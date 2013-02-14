@@ -1,0 +1,449 @@
+/* CSS Stylsheet for Shaarli - http://sebsauvage.net/wiki/doku.php?id=php:shaarli */
+
+/* CSS Reset from Yahoo to cope with browsers CSS inconsistencies. */
+/*
+Copyright (c) 2010, Yahoo! Inc. All rights reserved. Code licensed under the BSD License: http://developer.yahoo.com/yui/license.html
+version: 2.8.2r1
+*/
+html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var,optgroup{font-style:inherit;font-weight:inherit;}del,ins{text-decoration:none;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:baseline;}sub{vertical-align:baseline;}legend{color:#000;}input,button,textarea,select,optgroup,option{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}input,button,textarea,select{*font-size:100%;}
+
+body { font-family: "Trebuchet MS",Verdana,Arial,Helvetica,sans-serif; font-size:10pt; background-color: #ffffff; }
+input, textarea {
+	background-color: #dedede;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#dedede), to(#ffffff));
+	background: -webkit-linear-gradient(#dedede, #ffffff);
+	background: -moz-linear-gradient(#dedede, #ffffff);
+	background: -ms-linear-gradient(#dedede, #ffffff);
+	background: -o-linear-gradient(#dedede, #ffffff);
+	background: linear-gradient(#dedede, #ffffff);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	padding:5px;
+	border-radius: 5px 5px 5px 5px;
+	border: none;
+	color:#000;
+
+	}
+
+h1 { font-size:20pt; font-weight:bold; font-style:italic; margin-bottom:20px; }
+/* I don't give a shit about IE. He can't understand selectors such as input[type='submit']. */
+
+/* Buttons */
+.bigbutton {
+    background-color: #c0c0c0;
+	background: -moz-linear-gradient(#c0c0c0, #ffffff) repeat scroll 0 0 transparent;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#c0c0c0), to(#ffffff));
+	background: -webkit-linear-gradient(#c0c0c0, #ffffff);
+	background: -ms-linear-gradient(#c0c0c0, #ffffff);
+	background: -o-linear-gradient(#c0c0c0, #ffffff);
+	background: linear-gradient(#c0c0c0, #ffffff);
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    height: 24px;
+    margin-left: 5px;
+    padding: 0 5px;
+	color: #606060;
+	border-style:outset;
+	border-width:1px;
+
+	}
+.smallbutton {
+    background-color: #c0c0c0;
+	background: -moz-linear-gradient(#c0c0c0, #ffffff) repeat scroll 0 0 transparent;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#c0c0c0), to(#ffffff));
+	background: -webkit-linear-gradient(#c0c0c0, #ffffff);
+	background: -ms-linear-gradient(#c0c0c0, #ffffff);
+	background: -o-linear-gradient(#c0c0c0, #ffffff);
+	background: linear-gradient(#c0c0c0, #ffffff);
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    height: 20px;
+    margin-left: 5px;
+    padding: 0 5px;
+	color: #606060;
+	border-style:outset;
+	border-width:1px;
+
+	}
+
+/* Edit/Delete buttons on links */
+.button_edit, .button_delete { border-radius:0; box-shadow:none; border-style:none; border-width:0; padding:0; background:none; }
+.button_edit { margin-left:10px; }
+
+
+#pageheader #logo{
+background-image: url('../images/logo.png');
+background-repeat: no-repeat;
+float:left;
+margin:0 10px 0 10px;
+width:105px;
+height:55px;
+cursor:pointer;
+
+}
+
+#pageheader
+{
+    background-color: #333333;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#333333), to(#111111));
+	background: -webkit-linear-gradient(#333333, #111111);
+	background: -moz-linear-gradient(#333333, #111111);
+	background: -ms-linear-gradient(#333333, #111111);
+	background: -o-linear-gradient(#333333, #111111);
+	background: linear-gradient(#333333, #111111);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	width:auto;
+	padding:0 10px 5px 10px;
+	margin: auto; 
+}
+
+#pageheader a
+{
+    background-color: #333333;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#333333), to(#000000));
+	background: -webkit-linear-gradient(#333333, #000000);
+	background: -moz-linear-gradient(#333333, #000000);
+	background: -ms-linear-gradient(#333333, #000000);
+	background: -o-linear-gradient(#333333, #000000);
+	background: linear-gradient(#333333, #000000);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	padding:5px;
+	border-radius: 5px 5px 5px 5px;
+	margin:10px 3px 3px 3px;
+	color:#A2DD42;
+	float:left;
+	text-decoration:none;
+}
+
+#toolsdiv a{
+	clear:both;
+}
+#toolsdiv a span{
+	color:#ffffff;
+}
+.linksperpage,.tagfilter,.searchform,.addform {
+	background-color: #dedede;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#dedede), to(#ffffff));
+	background: -webkit-linear-gradient(#dedede, #ffffff);
+	background: -moz-linear-gradient(#dedede, #ffffff);
+	background: -ms-linear-gradient(#dedede, #ffffff);
+	background: -o-linear-gradient(#dedede, #ffffff);
+	background: linear-gradient(#dedede, #ffffff);
+	display:inline;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	padding:5px;
+	border: none;
+	border-radius: 5px 5px 5px 5px;
+	margin:10px 3px 3px 3px;
+	color:#cecece;
+}
+
+.linksperpage{
+	box-shadow: 0 0 0 rgba(0, 0, 0, 0.5);
+	padding:3px;
+}
+
+.linksperpage input,.tagfilter input, .searchform input, .addform input{
+	border:none;
+	color:#606060;
+	background:none;
+	box-shadow:none;
+	padding:5px;
+}
+
+.linksperpage input{
+	padding:0;
+}
+
+.tagfilter input.bigbutton,.searchform input.bigbutton,.addform input.bigbutton{
+    background-color: #dedede;
+   	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#dedede), to(#ffffff));
+	background: -webkit-linear-gradient(#dedede, #ffffff);
+	background: -moz-linear-gradient(#dedede, #ffffff);
+	background: -ms-linear-gradient(#dedede, #ffffff);
+	background: -o-linear-gradient(#dedede, #ffffff);
+	background: linear-gradient(#dedede, #ffffff);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	padding:0 5px 0 5px;
+	margin:5px 0 5px 0;
+	height:20px;
+	border-radius: 5px 5px 5px 5px;
+	cursor:pointer;
+}
+
+#shaarli_title { font-weight:bold; font-style:italic; margin-top:0;}
+#shaarli_title a { color: #fff !important; }
+
+#pageheader a:visited { color:#98C943; text-decoration:none;}
+#pageheader a:hover { color:#FFFFC9; text-decoration:none;}
+#pageheader a:active { color:#bbb; text-decoration:none;}
+#searchcriteria { padding: 4px 0px 5px 5px; font-weight:bold;}
+.paging { padding:5px;background-color:#777; color:#ccc; text-align:center;  clear:both;}
+.paging a:link { color:#ccc; text-decoration:none;}
+.paging a:visited { color:#ccc;  }
+.paging a:hover {  color:#FFFFC9;  }
+.paging a:active { color:#fff;  }
+#paging_privatelinks { float:left; }
+#paging_linksperpage { float:right; padding-right:5px; }
+#paging_current { display:inline; color:#fff; padding:0 20 0 20; }
+#paging_older { margin-right:15px; }
+#paging_newer { margin-left:15px; }
+
+#headerform { color:#ffffff; padding:5px 5px 5px 5px; clear: both;}
+#toolsdiv { color:#ffffff; padding:5px 5px 5px 5px; clear:left; }
+#uploaddiv { color:#ffffff; padding:5px 5px 5px 5px; clear:left; }
+#editlinkform { height:100%;color:#ffffff; padding:5px 5px 5px 15px; width:80%; clear:left; }
+#linklist li {
+	padding:4px 10px 15px 20px; border-top: 1px solid #bbb; clear:both;
+    background-color: #F2F2F2;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#F2F2F2), to(#ffffff));
+	background: -webkit-linear-gradient(#F2F2F2, #ffffff);
+	background: -moz-linear-gradient(#F2F2F2, #ffffff);
+	background: -ms-linear-gradient(#F2F2F2, #ffffff);
+	background: -o-linear-gradient(#F2F2F2, #ffffff);
+	background: linear-gradient(#F2F2F2, #ffffff);
+}
+
+/*
+#linklist li.publicLinkHightLight:hover,#linklist li:hover{
+	background: #E9FFCE;
+}
+*/
+#linklist li.private { background: url('../images/private.png') no-repeat 10px center; padding-left:60px; }
+.private  .linktitle a {color:#969696;}
+.linktitle { font-size:14pt; font-weight:bold; }
+.linktitle a { text-decoration: none; color:#80AD48; }
+.linktitle a:hover { color:#F57900; }
+.linkdate { font-size:8pt; color:#888; }
+.linkdate a { background-image:url('../images/calendar.png');padding:2px 0 3px 20px;background-repeat:no-repeat;text-decoration: none; color:#E28E3F;  }
+.linkdate a:hover { color: #F57900 }
+.linkurl { font-size:8pt; color:#4BAA74; }
+.linkdescription { color:#000; margin-top:0; margin-bottom:12px; font-weight:normal; max-height:400px; overflow:auto; }
+.linkdescription a { text-decoration: none; color:#3465A4; }
+.linkdescription a:hover { color:#F57900; }
+.linktaglist { padding-top:10px;}
+.linktag {
+
+font-size:9pt;
+    background-color: #F2F2F2;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#F2F2F2), to(#ffffff));
+	background: -webkit-linear-gradient(#F2F2F2, #ffffff);
+	background: -moz-linear-gradient(#F2F2F2, #ffffff);
+	background: -ms-linear-gradient(#F2F2F2, #ffffff);
+	background: -o-linear-gradient(#F2F2F2, #ffffff);
+	background: linear-gradient(#F2F2F2, #ffffff);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+	padding:3px 3px 3px 20px;
+	height:20px;
+	border-radius: 3px 3px 3px 3px;
+	cursor:pointer;
+	background-image:url('../images/tag_blue.png');
+	background-repeat:no-repeat;
+	background-position:3px center;
+	background-color:#ffffff;
+}
+.linktag:hover { border-color: #555573; color:#000; }
+.linktag a { color:#777; text-decoration:none; }
+.linkshort { font-size:8pt; color:#888; }
+.linkshort a { text-decoration: none; color:#393964; }
+.linkshort a:hover { text-decoration: underline; }
+.buttoneditform { display:inline; }
+#footer { font-size:8pt; text-align:center; border-top:1px solid #ddd; color: #888; clear:both; }
+#footer  a{ color:#486D08;}
+#footer  a:hover{ color:#000000;}
+#newversion { background-color: #FFFFA0; color:#000; position:absolute; top:0;right:0; padding:2 7 2 7;  font-size:9pt;}
+#cloudtag  { padding-left:10%; padding-right:10%; }
+#cloudtag a { color:black; text-decoration:none; }
+#installform td  { font-size: 10pt; color:black; padding:10px 5px 10px 5px; clear:left; }
+#changepasswordform { color:#ccc; padding:10px 5px 10px 5px; clear:left; }
+#changetag { color:#ccc; padding:10px 5px 10px 5px; clear:left; }
+#configform td  { color:#ccc; font-size: 10pt; padding:10px 5px 10px 5px;  }
+#configform  { color:#ccc; padding:10px 5px 10px 5px; clear:left; }
+.thumbnail { float:right;  margin-left: 10px; }
+/* If you want thumbnails on the left:
+.thumbnail { float:left;  margin-right: 10px;   }
+.linkcontainer { position: static; margin-left:130px; }
+*/
+
+
+
+
+/* --- Picture wall CSS --- */
+#picwall_container { color:#fff; background-color:#000; clear:both; }
+.picwall_pictureframe { background-color:#000; z-index:5; position:relative; display:table-cell; vertical-align:middle;width:90px; height:90px; overflow:hidden; text-align:center;  float:left; }
+.picwall_pictureframe img { max-width: 100%;height: auto; } /* Adapt the width of the image */
+.picwall_pictureframe a {text-decoration:none;}
+
+/* CSS to show title when hovering an image - no javascript required. */
+.picwall_pictureframe span.info {display: none;}
+.picwall_pictureframe:hover span.info {
+    display:block;
+    position:absolute;
+    top:0; left:0; width:90px;
+    font-weight:bold;
+    font-size:8pt;
+    color:#fff;
+    text-align: left;
+  background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.4);  /* FF3+, Saf3+, Opera 10.10+, Chrome, IE9 */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#66000000,endColorstr=#66000000); /* IE6IE9 */
+text-shadow:2px 2px 1px #000000;    
+}
+
+/* Minimal customisation for jQuery widgets */
+.ui-autocomplete { background-color:#fff; padding-left:5px;}
+.ui-state-hover { background-color: #604dff; color:#fff; }
+
+#linklist li.publicLinkHightLight{
+	background: #ffffff;
+}
+
+div.qrcode {
+width:220px;
+height:220px;
+background-color: #ffffff;
+border: 1px solid black;
+position: absolute;
+top:-100px;
+left:-100px;
+text-align:center;
+font-size: 8pt;
+z-index:50;
+-webkit-box-shadow:2px 2px 20px 2px #333333;
+-moz-box-shadow:2px 2px 20px 2px #333333;
+-o-box-shadow:2px 2px 20px 2px #333333;
+-ms-box-shadow:2px 2px 20px 2px #333333;
+box-shadow:2px 2px 20px 2px #333333;
+}
+
+div.daily
+{
+    font-family: Georgia, 'DejaVu Serif', Norasi, serif; 
+    background-color: #E6D6BE;
+    /* Background paper texture by BashCorpo:
+       http://www.bashcorpo.dk/textures.php
+       http://bashcorpo.deviantart.com/art/Grungy-paper-texture-v-5-22966998  */
+    background-image: url("../images/Paper_texture_v5_by_bashcorpo_w1000.jpg");
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    position:relative;
+    border-bottom: 2px solid black;
+}
+
+#daily_col1 { float:left;position:relative; width:33%; padding-left:1%; }
+#daily_col2 { float:left;position:relative; width:33%; }
+#daily_col3 { float:left;position:relative; width:33%;}
+
+div.dailyAbout
+{ 
+    float:left;
+    border: 1px solid black;
+    font-size: 8pt;
+    position:absolute;
+    left:10px;
+    top: 15px;
+    padding: 5px 5px 5px 5px;
+    text-align:center; 
+}
+div.dailyAbout  a { color: #890500; }
+div.dailyTitle
+ { 
+     font-weight: bold;
+     font-size: 44pt;
+     text-align:center; 
+     padding:10px 20px 0px 20px;
+}
+div.dailyDate
+ { 
+     font-size: 12pt;
+     font-weight:bold; 
+     text-align:center; 
+     padding:0px 20px 30px 20px;
+}
+
+/* Individual entries in "Daily": */
+div.dailyEntry
+{
+    margin: 5px 10px 2px 5px;
+    font-size: 11pt;
+    border-top: 1px solid #555;
+}
+div.dailyEntry  a { text-decoration:none; color: #890500; }
+div.dailyEntryTags { font-size:7.75pt;  }
+div.dailyEntryTitle { font-size:18pt; font-weight:bold;}
+div.dailyEntryThumbnail 
+{ 
+    width:100%; 
+    text-align:center; 
+    background-color:rgb(128,128,128); 
+    background:url(../images/50pc_transparent.png);
+    padding:4px 0px 2px 0px;
+}
+div.dailyEntryDescription
+{ 
+    margin-top: 10px;
+    margin-bottom: 30px; 
+    text-align:justify; 
+    overflow:auto;
+}
+
+/* Common css screwdriver */
+.clear{
+	clear:both;
+}
+
+/* For lazy images loading in picture wall.
+   using http://www.appelsiini.net/projects/lazyload 
+ */
+.lazyimage { display:none; }
+
+@media print {
+html {border:none;background:#fff!important;color:#000!important;}
+body {font-size:12pt;width:auto!important;margin:auto!important;}
+p {orphans:3; /*pas de ligne seule en bas */widows:3;/*pas de ligne seule en haut*/}
+a {color:#000!important;text-decoration:none!important;}
+#pageheader, .paging, #linklist li form, #footer {display:none;}
+#linklist li { padding:2 0 10 0; border-top: 2px solid #000; clear:both; }
+#linklist li.private { background-color: none; border-left:0; }
+.linkdate { line-height:2; }
+.linkurl { color:#000; }
+.linkdescription { font-size:10pt;}
+.linktag { border: 1px solid black; font-style:italic;  font-size:8pt;}
+
+}
+
+
+@media handheld, only screen and (max-width: 480px), only screen and (max-device-width: 854px)
+{
+/* A few fixes for mobile devices (far from perfect). */
+.nomobile  { display:none; }
+#logo { display:none; }
+#pageheader a
+{
+	padding:5px;
+	border-radius: 5px 5px 5px 5px;
+	margin:3px;
+}
+.searchform,.tagfilter  { display:block !important; margin:0px !important; padding:0px !important; width:100% !important; }
+.searchform input,.tagfilter input  { margin:0px !important; padding:0px !important; display:inline !important; }
+.tagfilter input.bigbutton,.searchform input.bigbutton,.addform input.bigbutton{  width:30%; font-size:smaller;}
+#searchform_value { width:70% !important; }
+#tagfilter_value { width:70% !important; }
+div.qrcode { position:relative; float:left; top:-10px; left:0px; }
+#paging_privatelinks { float;none; }
+#paging_linksperpage { float:none; margin-bottom:10px; font-size:smaller;}
+#paging_older,#paging_newer,#paging_linksperpage a { border: 1px solid black; padding:3px 5px 3px 5px; background-color:#666; color:#fff; border-radius: 5px 5px 5px 5px;}
+.thumbnail { float:none; height:auto; margin: 0px; text-align:center;}
+#cloudtag  { padding:0px; }
+div.dailyAbout {  float:none; position:relative; width:100%; clear:both; padding:0px; top:0px; left:0px; }
+#daily_col1,#daily_col2,#daily_col3 { float:none; width:100%; padding:0px;}
+div.dailyTitle  { font-size: 18pt; margin-top:5px; padding:0px;}
+div.dailyDate  {  font-size: 11pt;padding:0px; display:block; }
+div.dailyEntryTitle { font-size:16pt; font-weight:bold;}
+div.dailyEntryDescription { font-size:10pt; }
+
+} 
+
