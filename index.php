@@ -24,6 +24,9 @@ $GLOBALS['config']['UPDATECHECK_FILENAME'] = $GLOBALS['config']['DATADIR'].'/las
 $GLOBALS['config']['UPDATECHECK_INTERVAL'] = 86400 ; // Updates check frequency for Shaarli. 86400 seconds=24 hours
                                           // Note: You must have publisher.php in the same directory as Shaarli index.php
 // -----------------------------------------------------------------------------------------------
+// Require Markdown parser (used in link description)
+require_once('plugins/php-markdown/Michelf/Markdown.php');
+// -----------------------------------------------------------------------------------------------
 // You should not touch below (or at your own risks !)
 // Optionnal config file.
 if (is_file($GLOBALS['config']['DATADIR'].'/options.php')) require($GLOBALS['config']['DATADIR'].'/options.php');
@@ -1715,7 +1718,7 @@ function buildLinkList($PAGE,$LINKSDB)
     while ($i<$end && $i<count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
-        $link['description']=nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))));
+        $link['description'] = \Michelf\Markdown::defaultTransform(nl2br(htmlspecialchars($link['description'])));
         $title=$link['title'];
         $classLi =  $i%2!=0 ? '' : 'publicLinkHightLight';
         $link['class'] = ($link['private']==0 ? $classLi : 'private');
