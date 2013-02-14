@@ -219,7 +219,7 @@ cursor:pointer;
 .linkdate a { background-image:url('../images/calendar.png');padding:2px 0 3px 20px;background-repeat:no-repeat;text-decoration: none; color:#E28E3F;  }
 .linkdate a:hover { color: #F57900 }
 .linkurl { font-size:8pt; color:#4BAA74; }
-.linkdescription { color:#000; margin-top:0; margin-bottom:12px; font-weight:normal; max-height:400px; overflow:auto; }
+.linkdescription { color:#000; margin-top:8px; margin-bottom:12px; font-weight:normal; max-height:400px; overflow:auto; }
 .linkdescription a { text-decoration: none; color:#3465A4; }
 .linkdescription a:hover { color:#F57900; }
 .linktaglist { padding-top:10px;}
