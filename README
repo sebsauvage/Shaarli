@@ -6,3 +6,4 @@ Features:
 * Rearrange menu.
 * Add a little margin above each link description.
 * Add Markdown parsing for link description.
+* Enlarge description height while adding/editing a link.
