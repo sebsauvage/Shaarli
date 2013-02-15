@@ -16,3 +16,10 @@ Features:
 Note:
 * You can retrieve the original menu by simply restoring the original
   `tpl/page.header.html` file (in `tpl/page.header.html.bak`).
+
+To do:
+* Fix style in link description:
+  * [H[2-6]](https://daringfireball.net/projects/markdown/syntax#header) ;
+  * [Blockquote](https://daringfireball.net/projects/markdown/syntax#blockquote) ;
+  * [Ordered list](https://daringfireball.net/projects/markdown/syntax#list) ;
+  * [Code block](https://daringfireball.net/projects/markdown/syntax#precode) (`inline code in back quotes works`).
