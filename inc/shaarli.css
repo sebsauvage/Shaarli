@@ -447,3 +447,39 @@ div.dailyEntryDescription { font-size:10pt; }
 
 } 
 
+/* Modification */
+
+#linklist .linkdescription
+{
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+#linklist .linkdescription p
+{
+  margin: 8px;
+  margin-top: 0;
+  margin-left: 0;
+  line-height: 1.6;
+}
+
+#linklist .linkdescription ul li
+{
+  padding: 0;
+  padding-left: 15px;
+  border: 0;
+  background: rgb(0, 0, 0); /* old browsers */
+  background: rgba(0, 0, 0, 0); /* new browsers */
+  line-height: 1.6;
+  list-style: disc inside none;
+}
+
+#linklist .linkdescription code
+{
+  margin: 0 2px;
+  padding: 1px 4px;
+  border: 1px solid #cecece;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+

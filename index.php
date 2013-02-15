@@ -26,6 +26,7 @@ $GLOBALS['config']['UPDATECHECK_INTERVAL'] = 86400 ; // Updates check frequency 
 // -----------------------------------------------------------------------------------------------
 // Require Markdown parser (used in link description)
 require_once('plugins/php-markdown/Michelf/Markdown.php');
+require_once('plugins/php-markdown/Michelf/MarkdownExtra.php');
 // -----------------------------------------------------------------------------------------------
 // You should not touch below (or at your own risks !)
 // Optionnal config file.
@@ -1718,7 +1719,7 @@ function buildLinkList($PAGE,$LINKSDB)
     while ($i<$end && $i<count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
-        $link['description'] = \Michelf\Markdown::defaultTransform(nl2br(htmlspecialchars($link['description'])));
+        $link['description'] = \Michelf\MarkdownExtra::defaultTransform($link['description']);
         $title=$link['title'];
         $classLi =  $i%2!=0 ? '' : 'publicLinkHightLight';
         $link['class'] = ($link['private']==0 ? $classLi : 'private');
