@@ -447,7 +447,7 @@ div.dailyEntryDescription { font-size:10pt; }
 
 } 
 
-/* Modification */
+/* Modifications */
 
 #linklist .linkdescription
 {
@@ -461,6 +461,11 @@ div.dailyEntryDescription { font-size:10pt; }
   margin-top: 0;
   margin-left: 0;
   line-height: 1.6;
+}
+
+#linklist .linkdescription p strong
+{
+  font-weight: bold;
 }
 
 #linklist .linkdescription ul li
