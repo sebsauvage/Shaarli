@@ -514,12 +514,25 @@ div.dailyEntryDescription { font-size:10pt; }
   margin-top: -6px;
 }
 
-#linklist .linkdescription code
+#linklist .linkdescription p > code
 {
   margin: 0 2px;
   padding: 1px 4px;
   border: 1px solid #cecece;
   background-color: #f8f8f8;
   border-radius: 3px;
+}
+
+/* Link description -> blockquote */
+#linklist .linkdescription pre
+{
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+  padding: 6px 10px;
+  font-size: 13px;
+  overflow: auto;
+  line-height: 19px;
+  margin-bottom: 8px;
 }
 

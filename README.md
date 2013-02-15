@@ -42,5 +42,4 @@ You're done! Open your web browser.
 
 * Fix style in link description:
   * [H[2-6]](https://daringfireball.net/projects/markdown/syntax#header) ;
-  * [Blockquote](https://daringfireball.net/projects/markdown/syntax#blockquote) ;
   * [Code block](https://daringfireball.net/projects/markdown/syntax#precode) (`inline code in back quotes works`).
