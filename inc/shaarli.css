@@ -527,8 +527,20 @@ div.dailyEntryDescription { font-size:10pt; }
   border-radius: 3px;
 }
 
-/* Markdown -> blockquote */
+/* Markdown -> code block */
 #linklist .linkdescription pre
+{
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+  padding: 6px 10px;
+  font-size: 13px;
+  overflow: auto;
+  line-height: 19px;
+}
+
+/* Markdown -> blockquote */
+#linklist .linkdescription blockquote
 {
   border: 1px solid #ccc;
   background-color: #f8f8f8;

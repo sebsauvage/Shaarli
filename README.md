@@ -40,6 +40,5 @@ You're done! Open your web browser.
 
 #To do
 
-* Fix style in link description:
-  * [H[2-6]](https://daringfireball.net/projects/markdown/syntax#header) ;
-  * [Code block](https://daringfireball.net/projects/markdown/syntax#precode) (`inline code in back quotes works`).
+* Fix wrong margin when a p/ul/ol is in a blockquote (link description)
+* Fix h wrong appearance (link description)
