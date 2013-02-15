@@ -457,9 +457,8 @@ div.dailyEntryDescription { font-size:10pt; }
 
 #linklist .linkdescription p
 {
-  margin: 8px;
-  margin-top: 0;
-  margin-left: 0;
+  margin: 0;
+  margin-bottom: 8px;
   line-height: 1.6;
 }
 
@@ -473,6 +472,11 @@ div.dailyEntryDescription { font-size:10pt; }
   font-style: italic;
 }
 
+#linklist .linkdescription ul
+{
+  margin-bottom: 8px;
+}
+
 #linklist .linkdescription ul li
 {
   padding: 0;
@@ -482,6 +486,11 @@ div.dailyEntryDescription { font-size:10pt; }
   background: rgba(0, 0, 0, 0); /* new browsers */
   line-height: 1.6;
   list-style: disc inside none;
+}
+
+#linklist .linkdescription p + ul
+{
+  margin-top: -6px;
 }
 
 #linklist .linkdescription code
