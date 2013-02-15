@@ -480,13 +480,25 @@ div.dailyEntryDescription { font-size:10pt; }
 #linklist .linkdescription ul li
 {
   padding: 0;
-  padding-left: 10px;
+  padding-left: 11px;
   border: 0;
   background: rgb(0, 0, 0); /* old browsers */
   background: rgba(0, 0, 0, 0); /* new browsers */
   line-height: 1.6;
   list-style: disc inside none;
 }
+
+#linklist .linkdescription ul li ul li
+{
+  list-style: circle inside none;
+  padding-left: 25px;
+}
+
+#linklist .linkdescription ul li ul li ul li
+{
+  list-style: square inside none;
+}
+
 
 #linklist .linkdescription p + ul
 {
