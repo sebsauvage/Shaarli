@@ -480,7 +480,7 @@ div.dailyEntryDescription { font-size:10pt; }
 #linklist .linkdescription ul li
 {
   padding: 0;
-  padding-left: 15px;
+  padding-left: 10px;
   border: 0;
   background: rgb(0, 0, 0); /* old browsers */
   background: rgba(0, 0, 0, 0); /* new browsers */
