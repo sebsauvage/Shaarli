@@ -1,8 +1,7 @@
 This project is a fork of [Shaarli](http://sebsauvage.net/wiki/doku.php?id=php:shaarli) by Sebsauvage.
 
-It is hosted on [Github](https://github.com/abeaumet/shaarli).
-
-You can see the result [on my website](http://shaarli.beaumet.fr).
+It is hosted on [Github](https://github.com/abeaumet/shaarli). You can see the
+result [on my website](http://shaarli.beaumet.fr).
 
 Features:
 * Rearrange menu (only when not logged in):
@@ -16,4 +15,5 @@ Features:
 
 Note:
 * You can retrieve the deleted buttons or get the old order back by simply
-  restoring the original `tpl/page.header.html` file.
+  restoring the original `tpl/page.header.html` file. You can found it in
+  `tpl/page.header.html.bak`.

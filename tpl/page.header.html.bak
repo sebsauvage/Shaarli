@@ -1,0 +1,26 @@
+
+    <div id="logo" title="Share your links !" onclick="document.location='?';"></div>
+    <div style="float:right; font-style:italic; color:#bbb; text-align:right; padding:0 5 0 0;" class="nomobile">Shaare your links...<br>
+        {if="!empty($linkcount)"}{$linkcount} links{/if}</div>
+    <span id="shaarli_title"><a href="?">{$shaarlititle}</a></span>
+  
+{if="!empty($_GET['source']) && $_GET['source']=='bookmarklet'"}
+    {ignore} When called as a popup from bookmarklet, do not display menu. {/ignore}
+{else}
+    <a href="?" class="nomobile">Home</a>
+    {if="isLoggedIn()"}
+        <a href="?do=logout">Logout</a><a href="?do=tools">Tools</a><a href="?do=addlink"><b>Add link</b></a>
+    {elseif="$GLOBALS['config']['OPEN_SHAARLI']"}
+        <a href="?do=tools">Tools</a><a href="?do=addlink"><b>Add link</b></a>
+    {else}
+        <a href="?do=login">Login</a>
+    {/if}
+    <a href="{$feedurl}?do=rss{$searchcrits}" class="nomobile">RSS Feed</a>
+    <a href="{$feedurl}?do=atom{$searchcrits}" style="padding-left:10px;" class="nomobile">ATOM Feed</a>
+    <a href="?do=tagcloud">Tag cloud</a>
+    <a href="?do=picwall{$searchcrits}">Picture wall</a>
+    <a href="?do=daily">Daily</a>
+{/if}
+    <div class="clear"></div>
+
+
