@@ -5,7 +5,7 @@ result [on my website](http://shaarli.beaumet.fr).
 
 #Features
 
-* Support Markdown in links description
+* Support Markdown in links description (the complete syntax [described here](https://daringfireball.net/projects/markdown/syntax))
 * Rearrange menu (only when not logged in)
   * Delete "Login" button (`/?do=login` do the job... We don't need a public
     link, it attracts curious people)
@@ -37,7 +37,3 @@ update --init && cd ..`
 Move the shaarli folder in a place recognized by your HTTP server.
 
 You're done! Open your web browser.
-
-#To do
-
-* Fix wrong margin when a p/ul/ol is in a blockquote (link description)
