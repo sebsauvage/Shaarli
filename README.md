@@ -2,7 +2,7 @@ This project is a fork of [Shaarli](http://sebsauvage.net/wiki/doku.php?id=php:s
 
 It is hosted on [Github](https://github.com/abeaumet/shaarli).
 
-You can see the result [on my website](shaarli.beaumet.fr).
+You can see the result [on my website](http://shaarli.beaumet.fr).
 
 Features:
 * Rearrange menu (only when not logged in):
