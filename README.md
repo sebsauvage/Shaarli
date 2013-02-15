@@ -14,6 +14,5 @@ Features:
 * Enlarge description height while adding/editing a link.
 
 Note:
-* You can retrieve the deleted buttons or get the old order back by simply
-  restoring the original `tpl/page.header.html` file. You can found it in
-  `tpl/page.header.html.bak`.
+* You can retrieve the original menu by simply restoring the original
+  `tpl/page.header.html` file (in `tpl/page.header.html.bak`).
