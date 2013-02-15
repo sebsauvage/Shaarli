@@ -41,4 +41,3 @@ You're done! Open your web browser.
 #To do
 
 * Fix wrong margin when a p/ul/ol is in a blockquote (link description)
-* Fix h wrong appearance (link description)

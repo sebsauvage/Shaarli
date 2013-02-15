@@ -559,3 +559,59 @@ div.dailyEntryDescription { font-size:10pt; }
   margin-bottom: 10px;
 }
 
+/* Markdown -> h[1-6] */
+#linklist .linkdescription h1,
+#linklist .linkdescription h2,
+#linklist .linkdescription h3,
+#linklist .linkdescription h4,
+#linklist .linkdescription h5,
+#linklist .linkdescription h6
+{
+  margin: 20px 0 8px;
+  padding: 0;
+  font-weight: bold;
+  font-style:normal;
+}
+
+/* Markdown -> h1 */
+#linklist .linkdescription h1
+{
+  font-size: 28px;
+  color: #000;
+}
+
+/* Markdown -> h2 */
+#linklist .linkdescription h2
+{
+  font-size: 24px;
+  color: #000;
+}
+
+/* Markdown -> h3 */
+#linklist .linkdescription h3
+{
+  font-size: 18px;
+  color: #333333;
+}
+
+/* Markdown -> h4 */
+#linklist .linkdescription h4
+{
+  font-size: 16px;
+  color: #333333;
+}
+
+/* Markdown -> h5 */
+#linklist .linkdescription h5
+{
+  font-size: 14px;
+  color: #333333;
+}
+
+/* Markdown -> h6 */
+#linklist .linkdescription h6
+{
+  font-size: 14px;
+  color: #777;
+}
+
