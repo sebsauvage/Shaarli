@@ -447,7 +447,9 @@ div.dailyEntryDescription { font-size:10pt; }
 
 } 
 
-/* Modifications */
+/***********************************************
+************************************************
+***********************************************/
 
 #linklist .linkdescription
 {
@@ -458,25 +460,22 @@ div.dailyEntryDescription { font-size:10pt; }
 #linklist .linkdescription p
 {
   margin: 0;
-  margin-bottom: 8px;
   line-height: 1.6;
 }
 
+/* Markdown -> bold */
 #linklist .linkdescription p strong
 {
   font-weight: bold;
 }
 
+/* Markdown -> italic */
 #linklist .linkdescription p em
 {
   font-style: italic;
 }
 
-#linklist .linkdescription ul, #linklist .linkdescription ol
-{
-  margin-bottom: 8px;
-}
-
+/* Markdown -> ordered and unordered lists */
 #linklist .linkdescription ul li, #linklist .linkdescription ol li
 {
   padding: 0;
@@ -488,22 +487,26 @@ div.dailyEntryDescription { font-size:10pt; }
   list-style: disc inside none;
 }
 
+/* Markdown -> unordered list first level */
 #linklist .linkdescription ul li
 {
   list-style: disc inside none;
 }
 
+/* Markdown -> unordered list second level */
 #linklist .linkdescription ul li ul li
 {
   list-style: circle inside none;
   padding-left: 25px;
 }
 
+/* Markdown -> unordered list third level and more */
 #linklist .linkdescription ul li ul li ul li
 {
   list-style: square inside none;
 }
 
+/* Markdown -> ordered list */
 #linklist .linkdescription ol li
 {
   list-style: decimal inside none;
@@ -514,6 +517,7 @@ div.dailyEntryDescription { font-size:10pt; }
   margin-top: -6px;
 }
 
+/* Markdown -> inline code */
 #linklist .linkdescription p > code
 {
   margin: 0 2px;
@@ -523,7 +527,7 @@ div.dailyEntryDescription { font-size:10pt; }
   border-radius: 3px;
 }
 
-/* Link description -> blockquote */
+/* Markdown -> blockquote */
 #linklist .linkdescription pre
 {
   border: 1px solid #ccc;
@@ -533,6 +537,13 @@ div.dailyEntryDescription { font-size:10pt; }
   font-size: 13px;
   overflow: auto;
   line-height: 19px;
-  margin-bottom: 8px;
+}
+
+#linklist .linkdescription ul,
+#linklist .linkdescription ol,
+#linklist .linkdescription p,
+#linklist .linkdescription pre
+{
+  margin-bottom: 10px;
 }
 
