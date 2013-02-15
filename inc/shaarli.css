@@ -468,6 +468,11 @@ div.dailyEntryDescription { font-size:10pt; }
   font-weight: bold;
 }
 
+#linklist .linkdescription p em
+{
+  font-style: italic;
+}
+
 #linklist .linkdescription ul li
 {
   padding: 0;
