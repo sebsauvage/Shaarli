@@ -1,7 +1,7 @@
 This project is a fork of
 [Shaarli](http://sebsauvage.net/wiki/doku.php?id=php:shaarli) by Sebsauvage.
 
-The lastest version can be found on
+The latest version can be found on my
 [Github](https://github.com/abeaumet/shaarli). You can see a hosted version
 [on my website](http://shaarli.beaumet.fr).
 
@@ -9,17 +9,16 @@ The lastest version can be found on
 
 * Links
   * Links are opened in a new tab/window
-  * Support Markdown (complete syntax
-    [described here](https://daringfireball.net/projects/markdown/syntax))
-    in description
+  * Support standard
+    [Markdown](https://daringfireball.net/projects/markdown/syntax) in
+    description
   * Support [Github Gist](https://gist.github.com/) in description
   * Add a margin above and below each description
 * Enlarge description height while adding/editing a link
 * Menu (only when not logged in)
   * Delete "Login" button (Typing `/?do=login` do the job... We don't need a
-    public
-    link, it attracts curious people. Moreover, Shaarli asks to log in when
-    adding a link.)
+    public link, it attracts curious people. Moreover, Shaarli asks to log in
+    when adding a link.)
   * Delete "Picture wall" button
   * Delete "Daily" button
   * Reorder the remaining elements
