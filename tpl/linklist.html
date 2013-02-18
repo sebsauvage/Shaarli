@@ -32,7 +32,7 @@
         <li{if="$value.class"} class="{$value.class}"{/if}>
             <div class="thumbnail">{$value.url|thumbnail}</div>
             <div class="linkcontainer">
-                <span class="linktitle"><a href="{$redirector}{$value.url}">{$value.title|htmlspecialchars}</a></span>
+                <span class="linktitle"><a href="{$redirector}{$value.url}" target="_blank">{$value.title|htmlspecialchars}</a></span>
                 {if="isLoggedIn()"}
                     <form method="GET" class="buttoneditform"><input type="hidden" name="edit_link" value="{$value.linkdate}"><input type="image" alt="Edit" src="images/edit_icon.png#" title="Edit" class="button_edit"></form>
                     <form method="POST" class="buttoneditform"><input type="hidden" name="lf_linkdate" value="{$value.linkdate}">
