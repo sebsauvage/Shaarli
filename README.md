@@ -23,17 +23,17 @@ Note: you can retrieve the original menu by simply restoring
 Type the following commands:
 
 ```
-git clone git://github.com/abeaumet/shaarli.git
-cd shaarli
+git clone git://github.com/abeaumet/shaarli.git links
+cd links
 git submodule update --init
 cd ..
 ```
 
 Or just copy/paste the following snippet (lazy way...):
 
-`git clone git://github.com/abeaumet/shaarli.git && cd shaarli && git submodule
-update --init && cd ..`
+`git clone git://github.com/abeaumet/shaarli.git links && cd links && git
+submodule update --init && cd ..`
 
-Then move the Shaarli folder in a place recognized by your HTTP server.
+Then move the `links` folder in a place recognized by your HTTP server.
 
 You're done! Test it through your web browser.
