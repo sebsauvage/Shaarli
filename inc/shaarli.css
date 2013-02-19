@@ -464,13 +464,13 @@ div.dailyEntryDescription { font-size:10pt; }
 }
 
 /* Markdown -> bold */
-#linklist .linkdescription p strong
+#linklist .linkdescription strong
 {
   font-weight: bold;
 }
 
 /* Markdown -> italic */
-#linklist .linkdescription p em
+#linklist .linkdescription em
 {
   font-style: italic;
 }
