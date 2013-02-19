@@ -13,19 +13,18 @@ The latest version can be found on my
     [Markdown](https://daringfireball.net/projects/markdown/syntax) in
     description
   * Support [Github Gist](https://gist.github.com/) in description
-  * Add a margin above and below each description
-* Enlarge description height while adding/editing a link
 * Rearrange buttons position/color while adding/editing a link
 * Menu (only when not logged in)
-  * Delete "Login" button (Typing `/?do=login` do the job... We don't need a
+  * Remove "Login" button (Typing `/?do=login` do the job... We don't need a
     public link, it attracts curious people. Moreover, Shaarli asks to log in
     when adding a link.)
-  * Delete "Picture wall" button
-  * Delete "Daily" button
+  * Remove "Picture wall" button
+  * Remove "Daily" button
   * Reorder the remaining elements
 
-Note: you can retrieve the original menu by simply copying
-`tpl/page.header.html.bak` over `tpl/page.header.html`.
+Note: you can retrieve the original menu by simply erasing
+`tpl/page.header.html` with `tpl/page.header.html.bak` (the functionalities
+are still present in `index.php`).
 
 #Install
 
