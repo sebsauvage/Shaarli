@@ -15,6 +15,7 @@ The latest version can be found on my
   * Support [Github Gist](https://gist.github.com/) in description
   * Add a margin above and below each description
 * Enlarge description height while adding/editing a link
+* Rearrange buttons position/color while adding/editing a link
 * Menu (only when not logged in)
   * Delete "Login" button (Typing `/?do=login` do the job... We don't need a
     public link, it attracts curious people. Moreover, Shaarli asks to log in

@@ -14,10 +14,11 @@
 	        <i>Title</i><br><input type="text" name="lf_title" value="{$link.title|htmlspecialchars}" style="width:100%"><br>
 	        <i>Description</i><br><textarea name="lf_description" rows="7" cols="25" style="width:100%">{$link.description|htmlspecialchars}</textarea><br>
 	        <i>Tags</i><br><input type="text" id="lf_tags" name="lf_tags" value="{$link.tags|htmlspecialchars}" style="width:100%"><br>
-	        <input type="checkbox" {if condition="$link.private!=0"}checked="yes"{/if} style="margin:7 0 10 0;" name="lf_private" id="lf_private">&nbsp;<label for="lf_private"><i>Private</i></label><br>
-	        <input type="submit" value="Save" name="save_edit" class="bigbutton" style="margin-left:40px;">
-	        <input type="submit" value="Cancel" name="cancel_edit" class="bigbutton" style="margin-left:40px;">
-	        {if condition="!$link_is_new"}<input type="submit" value="Delete" name="delete_link" class="bigbutton" style="margin-left:180px;" onClick="return confirmDeleteLink();">{/if}
+	        <input type="checkbox" {if condition="$link.private!=0"}checked="yes"{/if} style="margin: 10px 0;" name="lf_private" id="lf_private">&nbsp;<label for="lf_private"><i>Private</i></label><br>
+	        <input type="submit" value="Save" name="save_edit" class="bigbutton" style="margin-left: 0px;">
+	        <input type="submit" value="Preview" name="preview_edit" class="bigbutton" style="margin-left:10px;" disabled>
+	        <input type="submit" value="Cancel" name="cancel_edit" class="bigbutton" style="margin-left:10px;">
+	        {if condition="!$link_is_new"}<input type="submit" value="Delete" name="delete_link" class="bigbutton" style="margin-left:10px; color: #C34640;" onClick="return confirmDeleteLink();">{/if}
 	        <input type="hidden" name="token" value="{$token}">
 	        {if condition="$http_referer"}<input type="hidden" name="returnurl" value="{$http_referer|htmlspecialchars}">{/if}
 	    </form>

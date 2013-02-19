@@ -447,9 +447,9 @@ div.dailyEntryDescription { font-size:10pt; }
 
 } 
 
-/***********************************************
-************************************************
-***********************************************/
+/*******************
+* Link description *
+*******************/
 
 #linklist .linkdescription
 {
@@ -615,3 +615,11 @@ div.dailyEntryDescription { font-size:10pt; }
   color: #777;
 }
 
+/************
+* Edit link *
+************/
+
+#editlinkform input[type="submit"]
+{
+  width: 65px;
+}
