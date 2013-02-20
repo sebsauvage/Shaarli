@@ -1243,6 +1243,21 @@ function renderPage()
         exit;
     }
 
+    // -------- User clicked the "Preview" button when editing a link: Render a preview
+    if (isset($_POST['preview_edit']))
+    {
+        $PAGE = new pageBuilder;
+        $PAGE->assign('localdate', linkdate2locale($_POST['p_linkdate']));
+        $PAGE->assign('url', $_POST['p_url']);
+        $PAGE->assign('title', $_POST['p_title']);
+        $PAGE->assign('description', \Michelf\MarkdownExtra::defaultTransform($_POST['p_description']));
+        $PAGE->assign('tags', $_POST['p_tags']);
+        $PAGE->assign('taglist', explode(' ', $_POST['p_tags']));
+        $PAGE->assign('private', $_POST['p_private']);
+        $PAGE->renderPage('previeweditlink');
+        exit;
+    }
+
     // -------- Handle other actions allowed for non-logged in users:
     if (!isLoggedIn())
     {
