@@ -551,6 +551,11 @@ div.dailyEntryDescription { font-size:10pt; }
   line-height: 19px;
 }
 
+#linklist .linkdescription blockquote p:last-child
+{
+  margin-bottom: 0;
+}
+
 #linklist .linkdescription ul,
 #linklist .linkdescription ol,
 #linklist .linkdescription p,
