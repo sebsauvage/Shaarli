@@ -898,7 +898,7 @@ function showRSS()
         {
             foreach(explode(' ',$link['tags']) as $tag) { echo '<category domain="'.htmlspecialchars($pageaddr).'">'.htmlspecialchars($tag).'</category>'."\n"; }
         }
-        echo '<description><![CDATA['.nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description'])))).']]></description>'."\n</item>\n";
+        echo '<description><![CDATA['.\Michelf\MarkdownExtra::defaultTransform($link['description']).']]></description>'."\n</item>\n";
         $i++;
     }
     echo '</channel></rss>';
@@ -944,7 +944,7 @@ function showATOM()
         if (startsWith($absurl,'?')) $absurl=$pageaddr.$absurl;  // make permalink URL absolute
         $entries.='<entry><title>'.htmlspecialchars($link['title']).'</title><link href="'.$absurl.'" /><id>'.$guid.'</id>';
         if (!$GLOBALS['config']['HIDE_TIMESTAMPS'] || isLoggedIn()) $entries.='<updated>'.htmlspecialchars($iso8601date).'</updated>';
-        $entries.='<content type="html">'.htmlspecialchars(nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description'])))))."</content>\n";
+        $entries.='<content type="html">'.\Michelf\MarkdownExtra::defaultTransform($link['description'])."</content>\n";
         if ($link['tags']!='') // Adding tags to each ATOM entry (as mentioned in ATOM specification)
         {
             foreach(explode(' ',$link['tags']) as $tag)
