@@ -9,15 +9,15 @@ The latest version can be found on my
 [Github](https://github.com/abeaumet/shaarli). You can see a hosted version
 [on my website](http://shaarli.beaumet.fr).
 
-#Enhancement
+#Enhancements
 
-* Links description
+* Link description
   * Support 
-    [Markdown](https://daringfireball.net/projects/markdown/syntax) in
-    description
-  * Support [Github Gist](https://gist.github.com/) in description
-  * Add preview when adding/editing a link
-* Rearrange buttons while adding/editing a link
+    [Markdown](https://daringfireball.net/projects/markdown/syntax)
+  * Support [Github Gist](https://gist.github.com/)
+* Adding/Editing a link
+  * Add preview functionality
+  * Rearrange form buttons
 * Offline menu
   * Remove "Login" button (Typing `/?do=login` do the job... We don't need a
     public link, it attracts curious people. Moreover, Shaarli asks to log in
