@@ -1,6 +1,8 @@
 This project is a fork of
 [Shaarli](http://sebsauvage.net/wiki/doku.php?id=php:shaarli) by Sebsauvage.
 
+> You want to share the links you discover ? Shaarli is a minimalist delicious clone you can install on your own website. It is designed to be personal (single-user), fast and handy.
+
 The latest version can be found on my
 [Github](https://github.com/abeaumet/shaarli). You can see a hosted version
 [on my website](http://shaarli.beaumet.fr).
