@@ -629,3 +629,9 @@ div.dailyEntryDescription { font-size:10pt; }
 {
   width: 65px;
 }
+
+#editlinkform textarea
+{
+  min-width: 100%;
+  max-width: 100%;
+}
