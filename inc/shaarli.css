@@ -542,6 +542,7 @@ div.dailyEntryDescription { font-size:10pt; }
 /* Markdown -> blockquote */
 #linklist .linkdescription blockquote
 {
+  margin-bottom: 10px;
   border: 1px solid #ccc;
   background-color: #f8f8f8;
   border-radius: 3px;
