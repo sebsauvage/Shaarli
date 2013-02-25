@@ -635,3 +635,23 @@ div.dailyEntryDescription { font-size:10pt; }
   min-width: 100%;
   max-width: 100%;
 }
+
+/*******
+* Menu *
+*******/
+
+#pageheader #loggedlinks a
+{
+  color: #F57900;
+}
+
+#pageheader #loggedlinks a:visited
+{
+  color: #F57900;
+}
+
+#pageheader #loggedlinks a:hover
+{
+  color:#FFFFC9;
+  text-decoration:none;
+}

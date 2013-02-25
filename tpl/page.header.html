@@ -7,15 +7,20 @@
 {if="!empty($_GET['source']) && $_GET['source']=='bookmarklet'"}
     {ignore} When called as a popup from bookmarklet, do not display menu. {/ignore}
 {else}
-    <a href="?" class="nomobile">Home</a>
-    {if="isLoggedIn()"}
-        <a href="?do=logout">Logout</a><a href="?do=tools">Tools</a><a href="?do=addlink"><b>Add link</b></a>
-    {elseif="$GLOBALS['config']['OPEN_SHAARLI']"}
-        <a href="?do=tools">Tools</a><a href="?do=addlink"><b>Add link</b></a>
-    {/if}
-    <a href="?do=tagcloud">Tag cloud</a>
     <a href="{$feedurl}?do=rss{$searchcrits}" class="nomobile">RSS Feed</a>
     <a href="{$feedurl}?do=atom{$searchcrits}" style="padding-left:10px;" class="nomobile">ATOM Feed</a>
+    <a href="?do=tagcloud">Tag cloud</a>
+    {if="isLoggedIn()"}
+        <span id="loggedlinks">
+            <a href="?searchtags=Unread">Unread</a><a href="?do=addlink"><b>Add link</b></a><a href="?do=tools">Tools</a><a href="?do=logout">Logout</a>
+        </span>
+    {elseif="$GLOBALS['config']['OPEN_SHAARLI']"}
+        <span id="loggedlinks">
+            <a href="?do=tools">Tools</a><a href="?do=addlink"><b style="color: #F57900;">Add link</b></a>
+        </span>
+    {else}
+        <a href="?do=login">Login</a>
+    {/if}
 {/if}
     <div class="clear"></div>
 

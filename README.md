@@ -17,19 +17,9 @@ The latest version can be found on my
   * Support [Github Gist](https://gist.github.com/)
 * Adding/Editing a link
   * Add preview functionality
-  * Rearrange form buttons
-* Offline menu
-  * Remove "Login" button (Typing `/?do=login` do the job... We don't need a
-    public link, it attracts curious people. Moreover, Shaarli asks to log in
-    when adding a link.)
-  * Remove "Picture wall" button
-  * Remove "Daily" button
-  * Reorder the remaining elements
+  * Rearrange post form buttons
+* Rearrange menu
 * Links are opened in a new tab/window
-
-Note: you can retrieve the original menu by simply erasing
-`tpl/page.header.html` with `tpl/page.header.html.bak` (the functionalities
-are still present in `index.php`).
 
 #Install
 
