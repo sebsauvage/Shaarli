@@ -8,8 +8,8 @@
     {ignore} When called as a popup from bookmarklet, do not display menu. {/ignore}
 {else}
     <a href="{$feedurl}?do=rss{$searchcrits}" class="nomobile">RSS Feed</a>
-    <a href="{$feedurl}?do=atom{$searchcrits}" style="padding-left:10px;" class="nomobile">ATOM Feed</a>
-    <a href="?do=tagcloud">Tag cloud</a>
+    <a href="{$feedurl}?do=atom{$searchcrits}" class="nomobile">ATOM Feed</a>
+    <a href="?do=tagcloud" style="margin-right: 10px">Tag cloud</a>
     {if="isLoggedIn()"}
         <span id="loggedlinks">
             <a href="?searchtags=Unread">Unread</a><a href="?do=addlink"><b>Add link</b></a><a href="?do=tools">Tools</a><a href="?do=logout">Logout</a>
