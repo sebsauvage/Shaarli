@@ -625,9 +625,9 @@ div.dailyEntryDescription { font-size:10pt; }
 * Edit link *
 ************/
 
-#editlinkform input[type="submit"]
+#editlinkform input[type="submit"], #editlinkform input[type="button"]
 {
-  width: 65px;
+  width: 75px;
 }
 
 #editlinkform textarea
