@@ -12,7 +12,7 @@
     <a href="?do=tagcloud" style="margin-right: 10px">Tag cloud</a>
     {if="isLoggedIn()"}
         <span id="loggedlinks">
-            <a href="?searchtags=Unread">Unread</a><a href="?do=addlink"><b>Add link</b></a><a href="?do=tools">Tools</a><a href="?do=logout">Logout</a>
+            <a href="?do=addlink"><b>Add link</b><a href="?searchtags=Unread">To read</a></a><a href="?do=tools">Tools</a><a href="?do=logout">Logout</a>
         </span>
     {elseif="$GLOBALS['config']['OPEN_SHAARLI']"}
         <span id="loggedlinks">
