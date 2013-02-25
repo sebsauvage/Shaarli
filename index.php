@@ -1412,6 +1412,20 @@ function renderPage()
         $linkdate=$_POST['lf_linkdate'];
         $link = array('title'=>trim($_POST['lf_title']),'url'=>trim($_POST['lf_url']),'description'=>trim($_POST['lf_description']),'private'=>(isset($_POST['lf_private']) ? 1 : 0),
                       'linkdate'=>$linkdate,'tags'=>str_replace(',',' ',$tags));
+
+        // if "Read later"
+        if ($_POST['save_edit'] == 'Read later')
+        {
+            $link['private'] = 1;
+
+            $tmp_array = explode(' ', $link['tags']);
+            foreach ($tmp_array as $key => $value)
+                if (strtolower($value) == 'unread')
+                    unset($tmp_array[$key]);
+            $tmp_array[] = 'Unread';
+            $link['tags'] = implode(' ', $tmp_array);
+        }
+
         if ($link['title']=='') $link['title']=$link['url']; // If title is empty, use the URL as title.
         $LINKSDB[$linkdate] = $link;
         $LINKSDB->savedb(); // save to disk
