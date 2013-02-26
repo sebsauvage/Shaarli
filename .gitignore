@@ -1,0 +1,5 @@
+# Ignore data/, tmp/, cache/ and pagecache/
+data/
+tmp/
+cache/
+pagecache/
