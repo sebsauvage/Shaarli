@@ -99,7 +99,7 @@ function checkphpversion()
     if (version_compare(PHP_VERSION, '5.1.0') < 0)
     {
         header('Content-Type: text/plain; charset=utf-8');
-        echo 'Your server supports php '.PHP_VERSION.'. Shaarli requires at last php 5.1.0, and thus cannot run. Sorry.';
+        echo 'Your server supports php '.PHP_VERSION.'. Shaarli requires at least php 5.1.0, and thus cannot run. Sorry.';
         exit;
     }
 }
