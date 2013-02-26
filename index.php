@@ -172,7 +172,7 @@ class pageCache
         if (is_dir($GLOBALS['config']['PAGECACHE']))
         {
             $handler = opendir($GLOBALS['config']['PAGECACHE']);
-            if ($handle!==false)
+            if ($handler!==false)
             {
                 while (($filename = readdir($handler))!==false) 
                 {
