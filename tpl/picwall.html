@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>{include="includes"}
+<script src="inc/jquery.lazyload.min.js#"></script>
+</head>
+<body>
+<div id="pageheader">{include="page.header"}</div>
+<center>
+<div class="picwall_container">
+    {loop="linksToDisplay"}
+    <div class="picwall_pictureframe">
+	    {$value.thumbnail}<a href="{$value.permalink}"><span class="info">{$value.title|htmlspecialchars}</span></a>
+    </div>
+    {/loop}
+</div>
+</center>
+{include="page.footer"}
+</body>
+<script>
+$(document).ready(function() {
+    $("img.lazyimage").show().lazyload();
+});
+</script>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>{include="includes"}</head>
+<body>
+<div id="pageheader">{include="page.header"}</div>
+<div style="background-color:#003;">
+    {loop="linksToDisplay"}
+    <div style="float:left;width:48%;border-right:2px solid white;height:120px;overflow:hide;">
+	    <div style="float:left;width:120px;text-align:center">{$value.thumbnail}</div>
+	    <a href="{$value.permalink}" style="color:yellow;font-weight:bold;text-decoration:none;">{$value.title|htmlspecialchars}</a><br>
+	    <span style="font-size:8pt;color:#eee;">{$value.description|htmlspecialchars}</span>
+	    <div style="clear:both;"></div>
+	</div><br>
+    {/loop}
+</div>
+
+{include="page.footer"}
+</body>
+</html>
