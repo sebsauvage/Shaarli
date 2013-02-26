@@ -34,7 +34,8 @@ define('PHPSUFFIX',' */ ?>'); // Suffix to encapsulate data in php code.
 
 // Force cookie path (but do not change lifetime)
 $cookie=session_get_cookie_params();
-session_set_cookie_params($cookie['lifetime'],dirname($_SERVER["SCRIPT_NAME"]).'/'); // Default cookie expiration and path.
+$cookiedir = ''; if(dirname($_SERVER['SCRIPT_NAME'])!='/') $cookiedir=dirname($_SERVER["SCRIPT_NAME"]).'/';
+session_set_cookie_params($cookie['lifetime'],$cookiedir); // Set default cookie expiration and path.
 
 // PHP Settings
 ini_set('max_input_time','60');  // High execution time in case of problematic imports/exports.
@@ -380,13 +381,16 @@ if (isset($_POST['login']))
         {
             $_SESSION['longlastingsession']=31536000;  // (31536000 seconds = 1 year)
             $_SESSION['expires_on']=time()+$_SESSION['longlastingsession'];  // Set session expiration on server-side.
-            session_set_cookie_params($_SESSION['longlastingsession'],dirname($_SERVER["SCRIPT_NAME"]).'/'); // Set session cookie expiration on client side
+
+            $cookiedir = ''; if(dirname($_SERVER['SCRIPT_NAME'])!='/') $cookiedir=dirname($_SERVER["SCRIPT_NAME"]).'/';
+            session_set_cookie_params($_SESSION['longlastingsession'],$cookiedir); // Set session cookie expiration on client side
             // Note: Never forget the trailing slash on the cookie path !
             session_regenerate_id(true);  // Send cookie with new expiration date to browser.
         }
         else // Standard session expiration (=when browser closes)
         {
-            session_set_cookie_params(0,dirname($_SERVER["SCRIPT_NAME"]).'/'); // 0 means "When browser closes"
+            $cookiedir = ''; if(dirname($_SERVER['SCRIPT_NAME'])!='/') $cookiedir=dirname($_SERVER["SCRIPT_NAME"]).'/';
+            session_set_cookie_params(0,$cookiedir); // 0 means "When browser closes"
             session_regenerate_id(true);
         }
         // Optional redirect after login:
