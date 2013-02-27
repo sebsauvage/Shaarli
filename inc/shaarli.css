@@ -67,10 +67,26 @@ h1 { font-size:20pt; font-weight:bold; font-style:italic; margin-bottom:20px; }
 
 	}
 
-/* Edit/Delete buttons on links */
+/* Small tab on the left of each link with edit/delete buttons. */
 .button_edit, .button_delete { border-radius:0; box-shadow:none; border-style:none; border-width:0; padding:0; background:none; }
-.button_edit { margin-left:10px; }
+.linkeditbuttons {  
+	position:absolute; 
+	left:-1px;  
+	padding:4px 2px 2px 2px;
+	background-color:#f0f0f0;
 
+	-webkit-border-radius:0px 6px 6px 0px;
+	-moz-border-radius:0px 6px 6px 0px;
+	-o-border-radius:0px 6px 6px 0px;
+	-ms-border-radius:0px 6px 6px 0px;
+	border-radius:0px 6px 6px 0px;
+
+	-webkit-box-shadow:0px 0px 3px 0px #333333;
+	-moz-box-shadow:0px 0px 3px 0px #333333;
+	-o-box-shadow:0px 0px 3px 0px #333333;
+	-ms-box-shadow:0px 0px 3px 0px #333333;
+	box-shadow:0px 0px 3px 0px #333333;
+}
 
 #pageheader #logo{
 background-image: url('../images/logo.png');
@@ -211,6 +227,7 @@ cursor:pointer;
 }
 */
 #linklist li.private { background: url('../images/private.png') no-repeat 10px center; padding-left:60px; }
+#linklist li  {  padding-left:26px; }
 .private  .linktitle a {color:#969696;}
 .linktitle { font-size:14pt; font-weight:bold; }
 .linktitle a { text-decoration: none; color:#80AD48; }
