@@ -427,7 +427,11 @@ function serverUrl()
 // (eg. http://sebsauvage.net/links/)
 function indexUrl()
 {
-    return serverUrl() . ($_SERVER["SCRIPT_NAME"] == '/index.php' ? '/' : $_SERVER["SCRIPT_NAME"]);
+    $scriptname = $_SERVER["SCRIPT_NAME"];
+    // If the script is named 'index.php', we remove it (for better looking URLs,
+    // eg. http://mysite.com/shaarli/?abcde instead of http://mysite.com/shaarli/index.php?abcde)
+    if (endswith($scriptname,'index.php')) $scriptname = substr($scriptname,0,strlen($scriptname)-9);
+    return serverUrl() . $scriptname;
 }
 
 // Returns the absolute URL of current script, WITH the query.
