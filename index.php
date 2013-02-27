@@ -223,7 +223,7 @@ function smallHash($text)
 function text2clickable($url)
 {
     $redir = empty($GLOBALS['redirector']) ? '' : $GLOBALS['redirector'];
-    return preg_replace('!(((?:https?|ftp|file)://|apt:)\S+[[:alnum:]]/?)!si','<a href="'.$redir.'$1" rel="nofollow">$1</a>',$url);
+    return preg_replace('!(((?:https?|ftp|file)://|apt:|magnet:)\S+[[:alnum:]]/?)!si','<a href="'.$redir.'$1" rel="nofollow">$1</a>',$url);
 }
 
 // This function inserts &nbsp; where relevant so that multiple spaces are properly displayed in HTML
