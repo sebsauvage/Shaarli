@@ -30,6 +30,7 @@
     <ul>
         {loop="links"}
         <li{if="$value.class"} class="{$value.class}"{/if}>
+            <a name="{$value.linkdate|smallHash}" id="{$value.linkdate|smallHash}"></a>
             <div class="thumbnail">{$value.url|thumbnail}</div>
             <div class="linkcontainer">
                 {if="isLoggedIn()"}

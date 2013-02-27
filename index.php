@@ -1437,6 +1437,7 @@ function renderPage()
         // If we are called from the bookmarklet, we must close the popup:
         if (isset($_GET['source']) && $_GET['source']=='bookmarklet') { echo '<script language="JavaScript">self.close();</script>'; exit; }
         $returnurl = ( isset($_POST['returnurl']) ? $_POST['returnurl'] : '?' );
+        $returnurl .= '#'.smallHash($linkdate);  // Scroll to the link which has been edited.
         header('Location: '.$returnurl); // After saving the link, redirect to the page the user was on.
         exit;
     }
@@ -1447,6 +1448,7 @@ function renderPage()
         // If we are called from the bookmarklet, we must close the popup;
         if (isset($_GET['source']) && $_GET['source']=='bookmarklet') { echo '<script language="JavaScript">self.close();</script>'; exit; }
         $returnurl = ( isset($_POST['returnurl']) ? $_POST['returnurl'] : '?' );
+        $returnurl .= '#'.smallHash($_POST['lf_linkdate']);  // Scroll to the link which has been edited.
         header('Location: '.$returnurl); // After canceling, redirect to the page the user was on.
         exit;
     }
