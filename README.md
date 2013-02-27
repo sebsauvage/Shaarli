@@ -1,3 +1,5 @@
+![Shaarli logo](http://sebsauvage.net/wiki/lib/exe/fetch.php?media=php:php_shaarli:php_shaarli_logo_inkscape_w600_transp-nq8.png)
+
 Shaarli 0.0.40 beta
 The personal, minimalist, super-fast, no-database delicious clone.
 
