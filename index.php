@@ -858,6 +858,10 @@ function showRSS()
 {
     header('Content-Type: application/rss+xml; charset=utf-8');
 
+    // $usepermalink : If true, use permalink instead of final link.
+    // User just has to add 'permalink' in URL parameters. eg. http://mysite.com/shaarli/?do=rss&permalinks
+    $usepermalinks = isset($_GET['permalinks']);
+
     // Cache system
     $query = $_SERVER["QUERY_STRING"];
     $cache = new pageCache(pageUrl(),startsWith($query,'do=rss') && !isLoggedIn());
@@ -892,13 +896,22 @@ function showRSS()
         $rfc822date = linkdate2rfc822($link['linkdate']);
         $absurl = htmlspecialchars($link['url']);
         if (startsWith($absurl,'?')) $absurl=$pageaddr.$absurl;  // make permalink URL absolute
-        echo '<item><title>'.htmlspecialchars($link['title']).'</title><guid>'.$guid.'</guid><link>'.$absurl.'</link>';
+        if ($usepermalinks===true)
+            echo '<item><title>'.htmlspecialchars($link['title']).'</title><guid>'.$guid.'</guid><link>'.$guid.'</link>';
+        else
+            echo '<item><title>'.htmlspecialchars($link['title']).'</title><guid>'.$guid.'</guid><link>'.$absurl.'</link>';
         if (!$GLOBALS['config']['HIDE_TIMESTAMPS'] || isLoggedIn()) echo '<pubDate>'.htmlspecialchars($rfc822date)."</pubDate>\n";
         if ($link['tags']!='') // Adding tags to each RSS entry (as mentioned in RSS specification)
         {
             foreach(explode(' ',$link['tags']) as $tag) { echo '<category domain="'.htmlspecialchars($pageaddr).'">'.htmlspecialchars($tag).'</category>'."\n"; }
         }
-        echo '<description><![CDATA['.nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description'])))).']]></description>'."\n</item>\n";
+
+        // Add permalink in description
+        $descriptionlink = '(<a href="'.$guid.'">Permalink</a>)';
+        // If user wants permalinks first, put the final link in description
+        if ($usepermalinks===true) $descriptionlink = '(<a href="'.$absurl.'">Link</a>)';
+        if (strlen($link['description'])>0) $descriptionlink = '<br>'.$descriptionlink;
+        echo '<description><![CDATA['.nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description'])))).$descriptionlink.']]></description>'."\n</item>\n";
         $i++;
     }
     echo '</channel></rss>';
@@ -913,6 +926,10 @@ function showRSS()
 function showATOM()
 {
     header('Content-Type: application/atom+xml; charset=utf-8');
+
+    // $usepermalink : If true, use permalink instead of final link.
+    // User just has to add 'permalink' in URL parameters. eg. http://mysite.com/shaarli/?do=atom&permalinks
+    $usepermalinks = isset($_GET['permalinks']);
 
     // Cache system
     $query = $_SERVER["QUERY_STRING"];
@@ -942,9 +959,20 @@ function showATOM()
         $latestDate = max($latestDate,$iso8601date);
         $absurl = htmlspecialchars($link['url']);
         if (startsWith($absurl,'?')) $absurl=$pageaddr.$absurl;  // make permalink URL absolute
-        $entries.='<entry><title>'.htmlspecialchars($link['title']).'</title><link href="'.$absurl.'" /><id>'.$guid.'</id>';
+        $entries.='<entry><title>'.htmlspecialchars($link['title']).'</title>';
+        if ($usepermalinks===true)
+            $entries.='<link href="'.$guid.'" /><id>'.$guid.'</id>';
+        else
+            $entries.='<link href="'.$absurl.'" /><id>'.$guid.'</id>';
         if (!$GLOBALS['config']['HIDE_TIMESTAMPS'] || isLoggedIn()) $entries.='<updated>'.htmlspecialchars($iso8601date).'</updated>';
-        $entries.='<content type="html">'.htmlspecialchars(nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description'])))))."</content>\n";
+
+        // Add permalink in description
+        $descriptionlink = htmlspecialchars('(<a href="'.$guid.'">Permalink</a>)');
+        // If user wants permalinks first, put the final link in description
+        if ($usepermalinks===true) $descriptionlink = htmlspecialchars('(<a href="'.$absurl.'">Link</a>)');
+        if (strlen($link['description'])>0) $descriptionlink = '&lt;br&gt;'.$descriptionlink;
+
+        $entries.='<content type="html">'.htmlspecialchars(nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))))).$descriptionlink."</content>\n";
         if ($link['tags']!='') // Adding tags to each ATOM entry (as mentioned in ATOM specification)
         {
             foreach(explode(' ',$link['tags']) as $tag)
