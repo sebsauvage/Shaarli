@@ -2336,6 +2336,7 @@ function resizeImage($filepath)
     imagejpeg($im2, $tempname, 90);
     imagedestroy($im);
     imagedestroy($im2);
+    unlink($filepath);
     rename($tempname,$filepath);  // Overwrite original picture with thumbnail.
     return true;
 }
