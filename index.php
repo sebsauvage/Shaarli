@@ -37,6 +37,14 @@ $cookie=session_get_cookie_params();
 $cookiedir = ''; if(dirname($_SERVER['SCRIPT_NAME'])!='/') $cookiedir=dirname($_SERVER["SCRIPT_NAME"]).'/';
 session_set_cookie_params($cookie['lifetime'],$cookiedir); // Set default cookie expiration and path.
 
+// Set session parameters on server side.
+define('INACTIVITY_TIMEOUT',3600); // (in seconds). If the user does not access any page within this time, his/her session is considered expired.
+ini_set('session.use_cookies', 1);       // Use cookies to store session.
+ini_set('session.use_only_cookies', 1);  // Force cookies for session (phpsessionID forbidden in URL)
+ini_set('session.use_trans_sid', false); // Prevent php to use sessionID in URL if cookies are disabled.
+session_name('shaarli');
+if (session_id() == '') session_start();  // Start session if needed (Some server auto-start sessions).
+
 // PHP Settings
 ini_set('max_input_time','60');  // High execution time in case of problematic imports/exports.
 ini_set('memory_limit', '128M');  // Try to set max upload file size and read (May not work on some hosts).
@@ -88,7 +96,6 @@ require $GLOBALS['config']['CONFIG_FILE'];  // Read login/password hash into $GL
 if (empty($GLOBALS['title'])) $GLOBALS['title']='Shared links on '.htmlspecialchars(indexUrl());
 if (empty($GLOBALS['timezone'])) $GLOBALS['timezone']=date_default_timezone_get();
 if (empty($GLOBALS['disablesessionprotection'])) $GLOBALS['disablesessionprotection']=false;
-
 
 autoLocale(); // Sniff browser language and set date format accordingly.
 header('Content-Type: text/html; charset=utf-8'); // We use UTF-8 for proper international characters handling.
@@ -265,12 +272,6 @@ function pubsubhub()
 
 // ------------------------------------------------------------------------------------------
 // Session management
-define('INACTIVITY_TIMEOUT',3600); // (in seconds). If the user does not access any page within this time, his/her session is considered expired.
-ini_set('session.use_cookies', 1);       // Use cookies to store session.
-ini_set('session.use_only_cookies', 1);  // Force cookies for session (phpsessionID forbidden in URL)
-ini_set('session.use_trans_sid', false); // Prevent php to use sessionID in URL if cookies are disabled.
-session_name('shaarli');
-session_start();
 
 // Returns the IP address of the client (Used to prevent session cookie hijacking.)
 function allIPs()
@@ -303,6 +304,8 @@ function check_auth($login,$password)
 function isLoggedIn()
 {
     if ($GLOBALS['config']['OPEN_SHAARLI']) return true;
+    
+    if (!isset($GLOBALS['login'])) return false;  // Shaarli is not configured yet.
 
     // If session does not exist on server side, or IP address has changed, or session has expired, logout.
     if (empty($_SESSION['uid']) || ($GLOBALS['disablesessionprotection']==false && $_SESSION['ip']!=allIPs()) || time()>=$_SESSION['expires_on'])
@@ -1970,6 +1973,28 @@ function install()
 {
     // On free.fr host, make sure the /sessions directory exists, otherwise login will not work.
     if (endsWith($_SERVER['SERVER_NAME'],'.free.fr') && !is_dir($_SERVER['DOCUMENT_ROOT'].'/sessions')) mkdir($_SERVER['DOCUMENT_ROOT'].'/sessions',0705);
+
+
+    // This part makes sure sessions works correctly.
+    // (Because on some hosts, session.save_path may not be set correctly,
+    // or we may not have write access to it.)
+    if (isset($_GET['test_session']) && ( !isset($_SESSION) || !isset($_SESSION['session_tested']) || $_SESSION['session_tested']!='Working'))
+    {   // Step 2: Check if data in session is correct.
+        echo '<pre>Sessions do not seem to work correctly on your server.<br>';
+        echo 'Make sure the variable session.save_path is set correctly in your php config, and that you have write access to it.<br>';
+        echo 'It currently points to '.session_save_path().'<br><br><a href="?">Click to try again.</a></pre>';
+        die;
+    }
+    if (!isset($_SESSION['session_tested']))
+    {   // Step 1 : Try to store data in session and reload page.
+        $_SESSION['session_tested'] = 'Working';  // Try to set a variable in session.
+        header('Location: '.indexUrl().'?test_session');  // Redirect to check stored data.
+    }
+    if (isset($_GET['test_session']))
+    {   // Step 3: Sessions are ok. Remove test parameter from URL.
+        header('Location: '.indexUrl());
+    }
+
 
     if (!empty($_POST['setlogin']) && !empty($_POST['setpassword']))
     {
