@@ -30,12 +30,12 @@ function askPreview() {
 	{include="page.header"}
 	<div id="editlinkform">
 	    <form method="post" name="linkform">
-	        <input type="hidden" name="lf_linkdate" value="{$link.linkdate}">
-	        <i>URL</i><br><input type="text" name="lf_url" value="{$link.url|htmlspecialchars}" style="width:100%"><br>
-	        <i>Title</i><br><input type="text" name="lf_title" value="{$link.title|htmlspecialchars}" style="width:100%"><br>
-	        <i>Description</i><br><textarea name="lf_description" rows="5" cols="25" style="width:100%">{$link.description|htmlspecialchars}</textarea><br>
+	        <input type="hidden" id="lf_linkdate" name="lf_linkdate" value="{$link.linkdate}">
+	        <i>URL</i><br><input type="text" id="lf_url" name="lf_url" value="{$link.url|htmlspecialchars}" style="width:100%"><br>
+	        <i>Title</i><br><input type="text" id="lf_title" name="lf_title" value="{$link.title|htmlspecialchars}" style="width:100%"><br>
+	        <i>Description</i><br><textarea id="lf_description" name="lf_description" rows="5" cols="25" style="width:100%">{$link.description|htmlspecialchars}</textarea><br>
 	        <i>Tags</i><br><input type="text" id="lf_tags" name="lf_tags" value="{$link.tags|htmlspecialchars}" style="width:100%"><br>
-	        <input type="checkbox" {if condition="$link.private!=0"}checked="yes"{/if} style="margin: 10px 0;" name="lf_private" id="lf_private">&nbsp;<label for="lf_private"><i>Private</i></label><br>
+	        <input type="checkbox" {if condition="$link.private!=0"}checked="yes"{/if} style="margin: 10px 0;" id="lf_private" name="lf_private">&nbsp;<label for="lf_private"><i>Private</i></label><br>
 	        <input type="submit" value="Save" name="save_edit" class="bigbutton" style="margin-left: 0;">
 	        <input type="button" value="Preview" id="preview_edit" class="bigbutton" style="margin-left:5px;" onClick="return askPreview();">
 	        <input type="submit" value="Read later" name="save_edit" class="bigbutton" style="margin-left:5px;">
