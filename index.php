@@ -576,7 +576,7 @@ if (!isset($_SESSION['tokens'])) $_SESSION['tokens']=array();  // Token are atta
 // Returns a token.
 function getToken()
 {
-    $rnd = sha1(uniqid('',true).'_'.mt_rand());  // We generate a random string.
+    $rnd = sha1(uniqid('',true).'_'.mt_rand().$GLOBALS['salt']);  // We generate a random string.
     $_SESSION['tokens'][$rnd]=1;  // Store it on the server side.
     return $rnd;
 }
