@@ -921,7 +921,7 @@ function showRSS()
         echo '<description><![CDATA['.nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description'])))).$descriptionlink.']]></description>'."\n</item>\n";
         $i++;
     }
-    echo '</channel></rss>';
+    echo '</channel></rss><!-- Cached version of '.pageUrl().' -->';
 
     $cache->cache(ob_get_contents());
     ob_end_flush();
@@ -1001,7 +1001,7 @@ function showATOM()
     $feed.='<author><name>'.htmlspecialchars($pageaddr).'</name><uri>'.htmlspecialchars($pageaddr).'</uri></author>';
     $feed.='<id>'.htmlspecialchars($pageaddr).'</id>'."\n\n"; // Yes, I know I should use a real IRI (RFC3987), but the site URL will do.
     $feed.=$entries;
-    $feed.='</feed>';
+    $feed.='</feed><!-- Cached version of '.pageUrl().' -->';
     echo $feed;
     
     $cache->cache(ob_get_contents());
@@ -1078,7 +1078,7 @@ function showDailyRSS()
         echo '<description><![CDATA['.$html.']]></description>'."\n</item>\n\n";
 
     }    
-    echo '</channel></rss>';
+    echo '</channel></rss><!-- Cached version of '.pageUrl().' -->';
     
     $cache->cache(ob_get_contents());
     ob_end_flush();
