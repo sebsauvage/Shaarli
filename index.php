@@ -1109,7 +1109,9 @@ function showDaily()
     // We pre-format some fields for proper output.
     foreach($linksToDisplay as $key=>$link)
     {
-        $linksToDisplay[$key]['taglist']=explode(' ',$link['tags']);
+        $taglist = explode(' ',$link['tags']);
+        uasort($taglist, 'strcasecmp');
+        $linksToDisplay[$key]['taglist']=$taglist;
         $linksToDisplay[$key]['formatedDescription']=nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))));
         $linksToDisplay[$key]['thumbnail'] = thumbnail($link['url']);            
     }
@@ -1761,7 +1763,9 @@ function buildLinkList($PAGE,$LINKSDB)
         $classLi =  $i%2!=0 ? '' : 'publicLinkHightLight';
         $link['class'] = ($link['private']==0 ? $classLi : 'private');
         $link['localdate']=linkdate2locale($link['linkdate']);
-        $link['taglist']=explode(' ',$link['tags']);
+        $taglist = explode(' ',$link['tags']);
+        uasort($taglist, 'strcasecmp');
+        $link['taglist']=$taglist;
         $linkDisp[$keys[$i]] = $link;
         $i++;
     }
