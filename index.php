@@ -96,6 +96,8 @@ require $GLOBALS['config']['CONFIG_FILE'];  // Read login/password hash into $GL
 if (empty($GLOBALS['title'])) $GLOBALS['title']='Shared links on '.htmlspecialchars(indexUrl());
 if (empty($GLOBALS['timezone'])) $GLOBALS['timezone']=date_default_timezone_get();
 if (empty($GLOBALS['disablesessionprotection'])) $GLOBALS['disablesessionprotection']=false;
+if (empty($GLOBALS['disablejquery'])) $GLOBALS['disablejquery']=false;
+// I really need to rewrite Shaarli with a proper configuation manager.
 
 autoLocale(); // Sniff browser language and set date format accordingly.
 header('Content-Type: text/html; charset=utf-8'); // We use UTF-8 for proper international characters handling.
@@ -1350,6 +1352,7 @@ function renderPage()
             $GLOBALS['title']=$_POST['title'];
             $GLOBALS['redirector']=$_POST['redirector'];
             $GLOBALS['disablesessionprotection']=!empty($_POST['disablesessionprotection']);
+            $GLOBALS['disablejquery']=!empty($_POST['disablejquery']);
             writeConfig();
             echo '<script language="JavaScript">alert("Configuration was saved.");document.location=\'?do=tools\';</script>';
             exit;
@@ -1951,6 +1954,11 @@ function lazyThumbnail($url,$href=false)
     $html='<a href="'.htmlspecialchars($t['href']).'">';
     
     // Lazy image (only loaded by javascript when in the viewport).
+    if (!empty($GLOBALS['disablejquery'])) // (except if jQuery is disabled)
+        $html.='<img class="lazyimage" src="'.htmlspecialchars($t['src']).'"';
+    else
+        $html.='<img class="lazyimage" src="#" data-original="'.htmlspecialchars($t['src']).'"';
+
     $html.='<img class="lazyimage" src="#" data-original="'.htmlspecialchars($t['src']).'"';
     if (!empty($t['width']))  $html.=' width="'.htmlspecialchars($t['width']).'"';
     if (!empty($t['height'])) $html.=' height="'.htmlspecialchars($t['height']).'"';
@@ -1958,7 +1966,7 @@ function lazyThumbnail($url,$href=false)
     if (!empty($t['alt']))    $html.=' alt="'.htmlspecialchars($t['alt']).'"';
     $html.='>';
     
-    // No-javascript fallback:
+    // No-javascript fallback.
     $html.='<noscript><img src="'.htmlspecialchars($t['src']).'"';
     if (!empty($t['width']))  $html.=' width="'.htmlspecialchars($t['width']).'"';
     if (!empty($t['height'])) $html.=' height="'.htmlspecialchars($t['height']).'"';
@@ -2065,8 +2073,8 @@ function templateTZform($ptz=false)
         foreach($continents as $continent)
             $continents_html.='<option  value="'.$continent.'"'.($pcontinent==$continent?'selected':'').'>'.$continent.'</option>';
         $cities_html = $cities[$pcontinent];
-        $timezone_form = "Continent: <select name=\"continent\" id=\"continent\" onChange=\"onChangecontinent();\">${continents_html}</select><br /><br />";
-        $timezone_form .= "City: <select name=\"city\" id=\"city\">${cities[$pcontinent]}</select><br /><br />";
+        $timezone_form = "Continent: <select name=\"continent\" id=\"continent\" onChange=\"onChangecontinent();\">${continents_html}</select>";
+        $timezone_form .= "&nbsp;&nbsp;&nbsp;&nbsp;City: <select name=\"city\" id=\"city\">${cities[$pcontinent]}</select><br />";
         $timezone_js = "<script language=\"JavaScript\">";
         $timezone_js .= "function onChangecontinent(){document.getElementById(\"city\").innerHTML = citiescontinent[document.getElementById(\"continent\").value];}";
         $timezone_js .= "var citiescontinent = ".json_encode($cities).";" ;
@@ -2137,12 +2145,11 @@ function processWS()
 function writeConfig()
 {
     if (is_file($GLOBALS['config']['CONFIG_FILE']) && !isLoggedIn()) die('You are not authorized to alter config.'); // Only logged in user can alter config.
-    if (empty($GLOBALS['redirector'])) $GLOBALS['redirector']='';
-    if (empty($GLOBALS['disablesessionprotection'])) $GLOBALS['disablesessionprotection']=false;
     $config='<?php $GLOBALS[\'login\']='.var_export($GLOBALS['login'],true).'; $GLOBALS[\'hash\']='.var_export($GLOBALS['hash'],true).'; $GLOBALS[\'salt\']='.var_export($GLOBALS['salt'],true).'; ';
     $config .='$GLOBALS[\'timezone\']='.var_export($GLOBALS['timezone'],true).'; date_default_timezone_set('.var_export($GLOBALS['timezone'],true).'); $GLOBALS[\'title\']='.var_export($GLOBALS['title'],true).';';
     $config .= '$GLOBALS[\'redirector\']='.var_export($GLOBALS['redirector'],true).'; ';
     $config .= '$GLOBALS[\'disablesessionprotection\']='.var_export($GLOBALS['disablesessionprotection'],true).'; ';
+    $config .= '$GLOBALS[\'disablejquery\']='.var_export($GLOBALS['disablejquery'],true).'; ';
     $config .= ' ?>';
     if (!file_put_contents($GLOBALS['config']['CONFIG_FILE'],$config) || strcmp(file_get_contents($GLOBALS['config']['CONFIG_FILE']),$config)!=0)
     {

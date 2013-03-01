@@ -8,7 +8,7 @@
 <script language="JavaScript">function confirmDeleteLink() { var agree=confirm("Are you sure you want to delete this link ?"); if (agree) return true ; else return false ; }</script>
 {/if}
 
-{if="$GLOBALS['config']['OPEN_SHAARLI'] || isLoggedIn()"}
+{if="($GLOBALS['config']['OPEN_SHAARLI'] || isLoggedIn()) && empty($GLOBALS['disablejquery'])"}
 <script language="JavaScript">
 $(document).ready(function()
 {
