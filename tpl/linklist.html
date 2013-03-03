@@ -40,7 +40,7 @@
                         <input type="hidden" name="token" value="{$token}"><input type="hidden" name="delete_link"><input type="image" alt="Delete" src="images/delete_icon.png#" title="Delete" class="button_delete" onClick="return confirmDeleteLink();"></form>
                     </div>
                 {/if}
-                <span class="linktitle"><a href="{$redirector}{$value.url}">{$value.title|htmlspecialchars}</a></span>
+                <span class="linktitle"><a href="{$redirector}{$value.url|htmlspecialchars}">{$value.title|htmlspecialchars}</a></span>
                 <br>
                 {if="$value.description"}<div class="linkdescription"{if condition="$search_type=='permalink'"} style="max-height:none !important;"{/if}>{$value.description}</div>{/if}
                 {if="!$GLOBALS['config']['HIDE_TIMESTAMPS'] || isLoggedIn()"}

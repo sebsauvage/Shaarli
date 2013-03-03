@@ -1265,7 +1265,11 @@ function renderPage()
     if (isset($_GET['linksperpage']))
     {
         if (is_numeric($_GET['linksperpage'])) { $_SESSION['LINKS_PER_PAGE']=abs(intval($_GET['linksperpage'])); }
-        header('Location: '.(empty($_SERVER['HTTP_REFERER'])?'?':$_SERVER['HTTP_REFERER']));
+        // Make sure the referer is from Shaarli itself.
+        $referer = '?';
+        if (!empty($_SERVER['HTTP_REFERER']) && strcmp(parse_url($_SERVER['HTTP_REFERER'],PHP_URL_HOST),$_SERVER['SERVER_NAME'])==0)
+            $referer = $_SERVER['HTTP_REFERER'];
+        header('Location: '.$referer);
         exit;
     }
     
@@ -1280,7 +1284,11 @@ function renderPage()
         {
             unset($_SESSION['privateonly']); // See all links
         }
-        header('Location: '.(empty($_SERVER['HTTP_REFERER'])?'?':$_SERVER['HTTP_REFERER']));
+        // Make sure the referer is from Shaarli itself.
+        $referer = '?';
+        if (!empty($_SERVER['HTTP_REFERER']) && strcmp(parse_url($_SERVER['HTTP_REFERER'],PHP_URL_HOST),$_SERVER['SERVER_NAME'])==0)
+            $referer = $_SERVER['HTTP_REFERER'];
+        header('Location: '.$referer);
         exit;
     }
 
@@ -1437,7 +1445,10 @@ function renderPage()
         if (!tokenOk($_POST['token'])) die('Wrong token.'); // Go away !
         $tags = trim(preg_replace('/\s\s+/',' ', $_POST['lf_tags'])); // Remove multiple spaces.
         $linkdate=$_POST['lf_linkdate'];
-        $link = array('title'=>trim($_POST['lf_title']),'url'=>trim($_POST['lf_url']),'description'=>trim($_POST['lf_description']),'private'=>(isset($_POST['lf_private']) ? 1 : 0),
+        $url = trim($_POST['lf_url']);
+        if (!startsWith($url,'http:') && !startsWith($url,'ftp:') && !startsWith($url,'magnet:') && !startsWith($url,'?'))
+            $url = 'http://'.$url;
+        $link = array('title'=>trim($_POST['lf_title']),'url'=>$url,'description'=>trim($_POST['lf_description']),'private'=>(isset($_POST['lf_private']) ? 1 : 0),
                       'linkdate'=>$linkdate,'tags'=>str_replace(',',' ',$tags));
         if ($link['title']=='') $link['title']=$link['url']; // If title is empty, use the URL as title.
         $LINKSDB[$linkdate] = $link;
