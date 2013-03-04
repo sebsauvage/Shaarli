@@ -87,18 +87,20 @@ if ($GLOBALS['config']['ENABLE_LOCALCACHE'])
     if (!is_file($GLOBALS['config']['CACHEDIR'].'/.htaccess')) { file_put_contents($GLOBALS['config']['CACHEDIR'].'/.htaccess',"Allow from none\nDeny from all\n"); } // Protect data files.
 }
 
+// Handling of old config file which do not have the new parameters.
+if (empty($GLOBALS['title'])) $GLOBALS['title']='Shared links on '.htmlspecialchars(indexUrl());
+if (empty($GLOBALS['timezone'])) $GLOBALS['timezone']=date_default_timezone_get();
+if (empty($GLOBALS['redirector'])) $GLOBALS['redirector']='';
+if (empty($GLOBALS['disablesessionprotection'])) $GLOBALS['disablesessionprotection']=false;
+if (empty($GLOBALS['disablejquery'])) $GLOBALS['disablejquery']=false;
+if (empty($GLOBALS['privateLinkByDefault'])) $GLOBALS['privateLinkByDefault']=false;
+// I really need to rewrite Shaarli with a proper configuation manager.
+
 // Run config screen if first run:
 if (!is_file($GLOBALS['config']['CONFIG_FILE'])) install();
 
 require $GLOBALS['config']['CONFIG_FILE'];  // Read login/password hash into $GLOBALS.
 
-// Handling of old config file which do not have the new parameters.
-if (empty($GLOBALS['title'])) $GLOBALS['title']='Shared links on '.htmlspecialchars(indexUrl());
-if (empty($GLOBALS['timezone'])) $GLOBALS['timezone']=date_default_timezone_get();
-if (empty($GLOBALS['disablesessionprotection'])) $GLOBALS['disablesessionprotection']=false;
-if (empty($GLOBALS['disablejquery'])) $GLOBALS['disablejquery']=false;
-if (empty($GLOBALS['privateLinkByDefault'])) $GLOBALS['privateLinkByDefault']=false;
-// I really need to rewrite Shaarli with a proper configuation manager.
 
 autoLocale(); // Sniff browser language and set date format accordingly.
 header('Content-Type: text/html; charset=utf-8'); // We use UTF-8 for proper international characters handling.
