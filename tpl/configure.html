@@ -19,8 +19,10 @@
 
         <tr><td valign="top"><b>Features:</b></td><td>
         	<input type="checkbox" name="disablejquery" id="disablejquery" {if="!empty($GLOBALS['disablejquery'])"}checked{/if}><label for="disablejquery">&nbsp;Disable jQuery and all heavy javascript (for example: Autocomplete in tags. Useful for slow computers.)</label>
+        </td></tr>
+        <tr><td valign="top"><b>New link:</b></td><td>
+        	<input type="checkbox" name="privateLinkByDefault" id="privateLinkByDefault" {if="!empty($GLOBALS['privateLinkByDefault'])"}checked{/if}/><label for="privateLinkByDefault">&nbsp;All new link are private by default</label></td>
         </tr>
-
 	  <tr><td></td><td align="right"><input type="submit" name="Save" value="Save config" class="bigbutton"></td></tr>
 	</table>
 	</form>
