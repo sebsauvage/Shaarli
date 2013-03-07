@@ -3,3 +3,4 @@ data/
 tmp/
 cache/
 pagecache/
+.*.sw[a-z]
