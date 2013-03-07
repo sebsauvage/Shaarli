@@ -23,6 +23,7 @@ $GLOBALS['config']['PUBSUBHUB_URL'] = ''; // PubSubHubbub support. Put an empty 
 $GLOBALS['config']['UPDATECHECK_FILENAME'] = $GLOBALS['config']['DATADIR'].'/lastupdatecheck.txt'; // For updates check of Shaarli.
 $GLOBALS['config']['UPDATECHECK_INTERVAL'] = 86400 ; // Updates check frequency for Shaarli. 86400 seconds=24 hours
                                           // Note: You must have publisher.php in the same directory as Shaarli index.php
+$GLOBALS['disablesessionprotection'] = true;    // Disable logout if IP change.
 // -----------------------------------------------------------------------------------------------
 // Require Markdown parser (used in link description)
 require_once('plugins/php-markdown/Michelf/Markdown.php');
