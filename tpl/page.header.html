@@ -9,7 +9,9 @@
 {else}
     <a href="{$feedurl}?do=rss{$searchcrits}" class="nomobile">RSS Feed</a>
     <a href="{$feedurl}?do=atom{$searchcrits}" class="nomobile">ATOM Feed</a>
-    <a href="?do=tagcloud" style="margin-right: 10px">Tag cloud</a>
+    <a href="?do=tagcloud">Tag cloud</a>
+    <a href="?do=picwall">Picture wall</a>
+    <a href="?do=daily" style="margin-right: 10px">Daily</a>
     {if="isLoggedIn()"}
         <span id="loggedlinks">
             <a href="?do=addlink"><b>Add link</b><a href="?searchtags=Unread">To read</a></a><a href="?do=tools">Tools</a><a href="?do=logout">Logout</a>
@@ -23,5 +25,3 @@
     {/if}
 {/if}
     <div class="clear"></div>
-
-
