@@ -1,0 +1,15 @@
+<div id="linklist">
+  <div class="linkcontainer" style="margin: 7px 10px 15px 20px;">
+    <span class="linktitle"><a href="#">{$title|htmlspecialchars}</a></span>
+    <br>
+    {if="$description"}<div class="linkdescription"{if condition="$search_type=='permalink'"} style="max-height:none !important;"{/if}>{$description}</div>{/if}
+    <span class="linkdate" title="Permalink"><a href="#">{$localdate|htmlspecialchars} - permalink</a> - </span>
+    <div style="position:relative;display:inline;"><a href="#" onclick="return false;" class="qrcode"><img src="images/qrcode.png#" width="13" height="13" title="QR-Code"></a></div> - 
+    <span class="linkurl" title="Short link">{$url}</span><br>
+    {if="$tags"}
+    <div class="linktaglist">
+      {loop="taglist"}<span class="linktag" title="Add tag"><a href="#">{$value|htmlspecialchars}</a></span> {/loop}
+    </div>
+    {/if}
+  </div>
+</div>

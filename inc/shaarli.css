@@ -464,3 +464,211 @@ div.dailyEntryDescription { font-size:10pt; }
 
 } 
 
+/*******************
+* Link description *
+*******************/
+
+#linklist .linkdescription
+{
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+#linklist .linkdescription p
+{
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Markdown -> bold */
+#linklist .linkdescription strong
+{
+  font-weight: bold;
+}
+
+/* Markdown -> italic */
+#linklist .linkdescription em
+{
+  font-style: italic;
+}
+
+/* Markdown -> ordered and unordered lists */
+#linklist .linkdescription ul li, #linklist .linkdescription ol li
+{
+  padding: 0;
+  padding-left: 11px;
+  border: 0;
+  background: rgb(0, 0, 0); /* old browsers */
+  background: rgba(0, 0, 0, 0); /* new browsers */
+  line-height: 1.6;
+  list-style: disc inside none;
+}
+
+/* Markdown -> unordered list first level */
+#linklist .linkdescription ul li
+{
+  list-style: disc inside none;
+}
+
+/* Markdown -> unordered list second level */
+#linklist .linkdescription ul li ul li
+{
+  list-style: circle inside none;
+  padding-left: 25px;
+}
+
+/* Markdown -> unordered list third level and more */
+#linklist .linkdescription ul li ul li ul li
+{
+  list-style: square inside none;
+}
+
+/* Markdown -> ordered list */
+#linklist .linkdescription ol li
+{
+  list-style: decimal inside none;
+}
+
+#linklist .linkdescription p + ul, #linklist .linkdescription p + ol
+{
+  margin-top: -6px;
+}
+
+/* Markdown -> inline code */
+#linklist .linkdescription p > code
+{
+  margin: 0 2px;
+  padding: 1px 4px;
+  border: 1px solid #cecece;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+/* Markdown -> code block */
+#linklist .linkdescription pre
+{
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+  padding: 6px 10px;
+  font-size: 13px;
+  overflow: auto;
+  line-height: 19px;
+}
+
+/* Markdown -> blockquote */
+#linklist .linkdescription blockquote
+{
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+  padding: 6px 10px;
+  font-size: 13px;
+  overflow: auto;
+  line-height: 19px;
+}
+
+#linklist .linkdescription blockquote p:last-child
+{
+  margin-bottom: 0;
+}
+
+#linklist .linkdescription ul,
+#linklist .linkdescription ol,
+#linklist .linkdescription p,
+#linklist .linkdescription pre
+{
+  margin-bottom: 10px;
+}
+
+/* Markdown -> h[1-6] */
+#linklist .linkdescription h1,
+#linklist .linkdescription h2,
+#linklist .linkdescription h3,
+#linklist .linkdescription h4,
+#linklist .linkdescription h5,
+#linklist .linkdescription h6
+{
+  margin: 20px 0 8px;
+  padding: 0;
+  font-weight: bold;
+  font-style:normal;
+}
+
+/* Markdown -> h1 */
+#linklist .linkdescription h1
+{
+  font-size: 28px;
+  color: #000;
+}
+
+/* Markdown -> h2 */
+#linklist .linkdescription h2
+{
+  font-size: 24px;
+  color: #000;
+}
+
+/* Markdown -> h3 */
+#linklist .linkdescription h3
+{
+  font-size: 18px;
+  color: #333333;
+}
+
+/* Markdown -> h4 */
+#linklist .linkdescription h4
+{
+  font-size: 16px;
+  color: #333333;
+}
+
+/* Markdown -> h5 */
+#linklist .linkdescription h5
+{
+  font-size: 14px;
+  color: #333333;
+}
+
+/* Markdown -> h6 */
+#linklist .linkdescription h6
+{
+  font-size: 14px;
+  color: #777;
+}
+
+/************
+* Edit link *
+************/
+
+#editlinkform input[type="submit"], #editlinkform input[type="button"]
+{
+  width: 75px;
+}
+
+#editlinkform textarea
+{
+  min-width: 100%;
+  max-width: 100%;
+}
+
+/*******
+* Menu *
+*******/
+
+#pageheader #loggedlinks a
+{
+  color: #F57900;
+}
+
+#pageheader #loggedlinks a:visited
+{
+  color: #F57900;
+}
+
+#pageheader #loggedlinks a:hover
+{
+  color:#FFFFC9;
+  text-decoration:none;
+}

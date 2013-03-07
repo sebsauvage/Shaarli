@@ -1,33 +1,58 @@
 <!DOCTYPE html>
 <html>
-<head>{include="includes"}</head>
-<body
+<head>
+{include="includes"}
+<script type="text/javascript">
+function askPreview() {
+  $.post('index.php', {
+    "p_linkdate": $('#lf_linkdate').val(),
+    "p_url": $('#lf_url').val(),
+    "p_title": $('#lf_title').val(),
+    "p_description": $('#lf_description').val(),
+    "p_tags": $('#lf_tags').val(),
+    "p_private": $('#lf_private').val(),
+    "preview_edit": true
+  }, function(data) {
+    var _previewEditLink = $('#previeweditlink');
+    _previewEditLink.html(data);
+    _previewEditLink.show();
+  }, 'html')
+  .fail(function() { alert('Unknown error while loading preview'); });
+}
+</script>
+</head>
+<body 
 {if condition="$link.title==''"}onload="document.linkform.lf_title.focus();"
 {elseif condition="$link.description==''"}onload="document.linkform.lf_description.focus();"
 {else}onload="document.linkform.lf_tags.focus();"{/if} >
+
 <div id="pageheader">
 	{include="page.header"}
 	<div id="editlinkform">
 	    <form method="post" name="linkform">
-	        <input type="hidden" name="lf_linkdate" value="{$link.linkdate}">
-	        <i>URL</i><br><input type="text" name="lf_url" value="{$link.url|htmlspecialchars}" style="width:100%"><br>
-	        <i>Title</i><br><input type="text" name="lf_title" value="{$link.title|htmlspecialchars}" style="width:100%"><br>
-	        <i>Description</i><br><textarea name="lf_description" rows="4" cols="25" style="width:100%">{$link.description|htmlspecialchars}</textarea><br>
+	        <input type="hidden" id="lf_linkdate" name="lf_linkdate" value="{$link.linkdate}">
+	        <i>URL</i><br><input type="text" id="lf_url" name="lf_url" value="{$link.url|htmlspecialchars}" style="width:100%"><br>
+	        <i>Title</i><br><input type="text" id="lf_title" name="lf_title" value="{$link.title|htmlspecialchars}" style="width:100%"><br>
+	        <i>Description</i><br><textarea id="lf_description" name="lf_description" rows="5" cols="25" style="width:100%">{$link.description|htmlspecialchars}</textarea><br>
 	        <i>Tags</i><br><input type="text" id="lf_tags" name="lf_tags" value="{$link.tags|htmlspecialchars}" style="width:100%"><br>
-	        {if condition="($link_is_new && $GLOBALS['privateLinkByDefault']==true) || $link.private == true"}
-            <input type="checkbox" checked="checked" name="lf_private" id="lf_private">
+	        	        {if condition="($link_is_new && $GLOBALS['privateLinkByDefault']==true) || $link.private == true"}
+            <input type="checkbox" checked="checked" style="margin: 10px 0;" name="lf_private" id="lf_private">
             &nbsp;<label for="lf_private"><i>Private</i></label><br>
             {else}
-            <input type="checkbox"  name="lf_private" id="lf_private">
+            <input type="checkbox" style="margin: 10px 0;"  name="lf_private" id="lf_private">
             &nbsp;<label for="lf_private"><i>Private</i></label><br>
             {/if}
-	        <input type="submit" value="Save" name="save_edit" class="bigbutton" style="margin-left:40px;">
-	        <input type="submit" value="Cancel" name="cancel_edit" class="bigbutton" style="margin-left:40px;">
-	        {if condition="!$link_is_new"}<input type="submit" value="Delete" name="delete_link" class="bigbutton" style="margin-left:180px;" onClick="return confirmDeleteLink();">{/if}
+	        <input type="submit" value="Save" name="save_edit" class="bigbutton" style="margin-left: 0; color: #32873D;">
+	        <input type="submit" value="Read later" name="save_edit" class="bigbutton" style="margin-left:5px;">
+	        <input type="button" value="Preview" id="preview_edit" class="bigbutton" style="margin-left:5px;" onClick="return askPreview();">
+	        <input type="submit" value="Cancel" name="cancel_edit" class="bigbutton" style="margin-left:5px;">
+	        {if condition="!$link_is_new"}<input type="submit" value="Delete" name="delete_link" class="bigbutton" style="margin-left:10px; color: #C34640;" onClick="return confirmDeleteLink();">{/if}
 	        <input type="hidden" name="token" value="{$token}">
 	        {if condition="$http_referer"}<input type="hidden" name="returnurl" value="{$http_referer|htmlspecialchars}">{/if}
 	    </form>
 	</div>
+</div>
+<div id="previeweditlink" style="display:none">
 </div>
 {include="page.footer"}
 </body>
