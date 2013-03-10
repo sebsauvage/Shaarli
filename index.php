@@ -1979,7 +1979,6 @@ function lazyThumbnail($url,$href=false)
     else
         $html.='<img class="lazyimage" src="#" data-original="'.htmlspecialchars($t['src']).'"';
 
-    $html.='<img class="lazyimage" src="#" data-original="'.htmlspecialchars($t['src']).'"';
     if (!empty($t['width']))  $html.=' width="'.htmlspecialchars($t['width']).'"';
     if (!empty($t['height'])) $html.=' height="'.htmlspecialchars($t['height']).'"';
     if (!empty($t['style']))  $html.=' style="'.htmlspecialchars($t['style']).'"';
