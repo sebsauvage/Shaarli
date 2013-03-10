@@ -18,3 +18,13 @@ $(document).ready(function()
 });
 </script>
 {/if}
+
+{if="empty($GLOBALS['disablejquery']) && isset($_GET['searchterm'])"}
+<script src="inc/jquery.highlight.js#"></script>
+<script language="JavaScript">
+$(document).ready(function()
+{
+	$('#linklist').highlight("{$search_crits}");
+});
+</script>
+{/if}
