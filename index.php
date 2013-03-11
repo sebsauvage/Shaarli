@@ -5,6 +5,12 @@
 // Licence: http://www.opensource.org/licenses/zlib-license.php
 // Requires: php 5.1.x  (but autocomplete fields will only work if you have php 5.2.x)
 // -----------------------------------------------------------------------------------------------
+// NEVER TRUST IN PHP.INI
+// Some hosts do not define a default timezone in php.ini,
+// so we have to do this for avoid the strict standard error.
+date_default_timezone_set('UTC');
+
+// -----------------------------------------------------------------------------------------------
 // Hardcoded parameter (These parameters can be overwritten by creating the file /config/options.php)
 $GLOBALS['config']['DATADIR'] = 'data'; // Data subdirectory
 $GLOBALS['config']['CONFIG_FILE'] = $GLOBALS['config']['DATADIR'].'/config.php'; // Configuration file (user login/password)
