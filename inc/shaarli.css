@@ -464,3 +464,5 @@ div.dailyEntryDescription { font-size:10pt; }
 
 } 
 
+/* Highlight search results */
+.highlight { background-color: #FFFF33; }
