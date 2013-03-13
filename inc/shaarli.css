@@ -1,4 +1,6 @@
-/* CSS Stylsheet for Shaarli - http://sebsauvage.net/wiki/doku.php?id=php:shaarli */
+﻿/* CSS Stylsheet for Shaarli - http://sebsauvage.net/wiki/doku.php?id=php:shaarli */
+
+/* Thème adapté par Alexis J pour http://liens.effingo.be */
 
 /* CSS Reset from Yahoo to cope with browsers CSS inconsistencies. */
 /*
@@ -7,15 +9,9 @@ version: 2.8.2r1
 */
 html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var,optgroup{font-style:inherit;font-weight:inherit;}del,ins{text-decoration:none;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:baseline;}sub{vertical-align:baseline;}legend{color:#000;}input,button,textarea,select,optgroup,option{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}input,button,textarea,select{*font-size:100%;}
 
-body { font-family: "Trebuchet MS",Verdana,Arial,Helvetica,sans-serif; font-size:10pt; background-color: #ffffff; }
+body { font-family: sans-serif,Arial,Helvetica,Verdana,"Trebuchet MS"; font-size:10pt; background-color: #ffffff; }
 input, textarea {
-	background-color: #dedede;
-	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#dedede), to(#ffffff));
-	background: -webkit-linear-gradient(#dedede, #ffffff);
-	background: -moz-linear-gradient(#dedede, #ffffff);
-	background: -ms-linear-gradient(#dedede, #ffffff);
-	background: -o-linear-gradient(#dedede, #ffffff);
-	background: linear-gradient(#dedede, #ffffff);
+	background-color: #FBFBFB;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 	padding:5px;
 	border-radius: 5px 5px 5px 5px;
@@ -29,42 +25,21 @@ h1 { font-size:20pt; font-weight:bold; font-style:italic; margin-bottom:20px; }
 
 /* Buttons */
 .bigbutton {
-    background-color: #c0c0c0;
-	background: -moz-linear-gradient(#c0c0c0, #ffffff) repeat scroll 0 0 transparent;
-	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#c0c0c0), to(#ffffff));
-	background: -webkit-linear-gradient(#c0c0c0, #ffffff);
-	background: -ms-linear-gradient(#c0c0c0, #ffffff);
-	background: -o-linear-gradient(#c0c0c0, #ffffff);
-	background: linear-gradient(#c0c0c0, #ffffff);
-    border-radius: 3px 3px 3px 3px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     height: 24px;
     margin-left: 5px;
     padding: 0 5px;
 	color: #606060;
-	border-style:outset;
-	border-width:1px;
-
 	}
 .smallbutton {
-    background-color: #c0c0c0;
-	background: -moz-linear-gradient(#c0c0c0, #ffffff) repeat scroll 0 0 transparent;
-	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#c0c0c0), to(#ffffff));
-	background: -webkit-linear-gradient(#c0c0c0, #ffffff);
-	background: -ms-linear-gradient(#c0c0c0, #ffffff);
-	background: -o-linear-gradient(#c0c0c0, #ffffff);
-	background: linear-gradient(#c0c0c0, #ffffff);
+    background-color: #E3272D;
     border-radius: 3px 3px 3px 3px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+	box-shadow: 5px 5px 5px grey;
     cursor: pointer;
     height: 20px;
     margin-left: 5px;
     padding: 0 5px;
 	color: #606060;
-	border-style:outset;
-	border-width:1px;
-
 	}
 
 /* Small tab on the left of each link with edit/delete buttons. */
@@ -92,45 +67,49 @@ h1 { font-size:20pt; font-weight:bold; font-style:italic; margin-bottom:20px; }
 background-image: url('../images/logo.png');
 background-repeat: no-repeat;
 float:left;
-margin:0 10px 0 10px;
-width:105px;
+#margin:0 10px 0 10px;
+#width:105px;
 height:55px;
-cursor:pointer;
+#cursor:pointer;
+display:none;
+}
 
+#topcount {
+    color: #BBBBBB;
+    float: right;
+    font-size: 11pt;
+    padding: 6px 6px 0 0;
+    text-align: right;
 }
 
 #pageheader
 {
-    background-color: #333333;
-	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#333333), to(#111111));
-	background: -webkit-linear-gradient(#333333, #111111);
-	background: -moz-linear-gradient(#333333, #111111);
-	background: -ms-linear-gradient(#333333, #111111);
-	background: -o-linear-gradient(#333333, #111111);
-	background: linear-gradient(#333333, #111111);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    background-color: rgba(196, 198, 199, 0.3);
 	width:auto;
 	padding:0 10px 5px 10px;
 	margin: auto; 
+	color:#ffffff;
 }
 
 #pageheader a
 {
-    background-color: #333333;
-	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#333333), to(#000000));
-	background: -webkit-linear-gradient(#333333, #000000);
-	background: -moz-linear-gradient(#333333, #000000);
-	background: -ms-linear-gradient(#333333, #000000);
-	background: -o-linear-gradient(#333333, #000000);
-	background: linear-gradient(#333333, #000000);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    background-color: #E3272D;
 	padding:5px;
 	border-radius: 5px 5px 5px 5px;
 	margin:10px 3px 3px 3px;
-	color:#A2DD42;
+	color:#ffffff;
 	float:left;
 	text-decoration:none;
 }
+#pageheader a:hover
+{
+    background-color: #555555;
+	transition-duration:1s;
+	-moz-transition-duration:1s;
+	-webkit-transition-duration:1s;
+	-o-transition-duration:1s;
+}
+
 
 #toolsdiv a{
 	clear:both;
@@ -139,18 +118,12 @@ cursor:pointer;
 	color:#ffffff;
 }
 .linksperpage,.tagfilter,.searchform,.addform {
-	background-color: #dedede;
-	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#dedede), to(#ffffff));
-	background: -webkit-linear-gradient(#dedede, #ffffff);
-	background: -moz-linear-gradient(#dedede, #ffffff);
-	background: -ms-linear-gradient(#dedede, #ffffff);
-	background: -o-linear-gradient(#dedede, #ffffff);
-	background: linear-gradient(#dedede, #ffffff);
+	background-color: #F7F7F7;
 	display:inline;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 	padding:5px;
 	border: none;
-	border-radius: 5px 5px 5px 5px;
+	border-radius: 2px 2px 2px 2px;
 	margin:10px 3px 3px 3px;
 	color:#cecece;
 }
@@ -173,43 +146,37 @@ cursor:pointer;
 }
 
 .tagfilter input.bigbutton,.searchform input.bigbutton,.addform input.bigbutton{
-    background-color: #dedede;
-   	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#dedede), to(#ffffff));
-	background: -webkit-linear-gradient(#dedede, #ffffff);
-	background: -moz-linear-gradient(#dedede, #ffffff);
-	background: -ms-linear-gradient(#dedede, #ffffff);
-	background: -o-linear-gradient(#dedede, #ffffff);
-	background: linear-gradient(#dedede, #ffffff);
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 	padding:0 5px 0 5px;
 	margin:5px 0 5px 0;
 	height:20px;
-	border-radius: 5px 5px 5px 5px;
 	cursor:pointer;
 }
 
-#shaarli_title { font-weight:bold; font-style:italic; margin-top:0;}
-#shaarli_title a { color: #fff !important; }
+#pageheader #shaarli_title a {background:none;box-shadow:0;font-size: 25px;margin-top: 3px;}
+#shaarli_title { font-weight:bold; font-style:normal; margin-top:0;}
+#shaarli_title a { backround:none repeat scroll 0 0 transparent;color: #E3272D !important; border-radius: 0px;box-shadow:0; }
 
-#pageheader a:visited { color:#98C943; text-decoration:none;}
-#pageheader a:hover { color:#FFFFC9; text-decoration:none;}
+#pageheader a:visited { color:#ffffff; text-decoration:none;}
+#pageheader a:hover { color:#ffffff; text-decoration:none;}
 #pageheader a:active { color:#bbb; text-decoration:none;}
 #searchcriteria { padding: 4px 0px 5px 5px; font-weight:bold;}
-.paging { padding:5px;background-color:#777; color:#ccc; text-align:center;  clear:both;}
-.paging a:link { color:#ccc; text-decoration:none;}
-.paging a:visited { color:#ccc;  }
-.paging a:hover {  color:#FFFFC9;  }
-.paging a:active { color:#fff;  }
+.paging { padding:5px;background-color:#777; color:#EDEDED; text-align:center;  clear:both;}
+.paging a:link { color:#EDEDED; text-decoration:none;}
+.paging a:visited { color:#EDEDED;  }
+.paging a:hover {  color:#ffffff;  }
+.paging a:active { color:#ffffff;  }
 #paging_privatelinks { float:left; }
 #paging_linksperpage { float:right; padding-right:5px; }
 #paging_current { display:inline; color:#fff; padding:0 20 0 20; }
 #paging_older { margin-right:15px; }
 #paging_newer { margin-left:15px; }
 
-#headerform { color:#ffffff; padding:5px 5px 5px 5px; clear: both;}
+#headerform { color:#4C4B4A; padding:5px 5px 5px 5px; clear: both;}
+#headerform a { color:#4C4B4A;}
 #toolsdiv { color:#ffffff; padding:5px 5px 5px 5px; clear:left; }
-#uploaddiv { color:#ffffff; padding:5px 5px 5px 5px; clear:left; }
-#editlinkform { height:100%;color:#ffffff; padding:5px 5px 5px 15px; width:80%; clear:left; }
+#uploaddiv { color:#4C4B4A; padding:5px 5px 5px 5px; clear:left; }
+#private {margin-top:15px;}
+#editlinkform { height:100%;color:#4C4B4A; padding:5px 5px 5px 15px; width:80%; clear:left; }
 #linklist li {
 	padding:4px 10px 15px 20px; border-top: 1px solid #bbb; clear:both;
     background-color: #F2F2F2;
@@ -226,19 +193,19 @@ cursor:pointer;
 	background: #E9FFCE;
 }
 */
-#linklist li.private { background: url('../images/private.png') no-repeat 10px center; padding-left:60px; }
+#linklist li.private { background: url('../images/private.png') no-repeat 15px center; padding-left:60px; }
 #linklist li  {  padding-left:26px; }
 .private  .linktitle a {color:#969696;}
 .linktitle { font-size:14pt; font-weight:bold; }
-.linktitle a { text-decoration: none; color:#80AD48; }
-.linktitle a:hover { color:#F57900; }
+.linktitle a { text-decoration: none; color:#E3272D; }
+.linktitle a:hover { color:#4C4B4A; }
 .linkdate { font-size:8pt; color:#888; }
-.linkdate a { background-image:url('../images/calendar.png');padding:2px 0 3px 20px;background-repeat:no-repeat;text-decoration: none; color:#E28E3F;  }
-.linkdate a:hover { color: #F57900 }
-.linkurl { font-size:8pt; color:#4BAA74; }
-.linkdescription { color:#000; margin-top:0; margin-bottom:12px; font-weight:normal; max-height:400px; overflow:auto; }
+.linkdate a { background-image:url('../images/calendar.png');padding:2px 0 3px 20px;background-repeat:no-repeat;text-decoration: none; color:#4C4B4A;  }
+.linkdate a:hover { color: #E3272D }
+.linkurl { font-size:8pt; color:#E3272D; }
+.linkdescription { color:#4C4B4A; margin-top:0; margin-bottom:12px; font-weight:normal; max-height:400px; overflow:auto; }
 .linkdescription a { text-decoration: none; color:#3465A4; }
-.linkdescription a:hover { color:#F57900; }
+.linkdescription a:hover { color:#E3272D; }
 .linktaglist { padding-top:10px;}
 .linktag {
 
@@ -267,16 +234,22 @@ font-size:9pt;
 .linkshort a:hover { text-decoration: underline; }
 .buttoneditform { display:inline; }
 #footer { font-size:8pt; text-align:center; border-top:1px solid #ddd; color: #888; clear:both; }
-#footer  a{ color:#486D08;}
-#footer  a:hover{ color:#000000;}
+#footer  a{ color:#4C4B4A;}
+#footer  a:hover{ color:#4C4B4A;}
 #newversion { background-color: #FFFFA0; color:#000; position:absolute; top:0;right:0; padding:2 7 2 7;  font-size:9pt;}
 #cloudtag  { padding-left:10%; padding-right:10%; }
-#cloudtag a { color:black; text-decoration:none; }
+#cloudtag a, #cloudtag a:visited { color:#E3272D !important; text-decoration:none; }
+#cloudtag a:hover { color:#4C4B4A !important; text-decoration:none;
+	transition-duration:1s;
+	-moz-transition-duration:1s;
+	-webkit-transition-duration:1s;
+	-o-transition-duration:1s; }
+#cloudtag span { color:#4C4B4A !important;}
 #installform td  { font-size: 10pt; color:black; padding:10px 5px 10px 5px; clear:left; }
-#changepasswordform { color:#ccc; padding:10px 5px 10px 5px; clear:left; }
-#changetag { color:#ccc; padding:10px 5px 10px 5px; clear:left; }
-#configform td  { color:#ccc; font-size: 10pt; padding:10px 5px 10px 5px;  }
-#configform  { color:#ccc; padding:10px 5px 10px 5px; clear:left; }
+#changepasswordform { color:#4C4B4A; padding:10px 5px 10px 5px; clear:left; }
+#changetag { color:#4C4B4A; padding:10px 5px 10px 5px; clear:left; }
+#configform td  { color:#4C4B4A; font-size: 10pt; padding:10px 5px 10px 5px;  }
+#configform  { color:#4C4B4A; padding:10px 5px 10px 5px; clear:left; }
 .thumbnail { float:right;  margin-left: 10px; }
 /* If you want thumbnails on the left:
 .thumbnail { float:left;  margin-right: 10px;   }
@@ -287,10 +260,10 @@ font-size:9pt;
 
 
 /* --- Picture wall CSS --- */
-#picwall_container { color:#fff; background-color:#000; clear:both; }
-.picwall_pictureframe { background-color:#000; z-index:5; position:relative; display:table-cell; vertical-align:middle;width:90px; height:90px; overflow:hidden; text-align:center;  float:left; }
+.picwall_container { color:#ffffff; background-color:#4C4B4A; clear:both; }
+.picwall_pictureframe { background-color:#4C4B4A; z-index:5; position:relative; display:table-cell; vertical-align:middle;width:90px; height:90px; overflow:hidden; text-align:center;  float:left; }
 .picwall_pictureframe img { max-width: 100%;height: auto; } /* Adapt the width of the image */
-.picwall_pictureframe a {text-decoration:none;}
+.picwall_pictureframe a {text-decoration:none;color:#4C4B4A;} /*vraiment moche le bleu par défaut qui apparaissait au chargement. Aïe mes yeux*/
 
 /* CSS to show title when hovering an image - no javascript required. */
 .picwall_pictureframe span.info {display: none;}
@@ -320,7 +293,7 @@ div.qrcode {
 width:220px;
 height:220px;
 background-color: #ffffff;
-border: 1px solid black;
+border: 1px solid #4C4B4A ;
 position: absolute;
 top:-100px;
 left:-100px;
@@ -334,20 +307,12 @@ z-index:50;
 box-shadow:2px 2px 20px 2px #333333;
 }
 
-div.daily
-{
-    font-family: Georgia, 'DejaVu Serif', Norasi, serif; 
-    background-color: #E6D6BE;
-    /* Background paper texture by BashCorpo:
-       http://www.bashcorpo.dk/textures.php
-       http://bashcorpo.deviantart.com/art/Grungy-paper-texture-v-5-22966998  */
-    background-image: url("../images/Paper_texture_v5_by_bashcorpo_w1000.jpg");
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    position:relative;
-    border-bottom: 2px solid black;
+
+div.daily {
+    border-bottom: 2px solid #4C4B4A;
+    font-family: sans-serif,Arial,verdana,helvetica;
+    position: relative;
+	background-color:rgba(196, 198, 199, 0.3);
 }
 
 #daily_col1 { float:left;position:relative; width:33%; padding-left:1%; }
@@ -364,39 +329,49 @@ div.dailyAbout
     top: 15px;
     padding: 5px 5px 5px 5px;
     text-align:center; 
+	width: 160px;
+	margin-left:10px /*manquant*/
 }
-div.dailyAbout  a { color: #890500; }
+div.dailyAbout  a { color: #E3272D ; }
 div.dailyTitle
  { 
-     font-weight: bold;
-     font-size: 44pt;
+     color:#E3272D ;
+	 font-weight: normal;
+     font-size: 38pt; /*c'est mieux plus petit et avec un weight normal*/
      text-align:center; 
      padding:10px 20px 0px 20px;
 }
 div.dailyDate
  { 
-     font-size: 12pt;
+     color:#4C4B4A;    
+	 font-size: 12pt;
      font-weight:bold; 
      text-align:center; 
      padding:0px 20px 30px 20px;
 }
+div.daily div.dailyDate span {
+display:none} /*superflu*/
 
 /* Individual entries in "Daily": */
 div.dailyEntry
 {
     margin: 5px 10px 2px 5px;
-    font-size: 11pt;
+    font-size: 10pt;
     border-top: 1px solid #555;
 }
-div.dailyEntry  a { text-decoration:none; color: #890500; }
+div.dailyEntry  a { text-decoration:none; color: #E3272D ; }
+div.dailyEntry:hover{
+background-color:rgba(0, 0, 0, 0.04);
+}
 div.dailyEntryTags { font-size:7.75pt;  }
-div.dailyEntryTitle { font-size:18pt; font-weight:bold;}
+div.dailyEntryTitle { font-size:16pt;}
+div.dailyTitle img.nomobile {display:none;}   /* Cache les images du titre*/
+div.daily div img {display:none;}   /* Cache l'image du bas*/
+div.dailyEntry div a img  {display:inline !important;} /*impossible de cacher ces trucs sans masquer les thumbnails grr*/
 div.dailyEntryThumbnail 
 { 
     width:100%; 
     text-align:center; 
-    background-color:rgb(128,128,128); 
-    background:url(../images/50pc_transparent.png);
     padding:4px 0px 2px 0px;
 }
 div.dailyEntryDescription
@@ -405,6 +380,7 @@ div.dailyEntryDescription
     margin-bottom: 30px; 
     text-align:justify; 
     overflow:auto;
+	color:#4C4B4A ;
 }
 
 /* Common css screwdriver */
