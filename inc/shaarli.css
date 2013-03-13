@@ -32,7 +32,7 @@ h1 { font-size:20pt; font-weight:bold; font-style:italic; margin-bottom:20px; }
 	color: #606060;
 	}
 .smallbutton {
-    background-color: #E3272D;
+    background-color: #6666FF;
     border-radius: 3px 3px 3px 3px;
 	box-shadow: 5px 5px 5px grey;
     cursor: pointer;
@@ -93,7 +93,7 @@ display:none;
 
 #pageheader a
 {
-    background-color: #E3272D;
+    background-color: #6666FF;
 	padding:5px;
 	border-radius: 5px 5px 5px 5px;
 	margin:10px 3px 3px 3px;
@@ -154,7 +154,7 @@ display:none;
 
 #pageheader #shaarli_title a {background:none;box-shadow:0;font-size: 25px;margin-top: 3px;}
 #shaarli_title { font-weight:bold; font-style:normal; margin-top:0;}
-#shaarli_title a { backround:none repeat scroll 0 0 transparent;color: #E3272D !important; border-radius: 0px;box-shadow:0; }
+#shaarli_title a { backround:none repeat scroll 0 0 transparent;color: #6666FF !important; border-radius: 0px;box-shadow:0; }
 
 #pageheader a:visited { color:#ffffff; text-decoration:none;}
 #pageheader a:hover { color:#ffffff; text-decoration:none;}
@@ -197,15 +197,15 @@ display:none;
 #linklist li  {  padding-left:26px; }
 .private  .linktitle a {color:#969696;}
 .linktitle { font-size:14pt; font-weight:bold; }
-.linktitle a { text-decoration: none; color:#E3272D; }
+.linktitle a { text-decoration: none; color:#6666FF; }
 .linktitle a:hover { color:#4C4B4A; }
 .linkdate { font-size:8pt; color:#888; }
 .linkdate a { background-image:url('../images/calendar.png');padding:2px 0 3px 20px;background-repeat:no-repeat;text-decoration: none; color:#4C4B4A;  }
-.linkdate a:hover { color: #E3272D }
-.linkurl { font-size:8pt; color:#E3272D; }
+.linkdate a:hover { color: #6666FF }
+.linkurl { font-size:8pt; color:#6666FF; }
 .linkdescription { color:#4C4B4A; margin-top:0; margin-bottom:12px; font-weight:normal; max-height:400px; overflow:auto; }
 .linkdescription a { text-decoration: none; color:#3465A4; }
-.linkdescription a:hover { color:#E3272D; }
+.linkdescription a:hover { color:#6666FF; }
 .linktaglist { padding-top:10px;}
 .linktag {
 
@@ -238,7 +238,7 @@ font-size:9pt;
 #footer  a:hover{ color:#4C4B4A;}
 #newversion { background-color: #FFFFA0; color:#000; position:absolute; top:0;right:0; padding:2 7 2 7;  font-size:9pt;}
 #cloudtag  { padding-left:10%; padding-right:10%; }
-#cloudtag a, #cloudtag a:visited { color:#E3272D !important; text-decoration:none; }
+#cloudtag a, #cloudtag a:visited { color:#6666FF !important; text-decoration:none; }
 #cloudtag a:hover { color:#4C4B4A !important; text-decoration:none;
 	transition-duration:1s;
 	-moz-transition-duration:1s;
@@ -332,10 +332,10 @@ div.dailyAbout
 	width: 160px;
 	margin-left:10px /*manquant*/
 }
-div.dailyAbout  a { color: #E3272D ; }
+div.dailyAbout  a { color: #6666FF ; }
 div.dailyTitle
  { 
-     color:#E3272D ;
+     color:#6666FF ;
 	 font-weight: normal;
      font-size: 38pt; /*c'est mieux plus petit et avec un weight normal*/
      text-align:center; 
@@ -359,7 +359,7 @@ div.dailyEntry
     font-size: 10pt;
     border-top: 1px solid #555;
 }
-div.dailyEntry  a { text-decoration:none; color: #E3272D ; }
+div.dailyEntry  a { text-decoration:none; color: #6666FF ; }
 div.dailyEntry:hover{
 background-color:rgba(0, 0, 0, 0.04);
 }
