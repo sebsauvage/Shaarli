@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>{include="includes"}</head>
+<body onload="document.getlist.post.focus();">
+<div id="pageheader">
+	{include="page.header"}
+
+	<div id="headerform">
+		<form method="GET" action="" name="getlistform">
+			<input type="hidden" name="do" value="genlist" style="width:25%;">
+			Tag :<input type="text" name="tag" style="width:20%;" tabindex="1">
+			From :<input type="text" name="from" style="width:15%;" tabindex="2" placeholder="20130301"> To :<input type="text" name="to" style="width:15%;" tabindex="3" placeholder="20130330"> 
+			Limit :<input type="text" name="limit" style="width:10%;" tabindex="34">
+			<input type="checkbox" checked="yes" style="margin:7 0 10 0;" name="sort" id="lf_sort">&nbsp;<label for="sort"><i>Sort</i></label>
+			<input type="submit" value="Generate" class="bigbutton">
+		</form>
+	</div>
+</div>
+{include="page.footer"}
+</body>
+</html>

@@ -2410,7 +2410,77 @@ function invalidateCaches()
     unset($_SESSION['tags']);  // Purge cache attached to session.
     pageCache::purgeCache();   // Purge page cache shared by sessions.
 }
+// Generate a list of links for reporting and fo generate html code for include it.
+function genList()
+{
+        $LINKSDB=new linkdb(false); // Only public link
+	$tag=isset($_GET['tag'])?$_GET['tag']:'all';
+        if ($tag!='all') { $LINKSDB=$LINKSDB->filterTags($tag); }
+        $to=isset($_GET['to'])?$_GET['to']:'99999999_999999';
+        $from=isset($_GET['from'])?$_GET['from']:'00000000_000000';
+        $limit=isset($_GET['limit'])?$_GET['limit']:'9999999';
 
+	if ($from!='') {
+        	if (!preg_match('/^\d{4}(\d{2})?(\d{2})?(_\d{2})?(\d{2})?(\d{2})?$/', $from)) { die('Wrong FROM format.'); }
+	} else $from='00000000_000000';
+	if ($to!='') {
+        	if (!preg_match('/^\d{4}(\d{2})?(\d{2})?(_\d{2})?(\d{2})?(\d{2})?$/', $to)) { die('Wrong TO format.'); }
+        } else $to='99999999_999999';
+	if ($limit!='') {
+		if (!preg_match('/^\d{1,7}$/', $limit)) { die('Wrong LIMIT format.'); }
+	} else $limit='9999999';
+
+        if (strcmp($from,$to) > 0) { $temp = $to; $to = $from; $from = $temp; }
+        $linkarray = array();
+        $tagcloud = array();
+	$code = '<ul>'."\n";
+        foreach($LINKSDB as $link)
+        {
+                $date=$link['linkdate'];
+                if ($from <= $date && $date <= $to)
+                {
+                        array_push($linkarray, ''.$link['description'].' [<a href="'.$link['url'].'" target="_blank">'.$date.'</a>]');
+                        foreach (explode(' ',$link['tags']) as $t)
+                                array_push($tagcloud, $t);
+                }
+        }
+
+        if ($limit>count($linkarray))
+                $limit=count($linkarray);
+
+        $linkarray = array_reverse($linkarray);
+
+        for ($i=0;$i<$limit;$i++)
+        {
+                $l = $linkarray[isset($_GET['sort'])?$limit-1-$i:$i];
+        	$code = $code.'<li>'.preg_replace('/(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/','\3/\2/\1 @ \4:\5:\6',$l).'</li>'."\n";
+        }
+
+	$code = $code.'</ul>'."\n";
+        $uniqueTags = array_unique($tagcloud);
+        unset($uniqueTags[array_search($tag,$uniqueTags)]);
+	$code = $code.'<b>Tags :</b> '.implode(', ',$uniqueTags);
+
+	$PAGE = new pageBuilder;
+	$PAGE->assign('linkcount',count($LINKSDB));
+	$PAGE->assign('tag',$tag);
+	if ($from!='00000000_000000') { $PAGE->assign('from',$from); }
+	if ($to!='99999999_999999') { $PAGE->assign('to',$to); }
+	$PAGE->assign('code',$code);
+	$PAGE->renderPage('genlist');
+        exit;
+}
+
+
+// -------- User wants to generate vrac link without using url options: show form.
+if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=getlist'))
+{
+	$PAGE = new pageBuilder;
+	$PAGE->renderPage('getlist');
+	exit;
+}
+
+if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=genlist')) { genList(); exit; } // User wants to generate list link without using gui
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=genthumbnail')) { genThumbnail(); exit; }  // Thumbnail generation/cache does not need the link database.
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=rss')) { showRSS(); exit; }
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=atom')) { showATOM(); exit; }

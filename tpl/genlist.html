@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>{include="includes"}</head>
+<body>
+<div id="pageheader">{include="page.header"}</div>
+<div class="code">
+	{if="$code"}
+	<div id="genlist">
+	<br><h1>Generated list</h1>
+	{if="$from"}From {$from} - {/if}{if="$to"}To {$to}{/if}
+	{if="$tag"}<br>With the tag : {$tag}<br><br>
+	{$code}
+	</div>
+	<br><h1>Code</h1>
+	<div class="code">
+	{$code|htmlentities|htmlspecialchars}
+	</div>{else}<b>Nothing found.<b>{/if}
+    {else}
+         <div style="text-align:center; padding:40px 0px 90px 0px;">No articles on this day.</div>
+    {/if}
+    <div style="clear:both;"></div>
+</div>
+{include="page.footer"}
+</body>
+</html>
