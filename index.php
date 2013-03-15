@@ -2460,6 +2460,7 @@ function genList()
         $uniqueTags = array_unique($tagcloud);
         unset($uniqueTags[array_search($tag,$uniqueTags)]);
 	$code = $code.'<b>Tags :</b> '.implode(', ',$uniqueTags);
+	$code = $code.'<br><b>Tags G+ :</b>  #'.implode(', #',$uniqueTags);
 
 	$PAGE = new pageBuilder;
 	$PAGE->assign('linkcount',count($LINKSDB));
