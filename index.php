@@ -1,6 +1,6 @@
 <?php
 error_reporting(E_ALL^E_WARNING);  // See all error except warnings.
-
+date_default_timezone_set('Europe/Paris');
 // Shaarli 0.0.40 beta - Shaare your links...
 // The personal, minimalist, super-fast, no-database delicious clone. By sebsauvage.net
 // http://sebsauvage.net/wiki/doku.php?id=php:shaarli
