@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL^E_WARNING);  // See all error except warnings.
+
 // Shaarli 0.0.40 beta - Shaare your links...
 // The personal, minimalist, super-fast, no-database delicious clone. By sebsauvage.net
 // http://sebsauvage.net/wiki/doku.php?id=php:shaarli
@@ -51,8 +53,6 @@ ini_set('memory_limit', '128M');  // Try to set max upload file size and read (M
 ini_set('post_max_size', '16M');
 ini_set('upload_max_filesize', '16M');
 checkphpversion();
-error_reporting(E_ALL^E_WARNING);  // See all error except warnings.
-//error_reporting(-1); // See all errors (for debugging only)
 
 include "inc/rain.tpl.class.php"; //include Rain TPL
 raintpl::$tpl_dir = "tpl/"; // template directory
