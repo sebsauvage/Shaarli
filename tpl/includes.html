@@ -7,4 +7,4 @@
 <link href="images/favicon.ico#" rel="shortcut icon" type="image/x-icon" />
 <link type="text/css" rel="stylesheet" href="inc/shaarli.css?version={$version|urlencode}#" />
 {if condition="is_file('inc/user.css')"}<link type="text/css" rel="stylesheet" href="inc/user.css?version={$version}#" />{/if}
-<script src="inc/jquery.min.js#"></script><script src="inc/jquery-ui.min.js#"></script>
+{if="empty($GLOBALS['disablejquery'])"}<script src="inc/jquery.min.js#"></script><script src="inc/jquery-ui.min.js#"></script>{/if}
