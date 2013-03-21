@@ -23,7 +23,7 @@ $GLOBALS['config']['PUBSUBHUB_URL'] = ''; // PubSubHubbub support. Put an empty 
 $GLOBALS['config']['UPDATECHECK_FILENAME'] = $GLOBALS['config']['DATADIR'].'/lastupdatecheck.txt'; // For updates check of Shaarli.
 $GLOBALS['config']['UPDATECHECK_INTERVAL'] = 86400 ; // Updates check frequency for Shaarli. 86400 seconds=24 hours
                                           // Note: You must have publisher.php in the same directory as Shaarli index.php
-$GLOBALS['config']['ACTUAL_SERVER_PORT'] = $_SERVER["SERVER_PORT"] ;
+$GLOBALS['config']['ACTUAL_SERVER_PORT'] = $_SERVER["SERVER_PORT"] ; //Override port used in generated URLs.
 // -----------------------------------------------------------------------------------------------
 // You should not touch below (or at your own risks !)
 // Optionnal config file.
