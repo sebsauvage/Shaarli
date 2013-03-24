@@ -29,6 +29,16 @@ $GLOBALS['config']['PUBSUBHUB_URL'] = ''; // PubSubHubbub support. Put an empty 
 $GLOBALS['config']['UPDATECHECK_FILENAME'] = $GLOBALS['config']['DATADIR'].'/lastupdatecheck.txt'; // For updates check of Shaarli.
 $GLOBALS['config']['UPDATECHECK_INTERVAL'] = 86400 ; // Updates check frequency for Shaarli. 86400 seconds=24 hours
                                           // Note: You must have publisher.php in the same directory as Shaarli index.php
+$GLOBALS['config']['PHP_MARKDOWN'] = false; // If true, enable markdown support in link description (on website and RSS/ATOM feed). See: http://daringfireball.net/projects/markdown/
+$GLOBALS['config']['PHP_MARKDOWN_EXTRA'] = false; // If true, enable markdown extra support. Ignored if $GLOBALS['config']['PHP_MARKDOWN'] !== true. See: http://michelf.ca/projects/php-markdown/extra/
+// -----------------------------------------------------------------------------------------------
+// PHP Markdown parser inclusion
+if ($GLOBALS['config']['PHP_MARKDOWN'] === true)
+{
+  require_once('/plugins/php-markdown/Michelf/Markdown.php');
+  if ($GLOBALS['config']['PHP_MARKDOWN_EXTRA'] === true)
+    require_once('/plugins/php-markdown/Michelf/MarkdownExtra.php');
+}
 // -----------------------------------------------------------------------------------------------
 // You should not touch below (or at your own risks !)
 // Optionnal config file.
@@ -934,7 +944,15 @@ function showRSS()
         // If user wants permalinks first, put the final link in description
         if ($usepermalinks===true) $descriptionlink = '(<a href="'.$absurl.'">Link</a>)';
         if (strlen($link['description'])>0) $descriptionlink = '<br>'.$descriptionlink;
-        echo '<description><![CDATA['.nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description'])))).$descriptionlink.']]></description>'."\n</item>\n";
+        if ($GLOBALS['config']['PHP_MARKDOWN'] === true)
+        {
+            if ($GLOBALS['config']['PHP_MARKDOWN_EXTRA'] !== true)
+               echo '<description><![CDATA['.\Michelf\Markdown::defaultTransform($link['description']).$descriptionlink.']]></description>'."\n</item>\n";
+            else
+               echo '<description><![CDATA['.\Michelf\MarkdownExtra::defaultTransform($link['description']).$descriptionlink.']]></description>'."\n</item>\n";
+        }
+        else
+            echo '<description><![CDATA['.nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description'])))).$descriptionlink.']]></description>'."\n</item>\n";
         $i++;
     }
     echo '</channel></rss><!-- Cached version of '.pageUrl().' -->';
@@ -994,8 +1012,15 @@ function showATOM()
         // If user wants permalinks first, put the final link in description
         if ($usepermalinks===true) $descriptionlink = htmlspecialchars('(<a href="'.$absurl.'">Link</a>)');
         if (strlen($link['description'])>0) $descriptionlink = '&lt;br&gt;'.$descriptionlink;
-
-        $entries.='<content type="html">'.htmlspecialchars(nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))))).$descriptionlink."</content>\n";
+        if ($GLOBALS['config']['PHP_MARKDOWN'] === true)
+        {
+           if ($GLOBALS['config']['PHP_MARKDOWN_EXTRA'] !== true)
+              $entries.='<content type="html">'.\Michelf\Markdown::defaultTransform($link['description']).$descriptionlink."</content>\n";
+           else
+              $entries.='<content type="html">'.\Michelf\MarkdownExtra::defaultTransform($link['description']).$descriptionlink."</content>\n";
+        }
+        else
+           $entries.='<content type="html">'.htmlspecialchars(nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))))).$descriptionlink."</content>\n";
         if ($link['tags']!='') // Adding tags to each ATOM entry (as mentioned in ATOM specification)
         {
             foreach(explode(' ',$link['tags']) as $tag)
@@ -1787,7 +1812,15 @@ function buildLinkList($PAGE,$LINKSDB)
     while ($i<$end && $i<count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
-        $link['description']=nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))));
+        if ($GLOBALS['config']['PHP_MARKDOWN'] === true)
+        {
+           if ($GLOBALS['config']['PHP_MARKDOWN_EXTRA'] !== true)
+              $link['description']=\Michelf\Markdown::defaultTransform($link['description']);
+           else
+              $link['description']=\Michelf\MarkdownExtra::defaultTransform($link['description']);
+        }
+        else
+           $link['description']=nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))));
         $title=$link['title'];
         $classLi =  $i%2!=0 ? '' : 'publicLinkHightLight';
         $link['class'] = ($link['private']==0 ? $classLi : 'private');
