@@ -31,8 +31,9 @@ $GLOBALS['config']['UPDATECHECK_INTERVAL'] = 86400 ; // Updates check frequency 
                                           // Note: You must have publisher.php in the same directory as Shaarli index.php
 $GLOBALS['config']['PHP_MARKDOWN'] = false; // If true, enable markdown support in link description (on website and RSS/ATOM feed). See: http://daringfireball.net/projects/markdown/
 $GLOBALS['config']['PHP_MARKDOWN_EXTRA'] = false; // If true, enable markdown extra support. Ignored if $GLOBALS['config']['PHP_MARKDOWN'] !== true. See: http://michelf.ca/projects/php-markdown/extra/
+// Note: You must first do a `git submodule update --init` to download the PHP Markdown library
 // -----------------------------------------------------------------------------------------------
-// PHP Markdown parser inclusion
+// PHP Markdown library inclusion
 if ($GLOBALS['config']['PHP_MARKDOWN'] === true)
 {
   require_once('plugins/php-markdown/Michelf/Markdown.php');
