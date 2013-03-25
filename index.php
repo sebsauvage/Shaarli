@@ -35,9 +35,9 @@ $GLOBALS['config']['PHP_MARKDOWN_EXTRA'] = false; // If true, enable markdown ex
 // PHP Markdown parser inclusion
 if ($GLOBALS['config']['PHP_MARKDOWN'] === true)
 {
-  require_once('/plugins/php-markdown/Michelf/Markdown.php');
+  require_once('plugins/php-markdown/Michelf/Markdown.php');
   if ($GLOBALS['config']['PHP_MARKDOWN_EXTRA'] === true)
-    require_once('/plugins/php-markdown/Michelf/MarkdownExtra.php');
+    require_once('plugins/php-markdown/Michelf/MarkdownExtra.php');
 }
 // -----------------------------------------------------------------------------------------------
 // You should not touch below (or at your own risks !)
