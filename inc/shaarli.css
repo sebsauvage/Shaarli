@@ -132,6 +132,8 @@ cursor:pointer;
 	text-decoration:none;
 }
 
+.shareYourLink  {float:right; font-style:italic; color:#bbb; text-align:right; padding:0 5 0 0;}
+
 #toolsdiv a{
 	clear:both;
 }
@@ -206,7 +208,7 @@ cursor:pointer;
 #paging_older { margin-right:15px; }
 #paging_newer { margin-left:15px; }
 
-#headerform { color:#ffffff; padding:5px 5px 5px 5px; clear: both;}
+#headerform { color:#ffffff; padding:5px 5px 5px 5px; clear: both; width:100%; white-space:nowrap;}
 #toolsdiv { color:#ffffff; padding:5px 5px 5px 5px; clear:left; }
 #uploaddiv { color:#ffffff; padding:5px 5px 5px 5px; clear:left; }
 #editlinkform { height:100%;color:#ffffff; padding:5px 5px 5px 15px; width:80%; clear:left; }
