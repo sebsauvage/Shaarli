@@ -1,0 +1,9 @@
+[submodule "inc/facebook-php-sdk"]
+	path = inc/facebook-php-sdk
+	url = https://github.com/facebook/facebook-php-sdk.git
+[submodule "inc/BitlyPHP"]
+	path = inc/BitlyPHP
+	url = https://github.com/Falicon/BitlyPHP.git
+[submodule "inc/tmhOAuth"]
+	path = inc/tmhOAuth
+	url = https://github.com/themattharris/tmhOAuth.git
