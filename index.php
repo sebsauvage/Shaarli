@@ -2439,7 +2439,7 @@ function genList()
                 $date=$link['linkdate'];
                 if ($from <= $date && $date <= $to)
                 {
-                        array_push($linkarray, ''.$link['description'].' [<a href="'.$link['url'].'" target="_blank">'.$date.'</a>]');
+                        array_push($linkarray, ''.$link['description']==''?$link['title']:$link['description'].' [<a href="'.$link['url'].'" target="_blank">'.$date.'</a>]');
                         foreach (explode(' ',$link['tags']) as $t)
                                 array_push($tagcloud, $t);
                 }
