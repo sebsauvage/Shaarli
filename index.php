@@ -2439,7 +2439,7 @@ function genList()
                 $date=$link['linkdate'];
                 if ($from <= $date && $date <= $to)
                 {
-                        array_push($linkarray, ''.$link['description'].' [<a href="'.$link['url'].'" target="_blank">'.$date.'</a>]');
+                        array_push($linkarray, ''.$link['description']==''?$link['title'].' [<a href="'.$link['url'].'" target="_blank">'.$date.'</a>]':$link['description'].' [<a href="'.$link['url'].'" target="_blank">'.$date.'</a>]');
                         foreach (explode(' ',$link['tags']) as $t)
                                 array_push($tagcloud, $t);
                 }
@@ -2460,7 +2460,7 @@ function genList()
         $uniqueTags = array_unique($tagcloud);
         unset($uniqueTags[array_search($tag,$uniqueTags)]);
 	$code = $code.'<b>Tags :</b> '.implode(', ',$uniqueTags);
-	$code = $code.'<br><b>Tags G+ :</b>  #'.implode(', #',$uniqueTags);
+	$code = $code.'<br><b>Tags G+ :</b>  #'.implode(' #',$uniqueTags);
 
 	$PAGE = new pageBuilder;
 	$PAGE->assign('linkcount',count($LINKSDB));
