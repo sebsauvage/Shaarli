@@ -1707,6 +1707,9 @@ function importFile()
                         if ($overwrite)
                         {   // If overwrite is required, we import link data, except date/time.
                             $link['linkdate']=$dblink['linkdate'];
+                            // Additionally, merge old tags instead of dropping them
+                            $mtags = array_merge(explode(' ',$link['tags']),explode(' ',$dblink['tags']));
+                            $link['tags'] = implode(' ',array_unique($mtags));
                             $LINKSDB[$link['linkdate']] = $link;
                             $import_count++;
                         }
