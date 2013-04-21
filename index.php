@@ -1677,7 +1677,12 @@ function importFile()
                 {
                     $attr=$m[1]; $value=$m[2];
                     if ($attr=='HREF') $link['url']=html_entity_decode($value,ENT_QUOTES,'UTF-8');
-                    elseif ($attr=='ADD_DATE') $raw_add_date=intval($value);
+                    elseif ($attr=='ADD_DATE')
+                    {
+                        $raw_add_date = floatval($value);
+                        // Adjust date from microseconds to seconds if necessary
+                        $raw_add_date = intval($raw_add_date > 1e15 ? $raw_add_date / 1E6 : $raw_add_date);
+                    }
                     elseif ($attr=='PRIVATE') $link['private']=($value=='0'?0:1);
                     elseif ($attr=='TAGS') $link['tags']=html_entity_decode(str_replace(',',' ',$value),ENT_QUOTES,'UTF-8');
                 }
