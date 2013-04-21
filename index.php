@@ -1683,7 +1683,6 @@ function importFile()
                 }
                 if (empty($link['tags']) and $usefolders)
                 {
-                    $filename = 'YESS';
                     $link['tags'] = str_replace(',',' ',$cur_folder);
                 }
                 if ($link['url']!='')
@@ -1717,7 +1716,6 @@ function importFile()
             }
             elseif (startswith($d[0],'<H3 '))
             {
-                $filesize = 'TESS';
                 // Use folder as tag for the following links
                 preg_match('!<H3 .*?>(.*?)</H3>!i',$d[0],$matches);
                 $cur_folder = (isset($matches[1]) ? trim($matches[1]) : '');  // Get folder name
