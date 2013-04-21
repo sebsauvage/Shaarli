@@ -1648,6 +1648,7 @@ function importFile()
     $data=file_get_contents($_FILES['filetoupload']['tmp_name']);
     $private = (empty($_POST['private']) ? 0 : 1); // Should the links be imported as private ?
     $overwrite = !empty($_POST['overwrite']) ; // Should the imported links overwrite existing ones ?
+    $usefolders = !empty($_POST['usefolders']) ; // Should folders be used as tags ?
     $import_count=0;
 
     // Sniff file type:
@@ -1659,6 +1660,7 @@ function importFile()
     {
         // This is a standard Netscape-style bookmark file.
         // This format is supported by all browsers (except IE, of course), also delicious, diigo and others.
+        $cur_folder = ''; // current folder
         foreach(explode('<DT>',$data) as $html) // explode is very fast
         {
             $link = array('linkdate'=>'','title'=>'','url'=>'','description'=>'','tags'=>'','private'=>0);
@@ -1666,7 +1668,8 @@ function importFile()
             if (startswith($d[0],'<A '))
             {
                 $link['description'] = (isset($d[1]) ? html_entity_decode(trim($d[1]),ENT_QUOTES,'UTF-8') : '');  // Get description (optional)
-                preg_match('!<A .*?>(.*?)</A>!i',$d[0],$matches); $link['title'] = (isset($matches[1]) ? trim($matches[1]) : '');  // Get title
+                preg_match('!<A .*?>(.*?)</A>!i',$d[0],$matches);
+                $link['title'] = (isset($matches[1]) ? trim($matches[1]) : '');  // Get title
                 $link['title'] = html_entity_decode($link['title'],ENT_QUOTES,'UTF-8');
                 preg_match_all('! ([A-Z_]+)=\"(.*?)"!i',$html,$matches,PREG_SET_ORDER);  // Get all other attributes
                 $raw_add_date=0;
@@ -1674,9 +1677,18 @@ function importFile()
                 {
                     $attr=$m[1]; $value=$m[2];
                     if ($attr=='HREF') $link['url']=html_entity_decode($value,ENT_QUOTES,'UTF-8');
-                    elseif ($attr=='ADD_DATE') $raw_add_date=intval($value);
+                    elseif ($attr=='ADD_DATE')
+                    {
+                        $raw_add_date = floatval($value);
+                        // Adjust date from microseconds to seconds if necessary
+                        $raw_add_date = intval($raw_add_date > 1e15 ? $raw_add_date / 1E6 : $raw_add_date);
+                    }
                     elseif ($attr=='PRIVATE') $link['private']=($value=='0'?0:1);
                     elseif ($attr=='TAGS') $link['tags']=html_entity_decode(str_replace(',',' ',$value),ENT_QUOTES,'UTF-8');
+                }
+                if (empty($link['tags']) and $usefolders)
+                {
+                    $link['tags'] = str_replace(',',' ',$cur_folder);
                 }
                 if ($link['url']!='')
                 {
@@ -1700,12 +1712,21 @@ function importFile()
                         if ($overwrite)
                         {   // If overwrite is required, we import link data, except date/time.
                             $link['linkdate']=$dblink['linkdate'];
+                            // Additionally, merge old tags instead of dropping them
+                            $mtags = array_merge(explode(' ',$link['tags']),explode(' ',$dblink['tags']));
+                            $link['tags'] = implode(' ',array_unique($mtags));
                             $LINKSDB[$link['linkdate']] = $link;
                             $import_count++;
                         }
                     }
 
                 }
+            }
+            elseif (startswith($d[0],'<H3 '))
+            {
+                // Use folder as tag for the following links
+                preg_match('!<H3 .*?>(.*?)</H3>!i',$d[0],$matches);
+                $cur_folder = (isset($matches[1]) ? trim($matches[1]) : '');  // Get folder name
             }
         }
         $LINKSDB->savedb();
