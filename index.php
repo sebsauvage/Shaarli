@@ -36,9 +36,16 @@ $GLOBALS['config']['PHP_MARKDOWN_EXTRA'] = false; // If true, enable markdown ex
 // PHP Markdown library inclusion
 if ($GLOBALS['config']['PHP_MARKDOWN'] === true)
 {
-  require_once('plugins/php-markdown/Michelf/Markdown.php');
-  if ($GLOBALS['config']['PHP_MARKDOWN_EXTRA'] === true)
-    require_once('plugins/php-markdown/Michelf/MarkdownExtra.php');
+	if (version_compare(PHP_VERSION, '5.3.0') >= 0)
+	{
+		require_once('plugins/php-markdown/Michelf/Markdown.php');
+		if ($GLOBALS['config']['PHP_MARKDOWN_EXTRA'] === true)
+			require_once('plugins/php-markdown/Michelf/MarkdownExtra.php');
+	} else {
+		require_once('plugins/php-markdown-5.2/markdown.php');
+		if ($GLOBALS['config']['PHP_MARKDOWN_EXTRA'] === true)
+			require_once('plugins/php-markdown-5.2/MarkdownExtra.php');
+	}
 }
 // -----------------------------------------------------------------------------------------------
 // You should not touch below (or at your own risks !)
@@ -947,10 +954,17 @@ function showRSS()
         if (strlen($link['description'])>0) $descriptionlink = '<br>'.$descriptionlink;
         if ($GLOBALS['config']['PHP_MARKDOWN'] === true)
         {
-            if ($GLOBALS['config']['PHP_MARKDOWN_EXTRA'] !== true)
-               echo '<description><![CDATA['.\Michelf\Markdown::defaultTransform($link['description']).$descriptionlink.']]></description>'."\n</item>\n";
+            if (version_compare(PHP_VERSION, '5.3.0') >= 0)
+            {
+              if ($GLOBALS['config']['PHP_MARKDOWN_EXTRA'] !== true)
+                 echo '<description><![CDATA['.\Michelf\Markdown::defaultTransform($link['description']).$descriptionlink.']]></description>'."\n</item>\n";
+              else
+                 echo '<description><![CDATA['.\Michelf\MarkdownExtra::defaultTransform($link['description']).$descriptionlink.']]></description>'."\n</item>\n";
+            }
             else
-               echo '<description><![CDATA['.\Michelf\MarkdownExtra::defaultTransform($link['description']).$descriptionlink.']]></description>'."\n</item>\n";
+            {
+               echo '<description><![CDATA['.Markdown($link['description']).$descriptionlink.']]></description>'."\n</item>\n";
+            }
         }
         else
             echo '<description><![CDATA['.nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description'])))).$descriptionlink.']]></description>'."\n</item>\n";
@@ -1015,10 +1029,17 @@ function showATOM()
         if (strlen($link['description'])>0) $descriptionlink = '&lt;br&gt;'.$descriptionlink;
         if ($GLOBALS['config']['PHP_MARKDOWN'] === true)
         {
-           if ($GLOBALS['config']['PHP_MARKDOWN_EXTRA'] !== true)
-              $entries.='<content type="html">'.\Michelf\Markdown::defaultTransform($link['description']).$descriptionlink."</content>\n";
+           if (version_compare(PHP_VERSION, '5.3.0') >= 0)
+           {
+             if ($GLOBALS['config']['PHP_MARKDOWN_EXTRA'] !== true)
+                $entries.='<content type="html">'.\Michelf\Markdown::defaultTransform($link['description']).$descriptionlink."</content>\n";
+             else
+                $entries.='<content type="html">'.\Michelf\MarkdownExtra::defaultTransform($link['description']).$descriptionlink."</content>\n";
+           }
            else
-              $entries.='<content type="html">'.\Michelf\MarkdownExtra::defaultTransform($link['description']).$descriptionlink."</content>\n";
+           {
+                $entries.='<content type="html">'.Markdown($link['description']).$descriptionlink."</content>\n";
+           }
         }
         else
            $entries.='<content type="html">'.htmlspecialchars(nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))))).$descriptionlink."</content>\n";
@@ -1815,10 +1836,17 @@ function buildLinkList($PAGE,$LINKSDB)
         $link = $linksToDisplay[$keys[$i]];
         if ($GLOBALS['config']['PHP_MARKDOWN'] === true)
         {
-           if ($GLOBALS['config']['PHP_MARKDOWN_EXTRA'] !== true)
-              $link['description']=\Michelf\Markdown::defaultTransform($link['description']);
+           if (version_compare(PHP_VERSION, '5.3.0') >= 0)
+           {
+             if ($GLOBALS['config']['PHP_MARKDOWN_EXTRA'] !== true)
+                $link['description']=\Michelf\Markdown::defaultTransform($link['description']);
+             else
+                $link['description']=\Michelf\MarkdownExtra::defaultTransform($link['description']);
+           }
            else
-              $link['description']=\Michelf\MarkdownExtra::defaultTransform($link['description']);
+           {
+                $link['description'] = Markdown($link['description']);
+           }
         }
         else
            $link['description']=nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))));
