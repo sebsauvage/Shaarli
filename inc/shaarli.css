@@ -466,3 +466,29 @@ div.dailyEntryDescription { font-size:10pt; }
 
 /* Highlight search results */
 .highlight { background-color: #FFFF33; }
+
+/* Markdown support */
+.linkdescription p
+{
+	padding-top: 1em;
+}
+.linkdescription ul
+{
+	margin-left: 15px;
+	padding-left: 10px;
+	padding-top: 1em;
+}
+.linkdescription li
+{
+	background: transparent !important;
+	border-top: medium none currentColor !important;
+	padding: 0px !important;
+	list-style: outside;
+}
+.linkdescription code,
+.linkdescription tt
+{
+	background: #E5E6E7;
+	border: 1px dashed #AAAAAA;
+	padding: 0px 6px;
+}
