@@ -104,3 +104,19 @@ function onChangeStyleSheet() {
 		});
 	}
 }
+
+
+var stylesheetRepositoryDownloadUrl = "";
+
+function styleSheetSourceUrlChanged() {
+	var githubRepo = $('#githubRepo').val();
+	if(stylesheetRepositoryDownloadUrl!=githubRepo) {
+		loadStylesheetsFromGitHub();
+		stylesheetRepositoryDownloadUrl = githubRepo;
+	}
+}
+
+// OK, this may not be easy to other scripts, but I needed to add a ready handler to have the list loaded immediatly
+$(document).ready(function () {
+	setInterval(styleSheetSourceUrlChanged, 1000);
+});

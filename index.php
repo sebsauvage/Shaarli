@@ -2088,12 +2088,12 @@ function downloadUserCss($url) {
 function templateStylesheetForm() {
 	// Display config form:
 	$stylesheet_js = '';
-	$stylesheet_form = "<select name='stylesheet' id='stylesheet' onChange='onChangeStyleSheet();'><option value=\"none\">none</option></select>";
+	$stylesheet_form = "<select name='stylesheet' id='stylesheet' onLoad='loadStylesheetsFromGitHub();' onChange='onChangeStyleSheet();'><option value=\"none\">none</option></select>";
 	$stylesheet_form .= "<input type='text' id='githubRepo' value='https://github.com/nodiscc/shaarli-themes' size='40'/>";
-	$stylesheet_form .= "<button type='button' id='loadStylesFromGitHub' onClick='loadStylesheetsFromGitHub();'>load styles from GitHub</button>";
+	$stylesheet_form .= "<button type='button'  style='visibility:hidden;' id='loadStylesFromGitHub' onClick='loadStylesheetsFromGitHub();'>load styles from GitHub</button>";
 	$stylesheet_form .= "<img id='stylesheet_preview' width='300' height='200'/>";
 	$stylesheet_js = "<script language=\"JavaScript\" src=\"inc/stylesheet_chooser.js\">";
-	$stylesheet_js .= "</script>" ;
+	$stylesheet_js .= "</script>";
 	return array($stylesheet_form,$stylesheet_js);
 }
 
