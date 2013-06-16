@@ -1370,6 +1370,9 @@ function renderPage()
             if (!empty($_POST['continent']) && !empty($_POST['city']))
                 if (isTZvalid($_POST['continent'],$_POST['city']))
                     $tz = $_POST['continent'].'/'.$_POST['city'];
+            if (!empty($_POST['stylesheet'])) {
+				downloadUserCss($_POST['stylesheet']);
+			}
             $GLOBALS['timezone'] = $tz;
             $GLOBALS['title']=$_POST['title'];
             $GLOBALS['redirector']=$_POST['redirector'];
@@ -1388,8 +1391,11 @@ function renderPage()
             $PAGE->assign('title',htmlspecialchars( empty($GLOBALS['title']) ? '' : $GLOBALS['title'] , ENT_QUOTES));
             $PAGE->assign('redirector',htmlspecialchars( empty($GLOBALS['redirector']) ? '' : $GLOBALS['redirector'] , ENT_QUOTES));
             list($timezone_form,$timezone_js) = templateTZform($GLOBALS['timezone']);
+            list($stylechooser_form, $stylechooser_js) = templateStylesheetForm(/* TODO input current style selection */);
             $PAGE->assign('timezone_form',$timezone_form); // FIXME: put entire tz form generation in template ?
             $PAGE->assign('timezone_js',$timezone_js);
+            $PAGE->assign('stylesheet_form',$stylechooser_form); // FIXME: put entire tz form generation in template ?
+            $PAGE->assign('stylesheet_js',$stylechooser_js);
             $PAGE->renderPage('configure');
             exit;
         }
@@ -2059,6 +2065,36 @@ function install()
     $PAGE->assign('timezone_js',$timezone_js);
     $PAGE->renderPage('install');
     exit;
+}
+
+/**
+ * download given stylesheet into user.css for immediate use
+ */
+function downloadUserCss($url) {
+	if($url=='none') {
+		unlink('inc/user.css');
+	} else {
+		$stylesheet = file_get_contents($url);
+		$stylesheet = json_decode($stylesheet);
+		error_log("using stylesheet from ".$stylesheet->html_url);
+		file_put_contents('inc/user.css', base64_decode($stylesheet->content));
+	}
+}
+
+// Generates the timezone selection form and javascript.
+// Input: TODO (optional) current stylesheet
+// Output: array(html,js)
+// Example: list($htmlform,$js) = templateStylesheetForm();  // Europe/Paris pre-selected.
+function templateStylesheetForm() {
+	// Display config form:
+	$stylesheet_js = '';
+	$stylesheet_form = "<select name='stylesheet' id='stylesheet' onChange='onChangeStyleSheet();'><option value=\"none\">none</option></select>";
+	$stylesheet_form .= "<input type='text' id='githubRepo' value='https://github.com/nodiscc/shaarli-themes' size='40'/>";
+	$stylesheet_form .= "<button type='button' id='loadStylesFromGitHub' onClick='loadStylesheetsFromGitHub();'>load styles from GitHub</button>";
+	$stylesheet_form .= "<img id='stylesheet_preview' width='300' height='200'/>";
+	$stylesheet_js = "<script language=\"JavaScript\" src=\"inc/stylesheet_chooser.js\">";
+	$stylesheet_js .= "</script>" ;
+	return array($stylesheet_form,$stylesheet_js);
 }
 
 // Generates the timezone selection form and javascript.
