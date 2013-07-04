@@ -1,4 +1,4 @@
-/* CSS Stylsheet for Shaarli - http://sebsauvage.net/wiki/doku.php?id=php:shaarli */
+/* Cascading Style Sheet for Shaarli - http://sebsauvage.net/wiki/doku.php?id=php:shaarli */
 
 /* CSS Reset from Yahoo to cope with browsers CSS inconsistencies. */
 /*
@@ -292,7 +292,7 @@ font-size:9pt;
 .picwall_pictureframe img { max-width: 100%;height: auto; } /* Adapt the width of the image */
 .picwall_pictureframe a {text-decoration:none;}
 
-/* CSS to show title when hovering an image - no javascript required. */
+/* CSS to show title when hovering an image - no JavaScript required. */
 .picwall_pictureframe span.info {display: none;}
 .picwall_pictureframe:hover span.info {
     display:block;
@@ -407,13 +407,13 @@ div.dailyEntryDescription
     overflow:auto;
 }
 
-/* Common css screwdriver */
+/* Common CSS screwdriver */
 .clear{
 	clear:both;
 }
 
 /* For lazy images loading in picture wall.
-   using http://www.appelsiini.net/projects/lazyload 
+   Using http://www.appelsiini.net/projects/lazyload 
  */
 .lazyimage { display:none; }
 
