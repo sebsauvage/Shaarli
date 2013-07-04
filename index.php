@@ -460,7 +460,7 @@ function pageUrl()
     return indexUrl().(!empty($_SERVER["QUERY_STRING"]) ? '?'.$_SERVER["QUERY_STRING"] : '');
 }
 
-// Convert post_max_size/upload_max_filesize (e.g.'16M') parameters to bytes.
+// Convert post_max_size/upload_max_filesize (e.g. '16M') parameters to bytes.
 function return_bytes($val)
 {
     $val = trim($val); $last=strtolower($val[strlen($val)-1]);
@@ -693,11 +693,11 @@ class linkdb implements Iterator, Countable, ArrayAccess
     private $urls;  // List of all recorded URLs (key=url, value=linkdate) for fast reserve search (url-->linkdate)
     private $keys;  // List of linkdate keys (for the Iterator interface implementation)
     private $position; // Position in the $this->keys array. (for the Iterator interface implementation.)
-    private $loggedin; // Is the used logged in? (used to filter private links)
+    private $loggedin; // Is the user logged in? (used to filter private links)
 
     // Constructor:
     function __construct($isLoggedIn)
-    // Input : $isLoggedIn : is the used logged in?
+    // Input : $isLoggedIn : is the user logged in?
     {
         $this->loggedin = $isLoggedIn;
         $this->checkdb(); // Make sure data file exists.
@@ -2125,7 +2125,7 @@ function isTZvalid($continent,$city)
 
 
 // Webservices (for use with jQuery/jQueryUI)
-// e.g.  index.php?ws=tags&term=minecr
+// e.g. index.php?ws=tags&term=minecr
 function processWS()
 {
     if (empty($_GET['ws']) || empty($_GET['term'])) return;
