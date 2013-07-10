@@ -681,6 +681,7 @@ class pageBuilder
        private : Is this link private ? 0=no, other value=yes
        linkdate : date of the creation of this entry, in the form YYYYMMDD_HHMMSS (eg.'20110914_192317')
        tags : tags attached to this entry (separated by spaces)
+	   landmark : latitute and longitude if activated, null otherwise
 
    We implement 3 interfaces:
      - ArrayAccess so that this object behaves like an associative array.
@@ -1463,6 +1464,17 @@ function renderPage()
             $url = 'http://'.$url;
         $link = array('title'=>trim($_POST['lf_title']),'url'=>$url,'description'=>trim($_POST['lf_description']),'private'=>(isset($_POST['lf_private']) ? 1 : 0),
                       'linkdate'=>$linkdate,'tags'=>str_replace(',',' ',$tags));
+		// Landmark		
+		if(isset($_POST['lf_landmark']))
+		{
+			$landmark = array('lat'=>$_POST['lf_land_lat'],'lon'=>$_POST['lf_land_lon'],'alt'=>$_POST['lf_land_alt']);
+		}
+		else
+		{
+			$landmark = null;
+		}
+		$link['landmark']=$landmark;
+		
         if ($link['title']=='') $link['title']=$link['url']; // If title is empty, use the URL as title.
         $LINKSDB[$linkdate] = $link;
         $LINKSDB->savedb(); // save to disk

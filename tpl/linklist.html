@@ -31,7 +31,12 @@
         {loop="links"}
         <li{if="$value.class"} class="{$value.class}"{/if}>
             <a name="{$value.linkdate|smallHash}" id="{$value.linkdate|smallHash}"></a>
-            <div class="thumbnail">{$value.url|thumbnail}</div>
+            <div class="thumbnail">{$value.url|thumbnail}
+			{if="isset($value.landmark)"}
+				<img width="90" height="90" alt="Latitude:{$value.landmark['lat']} | Longitude:{$value.landmark['lon']} |Altitude:{$value.landmark['alt']}" src="http://ojw.dev.openstreetmap.org/StaticMap/?mlat={$value.landmark['lat']}&mlon={$value.landmark['lon']}&z=14&layer=hiking&mode=Location&show=1" />
+			{/if}
+		
+			</div>
             <div class="linkcontainer">
                 {if="isLoggedIn()"}
                     <div class="linkeditbuttons">
@@ -41,6 +46,7 @@
                     </div>
                 {/if}
                 <span class="linktitle"><a href="{$redirector}{$value.url|htmlspecialchars}">{$value.title|htmlspecialchars}</a></span>
+				
                 <br>
                 {if="$value.description"}<div class="linkdescription"{if condition="$search_type=='permalink'"} style="max-height:none !important;"{/if}>{$value.description}</div>{/if}
                 {if="!$GLOBALS['config']['HIDE_TIMESTAMPS'] || isLoggedIn()"}
