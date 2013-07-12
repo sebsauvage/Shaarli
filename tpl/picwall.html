@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>{include="includes"}
-{if="empty($GLOBALS['disablejquery'])"}	
+{if="empty($GLOBALS['disablejquery'])"}
 	<script src="inc/jquery.lazyload.min.js#"></script>
 {/if}
 </head>
@@ -18,12 +18,12 @@
 </center>
 {include="page.footer"}
 
-{if="empty($GLOBALS['disablejquery'])"} 
+{if="empty($GLOBALS['disablejquery'])"}
 <script>
 $(document).ready(function() {
     $("img.lazyimage").show().lazyload();
 });
 </script>
-{/if} 
+{/if}
 </body>
 </html>

@@ -48,8 +48,8 @@
                 {else}
                     <span class="linkdate" title="Short link here"><a href="?{$value.linkdate|smallHash}">permalink</a> - </span>
                 {/if}
-                <div style="position:relative;display:inline;"><a href="http://invx.com/code/qrcode/?code={$scripturl|urlencode}%3F{$value.linkdate|smallHash}&width=200&height=200" 
-                    {if="empty($GLOBALS['disablejquery'])"}onclick="return false;"{/if} class="qrcode"><img src="images/qrcode.png#" width="13" height="13" title="QR-Code"></a></div> - 
+                <div style="position:relative;display:inline;"><a href="http://invx.com/code/qrcode/?code={$scripturl|urlencode}%3F{$value.linkdate|smallHash}&width=200&height=200"
+                    {if="empty($GLOBALS['disablejquery'])"}onclick="return false;"{/if} class="qrcode"><img src="images/qrcode.png#" width="13" height="13" title="QR-Code"></a></div> -
                 <span class="linkurl" title="Short link">{$value.url|htmlspecialchars}</span><br>
                 {if="$value.tags"}
                     <div class="linktaglist">
@@ -66,7 +66,7 @@
 </div>
 
     {include="page.footer"}
-{if="empty($GLOBALS['disablejquery'])"}    
+{if="empty($GLOBALS['disablejquery'])"}
 <script>
 $(document).ready(function() {
 	$('a.qrcode').click(function(){

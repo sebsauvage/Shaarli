@@ -4,7 +4,7 @@ Shaarli
 The personal, minimalist, super-fast, no-database delicious clone.
 
 You want to share the links you discover ? Shaarli is a minimalist delicious clone you can install on your own website.
-It is designed to be personal (single-user), fast and handy. 
+It is designed to be personal (single-user), fast and handy.
 
 
 Features:
@@ -55,10 +55,10 @@ In no event will the authors be held liable for any damages arising from
 the use of this software.
 
 Permission is granted to anyone to use this software for any purpose,
-including commercial applications, and to alter it and redistribute it 
+including commercial applications, and to alter it and redistribute it
 freely, subject to the following restrictions:
 
-  1. The origin of this software must not be misrepresented; you must not 
+  1. The origin of this software must not be misrepresented; you must not
      claim that you wrote the original software. If you use this software
      in a product, an acknowledgment in the product documentation would
      be appreciated but is not required.

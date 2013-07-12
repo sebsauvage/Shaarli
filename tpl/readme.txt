@@ -17,7 +17,6 @@ If you want to also add something in the page header (in the dark area), do it h
 
 <div id="pageheader">{include="page.header"}My menu goes here...</div>
 
-
 Example: "Add new link" form:
 -----------------------------------------------------
 <html>
@@ -27,7 +26,7 @@ Example: "Add new link" form:
 	{include="page.header"}
 	<div id="headerform">
 		<form method="GET" action="" name="addform" class="addform">
-			<input type="text" name="post" style="width:50%;"> 
+			<input type="text" name="post" style="width:50%;">
 			<input type="submit" value="Add link" class="bigbutton">
 		</form>
 	</div>
@@ -36,7 +35,4 @@ Example: "Add new link" form:
 </body>
 </html>
 -----------------------------------------------------
-
-
-
 
