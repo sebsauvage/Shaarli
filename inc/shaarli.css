@@ -201,8 +201,8 @@ cursor:pointer;
 .paging a:hover {  color:#FFFFC9;  }
 .paging a:active { color:#fff;  }
 #paging_privatelinks { float:left; }
-#paging_linksperpage { float:right; padding-right:5px; }
-#paging_current { display:inline; color:#fff; padding:0 20 0 20; }
+.paging_linksperpage { float:right; padding-right:5px; }
+.paging_current { display:inline; color:#fff; padding:0 20 0 20; }
 #paging_older { margin-right:15px; }
 #paging_newer { margin-left:15px; }
 
@@ -451,8 +451,8 @@ a {color:#000!important;text-decoration:none!important;}
 #tagfilter_value { width:70% !important; }
 div.qrcode { position:relative; float:left; top:-10px; left:0px; }
 #paging_privatelinks { float;none; }
-#paging_linksperpage { float:none; margin-bottom:10px; font-size:smaller;}
-#paging_older,#paging_newer,#paging_linksperpage a { border: 1px solid black; padding:3px 5px 3px 5px; background-color:#666; color:#fff; border-radius: 5px 5px 5px 5px;}
+.paging_linksperpage { float:none; margin-bottom:10px; font-size:smaller;}
+#paging_older,#paging_newer,.paging_linksperpage a { border: 1px solid black; padding:3px 5px 3px 5px; background-color:#666; color:#fff; border-radius: 5px 5px 5px 5px;}
 .thumbnail { float:none; height:auto; margin: 0px; text-align:center;}
 #cloudtag  { padding:0px; }
 div.dailyAbout {  float:none; position:relative; width:100%; clear:both; padding:0px; top:0px; left:0px; }
