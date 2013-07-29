@@ -23,6 +23,9 @@
         <tr><td valign="top"><b>New link:</b></td><td>
         	<input type="checkbox" name="privateLinkByDefault" id="privateLinkByDefault" {if="!empty($GLOBALS['privateLinkByDefault'])"}checked{/if}/><label for="privateLinkByDefault">&nbsp;All new link are private by default</label></td>
         </tr>
+		<tr><td valign="top"><b>Use Curl (instead get_content_file):</b></td><td>
+        	<input type="checkbox" name="useCurl" id="useCurl" {if="!empty($GLOBALS['useCurl'])"}checked{/if}/><label for="useCurl">&nbsp;Use Curl if get_content_file doesn't work fine.</label></td>
+        </tr>
 	  <tr><td></td><td align="right"><input type="submit" name="Save" value="Save config" class="bigbutton"></td></tr>
 	</table>
 	</form>

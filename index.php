@@ -580,6 +580,53 @@ function getHTTP($url,$timeout=30)
     }
 }
 
+function getHTTPWithCurl($url,$timeout=30){
+	try 
+	{
+		$ch = curl_init();
+		curl_setopt ($ch, CURLOPT_URL, $url);
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_HEADER,true); 
+		// ob_start();
+		$data = curl_exec($ch);
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); 
+		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+		curl_close($ch);
+		// $data = ob_get_contents();
+		// echo "<pre>data:".var_dump($data)."</pre>"; //debug mma
+		// exit(0); //debug mma
+		// ob_end_clean();
+
+		if (!$data) { return array('HTTP Error',array(),''); }
+		
+		$header = substr($data, 0, $header_size);
+		$body = substr($data, $header_size);
+		
+        // $httpStatus=$httpCode; // eg. "HTTP/1.1 200 OK"
+		$header = explode ("\r\n", $header); 
+		array_filter($header);
+
+		$responseHeaders=http_parse_headers_shaarli($header);
+		
+		// echo "<pre>";//debug mma
+		// var_dump($header);//debug mma
+		// echo "</pre>"; //debug mma
+		// exit(0); //debug mma
+		
+		//var_dump($httpCode);
+		return array($header[0],$responseHeaders,$data);
+	}
+	catch (Exception $e)
+	{
+		return array($e->getMessage(),'','');
+	}
+
+
+
+
+}
+
 // Extract title from an HTML document.
 // (Returns an empty string if not found.)
 function html_extract_title($html)
@@ -1376,6 +1423,8 @@ function renderPage()
             $GLOBALS['disablesessionprotection']=!empty($_POST['disablesessionprotection']);
             $GLOBALS['disablejquery']=!empty($_POST['disablejquery']);
             $GLOBALS['privateLinkByDefault']=!empty($_POST['privateLinkByDefault']);
+			$GLOBALS['useCurl']=!empty($_POST['useCurl']);
+			
             writeConfig();
             echo '<script language="JavaScript">alert("Configuration was saved.");document.location=\'?do=tools\';</script>';
             exit;
@@ -1541,12 +1590,16 @@ function renderPage()
             $description=''; $tags=''; $private=0;
             if (($url!='') && parse_url($url,PHP_URL_SCHEME)=='') $url = 'http://'.$url;
             // If this is an HTTP link, we try go get the page to extact the title (otherwise we will to straight to the edit form.)
-            if (empty($title) && parse_url($url,PHP_URL_SCHEME)=='http')
+			if (empty($title) && ((parse_url($url,PHP_URL_SCHEME)=='http') || (parse_url($url,PHP_URL_SCHEME)=='https')))
             {
-                list($status,$headers,$data) = getHTTP($url,4); // Short timeout to keep the application responsive.
+                if ($GLOBALS['useCurl']) list($status,$headers,$data) = getHTTPWithCurl($url,4); // Short timeout to keep the application responsive.
+                list($status,$headers,$data) = getHTTPWithCurl($url,4); // Short timeout to keep the application responsive.
+                //$debug = getHTTPWithCurl($url,4); // Short timeout to keep the application responsive.
                 // FIXME: Decode charset according to specified in either 1) HTTP response headers or 2) <head> in html
-                if (strpos($status,'200 OK')!==false) $title=html_entity_decode(html_extract_title($data),ENT_QUOTES,'UTF-8');
 
+
+                if (strpos($status,'200 OK')!==false) $title=html_entity_decode(html_extract_title($data),ENT_QUOTES,'UTF-8');
+			
             }
             if ($url=='') $url='?'.smallHash($linkdate); // In case of empty URL, this is just a text (with a link that point to itself)
             $link = array('linkdate'=>$linkdate,'title'=>$title,'url'=>$url,'description'=>$description,'tags'=>$tags,'private'=>0);
@@ -1985,6 +2038,7 @@ function lazyThumbnail($url,$href=false)
     else
         $html.='<img class="lazyimage" src="#" data-original="'.htmlspecialchars($t['src']).'"';
 
+	$html.='<img class="lazyimage" src="#" data-original="'.htmlspecialchars($t['src']).'"';
     if (!empty($t['width']))  $html.=' width="'.htmlspecialchars($t['width']).'"';
     if (!empty($t['height'])) $html.=' height="'.htmlspecialchars($t['height']).'"';
     if (!empty($t['style']))  $html.=' style="'.htmlspecialchars($t['style']).'"';
