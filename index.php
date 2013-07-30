@@ -588,33 +588,22 @@ function getHTTPWithCurl($url,$timeout=30){
 		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HEADER,true); 
-		// ob_start();
 		$data = curl_exec($ch);
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); 
 		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
 		curl_close($ch);
-		// $data = ob_get_contents();
-		// echo "<pre>data:".var_dump($data)."</pre>"; //debug mma
-		// exit(0); //debug mma
-		// ob_end_clean();
+
 
 		if (!$data) { return array('HTTP Error',array(),''); }
 		
 		$header = substr($data, 0, $header_size);
 		$body = substr($data, $header_size);
 		
-        // $httpStatus=$httpCode; // eg. "HTTP/1.1 200 OK"
 		$header = explode ("\r\n", $header); 
 		array_filter($header);
 
 		$responseHeaders=http_parse_headers_shaarli($header);
 		
-		// echo "<pre>";//debug mma
-		// var_dump($header);//debug mma
-		// echo "</pre>"; //debug mma
-		// exit(0); //debug mma
-		
-		//var_dump($httpCode);
 		return array($header[0],$responseHeaders,$data);
 	}
 	catch (Exception $e)
