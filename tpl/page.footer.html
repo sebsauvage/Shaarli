@@ -13,7 +13,7 @@
 $(document).ready(function()
 {
     $('#lf_tags').autocomplete({source:'{$source}?ws=tags',minLength:1});
-    $('#searchtags').autocomplete({source:'{$source}?ws=tags',minLength:1});
+    $('#tagfilter_value').autocomplete({source:'{$source}?ws=tags',minLength:1});
     $('#fromtag').autocomplete({source:'{$source}?ws=singletag',minLength:1});
 });
 </script>
