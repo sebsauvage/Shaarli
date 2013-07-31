@@ -411,8 +411,8 @@ if (isset($_POST['login']))
             session_regenerate_id(true);
         }
         // Optional redirect after login:
-        if (isset($_GET['post'])) { header('Location: ?post='.urlencode($_GET['post']).(!empty($_GET['title'])?'&title='.urlencode($_GET['title']):'').(!empty($_GET['source'])?'&source='.urlencode($_GET['source']):'')); exit; }
-        if (isset($_POST['returnurl']))
+        if (isset($_GET['post'])) { header('Location: ?post='.urlencode($_GET['post']).(!empty($_GET['title'])?'&title='.urlencode($_GET['title']):'').(!empty($_GET['description'])?'&description='.urlencode($_GET['description']):'').(!empty($_GET['source'])?'&source='.urlencode($_GET['source']):'')); exit; }
+		if (isset($_POST['returnurl']))
         {
             if (endsWith($_POST['returnurl'],'?do=login')) { header('Location: ?'); exit; } // Prevent loops over login screen.
             header('Location: '.$_POST['returnurl']); exit;
@@ -423,7 +423,7 @@ if (isset($_POST['login']))
     {
         ban_loginFailed();
         $redir = '';
-        if (isset($_GET['post'])) { $redir = '&post='.urlencode($_GET['post']).(!empty($_GET['title'])?'&title='.urlencode($_GET['title']):'').(!empty($_GET['source'])?'&source='.urlencode($_GET['source']):'');  }
+        if (isset($_GET['post'])) { $redir = '&post='.urlencode($_GET['post']).(!empty($_GET['title'])?'&title='.urlencode($_GET['title']):'').(!empty($_GET['description'])?'&description='.urlencode($_GET['description']):'').(!empty($_GET['source'])?'&source='.urlencode($_GET['source']):'');  }
         echo '<script language="JavaScript">alert("Wrong login/password.");document.location=\'?do=login'.$redir.'\';</script>'; // Redirect to login screen.
         exit;
     }
