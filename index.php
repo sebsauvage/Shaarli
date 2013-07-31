@@ -593,7 +593,6 @@ function getHTTPWithCurl($url,$timeout=30){
 		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
 		curl_close($ch);
 
-
 		if (!$data) { return array('HTTP Error',array(),''); }
 		
 		$header = substr($data, 0, $header_size);
@@ -610,10 +609,6 @@ function getHTTPWithCurl($url,$timeout=30){
 	{
 		return array($e->getMessage(),'','');
 	}
-
-
-
-
 }
 
 // Extract title from an HTML document.
