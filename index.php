@@ -1407,7 +1407,7 @@ function renderPage()
             $GLOBALS['disablesessionprotection']=!empty($_POST['disablesessionprotection']);
             $GLOBALS['disablejquery']=!empty($_POST['disablejquery']);
             $GLOBALS['privateLinkByDefault']=!empty($_POST['privateLinkByDefault']);
-			$GLOBALS['useCurl']=!empty($_POST['useCurl']);
+	    $GLOBALS['useCurl']=!empty($_POST['useCurl']);
 			
             writeConfig();
             echo '<script language="JavaScript">alert("Configuration was saved.");document.location=\'?do=tools\';</script>';
@@ -1573,17 +1573,14 @@ function renderPage()
             $title = (empty($_GET['title']) ? '' : $_GET['title'] ); // Get title if it was provided in URL (by the bookmarklet).
             $description=''; $tags=''; $private=0;
             if (($url!='') && parse_url($url,PHP_URL_SCHEME)=='') $url = 'http://'.$url;
-            // If this is an HTTP link, we try go get the page to extact the title (otherwise we will to straight to the edit form.)
-			if (empty($title) && ((parse_url($url,PHP_URL_SCHEME)=='http') || (parse_url($url,PHP_URL_SCHEME)=='https')))
+            // If this is an HTTP link (or HTTPS), we try go get the page to extact the title (otherwise we will to straight to the edit form.)
+	    if (empty($title) && ((parse_url($url,PHP_URL_SCHEME)=='http') || (parse_url($url,PHP_URL_SCHEME)=='https')))
             {
                 if ($GLOBALS['useCurl']) list($status,$headers,$data) = getHTTPWithCurl($url,4); // Short timeout to keep the application responsive.
                 list($status,$headers,$data) = getHTTPWithCurl($url,4); // Short timeout to keep the application responsive.
-                //$debug = getHTTPWithCurl($url,4); // Short timeout to keep the application responsive.
                 // FIXME: Decode charset according to specified in either 1) HTTP response headers or 2) <head> in html
 
-
-                if (strpos($status,'200 OK')!==false) $title=html_entity_decode(html_extract_title($data),ENT_QUOTES,'UTF-8');
-			
+                if (strpos($status,'200 OK')!==false) $title=html_entity_decode(html_extract_title($data),ENT_QUOTES,'UTF-8');	
             }
             if ($url=='') $url='?'.smallHash($linkdate); // In case of empty URL, this is just a text (with a link that point to itself)
             $link = array('linkdate'=>$linkdate,'title'=>$title,'url'=>$url,'description'=>$description,'tags'=>$tags,'private'=>0);
