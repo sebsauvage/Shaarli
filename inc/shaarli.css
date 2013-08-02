@@ -277,6 +277,8 @@ font-size:9pt;
 #changetag { color:#ccc; padding:10px 5px 10px 5px; clear:left; }
 #configform td  { color:#ccc; font-size: 10pt; padding:10px 5px 10px 5px;  }
 #configform  { color:#ccc; padding:10px 5px 10px 5px; clear:left; }
+#changeapiform td  { color:#ccc; font-size: 10pt; padding:10px 5px 10px 5px;  }
+#changeapiform  { color:#ccc; padding:10px 5px 10px 5px; clear:left; }
 .thumbnail { float:right;  margin-left: 10px; }
 /* If you want thumbnails on the left:
 .thumbnail { float:left;  margin-right: 10px;   }

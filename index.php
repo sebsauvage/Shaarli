@@ -1642,6 +1642,31 @@ function renderPage()
         }
     }
 
+    if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=showapi'))
+    {
+        if (!empty($_POST['generate_api']))
+        {
+            if (!tokenOk($_POST['token'])) die('Wrong token.'); // Go away !
+
+            // Generate new key and token api
+            $GLOBALS['api_key'] = sha1(uniqid('',true).'_'.mt_rand());
+            $GLOBALS['api_hash'] = substr(sha1(uniqid('',true).'_'.mt_rand()), 0, 16);
+            writeConfig();
+            echo '<script language="JavaScript">alert("Your API datas has been changed.");document.location=\'?do=showapi\';</script>';
+            exit;
+        }
+        else // show the change password form.
+        {
+            $PAGE = new pageBuilder;
+            $PAGE->assign('api_key',$GLOBALS['api_key']);
+            $PAGE->assign('api_hash',$GLOBALS['api_hash']);
+            $PAGE->assign('linkcount',count($LINKSDB));
+            $PAGE->assign('token',getToken());
+            $PAGE->renderPage('showapi');
+            exit;
+        }
+    }
+
     // -------- User wants to change configuration
     if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=configure'))
     {
