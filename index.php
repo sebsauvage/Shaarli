@@ -1545,8 +1545,29 @@ function renderPage()
             {
                 list($status,$headers,$data) = getHTTP($url,4); // Short timeout to keep the application responsive.
                 // FIXME: Decode charset according to specified in either 1) HTTP response headers or 2) <head> in html
-                if (strpos($status,'200 OK')!==false) $title=html_entity_decode(html_extract_title($data),ENT_QUOTES,'UTF-8');
-
+                if (strpos($status,'200 OK')!==false)
+ 					 {
+                        // Look for charset in html header.
+ 						preg_match('#<meta .*charset=.*>#Usi', $data, $meta);
+ 
+ 						// If found, extract encoding.
+ 						if (!empty($meta[0]))
+ 						{
+ 							// Get encoding specified in header.
+ 							preg_match('#charset="?(.*)"#si', $meta[0], $enc);
+ 							// If charset not found, use utf-8.
+							$html_charset = (!empty($enc[1])) ? strtolower($enc[1]) : 'utf-8';
+ 						}
+ 						else { $html_charset = 'utf-8'; }
+ 
+ 						// Extract title
+ 						$title = html_extract_title($data);
+ 						if (!empty($title))
+ 						{
+ 							// Re-encode title in utf-8 if necessary.
+ 							$title = ($html_charset == 'iso-8859-1') ? utf8_encode($title) : $title;
+ 						}
+ 					}
             }
             if ($url=='') $url='?'.smallHash($linkdate); // In case of empty URL, this is just a text (with a link that point to itself)
             $link = array('linkdate'=>$linkdate,'title'=>$title,'url'=>$url,'description'=>$description,'tags'=>$tags,'private'=>0);
