@@ -566,7 +566,7 @@ function getHTTP($url,$timeout=30)
 {
     try
     {
-        $options = array('http'=>array('method'=>'GET','timeout' => $timeout)); // Force network timeout
+        $options = array('http'=>array('method'=>'GET','timeout' => $timeout, 'user_agent' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:23.0) Gecko/20100101 Firefox/23.0')); // Force network timeout
         $context = stream_context_create($options);
         $data=file_get_contents($url,false,$context,-1, 4000000); // We download at most 4 Mb from source.
         if (!$data) { return array('HTTP Error',array(),''); }
