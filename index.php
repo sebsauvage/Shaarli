@@ -876,7 +876,7 @@ class linkdb implements Iterator, Countable, ArrayAccess
 }
 
 // ------------------------------------------------------------------------------------------
-// Ouput the last 50 links in RSS 2.0 format.
+// Ouput the last N links in RSS 2.0 format.
 function showRSS()
 {
     header('Content-Type: application/rss+xml; charset=utf-8');
@@ -898,6 +898,7 @@ function showRSS()
     if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
     elseif (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
     else $linksToDisplay = $LINKSDB;
+    $nblinksToDisplay = !empty($_GET['nb']) ? max($_GET['nb'] + 0, 1) : 50;
 
     $pageaddr=htmlspecialchars(indexUrl());
     echo '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">';
@@ -912,7 +913,7 @@ function showRSS()
     }
     $i=0;
     $keys=array(); foreach($linksToDisplay as $key=>$value) { $keys[]=$key; }  // No, I can't use array_keys().
-    while ($i<50 && $i<count($keys))
+    while ($i<$nblinksToDisplay && $i<count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
         $guid = $pageaddr.'?'.smallHash($link['linkdate']);
@@ -945,7 +946,7 @@ function showRSS()
 }
 
 // ------------------------------------------------------------------------------------------
-// Ouput the last 50 links in ATOM format.
+// Ouput the last N links in ATOM format.
 function showATOM()
 {
     header('Content-Type: application/atom+xml; charset=utf-8');
@@ -968,13 +969,14 @@ function showATOM()
     if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
     elseif (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
     else $linksToDisplay = $LINKSDB;
+    $nblinksToDisplay = !empty($_GET['nb']) ? max($_GET['nb'] + 0, 1) : 50;
 
     $pageaddr=htmlspecialchars(indexUrl());
     $latestDate = '';
     $entries='';
     $i=0;
     $keys=array(); foreach($linksToDisplay as $key=>$value) { $keys[]=$key; }  // No, I can't use array_keys().
-    while ($i<50 && $i<count($keys))
+    while ($i<$nblinksToDisplay && $i<count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
         $guid = $pageaddr.'?'.smallHash($link['linkdate']);
