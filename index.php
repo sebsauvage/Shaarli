@@ -89,7 +89,7 @@ if (!is_dir($GLOBALS['config']['DATADIR'])) { mkdir($GLOBALS['config']['DATADIR'
 if (!is_dir('tmp')) { mkdir('tmp',0705); chmod('tmp',0705); } // For RainTPL temporary files.
 if (!is_file($GLOBALS['config']['DATADIR'].'/.htaccess')) { file_put_contents($GLOBALS['config']['DATADIR'].'/.htaccess',"Allow from none\nDeny from all\n"); } // Protect data files.
 // Second check to see if Shaarli can write in its directory, because on some hosts is_writable() is not reliable.
-if (!is_file($GLOBALS['config']['DATADIR'].'/.htaccess')) die('<pre>ERROR: Shaarli does not have the right to write in its own directory ('.realpath(dirname(__FILE__)).').</pre>');
+if (!is_file($GLOBALS['config']['DATADIR'].'/.htaccess')) die('<pre>ERROR: Shaarli does not have the right to write in its data directory ('.realpath($GLOBALS['config']['DATADIR']).').</pre>');
 if ($GLOBALS['config']['ENABLE_LOCALCACHE'])
 {
     if (!is_dir($GLOBALS['config']['CACHEDIR'])) { mkdir($GLOBALS['config']['CACHEDIR'],0705); chmod($GLOBALS['config']['CACHEDIR'],0705); }
@@ -566,7 +566,7 @@ function getHTTP($url,$timeout=30)
 {
     try
     {
-        $options = array('http'=>array('method'=>'GET','timeout' => $timeout)); // Force network timeout
+        $options = array('http'=>array('method'=>'GET','timeout' => $timeout, 'user_agent' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:23.0) Gecko/20100101 Firefox/23.0')); // Force network timeout
         $context = stream_context_create($options);
         $data=file_get_contents($url,false,$context,-1, 4000000); // We download at most 4 Mb from source.
         if (!$data) { return array('HTTP Error',array(),''); }
@@ -876,7 +876,7 @@ class linkdb implements Iterator, Countable, ArrayAccess
 }
 
 // ------------------------------------------------------------------------------------------
-// Ouput the last 50 links in RSS 2.0 format.
+// Ouput the last N links in RSS 2.0 format.
 function showRSS()
 {
     header('Content-Type: application/rss+xml; charset=utf-8');
@@ -898,6 +898,7 @@ function showRSS()
     if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
     elseif (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
     else $linksToDisplay = $LINKSDB;
+    $nblinksToDisplay = !empty($_GET['nb']) ? max($_GET['nb'] + 0, 1) : 50;
 
     $pageaddr=htmlspecialchars(indexUrl());
     echo '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">';
@@ -912,7 +913,7 @@ function showRSS()
     }
     $i=0;
     $keys=array(); foreach($linksToDisplay as $key=>$value) { $keys[]=$key; }  // No, I can't use array_keys().
-    while ($i<50 && $i<count($keys))
+    while ($i<$nblinksToDisplay && $i<count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
         $guid = $pageaddr.'?'.smallHash($link['linkdate']);
@@ -945,7 +946,7 @@ function showRSS()
 }
 
 // ------------------------------------------------------------------------------------------
-// Ouput the last 50 links in ATOM format.
+// Ouput the last N links in ATOM format.
 function showATOM()
 {
     header('Content-Type: application/atom+xml; charset=utf-8');
@@ -968,13 +969,14 @@ function showATOM()
     if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
     elseif (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
     else $linksToDisplay = $LINKSDB;
+    $nblinksToDisplay = !empty($_GET['nb']) ? max($_GET['nb'] + 0, 1) : 50;
 
     $pageaddr=htmlspecialchars(indexUrl());
     $latestDate = '';
     $entries='';
     $i=0;
     $keys=array(); foreach($linksToDisplay as $key=>$value) { $keys[]=$key; }  // No, I can't use array_keys().
-    while ($i<50 && $i<count($keys))
+    while ($i<$nblinksToDisplay && $i<count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
         $guid = $pageaddr.'?'.smallHash($link['linkdate']);
@@ -1538,7 +1540,9 @@ function renderPage()
             $link_is_new = true;  // This is a new link
             $linkdate = strval(date('Ymd_His'));
             $title = (empty($_GET['title']) ? '' : $_GET['title'] ); // Get title if it was provided in URL (by the bookmarklet).
-            $description=''; $tags=''; $private=0;
+            $description = (empty($_GET['description']) ? '' : $_GET['description'] )."\n"; // Get description if it was provided in URL (by the bookmarklet). [Bronco added that]
+            $tags = (empty($_GET['tags']) ? '' : $_GET['tags'] ); // Get tags if it was provided in URL
+            $private = (!empty($_GET['private']) && $_GET['private'] === "1" ? 1 : 0); // Get private if it was provided in URL 
             if (($url!='') && parse_url($url,PHP_URL_SCHEME)=='') $url = 'http://'.$url;
             // If this is an HTTP link, we try go get the page to extact the title (otherwise we will to straight to the edit form.)
             if (empty($title) && parse_url($url,PHP_URL_SCHEME)=='http')
@@ -1570,7 +1574,7 @@ function renderPage()
  					}
             }
             if ($url=='') $url='?'.smallHash($linkdate); // In case of empty URL, this is just a text (with a link that point to itself)
-            $link = array('linkdate'=>$linkdate,'title'=>$title,'url'=>$url,'description'=>$description,'tags'=>$tags,'private'=>0);
+            $link = array('linkdate'=>$linkdate,'title'=>$title,'url'=>$url,'description'=>$description,'tags'=>$tags,'private'=>$private);
         }
 
         $PAGE = new pageBuilder;
@@ -1695,7 +1699,11 @@ function importFile()
                 {
                     $attr=$m[1]; $value=$m[2];
                     if ($attr=='HREF') $link['url']=html_entity_decode($value,ENT_QUOTES,'UTF-8');
-                    elseif ($attr=='ADD_DATE') $raw_add_date=intval($value);
+                    elseif ($attr=='ADD_DATE')
+                    {
+                        $raw_add_date=intval($value);
+                        if ($raw_add_date>30000000000) $raw_add_date/=1000;	//If larger than year 2920, then was likely stored in milliseconds instead of seconds
+                    }
                     elseif ($attr=='PRIVATE') $link['private']=($value=='0'?0:1);
                     elseif ($attr=='TAGS') $link['tags']=html_entity_decode(str_replace(',',' ',$value),ENT_QUOTES,'UTF-8');
                 }
@@ -2143,7 +2151,42 @@ function isTZvalid($continent,$city)
     }
     return false;
 }
-
+if (!function_exists('json_encode')) {
+    function json_encode($data) {
+        switch ($type = gettype($data)) {
+            case 'NULL':
+                return 'null';
+            case 'boolean':
+                return ($data ? 'true' : 'false');
+            case 'integer':
+            case 'double':
+            case 'float':
+                return $data;
+            case 'string':
+                return '"' . addslashes($data) . '"';
+            case 'object':
+                $data = get_object_vars($data);
+            case 'array':
+                $output_index_count = 0;
+                $output_indexed = array();
+                $output_associative = array();
+                foreach ($data as $key => $value) {
+                    $output_indexed[] = json_encode($value);
+                    $output_associative[] = json_encode($key) . ':' . json_encode($value);
+                    if ($output_index_count !== NULL && $output_index_count++ !== $key) {
+                        $output_index_count = NULL;
+                    }
+                }
+                if ($output_index_count !== NULL) {
+                    return '[' . implode(',', $output_indexed) . ']';
+                } else {
+                    return '{' . implode(',', $output_associative) . '}';
+                }
+            default:
+                return ''; // Not supported
+        }
+    }
+}
 
 // Webservices (for use with jQuery/jQueryUI)
 // eg.  index.php?ws=tags&term=minecr
