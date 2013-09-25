@@ -67,6 +67,8 @@ raintpl::$cache_dir = "tmp/"; // cache directory
 
 ob_start();  // Output buffering for the page cache.
 
+// Syntax highlighting
+include "./inc/geshi.php";
 
 // In case stupid admin has left magic_quotes enabled in php.ini:
 if (get_magic_quotes_gpc())
@@ -1824,7 +1826,47 @@ function buildLinkList($PAGE,$LINKSDB)
     while ($i<$end && $i<count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
-        $link['description']=nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))));
+		
+		// Syntax highlighting
+		$lines = explode("\n", $link[description]);
+		$link[description] = "";
+		$tmp = array();
+		$lng = null;
+		
+		for($cnt = 0; $cnt < count($lines); $cnt++) {
+			if(isset($lng)) { // We are inside code block
+				if(startsWith($lines[$cnt], "#!/end")) {
+					$tmp = join("\n", $tmp); 
+					$geshi = new GeSHi($tmp, $lng);
+					$geshi->set_header_type(GESHI_HEADER_DIV);
+					$geshi->enable_line_numbers(GESHI_FANCY_LINE_NUMBERS, 5);
+					$geshi->set_overall_style('font: normal normal 90% monospace; color: #000066; border: 1px solid #d0d0d0; background-color: #f0f0f0;', false);
+					$geshi->set_line_style('border:none; background:none; box-shadow:none; padding:0; color: #003030;', 'border:none; background:none; box-shadow:none; padding:0; font-weight: bold; color: #006060;', true);
+					$geshi->set_code_style('color: #000020;', true);
+					$geshi->set_link_styles(GESHI_LINK, 'color: #000060;');
+					$geshi->set_link_styles(GESHI_HOVER, 'background-color: #f0f000;');
+					$link[description] .= $geshi->parse_code().'<br />';
+					$lng = null;
+					$tmp = array();
+				} else {
+					$tmp[] = $lines[$cnt];
+				}
+			} else { // Standard text
+				if(startsWith($lines[$cnt], "#!/bin/parse/")) {
+					$link[description] .= nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars(join("\n", $tmp))))) . "<br />";
+					$lng = substr($lines[$cnt], 13);
+					$tmp = array();
+				} else {
+					$tmp[] = $lines[$cnt];
+				}
+			}
+		}
+		
+		// Buffer flush
+		if(count($tmp > 0)) {
+			$link[description] .= nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars(join("\n", $tmp)))));
+		}
+		
         $title=$link['title'];
         $classLi =  $i%2!=0 ? '' : 'publicLinkHightLight';
         $link['class'] = ($link['private']==0 ? $classLi : 'private');
