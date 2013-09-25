@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head>{include="includes"}</head>
+<head>{include="includes"}
+{if="empty($GLOBALS['disablejquery'])"}<script src="inc/jquery.min.js#"></script><script src="inc/jquery-ui.min.js#"></script>{/if}
+</head>
 <body onload="document.changetag.fromtag.focus();">
 <div id="pageheader">
 	{include="page.header"}
@@ -12,5 +14,13 @@
 <script language="JavaScript">function confirmDeleteTag() { var agree=confirm("Are you sure you want to delete this tag from all links ?"); if (agree) return true ; else return false ; }</script>
 </div>
 {include="page.footer"}
+{if="($GLOBALS['config']['OPEN_SHAARLI'] || isLoggedIn()) && empty($GLOBALS['disablejquery'])"}
+<script language="JavaScript">
+$(document).ready(function()
+{
+    $('#fromtag').autocomplete({source:'{$source}?ws=singletag',minLength:1});
+});
+</script>
+{/if}
 </body>
 </html>
