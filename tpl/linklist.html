@@ -3,11 +3,11 @@
 <head>{include="includes"}</head>
 <body>
 <div id="pageheader">
-	{include="page.header"}
-	<div id="headerform" style="width:100%; white-space:nowrap;">
-	    <form method="GET" class="searchform" name="searchform" style="display:inline;"><input type="text" id="searchform_value" name="searchterm" style="width:30%" value=""> <input type="submit" value="Search" class="bigbutton"></form>
-	    <form method="GET" class="tagfilter" name="tagfilter" style="display:inline;margin-left:24px;"><input type="text" name="searchtags" id="tagfilter_value" style="width:10%" value=""> <input type="submit" value="Filter by tag" class="bigbutton"></form>
-	</div>
+    {include="page.header"}
+    <div id="headerform" style="width:100%; white-space:nowrap;">
+        <form method="GET" class="searchform" name="searchform" style="display:inline;"><input type="text" id="searchform_value" name="searchterm" style="width:30%" value=""> <input type="submit" value="Search" class="bigbutton"></form>
+        <form method="GET" class="tagfilter" name="tagfilter" style="display:inline;margin-left:24px;"><input type="text" name="searchtags" id="tagfilter_value" style="width:10%" value=""> <input type="submit" value="Filter by tag" class="bigbutton"></form>
+    </div>
 </div>
 
 <div id="linklist">
@@ -48,8 +48,8 @@
                 {else}
                     <span class="linkdate" title="Short link here"><a href="?{$value.linkdate|smallHash}">permalink</a> - </span>
                 {/if}
-                <div style="position:relative;display:inline;"><a href="http://invx.com/code/qrcode/?code={$scripturl|urlencode}%3F{$value.linkdate|smallHash}&width=200&height=200" 
-                    {if="empty($GLOBALS['disablejquery'])"}onclick="return false;"{/if} class="qrcode"><img src="images/qrcode.png#" width="13" height="13" title="QR-Code"></a></div> - 
+                <div style="position:relative;display:inline;"><a href="http://qrfree.kaywa.com/?l=1&s=8&d={$scripturl|urlencode}%3F{$value.linkdate|smallHash}" 
+                    onclick="showQrCode(this); return false;" class="qrcode" data-permalink="{$scripturl}?{$value.linkdate|smallHash}"><img src="images/qrcode.png#" width="13" height="13" title="QR-Code"></a></div> - 
                 <span class="linkurl" title="Short link">{$value.url|htmlspecialchars}</span><br>
                 {if="$value.tags"}
                     <div class="linktaglist">
@@ -65,18 +65,58 @@
 
 </div>
 
-    {include="page.footer"}
-{if="empty($GLOBALS['disablejquery'])"}    
-<script>
-$(document).ready(function() {
-	$('a.qrcode').click(function(){
-	  hide_qrcode();
-	  var link = $(this).attr('href');
-	  $(this).after('<div class="qrcode" onclick="hide_qrcode();return false;"><img src="'+link+'#" width="200" height="200"><br>click to close</div>');
-	});
-});
-function hide_qrcode() { $('div.qrcode').remove(); }
+    {include="page.footer"} 
+
+<script language="JavaScript">
+
+// Remove any displayed QR-Code
+function remove_qrcode()
+{ 
+    var elem = document.getElementById("permalinkQrcode");
+    if (elem) elem.parentNode.removeChild(elem);
+    return false;
+}
+
+// Show the QR-Code of a permalink (when the QR-Code icon is clicked).
+function showQrCode(caller,loading=false)
+{ 
+    // Dynamic javascript lib loading: We only load qr.js if the QR code icon is clicked:
+    if (typeof(qr)=='undefined') // Load qr.js only if not present.
+    {
+        if (!loading)  // If javascript lib is still loading, do not append script to body.
+        {
+            var element = document.createElement("script");
+            element.src = "inc/qr.min.js";
+            document.body.appendChild(element);
+        }
+        setTimeout(function() { showQrCode(caller,true);}, 200); // Retry in 200 milliseconds.
+        return false;
+    }
+
+    // Remove previous qrcode if present.
+    remove_qrcode();
+    
+    // Build the div which contains the QR-Code:
+    var element = document.createElement('div');
+    element.id="permalinkQrcode";
+	// Make QR-Code div commit sepuku when clicked:
+    if ( element.attachEvent ){ element.attachEvent('onclick', 'this.parentNode.removeChild(this);' ); } // Damn IE
+    else { element.setAttribute('onclick', 'this.parentNode.removeChild(this);' ); }
+    
+    // Build the QR-Code:
+    var image = qr.image({size: 8,value: caller.dataset.permalink});
+    if (image)
+    { 
+        element.appendChild(image);
+        element.innerHTML+= "<br>Click to close";
+        caller.parentNode.appendChild(element);
+    }
+    else
+    {
+        element.innerHTML="Your browser does not seem to be HTML5 compatible.";
+    }
+    return false;
+}
 </script>
-{/if}
 </body>
 </html>
