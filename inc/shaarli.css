@@ -316,7 +316,8 @@ text-shadow:2px 2px 1px #000000;
 	background: #ffffff;
 }
 
-div.qrcode {
+div#permalinkQrcode {
+padding:20px;
 width:220px;
 height:220px;
 background-color: #ffffff;
