@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head>{include="includes"}</head>
+<head>{include="includes"}
+{if="empty($GLOBALS['disablejquery'])"}<script src="inc/jquery.min.js#"></script><script src="inc/jquery-ui.min.js#"></script>{/if}
+</head>
 <body
 {if condition="$link.title==''"}onload="document.linkform.lf_title.focus();"
 {elseif condition="$link.description==''"}onload="document.linkform.lf_description.focus();"
@@ -30,5 +32,13 @@
 	</div>
 </div>
 {include="page.footer"}
+{if="($GLOBALS['config']['OPEN_SHAARLI'] || isLoggedIn()) && empty($GLOBALS['disablejquery'])"}
+<script language="JavaScript">
+$(document).ready(function()
+{
+    $('#lf_tags').autocomplete({source:'{$source}?ws=tags',minLength:1});
+});
+</script>
+{/if}
 </body>
 </html>
