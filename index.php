@@ -1548,7 +1548,7 @@ function renderPage()
             $link_is_new = true;  // This is a new link
             $linkdate = strval(date('Ymd_His'));
             $title = (empty($_GET['title']) ? '' : $_GET['title'] ); // Get title if it was provided in URL (by the bookmarklet).
-            $description = (empty($_GET['description']) ? '' : $_GET['description'] )."\n"; // Get description if it was provided in URL (by the bookmarklet). [Bronco added that]
+            $description = (empty($_GET['description']) ? '' : $_GET['description']); // Get description if it was provided in URL (by the bookmarklet). [Bronco added that]
             $tags = (empty($_GET['tags']) ? '' : $_GET['tags'] ); // Get tags if it was provided in URL
             $private = (!empty($_GET['private']) && $_GET['private'] === "1" ? 1 : 0); // Get private if it was provided in URL 
             if (($url!='') && parse_url($url,PHP_URL_SCHEME)=='') $url = 'http://'.$url;
