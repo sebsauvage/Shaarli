@@ -1946,6 +1946,7 @@ function computeThumbnail($url,$href=false)
         || $domain=='ted.com' || endsWith($domain,'.ted.com')
         || $domain=='xkcd.com' || endsWith($domain,'.xkcd.com')
         || $domain=='twitter.com'
+        || $domain=='instagram.com'
     )
     {
         if ($domain=='vimeo.com')
@@ -2444,6 +2445,31 @@ function genThumbnail()
         }
     }
 
+    elseif ($domain=='instagram.com')
+    {
+        list($httpstatus,$headers,$data) = getHTTP($url,5);
+        if (strpos($httpstatus,'200 OK')!==false)
+        {
+            // Extract the link to the thumbnail
+            preg_match('!(http:\/\/distilleryimage\d.ak.instagram.com\/.*.jpg)!',$data,$matches);
+            if (!empty($matches[0]))
+            {   // Let's download the image.
+                $imageurl=$matches[0];
+                list($httpstatus,$headers,$data) = getHTTP($imageurl,20); // No control on image size, so wait long enough.
+                if (strpos($httpstatus,'200 OK')!==false)
+                {
+                    $filepath=$GLOBALS['config']['CACHEDIR'].'/'.$thumbname;
+                    file_put_contents($filepath,$data); // Save image to cache.
+                    if (resizeImage($filepath))
+                    {
+                        header('Content-Type: image/jpeg');
+                        echo file_get_contents($filepath);
+                        return;
+                    }
+                }
+            }
+        }
+    }
     else
     {
         // For all other domains, we try to download the image and make a thumbnail.
