@@ -2361,45 +2361,32 @@ function genThumbnail()
         }
     }
 
-    elseif ($domain=='ted.com' || endsWith($domain,'.ted.com'))
+    elseif ($domain=='ted.com' || endsWith($domain,'.ted.com') 
+    	    || $domain=='xkcd.com' || endsWith($domain,'.xkcd.com')
+	    || $domain=='twitter.com'        
+	    || $domain=='instagram.com'        
+	   )
     {
         // The thumbnail for TED talks is located in the <link rel="image_src" [...]> tag on that page
         // http://www.ted.com/talks/mikko_hypponen_fighting_viruses_defending_the_net.html
         // <link rel="image_src" href="http://images.ted.com/images/ted/28bced335898ba54d4441809c5b1112ffaf36781_389x292.jpg" />
-        list($httpstatus,$headers,$data) = getHTTP($url,5);
-        if (strpos($httpstatus,'200 OK')!==false)
-        {
-            // Extract the link to the thumbnail
-            preg_match('!link rel="image_src" href="(http://images.ted.com/images/ted/.+_\d+x\d+\.jpg)"!',$data,$matches);
-            if (!empty($matches[1]))
-            {   // Let's download the image.
-                $imageurl=$matches[1];
-                list($httpstatus,$headers,$data) = getHTTP($imageurl,20); // No control on image size, so wait long enough.
-                if (strpos($httpstatus,'200 OK')!==false)
-                {
-                    $filepath=$GLOBALS['config']['CACHEDIR'].'/'.$thumbname;
-                    file_put_contents($filepath,$data); // Save image to cache.
-                    if (resizeImage($filepath))
-                    {
-                        header('Content-Type: image/jpeg');
-                        echo file_get_contents($filepath);
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    elseif ($domain=='xkcd.com' || endsWith($domain,'.xkcd.com'))
-    {
+	if ($domain=='ted.com' || endsWith($domain,'.ted.com'))
+		$regex = '!link rel="image_src" href="(http://images.ted.com/images/ted/.+_\d+x\d+\.jpg)"!';
         // There is no thumbnail available for xkcd comics, so download the whole image and resize it.
         // http://xkcd.com/327/
         // <img src="http://imgs.xkcd.com/comics/exploits_of_a_mom.png" title="<BLABLA>" alt="<BLABLA>" />
+	elseif ($domain=='xkcd.com' || endsWith($domain,'.xkcd.com'))
+		$regex = '!<img src="(http://imgs.xkcd.com/comics/.*)" title="[^s]!';
+	elseif ($domain=='twitter.com')
+		$regex = '!data-resolved-url-large="(https://pbs.twimg.com/media/.*)"!';
+	elseif ($domain=='instagram.com')
+		$regex = '!(http:\/\/distilleryimage\d.ak.instagram.com\/.*.jpg)!';
+
         list($httpstatus,$headers,$data) = getHTTP($url,5);
         if (strpos($httpstatus,'200 OK')!==false)
         {
             // Extract the link to the thumbnail
-            preg_match('!<img src="(http://imgs.xkcd.com/comics/.*)" title="[^s]!',$data,$matches);
+            preg_match($regex,$data,$matches);
             if (!empty($matches[1]))
             {   // Let's download the image.
                 $imageurl=$matches[1];
@@ -2419,57 +2406,6 @@ function genThumbnail()
         }
     }
 
-    elseif ($domain=='twitter.com')
-    {
-        list($httpstatus,$headers,$data) = getHTTP($url,5);
-        if (strpos($httpstatus,'200 OK')!==false)
-        {
-            // Extract the link to the thumbnail
-            preg_match('!data-resolved-url-large="(https://pbs.twimg.com/media/.*)"!',$data,$matches);
-            if (!empty($matches[1]))
-            {   // Let's download the image.
-                $imageurl=$matches[1];
-                list($httpstatus,$headers,$data) = getHTTP($imageurl,20); // No control on image size, so wait long enough.
-                if (strpos($httpstatus,'200 OK')!==false)
-                {
-                    $filepath=$GLOBALS['config']['CACHEDIR'].'/'.$thumbname;
-                    file_put_contents($filepath,$data); // Save image to cache.
-                    if (resizeImage($filepath))
-                    {
-                        header('Content-Type: image/jpeg');
-                        echo file_get_contents($filepath);
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    elseif ($domain=='instagram.com')
-    {
-        list($httpstatus,$headers,$data) = getHTTP($url,5);
-        if (strpos($httpstatus,'200 OK')!==false)
-        {
-            // Extract the link to the thumbnail
-            preg_match('!(http:\/\/distilleryimage\d.ak.instagram.com\/.*.jpg)!',$data,$matches);
-            if (!empty($matches[0]))
-            {   // Let's download the image.
-                $imageurl=$matches[0];
-                list($httpstatus,$headers,$data) = getHTTP($imageurl,20); // No control on image size, so wait long enough.
-                if (strpos($httpstatus,'200 OK')!==false)
-                {
-                    $filepath=$GLOBALS['config']['CACHEDIR'].'/'.$thumbname;
-                    file_put_contents($filepath,$data); // Save image to cache.
-                    if (resizeImage($filepath))
-                    {
-                        header('Content-Type: image/jpeg');
-                        echo file_get_contents($filepath);
-                        return;
-                    }
-                }
-            }
-        }
-    }
     else
     {
         // For all other domains, we try to download the image and make a thumbnail.
@@ -2494,6 +2430,7 @@ function genThumbnail()
     header('Content-Type: image/gif');
     echo $blankgif;
 }
+
 
 // Make a thumbnail of the image (to width: 120 pixels)
 // Returns true if success, false otherwise.
