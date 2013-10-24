@@ -1947,6 +1947,7 @@ function computeThumbnail($url,$href=false)
         || $domain=='xkcd.com' || endsWith($domain,'.xkcd.com')
         || $domain=='twitter.com'
         || $domain=='instagram.com'
+        || endsWith($domain,'.tumblr.com')
     )
     {
         if ($domain=='vimeo.com')
@@ -2365,6 +2366,7 @@ function genThumbnail()
     	    || $domain=='xkcd.com' || endsWith($domain,'.xkcd.com')
 	    || $domain=='twitter.com'        
 	    || $domain=='instagram.com'        
+	    || endsWith($domain,'.tumblr.com')        
 	   )
     {
         // The thumbnail for TED talks is located in the <link rel="image_src" [...]> tag on that page
@@ -2381,6 +2383,8 @@ function genThumbnail()
 		$regex = '!data-resolved-url-large="(https://pbs.twimg.com/media/.*)"!';
 	elseif ($domain=='instagram.com')
 		$regex = '!(http:\/\/distilleryimage\d.ak.instagram.com\/.*.jpg)!';
+	elseif (endsWith($domain,'.tumblr.com'))
+		$regex = '!(http://\d+.media.tumblr.com/[0-9a-f]+/.*.[a-z]+)\"!';
 
         list($httpstatus,$headers,$data) = getHTTP($url,5);
         if (strpos($httpstatus,'200 OK')!==false)
