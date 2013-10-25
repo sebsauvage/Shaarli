@@ -2416,11 +2416,19 @@ function genThumbnail()
     {
         // For all other domains, we try to download the image and make a thumbnail.
         list($httpstatus,$headers,$data) = getHTTP($url,30);  // We allow 30 seconds max to download (and downloads are limited to 4 Mb)
-            // Extract the link to the thumbnail using Open Graph tag
-	    preg_match("|<meta property=[\'\"]og:image[\'\"] content=[\'\"]([^\"'].*)[\'\"]\s?\/>|",$data,$matches);
-            if (!empty($matches[1]))
-            {   // Let's download the image.
-		$imageurl=$matches[1];
+        // Extract the link to the thumbnail
+	$doc = new DOMDocument();
+	$error_level=error_reporting(0);
+	$doc->loadHTML($data);
+	error_reporting($error_level);
+	foreach( $doc->getElementsByTagName('meta') as $meta ) {
+   	if ($meta->getAttribute('property') == 'og:image')
+        	$imageurl=$meta->getAttribute('content');
+		libxml_clear_errors();
+	}
+
+        if (!empty($imageurl))
+        {   // Let's download the image.
                 list($httpstatus,$headers,$data) = getHTTP($imageurl,20); // No control on image size, so wait long enough.
                 if (strpos($httpstatus,'200 OK')!==false)
                 {
@@ -2433,8 +2441,8 @@ function genThumbnail()
                         return;
                     }
                 }
-            }
-        }
+         }
+    }
 
 
     // Otherwise, return an empty image (8x8 transparent gif)
