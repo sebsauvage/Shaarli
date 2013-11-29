@@ -942,7 +942,7 @@ function showRSS()
         echo '<description><![CDATA['.nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description'])))).$descriptionlink.']]></description>'."\n</item>\n";
         $i++;
     }
-    echo '</channel></rss><!-- Cached version of '.pageUrl().' -->';
+    echo '</channel></rss><!-- Cached version of '.htmlspecialchars(pageUrl()).' -->';
 
     $cache->cache(ob_get_contents());
     ob_end_flush();
@@ -1027,7 +1027,7 @@ function showATOM()
     $feed.='<author><name>'.htmlspecialchars($pageaddr).'</name><uri>'.htmlspecialchars($pageaddr).'</uri></author>';
     $feed.='<id>'.htmlspecialchars($pageaddr).'</id>'."\n\n"; // Yes, I know I should use a real IRI (RFC3987), but the site URL will do.
     $feed.=$entries;
-    $feed.='</feed><!-- Cached version of '.pageUrl().' -->';
+    $feed.='</feed><!-- Cached version of '.htmlspecialchars(pageUrl()).' -->';
     echo $feed;
 
     $cache->cache(ob_get_contents());
@@ -1104,7 +1104,7 @@ function showDailyRSS()
         echo '<description><![CDATA['.$html.']]></description>'."\n</item>\n\n";
 
     }
-    echo '</channel></rss><!-- Cached version of '.pageUrl().' -->';
+    echo '</channel></rss><!-- Cached version of '.htmlspecialchars(pageUrl()).' -->';
 
     $cache->cache(ob_get_contents());
     ob_end_flush();
@@ -1747,11 +1747,11 @@ function importFile()
         }
         $LINKSDB->savedb();
 
-        echo '<script language="JavaScript">alert("File '.$filename.' ('.$filesize.' bytes) was successfully processed: '.$import_count.' links imported.");document.location=\'?\';</script>';
+        echo '<script language="JavaScript">alert("File '.json_encode($filename).' ('.$filesize.' bytes) was successfully processed: '.$import_count.' links imported.");document.location=\'?\';</script>';
     }
     else
     {
-        echo '<script language="JavaScript">alert("File '.$filename.' ('.$filesize.' bytes) has an unknown file format. Nothing was imported.");document.location=\'?\';</script>';
+        echo '<script language="JavaScript">alert("File '.json_encode($filename).' ('.$filesize.' bytes) has an unknown file format. Nothing was imported.");document.location=\'?\';</script>';
     }
 }
 
