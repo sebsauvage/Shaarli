@@ -221,7 +221,7 @@ function nl2br_escaped($html)
     return str_replace('>','&gt;',str_replace('<','&lt;',nl2br($html)));
 }
 
-/* Returns the small hash of a string
+/* Returns the small hash of a string, using RFC 4648 base64url format
    eg. smallHash('20111006_131924') --> yZH23w
    Small hashes:
      - are unique (well, as unique as crc32, at last)
@@ -233,10 +233,7 @@ function nl2br_escaped($html)
 function smallHash($text)
 {
     $t = rtrim(base64_encode(hash('crc32',$text,true)),'=');
-    $t = str_replace('+','-',$t); // Get rid of characters which need encoding in URLs.
-    $t = str_replace('/','_',$t);
-    $t = str_replace('=','@',$t);
-    return $t;
+    return strtr($t, '+/', '-_');
 }
 
 // In a string, converts urls to clickable links.
