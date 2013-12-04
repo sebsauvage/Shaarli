@@ -239,7 +239,7 @@ cursor:pointer;
 .linkdescription { color:#000; margin-top:0; margin-bottom:12px; font-weight:normal; max-height:400px; overflow:auto; }
 .linkdescription a { text-decoration: none; color:#3465A4; }
 .linkdescription a:hover { color:#F57900; }
-.linktaglist { padding-top:10px;}
+.linktaglist { padding-top:10px; line-height:200%;}
 .linktag {
 
 font-size:9pt;
