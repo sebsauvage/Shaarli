@@ -944,7 +944,7 @@ function showRSS()
         if ($usepermalinks===true) $descriptionlink = '(<a href="'.$absurl.'">Link</a>)';
         if (strlen($link['description'])>0) $descriptionlink = '<br>'.$descriptionlink;
         if(!empty($link['via'])){
-          $via = '<br>via '.text2clickable(htmlspecialchars($link['via']));
+          $via = '<br>Origine => <a href="'.htmlspecialchars($link['via']).'">'.htmlspecialchars(getJustDomain($link['via'])).'</a>';
         } else {
          $via = '';
         }
@@ -1010,7 +1010,11 @@ function showATOM()
 
         // Add permalink in description
         $descriptionlink = htmlspecialchars('(<a href="'.$guid.'">Permalink</a>)');
-        $via = htmlspecialchars('</br> via '.(text2clickable(htmlspecialchars($link['via']))));
+        if(isset($link['via']) && !empty($link['via'])){
+          $via = htmlspecialchars('</br> Origine => <a href="'.$link['via'].'">'.getJustDomain($link['via']).'</a>');
+        } else {
+          $via = '';
+        }
         // If user wants permalinks first, put the final link in description
         if ($usepermalinks===true) $descriptionlink = htmlspecialchars('(<a href="'.$absurl.'">Link</a>)');
         if (strlen($link['description'])>0) $descriptionlink = '&lt;br&gt;'.$descriptionlink;
@@ -1560,7 +1564,8 @@ function renderPage()
             $title = (empty($_GET['title']) ? '' : $_GET['title'] ); // Get title if it was provided in URL (by the bookmarklet).
             $description = (empty($_GET['description']) ? '' : $_GET['description']); // Get description if it was provided in URL (by the bookmarklet). [Bronco added that]
             $tags = (empty($_GET['tags']) ? '' : $_GET['tags'] ); // Get tags if it was provided in URL
-            $private = (!empty($_GET['private']) && $_GET['private'] === "1" ? 1 : 0); // Get private if it was provided in URL 
+            $via = (empty($_GET['via']) ? '' : $_GET['via'] );
+            $private = (!empty($_GET['private']) && $_GET['private'] === "1" ? 1 : 0); // Get private if it was provided in URL
             if (($url!='') && parse_url($url,PHP_URL_SCHEME)=='') $url = 'http://'.$url;
             // If this is an HTTP link, we try go get the page to extact the title (otherwise we will to straight to the edit form.)
             if (empty($title) && parse_url($url,PHP_URL_SCHEME)=='http')
