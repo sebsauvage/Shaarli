@@ -798,7 +798,7 @@ class linkdb implements Iterator, Countable, ArrayAccess
                    || (strpos(strtolower($l['description']),$s)!==false)
                    || (strpos(strtolower($l['url']),$s)!==false)
                    || (strpos(strtolower($l['tags']),$s)!==false)
-                   || (strpos(strtolower($l['via']),$s)!==false);
+                   || (!empty($l['via']) && (strpos(strtolower($l['via']),$s)!==false));
             if ($found) $filtered[$l['linkdate']] = $l;
         }
         krsort($filtered);
@@ -904,7 +904,7 @@ function showRSS()
     else $linksToDisplay = $LINKSDB;
     $nblinksToDisplay = 50;  // Number of links to display.
     if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
-    { 
+    {
         $nblinksToDisplay = $_GET['nb']=='all' ? count($linksToDisplay) : max($_GET['nb']+0,1) ;
     }
 
@@ -984,7 +984,7 @@ function showATOM()
     else $linksToDisplay = $LINKSDB;
     $nblinksToDisplay = 50;  // Number of links to display.
     if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
-    { 
+    {
         $nblinksToDisplay = $_GET['nb']=='all' ? count($linksToDisplay) : max($_GET['nb']+0,1) ;
     }
 
@@ -1576,7 +1576,7 @@ function renderPage()
  					 {
                         // Look for charset in html header.
  						preg_match('#<meta .*charset=.*>#Usi', $data, $meta);
- 
+
  						// If found, extract encoding.
  						if (!empty($meta[0]))
  						{
@@ -1586,7 +1586,7 @@ function renderPage()
 							$html_charset = (!empty($enc[1])) ? strtolower($enc[1]) : 'utf-8';
  						}
  						else { $html_charset = 'utf-8'; }
- 
+
  						// Extract title
  						$title = html_extract_title($data);
  						if (!empty($title))
