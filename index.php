@@ -451,8 +451,7 @@ if (isset($_POST['login']))
 function serverUrl()
 {
     $https = (!empty($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS'])=='on')) || $_SERVER["SERVER_PORT"]=='443'; // HTTPS detection.
-    $serverport = ($_SERVER["SERVER_PORT"]=='80' || ($https && $_SERVER["SERVER_PORT"]=='443') ? '' : ':'.$_SERVER["SERVER_PORT"]);
-    return 'http'.($https?'s':'').'://'.$_SERVER['HTTP_HOST'].$serverport;
+    return 'http'.($https?'s':'').'://'.$_SERVER['HTTP_HOST'];
 }
 
 // Returns the absolute URL of current script, without the query.
