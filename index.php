@@ -43,7 +43,7 @@ define('WEB_PATH', substr($_SERVER["REQUEST_URI"], 0, 1+strrpos($_SERVER["REQUES
 // Force cookie path (but do not change lifetime)
 $cookie=session_get_cookie_params();
 $cookiedir = ''; if(dirname($_SERVER['SCRIPT_NAME'])!='/') $cookiedir=dirname($_SERVER["SCRIPT_NAME"]).'/';
-session_set_cookie_params($cookie['lifetime'],$cookiedir,$_SERVER['HTTP_HOST']); // Set default cookie expiration and path.
+session_set_cookie_params($cookie['lifetime'],$cookiedir,$_SERVER['SERVER_NAME']); // Set default cookie expiration and path.
 
 // Set session parameters on server side.
 define('INACTIVITY_TIMEOUT',3600); // (in seconds). If the user does not access any page within this time, his/her session is considered expired.
