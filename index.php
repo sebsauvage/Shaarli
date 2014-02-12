@@ -37,6 +37,8 @@ if (is_file($GLOBALS['config']['DATADIR'].'/options.php')) require($GLOBALS['con
 define('shaarli_version','0.0.41 beta');
 define('PHPPREFIX','<?php /* '); // Prefix to encapsulate data in php code.
 define('PHPSUFFIX',' */ ?>'); // Suffix to encapsulate data in php code.
+// http://server.com/x/shaarli --> /shaarli/
+define('WEB_PATH', substr($_SERVER["REQUEST_URI"], 0, 1+strrpos($_SERVER["REQUEST_URI"], '/', 0)));
 
 // Force cookie path (but do not change lifetime)
 $cookie=session_get_cookie_params();
@@ -110,6 +112,8 @@ if (!is_file($GLOBALS['config']['CONFIG_FILE'])) install();
 
 require $GLOBALS['config']['CONFIG_FILE'];  // Read login/password hash into $GLOBALS.
 
+// a token depending of deployment salt, user password, and the current ip
+define('STAY_SIGNED_IN_TOKEN', sha1($GLOBALS['hash'].$_SERVER["REMOTE_ADDR"].$GLOBALS['salt']));
 
 autoLocale(); // Sniff browser language and set date format accordingly.
 header('Content-Type: text/html; charset=utf-8'); // We use UTF-8 for proper international characters handling.
@@ -294,16 +298,20 @@ function allIPs()
     return $ip;
 }
 
+function fillSessionInfo() {
+	$_SESSION['uid'] = sha1(uniqid('',true).'_'.mt_rand()); // generate unique random number (different than phpsessionid)
+	$_SESSION['ip']=allIPs();                // We store IP address(es) of the client to make sure session is not hijacked.
+	$_SESSION['username']=$GLOBALS['login'];
+	$_SESSION['expires_on']=time()+INACTIVITY_TIMEOUT;  // Set session expiration.
+}
+
 // Check that user/password is correct.
 function check_auth($login,$password)
 {
     $hash = sha1($password.$login.$GLOBALS['salt']);
     if ($login==$GLOBALS['login'] && $hash==$GLOBALS['hash'])
     {   // Login/password is correct.
-        $_SESSION['uid'] = sha1(uniqid('',true).'_'.mt_rand()); // generate unique random number (different than phpsessionid)
-        $_SESSION['ip']=allIPs();                // We store IP address(es) of the client to make sure session is not hijacked.
-        $_SESSION['username']=$login;
-        $_SESSION['expires_on']=time()+INACTIVITY_TIMEOUT;  // Set session expiration.
+		fillSessionInfo();
         logm('Login successful');
         return True;
     }
@@ -318,6 +326,11 @@ function isLoggedIn()
 
     if (!isset($GLOBALS['login'])) return false;  // Shaarli is not configured yet.
 
+	if (@$_COOKIE['shaarli_staySignedIn']===STAY_SIGNED_IN_TOKEN)
+	{
+		fillSessionInfo();
+		return true;
+	}
     // If session does not exist on server side, or IP address has changed, or session has expired, logout.
     if (empty($_SESSION['uid']) || ($GLOBALS['disablesessionprotection']==false && $_SESSION['ip']!=allIPs()) || time()>=$_SESSION['expires_on'])
     {
@@ -331,7 +344,9 @@ function isLoggedIn()
 }
 
 // Force logout.
-function logout() { if (isset($_SESSION)) { unset($_SESSION['uid']); unset($_SESSION['ip']); unset($_SESSION['username']); unset($_SESSION['privateonly']); }  }
+function logout() { if (isset($_SESSION)) { unset($_SESSION['uid']); unset($_SESSION['ip']); unset($_SESSION['username']); unset($_SESSION['privateonly']); }  
+setcookie('shaarli_staySignedIn', FALSE, 0, WEB_PATH);
+}
 
 
 // ------------------------------------------------------------------------------------------
@@ -393,6 +408,7 @@ if (isset($_POST['login']))
         // If user wants to keep the session cookie even after the browser closes:
         if (!empty($_POST['longlastingsession']))
         {
+			setcookie('shaarli_staySignedIn', STAY_SIGNED_IN_TOKEN, time()+31536000, WEB_PATH);
             $_SESSION['longlastingsession']=31536000;  // (31536000 seconds = 1 year)
             $_SESSION['expires_on']=time()+$_SESSION['longlastingsession'];  // Set session expiration on server-side.
 
