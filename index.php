@@ -37,6 +37,8 @@ if (is_file($GLOBALS['config']['DATADIR'].'/options.php')) require($GLOBALS['con
 define('shaarli_version','0.0.41 beta');
 define('PHPPREFIX','<?php /* '); // Prefix to encapsulate data in php code.
 define('PHPSUFFIX',' */ ?>'); // Suffix to encapsulate data in php code.
+// http://server.com/x/shaarli --> /shaarli/
+define('WEB_PATH', substr($_SERVER["REQUEST_URI"], 0, 1+strrpos($_SERVER["REQUEST_URI"], '/', 0)));
 
 // Force cookie path (but do not change lifetime)
 $cookie=session_get_cookie_params();
@@ -89,7 +91,7 @@ if (!is_dir($GLOBALS['config']['DATADIR'])) { mkdir($GLOBALS['config']['DATADIR'
 if (!is_dir('tmp')) { mkdir('tmp',0705); chmod('tmp',0705); } // For RainTPL temporary files.
 if (!is_file($GLOBALS['config']['DATADIR'].'/.htaccess')) { file_put_contents($GLOBALS['config']['DATADIR'].'/.htaccess',"Allow from none\nDeny from all\n"); } // Protect data files.
 // Second check to see if Shaarli can write in its directory, because on some hosts is_writable() is not reliable.
-if (!is_file($GLOBALS['config']['DATADIR'].'/.htaccess')) die('<pre>ERROR: Shaarli does not have the right to write in its own directory ('.realpath(dirname(__FILE__)).').</pre>');
+if (!is_file($GLOBALS['config']['DATADIR'].'/.htaccess')) die('<pre>ERROR: Shaarli does not have the right to write in its data directory ('.realpath($GLOBALS['config']['DATADIR']).').</pre>');
 if ($GLOBALS['config']['ENABLE_LOCALCACHE'])
 {
     if (!is_dir($GLOBALS['config']['CACHEDIR'])) { mkdir($GLOBALS['config']['CACHEDIR'],0705); chmod($GLOBALS['config']['CACHEDIR'],0705); }
@@ -110,6 +112,8 @@ if (!is_file($GLOBALS['config']['CONFIG_FILE'])) install();
 
 require $GLOBALS['config']['CONFIG_FILE'];  // Read login/password hash into $GLOBALS.
 
+// a token depending of deployment salt, user password, and the current ip
+define('STAY_SIGNED_IN_TOKEN', sha1($GLOBALS['hash'].$_SERVER["REMOTE_ADDR"].$GLOBALS['salt']));
 
 autoLocale(); // Sniff browser language and set date format accordingly.
 header('Content-Type: text/html; charset=utf-8'); // We use UTF-8 for proper international characters handling.
@@ -221,7 +225,7 @@ function nl2br_escaped($html)
     return str_replace('>','&gt;',str_replace('<','&lt;',nl2br($html)));
 }
 
-/* Returns the small hash of a string
+/* Returns the small hash of a string, using RFC 4648 base64url format
    eg. smallHash('20111006_131924') --> yZH23w
    Small hashes:
      - are unique (well, as unique as crc32, at last)
@@ -233,10 +237,7 @@ function nl2br_escaped($html)
 function smallHash($text)
 {
     $t = rtrim(base64_encode(hash('crc32',$text,true)),'=');
-    $t = str_replace('+','-',$t); // Get rid of characters which need encoding in URLs.
-    $t = str_replace('/','_',$t);
-    $t = str_replace('=','@',$t);
-    return $t;
+    return strtr($t, '+/', '-_');
 }
 
 // In a string, converts urls to clickable links.
@@ -297,16 +298,20 @@ function allIPs()
     return $ip;
 }
 
+function fillSessionInfo() {
+	$_SESSION['uid'] = sha1(uniqid('',true).'_'.mt_rand()); // generate unique random number (different than phpsessionid)
+	$_SESSION['ip']=allIPs();                // We store IP address(es) of the client to make sure session is not hijacked.
+	$_SESSION['username']=$GLOBALS['login'];
+	$_SESSION['expires_on']=time()+INACTIVITY_TIMEOUT;  // Set session expiration.
+}
+
 // Check that user/password is correct.
 function check_auth($login,$password)
 {
     $hash = sha1($password.$login.$GLOBALS['salt']);
     if ($login==$GLOBALS['login'] && $hash==$GLOBALS['hash'])
     {   // Login/password is correct.
-        $_SESSION['uid'] = sha1(uniqid('',true).'_'.mt_rand()); // generate unique random number (different than phpsessionid)
-        $_SESSION['ip']=allIPs();                // We store IP address(es) of the client to make sure session is not hijacked.
-        $_SESSION['username']=$login;
-        $_SESSION['expires_on']=time()+INACTIVITY_TIMEOUT;  // Set session expiration.
+		fillSessionInfo();
         logm('Login successful');
         return True;
     }
@@ -321,6 +326,11 @@ function isLoggedIn()
 
     if (!isset($GLOBALS['login'])) return false;  // Shaarli is not configured yet.
 
+	if (@$_COOKIE['shaarli_staySignedIn']===STAY_SIGNED_IN_TOKEN)
+	{
+		fillSessionInfo();
+		return true;
+	}
     // If session does not exist on server side, or IP address has changed, or session has expired, logout.
     if (empty($_SESSION['uid']) || ($GLOBALS['disablesessionprotection']==false && $_SESSION['ip']!=allIPs()) || time()>=$_SESSION['expires_on'])
     {
@@ -334,7 +344,9 @@ function isLoggedIn()
 }
 
 // Force logout.
-function logout() { if (isset($_SESSION)) { unset($_SESSION['uid']); unset($_SESSION['ip']); unset($_SESSION['username']); unset($_SESSION['privateonly']); }  }
+function logout() { if (isset($_SESSION)) { unset($_SESSION['uid']); unset($_SESSION['ip']); unset($_SESSION['username']); unset($_SESSION['privateonly']); }  
+setcookie('shaarli_staySignedIn', FALSE, 0, WEB_PATH);
+}
 
 
 // ------------------------------------------------------------------------------------------
@@ -396,6 +408,7 @@ if (isset($_POST['login']))
         // If user wants to keep the session cookie even after the browser closes:
         if (!empty($_POST['longlastingsession']))
         {
+			setcookie('shaarli_staySignedIn', STAY_SIGNED_IN_TOKEN, time()+31536000, WEB_PATH);
             $_SESSION['longlastingsession']=31536000;  // (31536000 seconds = 1 year)
             $_SESSION['expires_on']=time()+$_SESSION['longlastingsession'];  // Set session expiration on server-side.
 
@@ -740,7 +753,7 @@ class linkdb implements Iterator, Countable, ArrayAccess
              $this->links = array();
              $link = array('title'=>'Shaarli - sebsauvage.net','url'=>'http://sebsauvage.net/wiki/doku.php?id=php:shaarli','description'=>'Welcome to Shaarli ! This is a bookmark. To edit or delete me, you must first login.','private'=>0,'linkdate'=>'20110914_190000','tags'=>'opensource software');
              $this->links[$link['linkdate']] = $link;
-             $link = array('title'=>'My secret stuff... - Pastebin.com','url'=>'http://pastebin.com/smCEEeSn','description'=>'SShhhh!!  I\'m a private link only YOU can see. You can delete me too.','private'=>1,'linkdate'=>'20110914_074522','tags'=>'secretstuff');
+             $link = array('title'=>'My secret stuff... - Pastebin.com','url'=>'http://sebsauvage.net/paste/?8434b27936c09649#bR7XsXhoTiLcqCpQbmOpBi3rq2zzQUC5hBI7ZT1O3x8=','description'=>'SShhhh!!  I\'m a private link only YOU can see. You can delete me too.','private'=>1,'linkdate'=>'20110914_074522','tags'=>'secretstuff');
              $this->links[$link['linkdate']] = $link;
              file_put_contents($GLOBALS['config']['DATASTORE'], PHPPREFIX.base64_encode(gzdeflate(serialize($this->links))).PHPSUFFIX); // Write database to disk
         }
@@ -876,7 +889,7 @@ class linkdb implements Iterator, Countable, ArrayAccess
 }
 
 // ------------------------------------------------------------------------------------------
-// Ouput the last 50 links in RSS 2.0 format.
+// Ouput the last N links in RSS 2.0 format.
 function showRSS()
 {
     header('Content-Type: application/rss+xml; charset=utf-8');
@@ -898,6 +911,11 @@ function showRSS()
     if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
     elseif (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
     else $linksToDisplay = $LINKSDB;
+    $nblinksToDisplay = 50;  // Number of links to display.
+    if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
+    { 
+        $nblinksToDisplay = $_GET['nb']=='all' ? count($linksToDisplay) : max($_GET['nb']+0,1) ;
+    }
 
     $pageaddr=htmlspecialchars(indexUrl());
     echo '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">';
@@ -912,7 +930,7 @@ function showRSS()
     }
     $i=0;
     $keys=array(); foreach($linksToDisplay as $key=>$value) { $keys[]=$key; }  // No, I can't use array_keys().
-    while ($i<50 && $i<count($keys))
+    while ($i<$nblinksToDisplay && $i<count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
         $guid = $pageaddr.'?'.smallHash($link['linkdate']);
@@ -937,7 +955,7 @@ function showRSS()
         echo '<description><![CDATA['.nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description'])))).$descriptionlink.']]></description>'."\n</item>\n";
         $i++;
     }
-    echo '</channel></rss><!-- Cached version of '.pageUrl().' -->';
+    echo '</channel></rss><!-- Cached version of '.htmlspecialchars(pageUrl()).' -->';
 
     $cache->cache(ob_get_contents());
     ob_end_flush();
@@ -945,7 +963,7 @@ function showRSS()
 }
 
 // ------------------------------------------------------------------------------------------
-// Ouput the last 50 links in ATOM format.
+// Ouput the last N links in ATOM format.
 function showATOM()
 {
     header('Content-Type: application/atom+xml; charset=utf-8');
@@ -968,13 +986,18 @@ function showATOM()
     if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
     elseif (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
     else $linksToDisplay = $LINKSDB;
+    $nblinksToDisplay = 50;  // Number of links to display.
+    if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
+    { 
+        $nblinksToDisplay = $_GET['nb']=='all' ? count($linksToDisplay) : max($_GET['nb']+0,1) ;
+    }
 
     $pageaddr=htmlspecialchars(indexUrl());
     $latestDate = '';
     $entries='';
     $i=0;
     $keys=array(); foreach($linksToDisplay as $key=>$value) { $keys[]=$key; }  // No, I can't use array_keys().
-    while ($i<50 && $i<count($keys))
+    while ($i<$nblinksToDisplay && $i<count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
         $guid = $pageaddr.'?'.smallHash($link['linkdate']);
@@ -1017,7 +1040,7 @@ function showATOM()
     $feed.='<author><name>'.htmlspecialchars($pageaddr).'</name><uri>'.htmlspecialchars($pageaddr).'</uri></author>';
     $feed.='<id>'.htmlspecialchars($pageaddr).'</id>'."\n\n"; // Yes, I know I should use a real IRI (RFC3987), but the site URL will do.
     $feed.=$entries;
-    $feed.='</feed><!-- Cached version of '.pageUrl().' -->';
+    $feed.='</feed><!-- Cached version of '.htmlspecialchars(pageUrl()).' -->';
     echo $feed;
 
     $cache->cache(ob_get_contents());
@@ -1094,7 +1117,7 @@ function showDailyRSS()
         echo '<description><![CDATA['.$html.']]></description>'."\n</item>\n\n";
 
     }
-    echo '</channel></rss><!-- Cached version of '.pageUrl().' -->';
+    echo '</channel></rss><!-- Cached version of '.htmlspecialchars(pageUrl()).' -->';
 
     $cache->cache(ob_get_contents());
     ob_end_flush();
@@ -1538,7 +1561,9 @@ function renderPage()
             $link_is_new = true;  // This is a new link
             $linkdate = strval(date('Ymd_His'));
             $title = (empty($_GET['title']) ? '' : $_GET['title'] ); // Get title if it was provided in URL (by the bookmarklet).
-            $description=''; $tags=''; $private=0;
+            $description = (empty($_GET['description']) ? '' : $_GET['description']); // Get description if it was provided in URL (by the bookmarklet). [Bronco added that]
+            $tags = (empty($_GET['tags']) ? '' : $_GET['tags'] ); // Get tags if it was provided in URL
+            $private = (!empty($_GET['private']) && $_GET['private'] === "1" ? 1 : 0); // Get private if it was provided in URL 
             if (($url!='') && parse_url($url,PHP_URL_SCHEME)=='') $url = 'http://'.$url;
             // If this is an HTTP link, we try go get the page to extact the title (otherwise we will to straight to the edit form.)
             if (empty($title) && parse_url($url,PHP_URL_SCHEME)=='http')
@@ -1570,7 +1595,7 @@ function renderPage()
  					}
             }
             if ($url=='') $url='?'.smallHash($linkdate); // In case of empty URL, this is just a text (with a link that point to itself)
-            $link = array('linkdate'=>$linkdate,'title'=>$title,'url'=>$url,'description'=>$description,'tags'=>$tags,'private'=>0);
+            $link = array('linkdate'=>$linkdate,'title'=>$title,'url'=>$url,'description'=>$description,'tags'=>$tags,'private'=>$private);
         }
 
         $PAGE = new pageBuilder;
@@ -1695,7 +1720,11 @@ function importFile()
                 {
                     $attr=$m[1]; $value=$m[2];
                     if ($attr=='HREF') $link['url']=html_entity_decode($value,ENT_QUOTES,'UTF-8');
-                    elseif ($attr=='ADD_DATE') $raw_add_date=intval($value);
+                    elseif ($attr=='ADD_DATE')
+                    {
+                        $raw_add_date=intval($value);
+                        if ($raw_add_date>30000000000) $raw_add_date/=1000;	//If larger than year 2920, then was likely stored in milliseconds instead of seconds
+                    }
                     elseif ($attr=='PRIVATE') $link['private']=($value=='0'?0:1);
                     elseif ($attr=='TAGS') $link['tags']=html_entity_decode(str_replace(',',' ',$value),ENT_QUOTES,'UTF-8');
                 }
@@ -1731,11 +1760,11 @@ function importFile()
         }
         $LINKSDB->savedb();
 
-        echo '<script language="JavaScript">alert("File '.$filename.' ('.$filesize.' bytes) was successfully processed: '.$import_count.' links imported.");document.location=\'?\';</script>';
+        echo '<script language="JavaScript">alert("File '.json_encode($filename).' ('.$filesize.' bytes) was successfully processed: '.$import_count.' links imported.");document.location=\'?\';</script>';
     }
     else
     {
-        echo '<script language="JavaScript">alert("File '.$filename.' ('.$filesize.' bytes) has an unknown file format. Nothing was imported.");document.location=\'?\';</script>';
+        echo '<script language="JavaScript">alert("File '.json_encode($filename).' ('.$filesize.' bytes) has an unknown file format. Nothing was imported.");document.location=\'?\';</script>';
     }
 }
 
@@ -2143,7 +2172,42 @@ function isTZvalid($continent,$city)
     }
     return false;
 }
-
+if (!function_exists('json_encode')) {
+    function json_encode($data) {
+        switch ($type = gettype($data)) {
+            case 'NULL':
+                return 'null';
+            case 'boolean':
+                return ($data ? 'true' : 'false');
+            case 'integer':
+            case 'double':
+            case 'float':
+                return $data;
+            case 'string':
+                return '"' . addslashes($data) . '"';
+            case 'object':
+                $data = get_object_vars($data);
+            case 'array':
+                $output_index_count = 0;
+                $output_indexed = array();
+                $output_associative = array();
+                foreach ($data as $key => $value) {
+                    $output_indexed[] = json_encode($value);
+                    $output_associative[] = json_encode($key) . ':' . json_encode($value);
+                    if ($output_index_count !== NULL && $output_index_count++ !== $key) {
+                        $output_index_count = NULL;
+                    }
+                }
+                if ($output_index_count !== NULL) {
+                    return '[' . implode(',', $output_indexed) . ']';
+                } else {
+                    return '{' . implode(',', $output_associative) . '}';
+                }
+            default:
+                return ''; // Not supported
+        }
+    }
+}
 
 // Webservices (for use with jQuery/jQueryUI)
 // eg.  index.php?ws=tags&term=minecr
