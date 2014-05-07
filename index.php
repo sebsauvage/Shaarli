@@ -2246,6 +2246,45 @@ function processWS()
         echo json_encode(array_keys($suggested));
         exit;
     }
+
+    if ($_GET['ws']=='permalink') {
+        $links = $LINKSDB->filterSmallHash($term);
+        if (count($links) == 0) {
+            header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+        } else {
+            #TODO: can we have more than 1 result ?
+            $result = array_values($links)[0];
+            $result['tags'] = split(' ', $result['tags']);
+            $result['private'] = $result['private']?true:false;
+            $result['timestamp'] = linkdate2timestamp($result['resultdate']);
+
+            echo json_encode($result);
+        }
+
+        exit;
+    }
+
+    //TODO: privacy: send hashsum instead of real url ?
+    //TODO: test both http and https urls
+    if ($_GET['ws']=='url') {
+        //NOTE: url must be url-encoded
+        // return false if not found
+        $link = $LINKSDB->getLinkFromUrl($term);
+        if (!$link) {
+            header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+        } else {
+            $link['permalink'] = smallHash($link['linkdate']);
+            $link['tags'] = split(' ', $link['tags']);
+            $link['timestamp'] = linkdate2timestamp($link['linkdate']);
+
+            echo json_encode($link);
+        }
+
+        exit;
+    }
+
+    header($_SERVER["SERVER_PROTOCOL"]." 400 Bad Request");
+    exit;
 }
 
 // Re-write configuration file according to globals.
