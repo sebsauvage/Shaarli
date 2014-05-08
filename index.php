@@ -2250,7 +2250,11 @@ function processWS()
     if ($_GET['ws']=='permalink') {
         $links = $LINKSDB->filterSmallHash($term);
         if (count($links) == 0) {
-            header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+            # link may be private, but we don't know if we are not logged
+            # we return a distinct error code, so the client can choose what to do
+            header($_SERVER["SERVER_PROTOCOL"].
+              (isLoggedIn() ? " 404 Not Found" : " 401 Unauthorized")
+            );
         } else {
             #TODO: can we have more than 1 result ?
             $result = array_values($links)[0];
@@ -2271,7 +2275,11 @@ function processWS()
         // return false if not found
         $link = $LINKSDB->getLinkFromUrl($term);
         if (!$link) {
-            header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+            # link may be private, but we don't know if we are not logged
+            # we return a distinct error code, so the client can choose what to do
+            header($_SERVER["SERVER_PROTOCOL"].
+              (isLoggedIn() ? " 404 Not Found" : " 401 Unauthorized")
+            );
         } else {
             $link['permalink'] = smallHash($link['linkdate']);
             $link['tags'] = split(' ', $link['tags']);
