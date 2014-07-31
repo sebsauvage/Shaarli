@@ -66,7 +66,6 @@ error_reporting(E_ALL^E_WARNING);  // See all error except warnings.
 
 include "inc/rain.tpl.class.php"; //include Rain TPL
 raintpl::$tpl_dir = $GLOBALS['config']['RAINTPL_TPL']; // template directory
-if (!is_dir($GLOBALS['config']['RAINTPL_TMP'])) { mkdir($GLOBALS['config']['RAINTPL_TMP'],0705); chmod($GLOBALS['config']['RAINTPL_TMP'],0705); }
 raintpl::$cache_dir = $GLOBALS['config']['RAINTPL_TMP']; // cache directory
 
 ob_start();  // Output buffering for the page cache.
