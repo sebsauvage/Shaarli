@@ -88,14 +88,11 @@ header("Pragma: no-cache");
 
 // Directories creations (Note that your web host may require differents rights than 705.)
 if (!is_writable(realpath(dirname(__FILE__)))) die('<pre>ERROR: Shaarli does not have the right to write in its own directory ('.realpath(dirname(__FILE__)).').</pre>');
-if (!is_dir($GLOBALS['config']['DATADIR'])) { mkdir($GLOBALS['config']['DATADIR'],0705); chmod($GLOBALS['config']['DATADIR'],0705); }
-if (!is_dir($GLOBALS['config']['RAINTPL_TMP'])) { mkdir($GLOBALS['config']['RAINTPL_TMP'],0705);chmod($GLOBALS['config']['RAINTPL_TMP'],0705); } // For RainTPL temporary files.
 if (!is_file($GLOBALS['config']['DATADIR'].'/.htaccess')) { file_put_contents($GLOBALS['config']['DATADIR'].'/.htaccess',"Allow from none\nDeny from all\n"); } // Protect data files.
 // Second check to see if Shaarli can write in its directory, because on some hosts is_writable() is not reliable.
 if (!is_file($GLOBALS['config']['DATADIR'].'/.htaccess')) die('<pre>ERROR: Shaarli does not have the right to write in its data directory ('.realpath($GLOBALS['config']['DATADIR']).').</pre>');
 if ($GLOBALS['config']['ENABLE_LOCALCACHE'])
 {
-    if (!is_dir($GLOBALS['config']['CACHEDIR'])) { mkdir($GLOBALS['config']['CACHEDIR'],0705); chmod($GLOBALS['config']['CACHEDIR'],0705); }
     if (!is_file($GLOBALS['config']['CACHEDIR'].'/.htaccess')) { file_put_contents($GLOBALS['config']['CACHEDIR'].'/.htaccess',"Allow from none\nDeny from all\n"); } // Protect data files.
 }
 
@@ -188,7 +185,6 @@ class pageCache
     public function cache($page)
     {
         if (!$this->shouldBeCached) return;
-        if (!is_dir($GLOBALS['config']['PAGECACHE'])) { mkdir($GLOBALS['config']['PAGECACHE'],0705); chmod($GLOBALS['config']['PAGECACHE'],0705); }
         file_put_contents($this->filename,$page);
     }
 
