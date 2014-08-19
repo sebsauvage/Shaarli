@@ -1,4 +1,4 @@
-/* CSS Stylsheet for Shaarli - http://sebsauvage.net/wiki/doku.php?id=php:shaarli */
+/* Cascading Stylesheet for Shaarli - http://sebsauvage.net/wiki/doku.php?id=php:shaarli */
 
 /* CSS Reset from Yahoo to cope with browsers CSS inconsistencies. */
 /*
@@ -408,13 +408,13 @@ div.dailyEntryDescription
     overflow:auto;
 }
 
-/* Common css screwdriver */
+/* Common CSS screwdriver */
 .clear{
 	clear:both;
 }
 
 /* For lazy images loading in picture wall.
-   using http://www.appelsiini.net/projects/lazyload 
+   Using http://www.appelsiini.net/projects/lazyload 
  */
 .lazyimage { display:none; }
 
@@ -451,7 +451,7 @@ a {color:#000!important;text-decoration:none!important;}
 #searchform_value { width:70% !important; }
 #tagfilter_value { width:70% !important; }
 div.qrcode { position:relative; float:left; top:-10px; left:0px; }
-#paging_privatelinks { float;none; }
+#paging_privatelinks { float:none; }
 #paging_linksperpage { float:none; margin-bottom:10px; font-size:smaller;}
 #paging_older,#paging_newer,#paging_linksperpage a { border: 1px solid black; padding:3px 5px 3px 5px; background-color:#666; color:#fff; border-radius: 5px 5px 5px 5px;}
 .thumbnail { float:none; height:auto; margin: 0px; text-align:center;}

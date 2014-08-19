@@ -5,7 +5,7 @@
 <div id="pageheader">
 	{include="page.header"}
 	<div id="uploaddiv">
-	Import Netscape html bookmarks (as exported from Firefox/Chrome/Opera/delicious/diigo...) (Max: {$maxfilesize|htmlspecialchars} bytes).
+	Import Netscape HTML bookmarks (as exported from Firefox/Chrome/Opera/Delicious/Diigo...) (Max: {$maxfilesize|htmlspecialchars} bytes).
 	<form method="POST" action="?do=upload" enctype="multipart/form-data" name="uploadform" id="uploadform">
 	    <input type="hidden" name="token" value="{$token}">
 	    <input type="file" name="filetoupload" size="80">
