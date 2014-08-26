@@ -2488,6 +2488,48 @@ function resizeImage($filepath)
     return true;
 }
 
+// Sitemap (txt only)
+function showSitemap()
+{
+
+    // Cache system
+    $query = $_SERVER["QUERY_STRING"];
+    $cache = new pageCache(pageUrl(),startsWith($query,'do=sitemap') && !isLoggedIn());
+    $cached = $cache->cachedVersion(); if (!empty($cached)) { echo $cached; exit; }
+
+    // If cached was not found (or not usable), then read the database and build the response:
+    $LINKSDB=new linkdb(isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI']);  // Read links from database (and filter private links if used it not logged in).
+
+    // Optionnaly filter the results:
+    $linksToDisplay=array();
+    if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
+    elseif (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
+    else $linksToDisplay = $LINKSDB;
+    $nblinksToDisplay = 5000;  // Number of links to display.
+    if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
+    { 
+        $nblinksToDisplay = $_GET['nb']=='all' ? count($linksToDisplay) : max($_GET['nb']+0,1) ;
+    }
+
+    $pageaddr=htmlspecialchars(indexUrl());
+    $i=0;
+    $keys=array(); foreach($linksToDisplay as $key=>$value) { $keys[]=$key; }  // No, I can't use array_keys().
+    while ($i<$nblinksToDisplay && $i<count($keys))
+    {
+        $link = $linksToDisplay[$keys[$i]];
+        $guid = $pageaddr.'?'.smallHash($link['linkdate']);
+        $rfc822date = linkdate2rfc822($link['linkdate']);
+        $absurl = htmlspecialchars($link['url']);
+        if (startsWith($absurl,'?')) $absurl=$pageaddr.$absurl;  // make permalink URL absolute
+            echo "$guid \n";
+        $i++;
+    }
+
+    $cache->cache(ob_get_contents());
+    ob_end_flush();
+    exit;
+}
+
 // Invalidate caches when the database is changed or the user logs out.
 // (eg. tags cache).
 function invalidateCaches()
@@ -2501,6 +2543,7 @@ if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=r
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=atom')) { showATOM(); exit; }
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=dailyrss')) { showDailyRSS(); exit; }
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=daily')) { showDaily(); exit; }
+if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=sitemap')) { showSitemap(); exit; }
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'ws=')) { processWS(); exit; } // Webservices (for jQuery/jQueryUI)
 if (!isset($_SESSION['LINKS_PER_PAGE'])) $_SESSION['LINKS_PER_PAGE']=$GLOBALS['config']['LINKS_PER_PAGE'];
 renderPage();
