@@ -600,6 +600,26 @@ function html_extract_title($html)
   return preg_match('!<title>(.*?)</title>!is', $html, $matches) ? trim(str_replace("\n",' ', $matches[1])) : '' ;
 }
 
+// Send a [webmention](http://webmention.org/) to the giver $url referencing the $source.
+function sendWebmention($url, $source)
+{
+    list($status,$headers,$data)=getHTTP($url,4);
+    if (strpos($status,'200 OK')!==false)
+    {
+        // Get webmention endpoint. Can be rel="webmention", rel="http://webmention.org/", rel="webmention http://webmention.org/", etc.
+        preg_match('!<link .*rel *= *\"(?:(?:webmention|http://webmention.org/?) *)+\" .*href *= *\"(.+?)\"!',$data,$matches);
+        if (!empty($matches[1]))
+        {
+            $endpoint=$matches[1];
+            $postdata=http_build_query(array('source'=>$source,'target'=>$url));
+            $options=array('http'=>array('method'=>'POST','timeout'=>4,'header'=>'Content-type: application/x-www-form-urlencoded','content'=>$postdata));
+            $context=stream_context_create($options);
+            $res = file_get_contents($endpoint, false, $context); // Don't care the result
+        }
+    }
+}
+
+
 // ------------------------------------------------------------------------------------------
 // Token management for XSRF protection
 // Token should be used in any form which acts on data (create,update,delete,import...).
@@ -624,6 +644,7 @@ function tokenOk($token)
     }
     return false; // Wrong token, or already used.
 }
+
 
 // ------------------------------------------------------------------------------------------
 /* This class is in charge of building the final page.
@@ -1489,6 +1510,7 @@ function renderPage()
         if ($link['title']=='') $link['title']=$link['url']; // If title is empty, use the URL as title.
         $LINKSDB[$linkdate] = $link;
         $LINKSDB->savedb(); // save to disk
+        sendWebmention($url, $_SERVER['SCRIPT_URI'].'?'.smallHash($linkdate));
         pubsubhub();
 
         // If we are called from the bookmarklet, we must close the popup:
