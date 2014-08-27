@@ -606,11 +606,14 @@ function sendWebmention($url, $source)
     list($status,$headers,$data)=getHTTP($url,4);
     if (strpos($status,'200 OK')!==false)
     {
+		$endpoint=null;
         // Get webmention endpoint. Can be rel="webmention", rel="http://webmention.org/", rel="webmention http://webmention.org/", etc.
         preg_match('!<link .*rel *= *\"(?:(?:webmention|http://webmention.org/?) *)+\" .*href *= *\"(.+?)\"!',$data,$matches);
-        if (!empty($matches[1]))
+        if (!empty($matches[1])) $endpoint=$matches[1];
+        preg_match('!<link .*href *= *\"(.+?)\" .*rel *= *\"(?:(?:webmention|http://webmention.org/?) *)+\"!',$data,$matches); // The order between rel and href can be different
+        if (!empty($matches[1])) $endpoint=$matches[1];
+		if ($endpoint)
         {
-            $endpoint=$matches[1];
             $postdata=http_build_query(array('source'=>$source,'target'=>$url));
             $options=array('http'=>array('method'=>'POST','timeout'=>4,'header'=>'Content-type: application/x-www-form-urlencoded','content'=>$postdata));
             $context=stream_context_create($options);
