@@ -1,6 +1,50 @@
-Shaarli is distributed under the zlib/libpng License:
+Files: * 
+License: zlib/libpng
+Copyright: (c) 2011-2014 SÃ©bastien SAUVAGE <sebsauvage@sebsauvage.net>
+           (c) 2011-2014 Alexandre Alapetite <alexandre@alapetite.fr>
+           (c) 2011-2014 David Sferruzza <david.sferruzza@gmail.com>
+           (c) 2011-2014 Christophe HENRY <christophe.henry@sbgodin.fr>
+           (c) 2011-2014 Mathieu Chabanon <git@matchab.fr>
+           (c) 2011-2014 BoboTiG <bobotig@gmail.com>
+           (c) 2011-2014 Bronco <bronco@warriordudimanche.net>
+           (c) 2011-2014 Emilien Klein <emilien@klein.st>
+           (c) 2011-2014 Knah Tsaeb <knah-tsaeb@knah-tsaeb.org>
+           (c) 2011-2014 Lionel Martin <renarddesmers@gmail.com>
+           (c) 2011-2014 lehollandaisvolant <levoltigeurhollandais@gmail.com>
+           (c) 2011-2014 timo van neerden <fire@lehollandaisvolant.net>
+           (c) 2011-2014 nodiscc <nodiscc@gmail.com>
 
-Copyright (c) 2011 Sébastien SAUVAGE (sebsauvage.net)
+
+
+Files: images/calendar.png, images/edit_icon.png, images/feed-icon-14x14.png, images/private.png, images/private_16x16.png, images/private_16x16_active.png, images/qrcode.png, images/tag_blue.png
+License: CC-BY (http://creativecommons.org/licenses/by/3.0/)
+Copyright: (c) 2014 Yusuke Kamiyamane
+Source: http://p.yusukekamiyamane.com/
+
+Files: images/delete_icon.png
+License: CC-BY (http://creativecommons.org/licenses/by/3.0/)
+Copyright: (c) 2014 Designmodo
+Source: http://designmodo.com/linecons-free/
+
+
+Files: images/floral_left.png, images/floral_right.png, images/squiggle.png, images/squiggle2.png, images/squiggle_closing.png
+Licence: Public Domain
+Source: https://openclipart.org/people/j4p4n/j4p4n_ornimental_bookend_-_left.svg
+
+
+Files: images/Paper_texture_v5_by_bashcorpo_w1000.jpg
+Licence: Public Domain
+Source: http://bashcorpo.deviantart.com/art/Grungy-paper-texture-v-5-22966998
+
+Files: images/logo.png
+License: zlib/libpng
+Copyright: (c) 2011-2014 idleman idleman@idleman.fr
+
+
+
+--------------------------------------------------------
+ZLIB/LIBPNG LICENSE
+
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from
