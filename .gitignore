@@ -8,3 +8,6 @@ pagecache
 .settings
 .buildpath
 .project
+
+# Ignore raintpl generated pages
+*.rtpl.php
