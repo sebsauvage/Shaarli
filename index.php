@@ -1027,7 +1027,8 @@ function showATOM()
         $entries.="</entry>\n";
         $i++;
     }
-    $feed='<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">';
+    // rdf via grddl, see example http://www.w3.org/TR/grddl-tests/#xmlWithGrddlAttributeAndNonXMLNamespaceDocument
+    $feed='<?xml version="1.0" encoding="UTF-8"?><feed xmlns:data-view="http://www.w3.org/2003/g/data-view#" data-view:transformation="inc/atom2rdf.xslt" xmlns="http://www.w3.org/2005/Atom">';
     $feed.='<title>'.htmlspecialchars($GLOBALS['title']).'</title>';
     if (!$GLOBALS['config']['HIDE_TIMESTAMPS'] || isLoggedIn()) $feed.='<updated>'.htmlspecialchars($latestDate).'</updated>';
     $feed.='<link rel="self" href="'.htmlspecialchars(serverUrl().$_SERVER["REQUEST_URI"]).'" />';
