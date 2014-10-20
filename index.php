@@ -1587,7 +1587,11 @@ function renderPage()
  						}
  					}
             }
-            if ($url=='') $url='?'.smallHash($linkdate); // In case of empty URL, this is just a text (with a link that point to itself)
+            if ($url=='') // In case of empty URL, this is just a text (with a link that points to itself)
+            {
+                $url='?'.smallHash($linkdate);
+                $title='Note: ';
+            }
             $link = array('linkdate'=>$linkdate,'title'=>$title,'url'=>$url,'description'=>$description,'tags'=>$tags,'private'=>$private);
         }
 
