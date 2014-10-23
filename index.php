@@ -1892,13 +1892,13 @@ function computeThumbnail($url,$href=false)
     if ($domain=='youtube.com' || $domain=='www.youtube.com')
     {
         parse_str(parse_url($url,PHP_URL_QUERY), $params); // Extract video ID and get thumbnail
-        if (!empty($params['v'])) return array('src'=>'http://img.youtube.com/vi/'.$params['v'].'/default.jpg',
+        if (!empty($params['v'])) return array('src'=>'https://img.youtube.com/vi/'.$params['v'].'/default.jpg',
                                                'href'=>$href,'width'=>'120','height'=>'90','alt'=>'YouTube thumbnail');
     }
     if ($domain=='youtu.be') // Youtube short links
     {
         $path = parse_url($url,PHP_URL_PATH);
-        return array('src'=>'http://img.youtube.com/vi'.$path.'/default.jpg',
+        return array('src'=>'https://img.youtube.com/vi'.$path.'/default.jpg',
                      'href'=>$href,'width'=>'120','height'=>'90','alt'=>'YouTube thumbnail');
     }
     if ($domain=='pix.toile-libre.org') // pix.toile-libre.org image hosting
@@ -1912,18 +1912,18 @@ function computeThumbnail($url,$href=false)
     {
         $path = parse_url($url,PHP_URL_PATH);
         if (startsWith($path,'/a/')) return array(); // Thumbnails for albums are not available.
-        if (startsWith($path,'/r/')) return array('src'=>'http://i.imgur.com/'.basename($path).'s.jpg',
+        if (startsWith($path,'/r/')) return array('src'=>'https://i.imgur.com/'.basename($path).'s.jpg',
                                                   'href'=>$href,'width'=>'90','height'=>'90','alt'=>'imgur.com thumbnail');
-        if (startsWith($path,'/gallery/')) return array('src'=>'http://i.imgur.com'.substr($path,8).'s.jpg',
+        if (startsWith($path,'/gallery/')) return array('src'=>'https://i.imgur.com'.substr($path,8).'s.jpg',
                                                         'href'=>$href,'width'=>'90','height'=>'90','alt'=>'imgur.com thumbnail');
 
-        if (substr_count($path,'/')==1) return array('src'=>'http://i.imgur.com/'.substr($path,1).'s.jpg',
+        if (substr_count($path,'/')==1) return array('src'=>'https://i.imgur.com/'.substr($path,1).'s.jpg',
                                                      'href'=>$href,'width'=>'90','height'=>'90','alt'=>'imgur.com thumbnail');
     }
     if ($domain=='i.imgur.com')
     {
         $pi = pathinfo(parse_url($url,PHP_URL_PATH));
-        if (!empty($pi['filename'])) return array('src'=>'http://i.imgur.com/'.$pi['filename'].'s.jpg',
+        if (!empty($pi['filename'])) return array('src'=>'https://i.imgur.com/'.$pi['filename'].'s.jpg',
                                                   'href'=>$href,'width'=>'90','height'=>'90','alt'=>'imgur.com thumbnail');
     }
     if ($domain=='dailymotion.com' || $domain=='www.dailymotion.com')
@@ -2354,7 +2354,7 @@ function genThumbnail()
         // This is more complex: we have to perform a HTTP request, then parse the result.
         // Maybe we should deport this to JavaScript ? Example: http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo/4285098#4285098
         $vid = substr(parse_url($url,PHP_URL_PATH),1);
-        list($httpstatus,$headers,$data) = getHTTP('http://vimeo.com/api/v2/video/'.htmlspecialchars($vid).'.php',5);
+        list($httpstatus,$headers,$data) = getHTTP('https://vimeo.com/api/v2/video/'.htmlspecialchars($vid).'.php',5);
         if (strpos($httpstatus,'200 OK')!==false)
         {
             $t = unserialize($data);
