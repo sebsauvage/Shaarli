@@ -232,9 +232,10 @@ cursor:pointer;
 .linktitle { font-size:14pt; font-weight:bold; }
 .linktitle a { text-decoration: none; color:#80AD48; }
 .linktitle a:hover { color:#F57900; }
-.linkdate { font-size:8pt; color:#888; }
-.linkdate a { background-image:url('../images/calendar.png');padding:2px 0 3px 20px;background-repeat:no-repeat;text-decoration: none; color:#E28E3F;  }
-.linkdate a:hover { color: #F57900 }
+.linkdate, .linkarchive { font-size:8pt; color:#888; }
+.linkdate a, .linkarchive a { color:#E28E3F;  }
+.linkdate a {background-image:url('../images/calendar.png');padding:2px 0 3px 20px;background-repeat:no-repeat;text-decoration: none; }
+.linkdate a:hover, .linkarchive a:hover { color: #F57900 }
 .linkurl { font-size:8pt; color:#4BAA74; }
 .linkdescription { color:#000; margin-top:0; margin-bottom:12px; font-weight:normal; max-height:400px; overflow:auto; }
 .linkdescription a { text-decoration: none; color:#3465A4; }
