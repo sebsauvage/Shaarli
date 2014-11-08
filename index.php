@@ -2067,7 +2067,9 @@ function install()
     {   // Step 2: Check if data in session is correct.
         echo '<pre>Sessions do not seem to work correctly on your server.<br>';
         echo 'Make sure the variable session.save_path is set correctly in your php config, and that you have write access to it.<br>';
-        echo 'It currently points to '.session_save_path().'<br><br><a href="?">Click to try again.</a></pre>';
+        echo 'It currently points to '.session_save_path().'<br>';
+        echo 'Check that the hostname used to access Shaarli contains a dot. On some browsers, accessing your server via a hostname like \'localhost\' or any custom hostname without a dot causes cookie storage to fail. We recommend accessing your server via it\'s IP address or Fully Qualified Domain Name.<br>';
+        echo '<br><a href="?">Click to try again.</a></pre>';
         die;
     }
     if (!isset($_SESSION['session_tested']))
