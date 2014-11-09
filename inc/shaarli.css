@@ -88,6 +88,7 @@ h1 {
     padding: 0;
     background: none;
 }
+
 .linkeditbuttons {
     position: absolute;
     left: -1px;
@@ -151,9 +152,11 @@ h1 {
 #toolsdiv a {
     clear: both;
 }
+
 #toolsdiv a span {
     color: #ffffff;
 }
+
 .linksperpage, .tagfilter, .searchform, .addform {
     background-color: #dedede;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#dedede), to(#ffffff));
@@ -209,6 +212,7 @@ h1 {
     font-style: italic;
     margin-top: 0;
 }
+
 #shaarli_title a {
     color: #fff !important;
 }
@@ -217,18 +221,22 @@ h1 {
     color: #98C943;
     text-decoration: none;
 }
+
 #pageheader a:hover {
     color: #FFFFC9;
     text-decoration: none;
 }
+
 #pageheader a:active {
     color: #bbb;
     text-decoration: none;
 }
+
 #searchcriteria {
     padding: 4px 0px 5px 5px;
     font-weight: bold;
 }
+
 .paging {
     padding: 5px;
     background-color: #777;
@@ -236,34 +244,43 @@ h1 {
     text-align: center;
     clear: both;
 }
+
 .paging a:link {
     color: #ccc;
     text-decoration: none;
 }
+
 .paging a:visited {
     color: #ccc;
 }
+
 .paging a:hover {
     color: #FFFFC9;
 }
+
 .paging a:active {
     color: #fff;
 }
+
 #paging_privatelinks {
     float: left;
 }
+
 #paging_linksperpage {
     float: right;
     padding-right: 5px;
 }
+
 #paging_current {
     display: inline;
     color: #fff;
     padding: 0 20 0 20;
 }
+
 #paging_older {
     margin-right: 15px;
 }
+
 #paging_newer {
     margin-left: 15px;
 }
@@ -273,16 +290,19 @@ h1 {
     padding: 5px 5px 5px 5px;
     clear: both;
 }
+
 #toolsdiv {
     color: #ffffff;
     padding: 5px 5px 5px 5px;
     clear: left;
 }
+
 #uploaddiv {
     color: #ffffff;
     padding: 5px 5px 5px 5px;
     clear: left;
 }
+
 #editlinkform {
     height: 100%;
     color: #ffffff;
@@ -290,6 +310,7 @@ h1 {
     width: 80%;
     clear: left;
 }
+
 #linklist li {
     padding: 4px 10px 15px 20px;
     border-top: 1px solid #bbb;
@@ -308,38 +329,48 @@ h1 {
     background: #E9FFCE;
 }
 */
+
 .linkdate, .linkarchive {
     font-size:8pt;
     color:#888;
 }
+
 .linkdate a, .linkarchive a {
     color:#E28E3F;
 }
+
 #linklist li.private {
     background: url('../images/private.png') no-repeat 10px center;
     padding-left: 60px;
 }
+
 #linklist li {
     padding-left: 26px;
 }
+
 .private .linktitle a {
     color: #969696;
 }
+
 .linktitle {
     font-size: 14pt;
     font-weight: bold;
 }
+
 .linktitle a {
     text-decoration: none;
     color: #80AD48;
 }
+
 .linktitle a:hover {
     color: #F57900;
 }
+
 .linkdate, .linkarchive {
     font-size: 8pt;
     color: #888;
 }
+
 .linkdate a, .linkarchive a {
     background-image: url('../images/calendar.png');
     padding: 2px 0 3px 20px;
@@ -347,12 +378,15 @@ h1 {
     text-decoration: none;
     color: #E28E3F;
 }
+
 .linkdate a:hover {
     color: #F57900 }
+
 .linkurl {
     font-size: 8pt;
     color: #4BAA74;
 }
+
 .linkdescription {
     color: #000;
     margin-top: 0;
@@ -361,17 +395,21 @@ h1 {
     max-height: 400px;
     overflow: auto;
 }
+
 .linkdescription a {
     text-decoration: none;
     color: #3465A4;
 }
+
 .linkdescription a:hover {
     color: #F57900;
 }
+
 .linktaglist {
     padding-top: 10px;
     line-height: 200%;
 }
+
 .linktag {
     font-size: 9pt;
     background-color: #F2F2F2;
@@ -391,28 +429,35 @@ h1 {
     background-position: 3px center;
     background-color: #ffffff;
 }
+
 .linktag:hover {
     border-color: #555573;
     color: #000;
 }
+
 .linktag a {
     color: #777;
     text-decoration: none;
 }
+
 .linkshort {
     font-size: 8pt;
     color: #888;
 }
+
 .linkshort a {
     text-decoration: none;
     color: #393964;
 }
+
 .linkshort a:hover {
     text-decoration: underline;
 }
+
 .buttoneditform {
     display: inline;
 }
+
 #footer {
     font-size: 8pt;
     text-align: center;
@@ -420,12 +465,15 @@ h1 {
     color: #888;
     clear: both;
 }
+
 #footer  a {
     color: #486D08;
 }
+
 #footer  a:hover {
     color: #000000;
 }
+
 #newversion {
     background-color: #FFFFA0;
     color: #000;
@@ -435,44 +483,53 @@ h1 {
     padding: 2 7 2 7;
     font-size: 9pt;
 }
+
 #cloudtag {
     padding-left: 10%;
     padding-right: 10%;
 }
+
 #cloudtag a {
     color: black;
     text-decoration: none;
 }
+
 #installform td {
     font-size: 10pt;
     color: black;
     padding: 10px 5px 10px 5px;
     clear: left;
 }
+
 #changepasswordform {
     color: #ccc;
     padding: 10px 5px 10px 5px;
     clear: left;
 }
+
 #changetag {
     color: #ccc;
     padding: 10px 5px 10px 5px;
     clear: left;
 }
+
 #configform td {
     color: #ccc;
     font-size: 10pt;
     padding: 10px 5px 10px 5px;
 }
+
 #configform {
     color: #ccc;
     padding: 10px 5px 10px 5px;
     clear: left;
 }
+
 .thumbnail {
     float: right;
     margin-left: 10px;
 }
+
 /* If you want thumbnails on the left:
 .thumbnail {
     float: left;
@@ -490,6 +547,7 @@ h1 {
     background-color: #000;
     clear: both;
 }
+
 .picwall_pictureframe {
     background-color: #000;
     z-index: 5;
@@ -502,10 +560,12 @@ h1 {
     text-align: center;
     float: left;
 }
+
 .picwall_pictureframe img {
     max-width: 100%;
     height: auto;
 } /* Adapt the width of the image */
+
 .picwall_pictureframe a {
     text-decoration: none;
 }
@@ -514,6 +574,7 @@ h1 {
 .picwall_pictureframe span.info {
     display: none;
 }
+
 .picwall_pictureframe:hover span.info {
     display: block;
     position: absolute;
@@ -537,6 +598,7 @@ h1 {
     background-color: #fff;
     padding-left: 5px;
 }
+
 .ui-state-hover {
     background-color: #604dff;
     color: #fff;
@@ -586,11 +648,13 @@ div.daily {
     width: 33%;
     padding-left: 1%;
 }
+
 #daily_col2 {
     float: left;
     position: relative;
     width: 33%;
 }
+
 #daily_col3 {
     float: left;
     position: relative;
@@ -607,15 +671,18 @@ div.dailyAbout {
     padding: 5px 5px 5px 5px;
     text-align: center;
 }
+
 div.dailyAbout a {
     color: #890500;
 }
+
 div.dailyTitle {
     font-weight: bold;
     font-size: 44pt;
     text-align: center;
     padding: 10px 20px 0px 20px;
 }
+
 div.dailyDate {
     font-size: 12pt;
     font-weight: bold;
@@ -629,17 +696,21 @@ div.dailyEntry {
     font-size: 11pt;
     border-top: 1px solid #555;
 }
+
 div.dailyEntry a {
     text-decoration: none;
     color: #890500;
 }
+
 div.dailyEntryTags {
     font-size: 7.75pt;
 }
+
 div.dailyEntryTitle {
     font-size: 18pt;
     font-weight: bold;
 }
+
 div.dailyEntryThumbnail {
     width: 100%;
     text-align: center;
@@ -647,6 +718,7 @@ div.dailyEntryThumbnail {
     background: url(../images/50pc_transparent.png);
     padding: 4px 0px 2px 0px;
 }
+
 div.dailyEntryDescription {
     margin-top: 10px;
     margin-bottom: 30px;
@@ -672,42 +744,52 @@ div.dailyEntryDescription {
 	background: #fff !important;
 	color: #000 !important;
     }
+
     body {
 	font-size: 12pt;
 	width: auto !important;
 	margin: auto !important;
     }
+
     /* Minimum numer of lines to display when splitting a paragraph
        over two pages */
     p {
 	orphans: 3;
 	widows: 3;
     }
+
     a {
 	color: #000 !important;
 	text-decoration: none !important;
     }
+
     #pageheader, .paging, #linklist li form, #footer {
 	display: none;
     }
+
     #linklist li {
 	padding: 2 0 10 0;
 	border-top: 2px solid #000;
 	clear: both;
     }
+
     #linklist li.private {
 	background-color: none;
 	border-left: 0;
     }
+
     .linkdate {
 	line-height: 2;
     }
+
     .linkurl {
 	color: #000;
     }
+
     .linkdescription {
 	font-size: 10pt;
     }
+
     .linktag {
 	border: 1px solid black;
 	font-style: italic;
@@ -720,50 +802,60 @@ div.dailyEntryDescription {
     .nomobile {
 	display: none;
     }
+
     #logo {
 	display: none;
     }
-    #pageheader a
-    {
+
+    #pageheader a {
 	padding: 5px;
 	border-radius: 5px 5px 5px 5px;
 	margin: 3px;
     }
+
     .searchform, .tagfilter {
 	display: block !important;
 	margin: 0px !important;
 	padding: 0px !important;
 	width: 100% !important;
     }
+
     .searchform input, .tagfilter input {
 	margin: 0px !important;
 	padding: 0px !important;
 	display: inline !important;
     }
+
     .tagfilter input.bigbutton, .searchform input.bigbutton, .addform input.bigbutton {
 	width: 30%;
 	font-size: smaller;
     }
+
     #searchform_value {
 	width: 70% !important;
     }
+
     #tagfilter_value {
 	width: 70% !important;
     }
+
     div.qrcode {
 	position: relative;
 	float: left;
 	top: -10px;
 	left: 0px;
     }
+
     #paging_privatelinks {
 	float: none;
     }
+
     #paging_linksperpage {
 	float: none;
 	margin-bottom: 10px;
 	font-size: smaller;
     }
+
     #paging_older, #paging_newer, #paging_linksperpage a {
 	border: 1px solid black;
 	padding: 3px 5px 3px 5px;
@@ -771,15 +863,18 @@ div.dailyEntryDescription {
 	color: #fff;
 	border-radius: 5px 5px 5px 5px;
     }
+
     .thumbnail {
 	float: none;
 	height: auto;
 	margin: 0px;
 	text-align: center;
     }
+
     #cloudtag {
 	padding: 0px;
     }
+
     div.dailyAbout {
 	float: none;
 	position: relative;
@@ -789,25 +884,30 @@ div.dailyEntryDescription {
 	top: 0px;
 	left: 0px;
     }
+
     #daily_col1, #daily_col2, #daily_col3 {
 	float: none;
 	width: 100%;
 	padding: 0px;
     }
+
     div.dailyTitle {
 	font-size: 18pt;
 	margin-top: 5px;
 	padding: 0px;
     }
+
     div.dailyDate {
 	font-size: 11pt;
 	padding: 0px;
 	display: block;
     }
+
     div.dailyEntryTitle {
 	font-size: 16pt;
 	font-weight: bold;
     }
+
     div.dailyEntryDescription {
 	font-size: 10pt;
     }
