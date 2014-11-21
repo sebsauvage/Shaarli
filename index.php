@@ -1349,6 +1349,14 @@ function renderPage()
             header('Location: ?do=login&post='.urlencode($_GET['post']).(!empty($_GET['title'])?'&title='.urlencode($_GET['title']):'').(!empty($_GET['description'])?'&description='.urlencode($_GET['description']):'').(!empty($_GET['source'])?'&source='.urlencode($_GET['source']):'')); // Redirect to login page, then back to post link.
             exit;
         }
+
+		// Same case as above except that user tried to access ?do=addlink without being logged in
+		// Note: passing empty parameters makes Shaarli generate default URLs and descriptions.
+		if (isset($_GET['do']) && $_GET['do'] === 'addlink') {
+			header('Location: ?do=login&post=');
+			exit;
+		}
+
         $PAGE = new pageBuilder;
         buildLinkList($PAGE,$LINKSDB); // Compute list of links to display
         $PAGE->renderPage('linklist');
