@@ -24,6 +24,10 @@ input, textarea {
 
 	}
 
+a {
+	text-decoration: none;
+}
+
 h1 { font-size:20pt; font-weight:bold; font-style:italic; margin-bottom:20px; }
 /* I don't give a shit about IE. He can't understand selectors such as input[type='submit']. */
 
@@ -69,9 +73,9 @@ h1 { font-size:20pt; font-weight:bold; font-style:italic; margin-bottom:20px; }
 
 /* Small tab on the left of each link with edit/delete buttons. */
 .button_edit, .button_delete { border-radius:0; box-shadow:none; border-style:none; border-width:0; padding:0; background:none; }
-.linkeditbuttons {  
-	position:absolute; 
-	left:-1px;  
+.linkeditbuttons {
+	position:absolute;
+	left:-1px;
 	padding:4px 2px 2px 2px;
 	background-color:#f0f0f0;
 
@@ -111,7 +115,7 @@ cursor:pointer;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 	width:auto;
 	padding:0 10px 5px 10px;
-	margin: auto; 
+	margin: auto;
 }
 
 #pageheader a
@@ -306,7 +310,7 @@ font-size:9pt;
   background-color: transparent;
   background-color: rgba(0, 0, 0, 0.4);  /* FF3+, Saf3+, Opera 10.10+, Chrome, IE9 */
             filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#66000000,endColorstr=#66000000); /* IE6IE9 */
-text-shadow:2px 2px 1px #000000;    
+text-shadow:2px 2px 1px #000000;
 }
 
 /* Minimal customisation for jQuery widgets */
@@ -338,7 +342,7 @@ box-shadow:2px 2px 20px 2px #333333;
 
 div.daily
 {
-    font-family: Georgia, 'DejaVu Serif', Norasi, serif; 
+    font-family: Georgia, 'DejaVu Serif', Norasi, serif;
     background-color: #E6D6BE;
     /* Background paper texture by BashCorpo:
        http://www.bashcorpo.dk/textures.php
@@ -357,7 +361,7 @@ div.daily
 #daily_col3 { float:left;position:relative; width:33%;}
 
 div.dailyAbout
-{ 
+{
     float:left;
     border: 1px solid black;
     font-size: 8pt;
@@ -365,21 +369,21 @@ div.dailyAbout
     left:10px;
     top: 15px;
     padding: 5px 5px 5px 5px;
-    text-align:center; 
+    text-align:center;
 }
 div.dailyAbout  a { color: #890500; }
 div.dailyTitle
- { 
+ {
      font-weight: bold;
      font-size: 44pt;
-     text-align:center; 
+     text-align:center;
      padding:10px 20px 0px 20px;
 }
 div.dailyDate
- { 
+ {
      font-size: 12pt;
-     font-weight:bold; 
-     text-align:center; 
+     font-weight:bold;
+     text-align:center;
      padding:0px 20px 30px 20px;
 }
 
@@ -393,19 +397,19 @@ div.dailyEntry
 div.dailyEntry  a { text-decoration:none; color: #890500; }
 div.dailyEntryTags { font-size:7.75pt;  }
 div.dailyEntryTitle { font-size:18pt; font-weight:bold;}
-div.dailyEntryThumbnail 
-{ 
-    width:100%; 
-    text-align:center; 
-    background-color:rgb(128,128,128); 
+div.dailyEntryThumbnail
+{
+    width:100%;
+    text-align:center;
+    background-color:rgb(128,128,128);
     background:url(../images/50pc_transparent.png);
     padding:4px 0px 2px 0px;
 }
 div.dailyEntryDescription
-{ 
+{
     margin-top: 10px;
-    margin-bottom: 30px; 
-    text-align:justify; 
+    margin-bottom: 30px;
+    text-align:justify;
     overflow:auto;
 }
 
@@ -415,7 +419,7 @@ div.dailyEntryDescription
 }
 
 /* For lazy images loading in picture wall.
-   Using http://www.appelsiini.net/projects/lazyload 
+   Using http://www.appelsiini.net/projects/lazyload
  */
 .lazyimage { display:none; }
 
@@ -464,7 +468,7 @@ div.dailyDate  {  font-size: 11pt;padding:0px; display:block; }
 div.dailyEntryTitle { font-size:16pt; font-weight:bold;}
 div.dailyEntryDescription { font-size:10pt; }
 
-} 
+}
 
 /* Highlight search results */
 .highlight { background-color: #FFFF33; }
