@@ -11,7 +11,7 @@
 date_default_timezone_set('UTC');
 
 // -----------------------------------------------------------------------------------------------
-// Hardcoded parameter (These parameters can be overwritten by creating the file /config/options.php)
+// Hardcoded parameter (These parameters can be overwritten by creating the file /data/options.php)
 $GLOBALS['config']['DATADIR'] = 'data'; // Data subdirectory
 $GLOBALS['config']['CONFIG_FILE'] = $GLOBALS['config']['DATADIR'].'/config.php'; // Configuration file (user login/password)
 $GLOBALS['config']['DATASTORE'] = $GLOBALS['config']['DATADIR'].'/datastore.php'; // Data storage file.
@@ -33,6 +33,7 @@ $GLOBALS['config']['UPDATECHECK_FILENAME'] = $GLOBALS['config']['DATADIR'].'/las
 $GLOBALS['config']['UPDATECHECK_INTERVAL'] = 86400 ; // Updates check frequency for Shaarli. 86400 seconds=24 hours
                                           // Note: You must have publisher.php in the same directory as Shaarli index.php
 $GLOBALS['config']['ARCHIVE_ORG'] = false; // For each link, add a link to an archived version on archive.org
+$GLOBALS['config']['ENABLE_RSS_PERMALINKS'] = true;  // Enable RSS permalinks by default. This corresponds to the default behavior of shaarli before this was added as an option.
 // -----------------------------------------------------------------------------------------------
 // You should not touch below (or at your own risks!)
 // Optional config file.
@@ -894,7 +895,8 @@ function showRSS()
 
     // $usepermalink : If true, use permalink instead of final link.
     // User just has to add 'permalink' in URL parameters. e.g. http://mysite.com/shaarli/?do=rss&permalinks
-    $usepermalinks = isset($_GET['permalinks']);
+    // Also enabled through a config option
+    $usepermalinks = isset($_GET['permalinks']) || !$GLOBALS['config']['ENABLE_RSS_PERMALINKS'];
 
     // Cache system
     $query = $_SERVER["QUERY_STRING"];
@@ -936,7 +938,7 @@ function showRSS()
         $absurl = htmlspecialchars($link['url']);
         if (startsWith($absurl,'?')) $absurl=$pageaddr.$absurl;  // make permalink URL absolute
         if ($usepermalinks===true)
-            echo '<item><title>'.htmlspecialchars($link['title']).'</title><guid isPermaLink="false">'.$guid.'</guid><link>'.$guid.'</link>';
+            echo '<item><title>'.htmlspecialchars($link['title']).'</title><guid isPermaLink="true">'.$guid.'</guid><link>'.$guid.'</link>';
         else
             echo '<item><title>'.htmlspecialchars($link['title']).'</title><guid isPermaLink="false">'.$guid.'</guid><link>'.$absurl.'</link>';
         if (!$GLOBALS['config']['HIDE_TIMESTAMPS'] || isLoggedIn()) echo '<pubDate>'.htmlspecialchars($rfc822date)."</pubDate>\n";
@@ -968,7 +970,7 @@ function showATOM()
 
     // $usepermalink : If true, use permalink instead of final link.
     // User just has to add 'permalink' in URL parameters. e.g. http://mysite.com/shaarli/?do=atom&permalinks
-    $usepermalinks = isset($_GET['permalinks']);
+    $usepermalinks = isset($_GET['permalinks']) || !$GLOBALS['config']['ENABLE_RSS_PERMALINKS'];
 
     // Cache system
     $query = $_SERVER["QUERY_STRING"];
@@ -1423,6 +1425,7 @@ function renderPage()
             $GLOBALS['disablesessionprotection']=!empty($_POST['disablesessionprotection']);
             $GLOBALS['disablejquery']=!empty($_POST['disablejquery']);
             $GLOBALS['privateLinkByDefault']=!empty($_POST['privateLinkByDefault']);
+            $GLOBALS['config']['ENABLE_RSS_PERMALINKS']= !empty($_POST['enableRssPermalinks']);
             writeConfig();
             echo '<script>alert("Configuration was saved.");document.location=\'?do=tools\';</script>';
             exit;
@@ -2290,6 +2293,7 @@ function writeConfig()
     $config .= '$GLOBALS[\'disablesessionprotection\']='.var_export($GLOBALS['disablesessionprotection'],true).'; ';
     $config .= '$GLOBALS[\'disablejquery\']='.var_export($GLOBALS['disablejquery'],true).'; ';
     $config .= '$GLOBALS[\'privateLinkByDefault\']='.var_export($GLOBALS['privateLinkByDefault'],true).'; ';
+    $config .= '$GLOBALS[\'config\'][\'ENABLE_RSS_PERMALINKS\']='.var_export($GLOBALS['config']['ENABLE_RSS_PERMALINKS'], true).'; ';
     $config .= ' ?>';
     if (!file_put_contents($GLOBALS['config']['CONFIG_FILE'],$config) || strcmp(file_get_contents($GLOBALS['config']['CONFIG_FILE']),$config)!=0)
     {
