@@ -308,14 +308,48 @@ function fillSessionInfo() {
 // Check that user/password is correct.
 function check_auth($login,$password)
 {
-    $hash = sha1($password.$login.$GLOBALS['salt']);
-    if ($login==$GLOBALS['login'] && $hash==$GLOBALS['hash'])
+    $success = False;
+    if ('LDAP'==$GLOBALS['config']['auth_backend'])
+    {
+        // use LDAP authentification.
+        // Needs global configuration;
+        //		auth_backend = LDAP
+        //		ldaphost: LDAP hostname
+        //		ldapport: LDAP port
+        //		ldaprdntpl: user RDN template (%login% replaced by actual login)
+        $success = check_auth_ldap($login, $password);
+    }
+    else
+    {
+        $hash = sha1($password.$login.$GLOBALS['salt']);
+        $success = ($login==$GLOBALS['login'] && $hash==$GLOBALS['hash']);
+    }
+    if ($success)
     {   // Login/password is correct.
-		fillSessionInfo();
+        fillSessionInfo();
         logm('Login successful');
         return True;
     }
     logm('Login failed for user '.$login);
+    return False;
+}
+
+// Check user/password with ldap server.
+function check_auth_ldap($login,$password)
+{
+    // check invalid login/password
+    if (empty($login) or empty($password) or preg_match('/[^a-zA-Z]/',$login)) {
+        logm('Invalid login or password');
+        return False;
+    }
+    $userrdn = str_replace("%login%", $login, $GLOBALS['config']['ldaprdntpl']);
+    $ldapconn = ldap_connect($GLOBALS['config']['ldaphost'], $GLOBALS['config']['ldapport']);
+    ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
+    if ($ldapconn)
+    {
+        return (ldap_bind($ldapconn, $userrdn, $password));
+    }
+    else logm('LDAP connection failed');
     return False;
 }
 
