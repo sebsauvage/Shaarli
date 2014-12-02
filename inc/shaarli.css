@@ -118,6 +118,14 @@ h1 {
     cursor: pointer;
 }
 
+#pageheader #linkcount {
+    float: right;
+    font-style: italic;
+    color: #bbb;
+    text-align: right;
+    padding-right: 5px;
+}
+
 #pageheader {
     background-color: #333333;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#333333), to(#111111));
@@ -149,8 +157,17 @@ h1 {
     text-decoration: none;
 }
 
+#pageheader .search {
+    width: 100%;
+    white-space: nowrap;
+}
+
 #toolsdiv a {
     clear: both;
+}
+
+#toolsdiv #bookmark {
+    clear: none;
 }
 
 #toolsdiv a span {
@@ -189,6 +206,18 @@ h1 {
 
 .linksperpage input {
     padding: 0;
+}
+
+.searchform #searchform_value {
+    width: 30%;
+}
+
+.tagfilter {
+    margin-left:24px;
+}
+
+.tagfilter #tagfilter_value {
+    width: 10%;
 }
 
 .tagfilter input.bigbutton, .searchform input.bigbutton, .addform input.bigbutton {
@@ -271,6 +300,14 @@ h1 {
     padding-right: 5px;
 }
 
+#paging_linksperpage form.linksperpage {
+    display: inline;
+}
+
+#paging_linksperpage form.linksperpage input {
+    height: 15px;
+}
+
 #paging_current {
     display: inline;
     color: #fff;
@@ -291,6 +328,10 @@ h1 {
     clear: both;
 }
 
+#headerform input.linkurl {
+    width: 50%;
+}
+
 #toolsdiv {
     color: #ffffff;
     padding: 5px 5px 5px 5px;
@@ -309,6 +350,10 @@ h1 {
     padding: 5px 5px 5px 15px;
     width: 80%;
     clear: left;
+}
+
+#editlinkform textarea, #editlinkform .lf_input {
+    width: 100%;
 }
 
 #linklist li {
@@ -337,6 +382,16 @@ h1 {
 
 .linkdate a, .linkarchive a {
     color:#E28E3F;
+}
+
+.linkqrcode {
+    display: inline;
+    position: relative;
+}
+
+a.qrcode img {
+    width: 13px;
+    height: 13px;
 }
 
 #linklist li.private {
@@ -440,6 +495,12 @@ h1 {
     text-decoration: none;
 }
 
+.linktag .remove {
+    border-left: 1px solid #aaa;
+    padding-left: 5px;
+    color:#6767A7;
+}
+
 .linkshort {
     font-size: 8pt;
     color: #888;
@@ -466,11 +527,11 @@ h1 {
     clear: both;
 }
 
-#footer  a {
+#footer a {
     color: #486D08;
 }
 
-#footer  a:hover {
+#footer a:hover {
     color: #000000;
 }
 
@@ -484,14 +545,39 @@ h1 {
     font-size: 9pt;
 }
 
+#newversion #version_id {
+    text-decoration: blink;
+}
+
 #cloudtag {
     padding-left: 10%;
     padding-right: 10%;
 }
 
+#cloudtag .count {
+    color: #99f;
+    font-size: 9pt;
+    padding-left: 5px;
+    padding-right: 2px;
+}
+
 #cloudtag a {
+    font-weight:bold;
     color: black;
     text-decoration: none;
+}
+
+#install {
+    margin: 0 20px;
+}
+
+#installform {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+#installform table {
+    border: none;
 }
 
 #installform td {
@@ -499,6 +585,10 @@ h1 {
     color: black;
     padding: 10px 5px 10px 5px;
     clear: left;
+}
+
+#installform input.bigbutton {
+    float: right;
 }
 
 #changepasswordform {
@@ -511,6 +601,10 @@ h1 {
     color: #ccc;
     padding: 10px 5px 10px 5px;
     clear: left;
+}
+
+#changetag #totag {
+    margin-left: 40px;
 }
 
 #configform td {
@@ -676,6 +770,14 @@ div.dailyAbout a {
     color: #890500;
 }
 
+div.dailyAbout img {
+    position: relative;
+    top: 3px;
+    margin-right: 4px;
+    width: 14px;
+    height: 14px;
+}
+
 div.dailyTitle {
     font-weight: bold;
     font-size: 44pt;
@@ -724,6 +826,17 @@ div.dailyEntryDescription {
     margin-bottom: 30px;
     text-align: justify;
     overflow: auto;
+}
+
+div.dailyNoEntry {
+    text-align: center;
+    padding: 40px 0px 90px 0px;
+}
+
+.daily #closing {
+    clear: both;
+    text-align: center;
+    padding-bottom: 20px;
 }
 
 /* Common CSS screwdriver */

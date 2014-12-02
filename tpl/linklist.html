@@ -4,9 +4,9 @@
 <body>
 <div id="pageheader">
     {include="page.header"}
-    <div id="headerform" style="width:100%; white-space:nowrap;">
-        <form method="GET" class="searchform" name="searchform" style="display:inline;"><input type="text" id="searchform_value" name="searchterm" style="width:30%" value=""> <input type="submit" value="Search" class="bigbutton"></form>
-        <form method="GET" class="tagfilter" name="tagfilter" style="display:inline;margin-left:24px;"><input type="text" name="searchtags" id="tagfilter_value" style="width:10%" value=""> <input type="submit" value="Filter by tag" class="bigbutton"></form>
+    <div id="headerform" class="search">
+        <form method="GET" class="searchform" name="searchform"><input type="text" id="searchform_value" name="searchterm" value=""> <input type="submit" value="Search" class="bigbutton"></form>
+        <form method="GET" class="tagfilter" name="tagfilter"><input type="text" name="searchtags" id="tagfilter_value" value=""> <input type="submit" value="Filter by tag" class="bigbutton"></form>
     </div>
 </div>
 
@@ -23,7 +23,7 @@
         {if="$search_type=='tags'"}
             <div id="searchcriteria">{$result_count} results for tags <i>
             {loop="search_crits"}
-                <span class="linktag" title="Remove tag"><a href="?removetag={$value|htmlspecialchars}">{$value|htmlspecialchars} <span style="border-left:1px solid #aaa; padding-left:5px; color:#6767A7;">x</span></a></span>
+                <span class="linktag" title="Remove tag"><a href="?removetag={$value|htmlspecialchars}">{$value|htmlspecialchars} <span class="remove">x</span></a></span>
             {/loop}</i></div>
         {/if}
     {/if}
@@ -42,7 +42,7 @@
                 {/if}
                 <span class="linktitle"><a href="{$redirector}{$value.url|htmlspecialchars}">{$value.title|htmlspecialchars}</a></span>
                 <br>
-                {if="$value.description"}<div class="linkdescription"{if="$search_type=='permalink'"} style="max-height:none !important;"{/if}>{$value.description}</div>{/if}
+                {if="$value.description"}<div class="linkdescription">{$value.description}</div>{/if}
                 {if="!$GLOBALS['config']['HIDE_TIMESTAMPS'] || isLoggedIn()"}
                     <span class="linkdate" title="Permalink"><a href="?{$value.linkdate|smallHash}">{$value.localdate|htmlspecialchars} - permalink</a> - </span>
                 {else}
@@ -51,8 +51,8 @@
                 {if="$GLOBALS['config']['ARCHIVE_ORG']"}
                 <span class="linkarchive"><a href="https://web.archive.org/web/{$value.url|htmlspecialchars}">archive</a> - </span>
                 {/if}
-                <div style="position:relative;display:inline;"><a href="http://qrfree.kaywa.com/?l=1&s=8&d={$scripturl|urlencode}%3F{$value.linkdate|smallHash}"
-                    onclick="showQrCode(this); return false;" class="qrcode" data-permalink="{$scripturl}?{$value.linkdate|smallHash}"><img src="images/qrcode.png#" width="13" height="13" title="QR-Code"></a></div> -
+                <div class="linkqrcode"><a href="http://qrfree.kaywa.com/?l=1&s=8&d={$scripturl|urlencode}%3F{$value.linkdate|smallHash}"
+                    onclick="showQrCode(this); return false;" class="qrcode" data-permalink="{$scripturl}?{$value.linkdate|smallHash}"><img src="images/qrcode.png#" title="QR-Code"></a></div> -
                 <a href={$value.url|htmlspecialchars}><span class="linkurl" title="Short link">{$value.url|htmlspecialchars}</span></a><br>
                 {if="$value.tags"}
                     <div class="linktaglist">
