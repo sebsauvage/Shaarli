@@ -2167,13 +2167,13 @@ function templateTZform($ptz=false)
                 $continent=substr($tz,0,$spos); $city=substr($tz,$spos+1);
                 $continents[$continent]=1;
                 if (!isset($cities[$continent])) $cities[$continent]='';
-                $cities[$continent].='<option value="'.$city.'"'.($pcity==$city?'selected':'').'>'.$city.'</option>';
+                $cities[$continent].='<option value="'.$city.'"'.($pcity==$city?' selected':'').'>'.$city.'</option>';
             }
         }
         $continents_html = '';
         $continents = array_keys($continents);
         foreach($continents as $continent)
-            $continents_html.='<option  value="'.$continent.'"'.($pcontinent==$continent?'selected':'').'>'.$continent.'</option>';
+            $continents_html.='<option  value="'.$continent.'"'.($pcontinent==$continent?' selected':'').'>'.$continent.'</option>';
         $cities_html = $cities[$pcontinent];
         $timezone_form = "Continent: <select name=\"continent\" id=\"continent\" onChange=\"onChangecontinent();\">${continents_html}</select>";
         $timezone_form .= "&nbsp;&nbsp;&nbsp;&nbsp;City: <select name=\"city\" id=\"city\">${cities[$pcontinent]}</select><br />";
