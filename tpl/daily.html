@@ -10,17 +10,17 @@
 	  - 
 	  {if="$nextday"}<a href="?do=daily&day={$nextday}">Next day<b>&gt;</b></a>{else}Next day<b>&gt;</b>{/if}
       <br><br>
-	  <a href="?do=dailyrss" title="1 RSS entry per day"><img src="images/feed-icon-14x14.png#" width="14" height="14" style="position:relative;top:3px; margin-right:4px;">Daily RSS Feed</a>
+	  <a href="?do=dailyrss" title="1 RSS entry per day"><img src="images/feed-icon-14x14.png#">Daily RSS Feed</a>
     </div>
     <div class="dailyTitle"><img src="../images/floral_left.png" width="51" height="50" class="nomobile"> The Daily Shaarli <img src="../images/floral_right.png" width="51" height="50" class="nomobile"></div>
     <div class="dailyDate"><span class="nomobile">&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;</span> {$day} <span class="nomobile">&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;</span></div>
-    <div style="clear:both;"></div>
+    <div class="clear"></div>
     
     {if="$linksToDisplay"}
         <div id="daily_col1">
         {loop="col1"}
         <div class="dailyEntry">
-            <div style="float:right;position:relative;top:-1px;"><a href="?{$value.linkdate|smallHash}"><img src="../images/squiggle2.png" width="25" height="26" title="permalink" alt="permalink"></a></div>
+            <div class="dailyEntryPermalink"><a href="?{$value.linkdate|smallHash}"><img src="../images/squiggle2.png" width="25" height="26" title="permalink" alt="permalink"></a></div>
             {if="$value.tags"}<div class="dailyEntryTags">{loop="value.taglist"}{$value|htmlspecialchars} - {/loop}</div>{/if}
             <div class="dailyEntryTitle"><a href="{$value.url}">{$value.title|htmlspecialchars}</a></div>
             {if="$value.thumbnail"}<div class="dailyEntryThumbnail">{$value.thumbnail}</div>{/if}
@@ -32,7 +32,7 @@
         <div id="daily_col2">
         {loop="col2"}
         <div class="dailyEntry">
-            <div style="float:right;position:relative;top:-1px;"><a href="?{$value.linkdate|smallHash}"><img src="../images/squiggle2.png" width="25" height="26" title="permalink" alt="permalink"></a></div>
+            <div class="dailyEntryPermalink"><a href="?{$value.linkdate|smallHash}"><img src="../images/squiggle2.png" width="25" height="26" title="permalink" alt="permalink"></a></div>
             {if="$value.tags"}<div class="dailyEntryTags">{loop="value.taglist"}{$value|htmlspecialchars} - {/loop}</div>{/if}
             <div class="dailyEntryTitle"><a href="{$value.url}">{$value.title|htmlspecialchars}</a></div>
             {if="$value.thumbnail"}<div class="dailyEntryThumbnail">{$value.thumbnail}</div>{/if}
@@ -44,7 +44,7 @@
         <div id="daily_col3">
         {loop="col3"}
         <div class="dailyEntry">
-            <div style="float:right;position:relative;top:-1px;"><a href="?{$value.linkdate|smallHash}"><img src="../images/squiggle2.png" width="25" height="26" title="permalink" alt="permalink"></a></div>
+            <div class="dailyEntryPermalink"><a href="?{$value.linkdate|smallHash}"><img src="../images/squiggle2.png" width="25" height="26" title="permalink" alt="permalink"></a></div>
             {if="$value.tags"}<div class="dailyEntryTags">{loop="value.taglist"}{$value|htmlspecialchars} - {/loop}</div>{/if}
             <div class="dailyEntryTitle"><a href="{$value.url}">{$value.title|htmlspecialchars}</a></div>
             {if="$value.thumbnail"}<div class="dailyEntryThumbnail">{$value.thumbnail}</div>{/if}
@@ -53,10 +53,9 @@
         {/loop}
         </div>        
     {else}
-         <div style="text-align:center; padding:40px 0px 90px 0px;">No articles on this day.</div>
+         <div class="dailyNoEntry">No articles on this day.</div>
     {/if}
-    <div style="clear:both;"></div>
-    <div style="text-align:center; padding-bottom:20px;"><img src="../images/squiggle_closing.png" width="66" height="61" alt="-"></div>
+    <div id="closing"><img src="../images/squiggle_closing.png" width="66" height="61" alt="-"></div>
 </div>
 {include="page.footer"}
 </body>
