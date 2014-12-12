@@ -8,7 +8,7 @@
 	Import Netscape HTML bookmarks (as exported from Firefox/Chrome/Opera/Delicious/Diigo...) (Max: {$maxfilesize|htmlspecialchars} bytes).
 	<form method="POST" action="?do=upload" enctype="multipart/form-data" name="uploadform" id="uploadform">
 	    <input type="hidden" name="token" value="{$token}">
-	    <input type="file" name="filetoupload" size="80">
+	    <input type="file" name="filetoupload">
 	    <input type="hidden" name="MAX_FILE_SIZE" value="{$maxfilesize|htmlspecialchars}">
 	    <input type="submit" name="import_file" value="Import" class="bigbutton"><br>
 	    <input type="checkbox" name="private" id="private"><label for="private">&nbsp;Import all links as private</label><br>

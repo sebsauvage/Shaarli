@@ -5,5 +5,5 @@
     <div id="newversion"><span id="version_id">&#x25CF;</span> Shaarli {$newversion|htmlspecialchars} is <a href="http://sebsauvage.net/wiki/doku.php?id=php:shaarli#download">available</a>.</div>
 {/if}
 {if="isLoggedIn()"}
-<script language="JavaScript">function confirmDeleteLink() { var agree=confirm("Are you sure you want to delete this link ?"); if (agree) return true ; else return false ; }</script>
+<script>function confirmDeleteLink() { var agree=confirm("Are you sure you want to delete this link ?"); if (agree) return true ; else return false ; }</script>
 {/if}

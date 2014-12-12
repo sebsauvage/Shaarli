@@ -3,13 +3,13 @@
 <head>{include="includes"}</head>
 <body>
 	<div id="pageheader">{include="page.header"}</div>
-<center>
-<div id="cloudtag">
-    {loop="tags"}
-    <span class="count">{$value.count}</span><a href="?searchtags={$key|urlencode}" style="font-size:{$value.size}pt;">{$key|htmlspecialchars}</a>
-    {/loop}
+<div class="center">
+    <div id="cloudtag">
+        {loop="tags"}
+        <span class="count">{$value.count}</span><a href="?searchtags={$key|urlencode}" style="font-size:{$value.size}pt;">{$key|htmlspecialchars}</a>
+        {/loop}
+    </div>
 </div>
-</center>
 {include="page.footer"}
 </body>
 </html>
