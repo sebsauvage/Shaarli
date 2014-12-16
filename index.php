@@ -89,7 +89,7 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
 // Directories creations (Note that your web host may require different rights than 705.)
-if (!is_writable(realpath(dirname(__FILE__)))) die('<pre>ERROR: Shaarli does not have the right to write in its own directory ('.realpath(dirname(__FILE__)).').</pre>');
+if (!is_writable(realpath(dirname(__FILE__)))) die('<pre>ERROR: Shaarli does not have the right to write in its own directory.').</pre>');
 
 // Handling of old config file which do not have the new parameters.
 if (empty($GLOBALS['title'])) $GLOBALS['title']='Shared links on '.htmlspecialchars(indexUrl());
@@ -118,7 +118,7 @@ function checkphpversion()
     if (version_compare(PHP_VERSION, '5.1.0') < 0)
     {
         header('Content-Type: text/plain; charset=utf-8');
-        echo 'Your server supports PHP '.PHP_VERSION.'. Shaarli requires at least php 5.1.0, and thus cannot run. Sorry.';
+        echo 'Your PHP version is obsolete! Shaarli requires at least php 5.1.0, and thus cannot run. Sorry. Your PHP version has known security vulnerabilities and should be updated as soon as possible.';
         exit;
     }
 }
