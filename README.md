@@ -41,12 +41,15 @@ It is designed to be personal (single-user), fast and handy.
  * You will be automatically notified by a discreet popup if a new version is available
  * **Shaarli is a bookmarking application, but you can use it for micro-blogging (like Twitter), a pastebin, an online notepad, a snippet repository, etc. See [Usage examples](https://github.com/shaarli/Shaarli/wiki#usage-examples)**
 
+
 ## Links
+
  * **[Wiki/documentation](https://github.com/shaarli/Shaarli/wiki)**
  * [Bugs/Feature requests/Discussion](https://github.com/shaarli/Shaarli/issues/)
 
 
 ## Installing
+
 Shaarli requires php 5.1
 
  * Download the latest stable release from https://github.com/shaarli/Shaarli/releases
@@ -56,21 +59,22 @@ Shaarli requires php 5.1
 
 _To get the development version, download https://github.com/shaarli/Shaarli/archive/master.zip or `git clone https://github.com/shaarli/Shaarli`_
 
+
 ## Upgrading
+
 Delete all files and directories except the `data` directory, then unzip the new version of Shaarli.  
 You will not lose your links and you will not have to reconfigure it.
 
 
-## Screenshots
-
-[![](https://cdn.mediacru.sh/AjZc6-emICeO.png)](https://cdn.mediacru.sh/kE8SyD-PvGuC.png)  [![](https://cdn.mediacru.sh/MfC-DzklMYs2.png)](https://cdn.mediacru.sh/iqTvO1-yP9pU.png) [![](https://cdn.mediacru.sh/dxmXskaubYcg.png)](https://cdn.mediacru.sh/mMoi31f94wdL.png) [![](https://cdn.mediacru.sh/-ptB2veFivBp.png)](https://cdn.mediacru.sh/GcoZPZmCZ-DR.png) [![](https://cdn.mediacru.sh/QmRdTAr8x427.png)](https://cdn.mediacru.sh/TDDujpMWT31q.png)
 
 ## About
 
-Original Project page: http://sebsauvage.net/wiki/doku.php?id=php:shaarli  
-Shaarli is developed by [Sébastien SAUVAGE](http://sebsauvage.net) and [contributors](COPYING).
-
-Shaarli is [Free Software](https://en.wikipedia.org/wiki/Free_software) distributed under the [zlib/libpng License](http://www.gzip.org/zlib/zlib_license.html)
-
 This friendly fork is maintained by the community at https://github.com/shaarli/Shaarli
+
+This is a community fork of the original [Shaarli](https://github.com/sebsauvage/Shaarli/) project by [sebsauvage](http://sebsauvage.net/). The original project is currently unmaintained, and the developer [has informed us](https://github.com/sebsauvage/Shaarli/issues/191) that he would have no time to work on Shaarli in the near future. The Shaarli community has carried on the work to provide [many patches](https://github.com/shaarli/Shaarli/compare/sebsauvage:master...master) for [bug fixes and enhancements](https://github.com/shaarli/Shaarli/issues?q=is%3Aclosed+) in this repository, and will keep maintaining the project for the foreseeable future, while keeping Shaarli simple and efficient. If you'd like to help, have a look at the current [issues](https://github.com/shaarli/Shaarli/issues) and [pull requests](https://github.com/shaarli/Shaarli/pulls) and feel free to report bugs and feature requests, propose solutions to existing problems and send us pull requests. 
+
+
+## License
+
+Shaarli is [Free Software](http://en.wikipedia.org/wiki/Free_software). See [COPYING](COPYING) for a detail of the contributors and licenses for each individual component.
 
