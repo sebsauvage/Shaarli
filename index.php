@@ -1173,10 +1173,7 @@ function showDaily()
     $PAGE = new pageBuilder;
     $PAGE->assign('linksToDisplay',$linksToDisplay);
     $PAGE->assign('linkcount',count($LINKSDB));
-    $PAGE->assign('col1',$columns[0]);
-    $PAGE->assign('col1',$columns[0]);
-    $PAGE->assign('col2',$columns[1]);
-    $PAGE->assign('col3',$columns[2]);
+    $PAGE->assign('cols', $columns);
     $PAGE->assign('day',utf8_encode(strftime('%A %d, %B %Y',linkdate2timestamp($day.'_000000'))));
     $PAGE->assign('previousday',$previousday);
     $PAGE->assign('nextday',$nextday);
