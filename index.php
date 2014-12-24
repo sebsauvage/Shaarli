@@ -1251,8 +1251,9 @@ function renderPage()
         ksort($tags);
         $tagList=array();
         foreach($tags as $key=>$value)
+	// Tag font size scaling: default 15 and 30 logarithm bases affect scaling, 22 and 6 are arbitrary font sizes for max and min sizes.
         {
-            $tagList[$key] = array('count'=>$value,'size'=>max(40*$value/$maxcount,8));
+            $tagList[$key] = array('count'=>$value,'size'=>log($value, 15) / log($maxcount, 30) * (22-6) + 6);
         }
         $PAGE = new pageBuilder;
         $PAGE->assign('linkcount',count($LINKSDB));
