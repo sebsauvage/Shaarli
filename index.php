@@ -113,6 +113,53 @@ define('STAY_SIGNED_IN_TOKEN', sha1($GLOBALS['hash'].$_SERVER["REMOTE_ADDR"].$GL
 autoLocale(); // Sniff browser language and set date format accordingly.
 header('Content-Type: text/html; charset=utf-8'); // We use UTF-8 for proper international characters handling.
 
+//==================================================================================================
+// Checking session state (i.e. is the user still logged in)
+//==================================================================================================
+
+function setup_login_state() {
+	$userIsLoggedIn = false; // By default, we do not consider the user as logged in;
+	$loginFailure = false; // If set to true, every attempt to authenticate the user will fail. This indicates that an important condition isn't met.
+	if ($GLOBALS['config']['OPEN_SHAARLI']) {
+	    $userIsLoggedIn = true;
+	}
+	if (!isset($GLOBALS['login'])) {
+	    $userIsLoggedIn = false;  // Shaarli is not configured yet.
+	    $loginFailure = true;
+	}
+	if (isset($_COOKIE['shaarli_staySignedIn']) &&
+	    $_COOKIE['shaarli_staySignedIn']===STAY_SIGNED_IN_TOKEN &&
+	    !$loginFailure)
+	{
+	    fillSessionInfo();
+	    $userIsLoggedIn = true;
+	}
+	// If session does not exist on server side, or IP address has changed, or session has expired, logout.
+	if (empty($_SESSION['uid']) ||
+	    ($GLOBALS['disablesessionprotection']==false && $_SESSION['ip']!=allIPs()) ||
+	    time() >= $_SESSION['expires_on'])
+	{
+	    logout();
+	    $userIsLoggedIn = false;
+	    $loginFailure = true;
+	}
+	if (!empty($_SESSION['longlastingsession'])) {
+	    $_SESSION['expires_on']=time()+$_SESSION['longlastingsession']; // In case of "Stay signed in" checked.
+	}
+	else {
+	    $_SESSION['expires_on']=time()+INACTIVITY_TIMEOUT; // Standard session expiration date.
+	}
+	if (!$loginFailure) {
+	    $userIsLoggedIn = true;
+	}
+
+	return $userIsLoggedIn;
+}
+//==================================================================================================
+$userIsLoggedIn = setup_login_state();
+//==================================================================================================
+//==================================================================================================
+
 // Check PHP version
 function checkphpversion()
 {
@@ -316,30 +363,19 @@ function check_auth($login,$password)
 // Returns true if the user is logged in.
 function isLoggedIn()
 {
-    if ($GLOBALS['config']['OPEN_SHAARLI']) return true;
-
-    if (!isset($GLOBALS['login'])) return false;  // Shaarli is not configured yet.
-
-	if (@$_COOKIE['shaarli_staySignedIn']===STAY_SIGNED_IN_TOKEN)
-	{
-		fillSessionInfo();
-		return true;
-	}
-    // If session does not exist on server side, or IP address has changed, or session has expired, logout.
-    if (empty($_SESSION['uid']) || ($GLOBALS['disablesessionprotection']==false && $_SESSION['ip']!=allIPs()) || time()>=$_SESSION['expires_on'])
-    {
-        logout();
-        return false;
-    }
-    if (!empty($_SESSION['longlastingsession']))  $_SESSION['expires_on']=time()+$_SESSION['longlastingsession']; // In case of "Stay signed in" checked.
-    else $_SESSION['expires_on']=time()+INACTIVITY_TIMEOUT; // Standard session expiration date.
-
-    return true;
+    global $userIsLoggedIn;
+    return $userIsLoggedIn;
 }
 
 // Force logout.
-function logout() { if (isset($_SESSION)) { unset($_SESSION['uid']); unset($_SESSION['ip']); unset($_SESSION['username']); unset($_SESSION['privateonly']); }
-setcookie('shaarli_staySignedIn', FALSE, 0, WEB_PATH);
+function logout() {
+    if (isset($_SESSION)) {
+        unset($_SESSION['uid']);
+        unset($_SESSION['ip']);
+        unset($_SESSION['username']);
+        unset($_SESSION['privateonly']);
+    }
+    setcookie('shaarli_staySignedIn', FALSE, 0, WEB_PATH);
 }
 
 
@@ -2073,7 +2109,6 @@ function thumbnail($url,$href=false)
     $html.='></a>';
     return $html;
 }
-
 
 // Returns the HTML code to display a thumbnail for a link
 // for the picture wall (using lazy image loading)
