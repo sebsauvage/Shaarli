@@ -7,7 +7,7 @@
     <div class="dailyAbout">
       All links of one day<br>in a single page.<br>
 	  {if="$previousday"} <a href="?do=daily&day={$previousday}"><b>&lt;</b>Previous day</a>{else}<b>&lt;</b>Previous day{/if}
-	  - 
+	  -
 	  {if="$nextday"}<a href="?do=daily&day={$nextday}">Next day<b>&gt;</b></a>{else}Next day<b>&gt;</b>{/if}
       <br><br>
 	  <a href="?do=dailyrss" title="1 RSS entry per day"><img src="images/feed-icon-14x14.png#">Daily RSS Feed</a>
@@ -15,43 +15,38 @@
     <div class="dailyTitle"><img src="../images/floral_left.png" width="51" height="50" class="nomobile"> The Daily Shaarli <img src="../images/floral_right.png" width="51" height="50" class="nomobile"></div>
     <div class="dailyDate"><span class="nomobile">&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;</span> {$day} <span class="nomobile">&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;&#x0097;</span></div>
     <div class="clear"></div>
-    
+
     {if="$linksToDisplay"}
-        <div id="daily_col1">
-        {loop="col1"}
-        <div class="dailyEntry">
-            <div class="dailyEntryPermalink"><a href="?{$value.linkdate|smallHash}"><img src="../images/squiggle2.png" width="25" height="26" title="permalink" alt="permalink"></a></div>
-            {if="$value.tags"}<div class="dailyEntryTags">{loop="value.taglist"}{$value|htmlspecialchars} - {/loop}</div>{/if}
-            <div class="dailyEntryTitle"><a href="{$value.url}">{$value.title|htmlspecialchars}</a></div>
-            {if="$value.thumbnail"}<div class="dailyEntryThumbnail">{$value.thumbnail}</div>{/if}
-            <div class="dailyEntryDescription">{$value.formatedDescription}</div>
-        </div>
+        {loop="cols"}
+            {if="isset($value[0])"}
+            <div id="daily_col{$counter+1}">
+                {loop="value"}
+                    {$link=$value}
+                    <div class="dailyEntry">
+                        <div class="dailyEntryPermalink">
+                            <a href="?{$link.linkdate|smallHash}">
+                                <img src="../images/squiggle2.png" width="25" height="26" title="permalink" alt="permalink">
+                            </a>
+                        </div>
+                        {if="$link.tags"}
+                            <div class="dailyEntryTags">
+                                {loop="link.taglist"}
+                                    {$value|htmlspecialchars} -
+                                {/loop}
+                            </div>
+                        {/if}
+                        <div class="dailyEntryTitle">
+                            <a href="{$link.url}">{$link.title|htmlspecialchars}</a>
+                        </div>
+                        {if="$link.thumbnail"}
+                            <div class="dailyEntryThumbnail">{$link.thumbnail}</div>
+                        {/if}
+                        <div class="dailyEntryDescription">{$link.formatedDescription}</div>
+                    </div>
+                {/loop}
+            </div>
+            {/if}
         {/loop}
-        </div>
-
-        <div id="daily_col2">
-        {loop="col2"}
-        <div class="dailyEntry">
-            <div class="dailyEntryPermalink"><a href="?{$value.linkdate|smallHash}"><img src="../images/squiggle2.png" width="25" height="26" title="permalink" alt="permalink"></a></div>
-            {if="$value.tags"}<div class="dailyEntryTags">{loop="value.taglist"}{$value|htmlspecialchars} - {/loop}</div>{/if}
-            <div class="dailyEntryTitle"><a href="{$value.url}">{$value.title|htmlspecialchars}</a></div>
-            {if="$value.thumbnail"}<div class="dailyEntryThumbnail">{$value.thumbnail}</div>{/if}
-            <div class="dailyEntryDescription">{$value.formatedDescription}</div>
-        </div>
-        {/loop}
-        </div>    
-
-        <div id="daily_col3">
-        {loop="col3"}
-        <div class="dailyEntry">
-            <div class="dailyEntryPermalink"><a href="?{$value.linkdate|smallHash}"><img src="../images/squiggle2.png" width="25" height="26" title="permalink" alt="permalink"></a></div>
-            {if="$value.tags"}<div class="dailyEntryTags">{loop="value.taglist"}{$value|htmlspecialchars} - {/loop}</div>{/if}
-            <div class="dailyEntryTitle"><a href="{$value.url}">{$value.title|htmlspecialchars}</a></div>
-            {if="$value.thumbnail"}<div class="dailyEntryThumbnail">{$value.thumbnail}</div>{/if}
-            <div class="dailyEntryDescription">{$value.formatedDescription}</div>
-        </div>
-        {/loop}
-        </div>        
     {else}
          <div class="dailyNoEntry">No articles on this day.</div>
     {/if}
