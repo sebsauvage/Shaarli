@@ -794,14 +794,16 @@ class linkdb implements Iterator, Countable, ArrayAccess
     {
         // FIXME: explode(' ',$searchterms) and perform a AND search.
         // FIXME: accept double-quotes to search for a string "as is"?
+        // Using mb_convert_case($val, MB_CASE_LOWER, 'UTF-8') allows us to perform searches on
+        // Unicode text. See https://github.com/shaarli/Shaarli/issues/75 for examples.
         $filtered=array();
-        $s = strtolower($searchterms);
+        $s = mb_convert_case($searchterms, MB_CASE_LOWER, 'UTF-8');
         foreach($this->links as $l)
         {
-            $found=   (strpos(strtolower($l['title']),$s)!==false)
-                   || (strpos(strtolower($l['description']),$s)!==false)
-                   || (strpos(strtolower($l['url']),$s)!==false)
-                   || (strpos(strtolower($l['tags']),$s)!==false);
+            $found=   (strpos(mb_convert_case($l['title'],       MB_CASE_LOWER, 'UTF-8'),$s) !== false)
+                   || (strpos(mb_convert_case($l['description'], MB_CASE_LOWER, 'UTF-8'),$s) !== false)
+                   || (strpos(mb_convert_case($l['url'],         MB_CASE_LOWER, 'UTF-8'),$s) !== false)
+                   || (strpos(mb_convert_case($l['tags'],        MB_CASE_LOWER, 'UTF-8'),$s) !== false);
             if ($found) $filtered[$l['linkdate']] = $l;
         }
         krsort($filtered);
@@ -813,12 +815,14 @@ class linkdb implements Iterator, Countable, ArrayAccess
     // e.g. print_r($mydb->filterTags('linux programming'));
     public function filterTags($tags,$casesensitive=false)
     {
-        $t = str_replace(',',' ',($casesensitive?$tags:strtolower($tags)));
+        // Same as above, we use UTF-8 conversion to handle various graphemes (i.e. cyrillic, or greek)
+        // TODO: is $casesensitive ever true ?
+        $t = str_replace(',',' ',($casesensitive?$tags:mb_convert_case($tags, MB_CASE_LOWER, 'UTF-8')));
         $searchtags=explode(' ',$t);
         $filtered=array();
         foreach($this->links as $l)
         {
-            $linktags = explode(' ',($casesensitive?$l['tags']:strtolower($l['tags'])));
+            $linktags = explode(' ',($casesensitive?$l['tags']:mb_convert_case($l['tags'], MB_CASE_LOWER, 'UTF-8')));
             if (count(array_intersect($linktags,$searchtags)) == count($searchtags))
                 $filtered[$l['linkdate']] = $l;
         }
