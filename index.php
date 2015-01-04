@@ -1546,9 +1546,7 @@ function renderPage()
 
         // If we are called from the bookmarklet, we must close the popup:
         if (isset($_GET['source']) && $_GET['source']=='bookmarklet') { echo '<script language="JavaScript">self.close();</script>'; exit; }
-        $returnurl = ( isset($_POST['returnurl']) ? $_POST['returnurl'] : '?' );
-        if ($returnurl=='?') { $returnurl = (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '?'); }
-        header('Location: '.$returnurl); // After deleting the link, redirect to the page the user was on.
+        header('Location: ?'); // After deleting the link, redirect to the home page.
         exit;
     }
 
