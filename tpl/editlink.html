@@ -33,7 +33,7 @@
 </div>
 {include="page.footer"}
 {if="($GLOBALS['config']['OPEN_SHAARLI'] || isLoggedIn()) && empty($GLOBALS['disablejquery'])"}
-<script language="JavaScript">
+<script>
 $(document).ready(function()
 {
     $('#lf_tags').autocomplete({source:'{$source}?ws=tags',minLength:1});
