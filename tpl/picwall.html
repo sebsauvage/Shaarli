@@ -9,15 +9,15 @@
 </head>
 <body>
 <div id="pageheader">{include="page.header"}</div>
-<center>
-<div class="picwall_container">
-    {loop="linksToDisplay"}
-    <div class="picwall_pictureframe">
-	    {$value.thumbnail}<a href="{$value.permalink}"><span class="info">{$value.title|htmlspecialchars}</span></a>
-    </div>
-    {/loop}
+<div class="center">
+        <div id="picwall_container">
+            {loop="linksToDisplay"}
+            <div class="picwall_pictureframe">
+        	    {$value.thumbnail}<a href="{$value.permalink}"><span class="info">{$value.title|htmlspecialchars}</span></a>
+            </div>
+            {/loop}
+        </div>
 </div>
-</center>
 {include="page.footer"}
 
 {if="empty($GLOBALS['disablejquery'])"} 

@@ -291,34 +291,34 @@ h1 {
     color: #fff;
 }
 
-#paging_privatelinks {
+.paging_privatelinks {
     float: left;
 }
 
-#paging_linksperpage {
+.paging_linksperpage {
     float: right;
     padding-right: 5px;
 }
 
-#paging_linksperpage form.linksperpage {
+.paging_linksperpage form.linksperpage {
     display: inline;
 }
 
-#paging_linksperpage form.linksperpage input {
+.paging_linksperpage form.linksperpage input {
     height: 15px;
 }
 
-#paging_current {
+.paging_current {
     display: inline;
     color: #fff;
     padding: 0 20 0 20;
 }
 
-#paging_older {
+.paging_older {
     margin-right: 15px;
 }
 
-#paging_newer {
+.paging_newer {
     margin-left: 15px;
 }
 
@@ -843,11 +843,21 @@ div.dailyNoEntry {
     clear: both;
 }
 
+.right {
+    text-align: right;
+}
+
 /* For lazy images loading in picture wall.
    Using http://www.appelsiini.net/projects/lazyload
 */
 .lazyimage {
     display: none;
+}
+
+#configuration_table td {
+    border: none;
+    padding: 10px;
+    vertical-align: top;
 }
 
 @media print {
@@ -958,17 +968,17 @@ div.dailyNoEntry {
 	left: 0px;
     }
 
-    #paging_privatelinks {
+    .paging_privatelinks {
 	float: none;
     }
 
-    #paging_linksperpage {
+    .paging_linksperpage {
 	float: none;
 	margin-bottom: 10px;
 	font-size: smaller;
     }
 
-    #paging_older, #paging_newer, #paging_linksperpage a {
+    #paging_older, #paging_newer, .paging_linksperpage a {
 	border: 1px solid black;
 	padding: 3px 5px 3px 5px;
 	background-color: #666;
@@ -1028,4 +1038,8 @@ div.dailyNoEntry {
 /* Highlight search results */
 .highlight {
     background-color: #FFFF33;
+}
+
+.center {
+    text-align: center;
 }

@@ -30,7 +30,7 @@
     <ul>
         {loop="links"}
         <li{if="$value.class"} class="{$value.class}"{/if}>
-            <a name="{$value.linkdate|smallHash}" id="{$value.linkdate|smallHash}"></a>
+            <a id="{$value.linkdate|smallHash}"></a>
             <div class="thumbnail">{$value.url|thumbnail}</div>
             <div class="linkcontainer">
                 {if="isLoggedIn()"}
@@ -51,9 +51,9 @@
                 {if="$GLOBALS['config']['ARCHIVE_ORG']"}
                 <span class="linkarchive"><a href="https://web.archive.org/web/{$value.url|htmlspecialchars}">archive</a> - </span>
                 {/if}
-                <div class="linkqrcode"><a href="http://qrfree.kaywa.com/?l=1&s=8&d={$scripturl|urlencode}%3F{$value.linkdate|smallHash}"
-                    onclick="showQrCode(this); return false;" class="qrcode" data-permalink="{$scripturl}?{$value.linkdate|smallHash}"><img src="images/qrcode.png#" title="QR-Code"></a></div> -
-                <a href={$value.url|htmlspecialchars}><span class="linkurl" title="Short link">{$value.url|htmlspecialchars}</span></a><br>
+                <div class="linkqrcode"><a href="http://qrfree.kaywa.com/?l=1&amp;s=8&amp;d={$scripturl|urlencode}%3F{$value.linkdate|smallHash}"
+                    onclick="showQrCode(this); return false;" class="qrcode" data-permalink="{$scripturl}?{$value.linkdate|smallHash}"><img src="images/qrcode.png#" title="QR-Code" alt="QR-Code"></a></div> -
+                <a href="{$value.url|htmlspecialchars}"><span class="linkurl" title="Short link">{$value.url|htmlspecialchars}</span></a><br>
                 {if="$value.tags"}
                     <div class="linktaglist">
                     {loop="value.taglist"}<span class="linktag" title="Add tag"><a href="?addtag={$value|urlencode}">{$value|htmlspecialchars}</a></span> {/loop}
@@ -70,7 +70,7 @@
 
     {include="page.footer"}
 
-<script language="JavaScript">
+<script>
 // Remove any displayed QR-Code
 function remove_qrcode()
 {
