@@ -52,7 +52,7 @@
                 <span class="linkarchive"><a href="https://web.archive.org/web/{$value.url|htmlspecialchars}">archive</a> - </span>
                 {/if}
                 <div class="linkqrcode"><a href="http://qrfree.kaywa.com/?l=1&amp;s=8&amp;d={$scripturl|urlencode}%3F{$value.linkdate|smallHash}"
-                    onclick="showQrCode(this); return false;" class="qrcode" data-permalink="{$scripturl}?{$value.linkdate|smallHash}"><img src="images/qrcode.png#" title="QR-Code" alt="QR-Code"></a></div> -
+                    onclick="return showQrCode(this);" class="qrcode" data-permalink="{$scripturl}?{$value.linkdate|smallHash}"><img src="images/qrcode.png#" title="QR-Code"></a></div> -
                 <a href="{$value.url|htmlspecialchars}"><span class="linkurl" title="Short link">{$value.url|htmlspecialchars}</span></a><br>
                 {if="$value.tags"}
                     <div class="linktaglist">
@@ -79,12 +79,20 @@ function remove_qrcode()
     return false;
 }
 
+function isCanvasSupported(){
+    var elem = document.createElement('canvas');
+    return !!(elem.getContext && elem.getContext('2d'));
+}
+
 // Show the QR-Code of a permalink (when the QR-Code icon is clicked).
-function showQrCode(caller,loading=false)
+function showQrCode(caller,loading)
 {
+    if( !isCanvasSupported() ) return true;
+
     // Dynamic javascript lib loading: We only load qr.js if the QR code icon is clicked:
     if (typeof(qr)=='undefined') // Load qr.js only if not present.
     {
+        loading = typeof loading !== 'undefined' ? loading : false;
         if (!loading)  // If javascript lib is still loading, do not append script to body.
         {
             var element = document.createElement("script");
@@ -101,12 +109,12 @@ function showQrCode(caller,loading=false)
     // Build the div which contains the QR-Code:
     var element = document.createElement('div');
     element.id="permalinkQrcode";
-	// Make QR-Code div commit sepuku when clicked:
-    if ( element.attachEvent ){ element.attachEvent('onclick', 'this.parentNode.removeChild(this);' ); } // Damn IE
-    else { element.setAttribute('onclick', 'this.parentNode.removeChild(this);' ); }
+
+    // Make QR-Code div commit sepuku when clicked:
+    element.addEventListener('click', remove_qrcode ); // Works on every canvas supported browser
 
     // Build the QR-Code:
-    var image = qr.image({size: 8,value: caller.dataset.permalink});
+    var image = qr.image({size: 8,value: caller.getAttribute('data-permalink')});
     if (image)
     {
         element.appendChild(image);

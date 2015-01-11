@@ -12,11 +12,11 @@
 	<input type="text" name="totag" id="totag">
 	<input type="submit" name="renametag" value="Rename tag" class="bigbutton">
 	&nbsp;&nbsp;or&nbsp; <input type="submit" name="deletetag" value="Delete tag" class="bigbutton" onClick="return confirmDeleteTag();"><br>(Case sensitive)</form>
-<script language="JavaScript">function confirmDeleteTag() { var agree=confirm("Are you sure you want to delete this tag from all links ?"); if (agree) return true ; else return false ; }</script>
+<script>function confirmDeleteTag() { var agree=confirm("Are you sure you want to delete this tag from all links ?"); if (agree) return true ; else return false ; }</script>
 </div>
 {include="page.footer"}
 {if="($GLOBALS['config']['OPEN_SHAARLI'] || isLoggedIn()) && empty($GLOBALS['disablejquery'])"}
-<script language="JavaScript">
+<script>
 $(document).ready(function()
 {
     $('#fromtag').autocomplete({source:'{$source}?ws=singletag',minLength:1});
