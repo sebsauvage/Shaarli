@@ -2129,7 +2129,7 @@ function install()
 
     // Display config form:
     list($timezone_form,$timezone_js) = templateTZform();
-    $timezone_html=''; if ($timezone_form!='') $timezone_html='<tr><td valign="top"><b>Timezone:</b></td><td>'.$timezone_form.'</td></tr>';
+    $timezone_html=''; if ($timezone_form!='') $timezone_html='<tr><td><b>Timezone:</b></td><td>'.$timezone_form.'</td></tr>';
 
     $PAGE = new pageBuilder;
     $PAGE->assign('timezone_html',$timezone_html);
