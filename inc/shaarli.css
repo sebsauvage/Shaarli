@@ -812,6 +812,10 @@ div.dailyEntryTitle {
     font-weight: bold;
 }
 
+div.dailyEntryLinkdate {
+    font-size: 8pt;
+}
+
 div.dailyEntryThumbnail {
     width: 100%;
     text-align: center;

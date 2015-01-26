@@ -1151,6 +1151,7 @@ function showDaily()
         $linksToDisplay[$key]['taglist']=$taglist;
         $linksToDisplay[$key]['formatedDescription']=nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))));
         $linksToDisplay[$key]['thumbnail'] = thumbnail($link['url']);
+        $linksToDisplay[$key]['localdate'] = linkdate2locale($link['linkdate']);
     }
 
     /* We need to spread the articles on 3 columns.
