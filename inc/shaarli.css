@@ -1039,6 +1039,10 @@ div.dailyNoEntry {
     }
 }
 
+#toolsdiv a.button-description {
+	clear: none;
+}
+
 /* Highlight search results */
 .highlight {
     background-color: #FFFF33;
