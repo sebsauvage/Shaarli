@@ -5,6 +5,7 @@ Shaarli, the personal, minimalist, super-fast, no-database delicious clone.
 You want to share the links you discover ? Shaarli is a minimalist delicious clone you can install on your own website.
 It is designed to be personal (single-user), fast and handy.
 
+[![Join the chat at https://gitter.im/shaarli/Shaarli](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/shaarli/Shaarli?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Features:
 
