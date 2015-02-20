@@ -30,6 +30,10 @@
         		<input type="checkbox" name="enableRssPermalinks" id="enableRssPermalinks" {if="!empty($GLOBALS['config']['ENABLE_RSS_PERMALINKS'])"}checked{/if}/><label for="enableRssPermalinks">&nbsp;Switches the RSS feed URLs between full URLs and shortlinks. Enabling it will show a permalink in the description, and the feed item will be linked to the absolute URL. Disabling it swaps this behaviour around (permalink in title and link in description). RSS Permalinks are currently <b>{if="$GLOBALS['config']['ENABLE_RSS_PERMALINKS']"}enabled{else}disabled{/if}</b></label>
         	</td>
         </tr>
+        <tr><td valign="top"><b>Update:</b></td><td>
+            <input type="checkbox" name="updateCheck" id="updateCheck" {if="!empty($GLOBALS['config']['ENABLE_UPDATECHECK'])"}checked{/if}/>
+            <label for="updateCheck">&nbsp;Notify me when a new release is ready</label></td>
+        </tr>
 	  <tr><td></td><td class="right"><input type="submit" name="Save" value="Save config" class="bigbutton"></td></tr>
 	</table>
 	</form>
