@@ -1,5 +1,5 @@
 <?php
-// Shaarli 0.0.42 beta - Shaare your links...
+// Shaarli 0.0.43beta - Shaare your links...
 // The personal, minimalist, super-fast, no-database Delicious clone. By sebsauvage.net
 // http://sebsauvage.net/wiki/doku.php?id=php:shaarli
 // Licence: http://www.opensource.org/licenses/zlib-license.php
@@ -39,7 +39,7 @@ $GLOBALS['config']['ENABLE_RSS_PERMALINKS'] = true;  // Enable RSS permalinks by
 // Optional config file.
 if (is_file($GLOBALS['config']['DATADIR'].'/options.php')) require($GLOBALS['config']['DATADIR'].'/options.php');
 
-define('shaarli_version','0.0.42 beta');
+define('shaarli_version','0.0.43beta');
 define('PHPPREFIX','<?php /* '); // Prefix to encapsulate data in PHP code.
 define('PHPSUFFIX',' */ ?>'); // Suffix to encapsulate data in PHP code.
 // http://server.com/x/shaarli --> /shaarli/
