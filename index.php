@@ -178,6 +178,7 @@ function checkphpversion()
 function checkUpdate()
 {
     if (!isLoggedIn()) return ''; // Do not check versions for visitors.
+    if (empty($GLOBALS['config']['ENABLE_UPDATECHECK'])) return ''; // Do not check if the user doesn't want to.
 
     // Get latest version number at most once a day.
     if (!is_file($GLOBALS['config']['UPDATECHECK_FILENAME']) || (filemtime($GLOBALS['config']['UPDATECHECK_FILENAME'])<time()-($GLOBALS['config']['UPDATECHECK_INTERVAL'])))
@@ -1462,6 +1463,7 @@ function renderPage()
             $GLOBALS['disablejquery']=!empty($_POST['disablejquery']);
             $GLOBALS['privateLinkByDefault']=!empty($_POST['privateLinkByDefault']);
             $GLOBALS['config']['ENABLE_RSS_PERMALINKS']= !empty($_POST['enableRssPermalinks']);
+            $GLOBALS['config']['ENABLE_UPDATECHECK'] = !empty($_POST['updateCheck']);
             writeConfig();
             echo '<script>alert("Configuration was saved.");document.location=\'?do=tools\';</script>';
             exit;
@@ -2191,6 +2193,7 @@ function install()
         $GLOBALS['salt'] = sha1(uniqid('',true).'_'.mt_rand()); // Salt renders rainbow-tables attacks useless.
         $GLOBALS['hash'] = sha1($_POST['setpassword'].$GLOBALS['login'].$GLOBALS['salt']);
         $GLOBALS['title'] = (empty($_POST['title']) ? 'Shared links on '.htmlspecialchars(indexUrl()) : $_POST['title'] );
+        $GLOBALS['config']['ENABLE_UPDATECHECK'] = !empty($_POST['updateCheck']);
         writeConfig();
         echo '<script>alert("Shaarli is now configured. Please enter your login/password and start shaaring your links!");document.location=\'?do=login\';</script>';
         exit;
@@ -2359,6 +2362,7 @@ function writeConfig()
     $config .= '$GLOBALS[\'disablejquery\']='.var_export($GLOBALS['disablejquery'],true).'; ';
     $config .= '$GLOBALS[\'privateLinkByDefault\']='.var_export($GLOBALS['privateLinkByDefault'],true).'; ';
     $config .= '$GLOBALS[\'config\'][\'ENABLE_RSS_PERMALINKS\']='.var_export($GLOBALS['config']['ENABLE_RSS_PERMALINKS'], true).'; ';
+    $config .= '$GLOBALS[\'config\'][\'ENABLE_UPDATECHECK\']='.var_export($GLOBALS['config']['ENABLE_UPDATECHECK'], true).'; ';
     $config .= ' ?>';
     if (!file_put_contents($GLOBALS['config']['CONFIG_FILE'],$config) || strcmp(file_get_contents($GLOBALS['config']['CONFIG_FILE']),$config)!=0)
     {
