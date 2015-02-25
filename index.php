@@ -184,8 +184,8 @@ function checkUpdate()
     if (!is_file($GLOBALS['config']['UPDATECHECK_FILENAME']) || (filemtime($GLOBALS['config']['UPDATECHECK_FILENAME'])<time()-($GLOBALS['config']['UPDATECHECK_INTERVAL'])))
     {
         $version=shaarli_version;
-        list($httpstatus,$headers,$data) = getHTTP('https://raw.githubusercontent.com/shaarli/Shaarli/master/shaarli_version.txt',2);
-        if (strpos($httpstatus,'200 OK')!==false) $version=$data;
+        list($httpstatus,$headers,$data) = getHTTP('https://raw.githubusercontent.com/shaarli/Shaarli/master/shaarli_version.php',2);
+        if (strpos($httpstatus,'200 OK')!==false) $version=str_replace(' */ ?>','',str_replace('<?php /* ','',$data));
         // If failed, never mind. We don't want to bother the user with that.
         file_put_contents($GLOBALS['config']['UPDATECHECK_FILENAME'],$version); // touch file date
     }
