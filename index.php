@@ -2125,11 +2125,8 @@ function lazyThumbnail($url,$href=false)
 
     $html='<a href="'.htmlspecialchars($t['href']).'">';
 
-    // Lazy image (only loaded by JavaScript when in the viewport).
-    if (!empty($GLOBALS['disablejquery'])) // (except if jQuery is disabled)
-        $html.='<img class="lazyimage" src="'.htmlspecialchars($t['src']).'"';
-    else
-        $html.='<img class="lazyimage" src="#" data-original="'.htmlspecialchars($t['src']).'"';
+    // Lazy image
+    $html.='<img class="b-lazy" src="#" data-src="'.htmlspecialchars($t['src']).'"';
 
     if (!empty($t['width']))  $html.=' width="'.htmlspecialchars($t['width']).'"';
     if (!empty($t['height'])) $html.=' height="'.htmlspecialchars($t['height']).'"';

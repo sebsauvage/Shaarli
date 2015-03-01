@@ -647,9 +647,21 @@ a.qrcode img {
     float: left;
 }
 
+.b-lazy {
+    -webkit-transition: opacity 500ms ease-in-out;
+    -moz-transition: opacity 500ms ease-in-out;
+    -o-transition: opacity 500ms ease-in-out;
+    transition: opacity 500ms ease-in-out;
+    opacity: 0;
+}
+.b-lazy.b-loaded {
+    opacity: 1;
+}
+
 .picwall_pictureframe img {
     max-width: 100%;
     height: auto;
+    color: transparent;
 } /* Adapt the width of the image */
 
 .picwall_pictureframe a {
