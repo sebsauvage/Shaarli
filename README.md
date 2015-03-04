@@ -51,7 +51,7 @@ It is designed to be personal (single-user), fast and handy.
 
 ## Installing
 
-Shaarli requires php 5.1
+Shaarli requires php 5.1. `php-gd` is optional and provides thumbnail resizing.
 
  * Download the latest stable release from https://github.com/shaarli/Shaarli/releases
  * Unpack the archive in a directory on your web server
@@ -63,9 +63,8 @@ _To get the development version, download https://github.com/shaarli/Shaarli/arc
 
 ## Upgrading
 
-Delete all files and directories except the `data` directory, then unzip the new version of Shaarli.  
-You will not lose your links and you will not have to reconfigure it.
-
+ * **If you installed from the zip:** Delete all files and directories except the `data` directory, then unzip the new version of Shaarli.  You will not lose your links and you will not have to reconfigure it.
+ * **If you installed using `git clone`**: run `git pull` in your Shaarli directory.
 
 
 ## About
