@@ -50,9 +50,9 @@ Files: Files: inc/jquery*.js, inc/jquery-ui*.js
 License: MIT License (http://opensource.org/licenses/MIT)
 Copyright: (C) jQuery Foundation and other contributors,https://jquery.com/download/
 
-Files: inc/jquery-lazyload*.js
+Files: inc/blazy*.js
 License: MIT License (http://opensource.org/licenses/MIT)
-Copyright: (C) Mika Tuupola, https://github.com/tuupola
+Copyright: (C) Bjoern Klinggaard - @bklinggaard - http://dinbror.dk/blazy
 
 Files: inc/qr.js
 License: GPLv3 License (http://opensource.org/licenses/gpl-3.0)

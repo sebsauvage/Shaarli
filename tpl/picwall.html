@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>{include="includes"}
-{if="empty($GLOBALS['disablejquery'])"}	
-<script src="inc/jquery-1.11.2.min.js#"></script>
-<script src="inc/jquery-ui-1.11.2.min.js#"></script>
-<script src="inc/jquery.lazyload-1.9.3.min.js#"></script>
-{/if}
+<script src="inc/blazy-1.3.1.min.js#"></script>
 </head>
 <body>
 <div id="pageheader">{include="page.header"}</div>
@@ -20,12 +16,8 @@
 </div>
 {include="page.footer"}
 
-{if="empty($GLOBALS['disablejquery'])"} 
 <script>
-$(document).ready(function() {
-    $("img.lazyimage").show().lazyload();
-});
+    var bLazy = new Blazy();
 </script>
-{/if} 
 </body>
 </html>
