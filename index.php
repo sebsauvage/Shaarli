@@ -1642,15 +1642,12 @@ function renderPage()
     {
         $url=$_GET['post'];
 
-        // We remove the annoying parameters added by FeedBurner and GoogleFeedProxy (?utm_source=...)
-        $i=strpos($url,'&utm_source='); if ($i!==false) $url=substr($url,0,$i);
-        $i=strpos($url,'?utm_source='); if ($i!==false) $url=substr($url,0,$i);
-        $i=strpos($url,'#xtor=RSS-'); if ($i!==false) $url=substr($url,0,$i);
-        $i=strpos($url,'?fb_'); if ($i!==false) $url=substr($url,0,$i);
-	$i=strpos($url,'?__scoop'); if ($i!==false) $url=substr($url,0,$i);
-	$i=strpos($url,'#tk.rss_all?'); if ($i!==false) $url=substr($url,0,$i);
-	$i=strpos($url,'?utm_campaign='); if ($i!==false) $url=substr($url,0,$i);
-	$i=strpos($url,'?utm_medium='); if ($i!==false) $url=substr($url,0,$i); 
+        // We remove the annoying parameters added by FeedBurner, GoogleFeedProxy, Facebook...
+        $annoyingpatterns = array('&utm_source=', '?utm_source=', '#xtor=RSS-', '?fb_', '?__scoop', '#tk.rss_all?', '?utm_campaign=', '?utm_medium=');
+        foreach($annoyingpatterns as $pattern)
+        {
+            $i=strpos($url,$pattern); if ($i!==false) $url=substr($url,0,$i);
+        }
 
         $link_is_new = false;
         $link = $LINKSDB->getLinkFromUrl($url); // Check if URL is not already in database (in this case, we will edit the existing link)
