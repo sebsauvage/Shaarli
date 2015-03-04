@@ -1560,6 +1560,7 @@ function renderPage()
         if (isset($_GET['source']) && $_GET['source']=='bookmarklet') { echo '<script>self.close();</script>'; exit; }
         $returnurl = ( isset($_POST['returnurl']) ? $_POST['returnurl'] : '?' );
         $returnurl .= '#'.smallHash($linkdate);  // Scroll to the link which has been edited.
+        if (strstr($returnurl, "do=addlink")) { $returnurl = '?'; } //if we come from ?do=addlink, set returnurl to homepage instead
         header('Location: '.$returnurl); // After saving the link, redirect to the page the user was on.
         exit;
     }
