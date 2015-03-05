@@ -1642,10 +1642,13 @@ function renderPage()
     {
         $url=$_GET['post'];
 
-        // We remove the annoying parameters added by FeedBurner and GoogleFeedProxy (?utm_source=...)
-        $i=strpos($url,'&utm_source='); if ($i!==false) $url=substr($url,0,$i);
-        $i=strpos($url,'?utm_source='); if ($i!==false) $url=substr($url,0,$i);
-        $i=strpos($url,'#xtor=RSS-'); if ($i!==false) $url=substr($url,0,$i);
+
+        // We remove the annoying parameters added by FeedBurner, GoogleFeedProxy, Facebook...
+        $annoyingpatterns = array('/[\?&]utm_source=[^&]*/', '/[\?&]utm_campaign=[^&]*/', '/[\?&]utm_medium=[^&]*/', '/#xtor=RSS-[^&]*/', '/[\?&]fb_[^&]*/', '/[\?&]__scoop[^&]*/', '/#tk\.rss_all\?/', '/[\?&]action_ref_map=[^&]*/', '/[\?&]action_type_map=[^&]*/', '/[\?&]action_object_map=[^&]*/');
+        foreach($annoyingpatterns as $pattern)
+        {
+            $url = preg_replace($pattern, "", $url);
+        }
 
         $link_is_new = false;
         $link = $LINKSDB->getLinkFromUrl($url); // Check if URL is not already in database (in this case, we will edit the existing link)
