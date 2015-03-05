@@ -1644,7 +1644,7 @@ function renderPage()
 
 
         // We remove the annoying parameters added by FeedBurner, GoogleFeedProxy, Facebook...
-        $annoyingpatterns = array('/[\?&]utm_source=[^&]*/', '/[\?&]utm_campaign=[^&]*/', '/[\?&]utm_medium=[^&]*/', '/#xtor=RSS-[^&]*/', '/[\?&]fb_[^&]*/', '/[\?&]__scoop[^&]*/', '/#tk\.rss_all\?/');
+        $annoyingpatterns = array('/[\?&]utm_source=[^&]*/', '/[\?&]utm_campaign=[^&]*/', '/[\?&]utm_medium=[^&]*/', '/#xtor=RSS-[^&]*/', '/[\?&]fb_[^&]*/', '/[\?&]__scoop[^&]*/', '/#tk\.rss_all\?/', '/[\?&]action_ref_map=[^&]*/', '/[\?&]action_type_map=[^&]*/', '/[\?&]action_object_map=[^&]*/');
         foreach($annoyingpatterns as $pattern)
         {
             $url = preg_replace($pattern, "", $url);
