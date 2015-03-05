@@ -1642,11 +1642,12 @@ function renderPage()
     {
         $url=$_GET['post'];
 
+
         // We remove the annoying parameters added by FeedBurner, GoogleFeedProxy, Facebook...
-        $annoyingpatterns = array('&utm_source=', '?utm_source=', '#xtor=RSS-', '?fb_', '?__scoop', '#tk.rss_all?', '?utm_campaign=', '?utm_medium=');
+        $annoyingpatterns = array('/[\?&]utm_source=[^&]*/', '/[\?&]utm_campaign=[^&]*/', '/[\?&]utm_medium=[^&]*/', '/#xtor=RSS-[^&]*/', '/[\?&]fb_[^&]*/', '/[\?&]__scoop[^&]*/', '/#tk\.rss_all\?/');
         foreach($annoyingpatterns as $pattern)
         {
-            $i=strpos($url,$pattern); if ($i!==false) $url=substr($url,0,$i);
+            $url = preg_replace($pattern, "", $url);
         }
 
         $link_is_new = false;
