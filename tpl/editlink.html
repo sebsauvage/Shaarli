@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>{include="includes"}
-{if="empty($GLOBALS['disablejquery'])"}<script src="inc/jquery-1.11.2.min.js#"></script><script src="inc/jquery-ui-1.11.2.min.js#"></script>{/if}
+    <link type="text/css" rel="stylesheet" href="../inc/awesomplete.css" />
+    <script src="inc/awesomplete.min.js#"></script>
 </head>
 <body
 {if="$link.title==''"}onload="document.linkform.lf_title.focus();"
@@ -12,10 +13,12 @@
 	<div id="editlinkform">
 	    <form method="post" name="linkform">
 	        <input type="hidden" name="lf_linkdate" value="{$link.linkdate}">
-	        <i>URL</i><br><input type="text" name="lf_url" value="{$link.url|htmlspecialchars}" class="lf_input"><br>
-	        <i>Title</i><br><input type="text" name="lf_title" value="{$link.title|htmlspecialchars}" class="lf_input"><br>
-	        <i>Description</i><br><textarea name="lf_description" rows="4" cols="25">{$link.description|htmlspecialchars}</textarea><br>
-	        <i>Tags</i><br><input type="text" id="lf_tags" name="lf_tags" value="{$link.tags|htmlspecialchars}" class="lf_input"><br>
+	        <label for="lf_url"><i>URL</i></label><br><input type="text" name="lf_url" id="lf_url" value="{$link.url|htmlspecialchars}" class="lf_input"><br>
+            <label for="lf_title"><i>Title</i></label><br><input type="text" name="lf_title" id="lf_title" value="{$link.title|htmlspecialchars}" class="lf_input"><br>
+            <label for="lf_description"><i>Description</i></label><br><textarea name="lf_description" id="lf_description" rows="4" cols="25">{$link.description|htmlspecialchars}</textarea><br>
+            <label for="lf_tags"><i>Tags</i></label><br>
+            <input type="text" id="lf_tags" name="lf_tags" id="lf_tags" value="{$link.tags|htmlspecialchars}" class="lf_input"
+                data-list="{loop="$tags"}{$key}, {/loop}" data-multiple autocomplete="off" ><br>
 	        {if="($link_is_new && $GLOBALS['privateLinkByDefault']==true) || $link.private == true"}
             <input type="checkbox" checked="checked" name="lf_private" id="lf_private">
             &nbsp;<label for="lf_private"><i>Private</i></label><br>
@@ -32,12 +35,19 @@
 	</div>
 </div>
 {include="page.footer"}
-{if="($GLOBALS['config']['OPEN_SHAARLI'] || isLoggedIn()) && empty($GLOBALS['disablejquery'])"}
+{if="($GLOBALS['config']['OPEN_SHAARLI'] || isLoggedIn())"}
 <script>
-$(document).ready(function()
-{
-    $('#lf_tags').autocomplete({source:'{$source}?ws=tags',minLength:1});
-});
+    $ = Awesomplete.$;
+    new Awesomplete($('input[data-multiple]'), {
+        filter: function(text, input) {
+            return Awesomplete.FILTER_CONTAINS(text, input.match(/[^ ]*$/)[0]);
+        },
+        replace: function(text) {
+            var before = this.input.value.match(/^.+ \s*|/)[0];
+            this.input.value = before + text + " ";
+        },
+        minChars: 1
+    });
 </script>
 {/if}
 </body>

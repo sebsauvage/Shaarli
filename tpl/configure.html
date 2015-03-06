@@ -18,9 +18,6 @@
 
         <tr><td><b>Security:</b></td><td><input type="checkbox" name="disablesessionprotection" id="disablesessionprotection" {if="!empty($GLOBALS['disablesessionprotection'])"}checked{/if}><label for="disablesessionprotection">&nbsp;Disable session cookie hijacking protection (Check this if you get disconnected often or if your IP address changes often.)</label></td></tr>
 
-        <tr><td><b>Features:</b></td><td>
-        	<input type="checkbox" name="disablejquery" id="disablejquery" {if="!empty($GLOBALS['disablejquery'])"}checked{/if}><label for="disablejquery">&nbsp;Disable jQuery and all heavy JavaScript (for example: Autocomplete in tags. Useful for slow computers.)</label>
-        </td></tr>
         <tr><td valign="top"><b>New link:</b></td><td>
         	<input type="checkbox" name="privateLinkByDefault" id="privateLinkByDefault" {if="!empty($GLOBALS['privateLinkByDefault'])"}checked{/if}/><label for="privateLinkByDefault">&nbsp;All new links are private by default</label></td>
         </tr>

@@ -1,27 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>{include="includes"}
-{if="empty($GLOBALS['disablejquery'])"}<script src="inc/jquery.min.js#"></script><script src="inc/jquery-ui.min.js#"></script>{/if}
+    <link type="text/css" rel="stylesheet" href="../inc/awesomplete.css" />
+    <script src="inc/awesomplete.min.js#"></script>
 </head>
 <body onload="document.changetag.fromtag.focus();">
 <div id="pageheader">
 	{include="page.header"}
 	<form method="POST" action="" name="changetag" id="changetag">
-	<input type="hidden" name="token" value="{$token}">
-	Tag: <input type="text" name="fromtag" id="fromtag">
-	<input type="text" name="totag" id="totag">
-	<input type="submit" name="renametag" value="Rename tag" class="bigbutton">
-	&nbsp;&nbsp;or&nbsp; <input type="submit" name="deletetag" value="Delete tag" class="bigbutton" onClick="return confirmDeleteTag();"><br>(Case sensitive)</form>
+        <input type="hidden" name="token" value="{$token}">
+        <div>
+            <label for="fromtag">Tag:</label>
+        </div>
+        <div>
+            <input type="text" name="fromtag" id="fromtag" list="tagsList" autocomplete="off" class="awesomplete" data-minChars="1"  />
+            <datalist id="tagsList">
+                {loop="$tags"}<option>{$key}</option>{/loop}
+            </datalist>
+        </div>
+
+        <div>
+            <input type="text" name="totag" id="totag">
+            <input type="submit" name="renametag" value="Rename tag" class="bigbutton">
+	&nbsp;&nbsp;or&nbsp; <input type="submit" name="deletetag" value="Delete tag" class="bigbutton" onClick="return confirmDeleteTag();">
+        </div>
+    </form>
+    <div class="clear white">(Case sensitive)</div>
+</div>
 <script>function confirmDeleteTag() { var agree=confirm("Are you sure you want to delete this tag from all links ?"); if (agree) return true ; else return false ; }</script>
 </div>
 {include="page.footer"}
-{if="($GLOBALS['config']['OPEN_SHAARLI'] || isLoggedIn()) && empty($GLOBALS['disablejquery'])"}
-<script>
-$(document).ready(function()
-{
-    $('#fromtag').autocomplete({source:'{$source}?ws=singletag',minLength:1});
-});
-</script>
-{/if}
 </body>
 </html>
