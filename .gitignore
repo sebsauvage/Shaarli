@@ -11,3 +11,10 @@ pagecache
 
 # Ignore raintpl generated pages
 *.rtpl.php
+
+# Ignore test dependencies
+composer.lock
+/vendor/
+
+# Ignore test output
+phpmd.html
