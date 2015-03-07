@@ -92,3 +92,16 @@ mess_detector_summary: mess_title
 		warnings=$$($(BIN)/phpmd $(PHP_SOURCE) text $$rule | wc -l); \
 		printf "$$warnings\t$$rule\n"; \
 	done;
+
+##
+# Targets for repository and documentation maintenance
+#
+# remove all unversioned files
+clean:
+		@git clean -df
+
+# update the local copy of the documentation
+doc: clean
+		@rm -rf doc
+		@git clone https://github.com/shaarli/Shaarli.wiki.git doc
+		@rm -rf doc/.git
