@@ -84,21 +84,14 @@ h1 {
 
 .linkeditbuttons {
     position: absolute;
-    left: -1px;
+    left: 2px;
     padding: 4px 2px 2px 2px;
-    background-color: #f0f0f0;
 
     -webkit-border-radius: 0px 6px 6px 0px;
     -moz-border-radius: 0px 6px 6px 0px;
     -o-border-radius: 0px 6px 6px 0px;
     -ms-border-radius: 0px 6px 6px 0px;
     border-radius: 0px 6px 6px 0px;
-
-    -webkit-box-shadow: 0px 0px 3px 0px #333333;
-    -moz-box-shadow: 0px 0px 3px 0px #333333;
-    -o-box-shadow: 0px 0px 3px 0px #333333;
-    -ms-box-shadow: 0px 0px 3px 0px #333333;
-    box-shadow: 0px 0px 3px 0px #333333;
 }
 
 #pageheader #logo {
@@ -111,26 +104,21 @@ h1 {
     cursor: pointer;
 }
 
-#pageheader #linkcount {
-    float: right;
-    font-style: italic;
-    color: #bbb;
-    text-align: right;
-    padding-right: 5px;
+#pageheader #menu {
+    width: 100%;
 }
 
-#pageheader {
-    background-color: #333333;
-    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#333333), to(#111111));
-    background: -webkit-linear-gradient(#333333, #111111);
-    background: -moz-linear-gradient(#333333, #111111);
-    background: -ms-linear-gradient(#333333, #111111);
-    background: -o-linear-gradient(#333333, #111111);
-    background: linear-gradient(#333333, #111111);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-    width: auto;
-    padding: 0 10px 5px 10px;
+#pageheader #menu ul {
     margin: auto;
+    padding: 7px 0px 0px 0px;
+    float: none;
+}
+
+#pageheader #menu ul li {
+    list-style: none;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
 }
 
 #pageheader a {
@@ -146,8 +134,32 @@ h1 {
     border-radius: 5px 5px 5px 5px;
     margin: 10px 3px 3px 3px;
     color: #A2DD42;
-    float: left;
     text-decoration: none;
+    line-height: 2.5;
+    white-space: nowrap;
+}
+
+#pageheader #linkcount {
+    float: right;
+    font-style: italic;
+    color: #bbb;
+    text-align: right;
+    padding-right: 5px;
+    margin: 3px 3px 0px 0px;
+}
+
+#pageheader {
+    background-color: #333333;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#333333), to(#111111));
+    background: -webkit-linear-gradient(#333333, #111111);
+    background: -moz-linear-gradient(#333333, #111111);
+    background: -ms-linear-gradient(#333333, #111111);
+    background: -o-linear-gradient(#333333, #111111);
+    background: linear-gradient(#333333, #111111);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    width: auto;
+    padding: 0 10px 5px 10px;
+    margin: auto;
 }
 
 #pageheader .search {
@@ -291,6 +303,7 @@ h1 {
 .paging_linksperpage {
     float: right;
     padding-right: 5px;
+    margin: 0px 10px 2px 0px;
 }
 
 .paging_linksperpage form.linksperpage {
@@ -388,12 +401,12 @@ a.qrcode img {
 }
 
 #linklist li.private {
-    background: url('../images/private.png') no-repeat 10px center;
-    padding-left: 60px;
+    background: url('../images/private.png') no-repeat 4px center;
+    padding-left: 30px;
 }
 
 #linklist li {
-    padding-left: 26px;
+    padding-left: 30px;
 }
 
 .private .linktitle a {
@@ -468,9 +481,9 @@ a.qrcode img {
     background: -o-linear-gradient(#F2F2F2, #ffffff);
     background: linear-gradient(#F2F2F2, #ffffff);
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-    padding: 3px 3px 3px 20px;
+    padding: 3px 5px 3px 20px;
     height: 20px;
-    border-radius: 3px 3px 3px 3px;
+    border-radius: 5px;
     cursor: pointer;
     background-image: url('../images/tag_blue.png');
     background-repeat: no-repeat;
@@ -515,9 +528,10 @@ a.qrcode img {
 #footer {
     font-size: 8pt;
     text-align: center;
-    border-top: 1px solid #ddd;
     color: #888;
     clear: both;
+    max-width: 30em;
+    margin: 15px auto 15px auto;
 }
 
 #footer a {
@@ -613,7 +627,12 @@ a.qrcode img {
 
 .thumbnail {
     float: right;
-    margin-left: 10px;
+    margin: 0px 10px 0px 10px;
+}
+
+.thumbnail img {
+    border-radius: 5px;
+    box-shadow: 0.5px 0.5px 0.5px 1px #dde4e6;
 }
 
 /* If you want thumbnails on the left:
@@ -938,7 +957,11 @@ div.dailyNoEntry {
 	display: none;
     }
 
-    #pageheader a {
+    #pageheader #menu ul {
+        text-align: center;
+    }
+
+    #pageheader #menu a {
 	padding: 5px;
 	border-radius: 5px 5px 5px 5px;
 	margin: 3px;
@@ -946,9 +969,9 @@ div.dailyNoEntry {
 
     .searchform, .tagfilter {
 	display: block !important;
-	margin: 0px !important;
+	margin: 0px 3px 7px 0px !important;
 	padding: 0px !important;
-	width: 100% !important;
+	width: 97% !important;
     }
 
     .searchform input, .tagfilter input {
