@@ -8,6 +8,7 @@
     "require": {},
     "require-dev": {
         "phpmd/phpmd" : "@stable",
+        "phpunit/phpunit": "4.6.*",
         "sebastian/phpcpd": "*",
         "squizlabs/php_codesniffer": "2.*"
     }
