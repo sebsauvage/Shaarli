@@ -17,7 +17,7 @@ input, textarea {
     background: linear-gradient(#dedede, #ffffff);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     padding: 5px;
-    border-radius: 5px 5px 5px 5px;
+    border-radius: 3px 3px 3px 3px;
     border: none;
     color: #000;
 }
@@ -131,7 +131,7 @@ h1 {
     background: linear-gradient(#333333, #000000);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     padding: 5px;
-    border-radius: 5px 5px 5px 5px;
+    border-radius: 3px 3px 3px 3px;
     margin: 10px 3px 3px 3px;
     color: #A2DD42;
     text-decoration: none;
@@ -191,7 +191,7 @@ h1 {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     padding: 5px;
     border: none;
-    border-radius: 5px 5px 5px 5px;
+    border-radius: 3px 3px 3px 3px;
     margin: 10px 3px 3px 3px;
     color: #cecece;
 }
@@ -237,7 +237,7 @@ h1 {
     padding: 0 5px 0 5px;
     margin: 5px 0 5px 0;
     height: 20px;
-    border-radius: 5px 5px 5px 5px;
+    border-radius: 3px 3px 3px 3px;
     cursor: pointer;
 }
 
@@ -483,7 +483,7 @@ a.qrcode img {
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
     padding: 3px 5px 3px 20px;
     height: 20px;
-    border-radius: 5px;
+    border-radius: 3px;
     cursor: pointer;
     background-image: url('../images/tag_blue.png');
     background-repeat: no-repeat;
@@ -631,7 +631,7 @@ a.qrcode img {
 }
 
 .thumbnail img {
-    border-radius: 5px;
+    border-radius: 3px;
     box-shadow: 0.5px 0.5px 0.5px 1px #dde4e6;
 }
 
@@ -963,7 +963,7 @@ div.dailyNoEntry {
 
     #pageheader #menu a {
 	padding: 5px;
-	border-radius: 5px 5px 5px 5px;
+	border-radius: 3px 3px 3px 3px;
 	margin: 3px;
     }
 
@@ -1015,7 +1015,7 @@ div.dailyNoEntry {
 	padding: 3px 5px 3px 5px;
 	background-color: #666;
 	color: #fff;
-	border-radius: 5px 5px 5px 5px;
+	border-radius: 3px 3px 3px 3px;
     }
 
     .thumbnail {
