@@ -1271,7 +1271,6 @@ function renderPage()
             if ($thumb!='') // Only output links which have a thumbnail.
             {
                 $link['thumbnail']=$thumb; // Thumbnail HTML code.
-                $link['permalink']=$permalink;
                 $linksToDisplay[]=$link; // Add to array.
             }
         }
