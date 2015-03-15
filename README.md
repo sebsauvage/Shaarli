@@ -1,4 +1,4 @@
-![Shaarli logo](https://cdn.mediacru.sh/W2NGCIHB3quT.png)
+![Shaarli logo](doc/images/doc-logo.png)
 
 Shaarli, the personal, minimalist, super-fast, no-database delicious clone.
 
