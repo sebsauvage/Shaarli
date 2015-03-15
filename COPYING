@@ -47,10 +47,6 @@ Files: images/logo.png
 License: zlib/libpng
 Copyright: (c) 2011-2014 idleman idleman@idleman.fr
 
-Files: Files: inc/jquery*.js, inc/jquery-ui*.js
-License: MIT License (http://opensource.org/licenses/MIT)
-Copyright: (C) jQuery Foundation and other contributors,https://jquery.com/download/
-
 Files: inc/blazy*.js
 License: MIT License (http://opensource.org/licenses/MIT)
 Copyright: (C) Bjoern Klinggaard - @bklinggaard - http://dinbror.dk/blazy
@@ -63,6 +59,10 @@ Files: inc/rain.tpl.class.php
 Copyright: 2011-2012, Federico Ulfo <rainelemental@gmail.com>
            2011-2012, The Rain Team <hello@raintm.com>
 License: LGPL-3+ (https://www.gnu.org/licenses/lgpl-3.0.txt)
+
+Files: inc/awesomplete*
+License: MIT License (http://opensource.org/licenses/MIT)
+Copyright: (C) 2015 Lea Verou - https://github.com/LeaVerou/awesomplete
 
 ----------------------------------------------------
 ZLIB/LIBPNG LICENSE

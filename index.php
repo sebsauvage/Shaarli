@@ -1491,6 +1491,7 @@ function renderPage()
             $PAGE = new pageBuilder;
             $PAGE->assign('linkcount',count($LINKSDB));
             $PAGE->assign('token',getToken());
+            $PAGE->assign('tags', $LINKSDB->allTags());
             $PAGE->renderPage('changetag');
             exit;
         }
@@ -1634,6 +1635,7 @@ function renderPage()
         $PAGE->assign('link_is_new',false);
         $PAGE->assign('token',getToken()); // XSRF protection.
         $PAGE->assign('http_referer',(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''));
+        $PAGE->assign('tags', $LINKSDB->allTags());
         $PAGE->renderPage('editlink');
         exit;
     }
@@ -1705,6 +1707,7 @@ function renderPage()
         $PAGE->assign('link_is_new',$link_is_new);
         $PAGE->assign('token',getToken()); // XSRF protection.
         $PAGE->assign('http_referer',(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''));
+        $PAGE->assign('tags', $LINKSDB->allTags());
         $PAGE->renderPage('editlink');
         exit;
     }
@@ -2309,45 +2312,6 @@ if (!function_exists('json_encode')) {
     }
 }
 
-// Webservices (for use with jQuery/jQueryUI)
-// e.g. index.php?ws=tags&term=minecr
-function processWS()
-{
-    if (empty($_GET['ws']) || empty($_GET['term'])) return;
-    $term = $_GET['term'];
-    $LINKSDB=new linkdb(isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI']);  // Read links from database (and filter private links if used it not logged in).
-    header('Content-Type: application/json; charset=utf-8');
-
-    // Search in tags (case insensitive, cumulative search)
-    if ($_GET['ws']=='tags')
-    {
-        $tags=explode(' ',str_replace(',',' ',$term)); $last = array_pop($tags); // Get the last term ("a b c d" ==> "a b c", "d")
-        $addtags=''; if ($tags) $addtags=implode(' ',$tags).' '; // We will pre-pend previous tags
-        $suggested=array();
-        /* To speed up things, we store list of tags in session */
-        if (empty($_SESSION['tags'])) $_SESSION['tags'] = $LINKSDB->allTags();
-        foreach($_SESSION['tags'] as $key=>$value)
-        {
-            if (startsWith($key,$last,$case=false) && !in_array($key,$tags)) $suggested[$addtags.$key.' ']=0;
-        }
-        echo json_encode(array_keys($suggested));
-        exit;
-    }
-
-    // Search a single tag (case sensitive, single tag search)
-    if ($_GET['ws']=='singletag')
-    {
-        /* To speed up things, we store list of tags in session */
-        if (empty($_SESSION['tags'])) $_SESSION['tags'] = $LINKSDB->allTags();
-        foreach($_SESSION['tags'] as $key=>$value)
-        {
-            if (startsWith($key,$term,$case=true)) $suggested[$key]=0;
-        }
-        echo json_encode(array_keys($suggested));
-        exit;
-    }
-}
-
 // Re-write configuration file according to globals.
 // Requires some $GLOBALS to be set (login,hash,salt,title).
 // If the config file cannot be saved, an error message is displayed and the user is redirected to "Tools" menu.
@@ -2604,7 +2568,6 @@ if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=r
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=atom')) { showATOM(); exit; }
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=dailyrss')) { showDailyRSS(); exit; }
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=daily')) { showDaily(); exit; }
-if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'ws=')) { processWS(); exit; } // Webservices (for jQuery/jQueryUI)
 if (!isset($_SESSION['LINKS_PER_PAGE'])) $_SESSION['LINKS_PER_PAGE']=$GLOBALS['config']['LINKS_PER_PAGE'];
 renderPage();
 ?>

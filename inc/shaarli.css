@@ -352,10 +352,13 @@ h1 {
 
 #editlinkform {
     height: 100%;
-    color: #ffffff;
     padding: 5px 5px 5px 15px;
     width: 80%;
     clear: left;
+}
+
+#editlinkform label {
+    color: #ffffff;
 }
 
 #editlinkform textarea, #editlinkform .lf_input {
@@ -613,6 +616,17 @@ a.qrcode img {
     margin-left: 40px;
 }
 
+#changetag div {
+    float:left;
+}
+
+#changetag label {
+    padding: 5px;
+}
+
+#changetag li {
+    color: #000;
+}
 #configform td {
     color: #ccc;
     font-size: 10pt;
@@ -708,17 +722,6 @@ a.qrcode img {
     filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=#66000000, endColorstr=#66000000);
     /* IE6IE9 */
     text-shadow: 2px 2px 1px #000000;
-}
-
-/* Minimal customisation for jQuery widgets */
-.ui-autocomplete {
-    background-color: #fff;
-    padding-left: 5px;
-}
-
-.ui-state-hover {
-    background-color: #604dff;
-    color: #fff;
 }
 
 #linklist li.publicLinkHightLight {
@@ -873,6 +876,10 @@ div.dailyNoEntry {
 
 .right {
     text-align: right;
+}
+
+.white {
+    color: white;
 }
 
 /* For lazy images loading in picture wall.
