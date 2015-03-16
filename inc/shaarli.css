@@ -336,6 +336,7 @@ h1 {
 
 #headerform input.linkurl {
     width: 50%;
+    font-size: inherit;
 }
 
 #toolsdiv {
