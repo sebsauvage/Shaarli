@@ -1940,15 +1940,25 @@ function buildLinkList($PAGE,$LINKSDB)
     while ($i<$end && $i<count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
-        $link['description']=nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))));
-        $title=$link['title'];
-        $classLi =  $i%2!=0 ? '' : 'publicLinkHightLight';
-        $link['class'] = ($link['private']==0 ? $classLi : 'private');
-        $link['localdate']=linkdate2locale($link['linkdate']);
-        $taglist = explode(' ',$link['tags']);
+        $title               = $link['title'];
+        $taglist             = explode(' ',$link['tags']);
         uasort($taglist, 'strcasecmp');
-        $link['taglist']=$taglist;
+
+        $classLi             = $i%2!=0 ? '' : 'publicLinkHightLight'; // This could really be done with just a css pseudoclass.
+
+        $link['description'] = nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))));
+        $link['class']       = ($link['private']==0 ? $classLi : 'private');
+        $link['localdate']   = linkdate2locale($link['linkdate']);
+        $link['taglist']     = $taglist;
+
+        // Convert notes to absolute URLs
+        if ($link["url"][0]      === '?' && // Check for both signs of a note: starting with ? and 7 chars long. I doubt that you'll post any links that look like this.
+            strlen($link["url"]) === 7) {
+            $link["url"] = indexUrl() . $link["url"];
+        }
+
         $linkDisp[$keys[$i]] = $link;
+
         $i++;
     }
 
