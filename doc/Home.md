@@ -84,7 +84,8 @@ To change the configuration, create the file `data/options.php`, example:
     $GLOBALS['config']['ENABLE_THUMBNAILS'] = false;  
     ?>
 ```
- The following parameters are available (parameters (default value)):
+
+**Do not edit config options in index.php! Your changes would be lost when you upgrade.** The following parameters are available (parameters (default value)):
 
  * `DATADIR ('data')` : This is the name of the subdirectory where Shaarli stores is data file. You can change it for better security.
  * `CONFIG_FILE ($GLOBALS['config']['DATADIR'].'/config.php')` : Name of file which is used to store login/password.
@@ -96,6 +97,8 @@ To change the configuration, create the file `data/options.php`, example:
  *  `OPEN_SHAARLI (false)` : If you set this option to true, anyone will be able to add/modify/delete/import/exports links without having to login.
  *   `HIDE_TIMESTAMPS (false)` : If you set this option to true, the date/time of each link will not be displayed (including in RSS Feed).
  *   `ENABLE_THUMBNAILS (true)` : Enable/disable thumbnails.
+ *   `RAINTPL_TMP (tmp/)` : Raintpl cache directory  (keep the trailing slash!)
+ *   `RAINTPL_TPL (tpl/) : Raintpl template directory (keep the trailing slash!). Edit this option if you want to change the rendering template (page structure) used by Shaarli. See [Changing template](#changing-template)
  *   `CACHEDIR ('cache')` : Directory where the thumbnails are stored.
  *   `ENABLE_LOCALCACHE (true)` : If you have a limited quota on your webspace, you can set this option to false: Shaarli will not generate thumbnails which need to be cached locally (vimeo, flickr, etc.). Thumbnails will still be visible for the services which do not use the local cache (youtube.com, imgur.com, dailymotion.com, imageshack.us)
  *   `UPDATECHECK_FILENAME ($GLOBALS['config']['DATADIR'].'/lastupdatecheck.txt')` : name of the file used to store available shaarli version.
@@ -114,6 +117,18 @@ To change the configuration, create the file `data/options.php`, example:
 See also:
  * [Download CSS styles for shaarlis listed in an opml file](https://github.com/shaarli/Shaarli/wiki/Download-CSS-styles-for-shaarlis-listed-in-an-opml-file)
 
+### Changing template
+
+| 💥 |  This feature is currently being worked on and will be improved in the next releases. Experimental.         |
+|---------|---------|
+
+ * Find the template you'd like to install. See the list of available templates (TODO). Find it's git clone URL or download the zip archive for the template.
+ * In your Shaarli `tpl/` directory, run `git clone https://url/of/my-template/` or unpack the zip archive. There should now be a `my-template/` directory under the `tpl/` dir, containing directly all the template files.
+ * Edit `data/options.php` to have Shaarli use this template. Eg.
+
+`$GLOBALS['config']['RAINTPL_TPL'] = 'tpl/my-template/' ;`
+
+You can find a list of compatible templates in [Related Software](#Related-software)
 
 # Backup
 
@@ -205,7 +220,7 @@ Download [publisher.php](https://pubsubhubbub.googlecode.com/git/publisher_clien
 
  * [Example patch: add a new "via" field for links](Example-patch---add-new-via-field-for-links)
  * [Copy a Shaarli installation over SSH SCP, serve it locally with php cli](Copy-a-Shaarli-installation-over-SSH-SCP,-serve-it-locally-with-php-cli)
- * To display the array representing the data saved in datastore.php, use the following snippet
+ * To display the array representing the data saved in datastore.php, use the following snippet (TODO where is it gone?)
 
 ### Changing timestamp for a link
  * Look for `<input type="hidden" name="lf_linkdate" value="{$link.linkdate}">` in `tpl/editlink.tpl` (line 14)
@@ -228,20 +243,24 @@ Unofficial but relatedd work on Shaarli. If you maintain one of these, please ge
 
  * [shaarchiver](https://github.com/nodiscc/shaarchiver) - Archive your Shaarli bookmarks and their content
  * [Shaarli for Android](http://sebsauvage.net/links/?ZAyDzg) - Android application that adds Shaarli as a sharing provider
+ * [Shaarlier for Android](https://play.google.com/store/apps/details?id=com.dimtion.shaarlier) - Android application to simply add links directly into your Shaarli
  * [shaarli-river](https://github.com/mknexen/shaarli-river) - an aggregator for shaarlis with many features 
  * [Shaarlo](https://github.com/DMeloni/shaarlo) - an aggregator for shaarlis with many features ([Demo](http://shaarli.fr/))
  * [kalvn/shaarli-blocks](https://github.com/kalvn/shaarli-blocks) - A template/theme for Shaarli
- * [Vinm/Blue-theme-for Shaarli](https://github.com/Vinm/Blue-theme-for-Shaarli) - A template/theme for Shaarli
+ * [kalvn/Shaarli-Material](https://github.com/kalvn/Shaarli-Material) - 
+A theme (template) based on Google's Material Design for Shaarli, the superfast delicious clone.
+ * [Vinm/Blue-theme-for Shaarli](https://github.com/Vinm/Blue-theme-for-Shaarli) - A template/theme for Shaarli ([unmaintained](https://github.com/Vinm/Blue-theme-for-Shaarli/issues/2), compatibility unknown)
  * [vivienhaese/shaarlitheme](https://github.com/vivienhaese/shaarlitheme) - A Shaarli fork meant to be run in an openshift instance
  * [tt-rss-shaarli](https://github.com/jcsaaddupuy/tt-rss-shaarli) - [TinyTiny RSS](http://tt-rss.org/) plugin that adds support for sharing articles with Shaarli
  * [dhoko/ShaarliTemplate](https://github.com/dhoko/ShaarliTemplate) - A template/theme for Shaarli
  * [mknexen/shaarli-api](https://github.com/mknexen/shaarli-api) - a REST API for Shaarli
- * [Shaarli-Albinomouse](https://github.com/alexisju/Shaarli-AlbinoMouse) - A fork of Shaarli with a different template
+ * [Albinomouse](https://github.com/alexisju/albinomouse-template) - A full template for Shaarli
  * [Shaarlimages](https://github.com/BoboTiG/shaarlimages) - An image-oriented aggregator for Shaarlis
  * [Shaarli Superhero Theme](https://github.com/AkibaTech/Shaarli---SuperHero-Theme) - A template/theme for Shaarli
  * [Limonade](https://github.com/misterair/limonade) - A fork of Shaarli with a new template
  * [octopress-shaarli](https://github.com/ahmet2mir/octopress-shaarli) - octoprress plugin to retrieve SHaarli links on the sidebara
  * [Bookie](https://github.com/bookieio/bookie) - Another self-hostable, Free bookmark sharing software, written in Python
+ * [Unmark](https://github.com/plainmade/unmark) -  An open source to do app for bookmarks ([Homepage](https://unmark.it/))
 
 
 
@@ -251,7 +270,6 @@ Unofficial but relatedd work on Shaarli. If you maintain one of these, please ge
  * [A list of working Shaarli aggregators](https://raw.githubusercontent.com/Oros42/find_shaarlis/master/annuaires.json)
  * [A list of some known Shaarlis](https://github.com/Oros42/shaarlis_list)
  * [Adieu Delicious, Diigo et StumbleUpon. Salut Shaarli ! - sebsauvage.net](http://sebsauvage.net/rhaa/index.php?2011/09/16/09/29/58-adieu-delicious-diigo-et-stumbleupon-salut-shaarli-) (fr) _16/09/2011 - the original post about Shaarli_
- * [Mentions of Shaarli in the press](Mentions-of-Shaarli-in-%22the-press%22)
  * [Original ideas/fixme/TODO page](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:ideas)
  * [Original discussion page](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:discussion) (fr)
  * [Original revisions history](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
