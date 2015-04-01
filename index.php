@@ -1938,6 +1938,12 @@ function buildLinkList($PAGE,$LINKSDB)
         $taglist = explode(' ',$link['tags']);
         uasort($taglist, 'strcasecmp');
         $link['taglist']=$taglist;
+
+        if ($link["url"][0] === '?' && // Check for both signs of a note: starting with ? and 7 chars long. I doubt that you'll post any links that look like this.
+            strlen($link["url"]) === 7) {
+            $link["url"] = indexUrl() . $link["url"];
+        }
+        
         $linkDisp[$keys[$i]] = $link;
         $i++;
     }
