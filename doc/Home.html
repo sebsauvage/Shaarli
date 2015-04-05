@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="github-markdown.css">
+</head>
+<body>
+<h1 id="shaarli-wiki">Shaarli wiki</h1>
+<p>Welcome to the <a href="https://github.com/shaarli/Shaarli/">Shaarli</a> wiki! Here you can find some info on how to use, configure, tweak and solve problems with your Shaarli. For general info, read the <a href="https://github.com/shaarli/Shaarli/blob/master/README.md">README</a>.</p>
+<p>If you have any questions or ideas, please join the <a href="https://gitter.im/shaarli/Shaarli">chat</a> (also reachable via <a href="https://irc.gitter.im/">IRC</a>), post them in our <a href="https://github.com/shaarli/Shaarli/issues/44">general discussion</a> or read the current <a href="https://github.com/shaarli/Shaarli/issues">issues</a>. If you've found a bug, please create a <a href="https://github.com/shaarli/Shaarli/issues/new">new issue</a>.</p>
+<p>If you'd like a feature added, see if it fits in the list of <a href="Ideas-for-plugins">Ideas for Plugins</a> and update the corresponding bug report.</p>
+<p><em>Note: This documentation is available online at <a href="https://github.com/shaarli/Shaarli/wiki">https://github.com/shaarli/Shaarli/wiki</a>, and locally in the <code>doc/</code> directory of your Shaarli installation.</em></p>
+<hr />
+<!-- MarkdownTOC depth=3 -->
+
+
+<ul>
+<li><p><a href="#basic-usage">Basic Usage</a></p>
+<ul>
+<li><a href="#add-the-sharing-button-_bookmarklet_-to-your-browser">Add the sharing button (<em>bookmarklet</em>) to your browser</a><br /></li>
+<li><a href="#share-links-using-the-_bookmarklet_">Share links using the <em>bookmarklet</em></a><br /></li>
+</ul></li>
+<li><p><a href="#other-usage-examples">Other usage examples</a></p>
+<ul>
+<li><a href="#using-shaarli-as-a-blog-notepad-pastebin">Using Shaarli as a blog, notepad, pastebin...</a><br /></li>
+<li><a href="#rss-feeds-or-picture-wall-for-a-specific-searchtag">RSS Feeds or Picture Wall for a specific search/tag</a><br /></li>
+</ul></li>
+<li><p><a href="#configuration">Configuration</a></p>
+<ul>
+<li><a href="#main-dataoptionsphp-file">Main data/options.php file</a><br /></li>
+<li><a href="#changing-theme">Changing theme</a><br /></li>
+<li><a href="#changing-template">Changing template</a><br /></li>
+</ul></li>
+<li><a href="#backup">Backup</a><br /></li>
+<li><p><a href="#troubleshooting">Troubleshooting</a></p>
+<ul>
+<li><a href="#i-forgot-my-password-">I forgot my password !</a><br /></li>
+<li><a href="#im-locked-out---login-bruteforce-protection">I'm locked out - Login bruteforce protection</a><br /></li>
+<li><a href="#list-of-all-login-attempts">List of all login attempts</a><br /></li>
+<li><a href="#exporting-from-diigo">Exporting from Diigo</a><br /></li>
+<li><a href="#importing-from-semanticscuttle">Importing from SemanticScuttle</a><br /></li>
+<li><a href="#importing-from-mister-wong">Importing from Mister Wong</a><br /></li>
+<li><a href="#hosting-problems">Hosting problems</a><br /></li>
+<li><a href="#dates-are-not-properly-formatted">Dates are not properly formatted</a><br /></li>
+<li><a href="#problems-on-centos-servers">Problems on CentOS servers</a><br /></li>
+<li><a href="#my-session-expires--i-cant-stay-logged-in">My session expires ! I can't stay logged in</a><br /></li>
+<li><a href="#sessions-do-not-seem-to-work-correctly-on-your-server"><code>Sessions do not seem to work correctly on your server</code></a><br /></li>
+<li><a href="#pubsubhubbub-support">pubsubhubbub support</a><br /></li>
+</ul></li>
+<li><p><a href="#notes">Notes</a></p>
+<ul>
+<li><a href="#various-hacks">Various hacks</a><br /></li>
+<li><a href="#changing-timestamp-for-a-link">Changing timestamp for a link</a><br /></li>
+</ul></li>
+<li><a href="#related-software">Related software</a><br /></li>
+<li><a href="#other-links">Other links</a><br /></li>
+<li><p><a href="#faq">FAQ</a></p>
+<ul>
+<li><a href="#why-did-you-create-shaarli-">Why did you create Shaarli ?</a><br /></li>
+<li><a href="#why-use-shaarli-and-not-deliciousdiigo-">Why use Shaarli and not Delicious/Diigo ?</a><br /></li>
+<li><a href="#what-does-shaarli-mean-">What does Shaarli mean ?</a><br /></li>
+</ul></li>
+<li><p><a href="#technical-details">Technical details</a></p>
+<ul>
+<li><a href="#directory-structure">Directory structure</a><br /></li>
+<li><a href="#why-not-use-a-real-database--files-are-slow-">Why not use a real database ? Files are slow !</a><br /></li>
+</ul></li>
+<li><p><a href="#wiki---todo">Wiki - TODO</a></p></li>
+</ul>
+<!-- /MarkdownTOC -->
+
+
+
+
+<hr />
+<h1 id="basic-usage">Basic Usage</h1>
+<h3 id="add-the-sharing-button-bookmarklet-to-your-browser">Add the sharing button (<em>bookmarklet</em>) to your browser</h3>
+<ul>
+<li>Open your Shaarli and <code>Login</code><br /></li>
+<li>Click the <code>Tools</code> button in the top bar<br /></li>
+<li>Drag the <strong><code>✚Shaare link</code> button</strong>, and drop it to your browser's bookmarks bar.</li>
+</ul>
+<p><em>This bookmarklet button in compatible with Firefox, Opera, Chrome and Safari. Under Opera, you can't drag'n drop the button: You have to right-click on it and add a bookmark to your personal toolbar.</em></p>
+<p><img src="images/bookmarklet.png" /></p>
+<h3 id="share-links-using-the-bookmarklet">Share links using the <em>bookmarklet</em></h3>
+<ul>
+<li>When you are visiting a webpage you would like to share with Shaarli, click the <em>bookmarklet</em> you just added.<br /></li>
+<li>A window opens.<br /></li>
+<li>You can freely edit title, description, tags... to find it later using the text search or tag filtering.<br /></li>
+<li>You will be able to edit this link later using the <img src="https://raw.githubusercontent.com/shaarli/Shaarli/master/images/edit_icon.png" /> edit button.<br /></li>
+<li>You can also check the “Private” box so that the link is saved but only visible to you.<br /></li>
+<li>Click <code>Save</code>.<strong>Voila! Your link is now shared.</strong></li>
+</ul>
+<h1 id="other-usage-examples">Other usage examples</h1>
+<p>Shaarli can be used:</p>
+<ul>
+<li>to share, comment and save interesting links and news<br /></li>
+<li>to bookmark useful/frequent personal links (as private links) and share them between computers<br /></li>
+<li>as a minimal blog/microblog/writing platform (no character limit)<br /></li>
+<li>as a read-it-later list (for example items tagged <code>readlater</code>)<br /></li>
+<li>to draft and save articles/ideas<br /></li>
+<li>to keep code snippets<br /></li>
+<li>to keep notes and documentation<br /></li>
+<li>as a shared clipboard between machines<br /></li>
+<li>as a todo list<br /></li>
+<li>to store playlists (e.g. with the <code>music</code> or <code>video</code> tags)<br /></li>
+<li>to keep extracts/comments from webpages that may disappear<br /></li>
+<li>to keep track of ongoing discussions (for example items tagged <code>discussion</code>)<br /></li>
+<li><a href="http://shaarli.chassegnouf.net/?9Efeiw">to feed RSS aggregators</a> (planets) with specific tags<br /></li>
+<li>to feed other social networks, blogs... using RSS feeds and external services (dlvr.it, ifttt.com ...)</li>
+</ul>
+<h3 id="using-shaarli-as-a-blog-notepad-pastebin...">Using Shaarli as a blog, notepad, pastebin...</h3>
+<ul>
+<li>Go to your Shaarli setup and log in<br /></li>
+<li>Click the <code>Add Link</code> button<br /></li>
+<li>To share text only, do not enter any URL in the corresponding input field and click <code>Add Link</code><br /></li>
+<li>Pick a title and enter your article, or note, in the description field; add a few tags; optionally check <code>Private</code> then click <code>Save</code><br /></li>
+<li>Voilà! Your article is now published (privately if you selected that option) and accessible using its permalink.</li>
+</ul>
+<h3 id="rss-feeds-or-picture-wall-for-a-specific-searchtag">RSS Feeds or Picture Wall for a specific search/tag</h3>
+<p>It is possible to filter RSS/ATOM feeds and Picture Wall on a Shaarli to <strong>only display results of a specific search, or for a specific tag</strong>. For example, if you want to subscribe only to links tagged <code>photography</code>:</p>
+<ul>
+<li>Go to the desired Shaarli instance.<br /></li>
+<li>Search for the <code>photography</code> tag in the <em>Filter by tag</em> box. Links tagged <code>photography</code> are displayed.<br /></li>
+<li>Click on the <code>RSS Feed</code> button.<br /></li>
+<li>You are presented with an RSS feed showing only these links. Subscribe to it to receive only updates with this tag.<br /></li>
+<li>The same method <strong>also works for a full-text search</strong> (<em>Search</em> box) <strong>and for the Picture Wall</strong> (want to only see pictures about <code>nature</code>?)<br /></li>
+<li>You can also build the URL manually: <code>https://my.shaarli.domain/?do=rss&amp;searchtags=nature</code>, <code>https://my.shaarli.domain/links/?do=picwall&amp;searchterm=poney</code></li>
+</ul>
+<p><img src="rss-filter-1.png" /> <img src="rss-filter-2.png" /></p>
+<h1 id="configuration">Configuration</h1>
+<h3 id="main-dataoptions.php-file">Main data/options.php file</h3>
+<p>To change the configuration, create the file <code>data/options.php</code>, example:</p>
+<pre><code>    &lt;?php
+    $GLOBALS[&#39;config&#39;][&#39;LINKS_PER_PAGE&#39;] = 30;
+    $GLOBALS[&#39;config&#39;][&#39;HIDE_TIMESTAMPS&#39;] = true;
+    $GLOBALS[&#39;config&#39;][&#39;ENABLE_THUMBNAILS&#39;] = false;  
+    ?&gt;</code></pre>
+<p><strong>Do not edit config options in index.php! Your changes would be lost when you upgrade.</strong> The following parameters are available (parameters (default value)):</p>
+<ul>
+<li><code>DATADIR ('data')</code> : This is the name of the subdirectory where Shaarli stores is data file. You can change it for better security.<br /></li>
+<li><code>CONFIG_FILE ($GLOBALS['config']['DATADIR'].'/config.php')</code> : Name of file which is used to store login/password.<br /></li>
+<li><code>DATASTORE ($GLOBALS['config']['DATADIR'].'/datastore.php')</code> : Name of file which contains the link database.<br /></li>
+<li><code>LINKS_PER_PAGE (20)</code> : Default number of links per page displayed.<br /></li>
+<li><code>IPBANS_FILENAME ($GLOBALS['config']['DATADIR'].'/ipbans.php')</code> : Name of file which records login attempts and IP bans.<br /></li>
+<li><code>BAN_AFTER (4)</code> : An IP address will be banned after this many failed login attempts.<br /></li>
+<li><code>BAN_DURATION (1800)</code> : Duration of ban (in seconds). (1800 seconds = 30 minutes)<br /></li>
+<li><code>OPEN_SHAARLI (false)</code> : If you set this option to true, anyone will be able to add/modify/delete/import/exports links without having to login.<br /></li>
+<li><code>HIDE_TIMESTAMPS (false)</code> : If you set this option to true, the date/time of each link will not be displayed (including in RSS Feed).<br /></li>
+<li><code>ENABLE_THUMBNAILS (true)</code> : Enable/disable thumbnails.<br /></li>
+<li><code>RAINTPL_TMP (tmp/)</code> : Raintpl cache directory (keep the trailing slash!)<br /></li>
+<li>`RAINTPL_TPL (tpl/) : Raintpl template directory (keep the trailing slash!). Edit this option if you want to change the rendering template (page structure) used by Shaarli. See <a href="#changing-template">Changing template</a><br /></li>
+<li><code>CACHEDIR ('cache')</code> : Directory where the thumbnails are stored.<br /></li>
+<li><code>ENABLE_LOCALCACHE (true)</code> : If you have a limited quota on your webspace, you can set this option to false: Shaarli will not generate thumbnails which need to be cached locally (vimeo, flickr, etc.). Thumbnails will still be visible for the services which do not use the local cache (youtube.com, imgur.com, dailymotion.com, imageshack.us)<br /></li>
+<li><code>UPDATECHECK_FILENAME ($GLOBALS['config']['DATADIR'].'/lastupdatecheck.txt')</code> : name of the file used to store available shaarli version.<br /></li>
+<li><code>UPDATECHECK_INTERVAL (86400)</code> : Delay between new Shaarli version check. 86400 seconds = 24 hours. Note that if you do not login for a week, Shaarli will not check for new version for a week.<br /></li>
+<li><code>ENABLE_UPDATECHECK</code>: Determines whether Shaarli check for new releases at <a href="https://github.com/shaarli/Shaarli">https://github.com/shaarli/Shaarli</a><br /></li>
+<li><code>SHOW_ATOM (false)</code> : Show an <code>ATOM Feed</code> button next to the <code>Subscribe</code> (RSS) button. ATOM feeds are available at the address <code>?do=atom</code> regardless of this option.<br /></li>
+<li><code>ARCHIVE_ORG (false)</code> : For each link, display a link to an archived version on archive.org<br /></li>
+<li><code>ENABLE_RSS_PERMALINKS (true)</code>: choose whether the RSS item title link points directly to the link, or to the entry on Shaarli (permalink). <code>true</code> is the original Shaarli bahevior (point directly to the link)</li>
+</ul>
+<h3 id="changing-theme">Changing theme</h3>
+<ul>
+<li>Shaarli's apparence can be modified by editing CSS rules in <code>inc/user.css</code>. This file allows to override rules defined in the main <code>inc/shaarli.css</code> (only add changed rules), or define a whole new theme.<br /></li>
+<li>Do not edit <code>inc/shaarli.css</code>! Your changes would be overriden when updating Shaarli.<br /></li>
+<li>Some themes are available at <a href="https://github.com/shaarli/shaarli-themes">https://github.com/shaarli/shaarli-themes</a>.</li>
+</ul>
+<p>See also:</p>
+<ul>
+<li><a href="https://github.com/shaarli/Shaarli/wiki/Download-CSS-styles-for-shaarlis-listed-in-an-opml-file">Download CSS styles for shaarlis listed in an opml file</a></li>
+</ul>
+<h3 id="changing-template">Changing template</h3>
+<p>| 💥 | This feature is currently being worked on and will be improved in the next releases. Experimental. |<br />|---------|---------|</p>
+<ul>
+<li>Find the template you'd like to install. See the list of available templates (TODO). Find it's git clone URL or download the zip archive for the template.<br /></li>
+<li>In your Shaarli <code>tpl/</code> directory, run <code>git clone https://url/of/my-template/</code> or unpack the zip archive. There should now be a <code>my-template/</code> directory under the <code>tpl/</code> dir, containing directly all the template files.<br /></li>
+<li>Edit <code>data/options.php</code> to have Shaarli use this template. Eg.</li>
+</ul>
+<p><code>$GLOBALS['config']['RAINTPL_TPL'] = 'tpl/my-template/' ;</code></p>
+<p>You can find a list of compatible templates in <a href="#Related-software">Related Software</a></p>
+<h1 id="backup">Backup</h1>
+<p>You have two ways of backing up your database:</p>
+<ul>
+<li><strong>Backup the file <code>data/datastore.php</code></strong> (by FTP or SSH). Restore by putting the file back in place.<br /></li>
+<li>Example command: <code>rsync -avzP my.server.com:/var/www/shaarli/data/datastore.php datastore-$(date +%Y-%m-%d_%H%M).php</code><br /></li>
+<li><strong>Export your links as HTML</strong> (Menu <code>Tools</code> &gt; <code>Export</code>). Restore by using the <code>Import</code> feature.<br /></li>
+<li>This can be done using the <a href="https://github.com/nodiscc/shaarchiver">shaarchiver</a> tool. Example command: <code>./export-bookmarks.py --url=https://my.server.com/shaarli --username=myusername --password=mysupersecretpassword --download-dir=./ --type=all</code></li>
+</ul>
+<h1 id="troubleshooting">Troubleshooting</h1>
+<h3 id="i-forgot-my-password">I forgot my password !</h3>
+<p>Delete the file data/config.php and display the page again. You will be asked for a new login/password.</p>
+<h3 id="im-locked-out---login-bruteforce-protection">I'm locked out - Login bruteforce protection</h3>
+<p>Login form is protected against brute force attacks: 4 failed logins will ban the IP address from login for 30 minutes. Banned IPs can still browse links.</p>
+<p>To remove the current IP bans, delete the file <code>data/ipbans.php</code></p>
+<h3 id="list-of-all-login-attempts">List of all login attempts</h3>
+<p>The file <code>data/log.txt</code> shows all logins (successful or failed) and bans/lifted bans.<br />Search for <code>failed</code> in this file to look for unauthorized login attempts.</p>
+<h3 id="exporting-from-diigo">Exporting from Diigo</h3>
+<p>If you export your bookmark from Diigo, make sure you use the Delicious export, not the Netscape export. (Their Netscape export is broken, and they don't seem to be interested in fixing it.)</p>
+<h3 id="importing-from-semanticscuttle">Importing from SemanticScuttle</h3>
+<p>To correctly import the tags from a <a href="http://semanticscuttle.sourceforge.net/">SemanticScuttle</a> HTML export, edit the HTML file before importing and replace all occurences of <code>tags=</code> (lowercase) to <code>TAGS=</code> (uppercase).</p>
+<h3 id="importing-from-mister-wong">Importing from Mister Wong</h3>
+<p>See <a href="https://github.com/sebsauvage/Shaarli/issues/146">this issue</a> for import tweaks.</p>
+<h3 id="hosting-problems">Hosting problems</h3>
+<ul>
+<li>On <strong>free.fr</strong> : Please note that free uses php 5.1 and thus you will not have autocomplete in tag editing. Don't forget to create a <code>sessions</code> directory at the root of your webspace. Change the file extension to <code>.php5</code> or create a <code>.htaccess</code> file in the directory where Shaarli is located containing:</li>
+</ul>
+<pre><code>php 1
+SetEnv PHP_VER 5</code></pre>
+<ul>
+<li>If you have an error such as: <code>Parse error: syntax error, unexpected '=', expecting '(' in /links/index.php on line xxx</code>, it means that your host is using php4, not php5. Shaarli requires php 5.1. Try changing the file extension to <code>.php5</code><br /></li>
+<li>On <strong>1and1</strong> : If you add the link from the page (and not from the bookmarklet), Shaarli will no be able to get the title of the page. You will have to enter it manually. (Because they have disabled the ability to download a file through HTTP).<br /></li>
+<li>If you have the error <code>Warning: file_get_contents() [function.file-get-contents]: URL file-access is disabled in the server configuration in /…/index.php on line xxx</code>, it means that your host has disabled the ability to fetch a file by HTTP in the php config (Typically in 1and1 hosting). Bad host. Change host. Or comment the following lines:</li>
+</ul>
+<pre><code>//list($status,$headers,$data) = getHTTP($url,4); // Short timeout to keep the application responsive.
+// FIXME: Decode charset according to charset specified in either 1) HTTP response headers or 2) &lt;head&gt; in html 
+//if (strpos($status,&#39;200 OK&#39;)) $title=html_extract_title($data);</code></pre>
+<ul>
+<li>On hosts which forbid outgoing HTTP requests (such as free.fr), some thumbnails will not work.<br /></li>
+<li>On <strong>lost-oasis</strong>, RSS doesn't work correctly, because of this message at the begining of the RSS/ATOM feed : <code>&lt;? // tout ce qui est charge ici (generalement des includes et require) est charge en permanence. ?&gt;</code>. To fix this, remove this message from <code>php-include/prepend.php</code></li>
+</ul>
+<h3 id="dates-are-not-properly-formatted">Dates are not properly formatted</h3>
+<p>Shaarli tries to sniff the language of the browser (using HTTP_ACCEPT_LANGUAGE headers) and choose a date format accordingly. But Shaarli can only use the date formats (and more generaly speaking, the locales) provided by the webserver. So even if you have a browser in French, you may end up with dates in US format (it's the case on sebsauvage.net :-( )</p>
+<h3 id="problems-on-centos-servers">Problems on CentOS servers</h3>
+<p>On <strong>CentOS</strong>/RedHat derivatives, you may need to install the <code>php-mbstring</code> package.</p>
+<h3 id="my-session-expires-i-cant-stay-logged-in">My session expires ! I can't stay logged in</h3>
+<p>This can be caused by several things:</p>
+<ul>
+<li>Your php installation may not have a proper directory setup for session files. (eg. on Free.fr you need to create a <code>session</code> directory on the root of your website.) You may need to create the session directory of set it up.<br /></li>
+<li>Most hosts regularly clean the temporary and session directories. Your host may be cleaning those directories too aggressively (eg.OVH hosts), forcing an expire of the session. You may want to set the session directory in your web root. (eg. Create the <code>sessions</code> subdirectory and add <code>ini_set('session.save_path', $_SERVER['DOCUMENT_ROOT'].'/../sessions');</code>. Make sure this directory is not browsable !)<br /></li>
+<li>If your IP address changes during surfing, Shaarli will force expire your session for security reasons (to prevent session cookie hijacking). This can happen when surfing from WiFi or 3G (you may have switched WiFi/3G access point), or in some corporate/university proxies which use load balancing (and may have proxies with several external IP addresses).<br /></li>
+<li>Some browser addons may interfer with HTTP headers (ipfuck/ipflood/GreaseMonkey…). Try disabling those.<br /></li>
+<li>You may be using OperaTurbo or OperaMini, which use their own proxies which may change from time to time.<br /></li>
+<li>If you have another application on the same webserver where Shaarli is installed, these application may forcefully expire php sessions.</li>
+</ul>
+<h3 id="sessions-do-not-seem-to-work-correctly-on-your-server"><code>Sessions do not seem to work correctly on your server</code></h3>
+<p>Follow the instructions in the error message. Make sure you are accessing shaarli via a direct IP address or a proper hostname. If you have <strong>no dots</strong> in the hostname (e.g. <code>localhost</code> or <code>http://my-webserver/shaarli/</code>), some browsers will not store cookies at all (this respects the <a href="http://curl.haxx.se/rfc/cookie_spec.html">HTTP cookie specification</a>).</p>
+<h3 id="pubsubhubbub-support">pubsubhubbub support</h3>
+<p>Download <a href="https://pubsubhubbub.googlecode.com/git/publisher_clients/php/library/publisher.php">publisher.php</a> at the root of your Shaarli installation and set <code>$GLOBALS['config']['PUBSUBHUB_URL']</code> in your <code>config.php</code></p>
+<h1 id="notes">Notes</h1>
+<h3 id="various-hacks">Various hacks</h3>
+<ul>
+<li><a href="Example-patch---add-new-via-field-for-links">Example patch: add a new &quot;via&quot; field for links</a><br /></li>
+<li><a href="Copy-a-Shaarli-installation-over-SSH-SCP,-serve-it-locally-with-php-cli">Copy a Shaarli installation over SSH SCP, serve it locally with php cli</a><br /></li>
+<li>To display the array representing the data saved in datastore.php, use the following snippet (TODO where is it gone?)</li>
+</ul>
+<h3 id="changing-timestamp-for-a-link">Changing timestamp for a link</h3>
+<ul>
+<li>Look for <code>&lt;input type=&quot;hidden&quot; name=&quot;lf_linkdate&quot; value=&quot;{$link.linkdate}&quot;&gt;</code> in <code>tpl/editlink.tpl</code> (line 14)<br /></li>
+<li>Remove <code>type=&quot;hidden&quot;</code> from this line<br /></li>
+<li>A new date/time field becomes available in the edit/new link dialog. You can set the timestamp manually by entering it in the format <code>YYYMMDD_HHMMS</code>.</li>
+</ul>
+<pre><code>$data = &quot;tZNdb9MwFIb... &lt;Commented content inside datastore.php&gt;&quot;;
+$out = unserialize(gzinflate(base64_decode($data)));
+echo &quot;&lt;pre&gt;&quot;; // Pretty printing is love, pretty printing is life
+print_r($out);
+echo &quot;&lt;/pre&gt;&quot;;
+exit;</code></pre>
+<p>This will output the internal representation of the datastore, &quot;unobfuscated&quot; (if this can really be considered obfuscation)</p>
+<h1 id="related-software">Related software</h1>
+<p>Unofficial but relatedd work on Shaarli. If you maintain one of these, please get in touch with us to help us find a way to adapt your work to our fork. <strong>TODO</strong> contact repos owners to see if they'd like to standardize their work for the community fork.</p>
+<ul>
+<li><a href="https://github.com/nodiscc/shaarchiver">shaarchiver</a> - Archive your Shaarli bookmarks and their content<br /></li>
+<li><a href="http://sebsauvage.net/links/?ZAyDzg">Shaarli for Android</a> - Android application that adds Shaarli as a sharing provider<br /></li>
+<li><a href="https://play.google.com/store/apps/details?id=com.dimtion.shaarlier">Shaarlier for Android</a> - Android application to simply add links directly into your Shaarli<br /></li>
+<li><a href="https://github.com/mknexen/shaarli-river">shaarli-river</a> - an aggregator for shaarlis with many features<br /></li>
+<li><a href="https://github.com/DMeloni/shaarlo">Shaarlo</a> - an aggregator for shaarlis with many features (<a href="http://shaarli.fr/">Demo</a>)<br /></li>
+<li><a href="https://github.com/kalvn/shaarli-blocks">kalvn/shaarli-blocks</a> - A template/theme for Shaarli<br /></li>
+<li><a href="https://github.com/kalvn/Shaarli-Material">kalvn/Shaarli-Material</a> -<br />A theme (template) based on Google's Material Design for Shaarli, the superfast delicious clone.<br /></li>
+<li><a href="https://github.com/Vinm/Blue-theme-for-Shaarli">Vinm/Blue-theme-for Shaarli</a> - A template/theme for Shaarli (<a href="https://github.com/Vinm/Blue-theme-for-Shaarli/issues/2">unmaintained</a>, compatibility unknown)<br /></li>
+<li><a href="https://github.com/vivienhaese/shaarlitheme">vivienhaese/shaarlitheme</a> - A Shaarli fork meant to be run in an openshift instance<br /></li>
+<li><a href="https://github.com/jcsaaddupuy/tt-rss-shaarli">tt-rss-shaarli</a> - <a href="http://tt-rss.org/">TinyTiny RSS</a> plugin that adds support for sharing articles with Shaarli<br /></li>
+<li><a href="https://github.com/dhoko/ShaarliTemplate">dhoko/ShaarliTemplate</a> - A template/theme for Shaarli<br /></li>
+<li><a href="https://github.com/mknexen/shaarli-api">mknexen/shaarli-api</a> - a REST API for Shaarli<br /></li>
+<li><a href="https://github.com/alexisju/albinomouse-template">Albinomouse</a> - A full template for Shaarli<br /></li>
+<li><a href="https://github.com/BoboTiG/shaarlimages">Shaarlimages</a> - An image-oriented aggregator for Shaarlis<br /></li>
+<li><a href="https://github.com/AkibaTech/Shaarli---SuperHero-Theme">Shaarli Superhero Theme</a> - A template/theme for Shaarli<br /></li>
+<li><a href="https://github.com/misterair/limonade">Limonade</a> - A fork of Shaarli with a new template<br /></li>
+<li><a href="https://github.com/ahmet2mir/octopress-shaarli">octopress-shaarli</a> - octoprress plugin to retrieve SHaarli links on the sidebara<br /></li>
+<li><a href="https://github.com/bookieio/bookie">Bookie</a> - Another self-hostable, Free bookmark sharing software, written in Python<br /></li>
+<li><a href="https://github.com/plainmade/unmark">Unmark</a> - An open source to do app for bookmarks (<a href="https://unmark.it/">Homepage</a>)</li>
+</ul>
+<h1 id="other-links">Other links</h1>
+<ul>
+<li><a href="http://sebsauvage.net/links/">Liens en vrac de sebsauvage</a> - the original Shaarli<br /></li>
+<li><a href="http://porneia.free.fr/pub/links/ou-est-shaarli.html">A large list of Shaarlis</a><br /></li>
+<li><a href="https://raw.githubusercontent.com/Oros42/find_shaarlis/master/annuaires.json">A list of working Shaarli aggregators</a><br /></li>
+<li><a href="https://github.com/Oros42/shaarlis_list">A list of some known Shaarlis</a><br /></li>
+<li><a href="http://sebsauvage.net/rhaa/index.php?2011/09/16/09/29/58-adieu-delicious-diigo-et-stumbleupon-salut-shaarli-">Adieu Delicious, Diigo et StumbleUpon. Salut Shaarli ! - sebsauvage.net</a> (fr) <em>16/09/2011 - the original post about Shaarli</em><br /></li>
+<li><a href="http://sebsauvage.net/wiki/doku.php?id=php:shaarli:ideas">Original ideas/fixme/TODO page</a><br /></li>
+<li><a href="http://sebsauvage.net/wiki/doku.php?id=php:shaarli:discussion">Original discussion page</a> (fr)<br /></li>
+<li><a href="http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history">Original revisions history</a><br /></li>
+<li><a href="https://www.shaarli.fr/my.php">Shaarli.fr/my</a> - Unofficial, unsupported (old fork) hosted Shaarlis provider, courtesy of <a href="https://github.com/DMeloni">DMeloni</a><br /></li>
+<li><a href="http://shaarferme.etudiant-libre.fr.nf/index.php">Shaarli Communauty</a> - Another unofficial Shaarli hoster (unsupported, old fork), hoster unknown</li>
+</ul>
+<h1 id="faq">FAQ</h1>
+<h3 id="why-did-you-create-shaarli">Why did you create Shaarli ?</h3>
+<p>I was a StumbleUpon user. Then I got fed up with they big toolbar. I switched to delicious, which was lighter, faster and more beautiful. Until Yahoo bought it. Then the export API broke all the time, delicious became slow and was ditched by Yahoo. I switched to Diigo, which is not bad, but does too much. And Diigo is sslllooooowww and their Firefox extension a bit buggy. And… oh… <strong>their Firefox addon sends to Diigo every single URL you visit</strong> (Don't believe me ? Use <a href="https://addons.mozilla.org/en-US/firefox/addon/tamper-data/">Tamper Data</a> and open any page).</p>
+<p>Enough is enough. Saving simple links should not be a complicated heavy thing. I ditched them all and wrote my own: Shaarli. It's simple, but it does the job and does it well. And my data is not hosted on a foreign server, but on my server.</p>
+<h3 id="why-use-shaarli-and-not-deliciousdiigo">Why use Shaarli and not Delicious/Diigo ?</h3>
+<p>With Shaarli:</p>
+<ul>
+<li>The data is yours: It's hosted on your server.<br /></li>
+<li>Never fear of having your data locked-in.<br /></li>
+<li>Never fear to have your data sold to third party.<br /></li>
+<li>Your private links are not hosted on a third party server.<br /></li>
+<li>You are not tracked by browser addons (like Diigo does)<br /></li>
+<li>You can change the look and feel of the pages if you want.<br /></li>
+<li>You can change the behaviour of the program.<br /></li>
+<li>It's magnitude faster than most bookmarking services.</li>
+</ul>
+<h3 id="what-does-shaarli-mean">What does Shaarli mean ?</h3>
+<p>Shaarli is for shaaring your links.</p>
+<h1 id="technical-details">Technical details</h1>
+<ul>
+<li>Application is protected against XSRF (Cross-site requests forgery): Forms which act on data (save,delete…) contain a token generated by the server. Any posted form which does not contain a valid token is rejected. Any token can only be used once. Token are attached to the session and cannot be reused in another session.<br /></li>
+<li>Sessions automatically expires after 60 minutes. Sessions are protected against highjacking: The sessionID cannot be used from a different IP address.<br /></li>
+<li>An .htaccess file protects the data file.<br /></li>
+<li><p>Link database is an associative array which is serialized, compressed (with deflate), base64-encoded and saved as a comment in a .php file. Thus even if the server does not support htaccess files, the data file will still not be readable by URL. The database looks like this:</p>
+<pre><code>&lt;?php /* zP1ZjxxJtiYIvvevEPJ2lDOaLrZv7o...
+...ka7gaco/Z+TFXM2i7BlfMf8qxpaSSYfKlvqv/x8= */ ?&gt;</code></pre></li>
+<li>The password is salted, hashed and stored in the data subdirectory, in a php file, and protected by htaccess. Even if the webserver does not support htaccess, the hash is not readable by URL. Even if the .php file is stolen, the password cannot deduced from the hash. The salt prevents rainbow-tables attacks.<br /></li>
+<li>Shaarli relies on <code>HTTP_REFERER</code> for some functions (like redirects and clicking on tags). If you have disabled or masqueraded <code>HTTP_REFERER</code> in your browser, some features of Shaarli may not work<br /></li>
+<li><code>magic_quotes</code> is a horrible option of php which is often activated on servers. No serious developer should rely on this horror to secure their code against SQL injections. You should disable it (and Shaarli expects this option to be disabled). Nevertheless, I have added code to cope with magic_quotes on, so you should not be bothered even on crappy hosts.<br /></li>
+<li><p>Small hashes are used to make a link to an entry in Shaarli. They are unique. In fact, the date of the items (eg.20110923_150523) is hashed with CRC32, then converted to base64 and some characters are replaced. They are always 6 characters longs and use only A-Z a-z 0-9 - _ and @.</p></li>
+</ul>
+<h3 id="directory-structure">Directory structure</h3>
+<p>Here is the directory structure of Shaarli and the purpose of the different files:</p>
+<pre><code>    index.php : Main program.
+    COPYING : Shaarli license.
+    inc/ : Includes (libraries, CSS…)
+        shaarli.css : Shaarli stylesheet.
+        jquery.min.js : jQuery javascript library.
+        jquery-ui.min.js : jQuery-UI javascript library.
+        jquery-MIT-LICENSE.txt: jQuery license.
+        jquery.lazyload.min.js: LazyLoad javascript library.
+        rain.tpl.class.php : RainTPL templating library.
+    tpl/ : RainTPL templates for Shaarli. They are used to build the pages.
+    images/ : Images and icons used in Shaarli.
+    data/ : Directory where data is stored (bookmark database, configuration, logs, banlist…)
+        config.php : Shaarli configuration (login, password, timezone, title…)
+        datastore.php : Your link database (compressed).
+        ipban.php : IP address ban system data.
+        lastupdatecheck.txt : Update check timestamp file (used to check every 24 hours if a new version of Shaarli is available).
+        log.txt : login/IPban log.
+    cache/ : Directory containing the thumbnails cache. This directory is automatically created. You can erase it anytime you want.
+    tmp/ : Temporary directory for compiled RainTPL templates. This directory is automatically created. You can erase it anytime you want.</code></pre>
+<h3 id="why-not-use-a-real-database-files-are-slow">Why not use a real database ? Files are slow !</h3>
+<p>Does browsing <a href="http://sebsauvage.net/links/">this page</a> feel slow ? Try browsing older pages, too.</p>
+<p>It's not slow at all, is it ? And don't forget the database contains more than 16000 links, and it's on a shared host, with 32000 visitors/day for my website alone. And it's still damn fast. Why ?</p>
+<p>The data file is only 3.7 Mb. It's read 99% of the time, and is probably already in the operation system disk cache. So generating a page involves no I/O at all most of the time.</p>
+<h1 id="wiki---todo">Wiki - TODO</h1>
+<ul>
+<li>Translate (new page can be called Home.fr, Home.es ...) and linked from Home<br /></li>
+<li>add more screenshots<br /></li>
+<li>add developer documentation (storage architecture, classes and functions, security handling, ...)<br /></li>
+<li>Contact related projects<br /></li>
+<li>Add a Table of Contents to the wiki (can be added to the sidebar)</li>
+</ul>
+<p>...</p>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="github-markdown.css">
+</head>
+<body>
+<p>Example bash script:</p>
+<pre><code>#!/bin/bash
+#Description: Copy a Shaarli installation over SSH/SCP, serve it locally with php-cli
+#Will create a local-shaarli/ directory when you run it, backup your Shaarli there, and serve it locally.
+#Will NOT download linked pages. It&#39;s just a directly usable backup/copy/mirror of your Shaarli
+#Requires: ssh, scp and a working SSH access to the server where your Shaarli is installed
+#Usage: ./local-shaarli.sh
+#Author: nodiscc (nodiscc@gmail.com)
+#License: MIT (http://opensource.org/licenses/MIT)
+set -o errexit
+set -o nounset
+
+##### CONFIG #################
+#The port used by php&#39;s local server
+php_local_port=7431
+
+#Name of the SSH server and path where Shaarli is installed
+#TODO: pass these as command-line arguments
+remotehost=&quot;my.ssh.server&quot;
+remote_shaarli_dir=&quot;/var/www/shaarli&quot;
+
+
+###### FUNCTIONS #############
+_main() {
+    _CBSyncShaarli
+    _CBServeShaarli
+}
+
+_CBSyncShaarli() {
+    remote_temp_dir=$(ssh $remotehost mktemp -d)
+    remote_ssh_user=$(ssh $remotehost whoami)
+    ssh -t &quot;$remotehost&quot; sudo cp -r &quot;$remote_shaarli_dir&quot; &quot;$remote_temp_dir&quot;
+    ssh -t &quot;$remotehost&quot; sudo chown -R &quot;$remote_ssh_user&quot;:&quot;$remote_ssh_user&quot; &quot;$remote_temp_dir&quot;
+    scp -rq &quot;$remotehost&quot;:&quot;$remote_temp_dir&quot; local-shaarli
+    ssh &quot;$remotehost&quot; rm -r &quot;$remote_temp_dir&quot;
+}
+
+_CBServeShaarli() {
+    #TODO: allow serving a previously downloaded Shaarli
+    #TODO: ask before overwriting local copy, if it exists
+    cd local-shaarli/
+    php -S localhost:${php_local_port}
+    echo &quot;Please go to http://localhost:${php_local_port}&quot;
+}
+
+
+##### MAIN #################
+
+_main</code></pre>
+<p>This outputs:</p>
+<pre><code>$ ./local-shaarli.sh
+PHP 5.6.0RC4 Development Server started at Mon Sep  1 21:56:19 2014
+Listening on http://localhost:7431
+Document root is /home/user/local-shaarli/shaarli
+Press Ctrl-C to quit.
+
+[Mon Sep  1 21:56:27 2014] ::1:57868 [200]: /
+[Mon Sep  1 21:56:27 2014] ::1:57869 [200]: /index.html
+[Mon Sep  1 21:56:37 2014] ::1:57881 [200]: /...</code></pre>
+</body>
+</html>
