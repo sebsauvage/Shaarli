@@ -102,3 +102,9 @@ doc: clean
 		@rm -rf doc
 		@git clone https://github.com/shaarli/Shaarli.wiki.git doc
 		@rm -rf doc/.git
+
+### Convert local markdown documentation to HTML
+htmldoc:
+	for file in `find doc/ -maxdepth 1 -name "*.md"`; do \
+		pandoc -f markdown_github -t html5 -s -c "github-markdown.css" -o doc/`basename $$file .md`.html "$$file"; \
+	done;
