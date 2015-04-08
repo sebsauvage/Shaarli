@@ -307,9 +307,10 @@ function autoLocale()
     {   // (It's a bit crude, but it works very well. Preferred language is always presented first.)
         if (preg_match('/([a-z]{2})-?([a-z]{2})?/i',$_SERVER['HTTP_ACCEPT_LANGUAGE'],$matches)) {
             $loc = $matches[1] . (!empty($matches[2]) ? '_' . strtoupper($matches[2]) : '');
-            $attempts = array($loc, str_replace('_', '-', $loc),
-                $loc . '_' . strtoupper($loc), $loc . '_' . $loc,
-                $loc . '-' . strtoupper($loc), $loc . '-' . $loc);
+            $attempts = array($loc.'.UTF-8', $loc, str_replace('_', '-', $loc).'.UTF-8', str_replace('_', '-', $loc),
+                $loc . '_' . strtoupper($loc).'.UTF-8', $loc . '_' . strtoupper($loc), 
+                $loc . '_' . $loc.'.UTF-8', $loc . '_' . $loc, $loc . '-' . strtoupper($loc).'.UTF-8', 
+                $loc . '-' . strtoupper($loc), $loc . '-' . $loc.'.UTF-8', $loc . '-' . $loc);
         }
     }
     setlocale(LC_TIME, $attempts);  // LC_TIME = Set local for date/time format only.
