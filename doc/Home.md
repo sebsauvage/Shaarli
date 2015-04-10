@@ -8,6 +8,52 @@ If you'd like a feature added, see if it fits in the list of [Ideas for Plugins]
 
 _Note: This documentation is available online at https://github.com/shaarli/Shaarli/wiki, and locally in the `doc/` directory of your Shaarli installation._
 
+----------------------------------------------------------------------------------
+
+<!-- MarkdownTOC depth=3 -->
+
+- [Basic Usage](#basic-usage)
+	- [Add the sharing button (_bookmarklet_) to your browser](#add-the-sharing-button-_bookmarklet_-to-your-browser)
+	- [Share links using the _bookmarklet_](#share-links-using-the-_bookmarklet_)
+- [Other usage examples](#other-usage-examples)
+	- [Using Shaarli as a blog, notepad, pastebin...](#using-shaarli-as-a-blog-notepad-pastebin)
+	- [RSS Feeds or Picture Wall for a specific search/tag](#rss-feeds-or-picture-wall-for-a-specific-searchtag)
+- [Configuration](#configuration)
+	- [Main data/options.php file](#main-dataoptionsphp-file)
+	- [Changing theme](#changing-theme)
+	- [Changing template](#changing-template)
+- [Backup](#backup)
+- [Troubleshooting](#troubleshooting)
+	- [I forgot my password !](#i-forgot-my-password-)
+	- [I'm locked out - Login bruteforce protection](#im-locked-out---login-bruteforce-protection)
+	- [List of all login attempts](#list-of-all-login-attempts)
+	- [Exporting from Diigo](#exporting-from-diigo)
+	- [Importing from SemanticScuttle](#importing-from-semanticscuttle)
+	- [Importing from Mister Wong](#importing-from-mister-wong)
+	- [Hosting problems](#hosting-problems)
+	- [Dates are not properly formatted](#dates-are-not-properly-formatted)
+	- [Problems on CentOS servers](#problems-on-centos-servers)
+	- [My session expires ! I can't stay logged in](#my-session-expires--i-cant-stay-logged-in)
+	- [`Sessions do not seem to work correctly on your server`](#sessions-do-not-seem-to-work-correctly-on-your-server)
+	- [pubsubhubbub support](#pubsubhubbub-support)
+- [Notes](#notes)
+	- [Various hacks](#various-hacks)
+	- [Changing timestamp for a link](#changing-timestamp-for-a-link)
+- [Related software](#related-software)
+- [Other links](#other-links)
+- [FAQ](#faq)
+	- [Why did you create Shaarli ?](#why-did-you-create-shaarli-)
+	- [Why use Shaarli and not Delicious/Diigo ?](#why-use-shaarli-and-not-deliciousdiigo-)
+	- [What does Shaarli mean ?](#what-does-shaarli-mean-)
+- [Technical details](#technical-details)
+	- [Directory structure](#directory-structure)
+	- [Why not use a real database ? Files are slow !](#why-not-use-a-real-database--files-are-slow-)
+- [Wiki - TODO](#wiki---todo)
+
+<!-- /MarkdownTOC -->
+
+
+
 ------------------------------------------------------------------
 
 # Basic Usage
@@ -139,22 +185,23 @@ You have two ways of backing up your database:
  * This can be done using the [shaarchiver](https://github.com/nodiscc/shaarchiver) tool. Example command: `./export-bookmarks.py --url=https://my.server.com/shaarli --username=myusername --password=mysupersecretpassword --download-dir=./ --type=all`
 
 
-
-# Login bruteforce protection
-Login form is protected against brute force attacks: 4 failed logins will ban the IP address from login for 30 minutes. Banned IPs can still browse links.
-
-To remove the current IP bans, delete the file `data/ipbans.php`
-
-## List of all login attempts
-
-The file `data/log.txt` shows all logins (successful or failed) and bans/lifted bans.
-Search for `failed` in this file to look for unauthorized login attempts.
-
 # Troubleshooting
 
 ### I forgot my password !
 
 Delete the file data/config.php and display the page again. You will be asked for a new login/password.
+
+
+
+### I'm locked out - Login bruteforce protection
+Login form is protected against brute force attacks: 4 failed logins will ban the IP address from login for 30 minutes. Banned IPs can still browse links.
+
+To remove the current IP bans, delete the file `data/ipbans.php`
+
+### List of all login attempts
+
+The file `data/log.txt` shows all logins (successful or failed) and bans/lifted bans.
+Search for `failed` in this file to look for unauthorized login attempts.
 
 
 ### Exporting from Diigo
