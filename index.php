@@ -1775,7 +1775,6 @@ HTML;
 
     // -------- Otherwise, simply display search form and links:
     $PAGE = new pageBuilder;
-    $PAGE->assign('linkcount',count($LINKSDB));
     buildLinkList($PAGE,$LINKSDB); // Compute list of links to display
     $PAGE->renderPage('linklist');
     exit;
