@@ -34,7 +34,7 @@ $GLOBALS['config']['UPDATECHECK_INTERVAL'] = 86400 ; // Updates check frequency 
                                           // Note: You must have publisher.php in the same directory as Shaarli index.php
 $GLOBALS['config']['ARCHIVE_ORG'] = false; // For each link, add a link to an archived version on archive.org
 $GLOBALS['config']['ENABLE_RSS_PERMALINKS'] = true;  // Enable RSS permalinks by default. This corresponds to the default behavior of shaarli before this was added as an option.
-$GLOBALS['config']['DISABLE_PUBLIC_LINKS'] = false;
+$GLOBALS['config']['HIDE_PUBLIC_LINKS'] = false;
 // -----------------------------------------------------------------------------------------------
 // You should not touch below (or at your own risks!)
 // Optional config file.
@@ -1460,7 +1460,7 @@ function renderPage()
             $GLOBALS['privateLinkByDefault']=!empty($_POST['privateLinkByDefault']);
             $GLOBALS['config']['ENABLE_RSS_PERMALINKS']= !empty($_POST['enableRssPermalinks']);
             $GLOBALS['config']['ENABLE_UPDATECHECK'] = !empty($_POST['updateCheck']);
-            $GLOBALS['config']['DISABLE_PUBLIC_LINKS'] = !empty($_POST['disablePublicLinks']);
+            $GLOBALS['config']['HIDE_PUBLIC_LINKS'] = !empty($_POST['hidePublicLinks']);
             writeConfig();
             echo '<script>alert("Configuration was saved.");document.location=\'?do=tools\';</script>';
             exit;
@@ -1902,7 +1902,7 @@ function buildLinkList($PAGE,$LINKSDB)
         $search_type='permalink';
     }
     // We chose to disable all private links and the user isn't logged in, do not return any link.
-    else if ($GLOBALS['config']['DISABLE_PUBLIC_LINKS'] && !isLoggedIn())
+    else if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
         $linksToDisplay = array();
     else
         $linksToDisplay = $LINKSDB;  // Otherwise, display without filtering.
@@ -2334,7 +2334,7 @@ function writeConfig()
     $config .= '$GLOBALS[\'privateLinkByDefault\']='.var_export($GLOBALS['privateLinkByDefault'],true).'; ';
     $config .= '$GLOBALS[\'config\'][\'ENABLE_RSS_PERMALINKS\']='.var_export($GLOBALS['config']['ENABLE_RSS_PERMALINKS'], true).'; ';
     $config .= '$GLOBALS[\'config\'][\'ENABLE_UPDATECHECK\']='.var_export($GLOBALS['config']['ENABLE_UPDATECHECK'], true).'; ';
-    $config .= '$GLOBALS[\'config\'][\'DISABLE_PUBLIC_LINKS\']='.var_export($GLOBALS['config']['DISABLE_PUBLIC_LINKS'], true).'; ';
+    $config .= '$GLOBALS[\'config\'][\'HIDE_PUBLIC_LINKS\']='.var_export($GLOBALS['config']['HIDE_PUBLIC_LINKS'], true).'; ';
     $config .= ' ?>';
     if (!file_put_contents($GLOBALS['config']['CONFIG_FILE'],$config) || strcmp(file_get_contents($GLOBALS['config']['CONFIG_FILE']),$config)!=0)
     {
