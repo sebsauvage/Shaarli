@@ -42,6 +42,12 @@ It is designed to be personal (single-user), fast and handy.
  * You will be automatically notified by a discreet popup if a new version is available
  * **Shaarli is a bookmarking application, but you can use it for micro-blogging (like Twitter), a pastebin, an online notepad, a snippet repository, etc. See [Usage examples](https://github.com/shaarli/Shaarli/wiki#usage-examples)**
 
+## Demo
+You can use this [public demo instance of Shaarli](http://shaarlidemo.tuxfamily.org/Shaarli). This demo runs the latest _development version_ of Shaarli and is updated/reset every day.
+
+Login: `demo`
+Password: `demo`
+
 
 ## Links
 
