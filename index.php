@@ -555,9 +555,12 @@ function endsWith($haystack,$needle,$case=true)
     PS: I could have used strptime(), but it does not exist on Windows. I'm too kind. */
 function linkdate2timestamp($linkdate)
 {
-    $Y=$M=$D=$h=$m=$s=0;
-    sscanf($linkdate,'%4d%2d%2d_%2d%2d%2d',$Y,$M,$D,$h,$m,$s);
-    return mktime($h,$m,$s,$M,$D,$Y);
+    if(strcmp($linkdate, '_000000') !== 0 || !$linkdate){
+        $Y=$M=$D=$h=$m=$s=0;
+        $r = sscanf($linkdate,'%4d%2d%2d_%2d%2d%2d',$Y,$M,$D,$h,$m,$s);
+        return mktime($h,$m,$s,$M,$D,$Y);
+    }
+    return time();
 }
 
 /*  Converts a linkdate time (YYYYMMDD_HHMMSS) of an article to a RFC822 date.
