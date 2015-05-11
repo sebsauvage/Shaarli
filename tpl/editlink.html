@@ -9,7 +9,9 @@
 {elseif="$link.description==''"}onload="document.linkform.lf_description.focus();"
 {else}onload="document.linkform.lf_tags.focus();"{/if} >
 <div id="pageheader">
+	{if="$source !== 'firefoxsocialapi'"}
 	{include="page.header"}
+	{/if}
 	<div id="editlinkform">
 	    <form method="post" name="linkform">
 	        <input type="hidden" name="lf_linkdate" value="{$link.linkdate}">
@@ -34,7 +36,9 @@
 	    </form>
 	</div>
 </div>
+{if="$source !== 'firefoxsocialapi'"}
 {include="page.footer"}
+{/if}
 {if="($GLOBALS['config']['OPEN_SHAARLI'] || isLoggedIn())"}
 <script>
     $ = Awesomplete.$;
