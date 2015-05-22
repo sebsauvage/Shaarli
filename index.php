@@ -946,8 +946,12 @@ function showRSS()
     // Optionally filter the results:
     $linksToDisplay=array();
     if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
-    elseif (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
+    else if (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
     else $linksToDisplay = $LINKSDB;
+    
+    if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
+        $linksToDisplay = array();
+        
     $nblinksToDisplay = 50;  // Number of links to display.
     if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
     {
@@ -1021,8 +1025,12 @@ function showATOM()
     // Optionally filter the results:
     $linksToDisplay=array();
     if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
-    elseif (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
+    else if (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
     else $linksToDisplay = $LINKSDB;
+    
+    if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
+        $linksToDisplay = array();
+        
     $nblinksToDisplay = 50;  // Number of links to display.
     if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
     {
@@ -1182,6 +1190,8 @@ function showDaily()
     }
 
     $linksToDisplay=$LINKSDB->filterDay($day);
+    if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
+        $linksToDisplay = array();
     // We pre-format some fields for proper output.
     foreach($linksToDisplay as $key=>$link)
     {
@@ -1260,6 +1270,10 @@ function renderPage()
         if (!empty($_GET['searchterm'])) $links = $LINKSDB->filterFulltext($_GET['searchterm']);
         elseif (!empty($_GET['searchtags']))   $links = $LINKSDB->filterTags(trim($_GET['searchtags']));
         else $links = $LINKSDB;
+        
+        if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
+            $links = array();
+            
         $body='';
         $linksToDisplay=array();
 
@@ -1274,6 +1288,7 @@ function renderPage()
                 $linksToDisplay[]=$link; // Add to array.
             }
         }
+            
         $PAGE = new pageBuilder;
         $PAGE->assign('linkcount',count($LINKSDB));
         $PAGE->assign('linksToDisplay',$linksToDisplay);
@@ -1285,6 +1300,8 @@ function renderPage()
     if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=tagcloud'))
     {
         $tags= $LINKSDB->allTags();
+        if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
+            $tags = array();
         // We sort tags alphabetically, then choose a font size according to count.
         // First, find max value.
         $maxcount=0; foreach($tags as $key=>$value) $maxcount=max($maxcount,$value);
@@ -1884,12 +1901,16 @@ function buildLinkList($PAGE,$LINKSDB)
     if (isset($_GET['searchterm'])) // Fulltext search
     {
         $linksToDisplay = $LINKSDB->filterFulltext(trim($_GET['searchterm']));
+        if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
+            $linksToDisplay = array();  
         $search_crits=htmlspecialchars(trim($_GET['searchterm']));
         $search_type='fulltext';
     }
     elseif (isset($_GET['searchtags'])) // Search by tag
     {
         $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
+        if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
+            $linksToDisplay = array();
         $search_crits=explode(' ',trim($_GET['searchtags']));
         $search_type='tags';
     }
