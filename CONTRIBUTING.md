@@ -1,0 +1,80 @@
+## Contributing to Shaarli (community repository)
+
+### Bugs and feature requests
+**Reporting bugs, feature requests: issues management**
+
+You can look through existing bugs/requests and help reporting them [here](https://github.com/shaarli/Shaarli/issues).
+
+Constructive input/experience reports/helping other users is welcome.
+
+The general guideline of the fork is to keep Shaarli simple (project and code maintenance, and features-wise), while providing customization capabilities (plugin system, making more settings configurable).
+
+Check the [milestones](https://github.com/shaarli/Shaarli/milestones) to see what issues have priority.
+
+ * The issues list should preferably contain **only tasks that can be actioned immediately**. Anyone should be able to open the issues list, pick one and start working on it immediately.
+ * If you have a clear idea of a **feature you expect, or have a specific bug/defect to report**, [search the issues list, both open and closed](https://github.com/shaarli/Shaarli/issues?q=is%3Aissue) to check if it has been discussed, and comment on the appropriate issue. If you can't find one, please open a [new issue](https://github.com/shaarli/Shaarli/issues/new)
+ * **General discussions** fit in #44 so that we don't follow a slope where users and contributors have to track 90 "maybe" items in the bug tracker. Separate issues about clear, separate steps can be opened after discussion.
+ * You can also join instant discussion at https://gitter.im/shaarli/Shaarli, or via IRC as described [here](https://github.com/shaarli/Shaarli/issues/44#issuecomment-77745105)
+ 
+### Documentation
+**the [wiki](https://github.com/shaarli/Shaarli/wiki) is world-writable** - anyone can edit or add chapters and pages.
+
+ * Large changes should preferably be discussed in [General discussion](https://github.com/shaarli/Shaarli/issues/44) beforehand (you can post a draft there and edit it).
+ * If you create a new page, please link it from the new page (eg from the [Other links](https://github.com/shaarli/Shaarli/wiki#other-links) section.
+ * The wiki is a general documentation about Shaarli:  usage, development, hacks, usage tricks, related links, projects. Try to keep it organized.
+ * The wiki will be synced to Shaarli's `doc/` directory on each release. Keep that in mind when reviewing the quality of your edits.
+
+You can make the project known by publishing blog posts/articles/videos about it and adding them to the links section in the wiki.
+
+### Translations
+Currently Shaarli has no translation/internationalization/localization system available and is single-language. You can help by proposing an i18n system (issue https://github.com/shaarli/Shaarli/issues/121)
+
+### Beta testing
+You can help testing Shaarli releases by immediately upgrading your installation after a [new version has been releases](https://github.com/shaarli/Shaarli/releases).
+
+All current development happens in [Pull Requests](https://github.com/shaarli/Shaarli/pulls). You can test proposed patches by cloning the Shaarli repo, adding the Pull Request branch and `git checkout` to it. You can also merge multiple Pull Requests to a testing branch.
+
+```bash
+git clone https://github.com/shaarli/Shaarli
+git remote add pull-request-25 owner/cool-new-feature
+git remote add pull-request-26 anotherowner/bugfix
+git remote update
+git checkout -b testing
+git merge cool-new-feature
+git merge bugfix
+```
+
+Please report any problem you might find.
+
+
+### Contributing code
+
+#### Adding your own changes
+
+ * Pick or open an issue
+ * Fork the Shaarli repository on github
+ * `git clone`  your fork
+ * starting from branch ` master`, switch to a new branch (eg. `git checkout -b my-awesome-feature`)
+ * edit the required files (from the Github web interface or your text editor)
+ * add and commit your changes with a meaningful commit message (eg `Cool new feature, fixes issue #1001`)
+ * Open your fork in the Github web interface and click the "Compare and Pull Request" button, enter required info and submit your Pull Request.
+
+All changes you will do on the `my-awesome-feature`  in the future will be added to your Pull Request. Don't work directly on the master branch, don't do unrelated work on your  `my-awesome-feature` branch.
+
+#### Contributing to an existing Pull Request
+
+TODO
+
+#### Useful links
+If you are not familiar with Git or Github, here are a few links to set you on track:
+
+ * https://try.github.io/ - 10 minutes Github workflow interactive tutorial
+ * http://ndpsoftware.com/git-cheatsheet.html - A Git cheatsheet
+ * http://www.wei-wang.com/ExplainGitWithD3 - Helps you understand some basic Git concepts visually
+ * https://www.atlassian.com/git/tutorial - Git tutorials
+ * https://www.atlassian.com/git/workflows - Git workflows
+ * http://git-scm.com/book - The official Git book, multiple languages
+ * http://www.vogella.com/tutorials/Git/article.html - Git tutorials
+ * http://think-like-a-git.net/resources.html - Guide to Git
+ * http://gitready.com/ - medium to advanced Git docs/tips/blog/articles
+ * https://github.com/btford/participating-in-open-source - Participating in Open Source
