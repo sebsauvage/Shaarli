@@ -2018,6 +2018,7 @@ function buildLinkList($PAGE,$LINKSDB)
     $PAGE->assign('redirector',empty($GLOBALS['redirector']) ? '' : $GLOBALS['redirector']); // Optional redirector URL.
     $PAGE->assign('token',$token);
     $PAGE->assign('links',$linkDisp);
+    $PAGE->assign('tags', $LINKSDB->allTags());
     return;
 }
 
