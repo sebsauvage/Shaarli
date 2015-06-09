@@ -794,6 +794,12 @@ class linkdb implements Iterator, Countable, ArrayAccess
     // Read database from disk to memory
     private function readdb()
     {
+        // Public links are hidden and user not logged in => nothing to show
+        if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn()) {
+            $this->links = array();
+            return;
+        }
+
         // Read data
         $this->links=(file_exists($GLOBALS['config']['DATASTORE']) ? unserialize(gzinflate(base64_decode(substr(file_get_contents($GLOBALS['config']['DATASTORE']),strlen(PHPPREFIX),-strlen(PHPSUFFIX))))) : array() );
         // Note that gzinflate is faster than gzuncompress. See: http://www.php.net/manual/en/function.gzdeflate.php#96439
@@ -948,9 +954,6 @@ function showRSS()
     if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
     else if (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
     else $linksToDisplay = $LINKSDB;
-    
-    if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
-        $linksToDisplay = array();
         
     $nblinksToDisplay = 50;  // Number of links to display.
     if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
@@ -1027,9 +1030,6 @@ function showATOM()
     if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
     else if (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
     else $linksToDisplay = $LINKSDB;
-    
-    if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
-        $linksToDisplay = array();
         
     $nblinksToDisplay = 50;  // Number of links to display.
     if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
@@ -1190,8 +1190,7 @@ function showDaily()
     }
 
     $linksToDisplay=$LINKSDB->filterDay($day);
-    if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
-        $linksToDisplay = array();
+
     // We pre-format some fields for proper output.
     foreach($linksToDisplay as $key=>$link)
     {
@@ -1270,9 +1269,6 @@ function renderPage()
         if (!empty($_GET['searchterm'])) $links = $LINKSDB->filterFulltext($_GET['searchterm']);
         elseif (!empty($_GET['searchtags']))   $links = $LINKSDB->filterTags(trim($_GET['searchtags']));
         else $links = $LINKSDB;
-        
-        if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
-            $links = array();
             
         $body='';
         $linksToDisplay=array();
@@ -1300,8 +1296,7 @@ function renderPage()
     if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=tagcloud'))
     {
         $tags= $LINKSDB->allTags();
-        if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
-            $tags = array();
+
         // We sort tags alphabetically, then choose a font size according to count.
         // First, find max value.
         $maxcount=0; foreach($tags as $key=>$value) $maxcount=max($maxcount,$value);
@@ -1914,16 +1909,12 @@ function buildLinkList($PAGE,$LINKSDB)
     if (isset($_GET['searchterm'])) // Fulltext search
     {
         $linksToDisplay = $LINKSDB->filterFulltext(trim($_GET['searchterm']));
-        if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
-            $linksToDisplay = array();  
         $search_crits=htmlspecialchars(trim($_GET['searchterm']));
         $search_type='fulltext';
     }
     elseif (isset($_GET['searchtags'])) // Search by tag
     {
         $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
-        if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
-            $linksToDisplay = array();
         $search_crits=explode(' ',trim($_GET['searchtags']));
         $search_type='tags';
     }
@@ -1939,9 +1930,6 @@ function buildLinkList($PAGE,$LINKSDB)
         }
         $search_type='permalink';
     }
-    // We chose to disable all private links and the user isn't logged in, do not return any link.
-    else if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn())
-        $linksToDisplay = array();
     else
         $linksToDisplay = $LINKSDB;  // Otherwise, display without filtering.
 
