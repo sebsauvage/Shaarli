@@ -6,7 +6,7 @@
 <div class="center">
     <div id="cloudtag">
         {loop="tags"}
-        <span class="count">{$value.count}</span><a href="?searchtags={$key|urlencode}" style="font-size:{$value.size}pt;">{$key|htmlspecialchars}</a>
+        <span class="count">{$value.count}</span><a href="?searchtags={$key|urlencode}" style="font-size:{$value.size}pt;">{$key}</a>
         {/loop}
     </div>
 </div>
