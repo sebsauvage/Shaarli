@@ -339,6 +339,16 @@ h1 {
     font-size: inherit;
 }
 
+#headerform label {
+    margin-right: 10px;
+}
+
+#headerform label[for=longlastingsession] {
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+}
+
 #toolsdiv {
     color: #ffffff;
     padding: 5px 5px 5px 5px;
