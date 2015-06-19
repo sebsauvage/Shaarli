@@ -10,10 +10,12 @@
     You have been banned from login after too many failed attempts. Try later.
 {else}
     <form method="post" name="loginform">
-    Login: <input type="text" name="login" tabindex="1">&nbsp;&nbsp;&nbsp;
-    Password : <input type="password" name="password" tabindex="2">
-    <input type="submit" value="Login" class="bigbutton" tabindex="4"><br>
-    <input type="checkbox" name="longlastingsession" id="longlastingsession" tabindex="3"><label for="longlastingsession">&nbsp;Stay signed in (Do not check on public computers)</label>
+    <label for="login">Login: <input type="text" id="login" name="login" tabindex="1"></label>
+    <label for="password">Password: <input type="password" id="password" name="password" tabindex="2"></label>
+    <input type="submit" value="Login" class="bigbutton" tabindex="4">
+    <label for="longlastingsession">
+    <input type="checkbox" name="longlastingsession" id="longlastingsession" tabindex="3">
+    Stay signed in (Do not check on public computers)</label>
     <input type="hidden" name="token" value="{$token}">
     {if="$returnurl"}<input type="hidden" name="returnurl" value="{$returnurl|htmlspecialchars}">{/if}
     </form>

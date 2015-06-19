@@ -975,6 +975,20 @@ div.dailyNoEntry {
 	margin: 3px;
     }
 
+    #headerform label {
+    width: 100%;
+    display: block;
+    height: auto;
+    line-height: 25px;
+    padding-bottom: 10px;
+    }
+
+    #headerform label input[type=text],
+    #headerform label input[type=password]{
+    float: right;
+    width: 70%;
+    }
+
     .searchform, .tagfilter {
 	display: block !important;
 	margin: 0px 3px 7px 0px !important;
