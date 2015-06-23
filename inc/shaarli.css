@@ -221,8 +221,17 @@ h1 {
     margin-left:24px;
 }
 
+.tagfilter div.awesomplete {
+    width: inherit;
+}
+
 .tagfilter #tagfilter_value {
-    width: 10%;
+    width: 100%;
+    display: inline;
+}
+
+.tagfilter li {
+    color: black;
 }
 
 .tagfilter input.bigbutton, .searchform input.bigbutton, .addform input.bigbutton {
