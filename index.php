@@ -269,23 +269,6 @@ function logm($message)
     file_put_contents($GLOBALS['config']['DATADIR'].'/log.txt',$t,FILE_APPEND);
 }
 
-// Same as nl2br(), but escapes < and >
-function nl2br_escaped($html)
-{
-    return str_replace('>','&gt;',str_replace('<','&lt;',nl2br($html)));
-}
-
-function escape($str) {
-    return htmlspecialchars($str, ENT_COMPAT, 'UTF-8', false);
-}
-
-function sanitizeLink(&$link) {
-    $link['url'] = escape($link['url']); // useful?
-    $link['title'] = escape($link['title']);
-    $link['description'] = escape($link['description']);
-    $link['tags'] = escape($link['tags']);
-}
-
 // In a string, converts URLs to clickable links.
 // Function inspired from http://www.php.net/manual/en/function.preg-replace.php#85722
 function text2clickable($url)

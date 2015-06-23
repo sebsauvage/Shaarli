@@ -42,4 +42,31 @@ function endsWith($haystack, $needle, $case=true)
     }
     return (strcasecmp(substr($haystack, strlen($haystack) - strlen($needle)), $needle) === 0);
 }
+
+/**
+ * Same as nl2br(), but escapes < and >
+ */
+function nl2br_escaped($html)
+{
+    return str_replace('>','&gt;',str_replace('<','&lt;',nl2br($html)));
+}
+
+/**
+ * htmlspecialchars wrapper
+ */
+function escape($str)
+{
+    return htmlspecialchars($str, ENT_COMPAT, 'UTF-8', false);
+}
+
+/**
+ * Link sanitization before templating
+ */
+function sanitizeLink(&$link)
+{
+    $link['url'] = escape($link['url']); // useful?
+    $link['title'] = escape($link['title']);
+    $link['description'] = escape($link['description']);
+    $link['tags'] = escape($link['tags']);
+}
 ?>
