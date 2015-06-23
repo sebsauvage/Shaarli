@@ -179,11 +179,15 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         // Create a dummy database for example
         $this->links = array();
         $link = array(
-            'title'=>'Shaarli - sebsauvage.net',
-            'url'=>'http://sebsauvage.net/wiki/doku.php?id=php:shaarli',
-            'description'=>'Welcome to Shaarli! This is a bookmark. To edit or delete me, you must first login.',
+            'title'=>' Shaarli: the personal, minimalist, super-fast, no-database delicious clone',
+            'url'=>'https://github.com/shaarli/Shaarli/wiki',
+            'description'=>'Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.
+
+To learn how to use Shaarli, consult the link "Help/documentation" at the bottom of this page.
+
+You use the community supported version of the original Shaarli project, by Sebastien Sauvage.',
             'private'=>0,
-            'linkdate'=>'20110914_190000',
+            'linkdate'=> date('Ymd_His'),
             'tags'=>'opensource software'
         );
         $this->links[$link['linkdate']] = $link;
@@ -191,9 +195,9 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         $link = array(
             'title'=>'My secret stuff... - Pastebin.com',
             'url'=>'http://sebsauvage.net/paste/?8434b27936c09649#bR7XsXhoTiLcqCpQbmOpBi3rq2zzQUC5hBI7ZT1O3x8=',
-            'description'=>'SShhhh!!  I\'m a private link only YOU can see. You can delete me too.',
+            'description'=>'Shhhh! I\'m a private link only YOU can see. You can delete me too.',
             'private'=>1,
-            'linkdate'=>'20110914_074522',
+            'linkdate'=> date('Ymd_His', strtotime('-1 minute')),
             'tags'=>'secretstuff'
         );
         $this->links[$link['linkdate']] = $link;
