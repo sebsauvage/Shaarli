@@ -41,8 +41,8 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
         self::$refDB->write(self::$testDatastore, PHPPREFIX, PHPSUFFIX);
 
         $GLOBALS['config']['DATASTORE'] = self::$testDatastore;
-        self::$publicLinkDB = new LinkDB(false);
-        self::$privateLinkDB = new LinkDB(true);
+        self::$publicLinkDB = new LinkDB(false, false);
+        self::$privateLinkDB = new LinkDB(true, false);
     }
 
     /**
@@ -76,7 +76,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructLoggedIn()
     {
-        new LinkDB(true);
+        new LinkDB(true, false);
         $this->assertFileExists(self::$testDatastore);
     }
 
@@ -85,7 +85,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructLoggedOut()
     {
-        new LinkDB(false);
+        new LinkDB(false, false);
         $this->assertFileExists(self::$testDatastore);
     }
 
@@ -98,7 +98,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     public function testConstructDatastoreNotWriteable()
     {
         $GLOBALS['config']['DATASTORE'] = 'null/store.db';
-        new LinkDB(false);
+        new LinkDB(false, false);
     }
 
     /**
@@ -106,7 +106,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     public function testCheckDBNew()
     {
-        $linkDB = new LinkDB(false);
+        $linkDB = new LinkDB(false, false);
         unlink(self::$testDatastore);
         $this->assertFileNotExists(self::$testDatastore);
 
@@ -126,7 +126,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     public function testCheckDBLoad()
     {
-        $linkDB = new LinkDB(false);
+        $linkDB = new LinkDB(false, false);
         $this->assertEquals(
             self::$dummyDatastoreSHA1,
             sha1_file(self::$testDatastore)
@@ -148,7 +148,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     public function testReadEmptyDB()
     {
         file_put_contents(self::$testDatastore, PHPPREFIX.'S7QysKquBQA='.PHPSUFFIX);
-        $emptyDB = new LinkDB(false);
+        $emptyDB = new LinkDB(false, false);
         $this->assertEquals(0, sizeof($emptyDB));
         $this->assertEquals(0, count($emptyDB));
     }
@@ -180,7 +180,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveDB()
     {
-        $testDB = new LinkDB(true);
+        $testDB = new LinkDB(true, false);
         $dbSize = sizeof($testDB);
 
         $link = array(
@@ -198,7 +198,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
 
         $testDB->savedb();
 
-        $testDB = new LinkDB(true);
+        $testDB = new LinkDB(true, false);
         $this->assertEquals($dbSize + 1, sizeof($testDB));
     }
 
@@ -214,6 +214,23 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             self::$refDB->countLinks(),
             self::$privateLinkDB->count()
+        );
+    }
+
+    /**
+     * Count existing links - public links hidden
+     */
+    public function testCountHiddenPublic()
+    {
+        $linkDB = new LinkDB(false, true);
+
+        $this->assertEquals(
+            0,
+            $linkDB->count()
+        );
+        $this->assertEquals(
+            0,
+            $linkDB->count()
         );
     }
 

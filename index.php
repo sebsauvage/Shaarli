@@ -702,7 +702,11 @@ function showRSS()
     $cached = $cache->cachedVersion(); if (!empty($cached)) { echo $cached; exit; }
 
     // If cached was not found (or not usable), then read the database and build the response:
-    $LINKSDB = new LinkDB(isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI']); // Read links from database (and filter private links if user it not logged in).
+    $LINKSDB = new LinkDB(
+        isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
+        $GLOBALS['config']['HIDE_PUBLIC_LINKS']
+    );
+    // Read links from database (and filter private links if user it not logged in).
 
     // Optionally filter the results:
     $linksToDisplay=array();
@@ -777,8 +781,10 @@ function showATOM()
     $cached = $cache->cachedVersion(); if (!empty($cached)) { echo $cached; exit; }
     // If cached was not found (or not usable), then read the database and build the response:
 
-    $LINKSDB = new LinkDB(isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI']);  // Read links from database (and filter private links if used it not logged in).
-
+    $LINKSDB = new LinkDB(
+        isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
+        $GLOBALS['config']['HIDE_PUBLIC_LINKS']
+    );
 
     // Optionally filter the results:
     $linksToDisplay=array();
@@ -859,7 +865,11 @@ function showDailyRSS()
     $cache = new pageCache(pageUrl(),startsWith($query,'do=dailyrss') && !isLoggedIn());
     $cached = $cache->cachedVersion(); if (!empty($cached)) { echo $cached; exit; }
     // If cached was not found (or not usable), then read the database and build the response:
-    $LINKSDB = new LinkDB(isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI']);  // Read links from database (and filter private links if used it not logged in).
+
+    $LINKSDB = new LinkDB(
+        isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
+        $GLOBALS['config']['HIDE_PUBLIC_LINKS']
+    );
 
     /* Some Shaarlies may have very few links, so we need to look
        back in time (rsort()) until we have enough days ($nb_of_days).
@@ -927,8 +937,10 @@ function showDailyRSS()
 // "Daily" page.
 function showDaily()
 {
-    $LINKSDB = new LinkDB(isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI']);  // Read links from database (and filter private links if used it not logged in).
-
+    $LINKSDB = new LinkDB(
+        isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
+        $GLOBALS['config']['HIDE_PUBLIC_LINKS']
+    );
 
     $day=Date('Ymd',strtotime('-1 day')); // Yesterday, in format YYYYMMDD.
     if (isset($_GET['day'])) $day=$_GET['day'];
@@ -993,7 +1005,10 @@ function showDaily()
 // Render HTML page (according to URL parameters and user rights)
 function renderPage()
 {
-    $LINKSDB = new LinkDB(isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI']);  // Read links from database (and filter private links if used it not logged in).
+    $LINKSDB = new LinkDB(
+        isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
+        $GLOBALS['config']['HIDE_PUBLIC_LINKS']
+    );
 
     // -------- Display login form.
     if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=login'))
@@ -1571,7 +1586,10 @@ HTML;
 function importFile()
 {
     if (!(isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'])) { die('Not allowed.'); }
-    $LINKSDB = new LinkDB(isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI']);   // Read links from database (and filter private links if used it not logged in).
+    $LINKSDB = new LinkDB(
+        isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
+        $GLOBALS['config']['HIDE_PUBLIC_LINKS']
+    );
     $filename=$_FILES['filetoupload']['name'];
     $filesize=$_FILES['filetoupload']['size'];
     $data=file_get_contents($_FILES['filetoupload']['tmp_name']);

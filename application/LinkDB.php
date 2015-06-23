@@ -45,6 +45,9 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     // Is the user logged in? (used to filter private links)
     private $loggedIn;
 
+    // Hide public links
+    private $hidePublicLinks;
+
     /**
      * Creates a new LinkDB
      *
@@ -52,10 +55,11 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      *
      * @param $isLoggedIn is the user logged in?
      */
-    function __construct($isLoggedIn)
+    function __construct($isLoggedIn, $hidePublicLinks)
     {
         // FIXME: do not access $GLOBALS, pass the datastore instead
         $this->loggedIn = $isLoggedIn;
+        $this->hidePublicLinks = $hidePublicLinks;
         $this->checkDB();
         $this->readdb();
     }
@@ -210,7 +214,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     {
 
         // Public links are hidden and user not logged in => nothing to show
-        if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn()) {
+        if ($this->hidePublicLinks && !$this->loggedIn) {
             $this->links = array();
             return;
         }
