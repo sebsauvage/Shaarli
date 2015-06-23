@@ -221,12 +221,7 @@ h1 {
     margin-left:24px;
 }
 
-.tagfilter div.awesomplete {
-    width: 20%;
-}
-
 .tagfilter #tagfilter_value {
-    width: 100%;
     display: inline;
 }
 
