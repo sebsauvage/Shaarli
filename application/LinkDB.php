@@ -208,6 +208,13 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      */
     private function readdb()
     {
+
+        // Public links are hidden and user not logged in => nothing to show
+        if ($GLOBALS['config']['HIDE_PUBLIC_LINKS'] && !isLoggedIn()) {
+            $this->links = array();
+            return;
+        }
+
         // Read data
         // Note that gzinflate is faster than gzuncompress.
         // See: http://www.php.net/manual/en/function.gzdeflate.php#96439
