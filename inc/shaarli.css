@@ -348,6 +348,16 @@ h1 {
     font-size: inherit;
 }
 
+#headerform label {
+    margin-right: 10px;
+}
+
+#headerform label[for=longlastingsession] {
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+}
+
 #toolsdiv {
     color: #ffffff;
     padding: 5px 5px 5px 5px;
@@ -982,6 +992,20 @@ div.dailyNoEntry {
 	padding: 5px;
 	border-radius: 3px 3px 3px 3px;
 	margin: 3px;
+    }
+
+    #headerform label {
+    width: 100%;
+    display: block;
+    height: auto;
+    line-height: 25px;
+    padding-bottom: 10px;
+    }
+
+    #headerform label input[type=text],
+    #headerform label input[type=password]{
+    float: right;
+    width: 70%;
     }
 
     .searchform, .tagfilter {
