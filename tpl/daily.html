@@ -36,12 +36,12 @@
                         {if="$link.tags"}
                             <div class="dailyEntryTags">
                                 {loop="link.taglist"}
-                                    {$value|htmlspecialchars} -
+                                    {$value} -
                                 {/loop}
                             </div>
                         {/if}
                         <div class="dailyEntryTitle">
-                            <a href="{$link.url}">{$link.title|htmlspecialchars}</a>
+                            <a href="{$link.url}">{$link.title}</a>
                         </div>
                         {if="$link.thumbnail"}
                             <div class="dailyEntryThumbnail">{$link.thumbnail}</div>

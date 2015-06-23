@@ -249,6 +249,11 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         foreach ($this->links as $link) {
             $this->urls[$link['url']] = $link['linkdate'];
         }
+
+        // Escape links data
+        foreach($this->links as &$link) { 
+            sanitizeLink($link); 
+        }
     }
 
     /**
