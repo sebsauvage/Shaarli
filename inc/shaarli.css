@@ -344,6 +344,7 @@ h1 {
 }
 
 #headerform label {
+    cursor: pointer;
     margin-right: 10px;
 }
 
