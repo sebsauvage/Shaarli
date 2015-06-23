@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.5/phpunit.xsd"
+    colors="true">
+  <filter>
+    <whitelist addUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">application</directory>
+    </whitelist>
+  </filter>
+  <logging>
+    <log type="coverage-html" target="coverage" lowUpperBound="30" highLowerBound="80"/>
+    <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
+  </logging>
+</phpunit>

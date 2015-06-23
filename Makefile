@@ -8,12 +8,15 @@
 # - install/update test dependencies:
 #   $ composer install  # 1st setup
 #   $ composer update
+# - install Xdebug for PHPUnit code coverage reports:
+#   - see http://xdebug.org/docs/install
+#   - enable in php.ini
 
 BIN = vendor/bin
-PHP_SOURCE = index.php
-MESS_DETECTOR_RULES = cleancode,codesize,controversial,design,naming,unusedcode
+PHP_SOURCE = index.php application tests
+PHP_COMMA_SOURCE = index.php,application,tests
 
-all: static_analysis_summary
+all: static_analysis_summary test
 
 ##
 # Concise status of the project
@@ -21,6 +24,7 @@ all: static_analysis_summary
 ##
 
 static_analysis_summary: code_sniffer_source copy_paste mess_detector_summary
+	@echo
 
 ##
 # PHP_CodeSniffer
@@ -62,6 +66,7 @@ copy_paste:
 # Detects PHP syntax errors, sorted by category
 # Rules documentation: http://phpmd.org/rules/index.html
 ##
+MESS_DETECTOR_RULES = cleancode,codesize,controversial,design,naming,unusedcode
 
 mess_title:
 	@echo "-----------------"
@@ -70,11 +75,11 @@ mess_title:
 
 ###  - all warnings
 mess_detector: mess_title
-	@$(BIN)/phpmd $(PHP_SOURCE) text $(MESS_DETECTOR_RULES) | sed 's_.*\/__'
+	@$(BIN)/phpmd $(PHP_COMMA_SOURCE) text $(MESS_DETECTOR_RULES) | sed 's_.*\/__'
 
 ### - all warnings + HTML output contains links to PHPMD's documentation
 mess_detector_html:
-	@$(BIN)/phpmd $(PHP_SOURCE) html $(MESS_DETECTOR_RULES) \
+	@$(BIN)/phpmd $(PHP_COMMA_SOURCE) html $(MESS_DETECTOR_RULES) \
 	--reportfile phpmd.html || exit 0
 
 ### - warnings grouped by message, sorted by descending frequency order
@@ -85,9 +90,23 @@ mess_detector_grouped: mess_title
 ### - summary: number of warnings by rule set
 mess_detector_summary: mess_title
 	@for rule in $$(echo $(MESS_DETECTOR_RULES) | tr ',' ' '); do \
-		warnings=$$($(BIN)/phpmd $(PHP_SOURCE) text $$rule | wc -l); \
+		warnings=$$($(BIN)/phpmd $(PHP_COMMA_SOURCE) text $$rule | wc -l); \
 		printf "$$warnings\t$$rule\n"; \
 	done;
+
+##
+# PHPUnit
+# Runs unitary and functional tests
+# Generates an HTML coverage report if Xdebug is enabled
+#
+# See phpunit.xml for configuration
+# https://phpunit.de/manual/current/en/appendixes.configuration.html
+##
+test: clean
+	@echo "-------"
+	@echo "PHPUNIT"
+	@echo "-------"
+	@$(BIN)/phpunit tests
 
 ##
 # Targets for repository and documentation maintenance
