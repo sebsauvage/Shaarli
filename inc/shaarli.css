@@ -222,7 +222,7 @@ h1 {
 }
 
 .tagfilter div.awesomplete {
-    width: inherit;
+    width: 20%;
 }
 
 .tagfilter #tagfilter_value {
@@ -976,6 +976,11 @@ div.dailyNoEntry {
 
 @media handheld, only screen and (max-width: 480px), only screen and (max-device-width: 854px) {
     /* A few fixes for mobile devices (far from perfect). */
+
+    .tagfilter div.awesomplete {
+        width: 70%;
+    }
+
     .nomobile {
 	display: none;
     }
