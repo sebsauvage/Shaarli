@@ -8,7 +8,6 @@
 div.awesomplete {
     display: inline-block;
     position: relative;
-    width: 100%;
 }
 
 div.awesomplete > input {

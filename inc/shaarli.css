@@ -221,12 +221,7 @@ h1 {
     margin-left:24px;
 }
 
-.tagfilter div.awesomplete {
-    width: inherit;
-}
-
 .tagfilter #tagfilter_value {
-    width: 100%;
     display: inline;
 }
 
@@ -349,6 +344,7 @@ h1 {
 }
 
 #headerform label {
+    cursor: pointer;
     margin-right: 10px;
 }
 
@@ -976,6 +972,11 @@ div.dailyNoEntry {
 
 @media handheld, only screen and (max-width: 480px), only screen and (max-device-width: 854px) {
     /* A few fixes for mobile devices (far from perfect). */
+
+    .tagfilter div.awesomplete {
+        width: 70%;
+    }
+
     .nomobile {
 	display: none;
     }
