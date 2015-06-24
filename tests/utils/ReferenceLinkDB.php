@@ -93,11 +93,11 @@ class ReferenceLinkDB
     /**
      * Writes data to the datastore
      */
-    public function write($filename, $prefix, $suffix)
+    public function write($filename)
     {
         file_put_contents(
             $filename,
-            $prefix.base64_encode(gzdeflate(serialize($this->links))).$suffix
+            '<?php /* '.base64_encode(gzdeflate(serialize($this->links))).' */ ?>'
         );
     }
 

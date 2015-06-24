@@ -41,8 +41,6 @@ $GLOBALS['config']['HIDE_PUBLIC_LINKS'] = false;
 if (is_file($GLOBALS['config']['DATADIR'].'/options.php')) require($GLOBALS['config']['DATADIR'].'/options.php');
 
 define('shaarli_version','0.0.45beta');
-define('PHPPREFIX','<?php /* '); // Prefix to encapsulate data in PHP code.
-define('PHPSUFFIX',' */ ?>'); // Suffix to encapsulate data in PHP code.
 // http://server.com/x/shaarli --> /shaarli/
 define('WEB_PATH', substr($_SERVER["REQUEST_URI"], 0, 1+strrpos($_SERVER["REQUEST_URI"], '/', 0)));
 
@@ -700,6 +698,7 @@ function showRSS()
 
     // If cached was not found (or not usable), then read the database and build the response:
     $LINKSDB = new LinkDB(
+        $GLOBALS['config']['DATASTORE'],
         isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
         $GLOBALS['config']['HIDE_PUBLIC_LINKS']
     );
@@ -780,6 +779,7 @@ function showATOM()
 
 // Read links from database (and filter private links if used it not logged in).
     $LINKSDB = new LinkDB(
+        $GLOBALS['config']['DATASTORE'],
         isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
         $GLOBALS['config']['HIDE_PUBLIC_LINKS']
     );
@@ -866,6 +866,7 @@ function showDailyRSS()
 
 // Read links from database (and filter private links if used it not logged in).
     $LINKSDB = new LinkDB(
+        $GLOBALS['config']['DATASTORE'],
         isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
         $GLOBALS['config']['HIDE_PUBLIC_LINKS']
     );
@@ -937,6 +938,7 @@ function showDailyRSS()
 function showDaily()
 {
     $LINKSDB = new LinkDB(
+        $GLOBALS['config']['DATASTORE'],
         isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
         $GLOBALS['config']['HIDE_PUBLIC_LINKS']
     );
@@ -1006,6 +1008,7 @@ function showDaily()
 function renderPage()
 {
     $LINKSDB = new LinkDB(
+        $GLOBALS['config']['DATASTORE'],
         isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
         $GLOBALS['config']['HIDE_PUBLIC_LINKS']
     );
@@ -1587,6 +1590,7 @@ function importFile()
 {
     if (!(isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'])) { die('Not allowed.'); }
     $LINKSDB = new LinkDB(
+        $GLOBALS['config']['DATASTORE'],
         isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
         $GLOBALS['config']['HIDE_PUBLIC_LINKS']
     );
