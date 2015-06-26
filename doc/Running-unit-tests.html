@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="github-markdown.css">
+</head>
+<body>
+<h3 id="setup-your-environment-for-tests">Setup your environment for tests</h3>
+<p>The framework used is <a href="https://phpunit.de/">PHPUnit</a>; it can be installed with <a href="https://getcomposer.org/">Composer</a>, which is a dependency management tool.</p>
+<p>Regarding Composer, you can either use:</p>
+<ul>
+<li>a system-wide version, e.g. installed through your distro's package manager<br /></li>
+<li>a local version, downloadable <a href="https://getcomposer.org/download/">here</a></li>
+</ul>
+<h4 id="sample-usage">Sample usage</h4>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># system-wide version</span>
+$ <span class="kw">composer</span> install
+$ <span class="kw">composer</span> update
+
+<span class="co"># local version</span>
+$ <span class="kw">php</span> composer.phar self-update
+$ <span class="kw">php</span> composer.phar install
+$ <span class="kw">php</span> composer.phar update</code></pre>
+<h4 id="install-shaarli-dev-dependencies">Install Shaarli dev dependencies</h4>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> /path/to/shaarli
+$ <span class="kw">composer</span> update</code></pre>
+<h4 id="install-and-enable-xdebug-to-generate-phpunit-coverage-reports">Install and enable Xdebug to generate PHPUnit coverage reports</h4>
+<p>For Debian-based distros:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">aptitude</span> install php5-xdebug</code></pre>
+<p>For ArchLinux:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pacman</span> -S xdebug</code></pre>
+<p>Then add the following line to <code>/etc/php/php.ini</code>:</p>
+<pre class="sourceCode ini"><code class="sourceCode ini"><span class="dt">zend_extension</span><span class="ot">=</span><span class="st">xdebug.so</span></code></pre>
+<h4 id="run-unit-tests">Run unit tests</h4>
+<p>Successful test suite:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">make</span> test
+
+<span class="kw">-------</span>
+<span class="kw">PHPUNIT</span>
+<span class="kw">-------</span>
+<span class="kw">PHPUnit</span> 4.6.9 by Sebastian Bergmann and contributors.
+
+<span class="kw">Configuration</span> read from /home/virtualtam/public_html/shaarli/phpunit.xml
+
+<span class="kw">....................................</span>
+
+<span class="kw">Time</span>: 759 ms, Memory: 8.25Mb
+
+<span class="kw">OK</span> (36 tests, 65 assertions)</code></pre>
+<p>Test suite with failures and errors:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">make</span> test
+<span class="kw">-------</span>
+<span class="kw">PHPUNIT</span>
+<span class="kw">-------</span>
+<span class="kw">PHPUnit</span> 4.6.9 by Sebastian Bergmann and contributors.
+
+<span class="kw">Configuration</span> read from /home/virtualtam/public_html/shaarli/phpunit.xml
+
+<span class="kw">E..FF...............................</span>
+
+<span class="kw">Time</span>: 802 ms, Memory: 8.25Mb
+
+<span class="kw">There</span> was 1 error:
+
+<span class="kw">1</span>) <span class="kw">LinkDBTest</span>::testConstructLoggedIn
+<span class="kw">Missing</span> argument 2 for LinkDB::__construct(), <span class="kw">called</span> in /home/virtualtam/public_html/shaarli/tests/Link\
+<span class="kw">DBTest.php</span> on line 79 and defined
+
+<span class="kw">/home/virtualtam/public_html/shaarli/application</span>/LinkDB.php:<span class="kw">58</span>
+<span class="kw">/home/virtualtam/public_html/shaarli/tests</span>/LinkDBTest.php:<span class="kw">79</span>
+
+<span class="kw">--</span>
+
+<span class="kw">There</span> were 2 failures:
+
+<span class="kw">1</span>) <span class="kw">LinkDBTest</span>::testCheckDBNew
+<span class="kw">Failed</span> asserting that two strings are equal.
+<span class="kw">---</span> Expected
+<span class="kw">+++</span> Actual
+<span class="kw">@@</span> @@
+<span class="kw">-</span><span class="st">&#39;e3edea8ea7bb50be4bcb404df53fbb4546a7156e&#39;</span>
+<span class="kw">+</span><span class="st">&#39;85eab0c610d4f68025f6ed6e6b6b5fabd4b55834&#39;</span>
+
+<span class="kw">/home/virtualtam/public_html/shaarli/tests</span>/LinkDBTest.php:<span class="kw">121</span>
+
+<span class="kw">2</span>) <span class="kw">LinkDBTest</span>::testCheckDBLoad
+<span class="kw">Failed</span> asserting that two strings are equal.
+<span class="kw">---</span> Expected
+<span class="kw">+++</span> Actual
+<span class="kw">@@</span> @@
+<span class="kw">-</span><span class="st">&#39;e3edea8ea7bb50be4bcb404df53fbb4546a7156e&#39;</span>
+<span class="kw">+</span><span class="st">&#39;85eab0c610d4f68025f6ed6e6b6b5fabd4b55834&#39;</span>
+
+<span class="kw">/home/virtualtam/public_html/shaarli/tests</span>/LinkDBTest.php:<span class="kw">133</span>
+
+<span class="kw">FAILURES</span>!
+<span class="kw">Tests</span>: 36, Assertions: 63, Errors: 1, Failures: 2.</code></pre>
+<h4 id="test-results-and-coverage">Test results and coverage</h4>
+<p>By default, PHPUnit will run all suitable tests found under the <code>tests</code> directory.</p>
+<p>Each test has 3 possible outcomes:</p>
+<ul>
+<li><code>.</code> - success<br /></li>
+<li><code>F</code> - failure: the test was run but its results are invalid<br /></li>
+<li>the code does not behave as expected<br /></li>
+<li>dependencies to external elements: globals, session, cache...<br /></li>
+<li><code>E</code> - error: something went wrong and the tested code has crashed<br /></li>
+<li>typos in the code, or in the test code<br /></li>
+<li>dependencies to missing external elements</li>
+</ul>
+<p>If Xdebug has been installed and activated, two coverage reports will be generated:</p>
+<ul>
+<li>a summary in the console<br /></li>
+<li>a detailed HTML report with metrics for tested code<br /></li>
+<li>to open it in a web browser: <code>firefox coverage/index.html &amp;</code></li>
+</ul>
+</body>
+</html>

@@ -2,9 +2,7 @@
 
 Welcome to the [Shaarli](https://github.com/shaarli/Shaarli/) wiki! Here you can find some info on how to use, configure, tweak and solve problems with your Shaarli. For general info, read the [README](https://github.com/shaarli/Shaarli/blob/master/README.md).
 
-If you have any questions or ideas, please join the [chat](https://gitter.im/shaarli/Shaarli) (also reachable via [IRC](https://irc.gitter.im/)), post them in our [general discussion](https://github.com/shaarli/Shaarli/issues/44) or read the current [issues](https://github.com/shaarli/Shaarli/issues). If you've found a bug, please create a [new issue](https://github.com/shaarli/Shaarli/issues/new).
-
-If you'd like a feature added, see if it fits in the list of [Ideas for Plugins](Ideas-for-plugins) and update the corresponding bug report.
+If you have any questions or ideas, please join the [chat](https://gitter.im/shaarli/Shaarli) (also reachable via [IRC](https://irc.gitter.im/)), post them in our [general discussion](https://github.com/shaarli/Shaarli/issues/44) or read the current [issues](https://github.com/shaarli/Shaarli/issues). If you've found a bug, please create a [new issue](https://github.com/shaarli/Shaarli/issues/new). If you would like a feature added to Shaarli, check the issues labeled [`feature`](https://github.com/shaarli/Shaarli/labels/feature), [`enhancement`](https://github.com/shaarli/Shaarli/labels/enhancement), and [`plugin`](https://github.com/shaarli/Shaarli/labels/plugin).
 
 _Note: This documentation is available online at https://github.com/shaarli/Shaarli/wiki, and locally in the `doc/` directory of your Shaarli installation._
 
@@ -14,7 +12,9 @@ _Note: This documentation is available online at https://github.com/shaarli/Shaa
 
 - [Basic Usage](#basic-usage)
 	- [Add the sharing button (_bookmarklet_) to your browser](#add-the-sharing-button-_bookmarklet_-to-your-browser)
+	- [Add Shaarli as a sharing service to Firefox](#add-shaarli-as-a-sharing-service-to-firefox)
 	- [Share links using the _bookmarklet_](#share-links-using-the-_bookmarklet_)
+	- [Sharing links using Firefox share](#sharing-links-using-firefox-share)
 - [Other usage examples](#other-usage-examples)
 	- [Using Shaarli as a blog, notepad, pastebin...](#using-shaarli-as-a-blog-notepad-pastebin)
 	- [RSS Feeds or Picture Wall for a specific search/tag](#rss-feeds-or-picture-wall-for-a-specific-searchtag)
@@ -40,6 +40,11 @@ _Note: This documentation is available online at https://github.com/shaarli/Shaa
 	- [Various hacks](#various-hacks)
 	- [Changing timestamp for a link](#changing-timestamp-for-a-link)
 - [Related software](#related-software)
+	- [Server apps](#server-apps)
+	- [Android apps](#android-apps)
+	- [Themes & templates](#themes--templates)
+	- [Integrate Shaarli with other platforms](#integrate-shaarli-with-other-platforms)
+	- [Alternative to Shaarli](#alternative-to-shaarli)
 - [Other links](#other-links)
 - [FAQ](#faq)
 	- [Why did you create Shaarli ?](#why-did-you-create-shaarli-)
@@ -47,6 +52,7 @@ _Note: This documentation is available online at https://github.com/shaarli/Shaa
 	- [What does Shaarli mean ?](#what-does-shaarli-mean-)
 - [Technical details](#technical-details)
 	- [Directory structure](#directory-structure)
+	- [Development](#development)
 	- [Why not use a real database ? Files are slow !](#why-not-use-a-real-database--files-are-slow-)
 - [Wiki - TODO](#wiki---todo)
 
@@ -68,6 +74,14 @@ _This bookmarklet button in compatible with Firefox, Opera, Chrome and Safari. U
 
 ![](images/bookmarklet.png)
 
+
+### Add Shaarli as a sharing service to Firefox
+
+ * Open your Shaarli and `Login`
+ * Click the `Tools` button in the top bar
+ * Click the `✚Add to Firefox social` button and accept the activation.
+
+
 ### Share links using the _bookmarklet_
 
  * When you are visiting a webpage you would like to share with Shaarli, click the _bookmarklet_ you just added.
@@ -78,6 +92,11 @@ _This bookmarklet button in compatible with Firefox, Opera, Chrome and Safari. U
  * Click `Save`.**Voila! Your link is now shared.**
 
 
+### Sharing links using Firefox share
+
+ * Add the sharing service as described above
+ * When you are visiting a webpage you would like to share with Shaarli, click the Firefox _Share_ button [[images/firefoxshare.png]]
+ * You can edit your link before and after saving, just like the bookmarklet above.
 
 
 # Other usage examples
@@ -116,7 +135,7 @@ It is possible to filter RSS/ATOM feeds and Picture Wall on a Shaarli to **only 
  * The same method **also works for a full-text search** (_Search_ box) **and for the Picture Wall** (want to only see pictures about `nature`?)
  * You can also build the URL manually: `https://my.shaarli.domain/?do=rss&searchtags=nature`, `https://my.shaarli.domain/links/?do=picwall&searchterm=poney`
 
-![](rss-filter-1.png) ![](rss-filter-2.png)
+![](images/rss-filter-1.png) ![](images/rss-filter-2.png)
 
 # Configuration
 
@@ -141,10 +160,10 @@ To change the configuration, create the file `data/options.php`, example:
  *  `BAN_AFTER (4)` : An IP address will be banned after this many failed login attempts.
  *  `BAN_DURATION (1800)` : Duration of ban (in seconds). (1800 seconds = 30 minutes)
  *  `OPEN_SHAARLI (false)` : If you set this option to true, anyone will be able to add/modify/delete/import/exports links without having to login.
- *   `HIDE_TIMESTAMPS (false)` : If you set this option to true, the date/time of each link will not be displayed (including in RSS Feed).
+ *   `HIDE_TIMESTAMPS (false)` : If you set this option to true, the date/time of each link will not be displayed (including in RSS Feed).#related-software
  *   `ENABLE_THUMBNAILS (true)` : Enable/disable thumbnails.
  *   `RAINTPL_TMP (tmp/)` : Raintpl cache directory  (keep the trailing slash!)
- *   `RAINTPL_TPL (tpl/) : Raintpl template directory (keep the trailing slash!). Edit this option if you want to change the rendering template (page structure) used by Shaarli. See [Changing template](#changing-template)
+ *   `RAINTPL_TPL (tpl/)` : Raintpl template directory (keep the trailing slash!). Edit this option if you want to change the rendering template (page structure) used by Shaarli. See [Changing template](#changing-template)
  *   `CACHEDIR ('cache')` : Directory where the thumbnails are stored.
  *   `ENABLE_LOCALCACHE (true)` : If you have a limited quota on your webspace, you can set this option to false: Shaarli will not generate thumbnails which need to be cached locally (vimeo, flickr, etc.). Thumbnails will still be visible for the services which do not use the local cache (youtube.com, imgur.com, dailymotion.com, imageshack.us)
  *   `UPDATECHECK_FILENAME ($GLOBALS['config']['DATADIR'].'/lastupdatecheck.txt')` : name of the file used to store available shaarli version.
@@ -153,6 +172,7 @@ To change the configuration, create the file `data/options.php`, example:
  * `SHOW_ATOM (false)` : Show an `ATOM Feed` button next to the `Subscribe` (RSS) button. ATOM feeds are available at the address `?do=atom` regardless of this option.
  * `ARCHIVE_ORG (false)` : For each link, display a link to an archived version on archive.org
  * `ENABLE_RSS_PERMALINKS (true)`: choose whether the RSS item title link points directly to the link, or to the entry on Shaarli (permalink). `true` is the original Shaarli bahevior (point directly to the link)
+ * `HIDE_PUBLIC_LINKS (false)`: setting this to true hides all links, even public ones, for non-logged in users.
 
 
 ### Changing theme
@@ -165,7 +185,7 @@ See also:
 
 ### Changing template
 
-| 💥 |  This feature is currently being worked on and will be improved in the next releases. Experimental.         |
+| WARNING |  This feature is currently being worked on and will be improved in the next releases. Experimental.         |
 |---------|---------|
 
  * Find the template you'd like to install. See the list of available templates (TODO). Find it's git clone URL or download the zip archive for the template.
@@ -174,7 +194,7 @@ See also:
 
 `$GLOBALS['config']['RAINTPL_TPL'] = 'tpl/my-template/' ;`
 
-You can find a list of compatible templates in [Related Software](#Related-software)
+You can find a list of compatible templates in [Related Software](#related-software)
 
 # Backup
 
@@ -267,13 +287,7 @@ Download [publisher.php](https://pubsubhubbub.googlecode.com/git/publisher_clien
 
  * [Example patch: add a new "via" field for links](Example-patch---add-new-via-field-for-links)
  * [Copy a Shaarli installation over SSH SCP, serve it locally with php cli](Copy-a-Shaarli-installation-over-SSH-SCP,-serve-it-locally-with-php-cli)
- * To display the array representing the data saved in datastore.php, use the following snippet (TODO where is it gone?)
-
-### Changing timestamp for a link
- * Look for `<input type="hidden" name="lf_linkdate" value="{$link.linkdate}">` in `tpl/editlink.tpl` (line 14)
- * Remove `type="hidden"` from this line
- * A new date/time field becomes available in the edit/new link dialog. You can set the timestamp manually by entering it in the format `YYYMMDD_HHMMS`.
-
+ * To display the array representing the data saved in datastore.php, use the following snippet 
 ```
 $data = "tZNdb9MwFIb... <Commented content inside datastore.php>";
 $out = unserialize(gzinflate(base64_decode($data)));
@@ -284,28 +298,40 @@ exit;
 ```
 This will output the internal representation of the datastore, "unobfuscated" (if this can really be considered obfuscation)
 
+### Changing timestamp for a link
+ * Look for `<input type="hidden" name="lf_linkdate" value="{$link.linkdate}">` in `tpl/editlink.tpl` (line 14)
+ * Remove `type="hidden"` from this line
+ * A new date/time field becomes available in the edit/new link dialog. You can set the timestamp manually by entering it in the format `YYYMMDD_HHMMS`.
+
 
 # Related software
 Unofficial but relatedd work on Shaarli. If you maintain one of these, please get in touch with us to help us find a way to adapt your work to our fork. **TODO** contact repos owners to see if they'd like to standardize their work for the community fork.
-
+### Server apps
  * [shaarchiver](https://github.com/nodiscc/shaarchiver) - Archive your Shaarli bookmarks and their content
+ * [shaarli-river](https://github.com/mknexen/shaarli-river) - An aggregator for shaarlis with many features 
+ * [Shaarlo](https://github.com/DMeloni/shaarlo) - An aggregator for shaarlis with many features (a very popular running instance among french shaarliers: [shaarli.fr](http://shaarli.fr/))
+ * [Shaarlimages](https://github.com/BoboTiG/shaarlimages) - An image-oriented aggregator for Shaarlis
+ * [mknexen/shaarli-api](https://github.com/mknexen/shaarli-api) - A REST API for Shaarli
+
+### Android apps
  * [Shaarli for Android](http://sebsauvage.net/links/?ZAyDzg) - Android application that adds Shaarli as a sharing provider
- * [Shaarlier for Android](https://play.google.com/store/apps/details?id=com.dimtion.shaarlier) - Android application to simply add links directly into your Shaarli
- * [shaarli-river](https://github.com/mknexen/shaarli-river) - an aggregator for shaarlis with many features 
- * [Shaarlo](https://github.com/DMeloni/shaarlo) - an aggregator for shaarlis with many features ([Demo](http://shaarli.fr/))
+ * [Shaarlier for Android](https://github.com/dimtion/Shaarlier) - Android application to simply add links directly into your Shaarli
+
+### Themes & templates
+ * [AkibaTech/Shaarli Superhero Theme](https://github.com/AkibaTech/Shaarli---SuperHero-Theme) - A template/theme for Shaarli
+ * [alexisju/albinomouse-template](https://github.com/alexisju/albinomouse-template) - A full template for Shaarli
+ * [dhoko/ShaarliTemplate](https://github.com/dhoko/ShaarliTemplate) - A template/theme for Shaarli
  * [kalvn/shaarli-blocks](https://github.com/kalvn/shaarli-blocks) - A template/theme for Shaarli
- * [kalvn/Shaarli-Material](https://github.com/kalvn/Shaarli-Material) - 
-A theme (template) based on Google's Material Design for Shaarli, the superfast delicious clone.
+ * [kalvn/Shaarli-Material](https://github.com/kalvn/Shaarli-Material) - A theme (template) based on Google's Material Design for Shaarli, the superfast delicious clone.
+ * [misterair/Limonade](https://github.com/misterair/limonade) - A fork of (legacy) Shaarli with a new template
  * [Vinm/Blue-theme-for Shaarli](https://github.com/Vinm/Blue-theme-for-Shaarli) - A template/theme for Shaarli ([unmaintained](https://github.com/Vinm/Blue-theme-for-Shaarli/issues/2), compatibility unknown)
  * [vivienhaese/shaarlitheme](https://github.com/vivienhaese/shaarlitheme) - A Shaarli fork meant to be run in an openshift instance
+
+### Integrate Shaarli with other platforms 
  * [tt-rss-shaarli](https://github.com/jcsaaddupuy/tt-rss-shaarli) - [TinyTiny RSS](http://tt-rss.org/) plugin that adds support for sharing articles with Shaarli
- * [dhoko/ShaarliTemplate](https://github.com/dhoko/ShaarliTemplate) - A template/theme for Shaarli
- * [mknexen/shaarli-api](https://github.com/mknexen/shaarli-api) - a REST API for Shaarli
- * [Albinomouse](https://github.com/alexisju/albinomouse-template) - A full template for Shaarli
- * [Shaarlimages](https://github.com/BoboTiG/shaarlimages) - An image-oriented aggregator for Shaarlis
- * [Shaarli Superhero Theme](https://github.com/AkibaTech/Shaarli---SuperHero-Theme) - A template/theme for Shaarli
- * [Limonade](https://github.com/misterair/limonade) - A fork of Shaarli with a new template
  * [octopress-shaarli](https://github.com/ahmet2mir/octopress-shaarli) - octoprress plugin to retrieve SHaarli links on the sidebara
+
+### Alternative to Shaarli
  * [Bookie](https://github.com/bookieio/bookie) - Another self-hostable, Free bookmark sharing software, written in Python
  * [Unmark](https://github.com/plainmade/unmark) -  An open source to do app for bookmarks ([Homepage](https://unmark.it/))
 
@@ -374,25 +400,40 @@ Here is the directory structure of Shaarli and the purpose of the different file
 
 ```
     index.php : Main program.
+	application/ : Shaarli classes
+		├── LinkDB.php
+		└── Utils.php
+	tests/ : Shaarli unitary & functional tests
+		├── LinkDBTest.php
+		├── utils  # utilities to ease testing
+		│   └── ReferenceLinkDB.php
+		└── UtilsTest.php
     COPYING : Shaarli license.
     inc/ : Includes (libraries, CSS…)
-        shaarli.css : Shaarli stylesheet.
-        jquery.min.js : jQuery javascript library.
-        jquery-ui.min.js : jQuery-UI javascript library.
-        jquery-MIT-LICENSE.txt: jQuery license.
-        jquery.lazyload.min.js: LazyLoad javascript library.
-        rain.tpl.class.php : RainTPL templating library.
+    	├── awesomplete.*: tags autocompletion library
+    	├── blazy.*: picture wall lazy image loading library
+        ├── shaarli.css, reset.css : Shaarli stylesheet.
+        ├── qr.* : qr code generation library
+        └──rain.tpl.class.php : RainTPL templating library.
     tpl/ : RainTPL templates for Shaarli. They are used to build the pages.
     images/ : Images and icons used in Shaarli.
     data/ : Directory where data is stored (bookmark database, configuration, logs, banlist…)
-        config.php : Shaarli configuration (login, password, timezone, title…)
-        datastore.php : Your link database (compressed).
-        ipban.php : IP address ban system data.
-        lastupdatecheck.txt : Update check timestamp file (used to check every 24 hours if a new version of Shaarli is available).
-        log.txt : login/IPban log.
+        ├── config.php : Shaarli configuration (login, password, timezone, title…)
+        ├── datastore.php : Your link database (compressed).
+        ├── ipban.php : IP address ban system data.
+        ├── lastupdatecheck.txt : Update check timestamp file (used to check every 24 hours if a new version of Shaarli is available).
+        └──log.txt : login/IPban log.
     cache/ : Directory containing the thumbnails cache. This directory is automatically created. You can erase it anytime you want.
     tmp/ : Temporary directory for compiled RainTPL templates. This directory is automatically created. You can erase it anytime you want.
 ```
+
+### Development
+
+ * [Contributing to Shaarli](https://github.com/shaarli/Shaarli/tree/master/CONTRIBUTING.md)
+ * [Running unit tests](Running-unit-tests)
+ * Patches should try to stick to the [PHP Standard Recommendations](http://www.php-fig.org/psr/) (PSR), especially:
+   * [PSR-1](http://www.php-fig.org/psr/psr-1/) - Basic Coding Standard
+   * [PSR-2](http://www.php-fig.org/psr/psr-2/) - Coding Style Guide
 
 ### Why not use a real database ? Files are slow !
 
@@ -403,10 +444,6 @@ It's not slow at all, is it ? And don't forget the database contains more than 1
 The data file is only 3.7 Mb. It's read 99% of the time, and is probably already in the operation system disk cache. So generating a page involves no I/O at all most of the time.
 
 # Wiki - TODO
- * Translate (new page can be called Home.fr, Home.es ...) and linked from Home
+ * translate (new page can be called Home.fr, Home.es ... and linked from Home)
  * add more screenshots
  * add developer documentation (storage architecture, classes and functions, security handling, ...)
- * Contact related projects
- * Add a Table of Contents to the wiki (can be added to the sidebar)
-
-...
