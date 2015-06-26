@@ -7,9 +7,6 @@ require_once 'application/LinkDB.php';
 require_once 'application/Utils.php';
 require_once 'tests/utils/ReferenceLinkDB.php';
 
-define('PHPPREFIX', '<?php /* ');
-define('PHPSUFFIX', ' */ ?>');
-
 
 /**
  * Unitary tests for LinkDB
@@ -38,11 +35,10 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         self::$refDB = new ReferenceLinkDB();
-        self::$refDB->write(self::$testDatastore, PHPPREFIX, PHPSUFFIX);
+        self::$refDB->write(self::$testDatastore);
 
-        $GLOBALS['config']['DATASTORE'] = self::$testDatastore;
-        self::$publicLinkDB = new LinkDB(false, false);
-        self::$privateLinkDB = new LinkDB(true, false);
+        self::$publicLinkDB = new LinkDB(self::$testDatastore, false, false);
+        self::$privateLinkDB = new LinkDB(self::$testDatastore, true, false);
     }
 
     /**
@@ -50,7 +46,6 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $GLOBALS['config']['DATASTORE'] = self::$testDatastore;
         if (file_exists(self::$testDatastore)) {
             unlink(self::$testDatastore);
         }
@@ -76,7 +71,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructLoggedIn()
     {
-        new LinkDB(true, false);
+        new LinkDB(self::$testDatastore, true, false);
         $this->assertFileExists(self::$testDatastore);
     }
 
@@ -85,7 +80,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructLoggedOut()
     {
-        new LinkDB(false, false);
+        new LinkDB(self::$testDatastore, false, false);
         $this->assertFileExists(self::$testDatastore);
     }
 
@@ -97,8 +92,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructDatastoreNotWriteable()
     {
-        $GLOBALS['config']['DATASTORE'] = 'null/store.db';
-        new LinkDB(false, false);
+        new LinkDB('null/store.db', false, false);
     }
 
     /**
@@ -106,7 +100,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     public function testCheckDBNew()
     {
-        $linkDB = new LinkDB(false, false);
+        $linkDB = new LinkDB(self::$testDatastore, false, false);
         unlink(self::$testDatastore);
         $this->assertFileNotExists(self::$testDatastore);
 
@@ -126,7 +120,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     public function testCheckDBLoad()
     {
-        $linkDB = new LinkDB(false, false);
+        $linkDB = new LinkDB(self::$testDatastore, false, false);
         $this->assertEquals(
             self::$dummyDatastoreSHA1,
             sha1_file(self::$testDatastore)
@@ -147,8 +141,8 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     public function testReadEmptyDB()
     {
-        file_put_contents(self::$testDatastore, PHPPREFIX.'S7QysKquBQA='.PHPSUFFIX);
-        $emptyDB = new LinkDB(false, false);
+        file_put_contents(self::$testDatastore, '<?php /* S7QysKquBQA= */ ?>');
+        $emptyDB = new LinkDB(self::$testDatastore, false, false);
         $this->assertEquals(0, sizeof($emptyDB));
         $this->assertEquals(0, count($emptyDB));
     }
@@ -180,7 +174,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveDB()
     {
-        $testDB = new LinkDB(true, false);
+        $testDB = new LinkDB(self::$testDatastore, true, false);
         $dbSize = sizeof($testDB);
 
         $link = array(
@@ -198,7 +192,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
 
         $testDB->savedb();
 
-        $testDB = new LinkDB(true, false);
+        $testDB = new LinkDB(self::$testDatastore, true, false);
         $this->assertEquals($dbSize + 1, sizeof($testDB));
     }
 
@@ -222,7 +216,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     public function testCountHiddenPublic()
     {
-        $linkDB = new LinkDB(false, true);
+        $linkDB = new LinkDB(self::$testDatastore, false, true);
 
         $this->assertEquals(
             0,
