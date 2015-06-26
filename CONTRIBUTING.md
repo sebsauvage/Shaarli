@@ -43,6 +43,7 @@ git checkout -b testing
 git merge cool-new-feature
 git merge bugfix
 ```
+Or see [Checkout Github Pull Requests locally](https://gist.github.com/piscisaureus/3342247)
 
 Please report any problem you might find.
 
