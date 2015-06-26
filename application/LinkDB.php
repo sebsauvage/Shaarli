@@ -303,7 +303,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         // FIXME: accept double-quotes to search for a string "as is"?
         $filtered = array();
         $search = mb_convert_case($searchterms, MB_CASE_LOWER, 'UTF-8');
-        $keys = ['title', 'description', 'url', 'tags'];
+        $keys = array('title', 'description', 'url', 'tags');
 
         foreach ($this->links as $link) {
             $found = false;
