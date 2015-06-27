@@ -396,19 +396,22 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
 
     /**
      * Use an invalid date format
+     * @expectedException              Exception
+     * @expectedExceptionMessageRegExp /Invalid date format/
      */
-    public function testFilterInvalidDay()
+    public function testFilterInvalidDayWithChars()
     {
-        $this->assertEquals(
-            0,
-            sizeof(self::$privateLinkDB->filterDay('Rainy day, dream away'))
-        );
+        self::$privateLinkDB->filterDay('Rainy day, dream away');
+    }
 
-        // TODO: check input format
-        $this->assertEquals(
-            6,
-            sizeof(self::$privateLinkDB->filterDay('20'))
-        );
+    /**
+     * Use an invalid date format
+     * @expectedException              Exception
+     * @expectedExceptionMessageRegExp /Invalid date format/
+     */
+    public function testFilterInvalidDayDigits()
+    {
+        self::$privateLinkDB->filterDay('20');
     }
 
     /**

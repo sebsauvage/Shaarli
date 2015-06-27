@@ -957,7 +957,13 @@ function showDaily()
         if ($i<count($days)-1) $nextday=$days[$i+1];
     }
 
-    $linksToDisplay=$LINKSDB->filterDay($day);
+    try {
+        $linksToDisplay = $LINKSDB->filterDay($day);
+    } catch (Exception $exc) {
+        error_log($exc);
+        $linksToDisplay = [];
+    }
+
     // We pre-format some fields for proper output.
     foreach($linksToDisplay as $key=>$link)
     {
