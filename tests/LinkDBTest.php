@@ -15,7 +15,6 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
 {
     // datastore to test write operations
     protected static $testDatastore = 'tests/datastore.php';
-    protected static $dummyDatastoreFilesize = 759;
     protected static $refDB = null;
     protected static $publicLinkDB = null;
     protected static $privateLinkDB = null;
@@ -109,10 +108,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
         $this->assertFileExists(self::$testDatastore);
 
         // ensure the correct data has been written
-        $this->assertEquals(
-            self::$dummyDatastoreFilesize,
-            filesize(self::$testDatastore)
-        );
+        $this->assertGreaterThan(0, filesize(self::$testDatastore));
     }
 
     /**
@@ -121,17 +117,15 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     public function testCheckDBLoad()
     {
         $linkDB = new LinkDB(self::$testDatastore, false, false);
-        $this->assertEquals(
-            self::$dummyDatastoreFilesize,
-            filesize(self::$testDatastore)
-        );
+        $datastoreSize = filesize(self::$testDatastore);
+        $this->assertGreaterThan(0, $datastoreSize);
 
         $checkDB = self::getMethod('checkDB');
         $checkDB->invokeArgs($linkDB, array());
 
         // ensure the datastore is left unmodified
         $this->assertEquals(
-            self::$dummyDatastoreFilesize,
+            $datastoreSize,
             filesize(self::$testDatastore)
         );
     }
