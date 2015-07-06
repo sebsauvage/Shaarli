@@ -1099,6 +1099,11 @@ function renderPage()
         if (empty($_SERVER['HTTP_REFERER'])) { header('Location: ?searchtags='.urlencode($_GET['addtag'])); exit; } // In case browser does not send HTTP_REFERER
         parse_str(parse_url($_SERVER['HTTP_REFERER'],PHP_URL_QUERY), $params);
 
+        // Prevent redirection loop
+        if (isset($params['addtag'])) {
+            unset($params['addtag']);
+        }
+
         // Check if this tag is already in the search query and ignore it if it is.
         // Each tag is always separated by a space
         $current_tags = explode(' ', $params['searchtags']);
@@ -1123,16 +1128,29 @@ function renderPage()
     }
 
     // -------- User clicks on a tag in result count: Remove the tag from the list of searched tags (searchtags=...)
-    if (isset($_GET['removetag']))
-    {
+    if (isset($_GET['removetag'])) {
         // Get previous URL (http_referer) and remove the tag from the searchtags parameters in query.
-        if (empty($_SERVER['HTTP_REFERER'])) { header('Location: ?'); exit; } // In case browser does not send HTTP_REFERER
-        parse_str(parse_url($_SERVER['HTTP_REFERER'],PHP_URL_QUERY), $params);
-        if (isset($params['searchtags']))
-        {
+        if (empty($_SERVER['HTTP_REFERER'])) {
+            header('Location: ?');
+            exit;
+        }
+
+        // In case browser does not send HTTP_REFERER
+        parse_str(parse_url($_SERVER['HTTP_REFERER'], PHP_URL_QUERY), $params);
+
+        // Prevent redirection loop
+        if (isset($params['removetag'])) {
+            unset($params['removetag']);
+        }
+
+        if (isset($params['searchtags'])) {
             $tags = explode(' ',$params['searchtags']);
             $tags=array_diff($tags, array($_GET['removetag'])); // Remove value from array $tags.
-            if (count($tags)==0) unset($params['searchtags']); else $params['searchtags'] = implode(' ',$tags);
+            if (count($tags)==0) {
+                unset($params['searchtags']);
+            } else {
+                $params['searchtags'] = implode(' ',$tags);
+            }
             unset($params['page']); // We also remove page (keeping the same page has no sense, since the results are different)
         }
         header('Location: ?'.http_build_query($params));
@@ -1140,33 +1158,24 @@ function renderPage()
     }
 
     // -------- User wants to change the number of links per page (linksperpage=...)
-    if (isset($_GET['linksperpage']))
-    {
-        if (is_numeric($_GET['linksperpage'])) { $_SESSION['LINKS_PER_PAGE']=abs(intval($_GET['linksperpage'])); }
-        // Make sure the referrer is Shaarli itself.
-        $referer = '?';
-        if (!empty($_SERVER['HTTP_REFERER']) && strcmp(parse_url($_SERVER['HTTP_REFERER'],PHP_URL_HOST),$_SERVER['HTTP_HOST'])==0)
-            $referer = $_SERVER['HTTP_REFERER'];
-        header('Location: '.$referer);
+    if (isset($_GET['linksperpage'])) {
+        if (is_numeric($_GET['linksperpage'])) {
+            $_SESSION['LINKS_PER_PAGE']=abs(intval($_GET['linksperpage']));
+        }
+
+        header('Location: '. generateLocation($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST'], array('linksperpage')));
         exit;
     }
 
     // -------- User wants to see only private links (toggle)
-    if (isset($_GET['privateonly']))
-    {
-        if (empty($_SESSION['privateonly']))
-        {
-            $_SESSION['privateonly']=1; // See only private links
-        }
-        else
-        {
+    if (isset($_GET['privateonly'])) {
+        if (empty($_SESSION['privateonly'])) {
+            $_SESSION['privateonly'] = 1; // See only private links
+        } else {
             unset($_SESSION['privateonly']); // See all links
         }
-        // Make sure the referrer is Shaarli itself.
-        $referer = '?';
-        if (!empty($_SERVER['HTTP_REFERER']) && strcmp(parse_url($_SERVER['HTTP_REFERER'],PHP_URL_HOST),$_SERVER['HTTP_HOST'])==0)
-            $referer = $_SERVER['HTTP_REFERER'];
-        header('Location: '.$referer);
+
+        header('Location: '. generateLocation($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST'], array('privateonly')));
         exit;
     }
 
@@ -1349,10 +1358,10 @@ function renderPage()
 
         // If we are called from the bookmarklet, we must close the popup:
         if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) { echo '<script>self.close();</script>'; exit; }
-        $returnurl = ( isset($_POST['returnurl']) ? $_POST['returnurl'] : '?' );
-        $returnurl .= '#'.smallHash($linkdate);  // Scroll to the link which has been edited.
-        if (strstr($returnurl, "do=addlink")) { $returnurl = '?'; } //if we come from ?do=addlink, set returnurl to homepage instead
-        header('Location: '.$returnurl); // After saving the link, redirect to the page the user was on.
+        $returnurl = ( !empty($_POST['returnurl']) ? escape($_POST['returnurl']) : '?' );
+        $returnurl .= '#'.smallHash($_POST['lf_linkdate']);  // Scroll to the link which has been edited.
+        $location = generateLocation($returnurl, $_SERVER['HTTP_HOST'], array('addlink', 'post', 'edit_link'));
+        header('Location: '. $location); // After saving the link, redirect to the page the user was on.
         exit;
     }
 
@@ -1363,6 +1372,7 @@ function renderPage()
         if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) { echo '<script>self.close();</script>'; exit; }
         $returnurl = ( isset($_POST['returnurl']) ? $_POST['returnurl'] : '?' );
         $returnurl .= '#'.smallHash($_POST['lf_linkdate']);  // Scroll to the link which has been edited.
+        $returnurl = generateLocation($returnurl, $_SERVER['HTTP_HOST'], array('addlink', 'post', 'edit_link'));
         header('Location: '.$returnurl); // After canceling, redirect to the page the user was on.
         exit;
     }
@@ -1395,18 +1405,15 @@ function renderPage()
         // redirect is not satisfied, and only then redirect to /
         $location = "?";
         // Self redirection
-        if (count($_GET) == 0    ||
-            isset($_GET['page']) ||
-            isset($_GET['searchterm']) ||
-            isset($_GET['searchtags'])) {
-
+        if (count($_GET) == 0
+            || isset($_GET['page'])
+            || isset($_GET['searchterm'])
+            || isset($_GET['searchtags'])
+        ) {
             if (isset($_POST['returnurl'])) {
                 $location = $_POST['returnurl']; // Handle redirects given by the form
-            }
-
-            if ($location === "?" &&
-                isset($_SERVER['HTTP_REFERER'])) { // Handle HTTP_REFERER in case we're not coming from the same place.
-                $location = $_SERVER['HTTP_REFERER'];
+            } else {
+                $location = generateLocation($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST'], array('delete_link'));
             }
         }
 

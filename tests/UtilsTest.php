@@ -93,5 +93,30 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(checkDateFormat('Y-m-d', '2015-06'));
         $this->assertFalse(checkDateFormat('Ymd', 'DeLorean'));
     }
+
+    /**
+     * Test generate location with valid data.
+     */
+    public function testGenerateLocation() {
+        $ref = 'http://localhost/?test';
+        $this->assertEquals($ref, generateLocation($ref, 'localhost'));
+        $ref = 'http://localhost:8080/?test';
+        $this->assertEquals($ref, generateLocation($ref, 'localhost:8080'));
+    }
+
+    /**
+     * Test generate location - anti loop.
+     */
+    public function testGenerateLocationLoop() {
+        $ref = 'http://localhost/?test';
+        $this->assertEquals('?', generateLocation($ref, 'localhost', ['test']));
+    }
+
+    /**
+     * Test generate location - from other domain.
+     */
+    public function testGenerateLocationOut() {
+        $ref = 'http://somewebsite.com/?test';
+        $this->assertEquals('?', generateLocation($ref, 'localhost'));
+    }
 }
-?>
