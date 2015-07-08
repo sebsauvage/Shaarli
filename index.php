@@ -709,7 +709,7 @@ function showRSS()
     if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
     else if (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
     else $linksToDisplay = $LINKSDB;
-        
+
     $nblinksToDisplay = 50;  // Number of links to display.
     if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
     {
@@ -789,7 +789,7 @@ function showATOM()
     if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
     else if (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
     else $linksToDisplay = $LINKSDB;
-        
+
     $nblinksToDisplay = 50;  // Number of links to display.
     if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
     {
@@ -1041,7 +1041,7 @@ function renderPage()
         if (!empty($_GET['searchterm'])) $links = $LINKSDB->filterFulltext($_GET['searchterm']);
         elseif (!empty($_GET['searchtags']))   $links = $LINKSDB->filterTags(trim($_GET['searchtags']));
         else $links = $LINKSDB;
-            
+
         $body='';
         $linksToDisplay=array();
 
@@ -1056,7 +1056,7 @@ function renderPage()
                 $linksToDisplay[]=$link; // Add to array.
             }
         }
-            
+
         $PAGE = new pageBuilder;
         $PAGE->assign('linkcount',count($LINKSDB));
         $PAGE->assign('linksToDisplay',$linksToDisplay);
@@ -1330,6 +1330,7 @@ function renderPage()
     {
         if (!tokenOk($_POST['token'])) die('Wrong token.'); // Go away!
         $tags = trim(preg_replace('/\s\s+/',' ', $_POST['lf_tags'])); // Remove multiple spaces.
+        $tags = implode(' ', array_unique(explode(' ', $tags))); // Remove duplicates.
         $linkdate=$_POST['lf_linkdate'];
         $url = trim($_POST['lf_url']);
         if (!startsWith($url,'http:') && !startsWith($url,'https:') && !startsWith($url,'ftp:') && !startsWith($url,'magnet:') && !startsWith($url,'?') && !startsWith($url,'javascript:'))
