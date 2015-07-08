@@ -709,7 +709,7 @@ function showRSS()
     if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
     else if (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
     else $linksToDisplay = $LINKSDB;
-        
+
     $nblinksToDisplay = 50;  // Number of links to display.
     if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
     {
@@ -789,7 +789,7 @@ function showATOM()
     if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
     else if (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
     else $linksToDisplay = $LINKSDB;
-        
+
     $nblinksToDisplay = 50;  // Number of links to display.
     if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
     {
@@ -948,12 +948,12 @@ function showDaily()
 
     $days = $LINKSDB->days();
     $i = array_search($day,$days);
-    if ($i==false) { $i=count($days)-1; $day=$days[$i]; }
+    if ($i===false) { $i=count($days)-1; $day=$days[$i]; }
     $previousday='';
     $nextday='';
     if ($i!==false)
     {
-        if ($i>1) $previousday=$days[$i-1];
+        if ($i>=1) $previousday=$days[$i-1];
         if ($i<count($days)-1) $nextday=$days[$i+1];
     }
 
@@ -1041,7 +1041,7 @@ function renderPage()
         if (!empty($_GET['searchterm'])) $links = $LINKSDB->filterFulltext($_GET['searchterm']);
         elseif (!empty($_GET['searchtags']))   $links = $LINKSDB->filterTags(trim($_GET['searchtags']));
         else $links = $LINKSDB;
-            
+
         $body='';
         $linksToDisplay=array();
 
@@ -1056,7 +1056,7 @@ function renderPage()
                 $linksToDisplay[]=$link; // Add to array.
             }
         }
-            
+
         $PAGE = new pageBuilder;
         $PAGE->assign('linkcount',count($LINKSDB));
         $PAGE->assign('linksToDisplay',$linksToDisplay);
