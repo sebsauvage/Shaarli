@@ -375,7 +375,10 @@ You use the community supported version of the original Shaarli project, by Seba
      */
     public function filterDay($day)
     {
-        // TODO: check input format
+        if (! checkDateFormat('Ymd', $day)) {
+            throw new Exception('Invalid date format');
+        }
+
         $filtered = array();
         foreach ($this->links as $l) {
             if (startsWith($l['linkdate'], $day)) {

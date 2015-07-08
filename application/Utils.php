@@ -69,4 +69,19 @@ function sanitizeLink(&$link)
     $link['description'] = escape($link['description']);
     $link['tags'] = escape($link['tags']);
 }
+
+/**
+ * Checks if a string represents a valid date
+ *
+ * @param string        a string-formatted date
+ * @param format        the expected DateTime format of the string
+ * @return              whether the string is a valid date
+ * @see                 http://php.net/manual/en/class.datetime.php
+ * @see                 http://php.net/manual/en/datetime.createfromformat.php
+ */
+function checkDateFormat($format, $string)
+{
+    $date = DateTime::createFromFormat($format, $string);
+    return $date && $date->format($string) == $string;
+}
 ?>

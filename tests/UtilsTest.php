@@ -74,5 +74,24 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(endsWith('å!ùµ', 'ùµ', false));
         $this->assertTrue(endsWith('µ$åù', 'åù', true));
     }
+
+    /**
+     * Check valid date strings, according to a DateTime format
+     */
+    public function testCheckValidDateFormat()
+    {
+        $this->assertTrue(checkDateFormat('Ymd', '20150627'));
+        $this->assertTrue(checkDateFormat('Y-m-d', '2015-06-27'));
+    }
+
+    /**
+     * Check erroneous date strings, according to a DateTime format
+     */
+    public function testCheckInvalidDateFormat()
+    {
+        $this->assertFalse(checkDateFormat('Ymd', '2015'));
+        $this->assertFalse(checkDateFormat('Y-m-d', '2015-06'));
+        $this->assertFalse(checkDateFormat('Ymd', 'DeLorean'));
+    }
 }
 ?>
