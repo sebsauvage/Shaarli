@@ -3,6 +3,7 @@
  * Link datastore tests
  */
 
+require_once 'application/Cache.php';
 require_once 'application/LinkDB.php';
 require_once 'application/Utils.php';
 require_once 'tests/utils/ReferenceLinkDB.php';
@@ -180,11 +181,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
             'tags'=>'unit test'
         );
         $testDB[$link['linkdate']] = $link;
-
-        // TODO: move PageCache to a proper class/file
-        function invalidateCaches() {}
-
-        $testDB->savedb();
+        $testDB->savedb('tests');
 
         $testDB = new LinkDB(self::$testDatastore, true, false);
         $this->assertEquals($dbSize + 1, sizeof($testDB));
@@ -514,4 +511,3 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
         );
     }
 }
-?>

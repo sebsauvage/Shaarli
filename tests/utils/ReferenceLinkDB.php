@@ -125,4 +125,3 @@ class ReferenceLinkDB
         return $this->_privateCount;
     }
 }
-?>

@@ -70,6 +70,8 @@ if (is_file($GLOBALS['config']['CONFIG_FILE'])) {
 }
 
 // Shaarli library
+require_once 'application/Cache.php';
+require_once 'application/CachedPage.php';
 require_once 'application/LinkDB.php';
 require_once 'application/TimeZone.php';
 require_once 'application/Utils.php';
@@ -199,63 +201,6 @@ function checkUpdate()
     $newestversion=file_get_contents($GLOBALS['config']['UPDATECHECK_FILENAME']);
     if (version_compare($newestversion,shaarli_version)==1) return $newestversion;
     return '';
-}
-
-
-// -----------------------------------------------------------------------------------------------
-// Simple cache system (mainly for the RSS/ATOM feeds).
-
-class pageCache
-{
-    private $url; // Full URL of the page to cache (typically the value returned by pageUrl())
-    private $shouldBeCached; // boolean: Should this url be cached?
-    private $filename; // Name of the cache file for this url.
-
-    /*
-         $url = URL (typically the value returned by pageUrl())
-         $shouldBeCached = boolean. If false, the cache will be disabled.
-    */
-    public function __construct($url,$shouldBeCached)
-    {
-        $this->url = $url;
-        $this->filename = $GLOBALS['config']['PAGECACHE'].'/'.sha1($url).'.cache';
-        $this->shouldBeCached = $shouldBeCached;
-    }
-
-    // If the page should be cached and a cached version exists,
-    // returns the cached version (otherwise, return null).
-    public function cachedVersion()
-    {
-        if (!$this->shouldBeCached) return null;
-        if (is_file($this->filename)) { return file_get_contents($this->filename); exit; }
-        return null;
-    }
-
-    // Put a page in the cache.
-    public function cache($page)
-    {
-        if (!$this->shouldBeCached) return;
-        file_put_contents($this->filename,$page);
-    }
-
-    // Purge the whole cache.
-    // (call with pageCache::purgeCache())
-    public static function purgeCache()
-    {
-        if (is_dir($GLOBALS['config']['PAGECACHE']))
-        {
-            $handler = opendir($GLOBALS['config']['PAGECACHE']);
-            if ($handler!==false)
-            {
-                while (($filename = readdir($handler))!==false)
-                {
-                    if (endsWith($filename,'.cache')) { unlink($GLOBALS['config']['PAGECACHE'].'/'.$filename); }
-                }
-                closedir($handler);
-            }
-        }
-    }
-
 }
 
 
@@ -718,8 +663,16 @@ function showRSS()
 
     // Cache system
     $query = $_SERVER["QUERY_STRING"];
-    $cache = new pageCache(pageUrl(),startsWith($query,'do=rss') && !isLoggedIn());
-    $cached = $cache->cachedVersion(); if (!empty($cached)) { echo $cached; exit; }
+    $cache = new CachedPage(
+        $GLOBALS['config']['PAGECACHE'],
+        pageUrl(),
+        startsWith($query,'do=rss') && !isLoggedIn()
+    );
+    $cached = $cache->cachedVersion();
+    if (! empty($cached)) {
+        echo $cached;
+        exit;
+    }
 
     // If cached was not found (or not usable), then read the database and build the response:
     $LINKSDB = new LinkDB(
@@ -798,11 +751,19 @@ function showATOM()
 
     // Cache system
     $query = $_SERVER["QUERY_STRING"];
-    $cache = new pageCache(pageUrl(),startsWith($query,'do=atom') && !isLoggedIn());
-    $cached = $cache->cachedVersion(); if (!empty($cached)) { echo $cached; exit; }
-    // If cached was not found (or not usable), then read the database and build the response:
+    $cache = new CachedPage(
+        $GLOBALS['config']['PAGECACHE'],
+        pageUrl(),
+        startsWith($query,'do=atom') && !isLoggedIn()
+    );
+    $cached = $cache->cachedVersion();
+    if (!empty($cached)) {
+        echo $cached;
+        exit;
+    }
 
-// Read links from database (and filter private links if used it not logged in).
+    // If cached was not found (or not usable), then read the database and build the response:
+    // Read links from database (and filter private links if used it not logged in).
     $LINKSDB = new LinkDB(
         $GLOBALS['config']['DATASTORE'],
         isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
@@ -884,7 +845,11 @@ function showATOM()
 function showDailyRSS() {
     // Cache system
     $query = $_SERVER["QUERY_STRING"];
-    $cache = new pageCache(pageUrl(), startsWith($query, 'do=dailyrss') && !isLoggedIn());
+    $cache = new CachedPage(
+        $GLOBALS['config']['PAGECACHE'],
+        pageUrl(),
+        startsWith($query,'do=dailyrss') && !isLoggedIn()
+    );
     $cached = $cache->cachedVersion();
     if (!empty($cached)) {
         echo $cached;
@@ -1076,7 +1041,7 @@ function renderPage()
     // -------- User wants to logout.
     if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=logout'))
     {
-        invalidateCaches();
+        invalidateCaches($GLOBALS['config']['PAGECACHE']);
         logout();
         header('Location: ?');
         exit;
@@ -1383,7 +1348,7 @@ function renderPage()
                 $value['tags']=trim(implode(' ',$tags));
                 $LINKSDB[$key]=$value;
             }
-            $LINKSDB->savedb(); // Save to disk.
+            $LINKSDB->savedb($GLOBALS['config']['PAGECACHE']); // Save to disk.
             echo '<script>alert("Tag was removed from '.count($linksToAlter).' links.");document.location=\'?\';</script>';
             exit;
         }
@@ -1400,7 +1365,7 @@ function renderPage()
                 $value['tags']=trim(implode(' ',$tags));
                 $LINKSDB[$key]=$value;
             }
-            $LINKSDB->savedb(); // Save to disk.
+            $LINKSDB->savedb($GLOBALS['config']['PAGECACHE']); // Save to disk.
             echo '<script>alert("Tag was renamed in '.count($linksToAlter).' links.");document.location=\'?searchtags='.urlencode($_POST['totag']).'\';</script>';
             exit;
         }
@@ -1429,7 +1394,7 @@ function renderPage()
                       'linkdate'=>$linkdate,'tags'=>str_replace(',',' ',$tags));
         if ($link['title']=='') $link['title']=$link['url']; // If title is empty, use the URL as title.
         $LINKSDB[$linkdate] = $link;
-        $LINKSDB->savedb(); // Save to disk.
+        $LINKSDB->savedb($GLOBALS['config']['PAGECACHE']); // Save to disk.
         pubsubhub();
 
         // If we are called from the bookmarklet, we must close the popup:
@@ -1462,7 +1427,7 @@ function renderPage()
         // - we are protected from XSRF by the token.
         $linkdate=$_POST['lf_linkdate'];
         unset($LINKSDB[$linkdate]);
-        $LINKSDB->savedb(); // save to disk
+        $LINKSDB->savedb($GLOBALS['config']['PAGECACHE']); // save to disk
 
         // If we are called from the bookmarklet, we must close the popup:
         if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) { echo '<script>self.close();</script>'; exit; }
@@ -1751,7 +1716,7 @@ function importFile()
                 }
             }
         }
-        $LINKSDB->savedb();
+        $LINKSDB->savedb($GLOBALS['config']['PAGECACHE']);
 
         echo '<script>alert("File '.json_encode($filename).' ('.$filesize.' bytes) was successfully processed: '.$import_count.' links imported.");document.location=\'?\';</script>';
     }
@@ -2384,14 +2349,6 @@ function resizeImage($filepath)
     unlink($filepath);
     rename($tempname,$filepath);  // Overwrite original picture with thumbnail.
     return true;
-}
-
-// Invalidate caches when the database is changed or the user logs out.
-// (e.g. tags cache).
-function invalidateCaches()
-{
-    unset($_SESSION['tags']);  // Purge cache attached to session.
-    pageCache::purgeCache();   // Purge page cache shared by sessions.
 }
 
 try {
