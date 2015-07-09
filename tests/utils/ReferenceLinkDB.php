@@ -4,9 +4,9 @@
  */
 class ReferenceLinkDB
 {
-    private $links = array();
-    private $publicCount = 0;
-    private $privateCount = 0;
+    private $_links = array();
+    private $_publicCount = 0;
+    private $_privateCount = 0;
 
     /**
      * Populates the test DB with reference data
@@ -81,13 +81,13 @@ class ReferenceLinkDB
             'linkdate' => $date,
             'tags' => $tags,
         );
-        $this->links[$date] = $link;
+        $this->_links[$date] = $link;
 
         if ($private) {
-            $this->privateCount++;
+            $this->_privateCount++;
             return;
         }
-        $this->publicCount++;
+        $this->_publicCount++;
     }
 
     /**
@@ -97,7 +97,7 @@ class ReferenceLinkDB
     {
         file_put_contents(
             $filename,
-            '<?php /* '.base64_encode(gzdeflate(serialize($this->links))).' */ ?>'
+            '<?php /* '.base64_encode(gzdeflate(serialize($this->_links))).' */ ?>'
         );
     }
 
@@ -106,7 +106,7 @@ class ReferenceLinkDB
      */
     public function countLinks()
     {
-        return $this->publicCount + $this->privateCount;
+        return $this->_publicCount + $this->_privateCount;
     }
 
     /**
@@ -114,7 +114,7 @@ class ReferenceLinkDB
      */
     public function countPublicLinks()
     {
-        return $this->publicCount;
+        return $this->_publicCount;
     }
 
     /**
@@ -122,7 +122,7 @@ class ReferenceLinkDB
      */
     public function countPrivateLinks()
     {
-        return $this->privateCount;
+        return $this->_privateCount;
     }
 }
 ?>
