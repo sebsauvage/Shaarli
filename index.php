@@ -11,7 +11,8 @@
 date_default_timezone_set('UTC');
 
 // -----------------------------------------------------------------------------------------------
-// Hardcoded parameter (These parameters can be overwritten by creating the file /data/options.php)
+// Hardcoded parameter (These parameters can be overwritten by editing the file /data/config.php)
+// You should not touch any code below (or at your own risks!)
 $GLOBALS['config']['DATADIR'] = 'data'; // Data subdirectory
 $GLOBALS['config']['CONFIG_FILE'] = $GLOBALS['config']['DATADIR'].'/config.php'; // Configuration file (user login/password)
 $GLOBALS['config']['DATASTORE'] = $GLOBALS['config']['DATADIR'].'/datastore.php'; // Data storage file.
@@ -36,10 +37,6 @@ $GLOBALS['config']['ARCHIVE_ORG'] = false; // For each link, add a link to an ar
 $GLOBALS['config']['ENABLE_RSS_PERMALINKS'] = true;  // Enable RSS permalinks by default. This corresponds to the default behavior of shaarli before this was added as an option.
 $GLOBALS['config']['HIDE_PUBLIC_LINKS'] = false;
 // -----------------------------------------------------------------------------------------------
-// You should not touch below (or at your own risks!)
-// Optional config file.
-if (is_file($GLOBALS['config']['DATADIR'].'/options.php')) require($GLOBALS['config']['DATADIR'].'/options.php');
-
 define('shaarli_version','0.0.45beta');
 // http://server.com/x/shaarli --> /shaarli/
 define('WEB_PATH', substr($_SERVER["REQUEST_URI"], 0, 1+strrpos($_SERVER["REQUEST_URI"], '/', 0)));
@@ -69,6 +66,7 @@ error_reporting(E_ALL^E_WARNING);  // See all error except warnings.
 // Shaarli library
 require_once 'application/LinkDB.php';
 require_once 'application/Utils.php';
+require_once 'application/Config.php';
 
 include "inc/rain.tpl.class.php"; //include Rain TPL
 raintpl::$tpl_dir = $GLOBALS['config']['RAINTPL_TPL']; // template directory
@@ -100,7 +98,6 @@ if (empty($GLOBALS['title'])) $GLOBALS['title']='Shared links on '.escape(indexU
 if (empty($GLOBALS['timezone'])) $GLOBALS['timezone']=date_default_timezone_get();
 if (empty($GLOBALS['redirector'])) $GLOBALS['redirector']='';
 if (empty($GLOBALS['disablesessionprotection'])) $GLOBALS['disablesessionprotection']=false;
-if (empty($GLOBALS['disablejquery'])) $GLOBALS['disablejquery']=false;
 if (empty($GLOBALS['privateLinkByDefault'])) $GLOBALS['privateLinkByDefault']=false;
 if (empty($GLOBALS['titleLink'])) $GLOBALS['titleLink']='?';
 // I really need to rewrite Shaarli with a proper configuation manager.
@@ -1220,7 +1217,19 @@ function renderPage()
             // Save new password
             $GLOBALS['salt'] = sha1(uniqid('',true).'_'.mt_rand()); // Salt renders rainbow-tables attacks useless.
             $GLOBALS['hash'] = sha1($_POST['setpassword'].$GLOBALS['login'].$GLOBALS['salt']);
-            writeConfig();
+            try {
+                writeConfig($GLOBALS, isLoggedIn());
+            }
+            catch(Exception $e) {
+                error_log(
+                    'ERROR while writing config file after changing password.' . PHP_EOL .
+                    $e->getMessage()
+                );
+
+                // TODO: do not handle exceptions/errors in JS.
+                echo '<script>alert("'. $e->getMessage() .'");document.location=\'?do=tools\';</script>';
+                exit;
+            }
             echo '<script>alert("Your password has been changed.");document.location=\'?do=tools\';</script>';
             exit;
         }
@@ -1249,12 +1258,23 @@ function renderPage()
             $GLOBALS['titleLink']=$_POST['titleLink'];
             $GLOBALS['redirector']=$_POST['redirector'];
             $GLOBALS['disablesessionprotection']=!empty($_POST['disablesessionprotection']);
-            $GLOBALS['disablejquery']=!empty($_POST['disablejquery']);
             $GLOBALS['privateLinkByDefault']=!empty($_POST['privateLinkByDefault']);
             $GLOBALS['config']['ENABLE_RSS_PERMALINKS']= !empty($_POST['enableRssPermalinks']);
             $GLOBALS['config']['ENABLE_UPDATECHECK'] = !empty($_POST['updateCheck']);
             $GLOBALS['config']['HIDE_PUBLIC_LINKS'] = !empty($_POST['hidePublicLinks']);
-            writeConfig();
+            try {
+                writeConfig($GLOBALS, isLoggedIn());
+            }
+            catch(Exception $e) {
+                error_log(
+                    'ERROR while writing config file after configuration update.' . PHP_EOL .
+                    $e->getMessage()
+                );
+
+                // TODO: do not handle exceptions/errors in JS.
+                echo '<script>alert("'. $e->getMessage() .'");document.location=\'?do=tools\';</script>';
+                exit;
+            }
             echo '<script>alert("Configuration was saved.");document.location=\'?do=tools\';</script>';
             exit;
         }
@@ -2013,7 +2033,19 @@ function install()
         $GLOBALS['hash'] = sha1($_POST['setpassword'].$GLOBALS['login'].$GLOBALS['salt']);
         $GLOBALS['title'] = (empty($_POST['title']) ? 'Shared links on '.escape(indexUrl()) : $_POST['title'] );
         $GLOBALS['config']['ENABLE_UPDATECHECK'] = !empty($_POST['updateCheck']);
-        writeConfig();
+        try {
+            writeConfig($GLOBALS, isLoggedIn());
+        }
+        catch(Exception $e) {
+            error_log(
+                    'ERROR while writing config file after installation.' . PHP_EOL .
+                    $e->getMessage()
+                );
+
+            // TODO: do not handle exceptions/errors in JS.
+            echo '<script>alert("'. $e->getMessage() .'");document.location=\'?\';</script>';
+            exit;
+        }
         echo '<script>alert("Shaarli is now configured. Please enter your login/password and start shaaring your links!");document.location=\'?do=login\';</script>';
         exit;
     }
@@ -2127,30 +2159,7 @@ if (!function_exists('json_encode')) {
     }
 }
 
-// Re-write configuration file according to globals.
-// Requires some $GLOBALS to be set (login,hash,salt,title).
-// If the config file cannot be saved, an error message is displayed and the user is redirected to "Tools" menu.
-// (otherwise, the function simply returns.)
-function writeConfig()
-{
-    if (is_file($GLOBALS['config']['CONFIG_FILE']) && !isLoggedIn()) die('You are not authorized to alter config.'); // Only logged in user can alter config.
-    $config='<?php $GLOBALS[\'login\']='.var_export($GLOBALS['login'],true).'; $GLOBALS[\'hash\']='.var_export($GLOBALS['hash'],true).'; $GLOBALS[\'salt\']='.var_export($GLOBALS['salt'],true).'; ';
-    $config .='$GLOBALS[\'timezone\']='.var_export($GLOBALS['timezone'],true).'; date_default_timezone_set('.var_export($GLOBALS['timezone'],true).'); $GLOBALS[\'title\']='.var_export($GLOBALS['title'],true).';';
-    $config .= '$GLOBALS[\'titleLink\']='.var_export($GLOBALS['titleLink'],true).'; ';
-    $config .= '$GLOBALS[\'redirector\']='.var_export($GLOBALS['redirector'],true).'; ';
-    $config .= '$GLOBALS[\'disablesessionprotection\']='.var_export($GLOBALS['disablesessionprotection'],true).'; ';
-    $config .= '$GLOBALS[\'disablejquery\']='.var_export($GLOBALS['disablejquery'],true).'; ';
-    $config .= '$GLOBALS[\'privateLinkByDefault\']='.var_export($GLOBALS['privateLinkByDefault'],true).'; ';
-    $config .= '$GLOBALS[\'config\'][\'ENABLE_RSS_PERMALINKS\']='.var_export($GLOBALS['config']['ENABLE_RSS_PERMALINKS'], true).'; ';
-    $config .= '$GLOBALS[\'config\'][\'ENABLE_UPDATECHECK\']='.var_export($GLOBALS['config']['ENABLE_UPDATECHECK'], true).'; ';
-    $config .= '$GLOBALS[\'config\'][\'HIDE_PUBLIC_LINKS\']='.var_export($GLOBALS['config']['HIDE_PUBLIC_LINKS'], true).'; ';
-    $config .= ' ?>';
-    if (!file_put_contents($GLOBALS['config']['CONFIG_FILE'],$config) || strcmp(file_get_contents($GLOBALS['config']['CONFIG_FILE']),$config)!=0)
-    {
-        echo '<script>alert("Shaarli could not create the config file. Please make sure Shaarli has the right to write in the folder is it installed in.");document.location=\'?\';</script>';
-        exit;
-    }
-}
+
 
 /* Because some f*cking services like flickr require an extra HTTP request to get the thumbnail URL,
    I have deported the thumbnail URL code generation here, otherwise this would slow down page generation.
@@ -2377,6 +2386,15 @@ function invalidateCaches()
 {
     unset($_SESSION['tags']);  // Purge cache attached to session.
     pageCache::purgeCache();   // Purge page cache shared by sessions.
+}
+
+try {
+    mergeDeprecatedConfig($GLOBALS, isLoggedIn());
+} catch(Exception $e) {
+    error_log(
+        'ERROR while merging deprecated options.php file.' . PHP_EOL .
+        $e->getMessage()
+    );
 }
 
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=genthumbnail')) { genThumbnail(); exit; }  // Thumbnail generation/cache does not need the link database.
