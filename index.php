@@ -63,6 +63,11 @@ checkphpversion();
 error_reporting(E_ALL^E_WARNING);  // See all error except warnings.
 //error_reporting(-1); // See all errors (for debugging only)
 
+// User configuration
+if (is_file($GLOBALS['config']['CONFIG_FILE'])) {
+    require_once $GLOBALS['config']['CONFIG_FILE'];
+}
+
 // Shaarli library
 require_once 'application/LinkDB.php';
 require_once 'application/Utils.php';
@@ -103,9 +108,10 @@ if (empty($GLOBALS['titleLink'])) $GLOBALS['titleLink']='?';
 // I really need to rewrite Shaarli with a proper configuation manager.
 
 // Run config screen if first run:
-if (!is_file($GLOBALS['config']['CONFIG_FILE'])) install();
+if (! is_file($GLOBALS['config']['CONFIG_FILE'])) {
+    install();
+}
 
-require $GLOBALS['config']['CONFIG_FILE'];  // Read login/password hash into $GLOBALS.
 $GLOBALS['title'] = !empty($GLOBALS['title']) ? escape($GLOBALS['title']) : '';
 $GLOBALS['titleLink'] = !empty($GLOBALS['titleLink']) ? escape($GLOBALS['titleLink']) : '';
 $GLOBALS['redirector'] = !empty($GLOBALS['redirector']) ? escape($GLOBALS['redirector']) : '';
