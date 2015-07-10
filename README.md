@@ -57,7 +57,7 @@ Password: `demo`
 
 ## Installing
 
-Shaarli requires php 5.4. `php-gd` is optional and provides thumbnail resizing.
+Shaarli requires PHP 5.3. `php-gd` is optional and provides thumbnail resizing.
 
  * Download the latest stable release from https://github.com/shaarli/Shaarli/releases
  * Unpack the archive in a directory on your web server

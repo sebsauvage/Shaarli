@@ -3,7 +3,7 @@
 // The personal, minimalist, super-fast, no-database Delicious clone. By sebsauvage.net
 // http://sebsauvage.net/wiki/doku.php?id=php:shaarli
 // Licence: http://www.opensource.org/licenses/zlib-license.php
-// Requires: PHP 5.1.x  (but autocomplete fields will only work if you have PHP 5.2.x)
+// Requires: PHP 5.3.x
 // -----------------------------------------------------------------------------------------------
 // NEVER TRUST IN PHP.INI
 // Some hosts do not define a default timezone in php.ini,
@@ -59,7 +59,6 @@ ini_set('max_input_time','60');  // High execution time in case of problematic i
 ini_set('memory_limit', '128M');  // Try to set max upload file size and read (May not work on some hosts).
 ini_set('post_max_size', '16M');
 ini_set('upload_max_filesize', '16M');
-checkphpversion();
 error_reporting(E_ALL^E_WARNING);  // See all error except warnings.
 //error_reporting(-1); // See all errors (for debugging only)
 
@@ -70,8 +69,18 @@ if (is_file($GLOBALS['config']['CONFIG_FILE'])) {
 
 // Shaarli library
 require_once 'application/LinkDB.php';
+require_once 'application/TimeZone.php';
 require_once 'application/Utils.php';
 require_once 'application/Config.php';
+
+// Ensure the PHP version is supported
+try {
+    checkPHPVersion('5.3', PHP_VERSION);
+} catch(Exception $e) {
+    header('Content-Type: text/plain; charset=utf-8');
+    echo $e->getMessage();
+    exit;
+}
 
 include "inc/rain.tpl.class.php"; //include Rain TPL
 raintpl::$tpl_dir = $GLOBALS['config']['RAINTPL_TPL']; // template directory
@@ -164,21 +173,7 @@ function setup_login_state() {
 
 	return $userIsLoggedIn;
 }
-//==================================================================================================
 $userIsLoggedIn = setup_login_state();
-//==================================================================================================
-//==================================================================================================
-
-// Check PHP version
-function checkphpversion()
-{
-    if (version_compare(PHP_VERSION, '5.1.0') < 0)
-    {
-        header('Content-Type: text/plain; charset=utf-8');
-        echo 'Your PHP version is obsolete! Shaarli requires at least php 5.1.0, and thus cannot run. Sorry. Your PHP version has known security vulnerabilities and should be updated as soon as possible.';
-        exit;
-    }
-}
 
 // Checks if an update is available for Shaarli.
 // (at most once a day, and only for registered user.)
@@ -982,7 +977,7 @@ function showDaily()
         $linksToDisplay = $LINKSDB->filterDay($day);
     } catch (Exception $exc) {
         error_log($exc);
-        $linksToDisplay = [];
+        $linksToDisplay = array();
     }
 
     // We pre-format some fields for proper output.
@@ -1288,7 +1283,7 @@ function renderPage()
             if (!tokenOk($_POST['token'])) die('Wrong token.'); // Go away!
             $tz = 'UTC';
             if (!empty($_POST['continent']) && !empty($_POST['city']))
-                if (isTZvalid($_POST['continent'],$_POST['city']))
+                if (isTimeZoneValid($_POST['continent'],$_POST['city']))
                     $tz = $_POST['continent'].'/'.$_POST['city'];
             $GLOBALS['timezone'] = $tz;
             $GLOBALS['title']=$_POST['title'];
@@ -1322,8 +1317,8 @@ function renderPage()
             $PAGE->assign('token',getToken());
             $PAGE->assign('title', empty($GLOBALS['title']) ? '' : $GLOBALS['title'] );
             $PAGE->assign('redirector', empty($GLOBALS['redirector']) ? '' : $GLOBALS['redirector'] );
-            list($timezone_form,$timezone_js) = templateTZform($GLOBALS['timezone']);
-            $PAGE->assign('timezone_form',$timezone_form); // FIXME: Put entire tz form generation in template?
+            list($timezone_form, $timezone_js) = generateTimeZoneForm($GLOBALS['timezone']);
+            $PAGE->assign('timezone_form', $timezone_form);
             $PAGE->assign('timezone_js',$timezone_js);
             $PAGE->renderPage('configure');
             exit;
@@ -2059,9 +2054,11 @@ function install()
     if (!empty($_POST['setlogin']) && !empty($_POST['setpassword']))
     {
         $tz = 'UTC';
-        if (!empty($_POST['continent']) && !empty($_POST['city']))
-            if (isTZvalid($_POST['continent'],$_POST['city']))
+        if (!empty($_POST['continent']) && !empty($_POST['city'])) {
+            if (isTimeZoneValid($_POST['continent'], $_POST['city'])) {
                 $tz = $_POST['continent'].'/'.$_POST['city'];
+            }
+        }
         $GLOBALS['timezone'] = $tz;
         // Everything is ok, let's create config file.
         $GLOBALS['login'] = $_POST['setlogin'];
@@ -2087,8 +2084,11 @@ function install()
     }
 
     // Display config form:
-    list($timezone_form,$timezone_js) = templateTZform();
-    $timezone_html=''; if ($timezone_form!='') $timezone_html='<tr><td><b>Timezone:</b></td><td>'.$timezone_form.'</td></tr>';
+    list($timezone_form, $timezone_js) = generateTimeZoneForm();
+    $timezone_html = '';
+    if ($timezone_form != '') {
+        $timezone_html = '<tr><td><b>Timezone:</b></td><td>'.$timezone_form.'</td></tr>';
+    }
 
     $PAGE = new pageBuilder;
     $PAGE->assign('timezone_html',$timezone_html);
@@ -2097,67 +2097,6 @@ function install()
     exit;
 }
 
-// Generates the timezone selection form and JavaScript.
-// Input: (optional) current timezone (can be 'UTC/UTC'). It will be pre-selected.
-// Output: array(html,js)
-// Example: list($htmlform,$js) = templateTZform('Europe/Paris');  // Europe/Paris pre-selected.
-// Returns array('','') if server does not support timezones list. (e.g. PHP 5.1 on free.fr)
-function templateTZform($ptz=false)
-{
-    if (function_exists('timezone_identifiers_list')) // because of old PHP version (5.1) which can be found on free.fr
-    {
-        // Try to split the provided timezone.
-        if ($ptz==false) { $l=timezone_identifiers_list(); $ptz=$l[0]; }
-        $spos=strpos($ptz,'/'); $pcontinent=substr($ptz,0,$spos); $pcity=substr($ptz,$spos+1);
-
-        // Display config form:
-        $timezone_form = '';
-        $timezone_js = '';
-        // The list is in the form "Europe/Paris", "America/Argentina/Buenos_Aires"...
-        // We split the list in continents/cities.
-        $continents = array();
-        $cities = array();
-        foreach(timezone_identifiers_list() as $tz)
-        {
-            if ($tz=='UTC') $tz='UTC/UTC';
-            $spos = strpos($tz,'/');
-            if ($spos!==false)
-            {
-                $continent=substr($tz,0,$spos); $city=substr($tz,$spos+1);
-                $continents[$continent]=1;
-                if (!isset($cities[$continent])) $cities[$continent]='';
-                $cities[$continent].='<option value="'.$city.'"'.($pcity==$city?' selected':'').'>'.$city.'</option>';
-            }
-        }
-        $continents_html = '';
-        $continents = array_keys($continents);
-        foreach($continents as $continent)
-            $continents_html.='<option  value="'.$continent.'"'.($pcontinent==$continent?' selected':'').'>'.$continent.'</option>';
-        $cities_html = $cities[$pcontinent];
-        $timezone_form = "Continent: <select name=\"continent\" id=\"continent\" onChange=\"onChangecontinent();\">${continents_html}</select>";
-        $timezone_form .= "&nbsp;&nbsp;&nbsp;&nbsp;City: <select name=\"city\" id=\"city\">${cities[$pcontinent]}</select><br />";
-        $timezone_js = "<script>";
-        $timezone_js .= "function onChangecontinent(){document.getElementById(\"city\").innerHTML = citiescontinent[document.getElementById(\"continent\").value];}";
-        $timezone_js .= "var citiescontinent = ".json_encode($cities).";" ;
-        $timezone_js .= "</script>" ;
-        return array($timezone_form,$timezone_js);
-    }
-    return array('','');
-}
-
-// Tells if a timezone is valid or not.
-// If not valid, returns false.
-// If system does not support timezone list, returns false.
-function isTZvalid($continent,$city)
-{
-    $tz = $continent.'/'.$city;
-    if (function_exists('timezone_identifiers_list')) // because of old PHP version (5.1) which can be found on free.fr
-    {
-        if (in_array($tz, timezone_identifiers_list())) // it's a valid timezone?
-                    return true;
-    }
-    return false;
-}
 if (!function_exists('json_encode')) {
     function json_encode($data) {
         switch ($type = gettype($data)) {

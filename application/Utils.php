@@ -48,7 +48,7 @@ function endsWith($haystack, $needle, $case=true)
  */
 function nl2br_escaped($html)
 {
-    return str_replace('>','&gt;',str_replace('<','&lt;',nl2br($html)));
+    return str_replace('>', '&gt;', str_replace('<', '&lt;', nl2br($html)));
 }
 
 /**
@@ -117,3 +117,24 @@ function generateLocation($referer, $host, $loopTerms = array())
 
     return $final_referer;
 }
+
+/**
+ * Checks the PHP version to ensure Shaarli can run
+ *
+ * @param string $minVersion minimum PHP required version
+ * @param string $curVersion current PHP version (use PHP_VERSION)
+ *
+ * @throws Exception    the PHP version is not supported
+ */
+function checkPHPVersion($minVersion, $curVersion)
+{
+    if (version_compare($curVersion, $minVersion) < 0) {
+        throw new Exception(
+            'Your PHP version is obsolete!'
+            .' Shaarli requires at least PHP '.$minVersion.', and thus cannot run.'
+            .' Your PHP version has known security vulnerabilities and should be'
+            .' updated as soon as possible.'
+        );
+    }
+}
+?>
