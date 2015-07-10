@@ -28,7 +28,7 @@
 class LinkDB implements Iterator, Countable, ArrayAccess
 {
     // Links are stored as a PHP serialized string
-    private $datastore;
+    private $_datastore;
 
     // Datastore PHP prefix
     protected static $phpPrefix = '<?php /* ';
@@ -39,23 +39,23 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     // List of links (associative array)
     //  - key:   link date (e.g. "20110823_124546"),
     //  - value: associative array (keys: title, description...)
-    private $links;
+    private $_links;
 
     // List of all recorded URLs (key=url, value=linkdate)
     // for fast reserve search (url-->linkdate)
-    private $urls;
+    private $_urls;
 
     // List of linkdate keys (for the Iterator interface implementation)
-    private $keys;
+    private $_keys;
 
-    // Position in the $this->keys array (for the Iterator interface)
-    private $position;
+    // Position in the $this->_keys array (for the Iterator interface)
+    private $_position;
 
     // Is the user logged in? (used to filter private links)
-    private $loggedIn;
+    private $_loggedIn;
 
     // Hide public links
-    private $hidePublicLinks;
+    private $_hidePublicLinks;
 
     /**
      * Creates a new LinkDB
@@ -66,11 +66,11 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      */
     function __construct($datastore, $isLoggedIn, $hidePublicLinks)
     {
-        $this->datastore = $datastore;
-        $this->loggedIn = $isLoggedIn;
-        $this->hidePublicLinks = $hidePublicLinks;
-        $this->checkDB();
-        $this->readdb();
+        $this->_datastore = $datastore;
+        $this->_loggedIn = $isLoggedIn;
+        $this->_hidePublicLinks = $hidePublicLinks;
+        $this->_checkDB();
+        $this->_readDB();
     }
 
     /**
@@ -78,7 +78,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      */
     public function count()
     {
-        return count($this->links);
+        return count($this->_links);
     }
 
     /**
@@ -87,7 +87,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     public function offsetSet($offset, $value)
     {
         // TODO: use exceptions instead of "die"
-        if (!$this->loggedIn) {
+        if (!$this->_loggedIn) {
             die('You are not authorized to add a link.');
         }
         if (empty($value['linkdate']) || empty($value['url'])) {
@@ -96,8 +96,8 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         if (empty($offset)) {
             die('You must specify a key.');
         }
-        $this->links[$offset] = $value;
-        $this->urls[$value['url']]=$offset;
+        $this->_links[$offset] = $value;
+        $this->_urls[$value['url']]=$offset;
     }
 
     /**
@@ -105,7 +105,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return array_key_exists($offset, $this->links);
+        return array_key_exists($offset, $this->_links);
     }
 
     /**
@@ -113,13 +113,13 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      */
     public function offsetUnset($offset)
     {
-        if (!$this->loggedIn) {
+        if (!$this->_loggedIn) {
             // TODO: raise an exception
             die('You are not authorized to delete a link.');
         }
-        $url = $this->links[$offset]['url'];
-        unset($this->urls[$url]);
-        unset($this->links[$offset]);
+        $url = $this->_links[$offset]['url'];
+        unset($this->_urls[$url]);
+        unset($this->_links[$offset]);
     }
 
     /**
@@ -127,7 +127,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      */
     public function offsetGet($offset)
     {
-        return isset($this->links[$offset]) ? $this->links[$offset] : null;
+        return isset($this->_links[$offset]) ? $this->_links[$offset] : null;
     }
 
     /**
@@ -135,7 +135,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      */
     function current()
     {
-        return $this->links[$this->keys[$this->position]];
+        return $this->_links[$this->_keys[$this->_position]];
     }
 
     /**
@@ -143,7 +143,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      */
     function key()
     {
-        return $this->keys[$this->position];
+        return $this->_keys[$this->_position];
     }
 
     /**
@@ -151,7 +151,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      */
     function next()
     {
-        ++$this->position;
+        ++$this->_position;
     }
 
     /**
@@ -161,9 +161,9 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      */
     function rewind()
     {
-        $this->keys = array_keys($this->links);
-        rsort($this->keys);
-        $this->position = 0;
+        $this->_keys = array_keys($this->_links);
+        rsort($this->_keys);
+        $this->_position = 0;
     }
 
     /**
@@ -171,7 +171,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      */
     function valid()
     {
-        return isset($this->keys[$this->position]);
+        return isset($this->_keys[$this->_position]);
     }
 
     /**
@@ -179,14 +179,14 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      *
      * If no DB file is found, creates a dummy DB.
      */
-    private function checkDB()
+    private function _checkDB()
     {
-        if (file_exists($this->datastore)) {
+        if (file_exists($this->_datastore)) {
             return;
         }
 
         // Create a dummy database for example
-        $this->links = array();
+        $this->_links = array();
         $link = array(
             'title'=>' Shaarli: the personal, minimalist, super-fast, no-database delicious clone',
             'url'=>'https://github.com/shaarli/Shaarli/wiki',
@@ -199,7 +199,7 @@ You use the community supported version of the original Shaarli project, by Seba
             'linkdate'=> date('Ymd_His'),
             'tags'=>'opensource software'
         );
-        $this->links[$link['linkdate']] = $link;
+        $this->_links[$link['linkdate']] = $link;
 
         $link = array(
             'title'=>'My secret stuff... - Pastebin.com',
@@ -209,60 +209,60 @@ You use the community supported version of the original Shaarli project, by Seba
             'linkdate'=> date('Ymd_His', strtotime('-1 minute')),
             'tags'=>'secretstuff'
         );
-        $this->links[$link['linkdate']] = $link;
+        $this->_links[$link['linkdate']] = $link;
 
         // Write database to disk
         // TODO: raise an exception if the file is not write-able
         file_put_contents(
-            $this->datastore,
-            self::$phpPrefix.base64_encode(gzdeflate(serialize($this->links))).self::$phpSuffix
+            $this->_datastore,
+            self::$phpPrefix.base64_encode(gzdeflate(serialize($this->_links))).self::$phpSuffix
         );
     }
 
     /**
      * Reads database from disk to memory
      */
-    private function readdb()
+    private function _readDB()
     {
 
         // Public links are hidden and user not logged in => nothing to show
-        if ($this->hidePublicLinks && !$this->loggedIn) {
-            $this->links = array();
+        if ($this->_hidePublicLinks && !$this->_loggedIn) {
+            $this->_links = array();
             return;
         }
 
         // Read data
         // Note that gzinflate is faster than gzuncompress.
         // See: http://www.php.net/manual/en/function.gzdeflate.php#96439
-        $this->links = array();
+        $this->_links = array();
 
-        if (file_exists($this->datastore)) {
-            $this->links = unserialize(gzinflate(base64_decode(
-                substr(file_get_contents($this->datastore),
+        if (file_exists($this->_datastore)) {
+            $this->_links = unserialize(gzinflate(base64_decode(
+                substr(file_get_contents($this->_datastore),
                        strlen(self::$phpPrefix), -strlen(self::$phpSuffix)))));
         }
 
         // If user is not logged in, filter private links.
-        if (!$this->loggedIn) {
+        if (!$this->_loggedIn) {
             $toremove = array();
-            foreach ($this->links as $link) {
+            foreach ($this->_links as $link) {
                 if ($link['private'] != 0) {
                     $toremove[] = $link['linkdate'];
                 }
             }
             foreach ($toremove as $linkdate) {
-                unset($this->links[$linkdate]);
+                unset($this->_links[$linkdate]);
             }
         }
 
         // Keep the list of the mapping URLs-->linkdate up-to-date.
-        $this->urls = array();
-        foreach ($this->links as $link) {
-            $this->urls[$link['url']] = $link['linkdate'];
+        $this->_urls = array();
+        foreach ($this->_links as $link) {
+            $this->_urls[$link['url']] = $link['linkdate'];
         }
 
         // Escape links data
-        foreach($this->links as &$link) { 
+        foreach($this->_links as &$link) { 
             sanitizeLink($link); 
         }
     }
@@ -272,13 +272,13 @@ You use the community supported version of the original Shaarli project, by Seba
      */
     public function savedb()
     {
-        if (!$this->loggedIn) {
+        if (!$this->_loggedIn) {
             // TODO: raise an Exception instead
             die('You are not authorized to change the database.');
         }
         file_put_contents(
-            $this->datastore,
-            self::$phpPrefix.base64_encode(gzdeflate(serialize($this->links))).self::$phpSuffix
+            $this->_datastore,
+            self::$phpPrefix.base64_encode(gzdeflate(serialize($this->_links))).self::$phpSuffix
         );
         invalidateCaches();
     }
@@ -288,8 +288,8 @@ You use the community supported version of the original Shaarli project, by Seba
      */
     public function getLinkFromUrl($url)
     {
-        if (isset($this->urls[$url])) {
-            return $this->links[$this->urls[$url]];
+        if (isset($this->_urls[$url])) {
+            return $this->_links[$this->_urls[$url]];
         }
         return false;
     }
@@ -316,7 +316,7 @@ You use the community supported version of the original Shaarli project, by Seba
         $search = mb_convert_case($searchterms, MB_CASE_LOWER, 'UTF-8');
         $keys = array('title', 'description', 'url', 'tags');
 
-        foreach ($this->links as $link) {
+        foreach ($this->_links as $link) {
             $found = false;
 
             foreach ($keys as $key) {
@@ -352,7 +352,7 @@ You use the community supported version of the original Shaarli project, by Seba
         $searchtags = explode(' ', $t);
         $filtered = array();
 
-        foreach ($this->links as $l) {
+        foreach ($this->_links as $l) {
             $linktags = explode(
                 ' ',
                 ($casesensitive ? $l['tags']:mb_convert_case($l['tags'], MB_CASE_LOWER, 'UTF-8'))
@@ -380,7 +380,7 @@ You use the community supported version of the original Shaarli project, by Seba
         }
 
         $filtered = array();
-        foreach ($this->links as $l) {
+        foreach ($this->_links as $l) {
             if (startsWith($l['linkdate'], $day)) {
                 $filtered[$l['linkdate']] = $l;
             }
@@ -395,7 +395,7 @@ You use the community supported version of the original Shaarli project, by Seba
     public function filterSmallHash($smallHash)
     {
         $filtered = array();
-        foreach ($this->links as $l) {
+        foreach ($this->_links as $l) {
             if ($smallHash == smallHash($l['linkdate'])) {
                 // Yes, this is ugly and slow
                 $filtered[$l['linkdate']] = $l;
@@ -412,7 +412,7 @@ You use the community supported version of the original Shaarli project, by Seba
     public function allTags()
     {
         $tags = array();
-        foreach ($this->links as $link) {
+        foreach ($this->_links as $link) {
             foreach (explode(' ', $link['tags']) as $tag) {
                 if (!empty($tag)) {
                     $tags[$tag] = (empty($tags[$tag]) ? 1 : $tags[$tag] + 1);
@@ -431,7 +431,7 @@ You use the community supported version of the original Shaarli project, by Seba
     public function days()
     {
         $linkDays = array();
-        foreach (array_keys($this->links) as $day) {
+        foreach (array_keys($this->_links) as $day) {
             $linkDays[substr($day, 0, 8)] = 0;
         }
         $linkDays = array_keys($linkDays);

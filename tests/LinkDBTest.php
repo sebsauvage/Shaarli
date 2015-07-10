@@ -103,7 +103,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
         unlink(self::$testDatastore);
         $this->assertFileNotExists(self::$testDatastore);
 
-        $checkDB = self::getMethod('checkDB');
+        $checkDB = self::getMethod('_checkDB');
         $checkDB->invokeArgs($linkDB, array());
         $this->assertFileExists(self::$testDatastore);
 
@@ -120,7 +120,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
         $datastoreSize = filesize(self::$testDatastore);
         $this->assertGreaterThan(0, $datastoreSize);
 
-        $checkDB = self::getMethod('checkDB');
+        $checkDB = self::getMethod('_checkDB');
         $checkDB->invokeArgs($linkDB, array());
 
         // ensure the datastore is left unmodified
