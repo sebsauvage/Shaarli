@@ -859,15 +859,18 @@ function showATOM()
 // Daily RSS feed: 1 RSS entry per day giving all the links on that day.
 // Gives the last 7 days (which have links).
 // This RSS feed cannot be filtered.
-function showDailyRSS()
-{
+function showDailyRSS() {
     // Cache system
     $query = $_SERVER["QUERY_STRING"];
-    $cache = new pageCache(pageUrl(),startsWith($query,'do=dailyrss') && !isLoggedIn());
-    $cached = $cache->cachedVersion(); if (!empty($cached)) { echo $cached; exit; }
-    // If cached was not found (or not usable), then read the database and build the response:
+    $cache = new pageCache(pageUrl(), startsWith($query, 'do=dailyrss') && !isLoggedIn());
+    $cached = $cache->cachedVersion();
+    if (!empty($cached)) {
+        echo $cached;
+        exit;
+    }
 
-// Read links from database (and filter private links if used it not logged in).
+    // If cached was not found (or not usable), then read the database and build the response:
+    // Read links from database (and filter private links if used it not logged in).
     $LINKSDB = new LinkDB(
         $GLOBALS['config']['DATASTORE'],
         isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
@@ -877,60 +880,75 @@ function showDailyRSS()
     /* Some Shaarlies may have very few links, so we need to look
        back in time (rsort()) until we have enough days ($nb_of_days).
     */
-    $linkdates=array(); foreach($LINKSDB as $linkdate=>$value) { $linkdates[]=$linkdate; }
+    $linkdates = array();
+    foreach ($LINKSDB as $linkdate => $value) {
+        $linkdates[] = $linkdate;
+    }
     rsort($linkdates);
-    $nb_of_days=7; // We take 7 days.
-    $today=Date('Ymd');
-    $days=array();
-    foreach($linkdates as $linkdate)
-    {
-        $day=substr($linkdate,0,8); // Extract day (without time)
-        if (strcmp($day,$today)<0)
-        {
-            if (empty($days[$day])) $days[$day]=array();
-            $days[$day][]=$linkdate;
+    $nb_of_days = 7; // We take 7 days.
+    $today = Date('Ymd');
+    $days = array();
+
+    foreach ($linkdates as $linkdate) {
+        $day = substr($linkdate, 0, 8); // Extract day (without time)
+        if (strcmp($day,$today) < 0) {
+            if (empty($days[$day])) {
+                $days[$day] = array();
+            }
+            $days[$day][] = $linkdate;
         }
-        if (count($days)>$nb_of_days) break; // Have we collected enough days?
+
+        if (count($days) > $nb_of_days) {
+            break; // Have we collected enough days?
+        }
     }
 
     // Build the RSS feed.
     header('Content-Type: application/rss+xml; charset=utf-8');
-    $pageaddr=escape(indexUrl());
+    $pageaddr = escape(indexUrl());
     echo '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0">';
-    echo '<channel><title>Daily - '.$GLOBALS['title'].'</title><link>'.$pageaddr.'</link>';
-    echo '<description>Daily shared links</description><language>en-en</language><copyright>'.$pageaddr.'</copyright>'."\n";
+    echo '<channel>';
+    echo '<title>Daily - '. $GLOBALS['title'] . '</title>';
+    echo '<link>'. $pageaddr .'</link>';
+    echo '<description>Daily shared links</description>';
+    echo '<language>en-en</language>';
+    echo '<copyright>'. $pageaddr .'</copyright>'. PHP_EOL;
 
-    foreach($days as $day=>$linkdates) // For each day.
-    {
-        $daydate = utf8_encode(strftime('%A %d, %B %Y',linkdate2timestamp($day.'_000000'))); // Full text date
+    // For each day.
+    foreach ($days as $day => $linkdates) {
+        $daydate = linkdate2timestamp($day.'_000000'); // Full text date
         $rfc822date = linkdate2rfc822($day.'_000000');
-        $absurl=escape(indexUrl().'?do=daily&day='.$day);  // Absolute URL of the corresponding "Daily" page.
-        echo '<item><title>'.$GLOBALS['title'].' - '.$daydate.'</title><guid>'.$absurl.'</guid><link>'.$absurl.'</link>';
-        echo '<pubDate>'.escape($rfc822date)."</pubDate>";
+        $absurl = escape(indexUrl().'?do=daily&day='.$day);  // Absolute URL of the corresponding "Daily" page.
 
         // Build the HTML body of this RSS entry.
-        $html='';
-        $href='';
-        $links=array();
+        $html = '';
+        $href = '';
+        $links = array();
+
         // We pre-format some fields for proper output.
-        foreach($linkdates as $linkdate)
-        {
+        foreach ($linkdates as $linkdate) {
             $l = $LINKSDB[$linkdate];
-            $l['formatedDescription']=nl2br(keepMultipleSpaces(text2clickable($l['description'])));
+            $l['formatedDescription'] = nl2br(keepMultipleSpaces(text2clickable($l['description'])));
             $l['thumbnail'] = thumbnail($l['url']);
             $l['timestamp'] = linkdate2timestamp($l['linkdate']);
-            if (startsWith($l['url'],'?')) $l['url']=indexUrl().$l['url'];  // make permalink URL absolute
-            $links[$linkdate]=$l;
+            if (startsWith($l['url'], '?')) {
+                $l['url'] = indexUrl() . $l['url'];  // make permalink URL absolute
+            }
+            $links[$linkdate] = $l;
         }
+
         // Then build the HTML for this day:
         $tpl = new RainTPL;
-        $tpl->assign('links',$links);
-        $html = $tpl->draw('dailyrss',$return_string=true);
-        echo "\n";
-        echo '<description><![CDATA['.$html.']]></description>'."\n</item>\n\n";
+        $tpl->assign('title', $GLOBALS['title']);
+        $tpl->assign('daydate', $daydate);
+        $tpl->assign('absurl', $absurl);
+        $tpl->assign('links', $links);
+        $tpl->assign('rfc822date', escape($rfc822date));
+        $html = $tpl->draw('dailyrss', $return_string=true);
 
+        echo $html . PHP_EOL;
     }
-    echo '</channel></rss><!-- Cached version of '.escape(pageUrl()).' -->';
+    echo '</channel></rss><!-- Cached version of '. escape(pageUrl()) .' -->';
 
     $cache->cache(ob_get_contents());
     ob_end_flush();
