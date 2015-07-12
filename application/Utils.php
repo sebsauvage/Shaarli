@@ -84,4 +84,36 @@ function checkDateFormat($format, $string)
     $date = DateTime::createFromFormat($format, $string);
     return $date && $date->format($string) == $string;
 }
-?>
+
+/**
+ * Generate a header location from HTTP_REFERER.
+ * Make sure the referer is Shaarli itself and prevent redirection loop.
+ *
+ * @param string $referer - HTTP_REFERER.
+ * @param string $host - Server HOST.
+ * @param array $loopTerms - Contains list of term to prevent redirection loop.
+ *
+ * @return string $referer - final referer.
+ */
+function generateLocation($referer, $host, $loopTerms = array())
+{
+    $final_referer = '?';
+
+    // No referer if it contains any value in $loopCriteria.
+    foreach ($loopTerms as $value) {
+        if (strpos($referer, $value) !== false) {
+            return $final_referer;
+        }
+    }
+
+    // Remove port from HTTP_HOST
+    if ($pos = strpos($host, ':')) {
+        $host = substr($host, 0, $pos);
+    }
+
+    if (!empty($referer) && strpos(parse_url($referer, PHP_URL_HOST), $host) !== false) {
+        $final_referer = $referer;
+    }
+
+    return $final_referer;
+}
