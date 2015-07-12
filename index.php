@@ -1122,7 +1122,11 @@ function renderPage()
 
         // Check if this tag is already in the search query and ignore it if it is.
         // Each tag is always separated by a space
-        $current_tags = explode(' ', $params['searchtags']);
+        if (isset($params['searchtags'])) {
+            $current_tags = explode(' ', $params['searchtags']);
+        } else {
+            $current_tags = array();
+        }
         $addtag = true;
         foreach ($current_tags as $value) {
             if ($value === $_GET['addtag']) {
