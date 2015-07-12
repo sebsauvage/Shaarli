@@ -1380,6 +1380,7 @@ function renderPage()
     {
         if (!tokenOk($_POST['token'])) die('Wrong token.'); // Go away!
         $tags = trim(preg_replace('/\s\s+/',' ', $_POST['lf_tags'])); // Remove multiple spaces.
+        $tags = implode(' ', array_unique(explode(' ', $tags))); // Remove duplicates.
         $linkdate=$_POST['lf_linkdate'];
         $url = trim($_POST['lf_url']);
         if (!startsWith($url,'http:') && !startsWith($url,'https:') && !startsWith($url,'ftp:') && !startsWith($url,'magnet:') && !startsWith($url,'?') && !startsWith($url,'javascript:'))

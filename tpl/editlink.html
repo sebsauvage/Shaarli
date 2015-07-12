@@ -42,7 +42,7 @@
 {if="($GLOBALS['config']['OPEN_SHAARLI'] || isLoggedIn())"}
 <script>
     $ = Awesomplete.$;
-    new Awesomplete($('input[data-multiple]'), {
+    awesomplete = new Awesomplete($('input[data-multiple]'), {
         filter: function(text, input) {
             return Awesomplete.FILTER_CONTAINS(text, input.match(/[^ ]*$/)[0]);
         },
@@ -51,6 +51,28 @@
             this.input.value = before + text + " ";
         },
         minChars: 1
+    });
+
+    /**
+     * Remove already selected items from autocompletion list.
+     * HTML list is never updated, so removing a tag will add it back to awesomplete.
+     *
+     * FIXME: This a workaround waiting for awesomplete to handle this.
+     *  https://github.com/LeaVerou/awesomplete/issues/16749
+     */
+    var input = document.querySelector('#lf_tags');
+    input.addEventListener('input', function()
+    {
+        proposedTags = input.getAttribute('data-list').replace(/,/g, '').split(' ');
+        reg = /(\w+) /g;
+        while((match = reg.exec(input.value)) !== null) {
+            id = proposedTags.indexOf(match[1]);
+            if(id != -1 ) {
+                proposedTags.splice(id, 1);
+            }
+        }
+
+        awesomplete.list = proposedTags;
     });
 </script>
 {/if}
