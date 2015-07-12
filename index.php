@@ -1756,7 +1756,7 @@ function buildLinkList($PAGE,$LINKSDB)
         {
             header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
             echo '<h1>404 Not found.</h1>Oh crap. The link you are trying to reach does not exist or has been deleted.';
-            echo '<br>You would mind <a href="?">clicking here</a>?';
+            echo '<br>Would you mind <a href="?">clicking here</a>?';
             exit;
         }
         $search_type='permalink';
