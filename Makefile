@@ -120,6 +120,11 @@ test:
 clean:
 	@git clean -df
 
+### generate Doxygen documentation
+doxygen: clean
+	@rm -rf doxygen
+	@( cat Doxyfile ; echo "PROJECT_NUMBER=`git describe`" ) | doxygen -
+
 ### update the local copy of the documentation
 doc: clean
 	@rm -rf doc
