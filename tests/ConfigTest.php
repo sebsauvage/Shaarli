@@ -18,7 +18,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        self::$_configFields = [
+        self::$_configFields = array(
             'login' => 'login',
             'hash' => 'hash',
             'salt' => 'salt',
@@ -28,13 +28,13 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'redirector' => '',
             'disablesessionprotection' => false,
             'privateLinkByDefault' => false,
-            'config' => [
+            'config' => array(
                 'CONFIG_FILE' => 'tests/config.php',
                 'DATADIR' => 'tests',
                 'config1' => 'config1data',
                 'config2' => 'config2data',
-            ]
-        ];
+            )
+        );
     }
 
     /**

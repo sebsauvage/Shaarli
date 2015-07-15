@@ -109,7 +109,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testGenerateLocationLoop() {
         $ref = 'http://localhost/?test';
-        $this->assertEquals('?', generateLocation($ref, 'localhost', ['test']));
+        $this->assertEquals('?', generateLocation($ref, 'localhost', array('test')));
     }
 
     /**
@@ -119,4 +119,36 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $ref = 'http://somewebsite.com/?test';
         $this->assertEquals('?', generateLocation($ref, 'localhost'));
     }
+
+    /**
+     * Check supported PHP versions
+     */
+    public function testCheckSupportedPHPVersion()
+    {
+        $minVersion = '5.3';
+        checkPHPVersion($minVersion, '5.4.32');
+        checkPHPVersion($minVersion, '5.5');
+        checkPHPVersion($minVersion, '5.6.10');
+    }
+
+    /**
+     * Check a unsupported PHP version
+     * @expectedException              Exception
+     * @expectedExceptionMessageRegExp /Your PHP version is obsolete/
+     */
+    public function testCheckSupportedPHPVersion51()
+    {
+        checkPHPVersion('5.3', '5.1.0');
+    }
+
+    /**
+     * Check another unsupported PHP version
+     * @expectedException              Exception
+     * @expectedExceptionMessageRegExp /Your PHP version is obsolete/
+     */
+    public function testCheckSupportedPHPVersion52()
+    {
+        checkPHPVersion('5.3', '5.2');
+    }
 }
+?>

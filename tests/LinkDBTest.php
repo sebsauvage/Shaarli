@@ -228,12 +228,12 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     public function testDays()
     {
         $this->assertEquals(
-            ['20121206', '20130614', '20150310'],
+            array('20121206', '20130614', '20150310'),
             self::$publicLinkDB->days()
         );
 
         $this->assertEquals(
-            ['20121206', '20130614', '20141125', '20150310'],
+            array('20121206', '20130614', '20141125', '20150310'),
             self::$privateLinkDB->days()
         );
     }
@@ -269,7 +269,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     public function testAllTags()
     {
         $this->assertEquals(
-            [
+            array(
                 'web' => 3,
                 'cartoon' => 2,
                 'gnu' => 2,
@@ -279,12 +279,12 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
                 'software' => 1,
                 'stallman' => 1,
                 'free' => 1
-            ],
+            ),
             self::$publicLinkDB->allTags()
         );
 
         $this->assertEquals(
-            [
+            array(
                 'web' => 4,
                 'cartoon' => 3,
                 'gnu' => 2,
@@ -298,7 +298,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
                 'w3c' => 1,
                 'css' => 1,
                 'Mercurial' => 1
-            ],
+            ),
             self::$privateLinkDB->allTags()
         );
     }

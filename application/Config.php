@@ -19,10 +19,10 @@
 function writeConfig($config, $isLoggedIn)
 {
     // These fields are required in configuration.
-    $MANDATORY_FIELDS = [
+    $MANDATORY_FIELDS = array(
         'login', 'hash', 'salt', 'timezone', 'title', 'titleLink',
         'redirector', 'disablesessionprotection', 'privateLinkByDefault'
-    ];
+    );
 
     if (!isset($config['config']['CONFIG_FILE'])) {
         throw new MissingFieldConfigException('CONFIG_FILE');
