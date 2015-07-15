@@ -99,7 +99,7 @@ class PluginManager
      * @param string $hook   name of the hook to trigger.
      * @param array  $data   list of data to manipulate passed by reference.
      * @param array  $params additional parameters such as page target.
-     * 
+     *
      * @return void
      */
     public function executeHooks($hook, &$data, $params = array())
