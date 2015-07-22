@@ -126,8 +126,38 @@ doc: clean
 	@git clone https://github.com/shaarli/Shaarli.wiki.git doc
 	@rm -rf doc/.git
 
+### Generate a custom sidebar
+#
+# Sidebar content:
+#  - convert GitHub-flavoured relative links to standard Markdown
+#  - trim HTML, only keep the list (<ul>[...]</ul>) part
+htmlsidebar:
+	@echo '<div id="local-sidebar">' > doc/sidebar.html
+	@awk 'BEGIN { FS = "[\\[\\]]{2}" }'\
+	'm = /\[/ { t=$$2; gsub(/ /, "-", $$2); print $$1"["t"]("$$2".html)"$$3 }'\
+	'!m { print $$0 }' doc/_Sidebar.md > doc/tmp.md
+	@pandoc -f markdown -t html5 -s doc/tmp.md | awk '/(ul>|li>)/' >> doc/sidebar.html
+	@echo '</div>' >> doc/sidebar.html
+	@rm doc/tmp.md
+
 ### Convert local markdown documentation to HTML
-htmldoc:
-	for file in `find doc/ -maxdepth 1 -name "*.md"`; do \
-		pandoc -f markdown_github -t html5 -s -c "github-markdown.css" -o doc/`basename $$file .md`.html "$$file"; \
+#
+# For all pages:
+#  - infer title from the file name
+#  - convert GitHub-flavoured relative links to standard Markdown
+#  - insert the sidebar menu
+htmlpages:
+	@for file in `find doc/ -maxdepth 1 -name "*.md"`; do \
+		base=`basename $$file .md`; \
+		sed -i "1i #$${base//-/ }" $$file; \
+		awk 'BEGIN { FS = "[\\[\\]]{2}" }'\
+	'm = /\[/ { t=$$2; gsub(/ /, "-", $$2); print $$1"["t"]("$$2".html)"$$3 }'\
+	'!m { print $$0 }' $$file > doc/tmp.md; \
+		mv doc/tmp.md $$file; \
+		pandoc -f markdown_github -t html5 -s \
+			-c "github-markdown.css" \
+			-T Shaarli -M pagetitle:"$${base//-/ }" -B doc/sidebar.html \
+			-o doc/$$base.html $$file; \
 	done;
+
+htmldoc: doc htmlsidebar htmlpages

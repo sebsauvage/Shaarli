@@ -1,6 +1,7 @@
+#Copy an existing installation over SSH and serve it locally
 Example bash script:
 
-```
+```bash
 #!/bin/bash
 #Description: Copy a Shaarli installation over SSH/SCP, serve it locally with php-cli
 #Will create a local-shaarli/ directory when you run it, backup your Shaarli there, and serve it locally.
@@ -53,14 +54,14 @@ _main
 
 This outputs:
 
-```
+```bash
 $ ./local-shaarli.sh
 PHP 5.6.0RC4 Development Server started at Mon Sep  1 21:56:19 2014
 Listening on http://localhost:7431
 Document root is /home/user/local-shaarli/shaarli
 Press Ctrl-C to quit.
 
-[Mon Sep  1 21:56:27 2014] ::1:57868 [200]: /
-[Mon Sep  1 21:56:27 2014] ::1:57869 [200]: /index.html
-[Mon Sep  1 21:56:37 2014] ::1:57881 [200]: /...
+[Mon Sep  1 21:56:27 2014] ::1:57868 [200]: /[](.html)
+[Mon Sep  1 21:56:27 2014] ::1:57869 [200]: /index.html[](.html)
+[Mon Sep  1 21:56:37 2014] ::1:57881 [200]: /...[](.html)
 ```

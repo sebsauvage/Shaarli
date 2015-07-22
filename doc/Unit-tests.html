@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title></title>
+  <title>Shaarli - Unit tests</title>
   <style type="text/css">code{white-space: pre;}</style>
   <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -31,12 +31,55 @@ code > span.er { color: #ff0000; font-weight: bold; }
   <link rel="stylesheet" href="github-markdown.css">
 </head>
 <body>
+<div id="local-sidebar">
+<ul>
+<li><a href="Home.html">Home</a></li>
+<li>Installation
+<ul>
+<li><a href="Server-requirements.html">Server requirements</a></li>
+<li><a href="Server-configuration.html">Server configuration</a></li>
+<li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
+</ul></li>
+<li><a href="Usage.html">Usage</a>
+<ul>
+<li><a href="Sharing-button.html">Sharing button</a> (bookmarklet)</li>
+<li><a href="Firefox-share.html">Firefox share</a></li>
+<li><a href="RSS-feeds.html">RSS feeds</a></li>
+</ul></li>
+<li>How To
+<ul>
+<li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
+<li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
+<li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
+</ul></li>
+<li><a href="Troubleshooting.html">Troubleshooting</a></li>
+<li><a href="Development.html">Development</a>
+<ul>
+<li><a href="GnuPG-signature.html">GnuPG signature</a></li>
+<li><a href="Coding-guidelines.html">Coding guidelines</a></li>
+<li><a href="Directory-structure.html">Directory structure</a></li>
+<li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
+<li><a href="Plugin-System.html">Plugin System</a></li>
+<li><a href="Security.html">Security</a></li>
+<li><a href="Static-analysis.html">Static analysis</a></li>
+<li><a href="Theming.html">Theming</a></li>
+<li><a href="Unit-tests.html">Unit tests</a></li>
+</ul></li>
+<li>About
+<ul>
+<li><a href="FAQ.html">FAQ</a></li>
+<li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
+<li><a href="TODO.html">TODO</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="unit-tests">Unit tests</h1>
 <h3 id="setup-your-environment-for-tests">Setup your environment for tests</h3>
-<p>The framework used is <a href="https://phpunit.de/">PHPUnit</a>; it can be installed with <a href="https://getcomposer.org/">Composer</a>, which is a dependency management tool.</p>
+<p>The framework used is <a href="https://phpunit.de/">PHPUnit</a>; it can be installed with <a href="https://getcomposer.org/">Composer</a>, which is a dependency management tool.<a href=".html"></a></p>
 <p>Regarding Composer, you can either use:</p>
 <ul>
-<li>a system-wide version, e.g. installed through your distro's package manager<br /></li>
-<li>a local version, downloadable <a href="https://getcomposer.org/download/">here</a></li>
+<li>a system-wide version, e.g. installed through your distro's package manager</li>
+<li>a local version, downloadable <a href="https://getcomposer.org/download/">here</a><a href=".html"></a></li>
 </ul>
 <h4 id="sample-usage">Sample usage</h4>
 <pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># system-wide version</span>
@@ -90,7 +133,7 @@ $ <span class="kw">composer</span> update</code></pre>
 
 <span class="kw">1</span>) <span class="kw">LinkDBTest</span>::testConstructLoggedIn
 <span class="kw">Missing</span> argument 2 for LinkDB::__construct(), <span class="kw">called</span> in /home/virtualtam/public_html/shaarli/tests/Link\
-<span class="kw">DBTest.php</span> on line 79 and defined
+DBTest.php on line 79 and defined
 
 <span class="kw">/home/virtualtam/public_html/shaarli/application</span>/LinkDB.php:<span class="kw">58</span>
 <span class="kw">/home/virtualtam/public_html/shaarli/tests</span>/LinkDBTest.php:<span class="kw">79</span>
@@ -125,18 +168,18 @@ $ <span class="kw">composer</span> update</code></pre>
 <p>By default, PHPUnit will run all suitable tests found under the <code>tests</code> directory.</p>
 <p>Each test has 3 possible outcomes:</p>
 <ul>
-<li><code>.</code> - success<br /></li>
-<li><code>F</code> - failure: the test was run but its results are invalid<br /></li>
-<li>the code does not behave as expected<br /></li>
-<li>dependencies to external elements: globals, session, cache...<br /></li>
-<li><code>E</code> - error: something went wrong and the tested code has crashed<br /></li>
-<li>typos in the code, or in the test code<br /></li>
+<li><code>.</code> - success</li>
+<li><code>F</code> - failure: the test was run but its results are invalid</li>
+<li>the code does not behave as expected</li>
+<li>dependencies to external elements: globals, session, cache...</li>
+<li><code>E</code> - error: something went wrong and the tested code has crashed</li>
+<li>typos in the code, or in the test code</li>
 <li>dependencies to missing external elements</li>
 </ul>
 <p>If Xdebug has been installed and activated, two coverage reports will be generated:</p>
 <ul>
-<li>a summary in the console<br /></li>
-<li>a detailed HTML report with metrics for tested code<br /></li>
+<li>a summary in the console</li>
+<li>a detailed HTML report with metrics for tested code</li>
 <li>to open it in a web browser: <code>firefox coverage/index.html &amp;</code></li>
 </ul>
 </body>

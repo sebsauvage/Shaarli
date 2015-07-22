@@ -1,3 +1,13 @@
+#local-sidebar {
+  width: 230px;
+  float: right;
+  position: relative;
+  z-index: 4;
+  background-color: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 3px;
+}
+
 body {
   font-family: Helvetica, arial, sans-serif;
   font-size: 14px;
