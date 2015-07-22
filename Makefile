@@ -102,7 +102,7 @@ mess_detector_summary: mess_title
 # See phpunit.xml for configuration
 # https://phpunit.de/manual/current/en/appendixes.configuration.html
 ##
-test: clean
+test:
 	@echo "-------"
 	@echo "PHPUNIT"
 	@echo "-------"
@@ -114,13 +114,13 @@ test: clean
 
 ### remove all unversioned files
 clean:
-		@git clean -df
+	@git clean -df
 
 ### update the local copy of the documentation
 doc: clean
-		@rm -rf doc
-		@git clone https://github.com/shaarli/Shaarli.wiki.git doc
-		@rm -rf doc/.git
+	@rm -rf doc
+	@git clone https://github.com/shaarli/Shaarli.wiki.git doc
+	@rm -rf doc/.git
 
 ### Convert local markdown documentation to HTML
 htmldoc:
