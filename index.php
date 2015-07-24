@@ -5,6 +5,7 @@
 // Licence: http://www.opensource.org/licenses/zlib-license.php
 // Requires: php 5.1.x  (but autocomplete fields will only work if you have php 5.2.x)
 // -----------------------------------------------------------------------------------------------
+ini_set('display_errors', false); // Full Path Disclosure https://github.com/sebsauvage/Shaarli/issues/222
 // NEVER TRUST IN PHP.INI
 // Some hosts do not define a default timezone in php.ini,
 // so we have to do this for avoid the strict standard error.
@@ -60,7 +61,6 @@ ini_set('post_max_size', '16M');
 ini_set('upload_max_filesize', '16M');
 checkphpversion();
 error_reporting(E_ALL^E_WARNING);  // See all error except warnings.
-ini_set('display_errors', false); // Full Path Disclosure https://github.com/sebsauvage/Shaarli/issues/222
 //error_reporting(-1); // See all errors (for debugging only)
 
 include "inc/rain.tpl.class.php"; //include Rain TPL
