@@ -55,9 +55,11 @@ Password: `demo`
  * [Bugs/Feature requests/Discussion](https://github.com/shaarli/Shaarli/issues/)
 
 
-## Installing
+## Requirements
 
-Shaarli requires PHP 5.3. `php-gd` is optional and provides thumbnail resizing.
+Check the [Server requirements](https://github.com/shaarli/Shaarli/wiki/Server-requirements) wiki page.
+
+## Installing
 
  * Download the latest stable release from https://github.com/shaarli/Shaarli/releases
  * Unpack the archive in a directory on your web server
