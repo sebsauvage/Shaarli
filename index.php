@@ -60,6 +60,7 @@ ini_set('post_max_size', '16M');
 ini_set('upload_max_filesize', '16M');
 checkphpversion();
 error_reporting(E_ALL^E_WARNING);  // See all error except warnings.
+ini_set('display_errors', false); // Full Path Disclosure https://github.com/sebsauvage/Shaarli/issues/222
 //error_reporting(-1); // See all errors (for debugging only)
 
 include "inc/rain.tpl.class.php"; //include Rain TPL
