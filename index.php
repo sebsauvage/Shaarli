@@ -43,19 +43,6 @@ define('shaarli_version','0.5.1');
 // http://server.com/x/shaarli --> /shaarli/
 define('WEB_PATH', substr($_SERVER["REQUEST_URI"], 0, 1+strrpos($_SERVER["REQUEST_URI"], '/', 0)));
 
-// Force cookie path (but do not change lifetime)
-$cookie=session_get_cookie_params();
-$cookiedir = ''; if(dirname($_SERVER['SCRIPT_NAME'])!='/') $cookiedir=dirname($_SERVER["SCRIPT_NAME"]).'/';
-session_set_cookie_params($cookie['lifetime'],$cookiedir,$_SERVER['SERVER_NAME']); // Set default cookie expiration and path.
-
-// Set session parameters on server side.
-define('INACTIVITY_TIMEOUT',3600); // (in seconds). If the user does not access any page within this time, his/her session is considered expired.
-ini_set('session.use_cookies', 1);       // Use cookies to store session.
-ini_set('session.use_only_cookies', 1);  // Force cookies for session (phpsessionID forbidden in URL).
-ini_set('session.use_trans_sid', false); // Prevent PHP form using sessionID in URL if cookies are disabled.
-session_name('shaarli');
-if (session_id() == '') session_start();  // Start session if needed (Some server auto-start sessions).
-
 // PHP Settings
 ini_set('max_input_time','60');  // High execution time in case of problematic imports/exports.
 ini_set('memory_limit', '128M');  // Try to set max upload file size and read (May not work on some hosts).
@@ -85,6 +72,34 @@ try {
     header('Content-Type: text/plain; charset=utf-8');
     echo $e->getMessage();
     exit;
+}
+
+// Force cookie path (but do not change lifetime)
+$cookie = session_get_cookie_params();
+$cookiedir = '';
+if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
+    $cookiedir = dirname($_SERVER["SCRIPT_NAME"]).'/';
+}
+// Set default cookie expiration and path.
+session_set_cookie_params($cookie['lifetime'], $cookiedir, $_SERVER['SERVER_NAME']);
+// Set session parameters on server side.
+// If the user does not access any page within this time, his/her session is considered expired.
+define('INACTIVITY_TIMEOUT', 3600); // in seconds.
+// Use cookies to store session.
+ini_set('session.use_cookies', 1);
+// Force cookies for session (phpsessionID forbidden in URL).
+ini_set('session.use_only_cookies', 1);
+// Prevent PHP form using sessionID in URL if cookies are disabled.
+ini_set('session.use_trans_sid', false);
+
+// Regenerate session id if invalid or not defined in cookie.
+if (isset($_COOKIE['shaarli']) && !is_session_id_valid($_COOKIE['shaarli'])) {
+    $_COOKIE['shaarli'] = uniqid();
+}
+session_name('shaarli');
+// Start session if needed (Some server auto-start sessions).
+if (session_id() == '') {
+    session_start();
 }
 
 include "inc/rain.tpl.class.php"; //include Rain TPL

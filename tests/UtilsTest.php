@@ -150,5 +150,22 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     {
         checkPHPVersion('5.3', '5.2');
     }
+
+    /**
+     * Test is_session_id_valid with a valid ID.
+     */
+    public function testIsSessionIdValid()
+    {
+        $this->assertTrue(is_session_id_valid('123456789012345678901234567890az'));
+    }
+
+    /**
+     * Test is_session_id_valid with invalid IDs.
+     */
+    public function testIsSessionIdInvalid()
+    {
+        $this->assertFalse(is_session_id_valid(''));
+        $this->assertFalse(is_session_id_valid(array()));
+        $this->assertFalse(is_session_id_valid('c0ZqcWF3VFE2NmJBdm1HMVQ0ZHJ3UmZPbTFsNGhkNHI='));
+    }
 }
-?>

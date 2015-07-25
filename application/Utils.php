@@ -137,4 +137,28 @@ function checkPHPVersion($minVersion, $curVersion)
         );
     }
 }
-?>
+
+/**
+ * Validate session ID to prevent Full Path Disclosure.
+ * See #298.
+ *
+ * @param string $sessionId Session ID
+ *
+ * @return true if valid, false otherwise.
+ */
+function is_session_id_valid($sessionId)
+{
+    if (empty($sessionId)) {
+        return false;
+    }
+
+    if (!$sessionId) {
+        return false;
+    }
+
+    if (!preg_match('/^[a-z0-9]{2,32}$/', $sessionId)) {
+        return false;
+    }
+
+    return true;
+}
