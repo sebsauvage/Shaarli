@@ -445,12 +445,30 @@ if (isset($_POST['login']))
             session_set_cookie_params(0,$cookiedir,$_SERVER['SERVER_NAME']); // 0 means "When browser closes"
             session_regenerate_id(true);
         }
+        
         // Optional redirect after login:
-        if (isset($_GET['post'])) { header('Location: ?post='.urlencode($_GET['post']).(!empty($_GET['title'])?'&title='.urlencode($_GET['title']):'').(!empty($_GET['description'])?'&description='.urlencode($_GET['description']):'').(!empty($_GET['source'])?'&source='.urlencode($_GET['source']):'')); exit; }
-        if (isset($_POST['returnurl']))
-        {
-            if (endsWith($_POST['returnurl'],'?do=login')) { header('Location: ?'); exit; } // Prevent loops over login screen.
-            header('Location: '.$_POST['returnurl']); exit;
+        if (isset($_GET['post'])) {
+            $uri = '?post='. urlencode($_GET['post']);
+            foreach (array('description', 'source', 'title') as $param) {
+                if (!empty($_GET[$param])) {
+                    $uri .= '&'.$param.'='.urlencode($_GET[$param]);
+                }
+            }
+            header('Location: '. $uri);
+            exit;
+        }
+
+        if (isset($_GET['edit_link'])) {
+            header('Location: ?edit_link='. escape($_GET['edit_link']));
+            exit;
+        }
+
+        if (isset($_POST['returnurl'])) {
+            // Prevent loops over login screen.
+            if (strpos($_POST['returnurl'], 'do=login') === false) {
+                header('Location: '. escape($_POST['returnurl']));
+                exit;
+            }
         }
         header('Location: ?'); exit;
     }
@@ -458,7 +476,14 @@ if (isset($_POST['login']))
     {
         ban_loginFailed();
         $redir = '';
-        if (isset($_GET['post'])) { $redir = '&post='.urlencode($_GET['post']).(!empty($_GET['title'])?'&title='.urlencode($_GET['title']):'').(!empty($_GET['description'])?'&description='.urlencode($_GET['description']):'').(!empty($_GET['source'])?'&source='.urlencode($_GET['source']):''); }
+        if (isset($_GET['post'])) {
+            $redir = '?post=' . urlencode($_GET['post']);
+            foreach (array('description', 'source', 'title') as $param) {
+                if (!empty($_GET[$param])) {
+                    $redir .= '&' . $param . '=' . urlencode($_GET[$param]);
+                }
+            }
+        }
         echo '<script>alert("Wrong login/password.");document.location=\'?do=login'.$redir.'\';</script>'; // Redirect to login screen.
         exit;
     }
@@ -1219,6 +1244,11 @@ function renderPage()
 			exit;
 		}
 
+        if (isset($_GET['edit_link'])) {
+            header('Location: ?do=login&edit_link='. escape($_GET['edit_link']));
+            exit;
+        }
+
         $PAGE = new pageBuilder;
         buildLinkList($PAGE,$LINKSDB); // Compute list of links to display
         $PAGE->renderPage('linklist');
@@ -1487,7 +1517,6 @@ function renderPage()
     if (isset($_GET['post']))
     {
         $url=$_GET['post'];
-
 
         // We remove the annoying parameters added by FeedBurner, GoogleFeedProxy, Facebook...
         $annoyingpatterns = array('/[\?&]utm_source=[^&]*/',
