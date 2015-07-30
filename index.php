@@ -1,5 +1,5 @@
 <?php
-// Shaarli 0.0.45beta - Shaare your links...
+// Shaarli 0.5.0 - Shaare your links...
 // The personal, minimalist, super-fast, no-database Delicious clone. By sebsauvage.net
 // http://sebsauvage.net/wiki/doku.php?id=php:shaarli
 // Licence: http://www.opensource.org/licenses/zlib-license.php
@@ -37,7 +37,7 @@ $GLOBALS['config']['ARCHIVE_ORG'] = false; // For each link, add a link to an ar
 $GLOBALS['config']['ENABLE_RSS_PERMALINKS'] = true;  // Enable RSS permalinks by default. This corresponds to the default behavior of shaarli before this was added as an option.
 $GLOBALS['config']['HIDE_PUBLIC_LINKS'] = false;
 // -----------------------------------------------------------------------------------------------
-define('shaarli_version','0.0.45beta');
+define('shaarli_version','0.5.0');
 // http://server.com/x/shaarli --> /shaarli/
 define('WEB_PATH', substr($_SERVER["REQUEST_URI"], 0, 1+strrpos($_SERVER["REQUEST_URI"], '/', 0)));
 
