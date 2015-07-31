@@ -36,6 +36,10 @@ static_analysis_summary: code_sniffer_source copy_paste mess_detector_summary
 
 code_sniffer: code_sniffer_full
 
+### - errors filtered by coding standard: PEAR, PSR1, PSR2, Zend...
+PHPCS_%:
+	@$(BIN)/phpcs $(PHP_SOURCE) --report-full --report-width=200 --standard=$*
+
 ### - errors by Git author
 code_sniffer_blame:
 	@$(BIN)/phpcs $(PHP_SOURCE) --report-gitblame
