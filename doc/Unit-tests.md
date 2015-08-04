@@ -1,10 +1,11 @@
+#Unit tests
 
 ### Setup your environment for tests
-The framework used is [PHPUnit](https://phpunit.de/); it can be installed with [Composer](https://getcomposer.org/), which is a dependency management tool.
+The framework used is [PHPUnit](https://phpunit.de/); it can be installed with [Composer](https://getcomposer.org/), which is a dependency management tool.[](.html)
 
 Regarding Composer, you can either use:
 * a system-wide version, e.g. installed through your distro's package manager
-* a local version, downloadable [here](https://getcomposer.org/download/)
+* a local version, downloadable [here](https://getcomposer.org/download/)[](.html)
 
 #### Sample usage
 ```bash

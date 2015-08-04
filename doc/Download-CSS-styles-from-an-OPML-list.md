@@ -1,7 +1,8 @@
+#Download CSS styles from an OPML list
 ###Download CSS styles for shaarlis listed in an opml file
 Example php script:
 
-```
+```php
 <!---- ?php -->
 <!---- Copyright (c) 2014 Nicolas Delsaux (https://github.com/Riduidel) -->
 <!---- License: zlib (http://www.gzip.org/zlib/zlib_license.html) -->
@@ -33,8 +34,8 @@ function createShaarliHashFromOPMLL($opmlFile) {
 	$opmlXml = simplexml_load_string($opml);
 	$outlineElements = $opmlXml->xpath("body/outline");
 	foreach($outlineElements as $site) {
-		$siteUrl = siteUrl((string) $site['htmlUrl']);
-		$result[$siteUrl]=((string) $site['text']);
+		$siteUrl = siteUrl((string) $site['htmlUrl']);[](.html)
+		$result[$siteUrl]=((string) $site['text']);[](.html)
 	}
 	return $result;
 }
@@ -46,7 +47,7 @@ function getSiteFolder($url) {
 
 function get_http_response_code($theURL) {
      $headers = get_headers($theURL);
-     return substr($headers[0], 9, 3);
+     return substr($headers[0], 9, 3);[](.html)
 }
 
 /**
@@ -121,7 +122,7 @@ function getDirectoryList ($directory)  {
     while ($file = readdir($handler)) {
         // if file isn't this directory or its parent, add it to the results
         if ($file != "." && $file != "..") {
-			$results[] = realpath($realPath . "/" . $file);
+			$results[ = realpath($realPath . "/" . $file);](-=-realpath($realPath-.-"/"-.-$file);.html)
         }
     }
     // tidy up: close the handler
@@ -141,7 +142,7 @@ function findKnownStyles() {
 		$configFile = $folder."/config.ini";
 		if(file_exists($configFile)) {
 			$iniParameters = parse_ini_file($configFile);
-			array_push($result, $iniParameters['site_url']);
+			array_push($result, $iniParameters['site_url']);[](.html)
 		}
 	}
 	return $result;

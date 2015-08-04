@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Shaarli - Development</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="github-markdown.css">
+</head>
+<body>
+<div id="local-sidebar">
+<ul>
+<li><a href="Home.html">Home</a></li>
+<li>Installation
+<ul>
+<li><a href="Server-requirements.html">Server requirements</a></li>
+<li><a href="Server-configuration.html">Server configuration</a></li>
+<li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
+</ul></li>
+<li><a href="Usage.html">Usage</a>
+<ul>
+<li><a href="Sharing-button.html">Sharing button</a> (bookmarklet)</li>
+<li><a href="Firefox-share.html">Firefox share</a></li>
+<li><a href="RSS-feeds.html">RSS feeds</a></li>
+</ul></li>
+<li>How To
+<ul>
+<li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
+<li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
+<li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
+</ul></li>
+<li><a href="Troubleshooting.html">Troubleshooting</a></li>
+<li><a href="Development.html">Development</a>
+<ul>
+<li><a href="GnuPG-signature.html">GnuPG signature</a></li>
+<li><a href="Coding-guidelines.html">Coding guidelines</a></li>
+<li><a href="Directory-structure.html">Directory structure</a></li>
+<li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
+<li><a href="Plugin-System.html">Plugin System</a></li>
+<li><a href="Security.html">Security</a></li>
+<li><a href="Static-analysis.html">Static analysis</a></li>
+<li><a href="Theming.html">Theming</a></li>
+<li><a href="Unit-tests.html">Unit tests</a></li>
+</ul></li>
+<li>About
+<ul>
+<li><a href="FAQ.html">FAQ</a></li>
+<li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
+<li><a href="TODO.html">TODO</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="development">Development</h1>
+<h2 id="guidelines">Guidelines</h2>
+<p>Please have a look at the following pages:</p>
+<ul>
+<li><a href="https://github.com/shaarli/Shaarli/tree/master/CONTRIBUTING.md">Contributing to Shaarli</a><a href=".html"></a></li>
+<li><a href="Static-analysis.html">Static analysis</a> - patches should try to stick to the <a href="http://www.php-fig.org/psr/">PHP Standard Recommendations</a> (PSR), especially:
+<ul>
+<li><a href="http://www.php-fig.org/psr/psr-1/">PSR-1</a> - Basic Coding Standard<a href=".html"></a></li>
+<li><a href="http://www.php-fig.org/psr/psr-2/">PSR-2</a> - Coding Style Guide<a href=".html"></a></li>
+</ul></li>
+<li><a href="Unit-tests.html">Unit tests</a></li>
+<li><a href="GnuPG-signature.html">GnuPG signature</a> for tags/releases</li>
+</ul>
+<h2 id="continuous-integration-tools">Continuous integration tools</h2>
+<h3 id="local-development">Local development</h3>
+<p>A <a href="https://github.com/shaarli/Shaarli/blob/master/Makefile"><code>Makefile</code></a> is available to perform project-related operations:<a href=".html"></a></p>
+<ul>
+<li>Documentation - generate a local HTML copy of the GitHub wiki</li>
+<li><a href="Static-analysis.html">Static analysis</a> - check that the code is compliant to PHP conventions</li>
+<li><a href="Unit-tests.html">Unit tests</a> - ensure there are no regressions introduced by new commits</li>
+</ul>
+<h3 id="automatic-builds">Automatic builds</h3>
+<p><a href="http://docs.travis-ci.com/">Travis CI</a> is a Continuous Integration build server, that runs a build:<a href=".html"></a></p>
+<ul>
+<li>each time a commit is merged to the mainline (<code>master</code> branch)</li>
+<li>each time a Pull Request is submitted or updated</li>
+</ul>
+<p>A build is composed of several jobs: one for each supported PHP version (see <a href="Server-requirements.html">Server requirements</a>).</p>
+<p>Each build job:</p>
+<ul>
+<li>updates Composer</li>
+<li>installs 3rd-party test dependencies with Composer</li>
+<li>runs <a href="Unit-tests.html">Unit tests</a></li>
+</ul>
+<p>After all jobs have finished, Travis returns the results to GitHub:</p>
+<ul>
+<li>a status icon represents the result for the <code>master</code> branch: <a href="(https://api.travis-ci.org/shaarli/Shaarli.svg)](https://travis-ci.org/shaarli/Shaarli).html"><img src="https://travis-ci.org/shaarli/Shaarli" alt="(https://api.travis-ci.org/shaarli/Shaarli.svg)" /></a></li>
+<li>Pull Requests are updated with the Travis result
+<ul>
+<li>Green: all tests have passed</li>
+<li>Red: some tests failed</li>
+<li>Orange: tests are pending</li>
+</ul></li>
+</ul>
+</body>
+</html>

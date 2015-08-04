@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Shaarli - Server configuration</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="github-markdown.css">
+</head>
+<body>
+<div id="local-sidebar">
+<ul>
+<li><a href="Home.html">Home</a></li>
+<li>Installation
+<ul>
+<li><a href="Server-requirements.html">Server requirements</a></li>
+<li><a href="Server-configuration.html">Server configuration</a></li>
+<li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
+</ul></li>
+<li><a href="Usage.html">Usage</a>
+<ul>
+<li><a href="Sharing-button.html">Sharing button</a> (bookmarklet)</li>
+<li><a href="Firefox-share.html">Firefox share</a></li>
+<li><a href="RSS-feeds.html">RSS feeds</a></li>
+</ul></li>
+<li>How To
+<ul>
+<li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
+<li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
+<li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
+</ul></li>
+<li><a href="Troubleshooting.html">Troubleshooting</a></li>
+<li><a href="Development.html">Development</a>
+<ul>
+<li><a href="GnuPG-signature.html">GnuPG signature</a></li>
+<li><a href="Coding-guidelines.html">Coding guidelines</a></li>
+<li><a href="Directory-structure.html">Directory structure</a></li>
+<li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
+<li><a href="Plugin-System.html">Plugin System</a></li>
+<li><a href="Security.html">Security</a></li>
+<li><a href="Static-analysis.html">Static analysis</a></li>
+<li><a href="Theming.html">Theming</a></li>
+<li><a href="Unit-tests.html">Unit tests</a></li>
+</ul></li>
+<li>About
+<ul>
+<li><a href="FAQ.html">FAQ</a></li>
+<li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
+<li><a href="TODO.html">TODO</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="server-configuration">Server configuration</h1>
+<p><em>Example virtual host configurations for popular web servers</em></p>
+<ul>
+<li><a href="#apache">Apache</a><a href=".html"></a></li>
+<li><a href="#lighthttpd">LightHttpd</a> (empty)<a href=".html"></a></li>
+<li><a href="#nginx">Nginx</a><a href=".html"></a></li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Shaarli is installed in a directory readable/writeable by the user</li>
+<li>the correct read/write permissions have been granted to the web server <em>user and/or group</em></li>
+<li>for HTTPS / SSL:</li>
+<li>a key pair (public, private) and a certificate have been generated</li>
+<li>the appropriate server SSL extension is installed and active</li>
+</ul>
+<p>Related guides:</p>
+<ul>
+<li><a href="http://www.xenocafe.com/tutorials/linux/centos/openssl/self_signed_certificates/index.php">How to Create Self-Signed SSL Certificates with OpenSSL</a><a href=".html"></a></li>
+<li><a href="https://workaround.org/certificate-authority">How do I create my own Certificate Authority?</a><a href=".html"></a></li>
+</ul>
+<h2 id="apache">Apache</h2>
+<h3 id="minimal">Minimal</h3>
+<pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:80</span><span class="fu">&gt;</span>
+    ServerName<span class="st">   shaarli.my-domain.org</span>
+    DocumentRoot<span class="st"> /absolute/path/to/shaarli/</span>
+<span class="fu">&lt;/VirtualHost&gt;</span></code></pre>
+<h3 id="debug---log-all-the-things">Debug - Log all the things!</h3>
+<p>This configuration will log both Apache and PHP errors, which may prove useful to identify server configuration errors.</p>
+<p>See:</p>
+<ul>
+<li><a href="http://stackoverflow.com/q/176">Apache/PHP - error log per VirtualHost</a> (StackOverflow)<a href=".html"></a></li>
+<li><a href="PHP:%20php_value%20vs%20php_admin_value%20and%20the%20use%20of%20php_flag%20explained">PHP: php_value vs php_admin_value and the use of php_flag explained</a><a href=".html"></a></li>
+</ul>
+<pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:80</span><span class="fu">&gt;</span>
+    ServerName<span class="st">   shaarli.my-domain.org</span>
+    DocumentRoot<span class="st"> /absolute/path/to/shaarli/</span>
+
+    <span class="ot">LogLevel</span><span class="ch">  </span><span class="kw">warn</span>
+    ErrorLog<span class="st">  /var/log/apache2/shaarli-error.log</span>
+    CustomLog<span class="st"> /var/log/apache2/shaarli-access.log combined</span>
+
+    php_flag  log_errors on
+    php_flag  display_errors on
+    php_value error_reporting 2147483647
+    php_value error_log /var/log/apache2/shaarli-php-error.log
+<span class="fu">&lt;/VirtualHost&gt;</span></code></pre>
+<h3 id="standard---keep-access-and-error-logs">Standard - Keep access and error logs</h3>
+<pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:80</span><span class="fu">&gt;</span>
+    ServerName<span class="st">   shaarli.my-domain.org</span>
+    DocumentRoot<span class="st"> /absolute/path/to/shaarli/</span>
+
+    <span class="ot">LogLevel</span><span class="ch">  </span><span class="kw">warn</span>
+    ErrorLog<span class="st">  /var/log/apache2/shaarli-error.log</span>
+    CustomLog<span class="st"> /var/log/apache2/shaarli-access.log combined</span>
+<span class="fu">&lt;/VirtualHost&gt;</span></code></pre>
+<h3 id="paranoid---redirect-http-80-to-https-443">Paranoid - Redirect HTTP (:80) to HTTPS (:443)</h3>
+<p>See <a href="https://wiki.mozilla.org/Security/Server_Side_TLS#Apache">Server-side TLS</a> (Mozilla).<a href=".html"></a></p>
+<pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:443</span><span class="fu">&gt;</span>
+    ServerName<span class="st">   shaarli.my-domain.org</span>
+    DocumentRoot<span class="st"> /absolute/path/to/shaarli/</span>
+
+    <span class="ot">SSLEngine</span><span class="ch">             </span><span class="kw">on</span>
+    SSLCertificateFile<span class="st">    /absolute/path/to/the/website/certificate.crt</span>
+    SSLCertificateKeyFile<span class="st"> /absolute/path/to/the/website/key.key</span>
+
+    <span class="fu">&lt;Directory</span><span class="ot"> /absolute/path/to/shaarli/</span><span class="fu">&gt;</span>
+        <span class="ot">AllowOverride</span><span class="ch"> </span><span class="kw">All</span>
+        <span class="ot">Options</span><span class="ch"> </span><span class="kw">Indexes</span><span class="ch"> </span><span class="kw">FollowSymLinks</span><span class="ch"> </span><span class="kw">MultiViews</span>
+        <span class="ot">Order</span><span class="ch"> </span><span class="kw">allow,deny</span>
+        allow<span class="st"> from all</span>
+    <span class="fu">&lt;/Directory&gt;</span>
+
+    <span class="ot">LogLevel</span><span class="ch">  </span><span class="kw">warn</span>
+    ErrorLog<span class="st">  /var/log/apache2/shaarli-error.log</span>
+    CustomLog<span class="st"> /var/log/apache2/shaarli-access.log combined</span>
+<span class="fu">&lt;/VirtualHost&gt;</span>
+<span class="fu">&lt;VirtualHost</span><span class="ot"> *:80</span><span class="fu">&gt;</span>
+    ServerName<span class="st">   shaarli.my-domain.org</span>
+    Redirect<span class="st"> 301 / https://shaarli.my-domain.org</span>
+
+    <span class="ot">LogLevel</span><span class="ch">  </span><span class="kw">warn</span>
+    ErrorLog<span class="st">  /var/log/apache2/shaarli-error.log</span>
+    CustomLog<span class="st"> /var/log/apache2/shaarli-access.log combined</span>
+<span class="fu">&lt;/VirtualHost&gt;</span></code></pre>
+<h2 id="lighthttpd">LightHttpd</h2>
+<h2 id="nginx">Nginx</h2>
+<h3 id="foreword">Foreword</h3>
+<p>Nginx does not natively interpret PHP scripts; to this effect, we will run a <a href="https://en.wikipedia.org/wiki/FastCGI">FastCGI</a> service, to which Nginx's FastCGI module will proxy all requests to PHP resources.<a href=".html"></a></p>
+<p>Required packages:</p>
+<ul>
+<li><a href="http://nginx.org">nginx</a><a href=".html"></a></li>
+<li><a href="http://php-fpm.org">php-fpm</a> - PHP FastCGI Process Manager<a href=".html"></a></li>
+</ul>
+<p>Official documentation:</p>
+<ul>
+<li><a href="http://nginx.org/en/docs/beginners_guide.html">Beginner's guide</a><a href=".html"></a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html">ngx_http_fastcgi_module</a><a href=".html"></a></li>
+<li><a href="http://wiki.nginx.org/Pitfalls">Pitfalls</a><a href=".html"></a></li>
+</ul>
+<p>Community resources:</p>
+<ul>
+<li><a href="https://wiki.mozilla.org/Security/Server_Side_TLS#Nginx">Server-side TLS (Nginx)</a> (Mozilla)<a href=".html"></a></li>
+<li><a href="http://kbeezie.com/nginx-configuration-examples/">PHP configuration examples</a> (Karl Blessing)<a href=".html"></a></li>
+</ul>
+<h3 id="common-setup">Common setup</h3>
+<p>Once Nginx and PHP-FPM are installed, we need to ensure:</p>
+<ul>
+<li>Nginx and PHP-FPM are running using the <em>same user and group</em></li>
+<li>both these user and group have
+<ul>
+<li><code>read</code> permissions for Shaarli resources</li>
+<li><code>execute</code> permissions for Shaarli directories <em>AND</em> their parent directories</li>
+</ul></li>
+</ul>
+<p>On a production server:</p>
+<ul>
+<li><code>user:group</code> will likely be <code>http:http</code>, <code>www:www</code> or <code>www-data:www-data</code></li>
+<li>files will be located under <code>/var/www</code>, <code>/var/http</code> or <code>/usr/share/nginx</code></li>
+</ul>
+<p>On a development server:</p>
+<ul>
+<li>files may be located in a user's home directory</li>
+<li>in this case, make sure both Nginx and PHP-FPM are running as the local user/group!</li>
+</ul>
+<p>For all following examples, a development configuration will be used:</p>
+<ul>
+<li><code>user:group = john:users</code>,</li>
+</ul>
+<p>which corresponds to the following service configuration:</p>
+<pre class="sourceCode ini"><code class="sourceCode ini"><span class="co">; /etc/php/php-fpm.conf</span>
+<span class="dt">user </span><span class="ot">=</span><span class="st"> john</span>
+<span class="dt">group </span><span class="ot">=</span><span class="st"> users</span>
+
+<span class="kw">[...][]</span><span class="dt">(.html)</span>
+<span class="dt">listen.owner </span><span class="ot">=</span><span class="st"> john</span>
+<span class="dt">listen.group </span><span class="ot">=</span><span class="st"> users</span></code></pre>
+<pre class="nginx"><code># /etc/nginx/nginx.conf
+user john users;
+
+http {
+    [...][](.html)
+}</code></pre>
+<h3 id="minimal-1">Minimal</h3>
+<p><em>WARNING: Use for development only!</em></p>
+<pre class="nginx"><code>user john users;
+worker_processes  1;
+events {
+    worker_connections  1024;
+}
+
+http {
+    include            mime.types;
+    default_type       application/octet-stream;
+    keepalive_timeout  20;
+
+    index index.html index.php;
+
+    server {
+        listen       80;
+        server_name  localhost;
+        root         /home/john/web;
+
+        access_log  /var/log/nginx/access.log;
+        error_log   /var/log/nginx/error.log;
+
+        location /shaarli/ {
+            access_log  /var/log/nginx/shaarli.access.log;
+            error_log   /var/log/nginx/shaarli.error.log;
+        }
+
+        location ~ (index)\.php$ {
+            fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
+            fastcgi_index  index.php;
+            include        fastcgi.conf;
+        }
+    }
+}</code></pre>
+<h3 id="modular">Modular</h3>
+<p>The previous setup is sufficient for development purposes, but has several major caveats:</p>
+<ul>
+<li>every content that does not match the PHP rule will be sent to client browsers:
+<ul>
+<li>dotfiles - in our case, <code>.htaccess</code></li>
+<li>temporary files, e.g. Vim or Emacs files: <code>index.php~</code></li>
+</ul></li>
+<li>asset / static resource caching is not optimized</li>
+<li>if serving several PHP sites, there will be a lot of duplication: <code>location /shaarli/</code>, <code>location /mysite/</code>, etc.</li>
+</ul>
+<p>To solve this, we will split Nginx configuration in several parts, that will be included when needed:</p>
+<pre class="nginx"><code># /etc/nginx/deny.conf
+location ~ /\. {
+    # deny access to dotfiles
+    access_log off;
+    log_not_found off;
+    deny all;
+}
+
+location ~ ~$ {
+    # deny access to temp editor files, e.g. &quot;script.php~&quot;
+    access_log off;
+    log_not_found off;
+    deny all;
+}</code></pre>
+<pre class="nginx"><code># /etc/nginx/php.conf
+location ~ (index)\.php$ {
+    # proxy PHP requests to PHP-FPM
+    fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
+    fastcgi_index  index.php;
+    include        fastcgi.conf;
+}</code></pre>
+<pre class="nginx"><code># /etc/nginx/static_assets.conf
+location ~* \.(?:ico|css|js|gif|jpe?g|png)$ {
+    expires    max;
+    add_header Pragma public;
+    add_header Cache-Control &quot;public, must-revalidate, proxy-revalidate&quot;;
+}</code></pre>
+<pre class="nginx"><code># /etc/nginx/nginx.conf
+[...][](.html)
+
+http {
+    [...][](.html)
+
+    root        /home/john/web;
+    access_log  /var/log/nginx/access.log;
+    error_log   /var/log/nginx/error.log;
+
+    server {
+        # virtual host for a first domain
+        listen       80;
+        server_name  my.first.domain.org;
+
+        location /shaarli/ {
+            access_log  /var/log/nginx/shaarli.access.log;
+            error_log   /var/log/nginx/shaarli.error.log;
+        }
+
+        include deny.conf;
+        include static_assets.conf;
+        include php.conf;
+    }
+
+    server {
+        # virtual host for a second domain
+        listen       80;
+        server_name  second.domain.com;
+
+        location /minigal/ {
+            access_log  /var/log/nginx/minigal.access.log;
+            error_log   /var/log/nginx/minigal.error.log;
+        }
+
+        include deny.conf;
+        include static_assets.conf;
+        include php.conf;
+    }
+}</code></pre>
+<h3 id="redirect-http-to-https">Redirect HTTP to HTTPS</h3>
+<p>Assuming you have generated a (self-signed) key and certificate, and they are located under <code>/home/john/ssl/localhost.{key,crt}</code>, it is pretty straightforward to set an HTTP (:80) to HTTPS (:443) redirection to force SSL/TLS usage.</p>
+<pre class="nginx"><code># /etc/nginx/nginx.conf
+[...][](.html)
+
+http {
+    [...][](.html)
+
+    index index.html index.php;
+
+    root        /home/john/web;
+    access_log  /var/log/nginx/access.log;
+    error_log   /var/log/nginx/error.log;
+
+    server {
+        listen       80;
+        server_name  localhost;
+
+        return 301 https://localhost$request_uri;
+    }
+
+    server {
+        listen       443 ssl;
+        server_name  localhost;
+
+        ssl_certificate      /home/john/ssl/localhost.crt;
+        ssl_certificate_key  /home/john/ssl/localhost.key;
+
+        location /shaarli/ {
+            access_log  /var/log/nginx/shaarli.access.log;
+            error_log   /var/log/nginx/shaarli.error.log;
+        }
+
+        include deny.conf;
+        include static_assets.conf;
+        include php.conf;
+    }
+}</code></pre>
+</body>
+</html>

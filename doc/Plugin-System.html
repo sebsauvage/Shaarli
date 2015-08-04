@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Shaarli - Plugin System</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="github-markdown.css">
+</head>
+<body>
+<div id="local-sidebar">
+<ul>
+<li><a href="Home.html">Home</a></li>
+<li>Installation
+<ul>
+<li><a href="Server-requirements.html">Server requirements</a></li>
+<li><a href="Server-configuration.html">Server configuration</a></li>
+<li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
+</ul></li>
+<li><a href="Usage.html">Usage</a>
+<ul>
+<li><a href="Sharing-button.html">Sharing button</a> (bookmarklet)</li>
+<li><a href="Firefox-share.html">Firefox share</a></li>
+<li><a href="RSS-feeds.html">RSS feeds</a></li>
+</ul></li>
+<li>How To
+<ul>
+<li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
+<li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
+<li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
+</ul></li>
+<li><a href="Troubleshooting.html">Troubleshooting</a></li>
+<li><a href="Development.html">Development</a>
+<ul>
+<li><a href="GnuPG-signature.html">GnuPG signature</a></li>
+<li><a href="Coding-guidelines.html">Coding guidelines</a></li>
+<li><a href="Directory-structure.html">Directory structure</a></li>
+<li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
+<li><a href="Plugin-System.html">Plugin System</a></li>
+<li><a href="Security.html">Security</a></li>
+<li><a href="Static-analysis.html">Static analysis</a></li>
+<li><a href="Theming.html">Theming</a></li>
+<li><a href="Unit-tests.html">Unit tests</a></li>
+</ul></li>
+<li>About
+<ul>
+<li><a href="FAQ.html">FAQ</a></li>
+<li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
+<li><a href="TODO.html">TODO</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="plugin-system">Plugin System</h1>
+<blockquote>
+<p>Note: Plugin current status - in developpement (not merged into master).</p>
+</blockquote>
+<p><a href="#plugin-user-guide"><strong>I am a user.</strong> Plugin User Guide.</a><a href=".html"></a></p>
+<p><a href="#developper-api"><strong>I am a developper.</strong> Developper API.</a><a href=".html"></a></p>
+<p><a href="#guide-for-template-designer"><strong>I am a template designer.</strong> Guide for template designer.</a><a href=".html"></a></p>
+<h2 id="plugin-user-guide">Plugin User Guide</h2>
+<h3 id="manage-plugins">Manage plugins</h3>
+<p>In <code>config.php</code>, change $GLOBALS<a href="&#39;ENABLED_PLUGINS&#39;]-array:.html">'config'['ENABLED_PLUGINS'] array:</a></p>
+<pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]](</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]</span>.html<span class="ot">)</span></code></pre>
+<p>Full list:</p>
+<pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]</span> = <span class="fu">array</span><span class="ot">(](</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]</span>-=-<span class="fu">array</span><span class="ot">(</span>.html<span class="ot">)</span>
+    <span class="st">&#39;qrcode&#39;</span><span class="ot">,</span> <span class="st">&#39;archiveorg&#39;</span><span class="ot">,</span> <span class="st">&#39;readityourself&#39;</span><span class="ot">,</span> <span class="st">&#39;playvideos&#39;</span><span class="ot">,</span>
+    <span class="st">&#39;wallabag&#39;</span><span class="ot">,</span> <span class="st">&#39;markdown&#39;</span><span class="ot">,</span> <span class="st">&#39;addlink_toolbar&#39;</span><span class="ot">,</span>
+<span class="ot">);</span></code></pre>
+<h3 id="list-of-plugins">List of plugins</h3>
+<p>Plugin maintained by the community:</p>
+<ul>
+<li>Archive.org - add a clickable icon to every link to archive.org.</li>
+<li>Addlink in toolbar - add a field to paste new links URL in toolbar.</li>
+<li>Markdown - write and display Shaare in Markdown.</li>
+<li>Play videos - popup to play all videos displayed in linklist.</li>
+<li>QRCode - add a clickable icon generating a QRCode for every link.</li>
+<li>ReadItYourself - add a clickable icon for ReadItYourself.</li>
+<li>Wallabag - add a clickable icon for Wallabag.</li>
+</ul>
+<h2 id="developper-api">Developper API</h2>
+<h3 id="what-can-i-do-with-plugins">What can I do with plugins?</h3>
+<p>The plugin system let you:</p>
+<ul>
+<li>insert content into specific places across templates.</li>
+<li>alter data before templates rendering.</li>
+<li>alter data before saving new links.</li>
+</ul>
+<h3 id="how-can-i-create-a-plugin-for-shaarli">How can I create a plugin for Shaarli?</h3>
+<p>First, chose a plugin name, such as <code>demo_plugin</code>.</p>
+<p>Under <code>plugin</code> folder, create a folder named with your plugin name. Then create a <plugin_name>.php file in that folder.</p>
+<p>You should have the following tree view:</p>
+<pre><code>| index.php
+| plugins/
+|---| demo_plugin/
+|   |---| demo_plugin.php</code></pre>
+<h3 id="understanding-hooks">Understanding hooks</h3>
+<p>A plugin is a set of functions. Each function will be triggered by the plugin system at certain point in Shaarli execution.</p>
+<p>These functions need to be named with this pattern:</p>
+<pre><code>hook_&lt;plugin_name&gt;_&lt;hook_name&gt;</code></pre>
+<p>For exemple, if my plugin want to add data to the header, this function is needed:</p>
+<pre><code>hook_demo_plugin_render_header()</code></pre>
+<p>If this function is declared, and the plugin enabled, it will be called every time Shaarli is rendering the header.</p>
+<h3 id="plugins-data">Plugin's data</h3>
+<h4 id="parameters">Parameters</h4>
+<p>Every hook function has a <code>$data</code> parameter. Its content differs for each hooks.</p>
+<p><strong>This parameter needs to be returned every time</strong>, otherwise data is lost.</p>
+<pre><code>return $data;</code></pre>
+<h4 id="filling-templates-placeholder">Filling templates placeholder</h4>
+<p>Template placeholders are displayed in template in specific places.</p>
+<p>RainTPL displays every element contained in the placeholder's array. These element can be added by plugins.</p>
+<p>For example, let's add a value in the placeholder <code>top_placeholder</code> which is displayed at the top of my page:</p>
+<pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$data</span><span class="ot">[</span><span class="st">&#39;top_placeholder&#39;</span><span class="ot">[]</span> = <span class="st">&#39;My content&#39;</span><span class="ot">;](]</span>-=-<span class="st">&#39;My-content&#39;</span><span class="ot">;</span>.html<span class="ot">)</span>
+<span class="co"># OR</span>
+<span class="fu">array_push</span><span class="ot">(</span><span class="kw">$data</span><span class="ot">[</span><span class="st">&#39;top_placeholder&#39;</span><span class="ot">],</span> <span class="st">&#39;My&#39;</span><span class="ot">,</span> <span class="st">&#39;content&#39;</span><span class="ot">);[](</span>.html<span class="ot">)</span>
+
+<span class="kw">return</span> <span class="kw">$data</span><span class="ot">;</span></code></pre>
+<h4 id="data-manipulation">Data manipulation</h4>
+<p>When a page is displayed, every variable send to the template engine is passed to plugins before that in <code>$data</code>.</p>
+<p>The data contained by this array can be altered before template rendering.</p>
+<p>For exemple, in linklist, it is possible to alter every title:</p>
+<pre class="sourceCode php"><code class="sourceCode php"><span class="co">// mind the reference if you want $data to be altered</span>
+<span class="kw">foreach</span> <span class="ot">(</span><span class="kw">$data</span><span class="ot">[</span><span class="st">&#39;links&#39;</span><span class="ot">]</span> <span class="kw">as</span> &amp;<span class="kw">$value</span><span class="ot">)</span> {<span class="ot">[](</span>.html<span class="ot">)</span>
+    <span class="co">// String reverse every title.</span>
+    <span class="kw">$value</span><span class="ot">[</span><span class="st">&#39;title&#39;</span><span class="ot">]</span> = <span class="fu">strrev</span><span class="ot">(</span><span class="kw">$value</span><span class="ot">[</span><span class="st">&#39;title&#39;</span><span class="ot">]);[](</span>.html<span class="ot">)</span>
+}
+
+<span class="kw">return</span> <span class="kw">$data</span><span class="ot">;</span></code></pre>
+<h3 id="its-not-working">It's not working!</h3>
+<p>Use <code>demo_plugin</code> as a functional example. It covers most of the plugin system features.</p>
+<p>If it's still not working, please <a href="https://github.com/shaarli/Shaarli/issues/new">open an issue</a>.<a href=".html"></a></p>
+<h3 id="hooks">Hooks</h3>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Hooks</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="#render_header">render_header</a></td>
+<td style="text-align: center;">Allow plugin to add content in page headers.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="#render_includes">render_includes</a></td>
+<td style="text-align: center;">Allow plugin to include their own CSS files.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="#render_footer">render_footer</a></td>
+<td style="text-align: center;">Allow plugin to add content in page footer and include their own JS files.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="#render_linklist">render_linklist</a></td>
+<td style="text-align: center;">It allows to add content at the begining and end of the page, after every link displayed and to alter link data.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="#render_editlink">render_editlink</a></td>
+<td style="text-align: center;">Allow to add fields in the form, or display elements.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="#render_tools">render_tools</a></td>
+<td style="text-align: center;">Allow to add content at the end of the page.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="#render_picwall">render_picwall</a></td>
+<td style="text-align: center;">Allow to add content at the top and bottom of the page.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="#render_tagcloud">render_tagcloud</a></td>
+<td style="text-align: center;">Allow to add content at the top and bottom of the page.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="#render_daily">render_daily</a></td>
+<td style="text-align: center;">Allow to add content at the top and bottom of the page, the bottom of each link and to alter data.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="#savelink">savelink</a></td>
+<td style="text-align: center;">Allow to alter the link being saved in the datastore.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="render_header">render_header</h4>
+<p>Triggered on every page.</p>
+<p>Allow plugin to add content in page headers.</p>
+<h5 id="data">Data</h5>
+<p><code>$data</code> is an array containing:</p>
+<ul>
+<li><code>_PAGE_</code>: current target page (eg: <code>linklist</code>, <code>picwall</code>, etc.).</li>
+<li><code>_LOGGEDIN_</code>: true if user is logged in, false otherwise.</li>
+</ul>
+<h5 id="template-placeholders">Template placeholders</h5>
+<p>Items can be displayed in templates by adding an entry in <code>$data['&lt;placeholder&gt;']</code> array.<a href=".html"></a></p>
+<p>List of placeholders:</p>
+<ul>
+<li><code>buttons_toolbar</code>: after the list of buttons in the header.</li>
+</ul>
+<p><img src="http://i.imgur.com/ssJUOrt.png" alt="buttons_toolbar_example" /><a href=".html"></a></p>
+<ul>
+<li><code>fields_toolbar</code>: after search fields in the header.</li>
+</ul>
+<blockquote>
+<p>Note: This will only be called in linklist.</p>
+</blockquote>
+<p><img src="http://i.imgur.com/3GMifI2.png" alt="fields_toolbar_example" /><a href=".html"></a></p>
+<h4 id="render_includes">render_includes</h4>
+<p>Triggered on every page.</p>
+<p>Allow plugin to include their own CSS files.</p>
+<h5 id="data-1">Data</h5>
+<p><code>$data</code> is an array containing:</p>
+<ul>
+<li><code>_PAGE_</code>: current target page (eg: <code>linklist</code>, <code>picwall</code>, etc.).</li>
+<li><code>_LOGGEDIN_</code>: true if user is logged in, false otherwise.</li>
+</ul>
+<h5 id="template-placeholders-1">Template placeholders</h5>
+<p>Items can be displayed in templates by adding an entry in <code>$data['&lt;placeholder&gt;']</code> array.<a href=".html"></a></p>
+<p>List of placeholders:</p>
+<ul>
+<li><code>css_files</code>: called after loading default CSS.</li>
+</ul>
+<blockquote>
+<p>Note: only add the path of the CSS file. E.g: <code>plugins/demo_plugin/custom_demo.css</code>.</p>
+</blockquote>
+<h4 id="render_footer">render_footer</h4>
+<p>Triggered on every page.</p>
+<p>Allow plugin to add content in page footer and include their own JS files.</p>
+<h5 id="data-2">Data</h5>
+<p><code>$data</code> is an array containing:</p>
+<ul>
+<li><code>_PAGE_</code>: current target page (eg: <code>linklist</code>, <code>picwall</code>, etc.).</li>
+<li><code>_LOGGEDIN_</code>: true if user is logged in, false otherwise.</li>
+</ul>
+<h5 id="template-placeholders-2">Template placeholders</h5>
+<p>Items can be displayed in templates by adding an entry in <code>$data['&lt;placeholder&gt;']</code> array.<a href=".html"></a></p>
+<p>List of placeholders:</p>
+<ul>
+<li><code>text</code>: called after the end of the footer text.</li>
+</ul>
+<p><img src="http://i.imgur.com/L5S2YEH.png" alt="text_example" /><a href=".html"></a></p>
+<ul>
+<li><code>js_files</code>: called at the end of the page, to include custom JS scripts.</li>
+</ul>
+<blockquote>
+<p>Note: only add the path of the JS file. E.g: <code>plugins/demo_plugin/custom_demo.js</code>.</p>
+</blockquote>
+<h4 id="render_linklist">render_linklist</h4>
+<p>Triggered when <code>linklist</code> is displayed (list of links, permalink, search, tag filtered, etc.).</p>
+<p>It allows to add content at the begining and end of the page, after every link displayed and to alter link data.</p>
+<h5 id="data-3">Data</h5>
+<p><code>$data</code> is an array containing:</p>
+<ul>
+<li><code>_LOGGEDIN_</code>: true if user is logged in, false otherwise.</li>
+<li>All templates data, including links.</li>
+</ul>
+<h5 id="template-placeholders-3">Template placeholders</h5>
+<p>Items can be displayed in templates by adding an entry in <code>$data['&lt;placeholder&gt;']</code> array.<a href=".html"></a></p>
+<p>List of placeholders:</p>
+<ul>
+<li><code>action_plugin</code>: next to the button &quot;private only&quot; at the top and bottom of the page.</li>
+</ul>
+<p><img src="http://i.imgur.com/Q12PWg0.png" alt="action_plugin_example" /><a href=".html"></a></p>
+<ul>
+<li><code>link_plugin</code>: for every link, between permalink and link URL.</li>
+</ul>
+<p><img src="http://i.imgur.com/3oDPhWx.png" alt="link_plugin_example" /><a href=".html"></a></p>
+<ul>
+<li><code>plugin_start_zone</code>: before displaying the template content.</li>
+</ul>
+<p><img src="http://i.imgur.com/OVBkGy3.png" alt="plugin_start_zone_example" /><a href=".html"></a></p>
+<ul>
+<li><code>plugin_end_zone</code>: after displaying the template content.</li>
+</ul>
+<p><img src="http://i.imgur.com/6IoRuop.png" alt="plugin_end_zone_example" /><a href=".html"></a></p>
+<h4 id="render_editlink">render_editlink</h4>
+<p>Triggered when the link edition form is displayed.</p>
+<p>Allow to add fields in the form, or display elements.</p>
+<h5 id="data-4">Data</h5>
+<p><code>$data</code> is an array containing:</p>
+<ul>
+<li>All templates data.</li>
+</ul>
+<h5 id="template-placeholders-4">Template placeholders</h5>
+<p>Items can be displayed in templates by adding an entry in <code>$data['&lt;placeholder&gt;']</code> array.<a href=".html"></a></p>
+<p>List of placeholders:</p>
+<ul>
+<li><code>edit_link_plugin</code>: after tags field.</li>
+</ul>
+<p><img src="http://i.imgur.com/5u17Ens.png" alt="edit_link_plugin_example" /><a href=".html"></a></p>
+<h4 id="render_tools">render_tools</h4>
+<p>Triggered when the &quot;tools&quot; page is displayed.</p>
+<p>Allow to add content at the end of the page.</p>
+<h5 id="data-5">Data</h5>
+<p><code>$data</code> is an array containing:</p>
+<ul>
+<li>All templates data.</li>
+</ul>
+<h5 id="template-placeholders-5">Template placeholders</h5>
+<p>Items can be displayed in templates by adding an entry in <code>$data['&lt;placeholder&gt;']</code> array.<a href=".html"></a></p>
+<p>List of placeholders:</p>
+<ul>
+<li><code>tools_plugin</code>: at the end of the page.</li>
+</ul>
+<p><img src="http://i.imgur.com/Bqhu9oQ.png" alt="tools_plugin_example" /><a href=".html"></a></p>
+<h4 id="render_picwall">render_picwall</h4>
+<p>Triggered when picwall is displayed.</p>
+<p>Allow to add content at the top and bottom of the page.</p>
+<h5 id="data-6">Data</h5>
+<p><code>$data</code> is an array containing:</p>
+<ul>
+<li><code>_LOGGEDIN_</code>: true if user is logged in, false otherwise.</li>
+<li>All templates data.</li>
+</ul>
+<h5 id="template-placeholders-6">Template placeholders</h5>
+<p>Items can be displayed in templates by adding an entry in <code>$data['&lt;placeholder&gt;']</code> array.<a href=".html"></a></p>
+<p>List of placeholders:</p>
+<ul>
+<li><p><code>plugin_start_zone</code>: before displaying the template content.</p></li>
+<li><p><code>plugin_end_zone</code>: after displaying the template content.</p></li>
+</ul>
+<p><img src="http://i.imgur.com/tVTQFER.png" alt="plugin_start_end_zone_example" /><a href=".html"></a></p>
+<h4 id="render_tagcloud">render_tagcloud</h4>
+<p>Triggered when tagcloud is displayed.</p>
+<p>Allow to add content at the top and bottom of the page.</p>
+<h5 id="data-7">Data</h5>
+<p><code>$data</code> is an array containing:</p>
+<ul>
+<li><code>_LOGGEDIN_</code>: true if user is logged in, false otherwise.</li>
+<li>All templates data.</li>
+</ul>
+<h5 id="template-placeholders-7">Template placeholders</h5>
+<p>Items can be displayed in templates by adding an entry in <code>$data['&lt;placeholder&gt;']</code> array.<a href=".html"></a></p>
+<p>List of placeholders:</p>
+<ul>
+<li><p><code>plugin_start_zone</code>: before displaying the template content.</p></li>
+<li><p><code>plugin_end_zone</code>: after displaying the template content.</p></li>
+</ul>
+<p><img src="http://i.imgur.com/vHmyT3a.png" alt="plugin_start_end_zone_example" /><a href=".html"></a></p>
+<h4 id="render_daily">render_daily</h4>
+<p>Triggered when tagcloud is displayed.</p>
+<p>Allow to add content at the top and bottom of the page, the bottom of each link and to alter data.</p>
+<h5 id="data-8">Data</h5>
+<p><code>$data</code> is an array containing:</p>
+<ul>
+<li><code>_LOGGEDIN_</code>: true if user is logged in, false otherwise.</li>
+<li>All templates data, including links.</li>
+</ul>
+<h5 id="template-placeholders-8">Template placeholders</h5>
+<p>Items can be displayed in templates by adding an entry in <code>$data['&lt;placeholder&gt;']</code> array.<a href=".html"></a></p>
+<p>List of placeholders:</p>
+<ul>
+<li><code>link_plugin</code>: used at bottom of each link.</li>
+</ul>
+<p><img src="http://i.imgur.com/hzhMfSZ.png" alt="link_plugin_example" /><a href=".html"></a></p>
+<ul>
+<li><p><code>plugin_start_zone</code>: before displaying the template content.</p></li>
+<li><p><code>plugin_end_zone</code>: after displaying the template content.</p></li>
+</ul>
+<h4 id="savelink">savelink</h4>
+<p>Triggered when a link is save (new link or edit).</p>
+<p>Allow to alter the link being saved in the datastore.</p>
+<h5 id="data-9">Data</h5>
+<p><code>$data</code> is an array containing the link being saved:</p>
+<ul>
+<li>title</li>
+<li>url</li>
+<li>description</li>
+<li>linkdate</li>
+<li>private</li>
+<li>tags</li>
+</ul>
+<h2 id="guide-for-template-designer">Guide for template designer</h2>
+<h3 id="placeholder-system">Placeholder system</h3>
+<p>In order to make plugins work with every custom themes, you need to add variable placeholder in your templates.</p>
+<p>It's a RainTPL loop like this:</p>
+<pre><code>{loop=&quot;$plugin_variable&quot;}
+    {$value}
+{/loop}</code></pre>
+<p>You should enable <code>demo_plugin</code> for testing purpose, since it uses every placeholder available.</p>
+<h3 id="list-of-placeholders">List of placeholders</h3>
+<p><strong>page.header.html</strong></p>
+<p>At the end of the menu:</p>
+<pre><code>{loop=&quot;$plugins_header.buttons_toolbar&quot;}
+    {$value}
+{/loop}</code></pre>
+<p><strong>includes.html</strong></p>
+<p>At the end of the file:</p>
+<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugins_includes.css_files&quot;}
+<span class="kw">&lt;link</span><span class="ot"> type=</span><span class="st">&quot;text/css&quot;</span><span class="ot"> rel=</span><span class="st">&quot;stylesheet&quot;</span><span class="ot"> href=</span><span class="st">&quot;{$value}#&quot;</span><span class="kw">/&gt;</span>
+{/loop}</code></pre>
+<p><strong>page.footer.html</strong></p>
+<p>At the end of your footer notes:</p>
+<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugins_footer.text&quot;}
+     {$value}
+{/loop}</code></pre>
+<p>At the end of file:</p>
+<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugins_footer.js_files&quot;}
+     <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;{$value}#&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
+{/loop}</code></pre>
+<p><strong>linklist.html</strong></p>
+<p>After search fields:</p>
+<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugins_header.fields_toolbar&quot;}
+     {$value}
+{/loop}</code></pre>
+<p>Before displaying the link list (after paging):</p>
+<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugin_start_zone&quot;}
+     {$value}
+{/loop}</code></pre>
+<p>For every links (icons):</p>
+<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$value.link_plugin&quot;}
+    <span class="kw">&lt;span&gt;</span>{$value}<span class="kw">&lt;/span&gt;</span>
+{/loop}</code></pre>
+<p>Before end paging:</p>
+<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugin_end_zone&quot;}
+     {$value}
+{/loop}</code></pre>
+<p><strong>linklist.paging.html</strong></p>
+<p>After the &quot;private only&quot; icon:</p>
+<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$action_plugin&quot;}
+     {$value}
+{/loop}</code></pre>
+<p><strong>editlink.html</strong></p>
+<p>After tags field:</p>
+<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$edit_link_plugin&quot;}
+     {$value}
+{/loop}</code></pre>
+<p><strong>tools.html</strong></p>
+<p>After the last tool:</p>
+<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$tools_plugin&quot;}
+     {$value}
+{/loop}</code></pre>
+<p><strong>picwall.html</strong></p>
+<p>Top:</p>
+<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_start_picwall&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
+    {loop=&quot;$plugin_start_zone&quot;}
+        {$value}
+    {/loop}
+<span class="kw">&lt;/div&gt;</span></code></pre>
+<p>Bottom:</p>
+<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_end_picwall&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
+    {loop=&quot;$plugin_end_zone&quot;}
+        {$value}
+    {/loop}
+<span class="kw">&lt;/div&gt;</span></code></pre>
+<p><strong>tagcloud.html</strong></p>
+<p>Top:</p>
+<pre class="sourceCode html"><code class="sourceCode html">   <span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_start_tagcloud&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
+        {loop=&quot;$plugin_start_zone&quot;}
+            {$value}
+        {/loop}
+    <span class="kw">&lt;/div&gt;</span></code></pre>
+<p>Bottom:</p>
+<pre class="sourceCode html"><code class="sourceCode html">    <span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_end_tagcloud&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
+        {loop=&quot;$plugin_end_zone&quot;}
+            {$value}
+        {/loop}
+    <span class="kw">&lt;/div&gt;</span></code></pre>
+<p><strong>daily.html</strong></p>
+<p>Top:</p>
+<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_start_picwall&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
+     {loop=&quot;$plugin_start_zone&quot;}
+         {$value}
+     {/loop}
+<span class="kw">&lt;/div&gt;</span></code></pre>
+<p>After every link:</p>
+<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;dailyEntryFooter&quot;</span><span class="kw">&gt;</span>
+     {loop=&quot;$link.link_plugin&quot;}
+          {$value}
+     {/loop}
+<span class="kw">&lt;/div&gt;</span></code></pre>
+<p>Bottom:</p>
+<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_end_picwall&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
+    {loop=&quot;$plugin_end_zone&quot;}
+        {$value}
+    {/loop}
+<span class="kw">&lt;/div&gt;</span></code></pre>
+</body>
+</html>

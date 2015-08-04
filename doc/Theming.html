@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Shaarli - Theming</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="github-markdown.css">
+</head>
+<body>
+<div id="local-sidebar">
+<ul>
+<li><a href="Home.html">Home</a></li>
+<li>Installation
+<ul>
+<li><a href="Server-requirements.html">Server requirements</a></li>
+<li><a href="Server-configuration.html">Server configuration</a></li>
+<li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
+</ul></li>
+<li><a href="Usage.html">Usage</a>
+<ul>
+<li><a href="Sharing-button.html">Sharing button</a> (bookmarklet)</li>
+<li><a href="Firefox-share.html">Firefox share</a></li>
+<li><a href="RSS-feeds.html">RSS feeds</a></li>
+</ul></li>
+<li>How To
+<ul>
+<li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
+<li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
+<li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
+</ul></li>
+<li><a href="Troubleshooting.html">Troubleshooting</a></li>
+<li><a href="Development.html">Development</a>
+<ul>
+<li><a href="GnuPG-signature.html">GnuPG signature</a></li>
+<li><a href="Coding-guidelines.html">Coding guidelines</a></li>
+<li><a href="Directory-structure.html">Directory structure</a></li>
+<li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
+<li><a href="Plugin-System.html">Plugin System</a></li>
+<li><a href="Security.html">Security</a></li>
+<li><a href="Static-analysis.html">Static analysis</a></li>
+<li><a href="Theming.html">Theming</a></li>
+<li><a href="Unit-tests.html">Unit tests</a></li>
+</ul></li>
+<li>About
+<ul>
+<li><a href="FAQ.html">FAQ</a></li>
+<li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
+<li><a href="TODO.html">TODO</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="theming">Theming</h1>
+<h2 id="user-css">User CSS</h2>
+<ul>
+<li>Shaarli's apparence can be modified by editing CSS rules in <code>inc/user.css</code>. This file allows to override rules defined in the main <code>inc/shaarli.css</code> (only add changed rules), or define a whole new theme.</li>
+<li>Do not edit <code>inc/shaarli.css</code>! Your changes would be overriden when updating Shaarli.</li>
+<li>Some themes are available at <a href="https://github.com/shaarli/shaarli-themes" class="uri">https://github.com/shaarli/shaarli-themes</a>.</li>
+</ul>
+<p>See also:</p>
+<ul>
+<li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
+</ul>
+<h2 id="raintpl-template">RainTPL template</h2>
+<p><em>WARNING - This feature is currently being worked on and will be improved in the next releases. Experimental.</em></p>
+<ul>
+<li>Find the template you'd like to install (see the list of <a href="available-templates|Theming#community-themes--templates.html">available templates|Theming#community-themes--templates</a>)</li>
+<li>Find it's git clone URL or download the zip archive for the template.</li>
+<li>In your Shaarli <code>tpl/</code> directory, run <code>git clone https://url/of/my-template/</code> or unpack the zip archive.
+<ul>
+<li>There should now be a <code>my-template/</code> directory under the <code>tpl/</code> dir, containing directly all the template files.</li>
+</ul></li>
+<li><p>Edit <code>data/config.php</code> to have Shaarli use this template, e.g.</p>
+<pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;RAINTPL_TPL&#39;</span><span class="ot">]</span> = <span class="st">&#39;tpl/my-template/&#39;</span><span class="ot">;](</span><span class="st">&#39;RAINTPL_TPL&#39;</span><span class="ot">]</span>-=-<span class="st">&#39;tpl/my-template/&#39;</span><span class="ot">;</span>.html<span class="ot">)</span></code></pre></li>
+</ul>
+<h2 id="community-themes-templates">Community themes &amp; templates</h2>
+<ul>
+<li><a href="https://github.com/AkibaTech/Shaarli---SuperHero-Theme">AkibaTech/Shaarli Superhero Theme</a> - A template/theme for Shaarli<a href=".html"></a></li>
+<li><a href="https://github.com/alexisju/albinomouse-template">alexisju/albinomouse-template</a> - A full template for Shaarli<a href=".html"></a></li>
+<li><a href="https://github.com/dhoko/ShaarliTemplate">dhoko/ShaarliTemplate</a> - A template/theme for Shaarli<a href=".html"></a></li>
+<li><a href="https://github.com/kalvn/shaarli-blocks">kalvn/shaarli-blocks</a> - A template/theme for Shaarli<a href=".html"></a></li>
+<li><a href="https://github.com/kalvn/Shaarli-Material">kalvn/Shaarli-Material</a> - A theme (template) based on Google's Material Design for Shaarli, the superfast delicious clone.<a href=".html"></a></li>
+<li><a href="https://github.com/misterair/limonade">misterair/Limonade</a> - A fork of (legacy) Shaarli with a new template<a href=".html"></a></li>
+<li><a href="https://github.com/Vinm/Blue-theme-for-Shaarli">Vinm/Blue-theme-for Shaarli</a> - A template/theme for Shaarli (<a href="https://github.com/Vinm/Blue-theme-for-Shaarli/issues/2">unmaintained</a>, compatibility unknown)<a href=".html"></a></li>
+<li><a href="https://github.com/vivienhaese/shaarlitheme">vivienhaese/shaarlitheme</a> - A Shaarli fork meant to be run in an openshift instance<a href=".html"></a></li>
+</ul>
+<h3 id="example-installation-albinomouse-template">Example installation: AlbinoMouse template</h3>
+<p>With the following configuration:</p>
+<ul>
+<li>Apache 2 / PHP 5.6</li>
+<li>user sites are enabled, e.g. <code>/home/user/public_html/somedir</code> is served as <code>http://localhost/~user/somedir</code></li>
+<li><code>http</code> is the name of the Apache user</li>
+</ul>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> ~/public_html
+
+<span class="co"># clone repositories</span>
+$ <span class="kw">git</span> clone https://github.com/shaarli/Shaarli.git shaarli
+$ <span class="kw">pushd</span> shaarli/tpl
+$ <span class="kw">git</span> clone https://github.com/alexisju/albinomouse-template.git
+$ <span class="kw">popd</span>
+
+<span class="co"># set access rights for Apache</span>
+$ <span class="kw">chgrp</span> -R http shaarli
+$ <span class="kw">chmod</span> g+rwx shaarli shaarli/cache shaarli/data shaarli/pagecache shaarli/tmp</code></pre>
+<p>Get config written:</p>
+<ul>
+<li>go to the freshly installed site</li>
+<li>fill the install form</li>
+<li>log in to Shaarli</li>
+</ul>
+<p>Edit Shaarli's <a href="configuration|Shaarli-configuration.html">configuration|Shaarli configuration</a>:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># the file should be owned by Apache, thus not writeable =&gt; sudo</span>
+$ <span class="kw">sudo</span> sed -i s=tpl=tpl/albinomouse-template=g shaarli/data/config.php</code></pre>
+</body>
+</html>

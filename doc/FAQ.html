@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Shaarli - FAQ</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="github-markdown.css">
+</head>
+<body>
+<div id="local-sidebar">
+<ul>
+<li><a href="Home.html">Home</a></li>
+<li>Installation
+<ul>
+<li><a href="Server-requirements.html">Server requirements</a></li>
+<li><a href="Server-configuration.html">Server configuration</a></li>
+<li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
+</ul></li>
+<li><a href="Usage.html">Usage</a>
+<ul>
+<li><a href="Sharing-button.html">Sharing button</a> (bookmarklet)</li>
+<li><a href="Firefox-share.html">Firefox share</a></li>
+<li><a href="RSS-feeds.html">RSS feeds</a></li>
+</ul></li>
+<li>How To
+<ul>
+<li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
+<li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
+<li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
+</ul></li>
+<li><a href="Troubleshooting.html">Troubleshooting</a></li>
+<li><a href="Development.html">Development</a>
+<ul>
+<li><a href="GnuPG-signature.html">GnuPG signature</a></li>
+<li><a href="Coding-guidelines.html">Coding guidelines</a></li>
+<li><a href="Directory-structure.html">Directory structure</a></li>
+<li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
+<li><a href="Plugin-System.html">Plugin System</a></li>
+<li><a href="Security.html">Security</a></li>
+<li><a href="Static-analysis.html">Static analysis</a></li>
+<li><a href="Theming.html">Theming</a></li>
+<li><a href="Unit-tests.html">Unit tests</a></li>
+</ul></li>
+<li>About
+<ul>
+<li><a href="FAQ.html">FAQ</a></li>
+<li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
+<li><a href="TODO.html">TODO</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="faq">FAQ</h1>
+<h3 id="why-did-you-create-shaarli">Why did you create Shaarli ?</h3>
+<p>I was a StumbleUpon user. Then I got fed up with they big toolbar. I switched to delicious, which was lighter, faster and more beautiful. Until Yahoo bought it. Then the export API broke all the time, delicious became slow and was ditched by Yahoo. I switched to Diigo, which is not bad, but does too much. And Diigo is sslllooooowww and their Firefox extension a bit buggy. And… oh… <strong>their Firefox addon sends to Diigo every single URL you visit</strong> (Don't believe me ? Use <a href="https://addons.mozilla.org/en-US/firefox/addon/tamper-data/">Tamper Data</a> and open any page).<a href=".html"></a></p>
+<p>Enough is enough. Saving simple links should not be a complicated heavy thing. I ditched them all and wrote my own: Shaarli. It's simple, but it does the job and does it well. And my data is not hosted on a foreign server, but on my server.</p>
+<h3 id="why-use-shaarli-and-not-deliciousdiigo">Why use Shaarli and not Delicious/Diigo ?</h3>
+<p>With Shaarli:</p>
+<ul>
+<li>The data is yours: It's hosted on your server.</li>
+<li>Never fear of having your data locked-in.</li>
+<li>Never fear to have your data sold to third party.</li>
+<li>Your private links are not hosted on a third party server.</li>
+<li>You are not tracked by browser addons (like Diigo does)</li>
+<li>You can change the look and feel of the pages if you want.</li>
+<li>You can change the behaviour of the program.</li>
+<li>It's magnitude faster than most bookmarking services.</li>
+</ul>
+<h3 id="what-does-shaarli-mean">What does Shaarli mean?</h3>
+<p>Shaarli is for shaaring your links.</p>
+<h3 id="my-shaarli-is-broken">My Shaarli is broken!</h3>
+<p>First of all, ensure that both the <a href="Server-configuration">web server</a> and <a href="Shaarli-configuration">Shaarli</a> are correctly configured, and that your installation is <a href="Server-requirements">supported</a>.<a href=".html"></a></p>
+<p>If everything looks right but the issue(s) remain(s), please:</p>
+<ul>
+<li>take a look at the <a href="Troubleshooting">troubleshooting</a> section<a href=".html"></a></li>
+<li>come <a href="https://gitter.im/shaarli/Shaarli">chat with us</a> on Gitter, we'll be happy to help ;-)<a href=".html"></a></li>
+<li>browse active <a href="https://github.com/shaarli/Shaarli/issues">issues</a> and <a href="https://github.com/shaarli/Shaarli/pulls">Pull Requests</a><a href=".html"></a>
+<ul>
+<li>if you find one that is related to the issue, feel free to comment and provide additional details (host/Shaarli setup)</li>
+<li>else, <a href="https://github.com/shaarli/Shaarli/issues/new">open a new issue</a>, and provide information about the problem:<a href=".html"></a>
+<ul>
+<li><em>what happens?</em> - display glitches, invalid data, security flaws...</li>
+<li><em>what is your configuration?</em> - OS, server version, activated extensions, web browser...</li>
+<li><em>is it reproducible?</em></li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="why-not-use-a-real-database-files-are-slow">Why not use a real database? Files are slow!</h3>
+<p>Does browsing <a href="http://sebsauvage.net/links/">this page</a> feel slow? Try browsing older pages, too.<a href=".html"></a></p>
+<p>It's not slow at all, is it? And don't forget the database contains more than 16000 links, and it's on a shared host, with 32000 visitors/day for my website alone. And it's still damn fast. Why?</p>
+<p>The data file is only 3.7 Mb. It's read 99% of the time, and is probably already in the operation system disk cache. So generating a page involves no I/O at all most of the time.</p>
+</body>
+</html>

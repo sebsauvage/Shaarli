@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Shaarli - Shaarli configuration</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="github-markdown.css">
+</head>
+<body>
+<div id="local-sidebar">
+<ul>
+<li><a href="Home.html">Home</a></li>
+<li>Installation
+<ul>
+<li><a href="Server-requirements.html">Server requirements</a></li>
+<li><a href="Server-configuration.html">Server configuration</a></li>
+<li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
+</ul></li>
+<li><a href="Usage.html">Usage</a>
+<ul>
+<li><a href="Sharing-button.html">Sharing button</a> (bookmarklet)</li>
+<li><a href="Firefox-share.html">Firefox share</a></li>
+<li><a href="RSS-feeds.html">RSS feeds</a></li>
+</ul></li>
+<li>How To
+<ul>
+<li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
+<li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
+<li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
+</ul></li>
+<li><a href="Troubleshooting.html">Troubleshooting</a></li>
+<li><a href="Development.html">Development</a>
+<ul>
+<li><a href="GnuPG-signature.html">GnuPG signature</a></li>
+<li><a href="Coding-guidelines.html">Coding guidelines</a></li>
+<li><a href="Directory-structure.html">Directory structure</a></li>
+<li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
+<li><a href="Plugin-System.html">Plugin System</a></li>
+<li><a href="Security.html">Security</a></li>
+<li><a href="Static-analysis.html">Static analysis</a></li>
+<li><a href="Theming.html">Theming</a></li>
+<li><a href="Unit-tests.html">Unit tests</a></li>
+</ul></li>
+<li>About
+<ul>
+<li><a href="FAQ.html">FAQ</a></li>
+<li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
+<li><a href="TODO.html">TODO</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="shaarli-configuration">Shaarli configuration</h1>
+<h2 id="foreword">Foreword</h2>
+<p><strong>Do not edit configuration options in index.php! Your changes would be lost.</strong></p>
+<p>Once your Shaarli instance is installed, the file <code>data/config.php</code> is generated:</p>
+<ul>
+<li>it contains all settings, and can be edited to customize values</li>
+<li>its values override those defined in <code>index.php</code></li>
+</ul>
+<h2 id="file-and-directory-permissions">File and directory permissions</h2>
+<p>The server process running Shaarli must have:</p>
+<ul>
+<li><code>read</code> access to the following resources:
+<ul>
+<li>PHP scripts: <code>index.php</code>, <code>application/*.php</code></li>
+<li>3rd party PHP and Javascript libraries: <code>inc/*.php</code>, <code>inc\*.js</code></li>
+<li>static assets:
+<ul>
+<li>CSS stylesheets: <code>inc\*.css</code></li>
+<li><code>images\*</code></li>
+</ul></li>
+<li>RainTPL templates: <code>tpl\*.html</code></li>
+</ul></li>
+<li><code>read</code>, <code>write</code> and <code>execution</code> access to the following directories:
+<ul>
+<li><code>cache</code> - thumbnail cache</li>
+<li><code>data</code> - link data store, configuration options</li>
+<li><code>pagecache</code> - Atom/RSS feed cache</li>
+<li><code>tmp</code> - RainTPL page cache</li>
+</ul></li>
+</ul>
+<p>On a Linux distribution:</p>
+<ul>
+<li>the web server user will likely be <code>www</code> or <code>http</code> (for Apache2)</li>
+<li>it will be a member of a group of the same name: <code>www:www</code>, <code>http:http</code></li>
+<li>to give it access to Shaarli, either:
+<ul>
+<li>unzip Shaarli in the default web server location (usually <code>/var/www/</code>) and set the web server user as the owner</li>
+<li>put users in the same group as the web server, and set the appropriate access rights</li>
+</ul></li>
+<li>if you have a domain / subdomain to serve Shaarli, <a href="Server-configuration">configure the server</a> accordingly<a href=".html"></a></li>
+</ul>
+<h2 id="example-dataconfig.php">Example <code>data/config.php</code></h2>
+<pre class="sourceCode php"><code class="sourceCode php"><span class="kw">&lt;?php</span> 
+<span class="co">// User login</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;login&#39;</span><span class="ot">]</span> = <span class="st">&#39;&lt;login&gt;&#39;</span><span class="ot">;[](</span>.html<span class="ot">)</span>
+
+<span class="co">// User password hash</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;hash&#39;</span><span class="ot">]</span> = <span class="st">&#39;200c452da46c2f889e5e48c49ef044bcacdcb095&#39;</span><span class="ot">;[](</span>.html<span class="ot">)</span>
+
+<span class="co">// Password salt</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;salt&#39;</span><span class="ot">]</span> = <span class="st">&#39;13b654102321576033d8473b63a275a1bf94c0f0&#39;</span><span class="ot">;</span> <span class="ot">[](</span>.html<span class="ot">)</span>
+
+<span class="co">// Local timezone</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;timezone&#39;</span><span class="ot">]</span> = <span class="st">&#39;Africa/Abidjan&#39;</span><span class="ot">;[](</span>.html<span class="ot">)</span>
+<span class="fu">date_default_timezone_set</span><span class="ot">(</span><span class="st">&#39;Africa/Abidjan&#39;</span><span class="ot">);</span>
+
+<span class="co">// Shaarli title</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;title&#39;</span><span class="ot">]</span> = <span class="st">&#39;My Little Shaarly&#39;</span><span class="ot">;[](</span>.html<span class="ot">)</span>
+
+<span class="co">// Link the Shaarli title points to</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;titleLink&#39;</span><span class="ot">]</span> = <span class="st">&#39;?&#39;</span><span class="ot">;[](</span>.html<span class="ot">)</span>
+
+<span class="co">// HTTP referer redirector</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;redirector&#39;</span><span class="ot">]</span> = <span class="st">&#39;&#39;</span><span class="ot">;[](</span>.html<span class="ot">)</span>
+
+<span class="co">// Disable session hijacking</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;disablesessionprotection&#39;</span><span class="ot">]</span> = <span class="kw">false</span><span class="ot">;</span> <span class="ot">[](</span>.html<span class="ot">)</span>
+
+<span class="co">// Whether new links are private by default</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;privateLinkByDefault&#39;</span><span class="ot">]</span> = <span class="kw">false</span><span class="ot">;[](</span>.html<span class="ot">)</span>
+
+<span class="co">// Subdirectory where Shaarli stores its data files.</span>
+<span class="co">// You can change it for better security.</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;DATADIR&#39;</span><span class="ot">]</span> = <span class="st">&#39;data&#39;</span><span class="ot">;](</span><span class="st">&#39;DATADIR&#39;</span><span class="ot">]</span>-=-<span class="st">&#39;data&#39;</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// File used to store settings</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;CONFIG_FILE&#39;</span><span class="ot">]</span> = <span class="st">&#39;data/config.php&#39;</span><span class="ot">;](</span><span class="st">&#39;CONFIG_FILE&#39;</span><span class="ot">]</span>-=-<span class="st">&#39;data/config.php&#39;</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// File containing the link database</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;DATASTORE&#39;</span><span class="ot">]</span> = <span class="st">&#39;data/datastore.php&#39;</span><span class="ot">;](</span><span class="st">&#39;DATASTORE&#39;</span><span class="ot">]</span>-=-<span class="st">&#39;data/datastore.php&#39;</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// Number of links displayed per page</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;LINKS_PER_PAGE&#39;</span><span class="ot">]</span> = <span class="dv">20</span><span class="ot">;](</span><span class="st">&#39;LINKS_PER_PAGE&#39;</span><span class="ot">]</span>-=-<span class="dv">20</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// File recording failed login attempts and IP bans</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;IPBANS_FILENAME&#39;</span><span class="ot">]</span> = <span class="st">&#39;data/ipbans.php&#39;</span><span class="ot">;](</span><span class="st">&#39;IPBANS_FILENAME&#39;</span><span class="ot">]</span>-=-<span class="st">&#39;data/ipbans.php&#39;</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// Failed login attempts before being banned</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;BAN_AFTER&#39;</span><span class="ot">]</span> = <span class="dv">4</span><span class="ot">;](</span><span class="st">&#39;BAN_AFTER&#39;</span><span class="ot">]</span>-=-<span class="dv">4</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// Duration of an IP ban, in seconds (30 minutes)</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;BAN_DURATION&#39;</span><span class="ot">]</span> = <span class="dv">1800</span><span class="ot">;](</span><span class="st">&#39;BAN_DURATION&#39;</span><span class="ot">]</span>-=-<span class="dv">1800</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// If set to true, everyone will be able to add, edit and remove links,</span>
+<span class="co">// as well as change configuration</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;OPEN_SHAARLI&#39;</span><span class="ot">]</span> = <span class="kw">false</span><span class="ot">;](</span><span class="st">&#39;OPEN_SHAARLI&#39;</span><span class="ot">]</span>-=-<span class="kw">false</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// Do not show link timestamps</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;HIDE_TIMESTAMPS&#39;</span><span class="ot">]</span> = <span class="kw">false</span><span class="ot">;](</span><span class="st">&#39;HIDE_TIMESTAMPS&#39;</span><span class="ot">]</span>-=-<span class="kw">false</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// Set to false to disable local thumbnail cache, e.g. due to limited disk quotas</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;ENABLE_THUMBNAILS&#39;</span><span class="ot">]</span> = <span class="kw">true</span><span class="ot">;](</span><span class="st">&#39;ENABLE_THUMBNAILS&#39;</span><span class="ot">]</span>-=-<span class="kw">true</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// Thumbnail cache directory</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;CACHEDIR&#39;</span><span class="ot">]</span> = <span class="st">&#39;cache&#39;</span><span class="ot">;](</span><span class="st">&#39;CACHEDIR&#39;</span><span class="ot">]</span>-=-<span class="st">&#39;cache&#39;</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// Enable feed (rss, atom, dailyrss) cache</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;ENABLE_LOCALCACHE&#39;</span><span class="ot">]</span> = <span class="kw">true</span><span class="ot">;](</span><span class="st">&#39;ENABLE_LOCALCACHE&#39;</span><span class="ot">]</span>-=-<span class="kw">true</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// Feed cache directory</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;PAGECACHE&#39;</span><span class="ot">]</span> = <span class="st">&#39;pagecache&#39;</span><span class="ot">;](</span><span class="st">&#39;PAGECACHE&#39;</span><span class="ot">]</span>-=-<span class="st">&#39;pagecache&#39;</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// RainTPL cache directory (keep the trailing slash!)</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;RAINTPL_TMP&#39;</span><span class="ot">]</span> = <span class="st">&#39;tmp/&#39;</span><span class="ot">;](</span><span class="st">&#39;RAINTPL_TMP&#39;</span><span class="ot">]</span>-=-<span class="st">&#39;tmp/&#39;</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// RainTPL template directory (keep the trailing slash!)</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;RAINTPL_TPL&#39;</span><span class="ot">]</span> = <span class="st">&#39;tpl/&#39;</span><span class="ot">;](</span><span class="st">&#39;RAINTPL_TPL&#39;</span><span class="ot">]</span>-=-<span class="st">&#39;tpl/&#39;</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// Whether Shaarli checks for new releases at https://github.com/shaarli/Shaarli</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;ENABLE_UPDATECHECK&#39;</span><span class="ot">]</span> = <span class="kw">true</span><span class="ot">;](</span><span class="st">&#39;ENABLE_UPDATECHECK&#39;</span><span class="ot">]</span>-=-<span class="kw">true</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// File to store the latest Shaarli version</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;UPDATECHECK_FILENAME&#39;</span><span class="ot">]</span> = <span class="st">&#39;data/lastupdatecheck.txt&#39;</span><span class="ot">;](</span><span class="st">&#39;UPDATECHECK_FILENAME&#39;</span><span class="ot">]</span>-=-<span class="st">&#39;data/lastupdatecheck.txt&#39;</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// Delay between version checks (requires to be logged in) (24 hours)</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;UPDATECHECK_INTERVAL&#39;</span><span class="ot">]</span> = <span class="dv">86400</span><span class="ot">;](</span><span class="st">&#39;UPDATECHECK_INTERVAL&#39;</span><span class="ot">]</span>-=-<span class="dv">86400</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// For each link, display a link to an archived version on archive.org</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;ARCHIVE_ORG&#39;</span><span class="ot">]</span> = <span class="kw">false</span><span class="ot">;](</span><span class="st">&#39;ARCHIVE_ORG&#39;</span><span class="ot">]</span>-=-<span class="kw">false</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// The RSS item links point:</span>
+<span class="co">// true   =&gt;  directly to the link</span>
+<span class="co">// false  =&gt;  to the entry on Shaarli (permalink)</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;ENABLE_RSS_PERMALINKS&#39;</span><span class="ot">]</span> = <span class="kw">true</span><span class="ot">;](</span><span class="st">&#39;ENABLE_RSS_PERMALINKS&#39;</span><span class="ot">]</span>-=-<span class="kw">true</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// Hide all links to non-logged users</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;HIDE_PUBLIC_LINKS&#39;</span><span class="ot">]</span> = <span class="kw">false</span><span class="ot">;](</span><span class="st">&#39;HIDE_PUBLIC_LINKS&#39;</span><span class="ot">]</span>-=-<span class="kw">false</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;PUBSUBHUB_URL&#39;</span><span class="ot">]</span> = <span class="st">&#39;&#39;</span><span class="ot">;](</span><span class="st">&#39;PUBSUBHUB_URL&#39;</span><span class="ot">]</span>-=-<span class="st">&#39;&#39;</span><span class="ot">;</span>.html<span class="ot">)</span>
+
+<span class="co">// Show an ATOM Feed button next to the Subscribe (RSS) button.</span>
+<span class="co">// ATOM feeds are available at the address ?do=atom regardless of this option.</span>
+<span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;SHOW_ATOM&#39;</span><span class="ot">]</span> = <span class="kw">false</span><span class="ot">;](</span><span class="st">&#39;SHOW_ATOM&#39;</span><span class="ot">]</span>-=-<span class="kw">false</span><span class="ot">;</span>.html<span class="ot">)</span>
+<span class="kw">?&gt;</span></code></pre>
+</body>
+</html>
