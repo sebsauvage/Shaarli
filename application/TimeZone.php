@@ -5,30 +5,33 @@
  * Note: 'UTC/UTC' is mapped to 'UTC' to form a valid option
  *
  * Example: preselect Europe/Paris
- *  list($htmlform, $js) = templateTZform('Europe/Paris');
+ *  list($htmlform, $js) = generateTimeZoneForm('Europe/Paris');
  *
  * @param string $preselected_timezone preselected timezone (optional)
  *
  * @return an array containing the generated HTML form and Javascript code
  **/
-function generateTimeZoneForm($preselected_timezone='')
+function generateTimeZoneForm($preselectedTimezone='')
 {
-    // Select the first available timezone if no preselected value is passed
-    if ($preselected_timezone == '') {
-        $l = timezone_identifiers_list();
-        $preselected_timezone = $l[0];
+    // Select the server timezone
+    if ($preselectedTimezone == '') {
+        $preselectedTimezone = date_default_timezone_get();
     }
 
-    // Try to split the provided timezone
-    $spos = strpos($preselected_timezone, '/');
-    $pcontinent = substr($preselected_timezone, 0, $spos);
-    $pcity = substr($preselected_timezone, $spos+1);
+    if ($preselectedTimezone == 'UTC') {
+        $pcity = $pcontinent = 'UTC';
+    } else {
+        // Try to split the provided timezone
+        $spos = strpos($preselectedTimezone, '/');
+        $pcontinent = substr($preselectedTimezone, 0, $spos);
+        $pcity = substr($preselectedTimezone, $spos+1);
+    }
 
     // Display config form:
-    $timezone_form = '';
-    $timezone_js = '';
+    $timezoneForm = '';
+    $timezoneJs = '';
 
-    // The list is in the form 'Europe/Paris', 'America/Argentina/Buenos_Aires'...
+    // The list is in the form 'Europe/Paris', 'America/Argentina/Buenos_Aires'
     // We split the list in continents/cities.
     $continents = array();
     $cities = array();
@@ -57,33 +60,33 @@ function generateTimeZoneForm($preselected_timezone='')
         }
     }
 
-    $continents_html = '';
+    $continentsHtml = '';
     $continents = array_keys($continents);
 
     foreach ($continents as $continent) {
-        $continents_html .= '<option  value="'.$continent.'"';
+        $continentsHtml .= '<option  value="'.$continent.'"';
         if ($pcontinent == $continent) {
-            $continents_html .= ' selected="selected"';
+            $continentsHtml .= ' selected="selected"';
         }
-        $continents_html .= '>'.$continent.'</option>';
+        $continentsHtml .= '>'.$continent.'</option>';
     }
 
     // Timezone selection form
-    $timezone_form = 'Continent:';
-    $timezone_form .= '<select name="continent" id="continent" onChange="onChangecontinent();">';
-    $timezone_form .= $continents_html.'</select>';
-    $timezone_form .= '&nbsp;&nbsp;&nbsp;&nbsp;City:';
-    $timezone_form .= '<select name="city" id="city">'.$cities[$pcontinent].'</select><br />';
+    $timezoneForm = 'Continent:';
+    $timezoneForm .= '<select name="continent" id="continent" onChange="onChangecontinent();">';
+    $timezoneForm .= $continentsHtml.'</select>';
+    $timezoneForm .= '&nbsp;&nbsp;&nbsp;&nbsp;City:';
+    $timezoneForm .= '<select name="city" id="city">'.$cities[$pcontinent].'</select><br />';
 
     // Javascript handler - updates the city list when the user selects a continent
-    $timezone_js = '<script>';
-    $timezone_js .= 'function onChangecontinent() {';
-    $timezone_js .= 'document.getElementById("city").innerHTML =';
-    $timezone_js .= ' citiescontinent[document.getElementById("continent").value]; }';
-    $timezone_js .= 'var citiescontinent = '.json_encode($cities).';';
-    $timezone_js .= '</script>';
+    $timezoneJs = '<script>';
+    $timezoneJs .= 'function onChangecontinent() {';
+    $timezoneJs .= 'document.getElementById("city").innerHTML =';
+    $timezoneJs .= ' citiescontinent[document.getElementById("continent").value]; }';
+    $timezoneJs .= 'var citiescontinent = '.json_encode($cities).';';
+    $timezoneJs .= '</script>';
 
-    return array($timezone_form, $timezone_js);
+    return array($timezoneForm, $timezoneJs);
 }
 
 /**
@@ -107,4 +110,3 @@ function isTimeZoneValid($continent, $city)
         timezone_identifiers_list()
     );
 }
-?>

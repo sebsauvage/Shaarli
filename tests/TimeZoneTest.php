@@ -80,4 +80,3 @@ class TimeZoneTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(isTimeZoneValid('Middle_Earth', 'Moria'));
     }
 }
-?>

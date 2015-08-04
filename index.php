@@ -5,10 +5,12 @@
 // Licence: http://www.opensource.org/licenses/zlib-license.php
 // Requires: PHP 5.3.x
 // -----------------------------------------------------------------------------------------------
-// NEVER TRUST IN PHP.INI
-// Some hosts do not define a default timezone in php.ini,
-// so we have to do this for avoid the strict standard error.
-date_default_timezone_set('UTC');
+
+// Set 'UTC' as the default timezone if it is not defined in php.ini
+// See http://php.net/manual/en/datetime.configuration.php#ini.date.timezone
+if (date_default_timezone_get() == '') {
+    date_default_timezone_set('UTC');
+}
 
 // -----------------------------------------------------------------------------------------------
 // Hardcoded parameter (These parameters can be overwritten by editing the file /data/config.php)
