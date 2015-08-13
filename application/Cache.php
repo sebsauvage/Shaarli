@@ -7,26 +7,18 @@
  * Purges all cached pages
  *
  * @param string $pageCacheDir page cache directory
+ *
+ * @return mixed an error string if the directory is missing
  */
 function purgeCachedPages($pageCacheDir)
 {
     if (! is_dir($pageCacheDir)) {
-        return;
+        $error = 'Cannot purge '.$pageCacheDir.': no directory';
+        error_log($error);
+        return $error;
     }
 
-    // TODO: check write access to the cache directory
-
-    $handler = opendir($pageCacheDir);
-    if ($handler == false) {
-        return;
-    }
-
-    while (($filename = readdir($handler)) !== false) {
-        if (endsWith($filename, '.cache')) {
-                unlink($pageCacheDir.'/'.$filename);
-        }
-    }
-    closedir($handler);
+    array_map('unlink', glob($pageCacheDir.'/*.cache'));
 }
 
 /**

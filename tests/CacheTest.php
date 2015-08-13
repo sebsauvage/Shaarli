@@ -27,11 +27,14 @@ class CachedTest extends PHPUnit_Framework_TestCase
     {
         if (! is_dir(self::$testCacheDir)) {
             mkdir(self::$testCacheDir);
+        } else {
+            array_map('unlink', glob(self::$testCacheDir.'/*'));
         }
         
         foreach (self::$pages as $page) {
             file_put_contents(self::$testCacheDir.'/'.$page.'.cache', $page);
         }
+        file_put_contents(self::$testCacheDir.'/intru.der', 'ShouldNotBeThere');
     }
 
     /**
@@ -42,7 +45,20 @@ class CachedTest extends PHPUnit_Framework_TestCase
         purgeCachedPages(self::$testCacheDir);
         foreach (self::$pages as $page) {
             $this->assertFileNotExists(self::$testCacheDir.'/'.$page.'.cache');
-        }        
+        }
+
+        $this->assertFileExists(self::$testCacheDir.'/intru.der');
+    }
+
+    /**
+     * Purge cached pages - missing directory
+     */
+    public function testPurgeCachedPagesMissingDir()
+    {
+        $this->assertEquals(
+            'Cannot purge tests/dummycache_missing: no directory',
+            purgeCachedPages(self::$testCacheDir.'_missing')
+        );
     }
 
     /**
