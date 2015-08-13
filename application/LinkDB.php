@@ -269,8 +269,10 @@ You use the community supported version of the original Shaarli project, by Seba
 
     /**
      * Saves the database from memory to disk
+     *
+     * @param string $pageCacheDir page cache directory
      */
-    public function savedb()
+    public function savedb($pageCacheDir)
     {
         if (!$this->_loggedIn) {
             // TODO: raise an Exception instead
@@ -280,7 +282,7 @@ You use the community supported version of the original Shaarli project, by Seba
             $this->_datastore,
             self::$phpPrefix.base64_encode(gzdeflate(serialize($this->_links))).self::$phpSuffix
         );
-        invalidateCaches();
+        invalidateCaches($pageCacheDir);
     }
 
     /**
@@ -439,4 +441,3 @@ You use the community supported version of the original Shaarli project, by Seba
         return $linkDays;
     }
 }
-?>
