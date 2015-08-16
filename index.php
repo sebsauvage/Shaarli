@@ -74,6 +74,7 @@ require_once 'application/Cache.php';
 require_once 'application/CachedPage.php';
 require_once 'application/LinkDB.php';
 require_once 'application/TimeZone.php';
+require_once 'application/Url.php';
 require_once 'application/Utils.php';
 require_once 'application/Config.php';
 
@@ -1479,29 +1480,9 @@ function renderPage()
     }
 
     // -------- User want to post a new link: Display link edit form.
-    if (isset($_GET['post']))
-    {
-        $url=$_GET['post'];
-
-        // We remove the annoying parameters added by FeedBurner, GoogleFeedProxy, Facebook...
-        $annoyingpatterns = array('/[\?&]utm_source=[^&]*/',
-            '/[\?&]utm_campaign=[^&]*/',
-            '/[\?&]utm_medium=[^&]*/',
-            '/#xtor=RSS-[^&]*/',
-            '/[\?&]fb_[^&]*/',
-            '/[\?&]__scoop[^&]*/',
-            '/#tk\.rss_all\?/',
-            '/[\?&]action_ref_map=[^&]*/',
-            '/[\?&]action_type_map=[^&]*/',
-            '/[\?&]action_object_map=[^&]*/',
-            '/[\?&]utm_content=[^&]*/',
-            '/[\?&]fb=[^&]*/',
-            '/[\?&]xtor=[^&]*/'
-            );
-        foreach($annoyingpatterns as $pattern)
-        {
-            $url = preg_replace($pattern, "", $url);
-        }
+    if (isset($_GET['post'])) {
+        $url = new Url($_GET['post']);
+        $url->cleanup();
 
         $link_is_new = false;
         $link = $LINKSDB->getLinkFromUrl($url); // Check if URL is not already in database (in this case, we will edit the existing link)
