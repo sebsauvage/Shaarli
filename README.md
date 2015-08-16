@@ -2,12 +2,14 @@
 
 Shaarli, the personal, minimalist, super-fast, no-database delicious clone.
 
-You want to share the links you discover ? Shaarli is a minimalist delicious clone you can install on your own website.
+Do you want to share the links you discover? Shaarli is a minimalist delicious clone you can install on your own website.
 It is designed to be personal (single-user), fast and handy.
 
-[![Join the chat at https://gitter.im/shaarli/Shaarli](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/shaarli/Shaarli) [![Bountysource](https://www.bountysource.com/badge/team?team_id=19583&style=bounties_received)](https://www.bountysource.com/teams/shaarli/issues) [![](https://api.travis-ci.org/shaarli/Shaarli.svg)](https://travis-ci.org/shaarli/Shaarli)
+[![Join the chat at https://gitter.im/shaarli/Shaarli](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/shaarli/Shaarli)
+[![Bountysource](https://www.bountysource.com/badge/team?team_id=19583&style=bounties_received)](https://www.bountysource.com/teams/shaarli/issues) [![](https://api.travis-ci.org/shaarli/Shaarli.svg)](https://travis-ci.org/shaarli/Shaarli)
+[![Docker repository](https://img.shields.io/docker/pulls/shaarli/shaarli.svg)](https://hub.docker.com/r/shaarli/shaarli/)
 
-## Features:
+## Features
 
  * Minimalist design (simple is beautiful)
  * **FAST**
@@ -85,4 +87,3 @@ This is a community fork of the original [Shaarli](https://github.com/sebsauvage
 ## License
 
 Shaarli is [Free Software](http://en.wikipedia.org/wiki/Free_software). See [COPYING](COPYING) for a detail of the contributors and licenses for each individual component.
-
