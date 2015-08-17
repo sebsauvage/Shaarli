@@ -12,6 +12,7 @@
     - [Backup, restore, import and export](Backup,-restore,-import-and-export.html)
     - [Copy an existing installation over SSH and serve it locally](Copy-an-existing-installation-over-SSH-and-serve-it-locally.html)
     - [Download CSS styles from an OPML list](Download-CSS-styles-from-an-OPML-list.html)
+    - [Datastore hacks](Datastore-hacks.html)
 - [Troubleshooting](Troubleshooting.html)
 - [Development](Development.html)
     - [GnuPG signature](GnuPG-signature.html)

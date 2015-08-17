@@ -51,6 +51,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
+<li><a href="Datastore-hacks.html">Datastore hacks</a></li>
 </ul></li>
 <li><a href="Troubleshooting.html">Troubleshooting</a></li>
 <li><a href="Development.html">Development</a>
@@ -74,6 +75,54 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </ul>
 </div>
 <h1 id="troubleshooting">Troubleshooting</h1>
+<h2 id="browser">Browser</h2>
+<h3 id="redirection-issues-http-referer">Redirection issues (HTTP Referer)</h3>
+<p>Depending on its configuration and installed plugins, the browser may remove or alter (spoof) HTTP referers, thus preventing Shaarli from properly redirecting between pages.</p>
+<p>See:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/HTTP_referer">HTTP referer</a> (Wikipedia)<a href=".html"></a></li>
+<li><a href="http://www.ghacks.net/2015/01/22/improve-online-privacy-by-controlling-referrer-information/">Improve online privacy by controlling referrer information</a><a href=".html"></a></li>
+<li><a href="http://b.agilob.net/better-security-privacy-and-anonymity-in-firefox/">Better security, privacy and anonymity in Firefox</a><a href=".html"></a></li>
+</ul>
+<h3 id="firefox-http-referer-options">Firefox HTTP Referer options</h3>
+<p>HTTP settings are available by browsing <code>about:config</code>, here are the available settings and their values.</p>
+<p><code>network.http.sendRefererHeader</code> - determines when to send the Referer HTTP header</p>
+<ul>
+<li>0: Never send the referring URL
+<ul>
+<li>not recommended, may break some sites</li>
+</ul></li>
+<li>1: Send only on clicked links</li>
+<li>2 (default): Send for links and images</li>
+</ul>
+<p><code>network.http.referer.XOriginPolicy</code> - Cross-domain origin policy</p>
+<ul>
+<li>0 (default): Always send</li>
+<li>1: Send if base domains match</li>
+<li>2: Send if hosts match</li>
+</ul>
+<p><code>network.http.referer.spoofSource</code> - Referer spoofing (~faking)</p>
+<ul>
+<li>false (default): real referer</li>
+<li>true: spoof referer (use target URI as referer)</li>
+</ul>
+<p><code>network.http.referer.trimmingPolicy</code> - trim the URI not to send a full Referer</p>
+<ul>
+<li>0 (default): send full URI</li>
+<li>1: scheme+host+port+path</li>
+<li>2: scheme+host+port</li>
+</ul>
+<h3 id="firefox-localhost-and-redirections">Firefox, localhost and redirections</h3>
+<p><code>localhost</code> is not a proper Fully Qualified Domain Name (FQDN); if Firefox has been set up to spoof referers, or anly accept requests from the same base domain/host, Shaarli redirections will not work properly.</p>
+<p>To solve this, assign a local domain to your host, e.g.</p>
+<pre><code>127.0.0.1 localhost desktop localhost.lan
+::1       localhost desktop localhost.lan</code></pre>
+<p>and browse Shaarli at <a href="http://localhost.lan/" class="uri">http://localhost.lan/</a>.</p>
+<p>Related threads:</p>
+<ul>
+<li><a href="https://bbs.archlinux.org/viewtopic.php?id=156064">What is localhost.localdomain for?</a><a href=".html"></a></li>
+<li><a href="https://github.com/shaarli/Shaarli/issues/311">Stop returning to the first page after editing a bookmark from another page</a><a href=".html"></a></li>
+</ul>
 <h2 id="login">Login</h2>
 <h3 id="i-forgot-my-password">I forgot my password!</h3>
 <p>Delete the file <code>data/config.php</code> and display the page again. You will be asked for a new login/password.</p>
@@ -83,6 +132,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h3 id="list-of-all-login-attempts">List of all login attempts</h3>
 <p>The file <code>data/log.txt</code> shows all logins (successful or failed) and bans/lifted bans.<br />Search for <code>failed</code> in this file to look for unauthorized login attempts.</p>
 <h2 id="hosting-problems">Hosting problems</h2>
+<h3 id="old-php-versions">Old PHP versions</h3>
 <ul>
 <li>On <strong>free.fr</strong> : Please note that free uses php 5.1 and thus you will not have autocomplete in tag editing. Don't forget to create a <code>sessions</code> directory at the root of your webspace. Change the file extension to <code>.php5</code> or create a <code>.htaccess</code> file in the directory where Shaarli is located containing:</li>
 </ul>

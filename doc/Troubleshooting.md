@@ -1,7 +1,53 @@
 #Troubleshooting
+## Browser
+### Redirection issues (HTTP Referer)
+Depending on its configuration and installed plugins, the browser may remove or alter (spoof) HTTP referers, thus preventing Shaarli from properly redirecting between pages.
+
+See:
+- [HTTP referer](https://en.wikipedia.org/wiki/HTTP_referer) (Wikipedia)[](.html)
+- [Improve online privacy by controlling referrer information](http://www.ghacks.net/2015/01/22/improve-online-privacy-by-controlling-referrer-information/)[](.html)
+- [Better security, privacy and anonymity in Firefox](http://b.agilob.net/better-security-privacy-and-anonymity-in-firefox/)[](.html)
+
+### Firefox HTTP Referer options
+HTTP settings are available by browsing `about:config`, here are the available settings and their values.
+
+`network.http.sendRefererHeader` - determines when to send the Referer HTTP header
+- 0: Never send the referring URL
+    - not recommended, may break some sites
+- 1: Send only on clicked links
+- 2 (default): Send for links and images
+
+`network.http.referer.XOriginPolicy` - Cross-domain origin policy
+- 0 (default): Always send
+- 1: Send if base domains match
+- 2: Send if hosts match
+
+`network.http.referer.spoofSource` - Referer spoofing (~faking)
+- false (default): real referer
+- true: spoof referer (use target URI as referer)
+
+`network.http.referer.trimmingPolicy` - trim the URI not to send a full Referer
+- 0 (default): send full URI
+- 1: scheme+host+port+path
+- 2: scheme+host+port
+
+### Firefox, localhost and redirections
+`localhost` is not a proper Fully Qualified Domain Name (FQDN); if Firefox has been set up to spoof referers, or anly accept requests from the same base domain/host, Shaarli redirections will not work properly.
+
+To solve this, assign a local domain to your host, e.g.
+```
+127.0.0.1 localhost desktop localhost.lan
+::1       localhost desktop localhost.lan
+```
+
+and browse Shaarli at http://localhost.lan/.
+
+Related threads:
+- [What is localhost.localdomain for?](https://bbs.archlinux.org/viewtopic.php?id=156064)[](.html)
+- [Stop returning to the first page after editing a bookmark from another page](https://github.com/shaarli/Shaarli/issues/311)[](.html)
+
 ## Login
 ### I forgot my password!
-
 Delete the file `data/config.php` and display the page again. You will be asked for a new login/password.
 
 ### I'm locked out - Login bruteforce protection
@@ -10,11 +56,11 @@ Login form is protected against brute force attacks: 4 failed logins will ban th
 To remove the current IP bans, delete the file `data/ipbans.php`
 
 ### List of all login attempts
-
 The file `data/log.txt` shows all logins (successful or failed) and bans/lifted bans.
 Search for `failed` in this file to look for unauthorized login attempts.
 
 ## Hosting problems
+### Old PHP versions
  * On **free.fr** : Please note that free uses php 5.1 and thus you will not have autocomplete in tag editing.  Don't forget to create a `sessions` directory at the root of your webspace. Change the file extension to `.php5` or create a `.htaccess` file in the directory where Shaarli is located containing:
 
 ```ini
@@ -56,5 +102,4 @@ This can be caused by several things:
 Follow the instructions in the error message. Make sure you are accessing shaarli via a direct IP address or a proper hostname. If you have **no dots** in the hostname (e.g. `localhost` or `http://my-webserver/shaarli/`), some browsers will not store cookies at all (this respects the [HTTP cookie specification](http://curl.haxx.se/rfc/cookie_spec.html)).[](.html)
 
 ### pubsubhubbub support
-
 Download [publisher.php](https://pubsubhubbub.googlecode.com/git/publisher_clients/php/library/publisher.php) at the root of your Shaarli installation and set `$GLOBALS['config'['PUBSUBHUB_URL']` in your `config.php`]('PUBSUBHUB_URL']`-in-your-`config.php`.html)
