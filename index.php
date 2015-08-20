@@ -1485,51 +1485,57 @@ function renderPage()
         $url->cleanup();
 
         $link_is_new = false;
-        $link = $LINKSDB->getLinkFromUrl($url); // Check if URL is not already in database (in this case, we will edit the existing link)
+        // Check if URL is not already in database (in this case, we will edit the existing link)
+        $link = $LINKSDB->getLinkFromUrl((string)$url);
         if (!$link)
         {
-            $link_is_new = true;  // This is a new link
+            $link_is_new = true;
             $linkdate = strval(date('Ymd_His'));
-            $title = (empty($_GET['title']) ? '' : $_GET['title'] ); // Get title if it was provided in URL (by the bookmarklet).
-            $description = (empty($_GET['description']) ? '' : $_GET['description']); // Get description if it was provided in URL (by the bookmarklet). [Bronco added that]
-            $tags = (empty($_GET['tags']) ? '' : $_GET['tags'] ); // Get tags if it was provided in URL
-            $private = (!empty($_GET['private']) && $_GET['private'] === "1" ? 1 : 0); // Get private if it was provided in URL
-            if (($url!='') && parse_url($url,PHP_URL_SCHEME)=='') $url = 'http://'.$url;
+            // Get title if it was provided in URL (by the bookmarklet).
+            $title = (empty($_GET['title']) ? '' : $_GET['title'] );
+            // Get description if it was provided in URL (by the bookmarklet). [Bronco added that]
+            $description = (empty($_GET['description']) ? '' : $_GET['description']);
+            $tags = (empty($_GET['tags']) ? '' : $_GET['tags'] );
+            $private = (!empty($_GET['private']) && $_GET['private'] === "1" ? 1 : 0);
             // If this is an HTTP link, we try go get the page to extract the title (otherwise we will to straight to the edit form.)
-            if (empty($title) && parse_url($url,PHP_URL_SCHEME)=='http')
-            {
+            if (empty($title) && $url->getScheme() == 'http') {
                 list($status,$headers,$data) = getHTTP($url,4); // Short timeout to keep the application responsive.
                 // FIXME: Decode charset according to specified in either 1) HTTP response headers or 2) <head> in html
-                if (strpos($status,'200 OK')!==false)
- 					 {
-                        // Look for charset in html header.
- 						preg_match('#<meta .*charset=.*>#Usi', $data, $meta);
+                if (strpos($status,'200 OK')!==false) {
+                    // Look for charset in html header.
+                    preg_match('#<meta .*charset=.*>#Usi', $data, $meta);
 
- 						// If found, extract encoding.
- 						if (!empty($meta[0]))
- 						{
- 							// Get encoding specified in header.
- 							preg_match('#charset="?(.*)"#si', $meta[0], $enc);
- 							// If charset not found, use utf-8.
-							$html_charset = (!empty($enc[1])) ? strtolower($enc[1]) : 'utf-8';
- 						}
- 						else { $html_charset = 'utf-8'; }
+                    // If found, extract encoding.
+                    if (!empty($meta[0])) {
+                        // Get encoding specified in header.
+                        preg_match('#charset="?(.*)"#si', $meta[0], $enc);
+                        // If charset not found, use utf-8.
+                        $html_charset = (!empty($enc[1])) ? strtolower($enc[1]) : 'utf-8';
+                    }
+                    else {
+                        $html_charset = 'utf-8';
+                    }
 
- 						// Extract title
- 						$title = html_extract_title($data);
- 						if (!empty($title))
- 						{
- 							// Re-encode title in utf-8 if necessary.
- 							$title = ($html_charset == 'iso-8859-1') ? utf8_encode($title) : $title;
- 						}
- 					}
+                    // Extract title
+                    $title = html_extract_title($data);
+                    if (!empty($title)) {
+                        // Re-encode title in utf-8 if necessary.
+                        $title = ($html_charset == 'iso-8859-1') ? utf8_encode($title) : $title;
+                    }
+                }
             }
-            if ($url=='') // In case of empty URL, this is just a text (with a link that points to itself)
-            {
-                $url='?'.smallHash($linkdate);
-                $title='Note: ';
+            if ($url == '') {
+                $url = '?' . smallHash($linkdate);
+                $title = 'Note: ';
             }
-            $link = array('linkdate'=>$linkdate,'title'=>$title,'url'=>$url,'description'=>$description,'tags'=>$tags,'private'=>$private);
+            $link = array(
+                'linkdate' => $linkdate,
+                'title' => $title,
+                'url' => (string)$url,
+                'description' => $description,
+                'tags' => $tags,
+                'private' => $private
+            );
         }
 
         $PAGE = new pageBuilder;
