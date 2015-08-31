@@ -81,6 +81,10 @@ class Url
     public function __construct($url)
     {
         $this->parts = parse_url($url);
+
+        if (!empty($url) && empty($this->parts['scheme'])) {
+            $this->parts['scheme'] = 'http';
+        }
     }
 
     /**
@@ -146,5 +150,17 @@ class Url
         $this->cleanupQuery();
         $this->cleanupFragment();
         return $this->__toString();
+    }
+
+    /**
+     * Get URL scheme.
+     *
+     * @return string the URL scheme or false if none is provided.
+     */
+    public function getScheme() {
+        if (!isset($this->parts['scheme'])) {
+            return false;
+        }
+        return $this->parts['scheme'];
     }
 }

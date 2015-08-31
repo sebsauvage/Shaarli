@@ -151,4 +151,20 @@ class UrlTest extends PHPUnit_Framework_TestCase
             $url->cleanup()
         );
     }
+
+    /**
+     * Test default http scheme.
+     */
+    public function testDefaultScheme() {
+        $url = new Url(self::$baseUrl);
+        $this->assertEquals('http', $url->getScheme());
+        $url = new Url('domain.tld');
+        $this->assertEquals('http', $url->getScheme());
+        $url = new Url('ssh://domain.tld');
+        $this->assertEquals('ssh', $url->getScheme());
+        $url = new Url('ftp://domain.tld');
+        $this->assertEquals('ftp', $url->getScheme());
+        $url = new Url('git://domain.tld/push?pull=clone#checkout');
+        $this->assertEquals('git', $url->getScheme());
+    }
 }
