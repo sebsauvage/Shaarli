@@ -1497,8 +1497,8 @@ function renderPage()
             $description = (empty($_GET['description']) ? '' : $_GET['description']);
             $tags = (empty($_GET['tags']) ? '' : $_GET['tags'] );
             $private = (!empty($_GET['private']) && $_GET['private'] === "1" ? 1 : 0);
-            // If this is an HTTP link, we try go get the page to extract the title (otherwise we will to straight to the edit form.)
-            if (empty($title) && $url->getScheme() == 'http') {
+            // If this is an HTTP(S) link, we try go get the page to extract the title (otherwise we will to straight to the edit form.)
+            if (empty($title) && strpos($url->getScheme(), 'http') !== false) {
                 list($status,$headers,$data) = getHTTP($url,4); // Short timeout to keep the application responsive.
                 // FIXME: Decode charset according to specified in either 1) HTTP response headers or 2) <head> in html
                 if (strpos($status,'200 OK')!==false) {
