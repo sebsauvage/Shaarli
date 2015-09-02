@@ -156,7 +156,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testIsSessionIdValid()
     {
-        $this->assertTrue(is_session_id_valid('123456789012345678901234567890az'));
+        $this->assertTrue(is_session_id_valid('azertyuiop123456789AZERTYUIOP1aA'));
     }
 
     /**
