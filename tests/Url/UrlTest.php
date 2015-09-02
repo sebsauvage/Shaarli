@@ -6,30 +6,6 @@
 require_once 'application/Url.php';
 
 /**
- * Unitary tests for unparse_url()
- */
-class UnparseUrlTest extends PHPUnit_Framework_TestCase
-{
-    /**
-     * Thanks for building nothing
-     */
-    public function testUnparseEmptyArray()
-    {
-        $this->assertEquals('', unparse_url(array()));
-    }
-
-    /**
-     * Rebuild a full-featured URL
-     */
-    public function testUnparseFull()
-    {
-        $ref = 'http://username:password@hostname:9090/path'
-              .'?arg1=value1&arg2=value2#anchor';
-        $this->assertEquals($ref, unparse_url(parse_url($ref)));
-    }
-}
-
-/**
  * Unitary tests for URL utilities
  */
 class UrlTest extends PHPUnit_Framework_TestCase
@@ -44,7 +20,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
     {
         $url = new Url(self::$baseUrl.$query.$fragment);
         $url->cleanup();
-        $this->assertEquals(self::$baseUrl, $url->__toString());
+        $this->assertEquals(self::$baseUrl, $url->toString());
     }
 
     /**
@@ -52,7 +28,8 @@ class UrlTest extends PHPUnit_Framework_TestCase
      */
     public function testEmptyConstruct()
     {
-        $this->assertEquals('', new Url(''));
+        $url = new Url('');
+        $this->assertEquals('', $url->toString());
     }
 
     /**
@@ -62,7 +39,8 @@ class UrlTest extends PHPUnit_Framework_TestCase
     {
         $ref = 'http://username:password@hostname:9090/path'
               .'?arg1=value1&arg2=value2#anchor';
-        $this->assertEquals($ref, new Url($ref));
+        $url = new Url($ref);
+        $this->assertEquals($ref, $url->toString());
     }
 
     /**

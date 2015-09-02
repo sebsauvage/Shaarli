@@ -1454,12 +1454,11 @@ function renderPage()
 
     // -------- User want to post a new link: Display link edit form.
     if (isset($_GET['post'])) {
-        $url = new Url($_GET['post']);
-        $url->cleanup();
+        $url = cleanup_url($_GET['post']);
 
         $link_is_new = false;
         // Check if URL is not already in database (in this case, we will edit the existing link)
-        $link = $LINKSDB->getLinkFromUrl((string)$url);
+        $link = $LINKSDB->getLinkFromUrl($url);
         if (!$link)
         {
             $link_is_new = true;
@@ -1471,7 +1470,7 @@ function renderPage()
             $tags = (empty($_GET['tags']) ? '' : $_GET['tags'] );
             $private = (!empty($_GET['private']) && $_GET['private'] === "1" ? 1 : 0);
             // If this is an HTTP(S) link, we try go get the page to extract the title (otherwise we will to straight to the edit form.)
-            if (empty($title) && strpos($url->getScheme(), 'http') !== false) {
+            if (empty($title) && strpos(get_url_scheme($url), 'http') !== false) {
                 // Short timeout to keep the application responsive
                 list($headers, $data) = get_http_url($url, 4);
                 // FIXME: Decode charset according to specified in either 1) HTTP response headers or 2) <head> in html
@@ -1505,7 +1504,7 @@ function renderPage()
             $link = array(
                 'linkdate' => $linkdate,
                 'title' => $title,
-                'url' => (string)$url,
+                'url' => $url,
                 'description' => $description,
                 'tags' => $tags,
                 'private' => $private
