@@ -140,11 +140,16 @@ function checkPHPVersion($minVersion, $curVersion)
 
 /**
  * Validate session ID to prevent Full Path Disclosure.
+ *
  * See #298.
+ * The session ID's format depends on the hash algorithm set in PHP settings
  *
  * @param string $sessionId Session ID
  *
  * @return true if valid, false otherwise.
+ *
+ * @see http://php.net/manual/en/function.hash-algos.php
+ * @see http://php.net/manual/en/session.configuration.php
  */
 function is_session_id_valid($sessionId)
 {
@@ -156,7 +161,7 @@ function is_session_id_valid($sessionId)
         return false;
     }
 
-    if (!preg_match('/^[a-z0-9]{2,32}$/i', $sessionId)) {
+    if (!preg_match('/^[a-zA-Z0-9,-]{2,128}$/', $sessionId)) {
         return false;
     }
 
