@@ -36,6 +36,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="Home.html">Home</a></li>
 <li>Installation
 <ul>
+<li><a href="Download.html">Download</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
@@ -279,10 +280,15 @@ location ~ ~$ {
 }</code></pre>
 <pre class="nginx"><code># /etc/nginx/php.conf
 location ~ (index)\.php$ {
-    # proxy PHP requests to PHP-FPM
+    # filter and proxy PHP requests to PHP-FPM
     fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
     fastcgi_index  index.php;
     include        fastcgi.conf;
+}
+
+location ~ \.php$ {
+    # deny access to all other PHP scripts
+    deny all;
 }</code></pre>
 <pre class="nginx"><code># /etc/nginx/static_assets.conf
 location ~* \.(?:ico|css|js|gif|jpe?g|png)$ {

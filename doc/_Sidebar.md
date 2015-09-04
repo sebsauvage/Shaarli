@@ -1,6 +1,7 @@
 #_Sidebar
 - [Home](Home.html)
 - Installation
+    - [Download](Download.html)
     - [Server requirements](Server-requirements.html)
     - [Server configuration](Server-configuration.html)
     - [Shaarli configuration](Shaarli-configuration.html)

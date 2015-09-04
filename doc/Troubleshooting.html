@@ -36,6 +36,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="Home.html">Home</a></li>
 <li>Installation
 <ul>
+<li><a href="Download.html">Download</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
@@ -134,10 +135,11 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h2 id="hosting-problems">Hosting problems</h2>
 <h3 id="old-php-versions">Old PHP versions</h3>
 <ul>
-<li>On <strong>free.fr</strong> : Please note that free uses php 5.1 and thus you will not have autocomplete in tag editing. Don't forget to create a <code>sessions</code> directory at the root of your webspace. Change the file extension to <code>.php5</code> or create a <code>.htaccess</code> file in the directory where Shaarli is located containing:</li>
+<li>On <strong>free.fr</strong> : free.fr now support php 5.6.x(<a href="http://les.pages.perso.chez.free.fr/migrations/php5v6.io">link</a>)and so support now the tag autocompletion but you have to do the following : At the root of your webspace create a <code>sessions</code> directory and a <code>.htaccess</code> file containing:<a href=".html"></a></li>
 </ul>
-<pre class="sourceCode ini"><code class="sourceCode ini"><span class="dt">php 1</span>
-<span class="dt">SetEnv PHP_VER 5</span></code></pre>
+<pre class="sourceCode ini"><code class="sourceCode ini"><span class="dt">&lt;IfDefine Free&gt;</span>
+<span class="dt">php56 1</span>
+<span class="dt">&lt;/IfDefine&gt;</span></code></pre>
 <ul>
 <li>If you have an error such as: <code>Parse error: syntax error, unexpected '=', expecting '(' in /links/index.php on line xxx</code>, it means that your host is using php4, not php5. Shaarli requires php 5.1. Try changing the file extension to <code>.php5</code></li>
 <li>On <strong>1and1</strong> : If you add the link from the page (and not from the bookmarklet), Shaarli will no be able to get the title of the page. You will have to enter it manually. (Because they have disabled the ability to download a file through HTTP).</li>
