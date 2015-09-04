@@ -9,16 +9,17 @@
 ### Supported versions
 Version | Status | Shaarli compatibility
 :---:|:---:|:---:
+7   | RC2 | planned
 5.6 | Supported | :white_check_mark:
 5.5 | Supported | :white_check_mark:
-5.4 | Supported | :white_check_mark:
+5.4 | EOL: 2015-09-14 | :white_check_mark:
 5.3 | EOL: 2014-08-14 | :white_check_mark:
 
 See also:
 - [Travis configuration](https://github.com/shaarli/Shaarli/blob/master/.travis.yml)[](.html)
 
-PHP 7.0 information:
-- [Beta1 announcement](http://php.net/archive/2015.php#id2015-07-10-4)[](.html)
+PHP 7 information:
+- Announcements: [Beta1](http://php.net/archive/2015.php#id2015-07-10-4), [RC1](http://php.net/archive/2015.php#id2015-08-21-1), [RC2](http://php.net/archive/2015.php#id2015-09-04-1)[](.html)
 - [TODOLIST](https://wiki.php.net/todo/php70)[](.html)
 - [Recent bugs](https://bugs.php.net/search.php?limit=30&order_by=id&direction=DESC&cmd=display&status=Open&bug_type=All&phpver=7.0)[](.html)
 - [Git repository](http://git.php.net/?p=php-src.git;a=shortlog;h=refs/heads/PHP-7.0.0)[](.html)

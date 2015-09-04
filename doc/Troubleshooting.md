@@ -61,11 +61,12 @@ Search for `failed` in this file to look for unauthorized login attempts.
 
 ## Hosting problems
 ### Old PHP versions
- * On **free.fr** : Please note that free uses php 5.1 and thus you will not have autocomplete in tag editing.  Don't forget to create a `sessions` directory at the root of your webspace. Change the file extension to `.php5` or create a `.htaccess` file in the directory where Shaarli is located containing:
+ * On **free.fr** : free.fr now support php 5.6.x([link](http://les.pages.perso.chez.free.fr/migrations/php5v6.io))and so support now the tag autocompletion but you have to do the following : At the root of your webspace create a `sessions` directory and a `.htaccess` file containing:[](.html)
 
 ```ini
-php 1
-SetEnv PHP_VER 5
+<IfDefine Free>
+php56 1
+</IfDefine>
 ```
 
  * If you have an error such as: `Parse error: syntax error, unexpected '=', expecting '(' in /links/index.php on line xxx`, it means that your host is using php4, not php5. Shaarli requires php 5.1. Try changing the file extension to `.php5`

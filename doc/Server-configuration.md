@@ -219,10 +219,15 @@ location ~ ~$ {
 ```nginx
 # /etc/nginx/php.conf
 location ~ (index)\.php$ {
-    # proxy PHP requests to PHP-FPM
+    # filter and proxy PHP requests to PHP-FPM
     fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
     fastcgi_index  index.php;
     include        fastcgi.conf;
+}
+
+location ~ \.php$ {
+    # deny access to all other PHP scripts
+    deny all;
 }
 ```
 
