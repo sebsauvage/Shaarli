@@ -50,3 +50,83 @@ function get_http_url($url, $timeout = 30, $maxBytes = 4194304)
 
     return array(get_headers($url, 1), $content);
 }
+
+/**
+ * Returns the server's base URL: scheme://domain.tld[:port]
+ *
+ * @param array $server the $_SERVER array
+ *
+ * @return string the server's base URL
+ *
+ * @see http://www.ietf.org/rfc/rfc7239.txt
+ * @see http://www.ietf.org/rfc/rfc6648.txt
+ * @see http://stackoverflow.com/a/3561399
+ * @see http://stackoverflow.com/q/452375
+ */
+function server_url($server)
+{
+    $scheme = 'http';
+    $port = '';
+
+    // Shaarli is served behind a proxy
+    if (isset($server['HTTP_X_FORWARDED_PROTO'])) {
+        // Keep forwarded scheme
+        $scheme = $server['HTTP_X_FORWARDED_PROTO'];
+
+        if (isset($server['HTTP_X_FORWARDED_PORT'])) {
+            // Keep forwarded port
+            $port = ':'.$server['HTTP_X_FORWARDED_PORT'];
+        }
+
+        return $scheme.'://'.$server['SERVER_NAME'].$port;
+    }
+
+    // SSL detection
+    if ((! empty($server['HTTPS']) && strtolower($server['HTTPS']) == 'on')
+        || (isset($server['SERVER_PORT']) && $server['SERVER_PORT'] == '443')) {
+        $scheme = 'https';
+    }
+
+    // Do not append standard port values
+    if (($scheme == 'http' && $server['SERVER_PORT'] != '80')
+        || ($scheme == 'https' && $server['SERVER_PORT'] != '443')) {
+        $port = ':'.$server['SERVER_PORT'];
+    }
+
+    return $scheme.'://'.$server['SERVER_NAME'].$port;
+}
+
+/**
+ * Returns the absolute URL of the current script, without the query
+ *
+ * If the resource is "index.php", then it is removed (for better-looking URLs)
+ *
+ * @param array $server the $_SERVER array
+ *
+ * @return string the absolute URL of the current script, without the query
+ */
+function index_url($server)
+{
+    $scriptname = $server['SCRIPT_NAME'];
+    if (endswith($scriptname, 'index.php')) {
+        $scriptname = substr($scriptname, 0, -9);
+    }
+    return server_url($server) . $scriptname;
+}
+
+/**
+ * Returns the absolute URL of the current script, with the query
+ *
+ * If the resource is "index.php", then it is removed (for better-looking URLs)
+ *
+ * @param array $server the $_SERVER array
+ *
+ * @return string the absolute URL of the current script, with the query
+ */
+function page_url($server)
+{
+    if (! empty($server['QUERY_STRING'])) {
+        return index_url($server).'?'.$server['QUERY_STRING'];
+    }
+    return index_url($server);
+}

@@ -131,7 +131,7 @@ header("Pragma: no-cache");
 if (!is_writable(realpath(dirname(__FILE__)))) die('<pre>ERROR: Shaarli does not have the right to write in its own directory.</pre>');
 
 // Handling of old config file which do not have the new parameters.
-if (empty($GLOBALS['title'])) $GLOBALS['title']='Shared links on '.escape(indexUrl());
+if (empty($GLOBALS['title'])) $GLOBALS['title']='Shared links on '.escape(index_url($_SERVER));
 if (empty($GLOBALS['timezone'])) $GLOBALS['timezone']=date_default_timezone_get();
 if (empty($GLOBALS['redirector'])) $GLOBALS['redirector']='';
 if (empty($GLOBALS['disablesessionprotection'])) $GLOBALS['disablesessionprotection']=false;
@@ -277,8 +277,8 @@ function pubsubhub()
     {
        $p = new Publisher($GLOBALS['config']['PUBSUBHUB_URL']);
        $topic_url = array (
-                       indexUrl().'?do=atom',
-                       indexUrl().'?do=rss'
+                       index_url($_SERVER).'?do=atom',
+                       index_url($_SERVER).'?do=rss'
                     );
        $p->publish_update($topic_url);
     }
@@ -458,34 +458,6 @@ if (isset($_POST['login']))
 // ------------------------------------------------------------------------------------------
 // Misc utility functions:
 
-// Returns the server URL (including port and http/https), without path.
-// e.g. "http://myserver.com:8080"
-// You can append $_SERVER['SCRIPT_NAME'] to get the current script URL.
-function serverUrl()
-{
-    $https = (!empty($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS'])=='on')) || $_SERVER["SERVER_PORT"]=='443' || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https'); // HTTPS detection.
-    $serverport = ($_SERVER["SERVER_PORT"]=='80' || ($https && $_SERVER["SERVER_PORT"]=='443') ? '' : ':'.$_SERVER["SERVER_PORT"]);
-    return 'http'.($https?'s':'').'://'.$_SERVER['SERVER_NAME'].$serverport;
-}
-
-// Returns the absolute URL of current script, without the query.
-// (e.g. http://sebsauvage.net/links/)
-function indexUrl()
-{
-    $scriptname = $_SERVER["SCRIPT_NAME"];
-    // If the script is named 'index.php', we remove it (for better looking URLs,
-    // e.g. http://mysite.com/shaarli/?abcde instead of http://mysite.com/shaarli/index.php?abcde)
-    if (endswith($scriptname,'index.php')) $scriptname = substr($scriptname,0,strlen($scriptname)-9);
-    return serverUrl() . $scriptname;
-}
-
-// Returns the absolute URL of current script, WITH the query.
-// (e.g. http://sebsauvage.net/links/?toto=titi&spamspamspam=humbug)
-function pageUrl()
-{
-    return indexUrl().(!empty($_SERVER["QUERY_STRING"]) ? '?'.$_SERVER["QUERY_STRING"] : '');
-}
-
 // Convert post_max_size/upload_max_filesize (e.g. '16M') parameters to bytes.
 function return_bytes($val)
 {
@@ -591,14 +563,14 @@ class pageBuilder
     {
         $this->tpl = new RainTPL;
         $this->tpl->assign('newversion',escape(checkUpdate()));
-        $this->tpl->assign('feedurl',escape(indexUrl()));
+        $this->tpl->assign('feedurl',escape(index_url($_SERVER)));
         $searchcrits=''; // Search criteria
         if (!empty($_GET['searchtags'])) $searchcrits.='&searchtags='.urlencode($_GET['searchtags']);
         elseif (!empty($_GET['searchterm'])) $searchcrits.='&searchterm='.urlencode($_GET['searchterm']);
         $this->tpl->assign('searchcrits',$searchcrits);
-        $this->tpl->assign('source',indexUrl());
+        $this->tpl->assign('source',index_url($_SERVER));
         $this->tpl->assign('version',shaarli_version);
-        $this->tpl->assign('scripturl',indexUrl());
+        $this->tpl->assign('scripturl',index_url($_SERVER));
         $this->tpl->assign('pagetitle','Shaarli');
         $this->tpl->assign('privateonly',!empty($_SESSION['privateonly'])); // Show only private links?
         if (!empty($GLOBALS['title'])) $this->tpl->assign('pagetitle',$GLOBALS['title']);
@@ -639,7 +611,7 @@ function showRSS()
     $query = $_SERVER["QUERY_STRING"];
     $cache = new CachedPage(
         $GLOBALS['config']['PAGECACHE'],
-        pageUrl(),
+        page_url($_SERVER),
         startsWith($query,'do=rss') && !isLoggedIn()
     );
     $cached = $cache->cachedVersion();
@@ -668,7 +640,7 @@ function showRSS()
         $nblinksToDisplay = $_GET['nb']=='all' ? count($linksToDisplay) : max($_GET['nb']+0,1) ;
     }
 
-    $pageaddr=escape(indexUrl());
+    $pageaddr=escape(index_url($_SERVER));
     echo '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">';
     echo '<channel><title>'.$GLOBALS['title'].'</title><link>'.$pageaddr.'</link>';
     echo '<description>Shared links</description><language>en-en</language><copyright>'.$pageaddr.'</copyright>'."\n\n";
@@ -706,7 +678,7 @@ function showRSS()
         echo '<description><![CDATA['.nl2br(keepMultipleSpaces(text2clickable($link['description']))).$descriptionlink.']]></description>'."\n</item>\n";
         $i++;
     }
-    echo '</channel></rss><!-- Cached version of '.escape(pageUrl()).' -->';
+    echo '</channel></rss><!-- Cached version of '.escape(page_url($_SERVER)).' -->';
 
     $cache->cache(ob_get_contents());
     ob_end_flush();
@@ -727,7 +699,7 @@ function showATOM()
     $query = $_SERVER["QUERY_STRING"];
     $cache = new CachedPage(
         $GLOBALS['config']['PAGECACHE'],
-        pageUrl(),
+        page_url($_SERVER),
         startsWith($query,'do=atom') && !isLoggedIn()
     );
     $cached = $cache->cachedVersion();
@@ -756,7 +728,7 @@ function showATOM()
         $nblinksToDisplay = $_GET['nb']=='all' ? count($linksToDisplay) : max($_GET['nb']+0,1) ;
     }
 
-    $pageaddr=escape(indexUrl());
+    $pageaddr=escape(index_url($_SERVER));
     $latestDate = '';
     $entries='';
     $i=0;
@@ -794,7 +766,7 @@ function showATOM()
     $feed='<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">';
     $feed.='<title>'.$GLOBALS['title'].'</title>';
     if (!$GLOBALS['config']['HIDE_TIMESTAMPS'] || isLoggedIn()) $feed.='<updated>'.escape($latestDate).'</updated>';
-    $feed.='<link rel="self" href="'.escape(serverUrl().$_SERVER["REQUEST_URI"]).'" />';
+    $feed.='<link rel="self" href="'.escape(server_url($_SERVER).$_SERVER["REQUEST_URI"]).'" />';
     if (!empty($GLOBALS['config']['PUBSUBHUB_URL']))
     {
         $feed.='<!-- PubSubHubbub Discovery -->';
@@ -804,7 +776,7 @@ function showATOM()
     $feed.='<author><name>'.$pageaddr.'</name><uri>'.$pageaddr.'</uri></author>';
     $feed.='<id>'.$pageaddr.'</id>'."\n\n"; // Yes, I know I should use a real IRI (RFC3987), but the site URL will do.
     $feed.=$entries;
-    $feed.='</feed><!-- Cached version of '.escape(pageUrl()).' -->';
+    $feed.='</feed><!-- Cached version of '.escape(page_url($_SERVER)).' -->';
     echo $feed;
 
     $cache->cache(ob_get_contents());
@@ -821,7 +793,7 @@ function showDailyRSS() {
     $query = $_SERVER["QUERY_STRING"];
     $cache = new CachedPage(
         $GLOBALS['config']['PAGECACHE'],
-        pageUrl(),
+        page_url($_SERVER),
         startsWith($query,'do=dailyrss') && !isLoggedIn()
     );
     $cached = $cache->cachedVersion();
@@ -866,7 +838,7 @@ function showDailyRSS() {
 
     // Build the RSS feed.
     header('Content-Type: application/rss+xml; charset=utf-8');
-    $pageaddr = escape(indexUrl());
+    $pageaddr = escape(index_url($_SERVER));
     echo '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0">';
     echo '<channel>';
     echo '<title>Daily - '. $GLOBALS['title'] . '</title>';
@@ -879,7 +851,7 @@ function showDailyRSS() {
     foreach ($days as $day => $linkdates) {
         $daydate = linkdate2timestamp($day.'_000000'); // Full text date
         $rfc822date = linkdate2rfc822($day.'_000000');
-        $absurl = escape(indexUrl().'?do=daily&day='.$day);  // Absolute URL of the corresponding "Daily" page.
+        $absurl = escape(index_url($_SERVER).'?do=daily&day='.$day);  // Absolute URL of the corresponding "Daily" page.
 
         // Build the HTML body of this RSS entry.
         $html = '';
@@ -893,7 +865,7 @@ function showDailyRSS() {
             $l['thumbnail'] = thumbnail($l['url']);
             $l['timestamp'] = linkdate2timestamp($l['linkdate']);
             if (startsWith($l['url'], '?')) {
-                $l['url'] = indexUrl() . $l['url'];  // make permalink URL absolute
+                $l['url'] = index_url($_SERVER) . $l['url'];  // make permalink URL absolute
             }
             $links[$linkdate] = $l;
         }
@@ -909,7 +881,7 @@ function showDailyRSS() {
 
         echo $html . PHP_EOL;
     }
-    echo '</channel></rss><!-- Cached version of '. escape(pageUrl()) .' -->';
+    echo '</channel></rss><!-- Cached version of '. escape(page_url($_SERVER)) .' -->';
 
     $cache->cache(ob_get_contents());
     ob_end_flush();
@@ -1201,7 +1173,7 @@ function renderPage()
     {
         $PAGE = new pageBuilder;
         $PAGE->assign('linkcount',count($LINKSDB));
-        $PAGE->assign('pageabsaddr',indexUrl());
+        $PAGE->assign('pageabsaddr',index_url($_SERVER));
         $PAGE->renderPage('tools');
         exit;
     }
@@ -1767,7 +1739,7 @@ function buildLinkList($PAGE,$LINKSDB)
 
         if ($link["url"][0] === '?' && // Check for both signs of a note: starting with ? and 7 chars long. I doubt that you'll post any links that look like this.
             strlen($link["url"]) === 7) {
-            $link["url"] = indexUrl() . $link["url"];
+            $link["url"] = index_url($_SERVER) . $link["url"];
         }
 
         $linkDisp[$keys[$i]] = $link;
@@ -1902,7 +1874,7 @@ function computeThumbnail($url,$href=false)
             if ("/talks/" !== substr($path,0,7)) return array(); // This is not a single video URL.
         }
         $sign = hash_hmac('sha256', $url, $GLOBALS['salt']); // We use the salt to sign data (it's random, secret, and specific to each installation)
-        return array('src'=>indexUrl().'?do=genthumbnail&hmac='.$sign.'&url='.urlencode($url),
+        return array('src'=>index_url($_SERVER).'?do=genthumbnail&hmac='.$sign.'&url='.urlencode($url),
                      'href'=>$href,'width'=>'120','style'=>'height:auto;','alt'=>'thumbnail');
     }
 
@@ -1913,7 +1885,7 @@ function computeThumbnail($url,$href=false)
     if ($ext=='jpg' || $ext=='jpeg' || $ext=='png' || $ext=='gif')
     {
         $sign = hash_hmac('sha256', $url, $GLOBALS['salt']); // We use the salt to sign data (it's random, secret, and specific to each installation)
-        return array('src'=>indexUrl().'?do=genthumbnail&hmac='.$sign.'&url='.urlencode($url),
+        return array('src'=>index_url($_SERVER).'?do=genthumbnail&hmac='.$sign.'&url='.urlencode($url),
                      'href'=>$href,'width'=>'120','style'=>'height:auto;','alt'=>'thumbnail');
     }
     return array(); // No thumbnail.
@@ -1999,11 +1971,11 @@ function install()
     if (!isset($_SESSION['session_tested']))
     {   // Step 1 : Try to store data in session and reload page.
         $_SESSION['session_tested'] = 'Working';  // Try to set a variable in session.
-        header('Location: '.indexUrl().'?test_session');  // Redirect to check stored data.
+        header('Location: '.index_url($_SERVER).'?test_session');  // Redirect to check stored data.
     }
     if (isset($_GET['test_session']))
     {   // Step 3: Sessions are OK. Remove test parameter from URL.
-        header('Location: '.indexUrl());
+        header('Location: '.index_url($_SERVER));
     }
 
 
@@ -2020,7 +1992,7 @@ function install()
         $GLOBALS['login'] = $_POST['setlogin'];
         $GLOBALS['salt'] = sha1(uniqid('',true).'_'.mt_rand()); // Salt renders rainbow-tables attacks useless.
         $GLOBALS['hash'] = sha1($_POST['setpassword'].$GLOBALS['login'].$GLOBALS['salt']);
-        $GLOBALS['title'] = (empty($_POST['title']) ? 'Shared links on '.escape(indexUrl()) : $_POST['title'] );
+        $GLOBALS['title'] = (empty($_POST['title']) ? 'Shared links on '.escape(index_url($_SERVER)) : $_POST['title'] );
         $GLOBALS['config']['ENABLE_UPDATECHECK'] = !empty($_POST['updateCheck']);
         try {
             writeConfig($GLOBALS, isLoggedIn());
