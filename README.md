@@ -38,7 +38,7 @@ Login: `demo`; Password: `demo`
 - views:
     - paginated link list
     - tag cloud
-    - picture wall: image and video thumbails
+    - picture wall: image and video thumbnails
     - daily: newspaper-like daily digest
     - daily RSS feed
 - permalinks for easy reference
@@ -91,14 +91,12 @@ This friendly fork is maintained by the Shaarli community at https://github.com/
 
 This is a community fork of the original [Shaarli](https://github.com/sebsauvage/Shaarli/) project by [Sébastien Sauvage](http://sebsauvage.net/).
 
-The original project is currently unmaintained, and the developer
-[has informed us](https://github.com/sebsauvage/Shaarli/issues/191) that he would
-have no time to work on Shaarli in the near future.
+The original project is currently unmaintained, and the developer [has informed us](https://github.com/sebsauvage/Shaarli/issues/191)
+that he would have no time to work on Shaarli in the near future.
 The Shaarli community has carried on the work to provide
 [many patches](https://github.com/shaarli/Shaarli/compare/sebsauvage:master...master)
 for [bug fixes and enhancements](https://github.com/shaarli/Shaarli/issues?q=is%3Aclosed+)
-in this repository, and will keep maintaining the project for the foreseeable future,
-while keeping Shaarli simple and efficient.
+in this repository, and will keep maintaining the project for the foreseeable future, while keeping Shaarli simple and efficient.
 
 ### Contributing
 If you'd like to help, please:
