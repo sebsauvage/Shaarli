@@ -59,6 +59,7 @@ if (is_file($GLOBALS['config']['CONFIG_FILE'])) {
 // Shaarli library
 require_once 'application/Cache.php';
 require_once 'application/CachedPage.php';
+require_once 'application/HttpUtils.php';
 require_once 'application/LinkDB.php';
 require_once 'application/TimeZone.php';
 require_once 'application/Url.php';
@@ -209,9 +210,11 @@ function checkUpdate()
     // Get latest version number at most once a day.
     if (!is_file($GLOBALS['config']['UPDATECHECK_FILENAME']) || (filemtime($GLOBALS['config']['UPDATECHECK_FILENAME'])<time()-($GLOBALS['config']['UPDATECHECK_INTERVAL'])))
     {
-        $version=shaarli_version;
-        list($httpstatus,$headers,$data) = getHTTP('https://raw.githubusercontent.com/shaarli/Shaarli/master/shaarli_version.php',2);
-        if (strpos($httpstatus,'200 OK')!==false) $version=str_replace(' */ ?>','',str_replace('<?php /* ','',$data));
+        $version = shaarli_version;
+        list($headers, $data) = get_http_url('https://raw.githubusercontent.com/shaarli/Shaarli/master/shaarli_version.php', 2);
+        if (strpos($headers[0], '200 OK') !== false) {
+            $version = str_replace(' */ ?>', '', str_replace('<?php /* ', '', $data));
+        }
         // If failed, never mind. We don't want to bother the user with that.
         file_put_contents($GLOBALS['config']['UPDATECHECK_FILENAME'],$version); // touch file date
     }
@@ -533,53 +536,6 @@ function linkdate2rfc822($linkdate)
 function linkdate2iso8601($linkdate)
 {
     return date('c',linkdate2timestamp($linkdate)); // 'c' is for ISO 8601 date format.
-}
-
-// Parse HTTP response headers and return an associative array.
-function http_parse_headers_shaarli( $headers )
-{
-    $res=array();
-    foreach($headers as $header)
-    {
-        $i = strpos($header,': ');
-        if ($i!==false)
-        {
-            $key=substr($header,0,$i);
-            $value=substr($header,$i+2,strlen($header)-$i-2);
-            $res[$key]=$value;
-        }
-    }
-    return $res;
-}
-
-/* GET an URL.
-   Input: $url : URL to get (http://...)
-          $timeout : Network timeout (will wait this many seconds for an anwser before giving up).
-   Output: An array.  [0] = HTTP status message (e.g. "HTTP/1.1 200 OK") or error message
-                      [1] = associative array containing HTTP response headers (e.g. echo getHTTP($url)[1]['Content-Type'])
-                      [2] = data
-    Example: list($httpstatus,$headers,$data) = getHTTP('http://sebauvage.net/');
-             if (strpos($httpstatus,'200 OK')!==false)
-                 echo 'Data type: '.htmlspecialchars($headers['Content-Type']);
-             else
-                 echo 'There was an error: '.htmlspecialchars($httpstatus)
-*/
-function getHTTP($url,$timeout=30)
-{
-    try
-    {
-        $options = array('http'=>array('method'=>'GET','timeout' => $timeout, 'user_agent' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:23.0) Gecko/20100101 Firefox/23.0')); // Force network timeout
-        $context = stream_context_create($options);
-        $data=file_get_contents($url,false,$context,-1, 4000000); // We download at most 4 Mb from source.
-        if (!$data) { return array('HTTP Error',array(),''); }
-        $httpStatus=$http_response_header[0]; // e.g. "HTTP/1.1 200 OK"
-        $responseHeaders=http_parse_headers_shaarli($http_response_header);
-        return array($httpStatus,$responseHeaders,$data);
-    }
-    catch (Exception $e)  // getHTTP *can* fail silently (we don't care if the title cannot be fetched)
-    {
-        return array($e->getMessage(),'','');
-    }
 }
 
 // Extract title from an HTML document.
@@ -1516,9 +1472,10 @@ function renderPage()
             $private = (!empty($_GET['private']) && $_GET['private'] === "1" ? 1 : 0);
             // If this is an HTTP(S) link, we try go get the page to extract the title (otherwise we will to straight to the edit form.)
             if (empty($title) && strpos($url->getScheme(), 'http') !== false) {
-                list($status,$headers,$data) = getHTTP($url,4); // Short timeout to keep the application responsive.
+                // Short timeout to keep the application responsive
+                list($headers, $data) = get_http_url($url, 4);
                 // FIXME: Decode charset according to specified in either 1) HTTP response headers or 2) <head> in html
-                if (strpos($status,'200 OK')!==false) {
+                if (strpos($headers[0], '200 OK') !== false) {
                     // Look for charset in html header.
                     preg_match('#<meta .*charset=.*>#Usi', $data, $meta);
 
@@ -2186,8 +2143,9 @@ function genThumbnail()
         }
         else // This is a flickr page (html)
         {
-            list($httpstatus,$headers,$data) = getHTTP($url,20); // Get the flickr html page.
-            if (strpos($httpstatus,'200 OK')!==false)
+            // Get the flickr html page.
+            list($headers, $data) = get_http_url($url, 20);
+            if (strpos($headers[0], '200 OK') !== false)
             {
                 // flickr now nicely provides the URL of the thumbnail in each flickr page.
                 preg_match('!<link rel=\"image_src\" href=\"(.+?)\"!',$data,$matches);
@@ -2206,9 +2164,9 @@ function genThumbnail()
 
         if ($imageurl!='')
         {   // Let's download the image.
-            list($httpstatus,$headers,$data) = getHTTP($imageurl,10); // Image is 240x120, so 10 seconds to download should be enough.
-            if (strpos($httpstatus,'200 OK')!==false)
-            {
+            // Image is 240x120, so 10 seconds to download should be enough.
+            list($headers, $data) = get_http_url($imageurl, 10);
+            if (strpos($headers[0], '200 OK') !== false) {
                 file_put_contents($GLOBALS['config']['CACHEDIR'].'/'.$thumbname,$data); // Save image to cache.
                 header('Content-Type: image/jpeg');
                 echo $data;
@@ -2222,15 +2180,13 @@ function genThumbnail()
         // This is more complex: we have to perform a HTTP request, then parse the result.
         // Maybe we should deport this to JavaScript ? Example: http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo/4285098#4285098
         $vid = substr(parse_url($url,PHP_URL_PATH),1);
-        list($httpstatus,$headers,$data) = getHTTP('https://vimeo.com/api/v2/video/'.escape($vid).'.php',5);
-        if (strpos($httpstatus,'200 OK')!==false)
-        {
+        list($headers, $data) = get_http_url('https://vimeo.com/api/v2/video/'.escape($vid).'.php', 5);
+        if (strpos($headers[0], '200 OK') !== false) {
             $t = unserialize($data);
             $imageurl = $t[0]['thumbnail_medium'];
             // Then we download the image and serve it to our client.
-            list($httpstatus,$headers,$data) = getHTTP($imageurl,10);
-            if (strpos($httpstatus,'200 OK')!==false)
-            {
+            list($headers, $data) = get_http_url($imageurl, 10);
+            if (strpos($headers[0], '200 OK') !== false) {
                 file_put_contents($GLOBALS['config']['CACHEDIR'].'/'.$thumbname,$data); // Save image to cache.
                 header('Content-Type: image/jpeg');
                 echo $data;
@@ -2244,17 +2200,16 @@ function genThumbnail()
         // The thumbnail for TED talks is located in the <link rel="image_src" [...]> tag on that page
         // http://www.ted.com/talks/mikko_hypponen_fighting_viruses_defending_the_net.html
         // <link rel="image_src" href="http://images.ted.com/images/ted/28bced335898ba54d4441809c5b1112ffaf36781_389x292.jpg" />
-        list($httpstatus,$headers,$data) = getHTTP($url,5);
-        if (strpos($httpstatus,'200 OK')!==false)
-        {
+        list($headers, $data) = get_http_url($url, 5);
+        if (strpos($headers[0], '200 OK') !== false) {
             // Extract the link to the thumbnail
             preg_match('!link rel="image_src" href="(http://images.ted.com/images/ted/.+_\d+x\d+\.jpg)"!',$data,$matches);
             if (!empty($matches[1]))
             {   // Let's download the image.
                 $imageurl=$matches[1];
-                list($httpstatus,$headers,$data) = getHTTP($imageurl,20); // No control on image size, so wait long enough.
-                if (strpos($httpstatus,'200 OK')!==false)
-                {
+                // No control on image size, so wait long enough
+                list($headers, $data) = get_http_url($imageurl, 20);
+                if (strpos($headers[0], '200 OK') !== false) {
                     $filepath=$GLOBALS['config']['CACHEDIR'].'/'.$thumbname;
                     file_put_contents($filepath,$data); // Save image to cache.
                     if (resizeImage($filepath))
@@ -2273,17 +2228,16 @@ function genThumbnail()
         // There is no thumbnail available for xkcd comics, so download the whole image and resize it.
         // http://xkcd.com/327/
         // <img src="http://imgs.xkcd.com/comics/exploits_of_a_mom.png" title="<BLABLA>" alt="<BLABLA>" />
-        list($httpstatus,$headers,$data) = getHTTP($url,5);
-        if (strpos($httpstatus,'200 OK')!==false)
-        {
+        list($headers, $data) = get_http_url($url, 5);
+        if (strpos($headers[0], '200 OK') !== false) {
             // Extract the link to the thumbnail
             preg_match('!<img src="(http://imgs.xkcd.com/comics/.*)" title="[^s]!',$data,$matches);
             if (!empty($matches[1]))
             {   // Let's download the image.
                 $imageurl=$matches[1];
-                list($httpstatus,$headers,$data) = getHTTP($imageurl,20); // No control on image size, so wait long enough.
-                if (strpos($httpstatus,'200 OK')!==false)
-                {
+                // No control on image size, so wait long enough
+                list($headers, $data) = get_http_url($imageurl, 20);
+                if (strpos($headers[0], '200 OK') !== false) {
                     $filepath=$GLOBALS['config']['CACHEDIR'].'/'.$thumbname;
                     file_put_contents($filepath,$data); // Save image to cache.
                     if (resizeImage($filepath))
@@ -2300,9 +2254,9 @@ function genThumbnail()
     else
     {
         // For all other domains, we try to download the image and make a thumbnail.
-        list($httpstatus,$headers,$data) = getHTTP($url,30);  // We allow 30 seconds max to download (and downloads are limited to 4 Mb)
-        if (strpos($httpstatus,'200 OK')!==false)
-        {
+        // We allow 30 seconds max to download (and downloads are limited to 4 Mb)
+        list($headers, $data) = get_http_url($url, 30);
+        if (strpos($headers[0], '200 OK') !== false) {
             $filepath=$GLOBALS['config']['CACHEDIR'].'/'.$thumbname;
             file_put_contents($filepath,$data); // Save image to cache.
             if (resizeImage($filepath))
