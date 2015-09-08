@@ -287,6 +287,10 @@ You use the community supported version of the original Shaarli project, by Seba
 
     /**
      * Returns the link for a given URL, or False if it does not exist.
+     *
+     * @param string $url URL to search for
+     *
+     * @return mixed the existing link if it exists, else 'false'
      */
     public function getLinkFromUrl($url)
     {

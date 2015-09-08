@@ -26,6 +26,32 @@ function unparse_url($parsedUrl)
 }
 
 /**
+ * Removes undesired query parameters and fragments
+ *
+ * @param string url Url to be cleaned
+ *
+ * @return string the string representation of this URL after cleanup
+ */
+function cleanup_url($url)
+{
+  $obj_url = new Url($url);
+  return $obj_url->cleanup();
+}
+
+/**
+ * Get URL scheme.
+ *
+ * @param string url Url for which the scheme is requested
+ *
+ * @return mixed the URL scheme or false if none is provided.
+ */
+function get_url_scheme($url)
+{
+  $obj_url = new Url($url);
+  return $obj_url->getScheme();
+}
+
+/**
  * URL representation and cleanup utilities
  *
  * Form
@@ -90,7 +116,7 @@ class Url
     /**
      * Returns a string representation of this URL
      */
-    public function __toString()
+    public function toString()
     {
         return unparse_url($this->parts);
     }
@@ -149,7 +175,7 @@ class Url
     {
         $this->cleanupQuery();
         $this->cleanupFragment();
-        return $this->__toString();
+        return $this->toString();
     }
 
     /**
