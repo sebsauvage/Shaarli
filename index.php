@@ -1,10 +1,20 @@
 <?php
-// Shaarli 0.5.3 - Shaare your links...
-// The personal, minimalist, super-fast, no-database Delicious clone. By sebsauvage.net
-// http://sebsauvage.net/wiki/doku.php?id=php:shaarli
-// Licence: http://www.opensource.org/licenses/zlib-license.php
-// Requires: PHP 5.3.x
-// -----------------------------------------------------------------------------------------------
+/**
+ * Shaarli v0.5.3 - Shaare your links...
+ *
+ * The personal, minimalist, super-fast, no-database Delicious clone.
+ *
+ * Friendly fork by the Shaarli community:
+ *  - https://github.com/shaarli/Shaarli
+ *
+ * Original project by sebsauvage.net:
+ *  - http://sebsauvage.net/wiki/doku.php?id=php:shaarli
+ *  - https://github.com/sebsauvage/Shaarli
+ *
+ * Licence: http://www.opensource.org/licenses/zlib-license.php
+ *
+ * Requires: PHP 5.3.x
+ */
 
 // Set 'UTC' as the default timezone if it is not defined in php.ini
 // See http://php.net/manual/en/datetime.configuration.php#ini.date.timezone
