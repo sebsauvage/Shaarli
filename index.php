@@ -1,6 +1,6 @@
 <?php
 /**
- * Shaarli v0.5.3 - Shaare your links...
+ * Shaarli v0.5.4 - Shaare your links...
  *
  * The personal, minimalist, super-fast, no-database Delicious clone.
  *
@@ -49,7 +49,7 @@ $GLOBALS['config']['ARCHIVE_ORG'] = false; // For each link, add a link to an ar
 $GLOBALS['config']['ENABLE_RSS_PERMALINKS'] = true;  // Enable RSS permalinks by default. This corresponds to the default behavior of shaarli before this was added as an option.
 $GLOBALS['config']['HIDE_PUBLIC_LINKS'] = false;
 // -----------------------------------------------------------------------------------------------
-define('shaarli_version','0.5.3');
+define('shaarli_version', '0.5.4');
 // http://server.com/x/shaarli --> /shaarli/
 define('WEB_PATH', substr($_SERVER["REQUEST_URI"], 0, 1+strrpos($_SERVER["REQUEST_URI"], '/', 0)));
 
