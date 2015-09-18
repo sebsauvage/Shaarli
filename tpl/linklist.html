@@ -70,7 +70,9 @@
                         </form>
                     </div>
                 {/if}
-                <span class="linktitle"><a href="{$redirector}{$value.url}">{$value.title}</a></span>
+                <span class="linktitle">
+                    <a href="{$value.real_url}">{$value.title}</a>
+                </span>
                 <br>
                 {if="$value.description"}<div class="linkdescription">{$value.description}</div>{/if}
                 {if="!$GLOBALS['config']['HIDE_TIMESTAMPS'] || isLoggedIn()"}
@@ -83,7 +85,7 @@
                     <span>{$value}</span> -
                 {/loop}
 
-                <a href="{$value.url}"><span class="linkurl" title="Short link">{$value.url}</span></a><br>
+                <a href="{$value.real_url}"><span class="linkurl" title="Short link">{$value.url}</span></a><br>
                 {if="$value.tags"}
                     <div class="linktaglist">
                     {loop="value.taglist"}<span class="linktag" title="Add tag"><a href="?addtag={$value|urlencode}">{$value}</a></span> {/loop}

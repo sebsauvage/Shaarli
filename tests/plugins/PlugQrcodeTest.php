@@ -30,7 +30,7 @@ class PlugQrcodeTest extends PHPUnit_Framework_TestCase
             'title' => $str,
             'links' => array(
                 array(
-                    'url' => $str,
+                    'real_url' => $str,
                 )
             )
         );
@@ -39,7 +39,7 @@ class PlugQrcodeTest extends PHPUnit_Framework_TestCase
         $link = $data['links'][0];
         // data shouldn't be altered
         $this->assertEquals($str, $data['title']);
-        $this->assertEquals($str, $link['url']);
+        $this->assertEquals($str, $link['real_url']);
 
         // plugin data
         $this->assertEquals(1, count($link['link_plugin']));

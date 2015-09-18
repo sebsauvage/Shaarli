@@ -340,21 +340,6 @@ function logm($message)
     file_put_contents($GLOBAL['config']['LOG_FILE'], $t, FILE_APPEND);
 }
 
-// In a string, converts URLs to clickable links.
-// Function inspired from http://www.php.net/manual/en/function.preg-replace.php#85722
-function text2clickable($url)
-{
-    $redir = empty($GLOBALS['redirector']) ? '' : $GLOBALS['redirector'];
-    return preg_replace('!(((?:https?|ftp|file)://|apt:|magnet:)\S+[[:alnum:]]/?)!si','<a href="'.$redir.'$1" rel="nofollow">$1</a>',$url);
-}
-
-// This function inserts &nbsp; where relevant so that multiple spaces are properly displayed in HTML
-// even in the absence of <pre>  (This is used in description to keep text formatting)
-function keepMultipleSpaces($text)
-{
-    return str_replace('  ',' &nbsp;',$text);
-
-}
 // ------------------------------------------------------------------------------------------
 // Sniff browser language to display dates in the right format automatically.
 // (Note that is may not work on your server if the corresponding local is not installed.)
@@ -746,7 +731,8 @@ function showRSS()
     $LINKSDB = new LinkDB(
         $GLOBALS['config']['DATASTORE'],
         isLoggedIn(),
-        $GLOBALS['config']['HIDE_PUBLIC_LINKS']
+        $GLOBALS['config']['HIDE_PUBLIC_LINKS'],
+        $GLOBALS['redirector']
     );
     // Read links from database (and filter private links if user it not logged in).
 
@@ -797,7 +783,9 @@ function showRSS()
         // If user wants permalinks first, put the final link in description
         if ($usepermalinks===true) $descriptionlink = '(<a href="'.$absurl.'">Link</a>)';
         if (strlen($link['description'])>0) $descriptionlink = '<br>'.$descriptionlink;
-        echo '<description><![CDATA['.nl2br(keepMultipleSpaces(text2clickable($link['description']))).$descriptionlink.']]></description>'."\n</item>\n";
+        echo '<description><![CDATA['.
+            format_description($link['description'], $GLOBALS['redirector']) .
+            $descriptionlink . ']]></description>' . "\n</item>\n";
         $i++;
     }
     echo '</channel></rss><!-- Cached version of '.escape(page_url($_SERVER)).' -->';
@@ -835,7 +823,8 @@ function showATOM()
     $LINKSDB = new LinkDB(
         $GLOBALS['config']['DATASTORE'],
         isLoggedIn(),
-        $GLOBALS['config']['HIDE_PUBLIC_LINKS']
+        $GLOBALS['config']['HIDE_PUBLIC_LINKS'],
+        $GLOBALS['redirector']
     );
 
     // Optionally filter the results:
@@ -876,7 +865,9 @@ function showATOM()
         if ($usepermalinks===true) $descriptionlink = '(<a href="'.$absurl.'">Link</a>)';
         if (strlen($link['description'])>0) $descriptionlink = '<br>'.$descriptionlink;
 
-        $entries.='<content type="html"><![CDATA['.nl2br(keepMultipleSpaces(text2clickable($link['description']))).$descriptionlink."]]></content>\n";
+        $entries .= '<content type="html"><![CDATA['.
+            format_description($link['description'], $GLOBALS['redirector']) .
+            $descriptionlink . "]]></content>\n";
         if ($link['tags']!='') // Adding tags to each ATOM entry (as mentioned in ATOM specification)
         {
             foreach(explode(' ',$link['tags']) as $tag)
@@ -929,7 +920,8 @@ function showDailyRSS() {
     $LINKSDB = new LinkDB(
         $GLOBALS['config']['DATASTORE'],
         isLoggedIn(),
-        $GLOBALS['config']['HIDE_PUBLIC_LINKS']
+        $GLOBALS['config']['HIDE_PUBLIC_LINKS'],
+        $GLOBALS['redirector']
     );
 
     /* Some Shaarlies may have very few links, so we need to look
@@ -983,7 +975,7 @@ function showDailyRSS() {
         // We pre-format some fields for proper output.
         foreach ($linkdates as $linkdate) {
             $l = $LINKSDB[$linkdate];
-            $l['formatedDescription'] = nl2br(keepMultipleSpaces(text2clickable($l['description'])));
+            $l['formatedDescription'] = format_description($l['description'], $GLOBALS['redirector']);
             $l['thumbnail'] = thumbnail($l['url']);
             $l['timestamp'] = linkdate2timestamp($l['linkdate']);
             if (startsWith($l['url'], '?')) {
@@ -1016,7 +1008,8 @@ function showDaily()
     $LINKSDB = new LinkDB(
         $GLOBALS['config']['DATASTORE'],
         isLoggedIn(),
-        $GLOBALS['config']['HIDE_PUBLIC_LINKS']
+        $GLOBALS['config']['HIDE_PUBLIC_LINKS'],
+        $GLOBALS['redirector']
     );
 
     $day=Date('Ymd',strtotime('-1 day')); // Yesterday, in format YYYYMMDD.
@@ -1047,7 +1040,7 @@ function showDaily()
         $taglist = explode(' ',$link['tags']);
         uasort($taglist, 'strcasecmp');
         $linksToDisplay[$key]['taglist']=$taglist;
-        $linksToDisplay[$key]['formatedDescription']=nl2br(keepMultipleSpaces(text2clickable($link['description'])));
+        $linksToDisplay[$key]['formatedDescription'] = format_description($link['description'], $GLOBALS['redirector']);
         $linksToDisplay[$key]['thumbnail'] = thumbnail($link['url']);
         $linksToDisplay[$key]['timestamp'] = linkdate2timestamp($link['linkdate']);
     }
@@ -1107,7 +1100,8 @@ function renderPage()
     $LINKSDB = new LinkDB(
         $GLOBALS['config']['DATASTORE'],
         isLoggedIn(),
-        $GLOBALS['config']['HIDE_PUBLIC_LINKS']
+        $GLOBALS['config']['HIDE_PUBLIC_LINKS'],
+        $GLOBALS['redirector']
     );
 
     $PAGE = new pageBuilder;
@@ -1781,7 +1775,8 @@ function importFile()
     $LINKSDB = new LinkDB(
         $GLOBALS['config']['DATASTORE'],
         isLoggedIn(),
-        $GLOBALS['config']['HIDE_PUBLIC_LINKS']
+        $GLOBALS['config']['HIDE_PUBLIC_LINKS'],
+        $GLOBALS['redirector']
     );
     $filename=$_FILES['filetoupload']['name'];
     $filesize=$_FILES['filetoupload']['size'];
@@ -1932,8 +1927,7 @@ function buildLinkList($PAGE,$LINKSDB)
     while ($i<$end && $i<count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
-        $link['description']=nl2br(keepMultipleSpaces(text2clickable($link['description'])));
-        $title=$link['title'];
+        $link['description'] = format_description($link['description'], $GLOBALS['redirector']);
         $classLi =  $i%2!=0 ? '' : 'publicLinkHightLight';
         $link['class'] = ($link['private']==0 ? $classLi : 'private');
         $link['timestamp']=linkdate2timestamp($link['linkdate']);

@@ -57,18 +57,25 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     // Hide public links
     private $_hidePublicLinks;
 
+    // link redirector set in user settings.
+    private $_redirector;
+
     /**
      * Creates a new LinkDB
      *
      * Checks if the datastore exists; else, attempts to create a dummy one.
      *
-     * @param $isLoggedIn is the user logged in?
+     * @param string  $datastore       datastore file path.
+     * @param boolean $isLoggedIn      is the user logged in?
+     * @param boolean $hidePublicLinks if true all links are private.
+     * @param string  $redirector      link redirector set in user settings.
      */
-    function __construct($datastore, $isLoggedIn, $hidePublicLinks)
+    function __construct($datastore, $isLoggedIn, $hidePublicLinks, $redirector = '')
     {
         $this->_datastore = $datastore;
         $this->_loggedIn = $isLoggedIn;
         $this->_hidePublicLinks = $hidePublicLinks;
+        $this->_redirector = $redirector;
         $this->_checkDB();
         $this->_readDB();
     }
@@ -259,7 +266,14 @@ You use the community supported version of the original Shaarli project, by Seba
 
         // Escape links data
         foreach($this->_links as &$link) { 
-            sanitizeLink($link); 
+            sanitizeLink($link);
+            // Do not use the redirector for internal links (Shaarli note URL starting with a '?').
+            if (!empty($this->_redirector) && !startsWith($link['url'], '?')) {
+                $link['real_url'] = $this->_redirector . urlencode($link['url']);
+            }
+            else {
+                $link['real_url'] = $link['url'];
+            }
         }
     }
 
