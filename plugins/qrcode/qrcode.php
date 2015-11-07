@@ -1,11 +1,15 @@
 <?php
-
-// TODO: Can't be tested in localhost
+/**
+ * Plugin qrcode
+ * Add QRCode containing URL for each links.
+ * Display a QRCode icon in link list.
+ */
 
 /**
  * Add qrcode icon to link_plugin when rendering linklist.
  *
- * @param $data - linklist data.
+ * @param array $data - linklist data.
+ *
  * @return mixed - linklist data with qrcode plugin.
  */
 function hook_qrcode_render_linklist($data)
@@ -24,6 +28,7 @@ function hook_qrcode_render_linklist($data)
  * When linklist is displayed, include qrcode JS files.
  *
  * @param array $data - footer data.
+ *
  * @return mixed - footer data with qrcode JS files added.
  */
 function hook_qrcode_render_footer($data)
