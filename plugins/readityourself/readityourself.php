@@ -14,9 +14,9 @@ if (is_file(PluginManager::$PLUGINS_PATH . '/readityourself/config.php')) {
 }
 
 if (!isset($GLOBALS['plugins']['READITYOUSELF_URL'])) {
-    $GLOBALS['plugins']['errors'][] = 'Wallabag plugin error: '.
-        'Please define "$GLOBALS[\'plugins\'][\'WALLABAG_URL\']" '.
-        'in "plugins/wallabag/config.php" or in your Shaarli config.php file.';
+    $GLOBALS['plugins']['errors'][] = 'Readityourself plugin error: '.
+        'Please define "$GLOBALS[\'plugins\'][\'READITYOUSELF_URL\']" '.
+        'in "plugins/readityourself/config.php" or in your Shaarli config.php file.';
 }
 
 /**

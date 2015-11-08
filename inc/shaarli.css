@@ -1126,3 +1126,8 @@ div.dailyNoEntry {
 .center {
     text-align: center;
 }
+
+ul.errors {
+    color: red;
+    float: left;
+}

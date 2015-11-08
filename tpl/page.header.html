@@ -40,6 +40,13 @@
   </ul>
 </div>
 
+{if="!empty($plugin_errors) && isLoggedIn()"}
+    <ul class="errors">
+        {loop="plugin_errors"}
+            <li>{$value}</li>
+        {/loop}
+    </ul>
+{/if}
 
 <div class="clear"></div>
 

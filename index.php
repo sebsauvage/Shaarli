@@ -55,8 +55,7 @@ $GLOBALS['config']['HIDE_PUBLIC_LINKS'] = false;
 $GLOBALS['config']['ENABLED_PLUGINS'] = array('qrcode');
 
 // Default plugins, default config - will be overriden by config.php and then plugin's config.php file.
-$GLOBALS['plugins']['READITYOUSELF_URL'] = 'http://someurl.com';
-$GLOBALS['plugins']['WALLABAG_URL'] = 'https://demo.wallabag.org/';
+//$GLOBALS['plugins']['WALLABAG_URL'] = 'https://demo.wallabag.org/';
 // -----------------------------------------------------------------------------------------------
 define('shaarli_version', '0.5.4');
 // http://server.com/x/shaarli --> /shaarli/
@@ -580,28 +579,43 @@ class pageBuilder
 
     function __construct()
     {
-        $this->tpl=false;
+        $this->tpl = false;
     }
 
+    /**
+     * Initialize all default tpl tags.
+     */
     private function initialize()
     {
         $this->tpl = new RainTPL;
-        $this->tpl->assign('newversion',escape(checkUpdate()));
-        $this->tpl->assign('feedurl',escape(index_url($_SERVER)));
-        $searchcrits=''; // Search criteria
-        if (!empty($_GET['searchtags'])) $searchcrits.='&searchtags='.urlencode($_GET['searchtags']);
-        elseif (!empty($_GET['searchterm'])) $searchcrits.='&searchterm='.urlencode($_GET['searchterm']);
-        $this->tpl->assign('searchcrits',$searchcrits);
-        $this->tpl->assign('source',index_url($_SERVER));
-        $this->tpl->assign('version',shaarli_version);
-        $this->tpl->assign('scripturl',index_url($_SERVER));
-        $this->tpl->assign('pagetitle','Shaarli');
-        $this->tpl->assign('privateonly',!empty($_SESSION['privateonly'])); // Show only private links?
-        if (!empty($GLOBALS['title'])) $this->tpl->assign('pagetitle',$GLOBALS['title']);
-        if (!empty($GLOBALS['titleLink'])) $this->tpl->assign('titleLink',$GLOBALS['titleLink']);
-        if (!empty($GLOBALS['pagetitle'])) $this->tpl->assign('pagetitle',$GLOBALS['pagetitle']);
-        $this->tpl->assign('shaarlititle',empty($GLOBALS['title']) ? 'Shaarli': $GLOBALS['title'] );
-        return;
+        $this->tpl->assign('newversion', escape(checkUpdate()));
+        $this->tpl->assign('feedurl', escape(index_url($_SERVER)));
+        $searchcrits = ''; // Search criteria
+        if (!empty($_GET['searchtags'])) {
+            $searchcrits .= '&searchtags=' . urlencode($_GET['searchtags']);
+        }
+        elseif (!empty($_GET['searchterm'])) {
+            $searchcrits .= '&searchterm=' . urlencode($_GET['searchterm']);
+        }
+        $this->tpl->assign('searchcrits', $searchcrits);
+        $this->tpl->assign('source', index_url($_SERVER));
+        $this->tpl->assign('version', shaarli_version);
+        $this->tpl->assign('scripturl', index_url($_SERVER));
+        $this->tpl->assign('pagetitle', 'Shaarli');
+        $this->tpl->assign('privateonly', !empty($_SESSION['privateonly'])); // Show only private links?
+        if (!empty($GLOBALS['title'])) {
+            $this->tpl->assign('pagetitle', $GLOBALS['title']);
+        }
+        if (!empty($GLOBALS['titleLink'])) {
+            $this->tpl->assign('titleLink', $GLOBALS['titleLink']);
+        }
+        if (!empty($GLOBALS['pagetitle'])) {
+            $this->tpl->assign('pagetitle', $GLOBALS['pagetitle']);
+        }
+        $this->tpl->assign('shaarlititle', empty($GLOBALS['title']) ? 'Shaarli': $GLOBALS['title']);
+        if (!empty($GLOBALS['plugins']['errors'])) {
+            $this->tpl->assign('plugin_errors', $GLOBALS['plugins']['errors']);
+        }
     }
 
     // The following assign() method is basically the same as RainTPL (except that it's lazy)
