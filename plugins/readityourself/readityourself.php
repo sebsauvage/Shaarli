@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Plugin readityourself
+ */
+
 // If we're talking about https://github.com/memiks/readityourself
 // it seems kinda dead.
 // Not tested.
@@ -10,20 +14,24 @@ if (is_file(PluginManager::$PLUGINS_PATH . '/readityourself/config.php')) {
 }
 
 if (!isset($GLOBALS['plugins']['READITYOUSELF_URL'])) {
-    header('Content-Type: text/plain; charset=utf-8');
-    echo 'ReadItYourself plugin error: '. PHP_EOL;
-    echo '  Please copy "plugins/readityourself/config.php.dist" to config.php and configure your readityourself URL.'. PHP_EOL;
-    echo '  You can also define "$GLOBALS[\'plugins\'][\'READITYOUSELF_URL\']" in your global Shaarli config.php file.';
-    exit;
+    $GLOBALS['plugins']['errors'][] = 'Wallabag plugin error: '.
+        'Please define "$GLOBALS[\'plugins\'][\'WALLABAG_URL\']" '.
+        'in "plugins/wallabag/config.php" or in your Shaarli config.php file.';
 }
 
 /**
  * Add readityourself icon to link_plugin when rendering linklist.
  *
- * @param $data - linklist data.
+ * @param mixed $data - linklist data.
+ *
  * @return mixed - linklist data with readityourself plugin.
  */
-function hook_readityourself_render_linklist($data) {
+function hook_readityourself_render_linklist($data)
+{
+    if (!isset($GLOBALS['plugins']['READITYOUSELF_URL'])) {
+        return $data;
+    }
+
     $readityourself_html = file_get_contents(PluginManager::$PLUGINS_PATH . '/readityourself/readityourself.html');
 
     foreach ($data['links'] as &$value) {
