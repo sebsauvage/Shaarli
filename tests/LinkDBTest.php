@@ -4,6 +4,7 @@
  */
 
 require_once 'application/Cache.php';
+require_once 'application/FileUtils.php';
 require_once 'application/LinkDB.php';
 require_once 'application/Utils.php';
 require_once 'tests/utils/ReferenceLinkDB.php';
@@ -87,8 +88,8 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     /**
      * Attempt to instantiate a LinkDB whereas the datastore is not writable
      *
-     * @expectedException              PHPUnit_Framework_Error_Warning
-     * @expectedExceptionMessageRegExp /failed to open stream: No such file or directory/
+     * @expectedException              IOException
+     * @expectedExceptionMessageRegExp /Error accessing null/
      */
     public function testConstructDatastoreNotWriteable()
     {
