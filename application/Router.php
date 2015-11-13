@@ -29,6 +29,8 @@ class Router
 
     public static $PAGE_IMPORT = 'import';
 
+    public static $PAGE_OPENSEARCH = 'opensearch';
+
     public static $PAGE_LINKLIST = 'linklist';
 
     /**
@@ -61,6 +63,10 @@ class Router
 
         if (startswith($query, 'do='. self::$PAGE_TAGCLOUD)) {
             return self::$PAGE_TAGCLOUD;
+        }
+
+        if (startswith($query, 'do='. self::$PAGE_OPENSEARCH)) {
+            return self::$PAGE_OPENSEARCH;
         }
 
         // At this point, only loggedin pages.
