@@ -44,14 +44,6 @@ function endsWith($haystack, $needle, $case=true)
 }
 
 /**
- * Same as nl2br(), but escapes < and >
- */
-function nl2br_escaped($html)
-{
-    return str_replace('>', '&gt;', str_replace('<', '&lt;', nl2br($html)));
-}
-
-/**
  * htmlspecialchars wrapper
  */
 function escape($str)
