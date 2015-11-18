@@ -1770,6 +1770,54 @@ HTML;
         exit;
     }
 
+    // Plugin administration page
+    if ($targetPage == Router::$PAGE_PLUGINSADMIN) {
+        $pluginMeta = $pluginManager->getPluginsMeta();
+
+        // Split plugins into 2 arrays: ordered enabled plugins and disabled.
+        $enabledPlugins = array_filter($pluginMeta, function($v) { return $v['order'] !== false; });
+        // Load parameters.
+        $enabledPlugins = load_plugin_parameter_values($enabledPlugins, $GLOBALS['plugins']);
+        uasort(
+            $enabledPlugins,
+            function($a, $b) { return $a['order'] - $b['order']; }
+        );
+        $disabledPlugins = array_filter($pluginMeta, function($v) { return $v['order'] === false; });
+
+        $PAGE->assign('enabledPlugins', $enabledPlugins);
+        $PAGE->assign('disabledPlugins', $disabledPlugins);
+        $PAGE->renderPage('pluginsadmin');
+        exit;
+    }
+
+    // Plugin administration form action
+    if ($targetPage == Router::$PAGE_SAVE_PLUGINSADMIN) {
+        try {
+            if (isset($_POST['parameters_form'])) {
+                unset($_POST['parameters_form']);
+                foreach ($_POST as $param => $value) {
+                    $GLOBALS['plugins'][$param] = escape($value);
+                }
+            }
+            else {
+                $GLOBALS['config']['ENABLED_PLUGINS'] = save_plugin_config($_POST);
+            }
+            writeConfig($GLOBALS, isLoggedIn());
+        }
+        catch (Exception $e) {
+            error_log(
+                'ERROR while saving plugin configuration:.' . PHP_EOL .
+                $e->getMessage()
+            );
+
+            // TODO: do not handle exceptions/errors in JS.
+            echo '<script>alert("'. $e->getMessage() .'");document.location=\'?do=pluginsadmin\';</script>';
+            exit;
+        }
+        header('Location: ?do='. Router::$PAGE_PLUGINSADMIN);
+        exit;
+    }
+
     // -------- Otherwise, simply display search form and links:
     showLinkList($PAGE, $LINKSDB);
     exit;

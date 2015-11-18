@@ -1103,6 +1103,66 @@ ul.errors {
     float: left;
 }
 
+#pluginsadmin {
+    width: 80%;
+    padding: 20px 0 0 20px;
+}
+
+#pluginsadmin section {
+    padding: 20px 0;
+}
+
+#pluginsadmin .plugin_parameters {
+    margin: 10px 0;
+}
+
+#pluginsadmin h1 {
+    font-style: normal;
+}
+
+#pluginsadmin h2 {
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+#pluginsadmin table {
+    width: 100%;
+}
+
+#pluginsadmin table, #pluginsadmin th, #pluginsadmin td {
+    border-width: 1px 0;
+    border-style: solid;
+    border-color: #c0c0c0;
+}
+
+#pluginsadmin table th {
+    font-weight: bold;
+    padding: 10px 0;
+}
+
+#pluginsadmin table td {
+    padding: 5px 0;
+}
+
+#pluginsadmin input[type=submit] {
+    margin: 10px 0;
+}
+
+#pluginsadmin .plugin_parameter {
+    padding: 5px 0;
+    border-width: 1px 0;
+    border-style: solid;
+    border-color: #c0c0c0;
+}
+
+#pluginsadmin .float_label {
+    float: left;
+    width: 20%;
+}
+
+#pluginsadmin a {
+    color: black;
+}
 /* 404 page */
 .error-container {
 

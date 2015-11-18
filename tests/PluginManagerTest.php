@@ -63,4 +63,23 @@ class PluginManagerTest extends PHPUnit_Framework_TestCase
 
         $pluginManager->load(array('nope', 'renope'));
     }
+
+    /**
+     * Test plugin metadata loading.
+     */
+    public function testGetPluginsMeta()
+    {
+        $pluginManager = PluginManager::getInstance();
+
+        PluginManager::$PLUGINS_PATH = self::$pluginPath;
+        $pluginManager->load(array(self::$pluginName));
+
+        $expectedParameters = array(
+            'pop' => '',
+            'hip' => '',
+        );
+        $meta = $pluginManager->getPluginsMeta();
+        $this->assertEquals('test plugin', $meta[self::$pluginName]['description']);
+        $this->assertEquals($expectedParameters, $meta[self::$pluginName]['parameters']);
+    }
 }

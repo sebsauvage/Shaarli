@@ -34,6 +34,12 @@ class PluginManager
     public static $PLUGINS_PATH = 'plugins';
 
     /**
+     * Plugins meta files extension.
+     * @var string $META_EXT
+     */
+    public static $META_EXT = 'meta';
+
+    /**
      * Private constructor: new instances not allowed.
      */
     private function __construct()
@@ -161,6 +167,51 @@ class PluginManager
     public function buildHookName($hook, $pluginName)
     {
         return 'hook_' . $pluginName . '_' . $hook;
+    }
+
+    /**
+     * Retrieve plugins metadata from *.meta (INI) files into an array.
+     * Metadata contains:
+     *   - plugin description [description]
+     *   - parameters split with ';' [parameters]
+     *
+     * Respects plugins order from settings.
+     *
+     * @return array plugins metadata.
+     */
+    public function getPluginsMeta()
+    {
+        $metaData = array();
+        $dirs = glob(self::$PLUGINS_PATH . '/*', GLOB_ONLYDIR | GLOB_MARK);
+
+        // Browse all plugin directories.
+        foreach ($dirs as $pluginDir) {
+            $plugin = basename($pluginDir);
+            $metaFile = $pluginDir . $plugin . '.' . self::$META_EXT;
+            if (!is_file($metaFile) || !is_readable($metaFile)) {
+                continue;
+            }
+
+            $metaData[$plugin] = parse_ini_file($metaFile);
+            $metaData[$plugin]['order'] = array_search($plugin, $this->authorizedPlugins);
+
+            // Read parameters and format them into an array.
+            if (isset($metaData[$plugin]['parameters'])) {
+                $params = explode(';', $metaData[$plugin]['parameters']);
+            } else {
+                $params = array();
+            }
+            $metaData[$plugin]['parameters'] = array();
+            foreach ($params as $param) {
+                if (empty($param)) {
+                    continue;
+                }
+
+                $metaData[$plugin]['parameters'][$param] = '';
+            }
+        }
+
+        return $metaData;
     }
 }
 
