@@ -11,7 +11,7 @@
 date_default_timezone_set('UTC');
 
 // -----------------------------------------------------------------------------------------------
-// Hardcoded parameter (These parameters can be overwritten by creating the file /config/options.php)
+// Hardcoded parameters (These parameters can be overwritten by creating the file /data/options.php)
 $GLOBALS['config']['DATADIR'] = 'data'; // Data subdirectory
 $GLOBALS['config']['CONFIG_FILE'] = $GLOBALS['config']['DATADIR'].'/config.php'; // Configuration file (user login/password)
 $GLOBALS['config']['DATASTORE'] = $GLOBALS['config']['DATADIR'].'/datastore.php'; // Data storage file.
