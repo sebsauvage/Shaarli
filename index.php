@@ -679,8 +679,8 @@ class pageBuilder
             $this->tpl->assign('pagetitle', $GLOBALS['pagetitle']);
         }
         $this->tpl->assign('shaarlititle', empty($GLOBALS['title']) ? 'Shaarli': $GLOBALS['title']);
-        if (!empty($GLOBALS['plugins']['errors'])) {
-            $this->tpl->assign('plugin_errors', $GLOBALS['plugins']['errors']);
+        if (!empty($GLOBALS['plugin_errors'])) {
+            $this->tpl->assign('plugin_errors', $GLOBALS['plugin_errors']);
         }
     }
 
