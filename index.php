@@ -1611,11 +1611,11 @@ function renderPage()
             $link_is_new = true;
             $linkdate = strval(date('Ymd_His'));
             // Get title if it was provided in URL (by the bookmarklet).
-            $title = (empty($_GET['title']) ? '' : $_GET['title'] );
+            $title = empty($_GET['title']) ? '' : escape($_GET['title']);
             // Get description if it was provided in URL (by the bookmarklet). [Bronco added that]
-            $description = (empty($_GET['description']) ? '' : $_GET['description']);
-            $tags = (empty($_GET['tags']) ? '' : $_GET['tags'] );
-            $private = (!empty($_GET['private']) && $_GET['private'] === "1" ? 1 : 0);
+            $description = empty($_GET['description']) ? '' : escape($_GET['description']);
+            $tags = empty($_GET['tags']) ? '' : escape($_GET['tags']);
+            $private = !empty($_GET['private']) && $_GET['private'] === "1" ? 1 : 0;
             // If this is an HTTP(S) link, we try go get the page to extract the title (otherwise we will to straight to the edit form.)
             if (empty($title) && strpos(get_url_scheme($url), 'http') !== false) {
                 // Short timeout to keep the application responsive
