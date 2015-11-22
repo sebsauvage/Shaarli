@@ -1204,6 +1204,14 @@ function renderPage()
         exit;
     }
 
+    // Display openseach plugin (XML)
+    if ($targetPage == Router::$PAGE_OPENSEARCH) {
+        header('Content-Type: application/xml; charset=utf-8');
+        $PAGE->assign('serverurl', index_url($_SERVER));
+        $PAGE->renderPage('opensearch');
+        exit;
+    }
+
     // -------- User clicks on a tag in a link: The tag is added to the list of searched tags (searchtags=...)
     if (isset($_GET['addtag']))
     {
