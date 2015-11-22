@@ -16,8 +16,9 @@ pagecache
 composer.lock
 /vendor/
 
-# Ignore test data & output
+# Ignore development and test resources
 coverage
+doxygen
 tests/datastore.php
 tests/dummycache/
 phpmd.html
