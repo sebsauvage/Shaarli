@@ -248,11 +248,11 @@ header('Content-Type: text/html; charset=utf-8'); // We use UTF-8 for proper int
 //==================================================================================================
 
 function setup_login_state() {
+	if ($GLOBALS['config']['OPEN_SHAARLI']) {
+	    return true;
+	}
 	$userIsLoggedIn = false; // By default, we do not consider the user as logged in;
 	$loginFailure = false; // If set to true, every attempt to authenticate the user will fail. This indicates that an important condition isn't met.
-	if ($GLOBALS['config']['OPEN_SHAARLI']) {
-	    $userIsLoggedIn = true;
-	}
 	if (!isset($GLOBALS['login'])) {
 	    $userIsLoggedIn = false;  // Shaarli is not configured yet.
 	    $loginFailure = true;
@@ -727,7 +727,7 @@ function showRSS()
     // If cached was not found (or not usable), then read the database and build the response:
     $LINKSDB = new LinkDB(
         $GLOBALS['config']['DATASTORE'],
-        isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
+        isLoggedIn(),
         $GLOBALS['config']['HIDE_PUBLIC_LINKS']
     );
     // Read links from database (and filter private links if user it not logged in).
@@ -816,7 +816,7 @@ function showATOM()
     // Read links from database (and filter private links if used it not logged in).
     $LINKSDB = new LinkDB(
         $GLOBALS['config']['DATASTORE'],
-        isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
+        isLoggedIn(),
         $GLOBALS['config']['HIDE_PUBLIC_LINKS']
     );
 
@@ -910,7 +910,7 @@ function showDailyRSS() {
     // Read links from database (and filter private links if used it not logged in).
     $LINKSDB = new LinkDB(
         $GLOBALS['config']['DATASTORE'],
-        isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
+        isLoggedIn(),
         $GLOBALS['config']['HIDE_PUBLIC_LINKS']
     );
 
@@ -997,7 +997,7 @@ function showDaily()
 {
     $LINKSDB = new LinkDB(
         $GLOBALS['config']['DATASTORE'],
-        isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
+        isLoggedIn(),
         $GLOBALS['config']['HIDE_PUBLIC_LINKS']
     );
 
@@ -1088,7 +1088,7 @@ function renderPage()
 {
     $LINKSDB = new LinkDB(
         $GLOBALS['config']['DATASTORE'],
-        isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
+        isLoggedIn(),
         $GLOBALS['config']['HIDE_PUBLIC_LINKS']
     );
 
@@ -1751,10 +1751,10 @@ HTML;
 // Process the import file form.
 function importFile()
 {
-    if (!(isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'])) { die('Not allowed.'); }
+    if (!isLoggedIn()) { die('Not allowed.'); }
     $LINKSDB = new LinkDB(
         $GLOBALS['config']['DATASTORE'],
-        isLoggedIn() || $GLOBALS['config']['OPEN_SHAARLI'],
+        isLoggedIn(),
         $GLOBALS['config']['HIDE_PUBLIC_LINKS']
     );
     $filename=$_FILES['filetoupload']['name'];
