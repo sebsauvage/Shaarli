@@ -212,11 +212,7 @@ You use the community supported version of the original Shaarli project, by Seba
         $this->_links[$link['linkdate']] = $link;
 
         // Write database to disk
-        // TODO: raise an exception if the file is not write-able
-        file_put_contents(
-            $this->_datastore,
-            self::$phpPrefix.base64_encode(gzdeflate(serialize($this->_links))).self::$phpSuffix
-        );
+        $this->writeDB();
     }
 
     /**
@@ -270,6 +266,28 @@ You use the community supported version of the original Shaarli project, by Seba
     /**
      * Saves the database from memory to disk
      *
+     * @throws IOException the datastore is not writable
+     */
+    private function writeDB()
+    {
+        if (is_file($this->_datastore) && !is_writeable($this->_datastore)) {
+            // The datastore exists but is not writeable
+            throw new IOException($this->_datastore);
+        } else if (!is_file($this->_datastore) && !is_writeable(dirname($this->_datastore))) {
+            // The datastore does not exist and its parent directory is not writeable
+            throw new IOException(dirname($this->_datastore));
+        }
+
+        file_put_contents(
+            $this->_datastore,
+            self::$phpPrefix.base64_encode(gzdeflate(serialize($this->_links))).self::$phpSuffix
+        );
+
+    }
+
+    /**
+     * Saves the database from memory to disk
+     *
      * @param string $pageCacheDir page cache directory
      */
     public function savedb($pageCacheDir)
@@ -278,10 +296,9 @@ You use the community supported version of the original Shaarli project, by Seba
             // TODO: raise an Exception instead
             die('You are not authorized to change the database.');
         }
-        file_put_contents(
-            $this->_datastore,
-            self::$phpPrefix.base64_encode(gzdeflate(serialize($this->_links))).self::$phpSuffix
-        );
+
+        $this->writeDB();
+
         invalidateCaches($pageCacheDir);
     }
 

@@ -44,6 +44,9 @@ $GLOBALS['config']['DATASTORE'] = $GLOBALS['config']['DATADIR'].'/datastore.php'
 // Banned IPs
 $GLOBALS['config']['IPBANS_FILENAME'] = $GLOBALS['config']['DATADIR'].'/ipbans.php';
 
+// Access log
+$GLOBALS['config']['LOG_FILE'] = $GLOBALS['config']['DATADIR'].'/log.txt';
+
 // For updates check of Shaarli
 $GLOBALS['config']['UPDATECHECK_FILENAME'] = $GLOBALS['config']['DATADIR'].'/lastupdatecheck.txt';
 
@@ -52,7 +55,7 @@ $GLOBALS['config']['RAINTPL_TMP'] = 'tmp/';
 // Raintpl template directory (keep the trailing slash!)
 $GLOBALS['config']['RAINTPL_TPL'] = 'tpl/';
 
-// Thuumbnail cache directory
+// Thumbnail cache directory
 $GLOBALS['config']['CACHEDIR'] = 'cache';
 
 // Atom & RSS feed cache directory
@@ -141,8 +144,10 @@ if (is_file($GLOBALS['config']['CONFIG_FILE'])) {
 }
 
 // Shaarli library
+require_once 'application/ApplicationUtils.php';
 require_once 'application/Cache.php';
 require_once 'application/CachedPage.php';
+require_once 'application/FileUtils.php';
 require_once 'application/HttpUtils.php';
 require_once 'application/LinkDB.php';
 require_once 'application/TimeZone.php';
@@ -155,9 +160,9 @@ require_once 'application/Router.php';
 // Ensure the PHP version is supported
 try {
     checkPHPVersion('5.3', PHP_VERSION);
-} catch(Exception $e) {
+} catch(Exception $exc) {
     header('Content-Type: text/plain; charset=utf-8');
-    echo $e->getMessage();
+    echo $exc->getMessage();
     exit;
 }
 
@@ -216,9 +221,6 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-// Directories creations (Note that your web host may require different rights than 705.)
-if (!is_writable(realpath(dirname(__FILE__)))) die('<pre>ERROR: Shaarli does not have the right to write in its own directory.</pre>');
-
 // Handling of old config file which do not have the new parameters.
 if (empty($GLOBALS['title'])) $GLOBALS['title']='Shared links on '.escape(index_url($_SERVER));
 if (empty($GLOBALS['timezone'])) $GLOBALS['timezone']=date_default_timezone_get();
@@ -228,8 +230,24 @@ if (empty($GLOBALS['privateLinkByDefault'])) $GLOBALS['privateLinkByDefault']=fa
 if (empty($GLOBALS['titleLink'])) $GLOBALS['titleLink']='?';
 // I really need to rewrite Shaarli with a proper configuation manager.
 
-// Run config screen if first run:
 if (! is_file($GLOBALS['config']['CONFIG_FILE'])) {
+    // Ensure Shaarli has proper access to its resources
+    $errors = ApplicationUtils::checkResourcePermissions($GLOBALS['config']);
+
+    if ($errors != array()) {
+        $message = '<p>Insufficient permissions:</p><ul>';
+
+        foreach ($errors as $error) {
+            $message .= '<li>'.$error.'</li>';
+        }
+        $message .= '</ul>';
+
+        header('Content-Type: text/html; charset=utf-8');
+        echo $message;
+        exit;
+    }
+
+    // Display the installation form if no existing config is found
     install();
 }
 
@@ -319,7 +337,7 @@ function checkUpdate()
 function logm($message)
 {
     $t = strval(date('Y/m/d_H:i:s')).' - '.$_SERVER["REMOTE_ADDR"].' - '.strval($message)."\n";
-    file_put_contents($GLOBALS['config']['DATADIR'].'/log.txt',$t,FILE_APPEND);
+    file_put_contents($GLOBAL['config']['LOG_FILE'], $t, FILE_APPEND);
 }
 
 // In a string, converts URLs to clickable links.
@@ -1461,7 +1479,7 @@ function renderPage()
                 $value['tags']=trim(implode(' ',$tags));
                 $LINKSDB[$key]=$value;
             }
-            $LINKSDB->savedb($GLOBALS['config']['PAGECACHE']); // Save to disk.
+            $LINKSDB->savedb($GLOBALS['config']['PAGECACHE']);
             echo '<script>alert("Tag was removed from '.count($linksToAlter).' links.");document.location=\'?\';</script>';
             exit;
         }
