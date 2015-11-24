@@ -6,6 +6,26 @@ class ApplicationUtils
 {
 
     /**
+     * Checks the PHP version to ensure Shaarli can run
+     *
+     * @param string $minVersion minimum PHP required version
+     * @param string $curVersion current PHP version (use PHP_VERSION)
+     *
+     * @throws Exception the PHP version is not supported
+     */
+    public static function checkPHPVersion($minVersion, $curVersion)
+    {
+        if (version_compare($curVersion, $minVersion) < 0) {
+            throw new Exception(
+                'Your PHP version is obsolete!'
+                .' Shaarli requires at least PHP '.$minVersion.', and thus cannot run.'
+                .' Your PHP version has known security vulnerabilities and should be'
+                .' updated as soon as possible.'
+            );
+        }
+    }
+
+    /**
      * Checks Shaarli has the proper access permissions to its resources
      *
      * @param array $globalConfig The $GLOBALS['config'] array

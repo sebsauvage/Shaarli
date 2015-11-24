@@ -159,7 +159,7 @@ require_once 'application/Router.php';
 
 // Ensure the PHP version is supported
 try {
-    checkPHPVersion('5.3', PHP_VERSION);
+    ApplicationUtils::checkPHPVersion('5.3', PHP_VERSION);
 } catch(Exception $exc) {
     header('Content-Type: text/plain; charset=utf-8');
     echo $exc->getMessage();

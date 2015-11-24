@@ -139,37 +139,6 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Check supported PHP versions
-     */
-    public function testCheckSupportedPHPVersion()
-    {
-        $minVersion = '5.3';
-        checkPHPVersion($minVersion, '5.4.32');
-        checkPHPVersion($minVersion, '5.5');
-        checkPHPVersion($minVersion, '5.6.10');
-    }
-
-    /**
-     * Check a unsupported PHP version
-     * @expectedException              Exception
-     * @expectedExceptionMessageRegExp /Your PHP version is obsolete/
-     */
-    public function testCheckSupportedPHPVersion51()
-    {
-        checkPHPVersion('5.3', '5.1.0');
-    }
-
-    /**
-     * Check another unsupported PHP version
-     * @expectedException              Exception
-     * @expectedExceptionMessageRegExp /Your PHP version is obsolete/
-     */
-    public function testCheckSupportedPHPVersion52()
-    {
-        checkPHPVersion('5.3', '5.2');
-    }
-
-    /**
      * Test is_session_id_valid with a valid ID - TEST ALL THE HASHES!
      *
      * This tests extensively covers all hash algorithms / bit representations
