@@ -11,7 +11,7 @@ require_once 'application/CachedPage.php';
 class CachedPageTest extends PHPUnit_Framework_TestCase
 {
     // test cache directory
-    protected static $testCacheDir = 'tests/pagecache';
+    protected static $testCacheDir = 'sandbox/pagecache';
     protected static $url = 'http://shaar.li/?do=atom';
     protected static $filename;
 

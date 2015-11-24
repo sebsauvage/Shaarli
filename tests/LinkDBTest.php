@@ -16,7 +16,7 @@ require_once 'tests/utils/ReferenceLinkDB.php';
 class LinkDBTest extends PHPUnit_Framework_TestCase
 {
     // datastore to test write operations
-    protected static $testDatastore = 'tests/datastore.php';
+    protected static $testDatastore = 'sandbox/datastore.php';
     protected static $refDB = null;
     protected static $publicLinkDB = null;
     protected static $privateLinkDB = null;

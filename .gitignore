@@ -19,8 +19,7 @@ composer.lock
 # Ignore development and test resources
 coverage
 doxygen
-tests/datastore.php
-tests/dummycache/
+sandbox
 phpmd.html
 
 # Ignore user plugin configuration
