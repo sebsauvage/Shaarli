@@ -337,7 +337,7 @@ function checkUpdate()
 function logm($message)
 {
     $t = strval(date('Y/m/d_H:i:s')).' - '.$_SERVER["REMOTE_ADDR"].' - '.strval($message)."\n";
-    file_put_contents($GLOBAL['config']['LOG_FILE'], $t, FILE_APPEND);
+    file_put_contents($GLOBALS['config']['LOG_FILE'], $t, FILE_APPEND);
 }
 
 // In a string, converts URLs to clickable links.
