@@ -17,7 +17,7 @@ function hook_qrcode_render_linklist($data)
     $qrcode_html = file_get_contents(PluginManager::$PLUGINS_PATH . '/qrcode/qrcode.html');
 
     foreach ($data['links'] as &$value) {
-        $qrcode = sprintf($qrcode_html, $value['url'], $value['url'], PluginManager::$PLUGINS_PATH);
+        $qrcode = sprintf($qrcode_html, $value['real_url'], $value['real_url'], PluginManager::$PLUGINS_PATH);
         $value['link_plugin'][] = $qrcode;
     }
 

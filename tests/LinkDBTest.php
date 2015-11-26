@@ -511,4 +511,27 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
             sizeof(self::$publicLinkDB->filterFullText('free software'))
         );
     }
+
+    /**
+     * Test real_url without redirector.
+     */
+    public function testLinkRealUrlWithoutRedirector()
+    {
+        $db = new LinkDB(self::$testDatastore, false, false);
+        foreach($db as $link) {
+            $this->assertEquals($link['url'], $link['real_url']);
+        }
+    }
+
+    /**
+     * Test real_url with redirector.
+     */
+    public function testLinkRealUrlWithRedirector()
+    {
+        $redirector = 'http://redirector.to?';
+        $db = new LinkDB(self::$testDatastore, false, false, $redirector);
+        foreach($db as $link) {
+            $this->assertStringStartsWith($redirector, $link['real_url']);
+        }
+    }
 }

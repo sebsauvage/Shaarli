@@ -187,4 +187,41 @@ class UtilsTest extends PHPUnit_Framework_TestCase
             is_session_id_valid('c0ZqcWF3VFE2NmJBdm1HMVQ0ZHJ3UmZPbTFsNGhkNHI=')
         );
     }
+
+    /**
+     * Test text2clickable without a redirector being set.
+     */
+    public function testText2clickableWithoutRedirector()
+    {
+        $text = 'stuff http://hello.there/is=someone#here otherstuff';
+        $expectedText = 'stuff <a href="http://hello.there/is=someone#here">http://hello.there/is=someone#here</a> otherstuff';
+        $processedText = text2clickable($text, '');
+        $this->assertEquals($expectedText, $processedText);
+    }
+
+    /**
+     * Test text2clickable a redirector set.
+     */
+    public function testText2clickableWithRedirector()
+    {
+        $text = 'stuff http://hello.there/is=someone#here otherstuff';
+        $redirector = 'http://redirector.to';
+        $expectedText = 'stuff <a href="'.
+            $redirector .
+            urlencode('http://hello.there/is=someone#here') .
+            '">http://hello.there/is=someone#here</a> otherstuff';
+        $processedText = text2clickable($text, $redirector);
+        $this->assertEquals($expectedText, $processedText);
+    }
+
+    /**
+     * Test testSpace2nbsp.
+     */
+    public function testSpace2nbsp()
+    {
+        $text = '  Are you   thrilled  by flags   ?'. PHP_EOL .' Really?';
+        $expectedText = '&nbsp; Are you &nbsp; thrilled &nbsp;by flags &nbsp; ?'. PHP_EOL .'&nbsp;Really?';
+        $processedText = space2nbsp($text);
+        $this->assertEquals($expectedText, $processedText);
+    }
 }
