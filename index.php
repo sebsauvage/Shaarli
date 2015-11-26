@@ -305,32 +305,6 @@ function setup_login_state() {
 }
 $userIsLoggedIn = setup_login_state();
 
-// Checks if an update is available for Shaarli.
-// (at most once a day, and only for registered user.)
-// Output: '' = no new version.
-//         other= the available version.
-function checkUpdate()
-{
-    if (!isLoggedIn()) return ''; // Do not check versions for visitors.
-    if (empty($GLOBALS['config']['ENABLE_UPDATECHECK'])) return ''; // Do not check if the user doesn't want to.
-
-    // Get latest version number at most once a day.
-    if (!is_file($GLOBALS['config']['UPDATECHECK_FILENAME']) || (filemtime($GLOBALS['config']['UPDATECHECK_FILENAME'])<time()-($GLOBALS['config']['UPDATECHECK_INTERVAL'])))
-    {
-        $version = shaarli_version;
-        list($headers, $data) = get_http_url('https://raw.githubusercontent.com/shaarli/Shaarli/master/shaarli_version.php', 2);
-        if (strpos($headers[0], '200 OK') !== false) {
-            $version = str_replace(' */ ?>', '', str_replace('<?php /* ', '', $data));
-        }
-        // If failed, never mind. We don't want to bother the user with that.
-        file_put_contents($GLOBALS['config']['UPDATECHECK_FILENAME'],$version); // touch file date
-    }
-    // Compare versions:
-    $newestversion=file_get_contents($GLOBALS['config']['UPDATECHECK_FILENAME']);
-    if (version_compare($newestversion,shaarli_version)==1) return $newestversion;
-    return '';
-}
-
 
 // -----------------------------------------------------------------------------------------------
 // Log to text file
@@ -657,7 +631,18 @@ class pageBuilder
     private function initialize()
     {
         $this->tpl = new RainTPL;
-        $this->tpl->assign('newversion', escape(checkUpdate()));
+        $this->tpl->assign(
+            'newversion',
+            escape(
+                ApplicationUtils::checkUpdate(
+                    shaarli_version,
+                    $GLOBALS['config']['UPDATECHECK_FILENAME'],
+                    $GLOBALS['config']['UPDATECHECK_INTERVAL'],
+                    $GLOBALS['config']['ENABLE_UPDATECHECK'],
+                    isLoggedIn()
+                )
+            )
+        );
         $this->tpl->assign('feedurl', escape(index_url($_SERVER)));
         $searchcrits = ''; // Search criteria
         if (!empty($_GET['searchtags'])) {

@@ -4,6 +4,98 @@
  */
 class ApplicationUtils
 {
+    private static $GIT_URL = 'https://raw.githubusercontent.com/shaarli/Shaarli';
+    private static $GIT_BRANCH = 'master';
+    private static $VERSION_FILE = 'shaarli_version.php';
+    private static $VERSION_START_TAG = '<?php /* ';
+    private static $VERSION_END_TAG = ' */ ?>';
+
+    /**
+     * Gets the latest version code from the Git repository
+     *
+     * The code is read from the raw content of the version file on the Git server.
+     *
+     * @return mixed the version code from the repository if available, else 'false'
+     */
+    public static function getLatestGitVersionCode($url, $timeout=2)
+    {
+        list($headers, $data) = get_http_url($url, $timeout);
+
+        if (strpos($headers[0], '200 OK') === false) {
+            error_log('Failed to retrieve ' . $url);
+            return false;
+        }
+
+        return str_replace(
+            array(self::$VERSION_START_TAG, self::$VERSION_END_TAG, PHP_EOL),
+            array('', '', ''),
+            $data
+        );
+    }
+
+    /**
+     * Checks if a new Shaarli version has been published on the Git repository
+     *
+     * Updates checks are run periodically, according to the following criteria:
+     * - the update checks are enabled (install, global config);
+     * - the user is logged in (or this is an open instance);
+     * - the last check is older than a given interval;
+     * - the check is non-blocking if the HTTPS connection to Git fails;
+     * - in case of failure, the update file's modification date is updated,
+     *   to avoid intempestive connection attempts.
+     *
+     * @param string $currentVersion the current version code
+     * @param string $updateFile     the file where to store the latest version code
+     * @param int    $checkInterval  the minimum interval between update checks (in seconds
+     * @param bool   $enableCheck    whether to check for new versions
+     * @param bool   $isLoggedIn     whether the user is logged in
+     *
+     * @return mixed the new version code if available and greater, else 'false'
+     */
+    public static function checkUpdate(
+        $currentVersion, $updateFile, $checkInterval, $enableCheck, $isLoggedIn)
+    {
+        if (! $isLoggedIn) {
+            // Do not check versions for visitors
+            return false;
+        }
+
+        if (empty($enableCheck)) {
+            // Do not check if the user doesn't want to
+            return false;
+        }
+
+        if (is_file($updateFile) && (filemtime($updateFile) > time() - $checkInterval)) {
+            // Shaarli has checked for updates recently - skip HTTP query
+            $latestKnownVersion = file_get_contents($updateFile);
+
+            if (version_compare($latestKnownVersion, $currentVersion) == 1) {
+                return $latestKnownVersion;
+            }
+            return false;
+        }
+
+        // Late Static Binding allows overriding within tests
+        // See http://php.net/manual/en/language.oop5.late-static-bindings.php
+        $latestVersion = static::getLatestGitVersionCode(
+            self::$GIT_URL . '/' . self::$GIT_BRANCH . '/' . self::$VERSION_FILE
+        );
+
+        if (! $latestVersion) {
+            // Only update the file's modification date
+            file_put_contents($updateFile, $currentVersion);
+            return false;
+        }
+
+        // Update the file's content and modification date
+        file_put_contents($updateFile, $latestVersion);
+
+        if (version_compare($latestVersion, $currentVersion) == 1) {
+            return $latestVersion;
+        }
+
+        return false;
+    }
 
     /**
      * Checks the PHP version to ensure Shaarli can run
