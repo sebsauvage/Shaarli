@@ -92,7 +92,8 @@ $GLOBALS['config']['ENABLE_THUMBNAILS'] = true;
 $GLOBALS['config']['ENABLE_LOCALCACHE'] = true;
 
 // Update check frequency for Shaarli. 86400 seconds=24 hours
-$GLOBALS['config']['UPDATECHECK_INTERVAL'] = 86400 ;
+$GLOBALS['config']['UPDATECHECK_BRANCH'] = 'stable';
+$GLOBALS['config']['UPDATECHECK_INTERVAL'] = 86400;
 
 
 /*
@@ -631,18 +632,23 @@ class pageBuilder
     private function initialize()
     {
         $this->tpl = new RainTPL;
-        $this->tpl->assign(
-            'newversion',
-            escape(
-                ApplicationUtils::checkUpdate(
-                    shaarli_version,
-                    $GLOBALS['config']['UPDATECHECK_FILENAME'],
-                    $GLOBALS['config']['UPDATECHECK_INTERVAL'],
-                    $GLOBALS['config']['ENABLE_UPDATECHECK'],
-                    isLoggedIn()
-                )
-            )
-        );
+
+        try {
+            $version = ApplicationUtils::checkUpdate(
+                shaarli_version,
+                $GLOBALS['config']['UPDATECHECK_FILENAME'],
+                $GLOBALS['config']['UPDATECHECK_INTERVAL'],
+                $GLOBALS['config']['ENABLE_UPDATECHECK'],
+                isLoggedIn(),
+                $GLOBALS['config']['UPDATECHECK_BRANCH']
+            );
+            $this->tpl->assign('newVersion', escape($version));
+
+        } catch (Exception $exc) {
+            logm($exc->getMessage());
+            $this->tpl->assign('versionError', escape($exc->getMessage()));
+        }
+
         $this->tpl->assign('feedurl', escape(index_url($_SERVER)));
         $searchcrits = ''; // Search criteria
         if (!empty($_GET['searchtags'])) {
