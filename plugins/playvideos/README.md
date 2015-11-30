@@ -1,21 +1,21 @@
 ### ► Play Videos plugin for Shaarli
-This plugin adds a `► Play Videos` button to [Shaarli](https://github.com/shaarli/Shaarli)'s toolbar. Click this button to play all videos on the page in an overlay HTML5 player. Nice for continuous stream of music, documentaries, talks...
+
+Adds a `► Play Videos` button to [Shaarli](https://github.com/shaarli/Shaarli)'s toolbar. Click this button to play all videos on the page in an overlay HTML5 player. Nice for continuous stream of music, documentaries, talks...
+
+<!-- TODO screenshot -->
 
 This uses code from https://zaius.github.io/youtube_playlist/ and is currently only compatible with Youtube videos.
 
-![](https://cdn.mediacru.sh/D_izf0zjAtxy.png)
-
 #### Installation and setup
-Place the files in the `tpl/plugins/playvideos/` directory of your Shaarli.
-This is a default Shaarli plugin, you just have to enable it.
 
-To enable the plugin, add `playvideos` to the `TOOLBAR_PLUGINS` config option in your `index.php` or `data/options.php`. Example:
+This is a default Shaarli plugin, you just have to enable it. See https://github.com/shaarli/Shaarli/wiki/Shaarli-configuration/
 
-    $GLOBALS['config']['TOOLBAR_PLUGINS'] = array('aplugins', 'anotherone', 'playvideos');
 
 #### Troubleshooting
+
 If your server has [Content Security Policy](http://content-security-policy.com/) headers enabled, this may prevent the script from loading fully. You should relax the CSP in your server settings. Example CSP rule for apache2:
 `Header set Content-Security-Policy "script-src 'self' 'unsafe-inline' https://www.youtube.com https://s.ytimg.com 'unsafe-eval'"`
+
 
 ### License
 ```
