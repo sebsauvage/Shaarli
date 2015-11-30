@@ -14,8 +14,16 @@ This is a default Shaarli plugin, you just have to enable it. See https://github
 #### Troubleshooting
 
 If your server has [Content Security Policy](http://content-security-policy.com/) headers enabled, this may prevent the script from loading fully. You should relax the CSP in your server settings. Example CSP rule for apache2:
-`Header set Content-Security-Policy "script-src 'self' 'unsafe-inline' https://www.youtube.com https://s.ytimg.com 'unsafe-eval'"`
 
+In `/etc/apache2/conf-available/shaarli-csp.conf`:
+
+```apache
+<Directory /path/to/shaarli>
+    Header set Content-Security-Policy "script-src 'self' 'unsafe-inline' https://www.youtube.com https://s.ytimg.com 'unsafe-eval'"
+</Directory>
+```
+
+Then run `a2enconf shaarli-csp; service apache2 reload`
 
 ### License
 ```
