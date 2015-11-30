@@ -5,7 +5,7 @@
 class ApplicationUtils
 {
     private static $GIT_URL = 'https://raw.githubusercontent.com/shaarli/Shaarli';
-    private static $GIT_BRANCH = 'master';
+    private static $GIT_BRANCHES = array('master', 'stable');
     private static $VERSION_FILE = 'shaarli_version.php';
     private static $VERSION_START_TAG = '<?php /* ';
     private static $VERSION_END_TAG = ' */ ?>';
@@ -52,8 +52,12 @@ class ApplicationUtils
      *
      * @return mixed the new version code if available and greater, else 'false'
      */
-    public static function checkUpdate(
-        $currentVersion, $updateFile, $checkInterval, $enableCheck, $isLoggedIn)
+    public static function checkUpdate($currentVersion,
+                                       $updateFile,
+                                       $checkInterval,
+                                       $enableCheck,
+                                       $isLoggedIn,
+                                       $branch='stable')
     {
         if (! $isLoggedIn) {
             // Do not check versions for visitors
@@ -75,10 +79,16 @@ class ApplicationUtils
             return false;
         }
 
+        if (! in_array($branch, self::$GIT_BRANCHES)) {
+            throw new Exception(
+                'Invalid branch selected for updates: "' . $branch . '"'
+            );
+        }
+
         // Late Static Binding allows overriding within tests
         // See http://php.net/manual/en/language.oop5.late-static-bindings.php
         $latestVersion = static::getLatestGitVersionCode(
-            self::$GIT_URL . '/' . self::$GIT_BRANCH . '/' . self::$VERSION_FILE
+            self::$GIT_URL . '/' . $branch . '/' . self::$VERSION_FILE
         );
 
         if (! $latestVersion) {

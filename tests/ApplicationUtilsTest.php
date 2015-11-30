@@ -75,7 +75,7 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
     public function testGetLatestGitVersionCodeInvalidUrl()
     {
         $this->assertFalse(
-            ApplicationUtils::getLatestGitVersionCode('htttp://null.io', 0)
+            ApplicationUtils::getLatestGitVersionCode('htttp://null.io', 1)
         );
     }
 
@@ -102,7 +102,7 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
     /**
      * A newer version is available
      */
-    public function testCheckUpdateNewVersionNew()
+    public function testCheckUpdateNewVersionAvailable()
     {
         $newVersion = '1.8.3';
         FakeApplicationUtils::$VERSION_CODE = $newVersion;
@@ -132,6 +132,16 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertFalse($version);
+    }
+
+    /**
+     * Test update checks - invalid Git branch
+     * @expectedException              Exception
+     * @expectedExceptionMessageRegExp /Invalid branch selected for updates/
+     */
+    public function testCheckUpdateInvalidGitBranch()
+    {
+        ApplicationUtils::checkUpdate('', 'null', 0, true, true, 'unstable');
     }
 
     /**
