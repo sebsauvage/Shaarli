@@ -30,11 +30,20 @@ class CacheTest extends PHPUnit_Framework_TestCase
         } else {
             array_map('unlink', glob(self::$testCacheDir.'/*'));
         }
-        
+
         foreach (self::$pages as $page) {
             file_put_contents(self::$testCacheDir.'/'.$page.'.cache', $page);
         }
         file_put_contents(self::$testCacheDir.'/intru.der', 'ShouldNotBeThere');
+    }
+
+    /**
+     * Remove dummycache folder after each tests.
+     */
+    public function tearDown()
+    {
+        array_map('unlink', glob(self::$testCacheDir.'/*'));
+        rmdir(self::$testCacheDir);
     }
 
     /**
