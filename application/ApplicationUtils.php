@@ -50,6 +50,8 @@ class ApplicationUtils
      * @param bool   $enableCheck    whether to check for new versions
      * @param bool   $isLoggedIn     whether the user is logged in
      *
+     * @throws Exception an invalid branch has been set for update checks
+     *
      * @return mixed the new version code if available and greater, else 'false'
      */
     public static function checkUpdate($currentVersion,

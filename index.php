@@ -643,9 +643,11 @@ class pageBuilder
                 $GLOBALS['config']['UPDATECHECK_BRANCH']
             );
             $this->tpl->assign('newVersion', escape($version));
+            $this->tpl->assign('versionError', '');
 
         } catch (Exception $exc) {
             logm($exc->getMessage());
+            $this->tpl->assign('newVersion', '');
             $this->tpl->assign('versionError', escape($exc->getMessage()));
         }
 
