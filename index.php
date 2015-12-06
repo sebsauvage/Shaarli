@@ -1948,6 +1948,7 @@ function buildLinkList($PAGE,$LINKSDB)
 
     // Fill all template fields.
     $data = array(
+        'pagetitle' => $GLOBALS['pagetitle'],
         'linkcount' => count($LINKSDB),
         'previous_page_url' => $previous_page_url,
         'next_page_url' => $next_page_url,
