@@ -995,8 +995,12 @@ function showDailyRSS() {
     exit;
 }
 
-// "Daily" page.
-function showDaily()
+/**
+ * Show the 'Daily' page.
+ *
+ * @param PageBuilder $pageBuilder Template engine wrapper.
+ */
+function showDaily($pageBuilder)
 {
     $LINKSDB = new LinkDB(
         $GLOBALS['config']['DATASTORE'],
@@ -1059,7 +1063,7 @@ function showDaily()
         array_push($columns[$index],$link); // Put entry in this column.
         $fill[$index]+=$length;
     }
-    $PAGE = new pageBuilder;
+
     $data = array(
         'linksToDisplay' => $linksToDisplay,
         'linkcount' => count($LINKSDB),
@@ -1072,10 +1076,10 @@ function showDaily()
     $pluginManager->executeHooks('render_daily', $data, array('loggedin' => isLoggedIn()));
 
     foreach ($data as $key => $value) {
-        $PAGE->assign($key, $value);
+        $pageBuilder->assign($key, $value);
     }
 
-    $PAGE->renderPage('daily');
+    $pageBuilder->renderPage('daily');
     exit;
 }
 
@@ -1207,6 +1211,11 @@ function renderPage()
 
         $PAGE->renderPage('tagcloud');
         exit;
+    }
+
+    // Daily page.
+    if ($targetPage == Router::$PAGE_DAILY) {
+        showDaily($PAGE);
     }
 
     // Display openseach plugin (XML)
@@ -2456,7 +2465,6 @@ if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=g
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=rss')) { showRSS(); exit; }
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=atom')) { showATOM(); exit; }
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=dailyrss')) { showDailyRSS(); exit; }
-if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=daily')) { showDaily(); exit; }
 if (!isset($_SESSION['LINKS_PER_PAGE'])) $_SESSION['LINKS_PER_PAGE']=$GLOBALS['config']['LINKS_PER_PAGE'];
 renderPage();
 ?>
