@@ -1948,7 +1948,6 @@ function buildLinkList($PAGE,$LINKSDB)
 
     // Fill all template fields.
     $data = array(
-        'pagetitle' => $GLOBALS['pagetitle'],
         'linkcount' => count($LINKSDB),
         'previous_page_url' => $previous_page_url,
         'next_page_url' => $next_page_url,
@@ -1962,6 +1961,10 @@ function buildLinkList($PAGE,$LINKSDB)
         'links' => $linkDisp,
         'tags' => $LINKSDB->allTags(),
     );
+    // FIXME! temporary fix - see #399.
+    if (!empty($GLOBALS['pagetitle']) && count($linkDisp) == 1) {
+        $data['pagetitle'] = $GLOBALS['pagetitle'];
+    }
 
     $pluginManager = PluginManager::getInstance();
     $pluginManager->executeHooks('render_linklist', $data, array('loggedin' => isLoggedIn()));
