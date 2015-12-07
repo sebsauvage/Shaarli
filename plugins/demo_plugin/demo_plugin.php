@@ -74,6 +74,7 @@ function hook_demo_plugin_render_includes($data)
  *
  * Template placeholders:
  *   - text
+ *   - endofpage
  *   - js_files
  *
  * Data:
@@ -88,6 +89,11 @@ function hook_demo_plugin_render_footer($data)
 {
     // footer text
     $data['text'][] = 'Shaarli is now enhanced by the awesome demo_plugin.';
+
+    // Free elements at the end of the page.
+    $data['endofpage'][] = '<marquee id="demo_marquee">' .
+            'DEMO: it\'s 1999 all over again!' .
+        '</marquee>';
 
     // List of plugin's JS files.
     // Note that you just need to specify CSS path.
