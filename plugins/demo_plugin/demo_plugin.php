@@ -40,6 +40,8 @@ function hook_demo_plugin_render_header($data)
         // Fields in toolbar
         $data['fields_toolbar'][] = 'DEMO_fields_toolbar';
     }
+    // Another button always displayed
+    $data['buttons_toolbar'][] = '<li><a href="#">DEMO</a></li>';
 
     return $data;
 }
