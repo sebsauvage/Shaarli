@@ -4,6 +4,11 @@
         {$value}
     {/loop}
 </div>
+
+{loop="$plugins_footer.endofpage"}
+    {$value}
+{/loop}
+
 {if="$newVersion"}
 <div id="newversion">
   <span id="version_id">&#x25CF;</span> Shaarli {$newVersion} is
