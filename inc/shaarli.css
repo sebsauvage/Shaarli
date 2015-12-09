@@ -414,16 +414,6 @@ h1 {
     color:#E28E3F;
 }
 
-.linkqrcode {
-    display: inline;
-    position: relative;
-}
-
-a.qrcode img {
-    width: 13px;
-    height: 13px;
-}
-
 #linklist li.private {
     background: url('../images/private.png') no-repeat 4px center;
     padding-left: 30px;
