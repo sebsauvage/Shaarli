@@ -739,25 +739,6 @@ h1 {
     background: #ffffff;
 }
 
-div#permalinkQrcode {
-    padding: 20px;
-    width: 220px;
-    height: 220px;
-    background-color: #ffffff;
-    border: 1px solid black;
-    position: absolute;
-    top: -100px;
-    left: -100px;
-    text-align: center;
-    font-size: 8pt;
-    z-index: 50;
-    -webkit-box-shadow: 2px 2px 20px 2px #333333;
-    -moz-box-shadow: 2px 2px 20px 2px #333333;
-    -o-box-shadow: 2px 2px 20px 2px #333333;
-    -ms-box-shadow: 2px 2px 20px 2px #333333;
-    box-shadow: 2px 2px 20px 2px #333333;
-}
-
 div.daily {
     font-family: Georgia, 'DejaVu Serif', Norasi, serif;
     background-color: #E6D6BE;
