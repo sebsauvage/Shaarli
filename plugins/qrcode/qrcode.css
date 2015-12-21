@@ -1,0 +1,23 @@
+.linkqrcode {
+    display: inline;
+    position: relative;
+}
+
+#permalinkQrcode {
+    position: absolute;
+    z-index: 200;
+    padding: 20px;
+    width: 220px;
+    height: 220px;
+    background-color: #ffffff;
+    border: 1px solid black;
+    top: -110px;
+    left: -110px;
+    text-align: center;
+    font-size: 8pt;
+    box-shadow: 2px 2px 20px 2px #333333;
+}
+
+#permalinkQrcode img {
+    margin-bottom: 5px;
+}

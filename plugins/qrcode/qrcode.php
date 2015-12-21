@@ -39,3 +39,19 @@ function hook_qrcode_render_footer($data)
 
     return $data;
 }
+
+/**
+ * When linklist is displayed, include qrcode CSS file.
+ *
+ * @param array $data - header data.
+ *
+ * @return mixed - header data with qrcode CSS file added.
+ */
+function hook_qrcode_render_includes($data)
+{
+    if ($data['_PAGE_'] == Router::$PAGE_LINKLIST) {
+        $data['css_files'][] = PluginManager::$PLUGINS_PATH . '/qrcode/qrcode.css';
+    }
+
+    return $data;
+}

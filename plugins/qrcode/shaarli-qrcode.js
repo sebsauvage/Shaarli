@@ -19,7 +19,7 @@ function showQrCode(caller,loading)
     
     // Build the div which contains the QR-Code:
     var element = document.createElement('div');
-    element.id="permalinkQrcode";
+    element.id = 'permalinkQrcode';
 
 	// Make QR-Code div commit sepuku when clicked:
     if ( element.attachEvent ){
@@ -37,6 +37,12 @@ function showQrCode(caller,loading)
         element.appendChild(image);
         element.innerHTML += "<br>Click to close";
         caller.parentNode.appendChild(element);
+
+        // Show the QRCode
+        qrcodeImage = document.getElementById('permalinkQrcode');
+        // Workaround to deal with newly created element lag for transition.
+        window.getComputedStyle(qrcodeImage).opacity;
+        qrcodeImage.className = 'show';
     }
     else
     {
@@ -48,7 +54,7 @@ function showQrCode(caller,loading)
 // Remove any displayed QR-Code
 function removeQrcode()
 {
-    var elem = document.getElementById("permalinkQrcode");
+    var elem = document.getElementById('permalinkQrcode');
     if (elem) {
         elem.parentNode.removeChild(elem);
     }
