@@ -52,6 +52,18 @@ function get_url_scheme($url)
 }
 
 /**
+ * Adds a trailing slash at the end of URL if necessary.
+ *
+ * @param string $url URL to check/edit.
+ *
+ * @return string $url URL with a end trailing slash.
+ */
+function add_trailing_slash($url)
+{
+    return $url . (!endsWith($url, '/') ? '/' : '');
+}
+
+/**
  * URL representation and cleanup utilities
  *
  * Form

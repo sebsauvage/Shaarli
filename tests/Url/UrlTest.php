@@ -145,4 +145,15 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $url = new Url('git://domain.tld/push?pull=clone#checkout');
         $this->assertEquals('git', $url->getScheme());
     }
+
+    /**
+     * Test add trailing slash.
+     */
+    function testAddTrailingSlash()
+    {
+        $strOn = 'http://randomstr.com/test/';
+        $strOff = 'http://randomstr.com/test';
+        $this->assertEquals($strOn, add_trailing_slash($strOn));
+        $this->assertEquals($strOn, add_trailing_slash($strOff));
+    }
 }
