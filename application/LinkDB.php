@@ -17,8 +17,10 @@
  *  - private:  Is this link private? 0=no, other value=yes
  *  - tags:     tags attached to this entry (separated by spaces)
  *  - title     Title of the link
- *  - url       URL of the link. Can be absolute or relative.
+ *  - url       URL of the link. Used for displayable links (no redirector, relative, etc.).
+ *              Can be absolute or relative.
  *              Relative URLs are permalinks (e.g.'?m-ukcw')
+ *  - real_url  Absolute processed URL.
  *
  * Implements 3 interfaces:
  *  - ArrayAccess: behaves like an associative array;
