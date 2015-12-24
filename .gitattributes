@@ -2,11 +2,13 @@
 *       text=auto eol=lf
 
 # Ensure sources are processed
+*.conf  text
 *.css   text
 *.html  text diff=html
 *.js    text
 *.md    text
 *.php   text diff=php
+Dockerfile      text
 
 # Do not alter images nor minified scripts
 *.ico           binary
@@ -22,6 +24,7 @@
 composer.json   export-ignore
 doc/**/*.json   export-ignore
 doc/**/*.md     export-ignore
+docker/         export-ignore
 Doxyfile        export-ignore
 Makefile        export-ignore
 phpunit.xml     export-ignore
