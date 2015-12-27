@@ -151,6 +151,7 @@ require_once 'application/CachedPage.php';
 require_once 'application/FileUtils.php';
 require_once 'application/HttpUtils.php';
 require_once 'application/LinkDB.php';
+require_once 'application/LinkFilter.php';
 require_once 'application/TimeZone.php';
 require_once 'application/Url.php';
 require_once 'application/Utils.php';
@@ -730,18 +731,23 @@ function showRSS()
     // Read links from database (and filter private links if user it not logged in).
 
     // Optionally filter the results:
-    $linksToDisplay=array();
-    if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
-    else if (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
-    else $linksToDisplay = $LINKSDB;
-
-    $nblinksToDisplay = 50;  // Number of links to display.
-    if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
-    {
-        $nblinksToDisplay = $_GET['nb']=='all' ? count($linksToDisplay) : max($_GET['nb']+0,1) ;
+    if (!empty($_GET['searchterm'])) {
+        $linksToDisplay = $LINKSDB->filter(LinkFilter::$FILTER_TEXT, $_GET['searchterm']);
+    }
+    elseif (!empty($_GET['searchtags'])) {
+        $linksToDisplay = $LINKSDB->filter(LinkFilter::$FILTER_TAG, trim($_GET['searchtags']));
+    }
+    else {
+        $linksToDisplay = $LINKSDB;
     }
 
-    $pageaddr=escape(index_url($_SERVER));
+    $nblinksToDisplay = 50;  // Number of links to display.
+    // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
+    if (!empty($_GET['nb'])) {
+        $nblinksToDisplay = $_GET['nb'] == 'all' ? count($linksToDisplay) : max(intval($_GET['nb']), 1);
+    }
+
+    $pageaddr = escape(index_url($_SERVER));
     echo '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">';
     echo '<channel><title>'.$GLOBALS['title'].'</title><link>'.$pageaddr.'</link>';
     echo '<description>Shared links</description><language>en-en</language><copyright>'.$pageaddr.'</copyright>'."\n\n";
@@ -821,15 +827,20 @@ function showATOM()
     );
 
     // Optionally filter the results:
-    $linksToDisplay=array();
-    if (!empty($_GET['searchterm'])) $linksToDisplay = $LINKSDB->filterFulltext($_GET['searchterm']);
-    else if (!empty($_GET['searchtags']))   $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
-    else $linksToDisplay = $LINKSDB;
+    if (!empty($_GET['searchterm'])) {
+        $linksToDisplay = $LINKSDB->filter(LinkFilter::$FILTER_TEXT, $_GET['searchterm']);
+    }
+    else if (!empty($_GET['searchtags'])) {
+        $linksToDisplay = $LINKSDB->filter(LinkFilter::$FILTER_TAG, trim($_GET['searchtags']));
+    }
+    else {
+        $linksToDisplay = $LINKSDB;
+    }
 
     $nblinksToDisplay = 50;  // Number of links to display.
-    if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
-    {
-        $nblinksToDisplay = $_GET['nb']=='all' ? count($linksToDisplay) : max($_GET['nb']+0,1) ;
+    // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
+    if (!empty($_GET['nb'])) {
+        $nblinksToDisplay = $_GET['nb']=='all' ? count($linksToDisplay) : max(intval($_GET['nb']), 1);
     }
 
     $pageaddr=escape(index_url($_SERVER));
@@ -1024,7 +1035,7 @@ function showDaily($pageBuilder)
     }
 
     try {
-        $linksToDisplay = $LINKSDB->filterDay($day);
+        $linksToDisplay = $LINKSDB->filter(LinkFilter::$FILTER_DAY, $day);
     } catch (Exception $exc) {
         error_log($exc);
         $linksToDisplay = array();
@@ -1149,13 +1160,17 @@ function renderPage()
     if ($targetPage == Router::$PAGE_PICWALL)
     {
         // Optionally filter the results:
-        $links=array();
-        if (!empty($_GET['searchterm'])) $links = $LINKSDB->filterFulltext($_GET['searchterm']);
-        elseif (!empty($_GET['searchtags']))   $links = $LINKSDB->filterTags(trim($_GET['searchtags']));
-        else $links = $LINKSDB;
+        if (!empty($_GET['searchterm'])) {
+            $links = $LINKSDB->filter(LinkFilter::$FILTER_TEXT, $_GET['searchterm']);
+        }
+        elseif (! empty($_GET['searchtags'])) {
+            $links = $LINKSDB->filter(LinkFilter::$FILTER_TAG, trim($_GET['searchtags']));
+        }
+        else {
+            $links = $LINKSDB;
+        }
 
-        $body='';
-        $linksToDisplay=array();
+        $linksToDisplay = array();
 
         // Get only links which have a thumbnail.
         foreach($links as $link)
@@ -1282,7 +1297,7 @@ function renderPage()
         }
 
         if (isset($params['searchtags'])) {
-            $tags = explode(' ',$params['searchtags']);
+            $tags = explode(' ', $params['searchtags']);
             $tags=array_diff($tags, array($_GET['removetag'])); // Remove value from array $tags.
             if (count($tags)==0) {
                 unset($params['searchtags']);
@@ -1467,7 +1482,8 @@ function renderPage()
         if (!empty($_POST['deletetag']) && !empty($_POST['fromtag']))
         {
             $needle=trim($_POST['fromtag']);
-            $linksToAlter = $LINKSDB->filterTags($needle,true); // True for case-sensitive tag search.
+            // True for case-sensitive tag search.
+            $linksToAlter = $LINKSDB->filter(LinkFilter::$FILTER_TAG, $needle, true);
             foreach($linksToAlter as $key=>$value)
             {
                 $tags = explode(' ',trim($value['tags']));
@@ -1484,7 +1500,8 @@ function renderPage()
         if (!empty($_POST['renametag']) && !empty($_POST['fromtag']) && !empty($_POST['totag']))
         {
             $needle=trim($_POST['fromtag']);
-            $linksToAlter = $LINKSDB->filterTags($needle,true); // true for case-sensitive tag search.
+            // True for case-sensitive tag search.
+            $linksToAlter = $LINKSDB->filter(LinkFilter::$FILTER_TAG, $needle, true);
             foreach($linksToAlter as $key=>$value)
             {
                 $tags = explode(' ',trim($value['tags']));
@@ -1865,81 +1882,78 @@ function importFile()
 function buildLinkList($PAGE,$LINKSDB)
 {
     // ---- Filter link database according to parameters
-    $linksToDisplay=array();
-    $search_type='';
-    $search_crits='';
-    if (isset($_GET['searchterm'])) // Fulltext search
-    {
-        $linksToDisplay = $LINKSDB->filterFulltext(trim($_GET['searchterm']));
-        $search_crits=escape(trim($_GET['searchterm']));
-        $search_type='fulltext';
+    $search_type = '';
+    $search_crits = '';
+    $privateonly = !empty($_SESSION['privateonly']) ? true : false;
+
+    // Fulltext search
+    if (isset($_GET['searchterm'])) {
+        $search_crits = escape(trim($_GET['searchterm']));
+        $search_type = LinkFilter::$FILTER_TEXT;
+        $linksToDisplay = $LINKSDB->filter($search_type, $search_crits, false, $privateonly);
     }
-    elseif (isset($_GET['searchtags'])) // Search by tag
-    {
-        $linksToDisplay = $LINKSDB->filterTags(trim($_GET['searchtags']));
-        $search_crits=explode(' ',escape(trim($_GET['searchtags'])));
-        $search_type='tags';
+    // Search by tag
+    elseif (isset($_GET['searchtags'])) {
+        $search_crits = explode(' ', escape(trim($_GET['searchtags'])));
+        $search_type = LinkFilter::$FILTER_TAG;
+        $linksToDisplay = $LINKSDB->filter($search_type, $search_crits, false, $privateonly);
     }
-    elseif (isset($_SERVER['QUERY_STRING']) && preg_match('/[a-zA-Z0-9-_@]{6}(&.+?)?/',$_SERVER['QUERY_STRING'])) // Detect smallHashes in URL
-    {
-        $linksToDisplay = $LINKSDB->filterSmallHash(substr(trim($_SERVER["QUERY_STRING"], '/'),0,6));
-        if (count($linksToDisplay)==0)
-        {
-            header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
-            echo '<h1>404 Not found.</h1>Oh crap. The link you are trying to reach does not exist or has been deleted.';
+    // Detect smallHashes in URL.
+    elseif (isset($_SERVER['QUERY_STRING'])
+        && preg_match('/[a-zA-Z0-9-_@]{6}(&.+?)?/', $_SERVER['QUERY_STRING'])) {
+        $search_type = LinkFilter::$FILTER_HASH;
+        $search_crits = substr(trim($_SERVER["QUERY_STRING"], '/'), 0, 6);
+        $linksToDisplay = $LINKSDB->filter($search_type, $search_crits);
+
+        if (count($linksToDisplay) == 0) {
+            header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
+            echo '<h1>404 Not found.</h1>Oh crap.
+                  The link you are trying to reach does not exist or has been deleted.';
             echo '<br>Would you mind <a href="?">clicking here</a>?';
             exit;
         }
-        $search_type='permalink';
     }
-    else
-        $linksToDisplay = $LINKSDB;  // Otherwise, display without filtering.
-
-
-    // Option: Show only private links
-    if (!empty($_SESSION['privateonly']))
-    {
-        $tmp = array();
-        foreach($linksToDisplay as $linkdate=>$link)
-        {
-            if ($link['private']!=0) $tmp[$linkdate]=$link;
-        }
-        $linksToDisplay=$tmp;
+    // Otherwise, display without filtering.
+    else {
+        $linksToDisplay = $LINKSDB->filter('', '', false, $privateonly);
     }
 
     // ---- Handle paging.
-    /* Can someone explain to me why you get the following error when using array_keys() on an object which implements the interface ArrayAccess???
-       "Warning: array_keys() expects parameter 1 to be array, object given in ... "
-       If my class implements ArrayAccess, why won't array_keys() accept it ?  ( $keys=array_keys($linksToDisplay); )
-    */
-    $keys=array(); foreach($linksToDisplay as $key=>$value) { $keys[]=$key; } // Stupid and ugly. Thanks PHP.
+    $keys = array();
+    foreach ($linksToDisplay as $key => $value) {
+        $keys[] = $key;
+    }
 
     // If there is only a single link, we change on-the-fly the title of the page.
-    if (count($linksToDisplay)==1) $GLOBALS['pagetitle'] = $linksToDisplay[$keys[0]]['title'].' - '.$GLOBALS['title'];
+    if (count($linksToDisplay) == 1) {
+        $GLOBALS['pagetitle'] = $linksToDisplay[$keys[0]]['title'].' - '.$GLOBALS['title'];
+    }
 
     // Select articles according to paging.
-    $pagecount = ceil(count($keys)/$_SESSION['LINKS_PER_PAGE']);
-    $pagecount = ($pagecount==0 ? 1 : $pagecount);
-    $page=( empty($_GET['page']) ? 1 : intval($_GET['page']));
-    $page = ( $page<1 ? 1 : $page );
-    $page = ( $page>$pagecount ? $pagecount : $page );
-    $i = ($page-1)*$_SESSION['LINKS_PER_PAGE']; // Start index.
-    $end = $i+$_SESSION['LINKS_PER_PAGE'];
-    $linkDisp=array(); // Links to display
+    $pagecount = ceil(count($keys) / $_SESSION['LINKS_PER_PAGE']);
+    $pagecount = $pagecount == 0 ? 1 : $pagecount;
+    $page= empty($_GET['page']) ? 1 : intval($_GET['page']);
+    $page = $page < 1 ? 1 : $page;
+    $page = $page > $pagecount ? $pagecount : $page;
+    // Start index.
+    $i = ($page-1) * $_SESSION['LINKS_PER_PAGE'];
+    $end = $i + $_SESSION['LINKS_PER_PAGE'];
+    $linkDisp = array();
     while ($i<$end && $i<count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
         $link['description'] = format_description($link['description'], $GLOBALS['redirector']);
-        $classLi =  $i%2!=0 ? '' : 'publicLinkHightLight';
-        $link['class'] = ($link['private']==0 ? $classLi : 'private');
-        $link['timestamp']=linkdate2timestamp($link['linkdate']);
-        $taglist = explode(' ',$link['tags']);
+        $classLi =  ($i % 2) != 0 ? '' : 'publicLinkHightLight';
+        $link['class'] = $link['private'] == 0 ? $classLi : 'private';
+        $link['timestamp'] = linkdate2timestamp($link['linkdate']);
+        $taglist = explode(' ', $link['tags']);
         uasort($taglist, 'strcasecmp');
-        $link['taglist']=$taglist;
+        $link['taglist'] = $taglist;
         $link['shorturl'] = smallHash($link['linkdate']);
-        if ($link["url"][0] === '?' && // Check for both signs of a note: starting with ? and 7 chars long. I doubt that you'll post any links that look like this.
-            strlen($link["url"]) === 7) {
-            $link["url"] = index_url($_SERVER) . $link["url"];
+        // Check for both signs of a note: starting with ? and 7 chars long.
+        if ($link['url'][0] === '?' &&
+            strlen($link['url']) === 7) {
+            $link['url'] = index_url($_SERVER) . $link['url'];
         }
 
         $linkDisp[$keys[$i]] = $link;
@@ -1947,13 +1961,21 @@ function buildLinkList($PAGE,$LINKSDB)
     }
 
     // Compute paging navigation
-    $searchterm= ( empty($_GET['searchterm']) ? '' : '&searchterm='.$_GET['searchterm'] );
-    $searchtags= ( empty($_GET['searchtags']) ? '' : '&searchtags='.$_GET['searchtags'] );
-    $paging='';
-    $previous_page_url=''; if ($i!=count($keys)) $previous_page_url='?page='.($page+1).$searchterm.$searchtags;
-    $next_page_url='';if ($page>1) $next_page_url='?page='.($page-1).$searchterm.$searchtags;
+    $searchterm = empty($_GET['searchterm']) ? '' : '&searchterm=' . $_GET['searchterm'];
+    $searchtags = empty($_GET['searchtags']) ? '' : '&searchtags=' . $_GET['searchtags'];
+    $previous_page_url = '';
+    if ($i != count($keys)) {
+        $previous_page_url = '?page=' . ($page+1) . $searchterm . $searchtags;
+    }
+    $next_page_url='';
+    if ($page>1) {
+        $next_page_url = '?page=' . ($page-1) . $searchterm . $searchtags;
+    }
 
-    $token = ''; if (isLoggedIn()) $token=getToken();
+    $token = '';
+    if (isLoggedIn()) {
+        $token = getToken();
+    }
 
     // Fill all template fields.
     $data = array(

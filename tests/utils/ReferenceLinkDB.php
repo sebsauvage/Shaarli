@@ -124,4 +124,9 @@ class ReferenceLinkDB
     {
         return $this->_privateCount;
     }
+
+    public function getLinks()
+    {
+        return $this->_links;
+    }
 }

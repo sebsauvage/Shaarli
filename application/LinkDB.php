@@ -63,6 +63,11 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     private $_redirector;
 
     /**
+     * @var LinkFilter instance.
+     */
+    private $linkFilter;
+
+    /**
      * Creates a new LinkDB
      *
      * Checks if the datastore exists; else, attempts to create a dummy one.
@@ -80,6 +85,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         $this->_redirector = $redirector;
         $this->_checkDB();
         $this->_readDB();
+        $this->linkFilter = new LinkFilter($this->_links);
     }
 
     /**
@@ -334,114 +340,18 @@ You use the community supported version of the original Shaarli project, by Seba
     }
 
     /**
-     * Returns the list of links corresponding to a full-text search
+     * Filter links.
      *
-     * Searches:
-     *  - in the URLs, title and description;
-     *  - are case-insensitive.
+     * @param string $type          Type of filter.
+     * @param mixed  $request       Search request, string or array.
+     * @param bool   $casesensitive Optional: Perform case sensitive filter
+     * @param bool   $privateonly   Optional: Returns private links only if true.
      *
-     * Example:
-     *    print_r($mydb->filterFulltext('hollandais'));
-     *
-     * mb_convert_case($val, MB_CASE_LOWER, 'UTF-8')
-     *  - allows to perform searches on Unicode text
-     *  - see https://github.com/shaarli/Shaarli/issues/75 for examples
+     * @return array filtered links
      */
-    public function filterFulltext($searchterms)
-    {
-        // FIXME: explode(' ',$searchterms) and perform a AND search.
-        // FIXME: accept double-quotes to search for a string "as is"?
-        $filtered = array();
-        $search = mb_convert_case($searchterms, MB_CASE_LOWER, 'UTF-8');
-        $keys = array('title', 'description', 'url', 'tags');
-
-        foreach ($this->_links as $link) {
-            $found = false;
-
-            foreach ($keys as $key) {
-                if (strpos(mb_convert_case($link[$key], MB_CASE_LOWER, 'UTF-8'),
-                           $search) !== false) {
-                    $found = true;
-                }
-            }
-
-            if ($found) {
-                $filtered[$link['linkdate']] = $link;
-            }
-        }
-        krsort($filtered);
-        return $filtered;
-    }
-
-    /**
-     * Returns the list of links associated with a given list of tags
-     *
-     * You can specify one or more tags, separated by space or a comma, e.g.
-     *  print_r($mydb->filterTags('linux programming'));
-     */
-    public function filterTags($tags, $casesensitive=false)
-    {
-        // Same as above, we use UTF-8 conversion to handle various graphemes (i.e. cyrillic, or greek)
-        // FIXME: is $casesensitive ever true?
-        $t = str_replace(
-            ',', ' ',
-            ($casesensitive ? $tags : mb_convert_case($tags, MB_CASE_LOWER, 'UTF-8'))
-        );
-
-        $searchtags = explode(' ', $t);
-        $filtered = array();
-
-        foreach ($this->_links as $l) {
-            $linktags = explode(
-                ' ',
-                ($casesensitive ? $l['tags']:mb_convert_case($l['tags'], MB_CASE_LOWER, 'UTF-8'))
-            );
-
-            if (count(array_intersect($linktags, $searchtags)) == count($searchtags)) {
-                $filtered[$l['linkdate']] = $l;
-            }
-        }
-        krsort($filtered);
-        return $filtered;
-    }
-
-
-    /**
-     * Returns the list of articles for a given day, chronologically sorted
-     *
-     * Day must be in the form 'YYYYMMDD' (e.g. '20120125'), e.g.
-     *  print_r($mydb->filterDay('20120125'));
-     */
-    public function filterDay($day)
-    {
-        if (! checkDateFormat('Ymd', $day)) {
-            throw new Exception('Invalid date format');
-        }
-
-        $filtered = array();
-        foreach ($this->_links as $l) {
-            if (startsWith($l['linkdate'], $day)) {
-                $filtered[$l['linkdate']] = $l;
-            }
-        }
-        ksort($filtered);
-        return $filtered;
-    }
-
-    /**
-     * Returns the article corresponding to a smallHash
-     */
-    public function filterSmallHash($smallHash)
-    {
-        $filtered = array();
-        foreach ($this->_links as $l) {
-            if ($smallHash == smallHash($l['linkdate'])) {
-                // Yes, this is ugly and slow
-                $filtered[$l['linkdate']] = $l;
-                return $filtered;
-            }
-        }
-        return $filtered;
+    public function filter($type, $request, $casesensitive = false, $privateonly = false) {
+        $requestFilter = is_array($request) ? implode(' ', $request) : $request;
+        return $this->linkFilter->filter($type, $requestFilter, $casesensitive, $privateonly);
     }
 
     /**
