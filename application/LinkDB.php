@@ -351,7 +351,7 @@ You use the community supported version of the original Shaarli project, by Seba
      */
     public function filter($type, $request, $casesensitive = false, $privateonly = false) {
         $requestFilter = is_array($request) ? implode(' ', $request) : $request;
-        return $this->linkFilter->filter($type, $requestFilter, $casesensitive, $privateonly);
+        return $this->linkFilter->filter($type, trim($requestFilter), $casesensitive, $privateonly);
     }
 
     /**

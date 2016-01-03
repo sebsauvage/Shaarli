@@ -1298,12 +1298,14 @@ function renderPage()
 
         if (isset($params['searchtags'])) {
             $tags = explode(' ', $params['searchtags']);
-            $tags=array_diff($tags, array($_GET['removetag'])); // Remove value from array $tags.
-            if (count($tags)==0) {
+            // Remove value from array $tags.
+            $tags = array_diff($tags, array($_GET['removetag']));
+            $params['searchtags'] = implode(' ',$tags);
+
+            if (empty($params['searchtags'])) {
                 unset($params['searchtags']);
-            } else {
-                $params['searchtags'] = implode(' ',$tags);
             }
+
             unset($params['page']); // We also remove page (keeping the same page has no sense, since the results are different)
         }
         header('Location: ?'.http_build_query($params));
