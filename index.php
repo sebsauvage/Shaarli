@@ -1453,19 +1453,20 @@ function renderPage()
     // -------- User wants to rename a tag or delete it
     if ($targetPage == Router::$PAGE_CHANGETAG)
     {
-        if (empty($_POST['fromtag']))
-        {
-            $PAGE->assign('linkcount',count($LINKSDB));
-            $PAGE->assign('token',getToken());
+        if (empty($_POST['fromtag']) || (empty($_POST['totag']) && isset($_POST['renametag']))) {
+            $PAGE->assign('linkcount', count($LINKSDB));
+            $PAGE->assign('token', getToken());
             $PAGE->assign('tags', $LINKSDB->allTags());
             $PAGE->renderPage('changetag');
             exit;
         }
-        if (!tokenOk($_POST['token'])) die('Wrong token.');
+
+        if (!tokenOk($_POST['token'])) {
+            die('Wrong token.');
+        }
 
         // Delete a tag:
-        if (!empty($_POST['deletetag']) && !empty($_POST['fromtag']))
-        {
+        if (isset($_POST['deletetag']) && !empty($_POST['fromtag'])) {
             $needle=trim($_POST['fromtag']);
             $linksToAlter = $LINKSDB->filterTags($needle,true); // True for case-sensitive tag search.
             foreach($linksToAlter as $key=>$value)
@@ -1481,8 +1482,7 @@ function renderPage()
         }
 
         // Rename a tag:
-        if (!empty($_POST['renametag']) && !empty($_POST['fromtag']) && !empty($_POST['totag']))
-        {
+        if (isset($_POST['renametag']) && !empty($_POST['fromtag']) && !empty($_POST['totag'])) {
             $needle=trim($_POST['fromtag']);
             $linksToAlter = $LINKSDB->filterTags($needle,true); // true for case-sensitive tag search.
             foreach($linksToAlter as $key=>$value)
