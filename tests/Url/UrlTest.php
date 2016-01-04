@@ -156,4 +156,22 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($strOn, add_trailing_slash($strOn));
         $this->assertEquals($strOn, add_trailing_slash($strOff));
     }
+
+    /**
+     * Test valid HTTP url.
+     */
+    function testUrlIsHttp()
+    {
+        $url = new Url(self::$baseUrl);
+        $this->assertTrue($url->isHttp());
+    }
+
+    /**
+     * Test non HTTP url.
+     */
+    function testUrlIsNotHttp()
+    {
+        $url = new Url('ftp://save.tld/mysave');
+        $this->assertFalse($url->isHttp());
+    }
 }

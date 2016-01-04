@@ -152,6 +152,7 @@ require_once 'application/FileUtils.php';
 require_once 'application/HttpUtils.php';
 require_once 'application/LinkDB.php';
 require_once 'application/LinkFilter.php';
+require_once 'application/LinkUtils.php';
 require_once 'application/TimeZone.php';
 require_once 'application/Url.php';
 require_once 'application/Utils.php';
@@ -576,13 +577,6 @@ function linkdate2rfc822($linkdate)
 function linkdate2iso8601($linkdate)
 {
     return date('c',linkdate2timestamp($linkdate)); // 'c' is for ISO 8601 date format.
-}
-
-// Extract title from an HTML document.
-// (Returns an empty string if not found.)
-function html_extract_title($html)
-{
-  return preg_match('!<title>(.*?)</title>!is', $html, $matches) ? trim(str_replace("\n",' ', $matches[1])) : '' ;
 }
 
 // ------------------------------------------------------------------------------------------
@@ -1642,7 +1636,7 @@ function renderPage()
 
     // -------- User want to post a new link: Display link edit form.
     if (isset($_GET['post'])) {
-        $url = cleanup_url($_GET['post']);
+        $url = cleanup_url(escape($_GET['post']));
 
         $link_is_new = false;
         // Check if URL is not already in database (in this case, we will edit the existing link)
@@ -1660,35 +1654,24 @@ function renderPage()
             // If this is an HTTP(S) link, we try go get the page to extract the title (otherwise we will to straight to the edit form.)
             if (empty($title) && strpos(get_url_scheme($url), 'http') !== false) {
                 // Short timeout to keep the application responsive
-                list($headers, $data) = get_http_url($url, 4);
-                // FIXME: Decode charset according to specified in either 1) HTTP response headers or 2) <head> in html
+                list($headers, $content) = get_http_response($url, 4);
                 if (strpos($headers[0], '200 OK') !== false) {
-                    // Look for charset in html header.
-                    preg_match('#<meta .*charset=.*>#Usi', $data, $meta);
-
-                    // If found, extract encoding.
-                    if (!empty($meta[0])) {
-                        // Get encoding specified in header.
-                        preg_match('#charset="?(.*)"#si', $meta[0], $enc);
-                        // If charset not found, use utf-8.
-                        $html_charset = (!empty($enc[1])) ? strtolower($enc[1]) : 'utf-8';
-                    }
-                    else {
-                        $html_charset = 'utf-8';
-                    }
-
-                    // Extract title
-                    $title = html_extract_title($data);
-                    if (!empty($title)) {
-                        // Re-encode title in utf-8 if necessary.
-                        $title = ($html_charset == 'iso-8859-1') ? utf8_encode($title) : $title;
+                    // Retrieve charset.
+                    $charset = get_charset($headers, $content);
+                    // Extract title.
+                    $title = html_extract_title($content);
+                    // Re-encode title in utf-8 if necessary.
+                    if (! empty($title) && $charset != 'utf-8') {
+                        $title = mb_convert_encoding($title, $charset, 'utf-8');
                     }
                 }
             }
+
             if ($url == '') {
                 $url = '?' . smallHash($linkdate);
                 $title = 'Note: ';
             }
+
             $link = array(
                 'linkdate' => $linkdate,
                 'title' => $title,
@@ -2314,11 +2297,11 @@ function genThumbnail()
         else // This is a flickr page (html)
         {
             // Get the flickr html page.
-            list($headers, $data) = get_http_url($url, 20);
+            list($headers, $content) = get_http_response($url, 20);
             if (strpos($headers[0], '200 OK') !== false)
             {
                 // flickr now nicely provides the URL of the thumbnail in each flickr page.
-                preg_match('!<link rel=\"image_src\" href=\"(.+?)\"!',$data,$matches);
+                preg_match('!<link rel=\"image_src\" href=\"(.+?)\"!', $content, $matches);
                 if (!empty($matches[1])) $imageurl=$matches[1];
 
                 // In albums (and some other pages), the link rel="image_src" is not provided,
@@ -2326,7 +2309,7 @@ function genThumbnail()
                 // <meta property="og:image" content="http://farm4.staticflickr.com/3398/3239339068_25d13535ff_z.jpg" />
                 if ($imageurl=='')
                 {
-                    preg_match('!<meta property=\"og:image\" content=\"(.+?)\"!',$data,$matches);
+                    preg_match('!<meta property=\"og:image\" content=\"(.+?)\"!', $content, $matches);
                     if (!empty($matches[1])) $imageurl=$matches[1];
                 }
             }
@@ -2335,11 +2318,12 @@ function genThumbnail()
         if ($imageurl!='')
         {   // Let's download the image.
             // Image is 240x120, so 10 seconds to download should be enough.
-            list($headers, $data) = get_http_url($imageurl, 10);
+            list($headers, $content) = get_http_response($imageurl, 10);
             if (strpos($headers[0], '200 OK') !== false) {
-                file_put_contents($GLOBALS['config']['CACHEDIR'].'/'.$thumbname,$data); // Save image to cache.
+                // Save image to cache.
+                file_put_contents($GLOBALS['config']['CACHEDIR'].'/' . $thumbname, $content);
                 header('Content-Type: image/jpeg');
-                echo $data;
+                echo $content;
                 return;
             }
         }
@@ -2350,16 +2334,17 @@ function genThumbnail()
         // This is more complex: we have to perform a HTTP request, then parse the result.
         // Maybe we should deport this to JavaScript ? Example: http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo/4285098#4285098
         $vid = substr(parse_url($url,PHP_URL_PATH),1);
-        list($headers, $data) = get_http_url('https://vimeo.com/api/v2/video/'.escape($vid).'.php', 5);
+        list($headers, $content) = get_http_response('https://vimeo.com/api/v2/video/'.escape($vid).'.php', 5);
         if (strpos($headers[0], '200 OK') !== false) {
-            $t = unserialize($data);
+            $t = unserialize($content);
             $imageurl = $t[0]['thumbnail_medium'];
             // Then we download the image and serve it to our client.
-            list($headers, $data) = get_http_url($imageurl, 10);
+            list($headers, $content) = get_http_response($imageurl, 10);
             if (strpos($headers[0], '200 OK') !== false) {
-                file_put_contents($GLOBALS['config']['CACHEDIR'].'/'.$thumbname,$data); // Save image to cache.
+                // Save image to cache.
+                file_put_contents($GLOBALS['config']['CACHEDIR'] . '/' . $thumbname, $content);
                 header('Content-Type: image/jpeg');
-                echo $data;
+                echo $content;
                 return;
             }
         }
@@ -2370,18 +2355,18 @@ function genThumbnail()
         // The thumbnail for TED talks is located in the <link rel="image_src" [...]> tag on that page
         // http://www.ted.com/talks/mikko_hypponen_fighting_viruses_defending_the_net.html
         // <link rel="image_src" href="http://images.ted.com/images/ted/28bced335898ba54d4441809c5b1112ffaf36781_389x292.jpg" />
-        list($headers, $data) = get_http_url($url, 5);
+        list($headers, $content) = get_http_response($url, 5);
         if (strpos($headers[0], '200 OK') !== false) {
             // Extract the link to the thumbnail
-            preg_match('!link rel="image_src" href="(http://images.ted.com/images/ted/.+_\d+x\d+\.jpg)"!',$data,$matches);
+            preg_match('!link rel="image_src" href="(http://images.ted.com/images/ted/.+_\d+x\d+\.jpg)"!', $content, $matches);
             if (!empty($matches[1]))
             {   // Let's download the image.
                 $imageurl=$matches[1];
                 // No control on image size, so wait long enough
-                list($headers, $data) = get_http_url($imageurl, 20);
+                list($headers, $content) = get_http_response($imageurl, 20);
                 if (strpos($headers[0], '200 OK') !== false) {
                     $filepath=$GLOBALS['config']['CACHEDIR'].'/'.$thumbname;
-                    file_put_contents($filepath,$data); // Save image to cache.
+                    file_put_contents($filepath, $content); // Save image to cache.
                     if (resizeImage($filepath))
                     {
                         header('Content-Type: image/jpeg');
@@ -2398,18 +2383,19 @@ function genThumbnail()
         // There is no thumbnail available for xkcd comics, so download the whole image and resize it.
         // http://xkcd.com/327/
         // <img src="http://imgs.xkcd.com/comics/exploits_of_a_mom.png" title="<BLABLA>" alt="<BLABLA>" />
-        list($headers, $data) = get_http_url($url, 5);
+        list($headers, $content) = get_http_response($url, 5);
         if (strpos($headers[0], '200 OK') !== false) {
             // Extract the link to the thumbnail
-            preg_match('!<img src="(http://imgs.xkcd.com/comics/.*)" title="[^s]!',$data,$matches);
+            preg_match('!<img src="(http://imgs.xkcd.com/comics/.*)" title="[^s]!', $content, $matches);
             if (!empty($matches[1]))
             {   // Let's download the image.
                 $imageurl=$matches[1];
                 // No control on image size, so wait long enough
-                list($headers, $data) = get_http_url($imageurl, 20);
+                list($headers, $content) = get_http_response($imageurl, 20);
                 if (strpos($headers[0], '200 OK') !== false) {
                     $filepath=$GLOBALS['config']['CACHEDIR'].'/'.$thumbname;
-                    file_put_contents($filepath,$data); // Save image to cache.
+                    // Save image to cache.
+                    file_put_contents($filepath, $content);
                     if (resizeImage($filepath))
                     {
                         header('Content-Type: image/jpeg');
@@ -2425,10 +2411,11 @@ function genThumbnail()
     {
         // For all other domains, we try to download the image and make a thumbnail.
         // We allow 30 seconds max to download (and downloads are limited to 4 Mb)
-        list($headers, $data) = get_http_url($url, 30);
+        list($headers, $content) = get_http_response($url, 30);
         if (strpos($headers[0], '200 OK') !== false) {
             $filepath=$GLOBALS['config']['CACHEDIR'].'/'.$thumbname;
-            file_put_contents($filepath,$data); // Save image to cache.
+            // Save image to cache.
+            file_put_contents($filepath, $content);
             if (resizeImage($filepath))
             {
                 header('Content-Type: image/jpeg');
