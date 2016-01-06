@@ -72,12 +72,14 @@ function sanitizeLink(&$link)
 
 /**
  * Checks if a string represents a valid date
+
+ * @param string $format The expected DateTime format of the string
+ * @param string $string A string-formatted date
  *
- * @param string        a string-formatted date
- * @param format        the expected DateTime format of the string
- * @return              whether the string is a valid date
- * @see                 http://php.net/manual/en/class.datetime.php
- * @see                 http://php.net/manual/en/datetime.createfromformat.php
+ * @return bool whether the string is a valid date
+ *
+ * @see http://php.net/manual/en/class.datetime.php
+ * @see http://php.net/manual/en/datetime.createfromformat.php
  */
 function checkDateFormat($format, $string)
 {
