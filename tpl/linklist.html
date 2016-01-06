@@ -53,7 +53,7 @@
             <div id="searchcriteria">{$result_count} results for tags <i>
             {loop="search_crits"}
                 <span class="linktag" title="Remove tag">
-                    <a href="?removetag={$value}">{$value} <span class="remove">x</span></a>
+                    <a href="?removetag={function="urlencode($value)"}">{$value} <span class="remove">x</span></a>
                 </span>
             {/loop}</i></div>
         {/if}
