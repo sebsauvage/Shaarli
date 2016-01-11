@@ -19,7 +19,7 @@ class ApplicationUtils
      */
     public static function getLatestGitVersionCode($url, $timeout=2)
     {
-        list($headers, $data) = get_http_url($url, $timeout);
+        list($headers, $data) = get_http_response($url, $timeout);
 
         if (strpos($headers[0], '200 OK') === false) {
             error_log('Failed to retrieve ' . $url);

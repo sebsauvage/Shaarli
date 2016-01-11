@@ -118,7 +118,7 @@ class Url
      */
     public function __construct($url)
     {
-        $this->parts = parse_url($url);
+        $this->parts = parse_url(trim($url));
 
         if (!empty($url) && empty($this->parts['scheme'])) {
             $this->parts['scheme'] = 'http';
@@ -200,5 +200,14 @@ class Url
             return false;
         }
         return $this->parts['scheme'];
+    }
+
+    /**
+     * Test if the Url is an HTTP one.
+     *
+     * @return true is HTTP, false otherwise.
+     */
+    public function isHttp() {
+        return strpos(strtolower($this->parts['scheme']), 'http') !== false;
     }
 }
