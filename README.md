@@ -5,7 +5,7 @@ Shaarli, the personal, minimalist, super-fast, no-database delicious clone.
 You want to share the links you discover ? Shaarli is a minimalist delicious clone you can install on your own website.
 It is designed to be personal (single-user), fast and handy. 
 
-Note: It do not have enough time to maintain this project right now. 
+Note: I do not have enough time to maintain this project right now. 
 You will find a more up-to-date fork of this project at https://github.com/shaarli/Shaarli. Please use this fork for requests/bug/latest updates...
 
 Features:
