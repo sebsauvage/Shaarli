@@ -260,7 +260,6 @@ class LinkFilter
      * Convert a list of tags (str) to an array. Also
      * - handle case sensitivity.
      * - accepts spaces commas as separator.
-     * - remove private tags for loggedout users.
      *
      * @param string $tags          string containing a list of tags.
      * @param bool   $casesensitive will convert everything to lowercase if false.

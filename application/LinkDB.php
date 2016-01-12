@@ -260,14 +260,11 @@ You use the community supported version of the original Shaarli project, by Seba
             }
         }
 
-        // Keep the list of the mapping URLs-->linkdate up-to-date.
         $this->_urls = array();
-        foreach ($this->_links as $link) {
+        foreach ($this->_links as &$link) {
+            // Keep the list of the mapping URLs-->linkdate up-to-date.
             $this->_urls[$link['url']] = $link['linkdate'];
-        }
-
-        // Escape links data
-        foreach($this->_links as &$link) { 
+            // Sanitize data fields.
             sanitizeLink($link);
             // Do not use the redirector for internal links (Shaarli note URL starting with a '?').
             if (!empty($this->_redirector) && !startsWith($link['url'], '?')) {
@@ -381,6 +378,7 @@ You use the community supported version of the original Shaarli project, by Seba
         }
         $linkDays = array_keys($linkDays);
         sort($linkDays);
+
         return $linkDays;
     }
 }

@@ -174,33 +174,6 @@ function load_plugin_parameter_values($plugins, $config)
 }
 
 /**
- * Milestone 0.9 - shaarli/Shaarli#41: options.php is not supported anymore.
- * ==> if user is loggedIn, merge its content with config.php, then delete options.php.
- *
- * @param array $config     contains all configuration fields.
- * @param bool  $isLoggedIn true if user is logged in.
- *
- * @return void
- */
-function mergeDeprecatedConfig($config, $isLoggedIn)
-{
-    $config_file = $config['config']['CONFIG_FILE'];
-
-    if (is_file($config['config']['DATADIR'].'/options.php') && $isLoggedIn) {
-        include $config['config']['DATADIR'].'/options.php';
-
-        // Load GLOBALS into config
-        foreach ($GLOBALS as $key => $value) {
-            $config[$key] = $value;
-        }
-        $config['config']['CONFIG_FILE'] = $config_file;
-        writeConfig($config, $isLoggedIn);
-
-        unlink($config['config']['DATADIR'].'/options.php');
-    }
-}
-
-/**
  * Exception used if a mandatory field is missing in given configuration.
  */
 class MissingFieldConfigException extends Exception
