@@ -245,7 +245,14 @@ function smallHash($text)
 function text2clickable($url)
 {
     $redir = empty($GLOBALS['redirector']) ? '' : $GLOBALS['redirector'];
-    return preg_replace('!(((?:https?|ftp|file)://|apt:|magnet:)\S+[[:alnum:]]/?)!si','<a href="'.$redir.'$1" rel="nofollow">$1</a>',$url);
+    if (!empty($GLOBALS['disablehtml'])) // (except if HTML is disabled)
+    {
+        return preg_replace('!(((?:https?|ftp|file)://|apt:|magnet:)\S+[[:alnum:]]/?)!si','<a href="'.$redir.'$1" rel="nofollow">$1</a>',$url);
+    }
+    else
+    {
+        return htmlspecialchars_decode($url);
+    }
 }
 
 // This function inserts &nbsp; where relevant so that multiple spaces are properly displayed in HTML

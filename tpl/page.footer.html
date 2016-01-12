@@ -7,3 +7,26 @@
 {if="isLoggedIn()"}
 <script language="JavaScript">function confirmDeleteLink() { var agree=confirm("Are you sure you want to delete this link ?"); if (agree) return true ; else return false ; }</script>
 {/if}
+<!-- tinyMCE -->
+    <script src="inc/tinymce/tinymce.min.js#"></script>
+    <script type="text/javascript">
+            tinymce.init({
+            	language : 'fr_FR',
+            	browser_spellcheck : false,
+            	selector:'textarea',
+            	theme : 'modern',
+                skin : 'lightgray',
+            	menubar: false,
+            	toolbar_items_size: 'small',
+            	plugins: [
+                	"advlist autolink lists link image charmap print preview anchor",
+                	"searchreplace visualblocks code fullscreen",
+                	"insertdatetime table contextmenu paste", // media template
+                	"emoticons textcolor"
+            	],
+            	toolbar1: "styleselect fontselect fontsizeselect | undo redo | fullscreen preview print code",
+            	toolbar2: "bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent blockquote | charmap emoticons media | link unlink anchor image",
+                //toolbar3: "print preview media | forecolor backcolor emoticons",
+                image_advtab: false,
+            });
+    </script>
