@@ -3,7 +3,7 @@
 Shaarli, the personal, minimalist, super-fast, no-database delicious clone.
 
 You want to share the links you discover ? Shaarli is a minimalist delicious clone you can install on your own website.
-It is designed to be personal (single-user), fast and handy. 
+It is designed to be personal (single-user), fast and handy.
 
 Note: I do not have enough time to maintain this project right now. 
 You will find a more up-to-date fork of this project at https://github.com/shaarli/Shaarli. Please use this fork for requests/bug/latest updates...
@@ -14,12 +14,12 @@ Features:
  * **FAST**
  * Dead-simple installation: Drop the files, open the page. No database required.
  * Easy to use: Single button in your browser to bookmark a page
- * Save url, title, description (unlimited size). Classify links with tags (with autocomplete)
+ * Save URL, title, description (unlimited size). Classify links with tags (with autocomplete)
  * Tag renaming, merging and deletion.
  * Automatic thumbnails for various services (imgur, imageshack.us, flickr, youtube, vimeo, dailymotion…)
  * Automatic conversion of URLs to clickable links in descriptions. Support for http/ftp/file/apt/magnet protocols.
  * Save links as public or private
- * 1-clic access to your private links/notes
+ * 1-click access to your private links/notes
  * Browse links by page, filter by tag or use the full text search engine
  * Permalinks (with QR-Code) for easy reference
  * RSS and ATOM feeds (which can be filtered by tag or text search)
@@ -57,10 +57,10 @@ In no event will the authors be held liable for any damages arising from
 the use of this software.
 
 Permission is granted to anyone to use this software for any purpose,
-including commercial applications, and to alter it and redistribute it 
+including commercial applications, and to alter it and redistribute it
 freely, subject to the following restrictions:
 
-  1. The origin of this software must not be misrepresented; you must not 
+  1. The origin of this software must not be misrepresented; you must not
      claim that you wrote the original software. If you use this software
      in a product, an acknowledgment in the product documentation would
      be appreciated but is not required.
