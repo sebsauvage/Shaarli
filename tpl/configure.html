@@ -5,11 +5,14 @@
 <div id="pageheader">
 	{include="page.header"}
 {$timezone_js}
+{$stylesheet_js}
     <form method="POST" action="" name="configform" id="configform">
 	<input type="hidden" name="token" value="{$token}">
 	<table border="0" cellpadding="20">
 
 	    <tr><td><b>Page title:</b></td><td><input type="text" name="title" id="title" size="50" value="{$title}"></td></tr>
+
+	    <tr><td valign="top"><b>Stylesheet:</b></td><td valign="top">{$stylesheet_form}</td></tr>
 
 	    <tr><td valign="top"><b>Timezone:</b></td><td valign="top">{$timezone_form}</td></tr>
 

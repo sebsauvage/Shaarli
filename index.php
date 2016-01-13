@@ -29,6 +29,7 @@ $GLOBALS['config']['PUBSUBHUB_URL'] = ''; // PubSubHubbub support. Put an empty 
 $GLOBALS['config']['UPDATECHECK_FILENAME'] = $GLOBALS['config']['DATADIR'].'/lastupdatecheck.txt'; // For updates check of Shaarli.
 $GLOBALS['config']['UPDATECHECK_INTERVAL'] = 86400 ; // Updates check frequency for Shaarli. 86400 seconds=24 hours
                                           // Note: You must have publisher.php in the same directory as Shaarli index.php
+$GLOBALS['config']['REVERSE_PROXY_PORT'] = 0; // 0 : no reverse proxy. >0 : the port listened to by the reverse proxy.
 // -----------------------------------------------------------------------------------------------
 // You should not touch below (or at your own risks !)
 // Optionnal config file.
@@ -451,7 +452,13 @@ if (isset($_POST['login']))
 function serverUrl()
 {
     $https = (!empty($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS'])=='on')) || $_SERVER["SERVER_PORT"]=='443'; // HTTPS detection.
-    $serverport = ($_SERVER["SERVER_PORT"]=='80' || ($https && $_SERVER["SERVER_PORT"]=='443') ? '' : ':'.$_SERVER["SERVER_PORT"]);
+
+    if ($GLOBALS['config']['REVERSE_PROXY_PORT']) {
+        $serverport = ':'.$GLOBALS['config']['REVERSE_PROXY_PORT'];
+    }
+    else {
+        $serverport = ($_SERVER["SERVER_PORT"]=='80' || ($https && $_SERVER["SERVER_PORT"]=='443') ? '' : ':'.$_SERVER["SERVER_PORT"]);
+    }
     return 'http'.($https?'s':'').'://'.$_SERVER['HTTP_HOST'].$serverport;
 }
 
@@ -1393,6 +1400,9 @@ function renderPage()
             if (!empty($_POST['continent']) && !empty($_POST['city']))
                 if (isTZvalid($_POST['continent'],$_POST['city']))
                     $tz = $_POST['continent'].'/'.$_POST['city'];
+            if (!empty($_POST['stylesheet'])) {
+				downloadUserCss($_POST['stylesheet']);
+			}
             $GLOBALS['timezone'] = $tz;
             $GLOBALS['title']=$_POST['title'];
             $GLOBALS['redirector']=$_POST['redirector'];
@@ -1411,8 +1421,11 @@ function renderPage()
             $PAGE->assign('title',htmlspecialchars( empty($GLOBALS['title']) ? '' : $GLOBALS['title'] , ENT_QUOTES));
             $PAGE->assign('redirector',htmlspecialchars( empty($GLOBALS['redirector']) ? '' : $GLOBALS['redirector'] , ENT_QUOTES));
             list($timezone_form,$timezone_js) = templateTZform($GLOBALS['timezone']);
+            list($stylechooser_form, $stylechooser_js) = templateStylesheetForm(/* TODO input current style selection */);
             $PAGE->assign('timezone_form',$timezone_form); // FIXME: put entire tz form generation in template ?
             $PAGE->assign('timezone_js',$timezone_js);
+            $PAGE->assign('stylesheet_form',$stylechooser_form); // FIXME: put entire tz form generation in template ?
+            $PAGE->assign('stylesheet_js',$stylechooser_js);
             $PAGE->renderPage('configure');
             exit;
         }
@@ -2109,6 +2122,37 @@ function install()
     $PAGE->assign('timezone_js',$timezone_js);
     $PAGE->renderPage('install');
     exit;
+}
+
+/**
+ * download given stylesheet into user.css for immediate use
+ */
+function downloadUserCss($url) {
+	if($url=='none') {
+		unlink('inc/user.css');
+	} else {
+		$stylesheet = file_get_contents($url);
+		$stylesheet = json_decode($stylesheet);
+		error_log("using stylesheet from ".$stylesheet->html_url);
+		file_put_contents('inc/user.css', base64_decode($stylesheet->content));
+	}
+}
+
+// Generates the timezone selection form and javascript.
+// Input: TODO (optional) current stylesheet
+// Output: array(html,js)
+// Example: list($htmlform,$js) = templateStylesheetForm();  // Europe/Paris pre-selected.
+function templateStylesheetForm() {
+	// Display config form:
+	$stylesheet_js = '';
+	$stylesheet_form = "<select name='stylesheet' id='stylesheet' onLoad='loadStylesheetsFromGitHub();' onChange='onChangeStyleSheet();'><option value=\"none\">none</option></select>";
+	$stylesheet_form .= "Don't use that form if you've defined a personal user.css : that user.css will be erased when anything but none is selected.";
+	$stylesheet_form .= "<input type='text' id='githubRepo' style='visibility:hidden;' value='https://github.com/nodiscc/shaarli-themes' size='40'/>";
+	$stylesheet_form .= "<button type='button'  style='visibility:hidden;' id='loadStylesFromGitHub' onClick='loadStylesheetsFromGitHub();'>load styles from GitHub</button>";
+	$stylesheet_form .= "<img id='stylesheet_preview' style='float:left;' width='300' height='200'/>";
+	$stylesheet_js = "<script language=\"JavaScript\" src=\"inc/stylesheet_chooser.js\">";
+	$stylesheet_js .= "</script>";
+	return array($stylesheet_form,$stylesheet_js);
 }
 
 // Generates the timezone selection form and javascript.
