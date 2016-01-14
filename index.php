@@ -29,6 +29,7 @@ $GLOBALS['config']['PUBSUBHUB_URL'] = ''; // PubSubHubbub support. Put an empty 
 $GLOBALS['config']['UPDATECHECK_FILENAME'] = $GLOBALS['config']['DATADIR'].'/lastupdatecheck.txt'; // For updates check of Shaarli.
 $GLOBALS['config']['UPDATECHECK_INTERVAL'] = 86400 ; // Updates check frequency for Shaarli. 86400 seconds=24 hours
                                           // Note: You must have publisher.php in the same directory as Shaarli index.php
+$GLOBALS['config']['REVERSE_PROXY_PORT'] = 0; // 0 : no reverse proxy. >0 : the port listened to by the reverse proxy.
 // -----------------------------------------------------------------------------------------------
 // You should not touch below (or at your own risks !)
 // Optionnal config file.
@@ -451,7 +452,13 @@ if (isset($_POST['login']))
 function serverUrl()
 {
     $https = (!empty($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS'])=='on')) || $_SERVER["SERVER_PORT"]=='443'; // HTTPS detection.
-    $serverport = ($_SERVER["SERVER_PORT"]=='80' || ($https && $_SERVER["SERVER_PORT"]=='443') ? '' : ':'.$_SERVER["SERVER_PORT"]);
+
+    if ($GLOBALS['config']['REVERSE_PROXY_PORT']) {
+        $serverport = ':'.$GLOBALS['config']['REVERSE_PROXY_PORT'];
+    }
+    else {
+        $serverport = ($_SERVER["SERVER_PORT"]=='80' || ($https && $_SERVER["SERVER_PORT"]=='443') ? '' : ':'.$_SERVER["SERVER_PORT"]);
+    }
     return 'http'.($https?'s':'').'://'.$_SERVER['HTTP_HOST'].$serverport;
 }
 
