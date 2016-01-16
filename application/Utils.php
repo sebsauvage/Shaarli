@@ -4,6 +4,19 @@
  */
 
 /**
+ * Logs a message to a text file
+ *
+ * @param string $logFile  where to write the logs
+ * @param string $clientIp the client's remote IPv4/IPv6 address
+ * @param string $message  the message to log
+ */
+function logm($logFile, $clientIp, $message)
+{
+    $line = strval(date('Y/m/d_H:i:s')).' - '.$clientIp.' - '.strval($message).'\n';
+    file_put_contents($logFile, $line, FILE_APPEND);
+}
+
+/**
  *  Returns the small hash of a string, using RFC 4648 base64url format
  *
  *  Small hashes:

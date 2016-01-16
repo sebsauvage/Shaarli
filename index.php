@@ -309,14 +309,6 @@ function setup_login_state() {
 $userIsLoggedIn = setup_login_state();
 
 
-// -----------------------------------------------------------------------------------------------
-// Log to text file
-function logm($message)
-{
-    $t = strval(date('Y/m/d_H:i:s')).' - '.$_SERVER["REMOTE_ADDR"].' - '.strval($message)."\n";
-    file_put_contents($GLOBALS['config']['LOG_FILE'], $t, FILE_APPEND);
-}
-
 // ------------------------------------------------------------------------------------------
 // Sniff browser language to display dates in the right format automatically.
 // (Note that is may not work on your server if the corresponding local is not installed.)
@@ -380,10 +372,10 @@ function check_auth($login,$password)
     if ($login==$GLOBALS['login'] && $hash==$GLOBALS['hash'])
     {   // Login/password is correct.
 		fillSessionInfo();
-        logm('Login successful');
+        logm($GLOBALS['config']['LOG_FILE'], $_SERVER['REMOTE_ADDR'], 'Login successful');
         return True;
     }
-    logm('Login failed for user '.$login);
+    logm($GLOBALS['config']['LOG_FILE'], $_SERVER['REMOTE_ADDR'], 'Login failed for user '.$login);
     return False;
 }
 
@@ -420,7 +412,7 @@ function ban_loginFailed()
     if ($gb['FAILURES'][$ip]>($GLOBALS['config']['BAN_AFTER']-1))
     {
         $gb['BANS'][$ip]=time()+$GLOBALS['config']['BAN_DURATION'];
-        logm('IP address banned from login');
+        logm($GLOBALS['config']['LOG_FILE'], $_SERVER['REMOTE_ADDR'], 'IP address banned from login');
     }
     $GLOBALS['IPBANS'] = $gb;
     file_put_contents($GLOBALS['config']['IPBANS_FILENAME'], "<?php\n\$GLOBALS['IPBANS']=".var_export($gb,true).";\n?>");
@@ -444,7 +436,7 @@ function ban_canLogin()
         // User is banned. Check if the ban has expired:
         if ($gb['BANS'][$ip]<=time())
         {   // Ban expired, user can try to login again.
-            logm('Ban lifted.');
+            logm($GLOBALS['config']['LOG_FILE'], $_SERVER['REMOTE_ADDR'], 'Ban lifted.');
             unset($gb['FAILURES'][$ip]); unset($gb['BANS'][$ip]);
             file_put_contents($GLOBALS['config']['IPBANS_FILENAME'], "<?php\n\$GLOBALS['IPBANS']=".var_export($gb,true).";\n?>");
             return true; // Ban has expired, user can login.
@@ -641,7 +633,7 @@ class pageBuilder
             $this->tpl->assign('versionError', '');
 
         } catch (Exception $exc) {
-            logm($exc->getMessage());
+            logm($GLOBALS['config']['LOG_FILE'], $_SERVER['REMOTE_ADDR'], $exc->getMessage());
             $this->tpl->assign('newVersion', '');
             $this->tpl->assign('versionError', escape($exc->getMessage()));
         }
