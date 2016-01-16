@@ -18,12 +18,78 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     // Session ID hashes
     protected static $sidHashes = null;
 
+    // Log file
+    protected static $testLogFile = 'tests.log';
+
+    // Expected log date format
+    protected static $dateFormat = 'Y/m/d_H:i:s';
+    
+
     /**
      * Assign reference data
      */
     public static function setUpBeforeClass()
     {
         self::$sidHashes = ReferenceSessionIdHashes::getHashes();
+    }
+
+    /**
+     * Resets test data before each test
+     */
+    protected function setUp()
+    {
+        if (file_exists(self::$testLogFile)) {
+            unlink(self::$testLogFile);
+        }
+    }
+
+    /**
+     * Returns a list of the elements from the last logged entry
+     *
+     * @return list (date, ip address, message)
+     */
+    protected function getLastLogEntry()
+    {
+        $logFile = file(self::$testLogFile);
+        return explode(' - ', trim(array_pop($logFile), '\n'));
+    }
+
+    /**
+     * Log a message to a file - IPv4 client address
+     */
+    public function testLogmIp4()
+    {
+        $logMessage = 'IPv4 client connected';
+        logm(self::$testLogFile, '127.0.0.1', $logMessage);
+        list($date, $ip, $message) = $this->getLastLogEntry();
+
+        $this->assertInstanceOf(
+            'DateTime',
+            DateTime::createFromFormat(self::$dateFormat, $date)
+        );
+        $this->assertTrue(
+            filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false
+        );
+        $this->assertEquals($logMessage, $message);
+    }
+
+    /**
+     * Log a message to a file - IPv6 client address
+     */
+    public function testLogmIp6()
+    {
+        $logMessage = 'IPv6 client connected';
+        logm(self::$testLogFile, '2001:db8::ff00:42:8329', $logMessage);
+        list($date, $ip, $message) = $this->getLastLogEntry();
+
+        $this->assertInstanceOf(
+            'DateTime',
+            DateTime::createFromFormat(self::$dateFormat, $date)
+        );
+        $this->assertTrue(
+            filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false
+        );
+        $this->assertEquals($logMessage, $message);
     }
 
     /**
