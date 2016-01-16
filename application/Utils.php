@@ -6,14 +6,19 @@
 /**
  * Logs a message to a text file
  *
+ * The log format is compatible with fail2ban.
+ *
  * @param string $logFile  where to write the logs
  * @param string $clientIp the client's remote IPv4/IPv6 address
  * @param string $message  the message to log
  */
 function logm($logFile, $clientIp, $message)
 {
-    $line = strval(date('Y/m/d_H:i:s')).' - '.$clientIp.' - '.strval($message).'\n';
-    file_put_contents($logFile, $line, FILE_APPEND);
+    file_put_contents(
+        $logFile,
+        date('Y/m/d H:i:s').' - '.$clientIp.' - '.strval($message).'\n',
+        FILE_APPEND
+    );
 }
 
 /**

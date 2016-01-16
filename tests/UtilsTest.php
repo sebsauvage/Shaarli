@@ -22,7 +22,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     protected static $testLogFile = 'tests.log';
 
     // Expected log date format
-    protected static $dateFormat = 'Y/m/d_H:i:s';
+    protected static $dateFormat = 'Y/m/d H:i:s';
     
 
     /**
