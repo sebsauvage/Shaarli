@@ -51,7 +51,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     protected function getLastLogEntry()
     {
         $logFile = file(self::$testLogFile);
-        return explode(' - ', trim(array_pop($logFile), '\n'));
+        return explode(' - ', trim(array_pop($logFile), PHP_EOL));
     }
 
     /**
