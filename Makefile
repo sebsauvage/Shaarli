@@ -16,7 +16,7 @@ BIN = vendor/bin
 PHP_SOURCE = index.php application tests plugins
 PHP_COMMA_SOURCE = index.php,application,tests,plugins
 
-all: static_analysis_summary test
+all: static_analysis_summary check_permissions test
 
 ##
 # Concise status of the project
@@ -97,6 +97,20 @@ mess_detector_summary: mess_title
 		warnings=$$($(BIN)/phpmd $(PHP_COMMA_SOURCE) text $$rule | wc -l); \
 		printf "$$warnings\t$$rule\n"; \
 	done;
+
+##
+# Checks source file & script permissions
+##
+check_permissions:
+	@echo "----------------------"
+	@echo "Check file permissions"
+	@echo "----------------------"
+	@for file in `git ls-files`; do \
+		if [ -x $$file ]; then \
+			errors=true; \
+			echo "$${file} is executable"; \
+		fi \
+	done; [ -z $$errors ] || false
 
 ##
 # PHPUnit
