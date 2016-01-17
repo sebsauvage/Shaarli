@@ -16,7 +16,7 @@ function logm($logFile, $clientIp, $message)
 {
     file_put_contents(
         $logFile,
-        date('Y/m/d H:i:s').' - '.$clientIp.' - '.strval($message).'\n',
+        date('Y/m/d H:i:s').' - '.$clientIp.' - '.strval($message).PHP_EOL,
         FILE_APPEND
     );
 }
