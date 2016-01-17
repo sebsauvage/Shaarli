@@ -67,6 +67,10 @@ raintpl::$tpl_dir = "tpl/"; // template directory
 if (!is_dir('tmp')) { mkdir('tmp',0705); chmod('tmp',0705); }
 raintpl::$cache_dir = "tmp/"; // cache directory
 
+include "inc/shaarli_tweet.php";
+include "inc/BitlyPHP/bitly.php";
+include "inc/shaarli_facebook.php";
+
 ob_start();  // Output buffering for the page cache.
 
 
@@ -1490,6 +1494,16 @@ function renderPage()
         $LINKSDB[$linkdate] = $link;
         $LINKSDB->savedb(); // save to disk
         pubsubhub();
+		
+		// Publish to twitter
+		$results=bitly_v3_shorten($link['url'],'bit.ly');
+		if (isset($results['url']))
+		{
+			shaarli_Tweet($link['title' ].' '.$results['url']);
+		}
+		
+		// Publish to facebook
+		shaarli_Facebook($link['url'],$link['title' ],$link['description']);
 
         // If we are called from the bookmarklet, we must close the popup:
         if (isset($_GET['source']) && $_GET['source']=='bookmarklet') { echo '<script language="JavaScript">self.close();</script>'; exit; }
