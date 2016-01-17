@@ -11,4 +11,5 @@ install:
   - composer install
 script:
   - make clean
+  - make check_permissions
   - make test
