@@ -63,11 +63,6 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     private $_redirector;
 
     /**
-     * @var LinkFilter instance.
-     */
-    private $linkFilter;
-
-    /**
      * Creates a new LinkDB
      *
      * Checks if the datastore exists; else, attempts to create a dummy one.
@@ -85,7 +80,6 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         $this->_redirector = $redirector;
         $this->_checkDB();
         $this->_readDB();
-        $this->linkFilter = new LinkFilter($this->_links);
     }
 
     /**
@@ -349,9 +343,11 @@ You use the community supported version of the original Shaarli project, by Seba
      *
      * @return array filtered links
      */
-    public function filter($type, $request, $casesensitive = false, $privateonly = false) {
+    public function filter($type, $request, $casesensitive = false, $privateonly = false)
+    {
+        $linkFilter = new LinkFilter($this->_links);
         $requestFilter = is_array($request) ? implode(' ', $request) : $request;
-        return $this->linkFilter->filter($type, trim($requestFilter), $casesensitive, $privateonly);
+        return $linkFilter->filter($type, trim($requestFilter), $casesensitive, $privateonly);
     }
 
     /**
