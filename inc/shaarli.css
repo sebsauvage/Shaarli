@@ -1102,3 +1102,16 @@ ul.errors {
     color: red;
     float: left;
 }
+
+/* 404 page */
+.error-container {
+
+    margin: 50px;
+    margin-top: 20px;
+}
+
+.error-container h1 {
+    text-decoration: none;
+    font-style: normal;
+    color: #80AD48;
+}
