@@ -131,6 +131,21 @@ class Updater
 
         return true;
     }
+
+    /**
+     * Rename tags starting with a '-' to work with tag exclusion search.
+     */
+    public function updateMethodRenameDashTags()
+    {
+        $linklist = $this->linkDB->filter();
+        foreach ($linklist as $link) {
+            $link['tags'] = preg_replace('/(^| )\-/', '$1', $link['tags']);
+            $link['tags'] = implode(' ', array_unique(LinkFilter::tagsStrToArray($link['tags'], true)));
+            $this->linkDB[$link['linkdate']] = $link;
+        }
+        $this->linkDB->savedb($this->config['config']['PAGECACHE']);
+        return true;
+    }
 }
 
 /**

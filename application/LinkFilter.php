@@ -209,19 +209,33 @@ class LinkFilter
      */
     public function filterTags($tags, $casesensitive = false, $privateonly = false)
     {
-        $searchtags = $this->tagsStrToArray($tags, $casesensitive);
+        $searchtags = self::tagsStrToArray($tags, $casesensitive);
         $filtered = array();
+        if (empty($searchtags)) {
+            return $filtered;
+        }
 
-        foreach ($this->links as $l) {
+        foreach ($this->links as $link) {
             // ignore non private links when 'privatonly' is on.
-            if (! $l['private'] && $privateonly === true) {
+            if (! $link['private'] && $privateonly === true) {
                 continue;
             }
 
-            $linktags = $this->tagsStrToArray($l['tags'], $casesensitive);
+            $linktags = self::tagsStrToArray($link['tags'], $casesensitive);
 
-            if (count(array_intersect($linktags, $searchtags)) == count($searchtags)) {
-                $filtered[$l['linkdate']] = $l;
+            $found = true;
+            for ($i = 0 ; $i < count($searchtags) && $found; $i++) {
+                // Exclusive search, quit if tag found.
+                // Or, tag not found in the link, quit.
+                if (($searchtags[$i][0] == '-' && in_array(substr($searchtags[$i], 1), $linktags))
+                    || ($searchtags[$i][0] != '-') && ! in_array($searchtags[$i], $linktags)
+                ) {
+                    $found = false;
+                }
+            }
+
+            if ($found) {
+                $filtered[$link['linkdate']] = $link;
             }
         }
         krsort($filtered);
@@ -266,12 +280,12 @@ class LinkFilter
      *
      * @return array filtered tags string.
     */
-    public function tagsStrToArray($tags, $casesensitive)
+    public static function tagsStrToArray($tags, $casesensitive)
     {
         // We use UTF-8 conversion to handle various graphemes (i.e. cyrillic, or greek)
         $tagsOut = $casesensitive ? $tags : mb_convert_case($tags, MB_CASE_LOWER, 'UTF-8');
         $tagsOut = str_replace(',', ' ', $tagsOut);
 
-        return explode(' ', trim($tagsOut));
+        return array_filter(explode(' ', trim($tagsOut)), 'strlen');
     }
 }
