@@ -472,7 +472,7 @@ if (isset($_POST['login']))
             session_set_cookie_params(0,$cookiedir,$_SERVER['SERVER_NAME']); // 0 means "When browser closes"
             session_regenerate_id(true);
         }
-        
+
         // Optional redirect after login:
         if (isset($_GET['post'])) {
             $uri = '?post='. urlencode($_GET['post']);
@@ -680,6 +680,18 @@ class pageBuilder
     {
         if ($this->tpl===false) $this->initialize(); // Lazy initialization
         $this->tpl->draw($page);
+    }
+
+    /**
+    * Render a 404 page (uses the template : tpl/404.tpl)
+    *
+    * usage : $PAGE->render404('The link was deleted')
+    * @param string $message A messate to display what is not found
+    */
+    public function render404($message='The page you are trying to reach does not exist or has been deleted.') {
+        header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
+        $this->tpl->assign('error_message', $message);
+        $this->renderPage('404');
     }
 }
 
@@ -1883,10 +1895,7 @@ function buildLinkList($PAGE,$LINKSDB)
         $linksToDisplay = $LINKSDB->filter($search_type, $search_crits);
 
         if (count($linksToDisplay) == 0) {
-            header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
-            echo '<h1>404 Not found.</h1>Oh crap.
-                  The link you are trying to reach does not exist or has been deleted.';
-            echo '<br>Would you mind <a href="?">clicking here</a>?';
+            $PAGE->render404('The link you are trying to reach does not exist or has been deleted.');
             exit;
         }
     }
