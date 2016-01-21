@@ -264,8 +264,15 @@ You use the community supported version of the original Shaarli project, by Seba
         foreach ($this->_links as &$link) {
             // Keep the list of the mapping URLs-->linkdate up-to-date.
             $this->_urls[$link['url']] = $link['linkdate'];
+
             // Sanitize data fields.
             sanitizeLink($link);
+
+            // Remove private tags if the user is not logged in.
+            if (! $this->_loggedIn) {
+                $link['tags'] = preg_replace('/(^| )\.[^($| )]+/', '', $link['tags']);
+            }
+
             // Do not use the redirector for internal links (Shaarli note URL starting with a '?').
             if (!empty($this->_redirector) && !startsWith($link['url'], '?')) {
                 $link['real_url'] = $this->_redirector . urlencode($link['url']);

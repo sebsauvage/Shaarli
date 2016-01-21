@@ -239,7 +239,6 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
         $this->assertEmpty($linkDB->filter(LinkFilter::$FILTER_TAG, 'exclude'));
         $updater = new Updater(array(), self::$configFields, $linkDB, true);
         $updater->updateMethodRenameDashTags();
-        var_dump($linkDB->filter(LinkFilter::$FILTER_TAG, 'exclude'));
         $this->assertNotEmpty($linkDB->filter(LinkFilter::$FILTER_TAG, 'exclude'));
     }
 }

@@ -298,6 +298,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
                 'css' => 1,
                 'Mercurial' => 1,
                 '-exclude' => 1,
+                '.hidden' => 1,
             ),
             self::$privateLinkDB->allTags()
         );
@@ -347,6 +348,24 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             2,
             count(self::$privateLinkDB->filter(LinkFilter::$FILTER_TAG, $tags, true, false))
+        );
+    }
+
+    /**
+     * Test hidden tags feature:
+     *  tags starting with a dot '.' are only visible when logged in.
+     */
+    public function testHiddenTags()
+    {
+        $tags = '.hidden';
+        $this->assertEquals(
+            1,
+            count(self::$privateLinkDB->filter(LinkFilter::$FILTER_TAG, $tags, true, false))
+        );
+
+        $this->assertEquals(
+            0,
+            count(self::$publicLinkDB->filter(LinkFilter::$FILTER_TAG, $tags, true, false))
         );
     }
 }
