@@ -888,6 +888,288 @@ class linkdb implements Iterator, Countable, ArrayAccess
     }
 }
 
+
+// ------------------------------------------------------------------------------------------
+/*
+ */
+class api
+{
+    private $loggedin; // Is the used logged in ? (used to filter private links)
+    private $allowed_methods = array('get', 'post', 'delete');
+    private $linkdb;
+
+    public function __construct()
+    {
+        $this->getLoggedIn();
+
+        $method = $this->getMethod();
+        if ($method === null) {
+            exit;
+        }
+
+        $this->linkdb = new linkdb($this->loggedin);
+
+        $this->$method();
+    }
+
+    private function getMethod()
+    {
+        if (isset($_SERVER['REQUEST_METHOD']) === false) {
+            $this->send(400);
+            return null;
+        }
+
+        $method = strtolower($_SERVER['REQUEST_METHOD']);
+
+        if (in_array($method, $this->allowed_methods) === false) {
+            $this->send(405);
+            return null;
+        }
+
+        return $method;
+    }
+
+    private function checkParam($name, $table = null)
+    {
+        if ($table === null) {
+            $table = $_GET;
+        }
+
+        return (isset($table[$name]) === true 
+                && 
+                is_string($table[$name]) === true 
+                && 
+                empty($table[$name]) === false
+        );
+    }
+
+    private function getLoggedIn()
+    {
+        $this->loggedin = false;
+
+        if ($this->checkParam('token') === false) {
+            return;
+        }
+
+        $token = $_GET['token'];
+
+        if (hash_hmac('sha256', $GLOBALS['api_key'], $GLOBALS['api_hash']) !== $token) {
+            $this->send(403, 'token verification failed');
+            exit;
+        }
+
+        $this->loggedin = true;
+    }
+
+    private function get()
+    {
+        if ($this->checkParam('key') === true) {
+            $this->getFilterByKey($_GET['key']);
+        } else if ($this->checkParam('hash') === true) {
+            $this->getFilterByHash($_GET['hash']);
+        } else if ($this->checkParam('url') === true) {
+            $this->getFilterByUrl($_GET['url']);
+        } else if ($this->checkParam('search') === true) {
+            $this->getFilterByFulltext($_GET['search']);
+        } else if ($this->checkParam('tags') === true) {
+            $this->getFilterByTags($_GET['tags']);
+        } else if ($this->checkParam('day') === true) {
+            $this->getFilterByDay($_GET['day']);
+        } else {
+            $this->getAll();
+        }
+    }
+
+    private function getAll()
+    {
+        $links = array();
+
+        foreach ($this->linkdb as $link) {
+            $links[] = $link;
+        }
+
+        $this->send(200, $links);
+    }
+
+    private function getFilterByKey($key)
+    {
+        $link = isset($this->linkdb[$key]) === true ? $this->linkdb[$key] : false;
+        if ($link === false) {
+            $this->send(404);
+            return;
+        }
+
+        $this->send(200, $link);
+    }
+
+    private function getFilterByHash($hash)
+    {
+        $link = $this->linkdb->filterSmallHash($hash);
+        if (count($link) === 0) {
+            $this->send(404);
+            return;
+        }
+
+        $this->send(200, current($link));
+    }
+
+    private function getFilterByUrl($url)
+    {
+        $link = $this->linkdb->getLinkFromUrl($url);
+        if ($link === false) {
+            $this->send(404);
+            return;
+        }
+
+        $this->send(200, $link);
+    }
+
+    private function getFilterByFulltext($text)
+    {
+        $links = $this->linkdb->filterFulltext($text);
+        $this->send(200, array_values($links));
+    }
+
+    private function getFilterByTags($tags)
+    {
+        $links = $this->linkdb->filterTags($tags, false);
+        $this->send(200, array_values($links));
+    }
+
+    private function getFilterByDay($day)
+    {
+        $links = $this->linkdb->filterDay($day);
+        $this->send(200, array_values($links));
+    }
+
+    private function post()
+    {
+        if ($this->loggedin === false) {
+            $this->send(403);
+            return;
+        }
+
+        if ($this->checkParam('key') === true) {
+            $key = $_GET['key'];
+            if (isset($this->linkdb[$key]) === false) {
+                $this->send(404);
+                return;
+            }
+            $link = $this->linkdb[$key];
+            $is_new = false;
+        } else if ($this->checkParam('hash') === true) {
+            $hash = $_GET['hash'];
+            $link = $this->linkdb->filterSmallHash($hash);
+            if (count($link) === 0) {
+                $this->send(404);
+                return;
+            }
+            $key = key($link);
+            $is_new = false;
+        } else {
+            $key = date('Ymd_His');
+            $link = array(
+                'title' => null,
+                'url' => null,
+                'description' => '',
+                'private' => 0,
+                'linkdate' => $key,
+                'tags' => '',
+            );
+            $is_new = true;
+        }
+
+        $post = array_map('trim', $_POST);
+
+        foreach (array('title', 'url', 'description', 'linkdate', 'tags') as $data) {
+            if ($this->checkParam($data, $post) === true) {
+                $link[$data] = $post[$data];
+            }
+        }
+
+        if (empty($link['url']) === true) {
+            $this->send(400, 'url can\'t be empty');
+        }
+
+        if (isset($post['private']) === true && $post['private'] !== '') {
+            $link['private'] = $post['private'];
+        }
+
+        if (empty($link['title']) === true) {
+            $link['title'] = $link['url'];
+        }
+
+        $this->linkdb[$key] = $link;
+        $this->linkdb->savedb();
+        $this->send($is_new ? 201 : 200, $link);
+    }
+
+    private function delete()
+    {
+        if ($this->loggedin === false) {
+            $this->send(403);
+            return;
+        }
+
+        if ($this->checkParam('key') === true) {
+            $key = $_GET['key'];
+            if (isset($this->linkdb[$key]) === false) {
+                $this->send(404);
+                return;
+            }
+
+            unset($this->linkdb[$key]);
+            $this->linkdb->savedb();
+            $this->send(200);
+        } else if ($this->checkParam('hash') === true) {
+            $hash = $_GET['hash'];
+            $link = $this->linkdb->filterSmallHash($hash);
+            if (count($link) === 0) {
+                $this->send(404);
+                return;
+            }
+
+            unset($this->linkdb[key($link)]);
+            $this->linkdb->savedb();
+            $this->send(200);
+        } else {
+            $this->send(400, 'key or hash is required to delete an item');
+        }
+    }
+
+    private function send($status, $message = null)
+    {
+        $this->sendHttpStatusCode($status);
+
+        if ($message !== null) {
+            header('Content-Type: application/json');
+            echo json_encode($message);
+        }
+    }
+
+    private function sendHttpStatusCode($status)
+    {
+        $status_text = array(
+            200 => 'OK',
+            201 => 'Created',
+            204 => 'No Content',
+            400 => 'Bad Request',
+            403 => 'Forbidden',
+            404 => 'Not Found',
+            405 => 'Method Not Allowed',
+            500 => 'Internal Server Error',
+        );
+
+        if (isset($status_text[$status]) === true) {
+            $header = 'HTTP/1.0 '.$status.' '.$status_text[$status];
+        } else {
+            $header = 'HTTP/1.0 500 '.$status_text[500];
+        }
+
+        header($header);
+    }
+}
+
 // ------------------------------------------------------------------------------------------
 // Ouput the last N links in RSS 2.0 format.
 function showRSS()
@@ -1379,6 +1661,31 @@ function renderPage()
             $PAGE->assign('linkcount',count($LINKSDB));
             $PAGE->assign('token',getToken());
             $PAGE->renderPage('changepassword');
+            exit;
+        }
+    }
+
+    if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=showapi'))
+    {
+        if (!empty($_POST['generate_api']))
+        {
+            if (!tokenOk($_POST['token'])) die('Wrong token.'); // Go away !
+
+            // Generate new key and token api
+            $GLOBALS['api_key'] = sha1(uniqid('',true).'_'.mt_rand());
+            $GLOBALS['api_hash'] = substr(sha1(uniqid('',true).'_'.mt_rand()), 0, 16);
+            writeConfig();
+            echo '<script language="JavaScript">alert("Your API datas has been changed.");document.location=\'?do=showapi\';</script>';
+            exit;
+        }
+        else // show the change password form.
+        {
+            $PAGE = new pageBuilder;
+            $PAGE->assign('api_key',$GLOBALS['api_key']);
+            $PAGE->assign('api_hash',$GLOBALS['api_hash']);
+            $PAGE->assign('linkcount',count($LINKSDB));
+            $PAGE->assign('token',getToken());
+            $PAGE->renderPage('showapi');
             exit;
         }
     }
@@ -2095,6 +2402,8 @@ function install()
         $GLOBALS['salt'] = sha1(uniqid('',true).'_'.mt_rand()); // Salt renders rainbow-tables attacks useless.
         $GLOBALS['hash'] = sha1($_POST['setpassword'].$GLOBALS['login'].$GLOBALS['salt']);
         $GLOBALS['title'] = (empty($_POST['title']) ? 'Shared links on '.htmlspecialchars(indexUrl()) : $_POST['title'] );
+        $GLOBALS['api_key'] = sha1(uniqid('',true).'_'.mt_rand());
+        $GLOBALS['api_hash'] = substr(sha1(uniqid('',true).'_'.mt_rand()), 0, 16);
         writeConfig();
         echo '<script language="JavaScript">alert("Shaarli is now configured. Please enter your login/password and start shaaring your links !");document.location=\'?do=login\';</script>';
         exit;
@@ -2261,6 +2570,7 @@ function writeConfig()
     $config .= '$GLOBALS[\'disablesessionprotection\']='.var_export($GLOBALS['disablesessionprotection'],true).'; ';
     $config .= '$GLOBALS[\'disablejquery\']='.var_export($GLOBALS['disablejquery'],true).'; ';
     $config .= '$GLOBALS[\'privateLinkByDefault\']='.var_export($GLOBALS['privateLinkByDefault'],true).'; ';
+    $config .= '$GLOBALS[\'api_key\']='.var_export($GLOBALS['api_key'],true).'; $GLOBALS[\'api_hash\']='.var_export($GLOBALS['api_hash'],true).';';
     $config .= ' ?>';
     if (!file_put_contents($GLOBALS['config']['CONFIG_FILE'],$config) || strcmp(file_get_contents($GLOBALS['config']['CONFIG_FILE']),$config)!=0)
     {
@@ -2501,6 +2811,7 @@ if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=r
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=atom')) { showATOM(); exit; }
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=dailyrss')) { showDailyRSS(); exit; }
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=daily')) { showDaily(); exit; }
+if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=api')) { $api = new api(); exit; }
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'ws=')) { processWS(); exit; } // Webservices (for jQuery/jQueryUI)
 if (!isset($_SESSION['LINKS_PER_PAGE'])) $_SESSION['LINKS_PER_PAGE']=$GLOBALS['config']['LINKS_PER_PAGE'];
 renderPage();
