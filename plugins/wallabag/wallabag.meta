@@ -1,0 +1,2 @@
+description="For each link, add a Wallabag icon to save it in your instance."
+parameters="WALLABAG_URL"

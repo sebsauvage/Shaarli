@@ -35,6 +35,10 @@ class Router
 
     public static $PAGE_LINKLIST = 'linklist';
 
+    public static $PAGE_PLUGINSADMIN = 'pluginadmin';
+
+    public static $PAGE_SAVE_PLUGINSADMIN = 'save_pluginadmin';
+
     /**
      * Reproducing renderPage() if hell, to avoid regression.
      *
@@ -110,6 +114,14 @@ class Router
 
         if (startswith($query, 'do='. self::$PAGE_IMPORT)) {
             return self::$PAGE_IMPORT;
+        }
+
+        if (startswith($query, 'do='. self::$PAGE_PLUGINSADMIN)) {
+            return self::$PAGE_PLUGINSADMIN;
+        }
+
+        if (startswith($query, 'do='. self::$PAGE_SAVE_PLUGINSADMIN)) {
+            return self::$PAGE_SAVE_PLUGINSADMIN;
         }
 
         return self::$PAGE_LINKLIST;

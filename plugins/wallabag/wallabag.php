@@ -11,7 +11,7 @@ if (is_file(PluginManager::$PLUGINS_PATH . '/wallabag/config.php')) {
     include PluginManager::$PLUGINS_PATH . '/wallabag/config.php';
 }
 
-if (!isset($GLOBALS['plugins']['WALLABAG_URL'])) {
+if (empty($GLOBALS['plugins']['WALLABAG_URL'])) {
     $GLOBALS['plugin_errors'][] = 'Wallabag plugin error: '.
         'Please define "$GLOBALS[\'plugins\'][\'WALLABAG_URL\']" '.
         'in "plugins/wallabag/config.php" or in your Shaarli config.php file.';

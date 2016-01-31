@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>{include="includes"}</head>
+<body>
+<div id="pageheader">
+  {include="page.header"}
+</div>
+
+<noscript>
+  <div>
+    <ul class="errors">
+      <li>You need to enable Javascript to change plugin loading order.</li>
+    </ul>
+  </div>
+  <div class="clear"></div>
+</noscript>
+
+<div id="pluginsadmin">
+  <form action="?do=save_pluginadmin" method="POST">
+    <section id="enabled_plugins">
+      <h1>Enabled Plugins</h1>
+
+      <div>
+        {if="count($enabledPlugins)==0"}
+          <p>No plugin enabled.</p>
+        {else}
+          <table id="plugin_table">
+            <thead>
+            <tr>
+              <th class="center">Disable</th>
+              <th class="center">Order</th>
+              <th>Name</th>
+              <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            {loop="$enabledPlugins"}
+              <tr data-line="{$key}" data-order="{$counter}">
+                <td class="center"><input type="checkbox" name="{$key}" checked="checked"></td>
+                <td class="center">
+                  <a href="#"
+                     onclick="return orderUp(this.parentNode.parentNode.getAttribute('data-order'));">
+                    ▲
+                  </a>
+                  <a href="#"
+                     onclick="return orderDown(this.parentNode.parentNode.getAttribute('data-order'));">
+                    ▼
+                  </a>
+                  <input type="hidden" name="order_{$key}" value="{$counter}">
+                </td>
+                <td>{$key}</td>
+                <td>{$value.description}</td>
+              </tr>
+            {/loop}
+            </tbody>
+          </table>
+        {/if}
+      </div>
+    </section>
+
+    <section id="disabled_plugins">
+      <h1>Disabled Plugins</h1>
+
+      <div>
+        {if="count($disabledPlugins)==0"}
+          <p>No plugin disabled.</p>
+        {else}
+          <table>
+            <tr>
+              <th class="center">Enable</th>
+              <th>Name</th>
+              <th>Description</th>
+            </tr>
+            {loop="$disabledPlugins"}
+              <tr>
+                <td class="center"><input type="checkbox" name="{$key}"></td>
+                <td>{$key}</td>
+                <td>{$value.description}</td>
+              </tr>
+            {/loop}
+          </table>
+        {/if}
+      </div>
+
+      <div class="center">
+        <input type="submit" value="Save"/>
+      </div>
+    </section>
+  </form>
+
+  <form action="?do=save_pluginadmin" method="POST">
+    <section id="plugin_parameters">
+      <h1>Enabled Plugin Parameters</h1>
+
+      <div>
+        {if="count($enabledPlugins)==0"}
+          <p>No plugin enabled.</p>
+        {else}
+          {loop="$enabledPlugins"}
+            {if="count($value.parameters) > 0"}
+              <div class="plugin_parameters">
+                <h2>{$key}</h2>
+                {loop="$value.parameters"}
+                  <div class="plugin_parameter">
+                    <div class="float_label">
+                      <label for="{$key}">
+                        <code>{$key}</code>
+                      </label>
+                    </div>
+                    <div class="float_input">
+                      <input name="{$key}" value="{$value}" id="{$key}"/>
+                    </div>
+                  </div>
+                {/loop}
+              </div>
+            {/if}
+          {/loop}
+        {/if}
+        <div class="center">
+          <input type="submit" name="parameters_form" value="Save"/>
+        </div>
+      </div>
+    </section>
+  </form>
+
+</div>
+{include="page.footer"}
+
+<script src="inc/plugin_admin.js#"></script>
+</body>
+</html>
