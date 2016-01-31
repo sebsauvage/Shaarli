@@ -1,0 +1,137 @@
+/**
+ * Credit to Simon Laroche <https://github.com/simonlc/Markdown-CSS>
+ * whom created the CSS which this file is based on.
+ * License: Unlicense <http://unlicense.org/>
+ */
+
+.markdown p{
+    margin:0.75em 0;
+}
+
+.markdown img{
+    max-width:100%;
+}
+
+.markdown h1, .markdown h2, .markdown h3, .markdown h4, .markdown h5, .markdown h6{
+    font-weight:normal;
+    font-style:normal;
+    line-height:1em;
+    margin:0.75em 0;
+}
+.markdown h4, .markdown h5, .markdown h6{ font-weight: bold; }
+.markdown h1{ font-size:2.5em; }
+.markdown h2{ font-size:2em; }
+.markdown h3{ font-size:1.5em; }
+.markdown h4{ font-size:1.2em; }
+.markdown h5{ font-size:1em; }
+.markdown h6{ font-size:0.9em; }
+
+.markdown blockquote{
+    color:#666666;
+    padding-left: 3em;
+    border-left: 0.5em #EEE solid;
+    margin:0.75em 0;
+}
+.markdown hr { display: block; height: 2px; border: 0; border-top: 1px solid #aaa;border-bottom: 1px solid #eee; margin: 1em 0; padding: 0; }
+.markdown pre, .markdown code, .markdown kbd, .markdown samp {
+    font-family: monospace, 'courier new';
+    font-size: 0.98em;
+}
+.markdown pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; }
+
+.markdown b, .markdown strong { font-weight: bold; }
+
+.markdown dfn, .markdown em { font-style: italic; }
+
+.markdown ins { background: #ff9; color: #000; text-decoration: none; }
+
+.markdown mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
+
+.markdown sub, .markdown sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
+.markdown sup { top: -0.5em; }
+.markdown sub { bottom: -0.25em; }
+
+.markdown ul, .markdown ol { margin: 1em 0; padding: 0 0 0 2em; }
+.markdown li p:last-child { margin:0 }
+.markdown dd { margin: 0 0 0 2em; }
+
+.markdown img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
+
+.markdown table { border-collapse: collapse; border-spacing: 0; }
+.markdown td { vertical-align: top; }
+
+@media only screen and (min-width: 480px) {
+    .markdown {font-size:0.9em;}
+}
+
+@media only screen and (min-width: 768px) {
+    .markdown {font-size:1em;}
+}
+
+#linklist .markdown li {
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+#linklist .markdown ul li {
+    list-style: circle;
+}
+
+#linklist .markdown ol li {
+    list-style: decimal;
+}
+
+.markdown table {
+    padding: 0;
+}
+.markdown table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+}
+.markdown table tr:nth-child(2n) {
+    background-color: #f8f8f8;
+}
+.markdown table tr th {
+    font-weight: bold;
+    border: 1px solid #cccccc;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px;
+}
+.markdown table tr td {
+    border: 1px solid #cccccc;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px;
+}
+.markdown table tr th :first-child, .markdown  table tr td :first-child {
+    margin-top: 0;
+}
+.markdown table tr th :last-child, table tr td :last-child {
+    margin-bottom: 0;
+}
+
+.md_help {
+    color: white;
+}
+
+/*
+ Remove header links style
+ */
+#pageheader .md_help a {
+    color: lightgray;
+    font-weight: bold;
+    text-decoration: underline;
+
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+}
+
+#pageheader .md_help a:hover {
+    color: white;
+}
