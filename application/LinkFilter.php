@@ -120,7 +120,9 @@ class LinkFilter
      *
      * Searches:
      *  - in the URLs, title and description;
-     *  - are case-insensitive.
+     *  - are case-insensitive;
+     *  - terms surrounded by quotes " are exact terms search.
+     *  - terms starting with a dash - are excluded (except exact terms).
      *
      * Example:
      *    print_r($mydb->filterFulltext('hollandais'));
@@ -137,18 +139,28 @@ class LinkFilter
     private function filterFulltext($searchterms, $privateonly = false)
     {
         $search = mb_convert_case(html_entity_decode($searchterms), MB_CASE_LOWER, 'UTF-8');
-        $explodedSearch = explode(' ', trim($search));
-        $keys = array('title', 'description', 'url', 'tags');
-        $found = true;
-        $searchExactPhrase = false;
+        $exactRegex = '/"([^"]+)"/';
+        // Retrieve exact search terms.
+        preg_match_all($exactRegex, $search, $exactSearch);
+        $exactSearch = array_values(array_filter($exactSearch[1]));
 
-        // Check if we're using double-quotes to search for the exact string
-        if ($search[0] == '"' && $search[strlen($search) - 1] == '"') {
-            $searchExactPhrase = true;
-            
-            // Remove the double-quotes as they are not what we search for
-            $search = substr($search, 1, -1);
+        // Remove exact search terms to get AND terms search.
+        $explodedSearchAnd = explode(' ', trim(preg_replace($exactRegex, '', $search)));
+        $explodedSearchAnd = array_values(array_filter($explodedSearchAnd));
+
+        // Filter excluding terms and update andSearch.
+        $excludeSearch = array();
+        $andSearch = array();
+        foreach ($explodedSearchAnd as $needle) {
+            if ($needle[0] == '-' && strlen($needle) > 1) {
+                $excludeSearch[] = substr($needle, 1);
+            } else {
+                $andSearch[] = $needle;
+            }
         }
+
+        $keys = array('title', 'description', 'url', 'tags');
+
         // Iterate over every stored link.
         foreach ($this->links as $link) {
 
@@ -162,22 +174,22 @@ class LinkFilter
                 // Be optimistic
                 $found = true;
                 
-                // FIXME: Find a better word for where you're searching in 
                 $haystack = mb_convert_case($link[$key], MB_CASE_LOWER, 'UTF-8');
 
-                // When searching for the phrase, check if it's in the haystack...
-                if ( $searchExactPhrase && strpos($haystack, $search) !== false) {
-                    break;
+                // First, we look for exact term search
+                for ($i = 0; $i < count($exactSearch) && $found; $i++) {
+                    $found = strpos($haystack, $exactSearch[$i]) !== false;
                 }
-                else {
-                    // Iterate over keywords, if keyword is not found,
-                    // no need to check for the others. We want all or nothing.
-                    foreach($explodedSearch as $keyword) {
-                         if(strpos($haystack, $keyword) === false) {
-                           $found = false;
-                           break;
-                      }
-                    }
+
+                // Iterate over keywords, if keyword is not found,
+                // no need to check for the others. We want all or nothing.
+                for ($i = 0; $i < count($andSearch) && $found; $i++) {
+                    $found = strpos($haystack, $andSearch[$i]) !== false;
+                }
+
+                // Exclude terms.
+                for ($i = 0; $i < count($excludeSearch) && $found; $i++) {
+                    $found = strpos($haystack, $excludeSearch[$i]) === false;
                 }
                 
                 // One of the fields of the link matches, no need to check the other.
