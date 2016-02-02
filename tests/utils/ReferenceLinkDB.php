@@ -14,21 +14,21 @@ class ReferenceLinkDB
     function __construct()
     {
         $this->addLink(
-            'Free as in Freedom 2.0',
+            'Free as in Freedom 2.0 @website',
             'https://static.fsf.org/nosvn/faif-2.0.pdf',
             'Richard Stallman and the Free Software Revolution. Read this.',
             0,
             '20150310_114633',
-            'free gnu software stallman -exclude'
+            'free gnu software stallman -exclude stuff'
         );
 
         $this->addLink(
-            'Note:',
+            'Link title: @website',
             'local',
             'Stallman has a beard and is part of the Free Software Foundation (or not). Seriously, read this.',
             0,
             '20150310_114651',
-            ''
+            'stuff'
         );
 
         $this->addLink(

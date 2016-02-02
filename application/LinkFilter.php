@@ -138,6 +138,7 @@ class LinkFilter
      */
     private function filterFulltext($searchterms, $privateonly = false)
     {
+        $filtered = array();
         $search = mb_convert_case(html_entity_decode($searchterms), MB_CASE_LOWER, 'UTF-8');
         $exactRegex = '/"([^"]+)"/';
         // Retrieve exact search terms.
@@ -169,35 +170,32 @@ class LinkFilter
                 continue;
             }
 
-            // Iterate over searchable link fields.
+            // Concatenate link fields to search across fields.
+            // Adds a '\' separator for exact search terms.
+            $content = '';
             foreach ($keys as $key) {
-                // Be optimistic
-                $found = true;
-                
-                $haystack = mb_convert_case($link[$key], MB_CASE_LOWER, 'UTF-8');
-
-                // First, we look for exact term search
-                for ($i = 0; $i < count($exactSearch) && $found; $i++) {
-                    $found = strpos($haystack, $exactSearch[$i]) !== false;
-                }
-
-                // Iterate over keywords, if keyword is not found,
-                // no need to check for the others. We want all or nothing.
-                for ($i = 0; $i < count($andSearch) && $found; $i++) {
-                    $found = strpos($haystack, $andSearch[$i]) !== false;
-                }
-
-                // Exclude terms.
-                for ($i = 0; $i < count($excludeSearch) && $found; $i++) {
-                    $found = strpos($haystack, $excludeSearch[$i]) === false;
-                }
-                
-                // One of the fields of the link matches, no need to check the other.
-                if ($found) {
-                    break;
-                }
+                $content .= mb_convert_case($link[$key], MB_CASE_LOWER, 'UTF-8') . '\\';
             }
-            
+
+            // Be optimistic
+            $found = true;
+
+            // First, we look for exact term search
+            for ($i = 0; $i < count($exactSearch) && $found; $i++) {
+                $found = strpos($content, $exactSearch[$i]) !== false;
+            }
+
+            // Iterate over keywords, if keyword is not found,
+            // no need to check for the others. We want all or nothing.
+            for ($i = 0; $i < count($andSearch) && $found; $i++) {
+                $found = strpos($content, $andSearch[$i]) !== false;
+            }
+
+            // Exclude terms.
+            for ($i = 0; $i < count($excludeSearch) && $found; $i++) {
+                $found = strpos($content, $excludeSearch[$i]) === false;
+            }
+
             if ($found) {
                 $filtered[$link['linkdate']] = $link;
             }
