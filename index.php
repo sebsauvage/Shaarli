@@ -1526,21 +1526,40 @@ function renderPage()
     // -------- User clicked the "Save" button when editing a link: Save link to database.
     if (isset($_POST['save_edit']))
     {
-        if (!tokenOk($_POST['token'])) die('Wrong token.'); // Go away!
-        $tags = trim(preg_replace('/\s\s+/',' ', $_POST['lf_tags'])); // Remove multiple spaces.
-        $tags = implode(' ', array_unique(explode(' ', $tags))); // Remove duplicates.
-        $linkdate=$_POST['lf_linkdate'];
+        // Go away!
+        if (! tokenOk($_POST['token'])) {
+            die('Wrong token.');
+        }
+        // Remove multiple spaces.
+        $tags = trim(preg_replace('/\s\s+/', ' ', $_POST['lf_tags']));
+        // Remove duplicates.
+        $tags = implode(' ', array_unique(explode(' ', $tags)));
+        $linkdate = $_POST['lf_linkdate'];
         $url = trim($_POST['lf_url']);
-        if (!startsWith($url,'http:') && !startsWith($url,'https:') && !startsWith($url,'ftp:') && !startsWith($url,'magnet:') && !startsWith($url,'?') && !startsWith($url,'javascript:'))
-            $url = 'http://'.$url;
-        $link = array('title'=>trim($_POST['lf_title']),'url'=>$url,'description'=>trim($_POST['lf_description']),'private'=>(isset($_POST['lf_private']) ? 1 : 0),
-                      'linkdate'=>$linkdate,'tags'=>str_replace(',',' ',$tags));
-        if ($link['title']=='') $link['title']=$link['url']; // If title is empty, use the URL as title.
+        if (! startsWith($url, 'http:') && ! startsWith($url, 'https:')
+            && ! startsWith($url, 'ftp:') && ! startsWith($url, 'magnet:')
+            && ! startsWith($url, '?') && ! startsWith($url, 'javascript:')
+        ) {
+            $url = 'http://' . $url;
+        }
+
+        $link = array(
+            'title' => trim($_POST['lf_title']),
+            'url' => $url,
+            'description' => trim($_POST['lf_description']),
+            'private' => (isset($_POST['lf_private']) ? 1 : 0),
+            'linkdate' => $linkdate,
+            'tags' => str_replace(',', ' ', $tags)
+        );
+        // If title is empty, use the URL as title.
+        if ($link['title'] == '') {
+            $link['title'] = $link['url'];
+        }
 
         $pluginManager->executeHooks('save_link', $link);
 
         $LINKSDB[$linkdate] = $link;
-        $LINKSDB->savedb($GLOBALS['config']['PAGECACHE']); // Save to disk.
+        $LINKSDB->savedb($GLOBALS['config']['PAGECACHE']);
         pubsubhub();
 
         // If we are called from the bookmarklet, we must close the popup:
@@ -1551,8 +1570,10 @@ function renderPage()
 
         $returnurl = !empty($_POST['returnurl']) ? escape($_POST['returnurl']): '?';
         $location = generateLocation($returnurl, $_SERVER['HTTP_HOST'], array('addlink', 'post', 'edit_link'));
-        $location .= '#'.smallHash($_POST['lf_linkdate']);  // Scroll to the link which has been edited.
-        header('Location: '. $location); // After saving the link, redirect to the page the user was on.
+        // Scroll to the link which has been edited.
+        $location .= '#' . smallHash($_POST['lf_linkdate']);
+        // After saving the link, redirect to the page the user was on.
+        header('Location: '. $location);
         exit;
     }
 
