@@ -50,6 +50,9 @@ $GLOBALS['config']['LOG_FILE'] = $GLOBALS['config']['DATADIR'].'/log.txt';
 // For updates check of Shaarli
 $GLOBALS['config']['UPDATECHECK_FILENAME'] = $GLOBALS['config']['DATADIR'].'/lastupdatecheck.txt';
 
+// Set ENABLE_UPDATECHECK to disabled by default.
+$GLOBALS['config']['ENABLE_UPDATECHECK'] = false;
+
 // RainTPL cache directory (keep the trailing slash!)
 $GLOBALS['config']['RAINTPL_TMP'] = 'tmp/';
 // Raintpl template directory (keep the trailing slash!)
