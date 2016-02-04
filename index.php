@@ -1568,7 +1568,7 @@ function renderPage()
             exit;
         }
 
-        $returnurl = !empty($_POST['returnurl']) ? escape($_POST['returnurl']): '?';
+        $returnurl = !empty($_POST['returnurl']) ? $_POST['returnurl'] : '?';
         $location = generateLocation($returnurl, $_SERVER['HTTP_HOST'], array('addlink', 'post', 'edit_link'));
         // Scroll to the link which has been edited.
         $location .= '#' . smallHash($_POST['lf_linkdate']);
