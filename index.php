@@ -114,7 +114,8 @@ $GLOBALS['config']['UPDATECHECK_INTERVAL'] = 86400;
 //);
 $GLOBALS['config']['ENABLED_PLUGINS'] = array('qrcode');
 
-//$GLOBALS['plugins']['WALLABAG_URL'] = 'https://demo.wallabag.org/';
+// Initialize plugin parameters array.
+$GLOBALS['plugins'] = array();
 
 // PubSubHubbub support. Put an empty string to disable, or put your hub url here to enable.
 $GLOBALS['config']['PUBSUBHUB_URL'] = '';
