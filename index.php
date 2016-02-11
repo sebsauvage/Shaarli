@@ -1123,9 +1123,9 @@ function renderPage()
     // Call plugin hooks for header, footer and includes, specifying which page will be rendered.
     // Then assign generated data to RainTPL.
     $common_hooks = array(
+        'includes',
         'header',
         'footer',
-        'includes',
     );
     $pluginManager = PluginManager::getInstance();
     foreach($common_hooks as $name) {
