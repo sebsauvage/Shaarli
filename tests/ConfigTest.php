@@ -134,48 +134,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test mergeDeprecatedConfig while being logged in:
-     *      1. init a config file.
-     *      2. init a options.php file with update value.
-     *      3. merge.
-     *      4. check updated value in config file.
-     */
-    public function testMergeDeprecatedConfig()
-    {
-        // init
-        writeConfig(self::$configFields, true);
-        $configCopy = self::$configFields;
-        $invert = !$configCopy['privateLinkByDefault'];
-        $configCopy['privateLinkByDefault'] = $invert;
-
-        // Use writeConfig to create a options.php
-        $configCopy['config']['CONFIG_FILE'] = 'tests/options.php';
-        writeConfig($configCopy, true);
-
-        $this->assertTrue(is_file($configCopy['config']['CONFIG_FILE']));
-
-        // merge configs
-        mergeDeprecatedConfig(self::$configFields, true);
-
-        // make sure updated field is changed
-        include self::$configFields['config']['CONFIG_FILE'];
-        $this->assertEquals($invert, $GLOBALS['privateLinkByDefault']);
-        $this->assertFalse(is_file($configCopy['config']['CONFIG_FILE']));
-    }
-
-    /**
-     * Test mergeDeprecatedConfig while being logged in without options file.
-     */
-    public function testMergeDeprecatedConfigNoFile()
-    {
-        writeConfig(self::$configFields, true);
-        mergeDeprecatedConfig(self::$configFields, true);
-
-        include self::$configFields['config']['CONFIG_FILE'];
-        $this->assertEquals(self::$configFields['login'], $GLOBALS['login']);
-    }
-
-    /**
      * Test save_plugin_config with valid data.
      *
      * @throws PluginConfigOrderException

@@ -44,6 +44,9 @@ $GLOBALS['config']['DATASTORE'] = $GLOBALS['config']['DATADIR'].'/datastore.php'
 // Banned IPs
 $GLOBALS['config']['IPBANS_FILENAME'] = $GLOBALS['config']['DATADIR'].'/ipbans.php';
 
+// Processed updates file.
+$GLOBALS['config']['UPDATES_FILE'] = $GLOBALS['config']['DATADIR'].'/updates.txt';
+
 // Access log
 $GLOBALS['config']['LOG_FILE'] = $GLOBALS['config']['DATADIR'].'/log.txt';
 
@@ -63,7 +66,6 @@ $GLOBALS['config']['CACHEDIR'] = 'cache';
 
 // Atom & RSS feed cache directory
 $GLOBALS['config']['PAGECACHE'] = 'pagecache';
-
 
 /*
  * Global configuration
@@ -163,6 +165,7 @@ require_once 'application/Utils.php';
 require_once 'application/Config.php';
 require_once 'application/PluginManager.php';
 require_once 'application/Router.php';
+require_once 'application/Updater.php';
 
 // Ensure the PHP version is supported
 try {
@@ -1113,6 +1116,25 @@ function renderPage()
         $GLOBALS['config']['HIDE_PUBLIC_LINKS'],
         $GLOBALS['redirector']
     );
+
+    $updater = new Updater(
+        read_updates_file($GLOBALS['config']['UPDATES_FILE']),
+        $GLOBALS,
+        $LINKSDB,
+        isLoggedIn()
+    );
+    try {
+        $newUpdates = $updater->update();
+        if (! empty($newUpdates)) {
+            write_updates_file(
+                $GLOBALS['config']['UPDATES_FILE'],
+                $updater->getDoneUpdates()
+            );
+        }
+    }
+    catch(Exception $e) {
+        die($e->getMessage());
+    }
 
     $PAGE = new pageBuilder;
 
@@ -2517,15 +2539,6 @@ function resizeImage($filepath)
     unlink($filepath);
     rename($tempname,$filepath);  // Overwrite original picture with thumbnail.
     return true;
-}
-
-try {
-    mergeDeprecatedConfig($GLOBALS, isLoggedIn());
-} catch(Exception $e) {
-    error_log(
-        'ERROR while merging deprecated options.php file.' . PHP_EOL .
-        $e->getMessage()
-    );
 }
 
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=genthumbnail')) { genThumbnail(); exit; }  // Thumbnail generation/cache does not need the link database.
