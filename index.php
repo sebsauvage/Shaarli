@@ -1815,7 +1815,7 @@ HTML;
             );
 
             // TODO: do not handle exceptions/errors in JS.
-            echo '<script>alert("'. $e->getMessage() .'");document.location=\'?do=pluginsadmin\';</script>';
+            echo '<script>alert("'. $e->getMessage() .'");document.location=\'?do='. Router::$PAGE_PLUGINSADMIN .'\';</script>';
             exit;
         }
         header('Location: ?do='. Router::$PAGE_PLUGINSADMIN);
