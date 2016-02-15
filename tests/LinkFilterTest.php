@@ -27,7 +27,7 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
     public function testFilter()
     {
         $this->assertEquals(
-            6,
+            7,
             count(self::$linkFilter->filter('', ''))
         );
 
@@ -165,6 +165,17 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Full-text search - no result found.
+     */
+    public function testFilterFullTextNoResult()
+    {
+        $this->assertEquals(
+            0,
+            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'azertyuiop'))
+        );
+    }
+
+    /**
      * Full-text search - result from a link's URL
      */
     public function testFilterFullTextURL()
@@ -222,7 +233,7 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertEquals(
-            2,
+            3,
             count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, '"free software"'))
         );        
     }
@@ -250,8 +261,68 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
     public function testFilterFullTextMixed()
     {
         $this->assertEquals(
-            2,
+            3,
             count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'free software'))
+        );
+    }
+
+    /**
+     * Full-text search - test exclusion with '-'.
+     */
+    public function testExcludeSearch()
+    {
+        $this->assertEquals(
+            1,
+            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'free -gnu'))
+        );
+
+        $this->assertEquals(
+            6,
+            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, '-revolution'))
+        );
+    }
+
+    /**
+     * Full-text search - test AND, exact terms and exclusion combined, across fields.
+     */
+    public function testMultiSearch()
+    {
+        $this->assertEquals(
+            2,
+            count(self::$linkFilter->filter(
+                LinkFilter::$FILTER_TEXT,
+                '"Free Software " stallman "read this" @website stuff'
+            ))
+        );
+
+        $this->assertEquals(
+            1,
+            count(self::$linkFilter->filter(
+                LinkFilter::$FILTER_TEXT,
+                '"free software " stallman "read this" -beard @website stuff'
+            ))
+        );
+    }
+
+    /**
+     * Full-text search - make sure that exact search won't work across fields.
+     */
+    public function testSearchExactTermMultiFieldsKo()
+    {
+        $this->assertEquals(
+            0,
+            count(self::$linkFilter->filter(
+                LinkFilter::$FILTER_TEXT,
+                '"designer naming"'
+            ))
+        );
+
+        $this->assertEquals(
+            0,
+            count(self::$linkFilter->filter(
+                LinkFilter::$FILTER_TEXT,
+                '"designernaming"'
+            ))
         );
     }
 
@@ -266,7 +337,7 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            5,
+            6,
             count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, '-free'))
         );
     }
