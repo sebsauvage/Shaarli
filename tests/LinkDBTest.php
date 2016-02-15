@@ -276,7 +276,8 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
                 'media' => 1,
                 'software' => 1,
                 'stallman' => 1,
-                'free' => 1
+                'free' => 1,
+                '-exclude' => 1,
             ),
             self::$publicLinkDB->allTags()
         );
@@ -295,7 +296,8 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
                 'html' => 1,
                 'w3c' => 1,
                 'css' => 1,
-                'Mercurial' => 1
+                'Mercurial' => 1,
+                '-exclude' => 1,
             ),
             self::$privateLinkDB->allTags()
         );

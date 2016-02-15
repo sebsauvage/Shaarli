@@ -254,4 +254,20 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
             count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'free software'))
         );
     }
+
+    /**
+     * Tag search with exclusion.
+     */
+    public function testTagFilterWithExclusion()
+    {
+        $this->assertEquals(
+            1,
+            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'gnu -free'))
+        );
+
+        $this->assertEquals(
+            5,
+            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, '-free'))
+        );
+    }
 }

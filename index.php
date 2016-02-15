@@ -1558,6 +1558,8 @@ function renderPage()
         }
         // Remove multiple spaces.
         $tags = trim(preg_replace('/\s\s+/', ' ', $_POST['lf_tags']));
+        // Remove first '-' char in tags.
+        $tags = preg_replace('/(^| )\-/', '$1', $tags);
         // Remove duplicates.
         $tags = implode(' ', array_unique(explode(' ', $tags)));
         $linkdate = $_POST['lf_linkdate'];

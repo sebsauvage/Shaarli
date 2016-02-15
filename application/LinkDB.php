@@ -340,7 +340,7 @@ You use the community supported version of the original Shaarli project, by Seba
      *
      * @return array filtered links
      */
-    public function filter($type, $request, $casesensitive = false, $privateonly = false)
+    public function filter($type = '', $request = '', $casesensitive = false, $privateonly = false)
     {
         $linkFilter = new LinkFilter($this->_links);
         $requestFilter = is_array($request) ? implode(' ', $request) : $request;

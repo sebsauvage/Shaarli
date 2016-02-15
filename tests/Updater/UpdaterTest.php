@@ -14,6 +14,11 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
     private static $configFields;
 
     /**
+     * @var string Path to test datastore.
+     */
+    protected static $testDatastore = 'sandbox/datastore.php';
+
+    /**
      * Executed before each test.
      */
     public function setUp()
@@ -31,6 +36,7 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
             'config' => array(
                 'CONFIG_FILE' => 'tests/Updater/config.php',
                 'DATADIR' => 'tests/Updater',
+                'PAGECACHE' => 'sandbox/pagecache',
                 'config1' => 'config1data',
                 'config2' => 'config2data',
             )
@@ -223,5 +229,17 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
 
         include self::$configFields['config']['CONFIG_FILE'];
         $this->assertEquals(self::$configFields['login'], $GLOBALS['login']);
+    }
+
+    public function testRenameDashTags()
+    {
+        $refDB = new ReferenceLinkDB();
+        $refDB->write(self::$testDatastore);
+        $linkDB = new LinkDB(self::$testDatastore, true, false);
+        $this->assertEmpty($linkDB->filter(LinkFilter::$FILTER_TAG, 'exclude'));
+        $updater = new Updater(array(), self::$configFields, $linkDB, true);
+        $updater->updateMethodRenameDashTags();
+        var_dump($linkDB->filter(LinkFilter::$FILTER_TAG, 'exclude'));
+        $this->assertNotEmpty($linkDB->filter(LinkFilter::$FILTER_TAG, 'exclude'));
     }
 }
