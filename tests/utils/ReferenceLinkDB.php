@@ -28,7 +28,7 @@ class ReferenceLinkDB
             'A free software media publishing platform',
             0,
             '20130614_184135',
-            'gnu media web'
+            'gnu media web .hidden'
         );
 
         $this->addLink(
