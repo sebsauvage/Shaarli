@@ -32,6 +32,9 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     // Links are stored as a PHP serialized string
     private $_datastore;
 
+    // Link date storage format
+    const LINK_DATE_FORMAT = 'Ymd_His';
+
     // Datastore PHP prefix
     protected static $phpPrefix = '<?php /* ';
 
