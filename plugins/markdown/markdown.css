@@ -114,6 +114,35 @@
     margin-bottom: 0;
 }
 
+.markdown pre {
+    background-color: #eee;
+    padding: 4px 9px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    overflow: auto;
+    box-shadow: 0 -1px 0 #e5e5e5,0 0 1px rgba(0,0,0,0.12),0 1px 2px rgba(0,0,0,0.24);
+}
+
+.markdown pre code {
+    color: black;
+    font-family: 'Consolas', 'Monaco', 'Andale Mono', monospace;
+    direction: ltr;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    line-height: 1.7;
+    font-size: 11.5px;
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;  
+}
+
 .md_help {
     color: white;
 }
