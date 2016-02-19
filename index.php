@@ -268,7 +268,7 @@ $GLOBALS['redirector'] = !empty($GLOBALS['redirector']) ? escape($GLOBALS['redir
 // a token depending of deployment salt, user password, and the current ip
 define('STAY_SIGNED_IN_TOKEN', sha1($GLOBALS['hash'].$_SERVER["REMOTE_ADDR"].$GLOBALS['salt']));
 
-autoLocale(); // Sniff browser language and set date format accordingly.
+autoLocale($_SERVER['HTTP_ACCEPT_LANGUAGE']); // Sniff browser language and set date format accordingly.
 header('Content-Type: text/html; charset=utf-8'); // We use UTF-8 for proper international characters handling.
 
 //==================================================================================================
@@ -314,26 +314,6 @@ function setup_login_state() {
 	return $userIsLoggedIn;
 }
 $userIsLoggedIn = setup_login_state();
-
-
-// ------------------------------------------------------------------------------------------
-// Sniff browser language to display dates in the right format automatically.
-// (Note that is may not work on your server if the corresponding local is not installed.)
-function autoLocale()
-{
-    $attempts = array('en_US'); // Default if browser does not send HTTP_ACCEPT_LANGUAGE
-    if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) // e.g. "fr,fr-fr;q=0.8,en;q=0.5,en-us;q=0.3"
-    {   // (It's a bit crude, but it works very well. Preferred language is always presented first.)
-        if (preg_match('/([a-z]{2})-?([a-z]{2})?/i',$_SERVER['HTTP_ACCEPT_LANGUAGE'],$matches)) {
-            $loc = $matches[1] . (!empty($matches[2]) ? '_' . strtoupper($matches[2]) : '');
-            $attempts = array($loc.'.UTF-8', $loc, str_replace('_', '-', $loc).'.UTF-8', str_replace('_', '-', $loc),
-                $loc . '_' . strtoupper($loc).'.UTF-8', $loc . '_' . strtoupper($loc),
-                $loc . '_' . $loc.'.UTF-8', $loc . '_' . $loc, $loc . '-' . strtoupper($loc).'.UTF-8',
-                $loc . '-' . strtoupper($loc), $loc . '-' . $loc.'.UTF-8', $loc . '-' . $loc);
-        }
-    }
-    setlocale(LC_TIME, $attempts);  // LC_TIME = Set local for date/time format only.
-}
 
 // ------------------------------------------------------------------------------------------
 // PubSubHubbub protocol support (if enabled)  [UNTESTED]
