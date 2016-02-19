@@ -1218,11 +1218,12 @@ function renderPage()
         uksort($tags, function($a, $b) {
             // Collator is part of PHP intl.
             if (class_exists('Collator')) {
-                $c = new Collator(setlocale(LC_ALL, 0));
-                return $c->compare($a, $b);
-            } else {
-                return strcasecmp($a, $b);
+                $c = new Collator(setlocale(LC_COLLATE, 0));
+                if (!intl_is_failure(intl_get_error_code())) {
+                    return $c->compare($a, $b);
+                }
             }
+            return strcasecmp($a, $b);
         });
 
         $tagList=array();
