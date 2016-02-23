@@ -55,16 +55,25 @@ class LinkFilter
         switch($type) {
             case self::$FILTER_HASH:
                 return $this->filterSmallHash($request);
-                break;
+            case self::$FILTER_TAG | self::$FILTER_TEXT:
+                if (!empty($request)) {
+                    $filtered = $this->links;
+                    if (isset($request[0])) {
+                        $filtered = $this->filterTags($request[0], $casesensitive, $privateonly);
+                    }
+                    if (isset($request[1])) {
+                        $lf = new LinkFilter($filtered);
+                        $filtered = $lf->filterFulltext($request[1], $privateonly);
+                    }
+                    return $filtered;
+                }
+                return $this->noFilter($privateonly);
             case self::$FILTER_TEXT:
                 return $this->filterFulltext($request, $privateonly);
-                break;
             case self::$FILTER_TAG:
                 return $this->filterTags($request, $casesensitive, $privateonly);
-                break;
             case self::$FILTER_DAY:
                 return $this->filterDay($request);
-                break;
             default:
                 return $this->noFilter($privateonly);
         }
@@ -138,6 +147,10 @@ class LinkFilter
      */
     private function filterFulltext($searchterms, $privateonly = false)
     {
+        if (empty($searchterms)) {
+            return $this->links;
+        }
+
         $filtered = array();
         $search = mb_convert_case(html_entity_decode($searchterms), MB_CASE_LOWER, 'UTF-8');
         $exactRegex = '/"([^"]+)"/';
@@ -219,6 +232,12 @@ class LinkFilter
      */
     public function filterTags($tags, $casesensitive = false, $privateonly = false)
     {
+        // Implode if array for clean up.
+        $tags = is_array($tags) ? trim(implode(' ', $tags)) : $tags;
+        if (empty($tags)) {
+            return $this->links;
+        }
+
         $searchtags = self::tagsStrToArray($tags, $casesensitive);
         $filtered = array();
         if (empty($searchtags)) {
