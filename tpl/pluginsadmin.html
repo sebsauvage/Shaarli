@@ -36,7 +36,7 @@
             <tbody>
             {loop="$enabledPlugins"}
               <tr data-line="{$key}" data-order="{$counter}">
-                <td class="center"><input type="checkbox" name="{$key}" checked="checked"></td>
+                <td class="center"><input type="checkbox" name="{$key}" id="{$key}" checked="checked"></td>
                 <td class="center">
                   <a href="#"
                      onclick="return orderUp(this.parentNode.parentNode.getAttribute('data-order'));">
@@ -48,8 +48,8 @@
                   </a>
                   <input type="hidden" name="order_{$key}" value="{$counter}">
                 </td>
-                <td>{$key}</td>
-                <td>{$value.description}</td>
+                <td><label for="{$key}">{function="str_replace('_', ' ', $key)"}</label></td>
+                <td><label for="{$key}">{$value.description}</label></td>
               </tr>
             {/loop}
             </tbody>
@@ -73,9 +73,9 @@
             </tr>
             {loop="$disabledPlugins"}
               <tr>
-                <td class="center"><input type="checkbox" name="{$key}"></td>
-                <td>{$key}</td>
-                <td>{$value.description}</td>
+                <td class="center"><input type="checkbox" name="{$key}" id="{$key}"></td>
+                <td><label for="{$key}">{function="str_replace('_', ' ', $key)"}</label></td>
+                <td><label for="{$key}">{$value.description}</label></td>
               </tr>
             {/loop}
           </table>
@@ -99,7 +99,7 @@
           {loop="$enabledPlugins"}
             {if="count($value.parameters) > 0"}
               <div class="plugin_parameters">
-                <h2>{$key}</h2>
+                <h2>{function="str_replace('_', ' ', $key)"}</h2>
                 {loop="$value.parameters"}
                   <div class="plugin_parameter">
                     <div class="float_label">
