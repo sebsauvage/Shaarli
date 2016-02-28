@@ -33,6 +33,10 @@ h1 {
     margin-bottom: 20px;
 }
 
+em {
+    font-style: italic;
+}
+
 /* Buttons */
 .bigbutton {
     background-color: #c0c0c0;
