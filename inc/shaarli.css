@@ -1182,3 +1182,8 @@ ul.errors {
     font-style: normal;
     color: #80AD48;
 }
+
+.linklist-plugin-icon {
+    width: 13px;
+    height: 13px;
+}
