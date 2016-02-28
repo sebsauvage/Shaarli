@@ -67,6 +67,19 @@ class ServerUrlTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
+
+        $this->assertEquals(
+            'https://host.tld:4974',
+            server_url(
+                array(
+                    'HTTPS' => 'Off',
+                    'SERVER_NAME' => 'host.tld',
+                    'SERVER_PORT' => '80',
+                    'HTTP_X_FORWARDED_PROTO' => 'https, https',
+                    'HTTP_X_FORWARDED_PORT' => '4974, 80'
+                )
+            )
+        );
     }
 
     /**
