@@ -268,7 +268,10 @@ $GLOBALS['redirector'] = !empty($GLOBALS['redirector']) ? escape($GLOBALS['redir
 // a token depending of deployment salt, user password, and the current ip
 define('STAY_SIGNED_IN_TOKEN', sha1($GLOBALS['hash'].$_SERVER["REMOTE_ADDR"].$GLOBALS['salt']));
 
-autoLocale($_SERVER['HTTP_ACCEPT_LANGUAGE']); // Sniff browser language and set date format accordingly.
+// Sniff browser language and set date format accordingly.
+if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+    autoLocale($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+}
 header('Content-Type: text/html; charset=utf-8'); // We use UTF-8 for proper international characters handling.
 
 //==================================================================================================
