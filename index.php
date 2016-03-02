@@ -1,6 +1,6 @@
 <?php
 /**
- * Shaarli v0.6.4 - Shaare your links...
+ * Shaarli v0.6.5 - Shaare your links...
  *
  * The personal, minimalist, super-fast, no-database Delicious clone.
  *
@@ -125,7 +125,7 @@ $GLOBALS['config']['PUBSUBHUB_URL'] = '';
 /*
  * PHP configuration
  */
-define('shaarli_version', '0.6.4');
+define('shaarli_version', '0.6.5');
 
 // http://server.com/x/shaarli --> /shaarli/
 define('WEB_PATH', substr($_SERVER["REQUEST_URI"], 0, 1+strrpos($_SERVER["REQUEST_URI"], '/', 0)));
