@@ -9,7 +9,7 @@
  */
 function html_extract_title($html)
 {
-    if (preg_match('!<title>(.*)</title>!is', $html, $matches)) {
+    if (preg_match('!<title>(.*?)</title>!is', $html, $matches)) {
         return trim(str_replace("\n", ' ', $matches[1]));
     }
     return false;

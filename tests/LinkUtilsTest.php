@@ -15,6 +15,8 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
         $title = 'Read me please.';
         $html = '<html><meta>stuff</meta><title>'. $title .'</title></html>';
         $this->assertEquals($title, html_extract_title($html));
+        $html = '<html><title>'. $title .'</title>blabla<title>another</title></html>';
+        $this->assertEquals($title, html_extract_title($html));
     }
 
     /**
