@@ -790,13 +790,9 @@ function showRSS()
 
 // ------------------------------------------------------------------------------------------
 // Output the last N links in ATOM format.
-function showATOM()
+function showATOM($pageBuilder, $linkDB)
 {
     header('Content-Type: application/atom+xml; charset=utf-8');
-
-    // $usepermalink : If true, use permalink instead of final link.
-    // User just has to add 'permalink' in URL parameters. e.g. http://mysite.com/shaarli/?do=atom&permalinks
-    $usepermalinks = isset($_GET['permalinks']) || !$GLOBALS['config']['ENABLE_RSS_PERMALINKS'];
 
     // Cache system
     $query = $_SERVER["QUERY_STRING"];
@@ -811,97 +807,90 @@ function showATOM()
         exit;
     }
 
-    // If cached was not found (or not usable), then read the database and build the response:
-    // Read links from database (and filter private links if used it not logged in).
-    $LINKSDB = new LinkDB(
-        $GLOBALS['config']['DATASTORE'],
-        isLoggedIn(),
-        $GLOBALS['config']['HIDE_PUBLIC_LINKS'],
-        $GLOBALS['redirector']
-    );
+    // $usepermalink : If true, use permalink instead of final link.
+    // User just has to add 'permalink' in URL parameters. e.g. http://mysite.com/shaarli/?do=atom&permalinks
+    $usepermalinks = isset($_GET['permalinks']) || !$GLOBALS['config']['ENABLE_RSS_PERMALINKS'];
 
     // Optionally filter the results:
     $searchtags = !empty($_GET['searchtags']) ? escape($_GET['searchtags']) : '';
     $searchterm = !empty($_GET['searchterm']) ? escape($_GET['searchterm']) : '';
     if (! empty($searchtags) && ! empty($searchterm)) {
-        $linksToDisplay = $LINKSDB->filter(
+        $linksToDisplay = $linkDB->filter(
             LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT,
             array($searchtags, $searchterm)
         );
     }
     elseif ($searchtags) {
-        $linksToDisplay = $LINKSDB->filter(LinkFilter::$FILTER_TAG, $searchtags);
+        $linksToDisplay = $linkDB->filter(LinkFilter::$FILTER_TAG, $searchtags);
     }
     elseif ($searchterm) {
-        $linksToDisplay = $LINKSDB->filter(LinkFilter::$FILTER_TEXT, $searchterm);
+        $linksToDisplay = $linkDB->filter(LinkFilter::$FILTER_TEXT, $searchterm);
     }
     else {
-        $linksToDisplay = $LINKSDB;
+        $linksToDisplay = $linkDB;
     }
 
     $nblinksToDisplay = 50;  // Number of links to display.
     // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
     if (!empty($_GET['nb'])) {
-        $nblinksToDisplay = $_GET['nb']=='all' ? count($linksToDisplay) : max(intval($_GET['nb']), 1);
+        $nblinksToDisplay = $_GET['nb'] == 'all' ? count($linksToDisplay) : max(intval($_GET['nb']), 1);
     }
 
-    $pageaddr=escape(index_url($_SERVER));
+    $keys = array();
+    foreach ($linksToDisplay as $key=>$value) {
+        $keys[] = $key; // No, I can't use array_keys().
+    }
+
+    $pageaddr = escape(index_url($_SERVER));
     $latestDate = '';
-    $entries='';
-    $i=0;
-    $keys=array(); foreach($linksToDisplay as $key=>$value) { $keys[]=$key; }  // No, I can't use array_keys().
-    while ($i<$nblinksToDisplay && $i<count($keys))
+    $i = 0;
+    $linkDisp = array();
+    while ($i < $nblinksToDisplay && $i < count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
-        $guid = $pageaddr.'?'.smallHash($link['linkdate']);
+        $link['guid'] = $pageaddr. '?' .smallHash($link['linkdate']);
+        // Check for both signs of a note: starting with ? and 7 chars long.
+        if ($link['url'][0] === '?' && strlen($link['url']) === 7) {
+            $link['url'] = $pageaddr . $link['url'];
+        }
+        if ($usepermalinks) {
+            $permalink = '<a href="'. $link['url'] .'" title="Direct link">Direct link</a>';
+        } else {
+            $permalink = '<a href="'. $link['guid'] .'" title="Permalink">Permalink</a>';
+        }
+        $link['description'] = format_description($link['description']) . PHP_EOL .'<br>&#8212; '. $permalink;
+
         $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
-        $iso8601date = $date->format(DateTime::ISO8601);
-        $latestDate = max($latestDate, $iso8601date);
-        $absurl = $link['url'];
-        if (startsWith($absurl,'?')) $absurl=$pageaddr.$absurl;  // make permalink URL absolute
-        $entries.='<entry><title>'.$link['title'].'</title>';
-        if ($usepermalinks===true)
-            $entries.='<link href="'.$guid.'" /><id>'.$guid.'</id>';
-        else
-            $entries.='<link href="'.$absurl.'" /><id>'.$guid.'</id>';
+        $link['iso_date'] = $date->format(DateTime::ATOM);
+        $latestDate = max($latestDate, $link['iso_date']);
+        $taglist = array_filter(explode(' ', $link['tags']), 'strlen');
+        uasort($taglist, 'strcasecmp');
+        $link['taglist'] = $taglist;
 
-        if (!$GLOBALS['config']['HIDE_TIMESTAMPS'] || isLoggedIn()) {
-            $entries.='<updated>'.escape($iso8601date).'</updated>';
-        }
-
-        // Add permalink in description
-        $descriptionlink = '(<a href="'.$guid.'">Permalink</a>)';
-        // If user wants permalinks first, put the final link in description
-        if ($usepermalinks===true) $descriptionlink = '(<a href="'.$absurl.'">Link</a>)';
-        if (strlen($link['description'])>0) $descriptionlink = '<br>'.$descriptionlink;
-
-        $entries .= '<content type="html"><![CDATA['.
-            format_description($link['description'], $GLOBALS['redirector']) .
-            $descriptionlink . "]]></content>\n";
-        if ($link['tags']!='') // Adding tags to each ATOM entry (as mentioned in ATOM specification)
-        {
-            foreach(explode(' ',$link['tags']) as $tag)
-                { $entries.='<category scheme="'.$pageaddr.'" term="'.$tag.'" />'."\n"; }
-        }
-        $entries.="</entry>\n";
+        $linkDisp[$keys[$i]] = $link;
         $i++;
     }
-    $feed='<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">';
-    $feed.='<title>'.$GLOBALS['title'].'</title>';
-    if (!$GLOBALS['config']['HIDE_TIMESTAMPS'] || isLoggedIn()) $feed.='<updated>'.escape($latestDate).'</updated>';
-    $feed.='<link rel="self" href="'.escape(server_url($_SERVER).$_SERVER["REQUEST_URI"]).'" />';
-    if (!empty($GLOBALS['config']['PUBSUBHUB_URL']))
-    {
-        $feed.='<!-- PubSubHubbub Discovery -->';
-        $feed.='<link rel="hub" href="'.escape($GLOBALS['config']['PUBSUBHUB_URL']).'" />';
-        $feed.='<!-- End Of PubSubHubbub Discovery -->';
-    }
-    $feed.='<author><name>'.$pageaddr.'</name><uri>'.$pageaddr.'</uri></author>';
-    $feed.='<id>'.$pageaddr.'</id>'."\n\n"; // Yes, I know I should use a real IRI (RFC3987), but the site URL will do.
-    $feed.=$entries;
-    $feed.='</feed><!-- Cached version of '.escape(page_url($_SERVER)).' -->';
-    echo $feed;
 
+    $data = array();
+    if (!empty($GLOBALS['config']['PUBSUBHUB_URL'])) {
+        $data['pubsubhub_url'] = escape($GLOBALS['config']['PUBSUBHUB_URL']);
+    }
+    // Use the locale do define the language, if available.
+    $locale = strtolower(setlocale(LC_COLLATE, 0));
+    if (! empty($locale) && preg_match('/^\w{2}[_\-]\w{2}/', $locale)) {
+        $data['language'] = substr($locale, 0, 2);
+    } else {
+        $data['language'] = 'en';
+    }
+    $data['last_update'] = escape($latestDate);
+    $data['show_dates'] = !$GLOBALS['config']['HIDE_TIMESTAMPS'] || isLoggedIn();
+    $data['self_link'] = escape($pageaddr . $_SERVER['REQUEST_URI']);
+    $data['index_url'] = escape($pageaddr);
+    $data['usepermalinks'] = $usepermalinks;
+    $data['links'] = $linkDisp;
+
+    $pageBuilder->assignAll($data);
+    $pageBuilder->renderPage('feed.atom', false);
     $cache->cache(ob_get_contents());
     ob_end_flush();
     exit;
@@ -1281,6 +1270,11 @@ function renderPage()
     // Daily page.
     if ($targetPage == Router::$PAGE_DAILY) {
         showDaily($PAGE);
+    }
+
+    // ATOM feed.
+    if ($targetPage == Router::$PAGE_ATOM) {
+        showATOM($PAGE, $LINKSDB);
     }
 
     // Display openseach plugin (XML)
@@ -2608,7 +2602,6 @@ function resizeImage($filepath)
 
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=genthumbnail')) { genThumbnail(); exit; }  // Thumbnail generation/cache does not need the link database.
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=rss')) { showRSS(); exit; }
-if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=atom')) { showATOM(); exit; }
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=dailyrss')) { showDailyRSS(); exit; }
 if (!isset($_SESSION['LINKS_PER_PAGE'])) $_SESSION['LINKS_PER_PAGE']=$GLOBALS['config']['LINKS_PER_PAGE'];
 renderPage();
