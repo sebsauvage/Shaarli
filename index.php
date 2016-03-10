@@ -637,6 +637,29 @@ class pageBuilder
         $this->tpl->assign($what,$where);
     }
 
+    /**
+     * Assign an array of data to the template builder.
+     *
+     * @param array $data Data to assign.
+     *
+     * @return false if invalid data.
+     */
+    public function assignAll($data)
+    {
+        // Lazy initialization
+        if ($this->tpl === false) {
+            $this->initialize();
+        }
+
+        if (empty($data) || !is_array($data)){
+            return false;
+        }
+
+        foreach ($data as $key => $value) {
+            $this->assign($key, $value);
+        }
+    }
+
     // Render a specific page (using a template).
     // e.g. pb.renderPage('picwall')
     public function renderPage($page)
