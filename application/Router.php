@@ -15,6 +15,10 @@ class Router
 
     public static $PAGE_DAILY = 'daily';
 
+    public static $PAGE_FEED_ATOM = 'atom';
+
+    public static $PAGE_FEED_RSS = 'rss';
+
     public static $PAGE_TOOLS = 'tools';
 
     public static $PAGE_CHANGEPASSWORD = 'changepasswd';
@@ -77,6 +81,14 @@ class Router
 
         if (startsWith($query, 'do='. self::$PAGE_DAILY)) {
             return self::$PAGE_DAILY;
+        }
+
+        if (startsWith($query, 'do='. self::$PAGE_FEED_ATOM)) {
+            return self::$PAGE_FEED_ATOM;
+        }
+
+        if (startsWith($query, 'do='. self::$PAGE_FEED_RSS)) {
+            return self::$PAGE_FEED_RSS;
         }
 
         // At this point, only loggedin pages.
