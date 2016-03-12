@@ -323,3 +323,28 @@ function hook_demo_plugin_delete_link($data)
         exit('You can not delete a YouTube link. Don\'t ask.');
     }
 }
+
+/**
+ * Execute render_feed hook.
+ * Called with ATOM and RSS feed.
+ *
+ * Special data keys:
+ *   - _PAGE_: current page
+ *   - _LOGGEDIN_: true/false
+ *
+ * @param array $data data passed to plugin
+ *
+ * @return array altered $data.
+ */
+function hook_demo_plugin_render_feed($data)
+{
+    foreach ($data['links'] as &$link) {
+        if ($data['_PAGE_'] == Router::$PAGE_FEED_ATOM) {
+            $link['description'] .= ' - ATOM Feed' ;
+        }
+        elseif ($data['_PAGE_'] == Router::$PAGE_FEED_RSS) {
+            $link['description'] .= ' - RSS Feed';
+        }
+    }
+    return $data;
+}

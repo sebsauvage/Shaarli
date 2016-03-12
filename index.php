@@ -785,6 +785,12 @@ function showRSS($pageBuilder, $linkDB)
     $data['usepermalinks'] = $usepermalinks;
     $data['links'] = $linkDisp;
 
+    $pluginManager = PluginManager::getInstance();
+    $pluginManager->executeHooks('render_feed', $data, array(
+        'loggedin' => isLoggedIn(),
+        'target' => Router::$PAGE_RSS,
+    ));
+
     $pageBuilder->assignAll($data);
     $pageBuilder->renderPage('feed.rss', false);
     $cache->cache(ob_get_contents());
