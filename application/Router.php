@@ -53,7 +53,7 @@ class Router
      * @param array  $get      $_SERVER['GET'].
      * @param bool   $loggedIn true if authenticated user.
      *
-     * @return self::page found.
+     * @return string page found.
      */
     public static function findPage($query, $get, $loggedIn)
     {
