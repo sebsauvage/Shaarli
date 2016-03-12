@@ -683,7 +683,7 @@ class pageBuilder
 
 // ------------------------------------------------------------------------------------------
 // Output the last N links in RSS 2.0 format.
-function showRSS()
+function showRSS($pageBuilder, $linkDB)
 {
     header('Content-Type: application/rss+xml; charset=utf-8');
 
@@ -693,11 +693,11 @@ function showRSS()
     $usepermalinks = isset($_GET['permalinks']) || !$GLOBALS['config']['ENABLE_RSS_PERMALINKS'];
 
     // Cache system
-    $query = $_SERVER["QUERY_STRING"];
+    $query = $_SERVER['QUERY_STRING'];
     $cache = new CachedPage(
         $GLOBALS['config']['PAGECACHE'],
         page_url($_SERVER),
-        startsWith($query,'do=rss') && !isLoggedIn()
+        startsWith($query, 'do=rss') && !isLoggedIn()
     );
     $cached = $cache->cachedVersion();
     if (! empty($cached)) {
@@ -705,32 +705,23 @@ function showRSS()
         exit;
     }
 
-    // If cached was not found (or not usable), then read the database and build the response:
-    $LINKSDB = new LinkDB(
-        $GLOBALS['config']['DATASTORE'],
-        isLoggedIn(),
-        $GLOBALS['config']['HIDE_PUBLIC_LINKS'],
-        $GLOBALS['redirector']
-    );
-    // Read links from database (and filter private links if user it not logged in).
-
     // Optionally filter the results:
     $searchtags = !empty($_GET['searchtags']) ? escape($_GET['searchtags']) : '';
     $searchterm = !empty($_GET['searchterm']) ? escape($_GET['searchterm']) : '';
     if (! empty($searchtags) && ! empty($searchterm)) {
-        $linksToDisplay = $LINKSDB->filter(
+        $linksToDisplay = $linkDB->filter(
             LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT,
             array($searchtags, $searchterm)
         );
     }
     elseif ($searchtags) {
-        $linksToDisplay = $LINKSDB->filter(LinkFilter::$FILTER_TAG, $searchtags);
+        $linksToDisplay = $linkDB->filter(LinkFilter::$FILTER_TAG, $searchtags);
     }
     elseif ($searchterm) {
-        $linksToDisplay = $LINKSDB->filter(LinkFilter::$FILTER_TEXT, $searchterm);
+        $linksToDisplay = $linkDB->filter(LinkFilter::$FILTER_TEXT, $searchterm);
     }
     else {
-        $linksToDisplay = $LINKSDB;
+        $linksToDisplay = $linkDB;
     }
 
     $nblinksToDisplay = 50;  // Number of links to display.
@@ -739,50 +730,63 @@ function showRSS()
         $nblinksToDisplay = $_GET['nb'] == 'all' ? count($linksToDisplay) : max(intval($_GET['nb']), 1);
     }
 
-    $pageaddr = escape(index_url($_SERVER));
-    echo '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">';
-    echo '<channel><title>'.$GLOBALS['title'].'</title><link>'.$pageaddr.'</link>';
-    echo '<description>Shared links</description><language>en-en</language><copyright>'.$pageaddr.'</copyright>'."\n\n";
-    if (!empty($GLOBALS['config']['PUBSUBHUB_URL']))
-    {
-        echo '<!-- PubSubHubbub Discovery -->';
-        echo '<link rel="hub" href="'.escape($GLOBALS['config']['PUBSUBHUB_URL']).'" xmlns="http://www.w3.org/2005/Atom" />';
-        echo '<link rel="self" href="'.$pageaddr.'?do=rss" xmlns="http://www.w3.org/2005/Atom" />';
-        echo '<!-- End Of PubSubHubbub Discovery -->';
+    $keys = array();
+    foreach ($linksToDisplay as $key=>$value) {
+        $keys[] = $key; // No, I can't use array_keys().
     }
-    $i=0;
-    $keys=array(); foreach($linksToDisplay as $key=>$value) { $keys[]=$key; }  // No, I can't use array_keys().
-    while ($i<$nblinksToDisplay && $i<count($keys))
+
+    $pageaddr = escape(index_url($_SERVER));
+    $latestDate = '';
+    $i = 0;
+    $linkDisp = array();
+    while ($i < $nblinksToDisplay && $i < count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
-        $guid = $pageaddr.'?'.smallHash($link['linkdate']);
-        $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
-        $absurl = $link['url'];
-        if (startsWith($absurl,'?')) $absurl=$pageaddr.$absurl;  // make permalink URL absolute
-        if ($usepermalinks===true)
-            echo '<item><title>'.$link['title'].'</title><guid isPermaLink="true">'.$guid.'</guid><link>'.$guid.'</link>';
-        else
-            echo '<item><title>'.$link['title'].'</title><guid isPermaLink="false">'.$guid.'</guid><link>'.$absurl.'</link>';
-        if (!$GLOBALS['config']['HIDE_TIMESTAMPS'] || isLoggedIn()) {
-            echo '<pubDate>'.escape($date->format(DateTime::RSS))."</pubDate>\n";
+        $link['guid'] = $pageaddr. '?' .smallHash($link['linkdate']);
+        // Check for both signs of a note: starting with ? and 7 chars long.
+        if ($link['url'][0] === '?' && strlen($link['url']) === 7) {
+            $link['url'] = $pageaddr . $link['url'];
         }
-        if ($link['tags']!='') // Adding tags to each RSS entry (as mentioned in RSS specification)
-        {
-            foreach(explode(' ',$link['tags']) as $tag) { echo '<category domain="'.$pageaddr.'">'.$tag.'</category>'."\n"; }
+        if ($usepermalinks) {
+            $permalink = '<a href="'. $link['url'] .'" title="Direct link">Direct link</a>';
+        } else {
+            $permalink = '<a href="'. $link['guid'] .'" title="Permalink">Permalink</a>';
         }
+        $link['description'] = format_description($link['description']) . PHP_EOL .'<br>&#8212; '. $permalink;
 
-        // Add permalink in description
-        $descriptionlink = '(<a href="'.$guid.'">Permalink</a>)';
-        // If user wants permalinks first, put the final link in description
-        if ($usepermalinks===true) $descriptionlink = '(<a href="'.$absurl.'">Link</a>)';
-        if (strlen($link['description'])>0) $descriptionlink = '<br>'.$descriptionlink;
-        echo '<description><![CDATA['.
-            format_description($link['description'], $GLOBALS['redirector']) .
-            $descriptionlink . ']]></description>' . "\n</item>\n";
+        $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
+        $link['iso_date'] = $date->format(DateTime::RSS);
+        $latestDate = max($latestDate, $link['iso_date']);
+        $taglist = array_filter(explode(' ', $link['tags']), 'strlen');
+        uasort($taglist, 'strcasecmp');
+        $link['taglist'] = $taglist;
+
+        $linkDisp[$keys[$i]] = $link;
         $i++;
     }
-    echo '</channel></rss><!-- Cached version of '.escape(page_url($_SERVER)).' -->';
 
+    $data = array();
+    if (!empty($GLOBALS['config']['PUBSUBHUB_URL'])) {
+        $data['pubsubhub_url'] = escape($GLOBALS['config']['PUBSUBHUB_URL']);
+    }
+
+    // Use the locale do define the language, if available.
+    $locale = strtolower(setlocale(LC_COLLATE, 0));
+    if (! empty($locale) && preg_match('/^\w{2}[_\-]\w{2}/', $locale)) {
+        $data['language'] = str_replace('_', '-', substr($locale, 0, 5));
+    } else {
+        $data['language'] = 'en-en';
+    }
+    $data['last_update'] = escape($latestDate);
+    $data['show_dates'] = !$GLOBALS['config']['HIDE_TIMESTAMPS'] || isLoggedIn();
+    // Remove starting slash from REQUEST_URI.
+    $data['self_link'] = escape($pageaddr . substr($_SERVER['REQUEST_URI'], 1));
+    $data['index_url'] = escape($pageaddr);
+    $data['usepermalinks'] = $usepermalinks;
+    $data['links'] = $linkDisp;
+
+    $pageBuilder->assignAll($data);
+    $pageBuilder->renderPage('feed.rss', false);
     $cache->cache(ob_get_contents());
     ob_end_flush();
     exit;
@@ -888,6 +892,12 @@ function showATOM($pageBuilder, $linkDB)
     $data['index_url'] = escape($pageaddr);
     $data['usepermalinks'] = $usepermalinks;
     $data['links'] = $linkDisp;
+
+    $pluginManager = PluginManager::getInstance();
+    $pluginManager->executeHooks('render_feed', $data, array(
+        'loggedin' => isLoggedIn(),
+        'target' => Router::$PAGE_ATOM,
+    ));
 
     $pageBuilder->assignAll($data);
     $pageBuilder->renderPage('feed.atom', false);
@@ -1275,6 +1285,11 @@ function renderPage()
     // ATOM feed.
     if ($targetPage == Router::$PAGE_ATOM) {
         showATOM($PAGE, $LINKSDB);
+    }
+
+    // RSS feed.
+    if ($targetPage == Router::$PAGE_RSS) {
+        showRSS($PAGE, $LINKSDB);
     }
 
     // Display openseach plugin (XML)
@@ -2601,7 +2616,6 @@ function resizeImage($filepath)
 }
 
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=genthumbnail')) { genThumbnail(); exit; }  // Thumbnail generation/cache does not need the link database.
-if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=rss')) { showRSS(); exit; }
 if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=dailyrss')) { showDailyRSS(); exit; }
 if (!isset($_SESSION['LINKS_PER_PAGE'])) $_SESSION['LINKS_PER_PAGE']=$GLOBALS['config']['LINKS_PER_PAGE'];
 renderPage();
