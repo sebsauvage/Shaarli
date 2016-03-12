@@ -12,8 +12,6 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
      */
     protected static $linkFilter;
 
-    protected static $NB_LINKS_REFDB = 7;
-
     /**
      * Instanciate linkFilter with ReferenceLinkDB data.
      */
@@ -29,7 +27,7 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
     public function testFilter()
     {
         $this->assertEquals(
-            self::$NB_LINKS_REFDB,
+            ReferenceLinkDB::$NB_LINKS_TOTAL,
             count(self::$linkFilter->filter('', ''))
         );
 
@@ -40,12 +38,12 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            self::$NB_LINKS_REFDB,
+            ReferenceLinkDB::$NB_LINKS_TOTAL,
             count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, ''))
         );
 
         $this->assertEquals(
-            self::$NB_LINKS_REFDB,
+            ReferenceLinkDB::$NB_LINKS_TOTAL,
             count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, ''))
         );
     }
@@ -383,7 +381,7 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
             ))
         );
         $this->assertEquals(
-            self::$NB_LINKS_REFDB,
+            ReferenceLinkDB::$NB_LINKS_TOTAL,
             count(self::$linkFilter->filter(
                 LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT,
                 ''
