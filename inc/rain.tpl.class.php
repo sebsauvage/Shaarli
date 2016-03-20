@@ -6,7 +6,7 @@
  *  Realized by Federico Ulfo & maintained by the Rain Team
  *  Distributed under GNU/LGPL 3 License
  *
- *  @version 2.7
+ *  @version 2.7.2
  */
 
 
@@ -243,7 +243,7 @@ class RainTPL{
 				self::configure( $key, $value );
 		else if( property_exists( __CLASS__, $setting ) ){
 			self::$$setting = $value;
-            self::$config_name_sum[$key] = $value; // take trace of all config
+            self::$config_name_sum[ $setting ] = $value; // take trace of all config
         }
 	}
 
@@ -259,7 +259,7 @@ class RainTPL{
 			$tpl_basedir                        = strpos($tpl_name,"/") ? dirname($tpl_name) . '/' : null;						// template basedirectory
 			$tpl_dir                            = self::$tpl_dir . $tpl_basedir;								// template directory
 			$this->tpl['tpl_filename']          = $tpl_dir . $tpl_basename . '.' . self::$tpl_ext;	// template filename
-			$temp_compiled_filename             = self::$cache_dir . $tpl_basename . "." . md5( $tpl_dir . implode('', self::$config_name_sum));
+			$temp_compiled_filename             = self::$cache_dir . $tpl_basename . "." . md5( $tpl_dir . serialize(self::$config_name_sum));
 			$this->tpl['compiled_filename']     = $temp_compiled_filename . '.rtpl.php';	// cache filename
 			$this->tpl['cache_filename']        = $temp_compiled_filename . '.s_' . $this->cache_id . '.rtpl.php';	// static cache filename
 
@@ -342,8 +342,8 @@ class RainTPL{
                              'function'     => '(\{function="[^"]*"\})',
                              'noparse'      => '(\{noparse\})',
                              'noparse_close'=> '(\{\/noparse\})',
-                             'ignore'       => '(\{ignore\})',
-                             'ignore_close'	=> '(\{\/ignore\})',
+                             'ignore'       => '(\{ignore\}|\{\*)',
+                             'ignore_close'	=> '(\{\/ignore\}|\*\})',
                              'include'      => '(\{include="[^"]*"(?: cache="[^"]*")?\})',
                              'template_info'=> '(\{\$template_info\})',
                              'function'		=> '(\{function="(\w*?)(?:.*?)"\})'
@@ -381,7 +381,7 @@ class RainTPL{
 	 	while( $html = array_shift( $parsed_code ) ){
 
 	 		//close ignore tag
-			if( !$comment_is_open && strpos( $html, '{/ignore}' ) !== FALSE )
+			if( !$comment_is_open && ( strpos( $html, '{/ignore}' ) !== FALSE || strpos( $html, '*}' ) !== FALSE ) )
 	 			$ignore_is_open = false;
 
 	 		//code between tag ignore id deleted
@@ -398,7 +398,7 @@ class RainTPL{
  				$compiled_code .= $html;
 
 	 		//ignore
-			elseif( strpos( $html, '{ignore}' ) !== FALSE )
+			elseif( strpos( $html, '{ignore}' ) !== FALSE || strpos( $html, '{*' ) !== FALSE )
 	 			$ignore_is_open = true;
 
 	 		//noparse
@@ -415,7 +415,7 @@ class RainTPL{
 				if( isset($code[ 2 ]) ){
 					
 					//dynamic include
-					$compiled_code .= '<?php $tpl = new RainTpl;' .
+					$compiled_code .= '<?php $tpl = new '.get_class($this).';' .
 								 'if( $cache = $tpl->cache( $template = basename("'.$include_var.'") ) )' .
 								 '	echo $cache;' .
 								 'else{' .
@@ -428,7 +428,7 @@ class RainTPL{
 				else{
 	
 					//dynamic include
-					$compiled_code .= '<?php $tpl = new RainTpl;' .
+					$compiled_code .= '<?php $tpl = new '.get_class($this).';' .
 									  '$tpl_dir_temp = self::$tpl_dir;' .
 									  '$tpl->assign( $this->var );' .
 									  ( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
@@ -584,9 +584,15 @@ class RainTPL{
 	}
 	
 	
-	
+	/**
+	 * Reduce a path, eg. www/library/../filepath//file => www/filepath/file
+	 * @param type $path
+	 * @return type
+	 */
 	protected function reduce_path( $path ){
+		$path = str_replace( "://", "@not_replace@", $path );
 		$path = str_replace( "//", "/", $path );
+		$path = str_replace( "@not_replace@", "://", $path );
 		return preg_replace('/\w+\/\.\.\//', '', $path );
 	}
 
@@ -628,8 +634,8 @@ class RainTPL{
 			}
 
 			if( in_array( "a", self::$path_replace_list ) ){
-				$exp = array_merge( $exp , array( '/<a(.*?)href=(?:")(http|https)\:\/\/([^"]+?)(?:")/i', '/<a(.*?)href="(.*?)"/', '/<a(.*?)href=(?:\@)([^"]+?)(?:\@)/i'  ) );
-				$sub = array_merge( $sub , array( '<a$1href=@$2://$3@', '<a$1href="' . self::$base_url . '$2"', '<a$1href="$2"' ) );
+				$exp = array_merge( $exp , array( '/<a(.*?)href=(?:")(http\:\/\/|https\:\/\/|javascript:)([^"]+?)(?:")/i', '/<a(.*?)href="(.*?)"/', '/<a(.*?)href=(?:\@)([^"]+?)(?:\@)/i'  ) );
+				$sub = array_merge( $sub , array( '<a$1href=@$2$3@', '<a$1href="' . self::$base_url . '$2"', '<a$1href="$2"' ) );
 			}
 
 			if( in_array( "input", self::$path_replace_list ) ){
