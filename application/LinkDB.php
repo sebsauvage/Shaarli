@@ -341,17 +341,71 @@ You use the community supported version of the original Shaarli project, by Seba
     }
 
     /**
-     * Filter links.
+     * Returns the shaare corresponding to a smallHash.
      *
-     * @param string $type          Type of filter.
-     * @param mixed  $request       Search request, string or array.
+     * @param string $request QUERY_STRING server parameter.
+     *
+     * @return array $filtered array containing permalink data.
+     *
+     * @throws LinkNotFoundException if the smallhash is malformed or doesn't match any link.
+     */
+    public function filterHash($request)
+    {
+        $request = substr($request, 0, 6);
+        $linkFilter = new LinkFilter($this->_links);
+        return $linkFilter->filter(LinkFilter::$FILTER_HASH, $request);
+    }
+
+    /**
+     * Returns the list of articles for a given day.
+     *
+     * @param string $request day to filter. Format: YYYYMMDD.
+     *
+     * @return array list of shaare found.
+     */
+    public function filterDay($request) {
+        $linkFilter = new LinkFilter($this->_links);
+        return $linkFilter->filter(LinkFilter::$FILTER_DAY, $request);
+    }
+
+    /**
+     * Filter links according to search parameters.
+     *
+     * @param array  $filterRequest Search request content. Supported keys:
+     *                                - searchtags: list of tags
+     *                                - searchterm: term search
      * @param bool   $casesensitive Optional: Perform case sensitive filter
      * @param bool   $privateonly   Optional: Returns private links only if true.
      *
-     * @return array filtered links
+     * @return array filtered links, all links if no suitable filter was provided.
      */
-    public function filter($type = '', $request = '', $casesensitive = false, $privateonly = false)
+    public function filterSearch($filterRequest = array(), $casesensitive = false, $privateonly = false)
     {
+        // Filter link database according to parameters.
+        $searchtags = !empty($filterRequest['searchtags']) ? escape($filterRequest['searchtags']) : '';
+        $searchterm = !empty($filterRequest['searchterm']) ? escape($filterRequest['searchterm']) : '';
+
+        // Search tags + fullsearch.
+        if (empty($type) && ! empty($searchtags) && ! empty($searchterm)) {
+            $type = LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT;
+            $request = array($searchtags, $searchterm);
+        }
+        // Search by tags.
+        elseif (! empty($searchtags)) {
+            $type = LinkFilter::$FILTER_TAG;
+            $request = $searchtags;
+        }
+        // Fulltext search.
+        elseif (! empty($searchterm)) {
+            $type = LinkFilter::$FILTER_TEXT;
+            $request = $searchterm;
+        }
+        // Otherwise, display without filtering.
+        else {
+            $type = '';
+            $request = '';
+        }
+
         $linkFilter = new LinkFilter($this->_links);
         return $linkFilter->filter($type, $request, $casesensitive, $privateonly);
     }

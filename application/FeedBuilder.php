@@ -103,23 +103,7 @@ class FeedBuilder
     public function buildData()
     {
         // Optionally filter the results:
-        $searchtags = !empty($this->userInput['searchtags']) ? escape($this->userInput['searchtags']) : '';
-        $searchterm = !empty($this->userInput['searchterm']) ? escape($this->userInput['searchterm']) : '';
-        if (! empty($searchtags) && ! empty($searchterm)) {
-            $linksToDisplay = $this->linkDB->filter(
-                LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT,
-                array($searchtags, $searchterm)
-            );
-        }
-        elseif ($searchtags) {
-            $linksToDisplay = $this->linkDB->filter(LinkFilter::$FILTER_TAG, $searchtags);
-        }
-        elseif ($searchterm) {
-            $linksToDisplay = $this->linkDB->filter(LinkFilter::$FILTER_TEXT, $searchterm);
-        }
-        else {
-            $linksToDisplay = $this->linkDB;
-        }
+        $linksToDisplay = $this->linkDB->filterSearch($this->userInput);
 
         $nblinksToDisplay = $this->getNbLinks(count($linksToDisplay));
 

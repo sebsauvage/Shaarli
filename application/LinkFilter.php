@@ -44,7 +44,7 @@ class LinkFilter
      * Filter links according to parameters.
      *
      * @param string $type          Type of filter (eg. tags, permalink, etc.).
-     * @param string $request       Filter content.
+     * @param mixed  $request       Filter content.
      * @param bool   $casesensitive Optional: Perform case sensitive filter if true.
      * @param bool   $privateonly   Optional: Only returns private links if true.
      *
@@ -110,6 +110,8 @@ class LinkFilter
      * @param string $smallHash permalink hash.
      *
      * @return array $filtered array containing permalink data.
+     *
+     * @throws LinkNotFoundException if the smallhash doesn't match any link.
      */
     private function filterSmallHash($smallHash)
     {
@@ -121,6 +123,11 @@ class LinkFilter
                 return $filtered;
             }
         }
+
+        if (empty($filtered)) {
+            throw new LinkNotFoundException();
+        }
+
         return $filtered;
     }
 
@@ -317,4 +324,9 @@ class LinkFilter
 
         return array_filter(explode(' ', trim($tagsOut)), 'strlen');
     }
+}
+
+class LinkNotFoundException extends Exception
+{
+    protected $message = 'The link you are trying to reach does not exist or has been deleted.';
 }

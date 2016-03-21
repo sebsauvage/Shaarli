@@ -816,7 +816,7 @@ function showDaily($pageBuilder)
     }
 
     try {
-        $linksToDisplay = $LINKSDB->filter(LinkFilter::$FILTER_DAY, $day);
+        $linksToDisplay = $LINKSDB->filterDay($day);
     } catch (Exception $exc) {
         error_log($exc);
         $linksToDisplay = array();
@@ -962,24 +962,7 @@ function renderPage()
     if ($targetPage == Router::$PAGE_PICWALL)
     {
         // Optionally filter the results:
-        $searchtags = !empty($_GET['searchtags']) ? escape($_GET['searchtags']) : '';
-        $searchterm = !empty($_GET['searchterm']) ? escape($_GET['searchterm']) : '';
-        if (! empty($searchtags) && ! empty($searchterm)) {
-            $links = $LINKSDB->filter(
-                LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT,
-                array($searchtags, $searchterm)
-            );
-        }
-        elseif ($searchtags) {
-            $links = $LINKSDB->filter(LinkFilter::$FILTER_TAG, $searchtags);
-        }
-        elseif ($searchterm) {
-            $links = $LINKSDB->filter(LinkFilter::$FILTER_TEXT, $searchterm);
-        }
-        else {
-            $links = $LINKSDB;
-        }
-
+        $links = $LINKSDB->filterSearch($_GET);
         $linksToDisplay = array();
 
         // Get only links which have a thumbnail.
@@ -1071,7 +1054,7 @@ function renderPage()
             startsWith($query,'do='. $targetPage) && !isLoggedIn()
         );
         $cached = $cache->cachedVersion();
-        if (!empty($cached)) {
+        if (false && !empty($cached)) {
             echo $cached;
             exit;
         }
@@ -1352,9 +1335,9 @@ function renderPage()
 
         // Delete a tag:
         if (isset($_POST['deletetag']) && !empty($_POST['fromtag'])) {
-            $needle=trim($_POST['fromtag']);
+            $needle = trim($_POST['fromtag']);
             // True for case-sensitive tag search.
-            $linksToAlter = $LINKSDB->filter(LinkFilter::$FILTER_TAG, $needle, true);
+            $linksToAlter = $LINKSDB->filterSearch(array('searchtags' => $needle), true);
             foreach($linksToAlter as $key=>$value)
             {
                 $tags = explode(' ',trim($value['tags']));
@@ -1369,9 +1352,9 @@ function renderPage()
 
         // Rename a tag:
         if (isset($_POST['renametag']) && !empty($_POST['fromtag']) && !empty($_POST['totag'])) {
-            $needle=trim($_POST['fromtag']);
+            $needle = trim($_POST['fromtag']);
             // True for case-sensitive tag search.
-            $linksToAlter = $LINKSDB->filter(LinkFilter::$FILTER_TAG, $needle, true);
+            $linksToAlter = $LINKSDB->filterSearch(array('searchtags' => $needle), true);
             foreach($linksToAlter as $key=>$value)
             {
                 $tags = explode(' ',trim($value['tags']));
@@ -1807,60 +1790,32 @@ function importFile()
     }
 }
 
-// -----------------------------------------------------------------------------------------------
-// Template for the list of links (<div id="linklist">)
-// This function fills all the necessary fields in the $PAGE for the template 'linklist.html'
+/**
+ * Template for the list of links (<div id="linklist">)
+ * This function fills all the necessary fields in the $PAGE for the template 'linklist.html'
+ *
+ * @param pageBuilder $PAGE    pageBuilder instance.
+ * @param LinkDB      $LINKSDB LinkDB instance.
+ */
 function buildLinkList($PAGE,$LINKSDB)
 {
-    // Filter link database according to parameters.
+    // Used in templates
     $searchtags = !empty($_GET['searchtags']) ? escape($_GET['searchtags']) : '';
-    $searchterm = !empty($_GET['searchterm']) ? escape(trim($_GET['searchterm'])) : '';
-    $privateonly = !empty($_SESSION['privateonly']) ? true : false;
+    $searchterm = !empty($_GET['searchterm']) ? escape($_GET['searchterm']) : '';
 
-    // Search tags + fullsearch.
-    if (! empty($searchtags) && ! empty($searchterm)) {
-        $linksToDisplay = $LINKSDB->filter(
-            LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT,
-            array($searchtags, $searchterm),
-            false,
-            $privateonly
-        );
-    }
-    // Search by tags.
-    elseif (! empty($searchtags)) {
-        $linksToDisplay = $LINKSDB->filter(
-            LinkFilter::$FILTER_TAG,
-            $searchtags,
-            false,
-            $privateonly
-        );
-    }
-    // Fulltext search.
-    elseif (! empty($searchterm)) {
-        $linksToDisplay = $LINKSDB->filter(
-            LinkFilter::$FILTER_TEXT,
-            $searchterm,
-            false,
-            $privateonly
-        );
-    }
-    // Detect smallHashes in URL.
-    elseif (! empty($_SERVER['QUERY_STRING'])
-        && preg_match('/[a-zA-Z0-9-_@]{6}(&.+?)?/', $_SERVER['QUERY_STRING'])
-    ) {
-        $linksToDisplay = $LINKSDB->filter(
-            LinkFilter::$FILTER_HASH,
-            substr(trim($_SERVER["QUERY_STRING"], '/'), 0, 6)
-        );
-
-        if (count($linksToDisplay) == 0) {
-            $PAGE->render404('The link you are trying to reach does not exist or has been deleted.');
+    // Smallhash filter
+    if (! empty($_SERVER['QUERY_STRING'])
+        && preg_match('/^[a-zA-Z0-9-_@]{6}($|&|#)/', $_SERVER['QUERY_STRING'])) {
+        try {
+            $linksToDisplay = $LINKSDB->filterHash($_SERVER['QUERY_STRING']);
+        } catch (LinkNotFoundException $e) {
+            $PAGE->render404($e->getMessage());
             exit;
         }
-    }
-    // Otherwise, display without filtering.
-    else {
-        $linksToDisplay = $LINKSDB->filter('', '', false, $privateonly);
+    } else {
+        // Filter links according search parameters.
+        $privateonly = !empty($_SESSION['privateonly']);
+        $linksToDisplay = $LINKSDB->filterSearch($_GET, false, $privateonly);
     }
 
     // ---- Handle paging.

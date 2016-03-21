@@ -17,8 +17,20 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
 {
     // datastore to test write operations
     protected static $testDatastore = 'sandbox/datastore.php';
+
+    /**
+     * @var ReferenceLinkDB instance.
+     */
     protected static $refDB = null;
+
+    /**
+     * @var LinkDB public LinkDB instance.
+     */
     protected static $publicLinkDB = null;
+
+    /**
+     * @var LinkDB private LinkDB instance.
+     */
     protected static $privateLinkDB = null;
 
     /**
@@ -335,9 +347,10 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     public function testFilterString()
     {
         $tags = 'dev cartoon';
+        $request = array('searchtags' => $tags);
         $this->assertEquals(
             2,
-            count(self::$privateLinkDB->filter(LinkFilter::$FILTER_TAG, $tags, true, false))
+            count(self::$privateLinkDB->filterSearch($request, true, false))
         );
     }
 
@@ -347,9 +360,10 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     public function testFilterArray()
     {
         $tags = array('dev', 'cartoon');
+        $request = array('searchtags' => $tags);
         $this->assertEquals(
             2,
-            count(self::$privateLinkDB->filter(LinkFilter::$FILTER_TAG, $tags, true, false))
+            count(self::$privateLinkDB->filterSearch($request, true, false))
         );
     }
 
@@ -360,14 +374,48 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     public function testHiddenTags()
     {
         $tags = '.hidden';
+        $request = array('searchtags' => $tags);
         $this->assertEquals(
             1,
-            count(self::$privateLinkDB->filter(LinkFilter::$FILTER_TAG, $tags, true, false))
+            count(self::$privateLinkDB->filterSearch($request, true, false))
         );
 
         $this->assertEquals(
             0,
-            count(self::$publicLinkDB->filter(LinkFilter::$FILTER_TAG, $tags, true, false))
+            count(self::$publicLinkDB->filterSearch($request, true, false))
         );
+    }
+
+    /**
+     * Test filterHash() with a valid smallhash.
+     */
+    public function testFilterHashValid()
+    {
+        $request = smallHash('20150310_114651');
+        $this->assertEquals(
+            1,
+            count(self::$publicLinkDB->filterHash($request))
+        );
+    }
+
+    /**
+     * Test filterHash() with an invalid smallhash.
+     *
+     * @expectedException LinkNotFoundException
+     */
+    public function testFilterHashInValid1()
+    {
+        $request = 'blabla';
+        self::$publicLinkDB->filterHash($request);
+    }
+
+    /**
+     * Test filterHash() with an empty smallhash.
+     *
+     * @expectedException LinkNotFoundException
+     */
+    public function testFilterHashInValid()
+    {
+        self::$publicLinkDB->filterHash('');
     }
 }
