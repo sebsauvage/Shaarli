@@ -102,7 +102,8 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
     /**
      * Test sanitize_html().
      */
-    function testSanitizeHtml() {
+    function testSanitizeHtml()
+    {
         $input = '< script src="js.js"/>';
         $input .= '< script attr>alert(\'xss\');</script>';
         $input .= '<style> * { display: none }</style>';
@@ -113,5 +114,39 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
         // Do not touch escaped HTML.
         $input = escape($input);
         $this->assertEquals($input, sanitize_html($input));
+    }
+
+    /**
+     * Test the no markdown tag.
+     */
+    function testNoMarkdownTag()
+    {
+        $str = 'All _work_ and `no play` makes Jack a *dull* boy.';
+        $data = array(
+            'links' => array(array(
+                'description' => $str,
+                'tags' => NO_MD_TAG
+            ))
+        );
+
+        $data = hook_markdown_render_linklist($data);
+        $this->assertEquals($str, $data['links'][0]['description']);
+
+        $data = array(
+            // Columns data
+            'cols' => array(
+                // First, second, third.
+                0 => array(
+                    // nth link
+                    0 => array(
+                        'formatedDescription' => $str,
+                        'tags' => NO_MD_TAG
+                    ),
+                ),
+            ),
+        );
+
+        $data = hook_markdown_render_daily($data);
+        $this->assertEquals($str, $data['cols'][0][0]['formatedDescription']);
     }
 }
