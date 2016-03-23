@@ -483,7 +483,7 @@ if (isset($_POST['login']))
         if (isset($_POST['returnurl'])) {
             // Prevent loops over login screen.
             if (strpos($_POST['returnurl'], 'do=login') === false) {
-                header('Location: '. escape($_POST['returnurl']));
+                header('Location: '. generateLocation($_POST['returnurl'], $_SERVER['HTTP_HOST']));
                 exit;
             }
         }
