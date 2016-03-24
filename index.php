@@ -100,6 +100,7 @@ $GLOBALS['config']['ENABLE_LOCALCACHE'] = true;
 $GLOBALS['config']['UPDATECHECK_BRANCH'] = 'stable';
 $GLOBALS['config']['UPDATECHECK_INTERVAL'] = 86400;
 
+$GLOBALS['config']['REDIRECTOR_URLENCODE'] = true;
 
 /*
  * Plugin configuration
@@ -706,7 +707,8 @@ function showDailyRSS() {
         $GLOBALS['config']['DATASTORE'],
         isLoggedIn(),
         $GLOBALS['config']['HIDE_PUBLIC_LINKS'],
-        $GLOBALS['redirector']
+        $GLOBALS['redirector'],
+        $GLOBALS['config']['REDIRECTOR_URLENCODE']
     );
 
     /* Some Shaarlies may have very few links, so we need to look
@@ -791,16 +793,10 @@ function showDailyRSS() {
  * Show the 'Daily' page.
  *
  * @param PageBuilder $pageBuilder Template engine wrapper.
+ * @param LinkDB $LINKSDB LinkDB instance.
  */
-function showDaily($pageBuilder)
+function showDaily($pageBuilder, $LINKSDB)
 {
-    $LINKSDB = new LinkDB(
-        $GLOBALS['config']['DATASTORE'],
-        isLoggedIn(),
-        $GLOBALS['config']['HIDE_PUBLIC_LINKS'],
-        $GLOBALS['redirector']
-    );
-
     $day=Date('Ymd',strtotime('-1 day')); // Yesterday, in format YYYYMMDD.
     if (isset($_GET['day'])) $day=$_GET['day'];
 
@@ -892,7 +888,8 @@ function renderPage()
         $GLOBALS['config']['DATASTORE'],
         isLoggedIn(),
         $GLOBALS['config']['HIDE_PUBLIC_LINKS'],
-        $GLOBALS['redirector']
+        $GLOBALS['redirector'],
+        $GLOBALS['config']['REDIRECTOR_URLENCODE']
     );
 
     $updater = new Updater(
@@ -1043,7 +1040,7 @@ function renderPage()
 
     // Daily page.
     if ($targetPage == Router::$PAGE_DAILY) {
-        showDaily($PAGE);
+        showDaily($PAGE, $LINKSDB);
     }
 
     // ATOM and RSS feed.
@@ -1638,7 +1635,7 @@ HTML;
             exit;
         }
         if (!tokenOk($_POST['token'])) die('Wrong token.');
-        importFile();
+        importFile($LINKSDB);
         exit;
     }
 
@@ -1707,15 +1704,10 @@ HTML;
 
 // -----------------------------------------------------------------------------------------------
 // Process the import file form.
-function importFile()
+function importFile($LINKSDB)
 {
     if (!isLoggedIn()) { die('Not allowed.'); }
-    $LINKSDB = new LinkDB(
-        $GLOBALS['config']['DATASTORE'],
-        isLoggedIn(),
-        $GLOBALS['config']['HIDE_PUBLIC_LINKS'],
-        $GLOBALS['redirector']
-    );
+
     $filename=$_FILES['filetoupload']['name'];
     $filesize=$_FILES['filetoupload']['size'];
     $data=file_get_contents($_FILES['filetoupload']['tmp_name']);
