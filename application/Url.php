@@ -118,24 +118,41 @@ class Url
      */
     public function __construct($url)
     {
-        $this->parts = parse_url(trim($url));
+        $url = self::cleanupUnparsedUrl(trim($url));
+        $this->parts = parse_url($url);
 
         if (!empty($url) && empty($this->parts['scheme'])) {
             $this->parts['scheme'] = 'http';
         }
     }
 
+    /**
+     * Clean up URL before it's parsed.
+     * ie. handle urlencode, url prefixes, etc.
+     *
+     * @param string $url URL to clean.
+     *
+     * @return string cleaned URL.
+     */
+    protected static function cleanupUnparsedUrl($url)
+    {
+        return self::removeFirefoxAboutReader($url);
+    }
 
-    private function removeFirefoxAboutReader($input){
-      $output_array = [];
-      preg_match("%^about://reader\?url=(.*)%", $input, $output_array);
-      if(!empty($output_array)){
-        $extractedUrl = preg_replace("%^about://reader\?url=(.*)%", "$1", $input);
-        $url = urldecode($extractedUrl);
-      }else{
-        $url = $input;
-      }
-      return $url;
+    /**
+     * Remove Firefox Reader prefix if it's present.
+     *
+     * @param string $input url
+     *
+     * @return string cleaned url
+     */
+    protected static function removeFirefoxAboutReader($input)
+    {
+        $firefoxPrefix = 'about://reader?url=';
+        if (startsWith($input, $firefoxPrefix)) {
+            return urldecode(ltrim($input, $firefoxPrefix));
+        }
+        return $input;
     }
     
     /**
@@ -200,8 +217,7 @@ class Url
     {
         $this->cleanupQuery();
         $this->cleanupFragment();
-        $url = $this->toString();
-        return $this->removeFirefoxAboutReader($url);
+        return $this->toString();
     }
 
     /**

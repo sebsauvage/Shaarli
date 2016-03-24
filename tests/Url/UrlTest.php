@@ -128,6 +128,13 @@ class UrlTest extends PHPUnit_Framework_TestCase
             self::$baseUrl.'?my=stuff&is=kept#again',
             $url->cleanup()
         );
+
+        // test firefox reader url
+        $url = new Url(
+            'about://reader?url=' . urlencode(self::$baseUrl .'?my=stuff&is=kept')
+        );
+        $this->assertEquals(self::$baseUrl.'?my=stuff&is=kept', $url->cleanup());
+
     }
 
     /**
