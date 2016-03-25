@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>{$pagetitle}</title>
+    <link>{$index_url}</link>
+    <description>Shaared links</description>
+    <language>{$language}</language>
+    <copyright>{$index_url}</copyright>
+    <generator>Shaarli</generator>
+    <atom:link rel="self" href="{$self_link}"  />
+    {if="!empty($pubsubhub_url)"}
+      <!-- PubSubHubbub Discovery -->
+      <atom:link rel="hub" href="{$pubsubhub_url}" />
+    {/if}
+    {loop="links"}
+      <item>
+        <title>{$value.title}</title>
+        <guid isPermaLink="{if="$usepermalinks"}true{else}false{/if}">{$value.guid}</guid>
+        {if="$usepermalinks"}
+          <link>{$value.guid}</link>
+        {else}
+          <link>{$value.url}</link>
+        {/if}
+        {if="$show_dates"}
+          <pubDate>{$value.iso_date}</pubDate>
+        {/if}
+        <description><![CDATA[{$value.description}]]></description>
+        {loop="$value.taglist"}
+          <category domain="{$index_url}?searchtags=">{$value}</category>
+        {/loop}
+      </item>
+    {/loop}
+  </channel>
+</rss>

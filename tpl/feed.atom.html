@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{$pagetitle}</title>
+  <subtitle>Shaared links</subtitle>
+  {if="$show_dates"}
+    <updated>{$last_update}</updated>
+  {/if}
+  <link rel="self" href="{$self_link}#" />
+  {if="!empty($pubsubhub_url)"}
+    <!-- PubSubHubbub Discovery -->
+    <link rel="hub" href="{$pubsubhub_url}#" />
+    <!-- End Of PubSubHubbub Discovery -->
+  {/if}
+  <author>
+    <name>{$index_url}</name>
+    <uri>{$index_url}</uri>
+  </author>
+  <id>{$index_url}</id>
+  <generator>Shaarli</generator>
+  {loop="links"}
+    <entry>
+      <title>{$value.title}</title>
+      {if="$usepermalinks"}
+        <link href="{$value.guid}#" />
+      {else}
+        <link href="{$value.url}#" />
+      {/if}
+      <id>{$value.guid}</id>
+      {if="$show_dates"}
+        <updated>{$value.iso_date}</updated>
+      {/if}
+      <content type="html" xml:lang="{$language}">
+        <![CDATA[{$value.description}]]>
+      </content>
+      {loop="$value.taglist"}
+        <category scheme="{$index_url}?searchtags=" term="{$value|strtolower}" label="{$value}" />
+      {/loop}
+    </entry>
+  {/loop}
+</feed>

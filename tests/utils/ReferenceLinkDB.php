@@ -4,6 +4,8 @@
  */
 class ReferenceLinkDB
 {
+    public static $NB_LINKS_TOTAL = 7;
+
     private $_links = array();
     private $_publicCount = 0;
     private $_privateCount = 0;
@@ -14,21 +16,21 @@ class ReferenceLinkDB
     function __construct()
     {
         $this->addLink(
+            'Link title: @website',
+            '?WDWyig',
+            'Stallman has a beard and is part of the Free Software Foundation (or not). Seriously, read this.',
+            0,
+            '20150310_114651',
+            'stuff'
+        );
+
+        $this->addLink(
             'Free as in Freedom 2.0 @website',
             'https://static.fsf.org/nosvn/faif-2.0.pdf',
             'Richard Stallman and the Free Software Revolution. Read this.',
             0,
             '20150310_114633',
             'free gnu software stallman -exclude stuff'
-        );
-
-        $this->addLink(
-            'Link title: @website',
-            'local',
-            'Stallman has a beard and is part of the Free Software Foundation (or not). Seriously, read this.',
-            0,
-            '20150310_114651',
-            'stuff'
         );
 
         $this->addLink(

@@ -236,9 +236,9 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
         $refDB = new ReferenceLinkDB();
         $refDB->write(self::$testDatastore);
         $linkDB = new LinkDB(self::$testDatastore, true, false);
-        $this->assertEmpty($linkDB->filter(LinkFilter::$FILTER_TAG, 'exclude'));
+        $this->assertEmpty($linkDB->filterSearch(array('searchtags' => 'exclude')));
         $updater = new Updater(array(), self::$configFields, $linkDB, true);
         $updater->updateMethodRenameDashTags();
-        $this->assertNotEmpty($linkDB->filter(LinkFilter::$FILTER_TAG, 'exclude'));
+        $this->assertNotEmpty($linkDB->filterSearch(array('searchtags' =>  'exclude')));
     }
 }
