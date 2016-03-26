@@ -2,25 +2,31 @@
 
 Convert all your shaares description to HTML formatted Markdown.
 
-Read more about Markdown syntax here.
+[Read more about Markdown syntax](http://daringfireball.net/projects/markdown/syntax).
+
+Markdown processing is done with [Parsedown library](https://github.com/erusev/parsedown).
 
 ### Installation
 
-Clone this repository inside your `tpl/plugins/` directory, or download the archive and unpack it there.
+As a default plugin, it should already be in `tpl/plugins/` directory.
+If not, download and unpack it there.
+
 The directory structure should look like:
 
 ```
-??? plugins
-    ??? markdown
-        ??? help.html
-        ??? markdown.css
-        ??? markdown.meta
-        ??? markdown.php
-        ??? Parsedown.php
-        ??? README.md
+--- plugins
+  |--- markdown
+     |--- help.html
+     |--- markdown.css
+     |--- markdown.meta
+     |--- markdown.php
+     |--- Parsedown.php
+     |--- README.md
 ```
 
-To enable the plugin, add `markdown` to your list of enabled plugins in `data/config.php`
+To enable the plugin, just check it in the plugin administration page.
+
+You can also add `markdown` to your list of enabled plugins in `data/config.php`
 (`ENABLED_PLUGINS` array).
 
 This should look like:
@@ -28,6 +34,12 @@ This should look like:
 ```
 $GLOBALS['config']['ENABLED_PLUGINS'] = array('qrcode', 'any_other_plugin', 'markdown')
 ```
+
+### No Markdown tag
+
+If the tag `.nomarkdown` is set for a shaare, it won't be converted to Markdown syntax.
+ 
+> Note: it's a private tag (leading dot), so it won't be displayed to visitors.
 
 ### Known issue
 
