@@ -118,13 +118,43 @@ class Url
      */
     public function __construct($url)
     {
-        $this->parts = parse_url(trim($url));
+        $url = self::cleanupUnparsedUrl(trim($url));
+        $this->parts = parse_url($url);
 
         if (!empty($url) && empty($this->parts['scheme'])) {
             $this->parts['scheme'] = 'http';
         }
     }
 
+    /**
+     * Clean up URL before it's parsed.
+     * ie. handle urlencode, url prefixes, etc.
+     *
+     * @param string $url URL to clean.
+     *
+     * @return string cleaned URL.
+     */
+    protected static function cleanupUnparsedUrl($url)
+    {
+        return self::removeFirefoxAboutReader($url);
+    }
+
+    /**
+     * Remove Firefox Reader prefix if it's present.
+     *
+     * @param string $input url
+     *
+     * @return string cleaned url
+     */
+    protected static function removeFirefoxAboutReader($input)
+    {
+        $firefoxPrefix = 'about://reader?url=';
+        if (startsWith($input, $firefoxPrefix)) {
+            return urldecode(ltrim($input, $firefoxPrefix));
+        }
+        return $input;
+    }
+    
     /**
      * Returns a string representation of this URL
      */
