@@ -9,8 +9,8 @@
  */
 function html_extract_title($html)
 {
-    if (preg_match('!<title>(.*?)</title>!is', $html, $matches)) {
-        return trim(str_replace("\n", ' ', $matches[1]));
+    if (preg_match('!<title.*?>(.*?)</title>!is', $html, $matches)) {
+        return trim(str_replace("\n", '', $matches[1]));
     }
     return false;
 }
@@ -70,7 +70,7 @@ function headers_extract_charset($headers)
 function html_extract_charset($html)
 {
     // Get encoding specified in HTML header.
-    preg_match('#<meta .*charset="?([^">/]+)"? */?>#Usi', $html, $enc);
+    preg_match('#<meta .*charset=["\']?([^";\'>/]+)["\']? */?>#Usi', $html, $enc);
     if (!empty($enc[1])) {
         return strtolower($enc[1]);
     }
