@@ -1015,11 +1015,16 @@ function renderPage()
             return strcasecmp($a, $b);
         });
 
-        $tagList=array();
-        foreach($tags as $key=>$value)
-        // Tag font size scaling: default 15 and 30 logarithm bases affect scaling, 22 and 6 are arbitrary font sizes for max and min sizes.
-        {
-            $tagList[$key] = array('count'=>$value,'size'=>log($value, 15) / log($maxcount, 30) * (22-6) + 6);
+        $tagList = array();
+        foreach($tags as $key => $value) {
+            // Tag font size scaling:
+            //   default 15 and 30 logarithm bases affect scaling,
+            //   22 and 6 are arbitrary font sizes for max and min sizes.
+            $size = log($value, 15) / log($maxcount, 30) * 2.2 + 0.8;
+            $tagList[$key] = array(
+                'count' => $value,
+                'size' => number_format($size, 2, '.', ''),
+            );
         }
 
         $data = array(
