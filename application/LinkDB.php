@@ -66,21 +66,39 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     private $_redirector;
 
     /**
+     * Set this to `true` to urlencode link behind redirector link, `false` to leave it untouched.
+     *
+     * Example:
+     *   anonym.to needs clean URL while dereferer.org needs urlencoded URL.
+     *
+     * @var boolean $redirectorEncode parameter: true or false
+     */
+    private $redirectorEncode;
+
+    /**
      * Creates a new LinkDB
      *
      * Checks if the datastore exists; else, attempts to create a dummy one.
      *
-     * @param string  $datastore       datastore file path.
-     * @param boolean $isLoggedIn      is the user logged in?
-     * @param boolean $hidePublicLinks if true all links are private.
-     * @param string  $redirector      link redirector set in user settings.
+     * @param string  $datastore        datastore file path.
+     * @param boolean $isLoggedIn       is the user logged in?
+     * @param boolean $hidePublicLinks  if true all links are private.
+     * @param string  $redirector       link redirector set in user settings.
+     * @param boolean $redirectorEncode Enable urlencode on redirected urls (default: true).
      */
-    function __construct($datastore, $isLoggedIn, $hidePublicLinks, $redirector = '')
+    function __construct(
+        $datastore,
+        $isLoggedIn,
+        $hidePublicLinks,
+        $redirector = '',
+        $redirectorEncode = true
+    )
     {
         $this->_datastore = $datastore;
         $this->_loggedIn = $isLoggedIn;
         $this->_hidePublicLinks = $hidePublicLinks;
         $this->_redirector = $redirector;
+        $this->redirectorEncode = $redirectorEncode === true;
         $this->_checkDB();
         $this->_readDB();
     }
@@ -278,7 +296,12 @@ You use the community supported version of the original Shaarli project, by Seba
 
             // Do not use the redirector for internal links (Shaarli note URL starting with a '?').
             if (!empty($this->_redirector) && !startsWith($link['url'], '?')) {
-                $link['real_url'] = $this->_redirector . urlencode($link['url']);
+                $link['real_url'] = $this->_redirector;
+                if ($this->redirectorEncode) {
+                    $link['real_url'] .= urlencode(unescape($link['url']));
+                } else {
+                    $link['real_url'] .= $link['url'];
+                }
             }
             else {
                 $link['real_url'] = $link['url'];

@@ -338,6 +338,13 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
         $db = new LinkDB(self::$testDatastore, false, false, $redirector);
         foreach($db as $link) {
             $this->assertStringStartsWith($redirector, $link['real_url']);
+            $this->assertNotFalse(strpos($link['real_url'], urlencode('://')));
+        }
+
+        $db = new LinkDB(self::$testDatastore, false, false, $redirector, false);
+        foreach($db as $link) {
+            $this->assertStringStartsWith($redirector, $link['real_url']);
+            $this->assertFalse(strpos($link['real_url'], urlencode('://')));
         }
     }
 
