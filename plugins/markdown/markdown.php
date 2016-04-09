@@ -34,6 +34,25 @@ function hook_markdown_render_linklist($data)
 }
 
 /**
+ * Parse feed linklist descriptions.
+ *
+ * @param array $data linklist data.
+ *
+ * @return mixed linklist data parsed in markdown (and converted to HTML).
+ */
+function hook_markdown_render_feed($data)
+{
+    foreach ($data['links'] as &$value) {
+        if (!empty($value['tags']) && noMarkdownTag($value['tags'])) {
+            continue;
+        }
+        $value['description'] = process_markdown($value['description']);
+    }
+
+    return $data;
+}
+
+/**
  * Parse daily descriptions.
  *
  * @param array $data daily data.
