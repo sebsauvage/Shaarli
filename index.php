@@ -161,6 +161,7 @@ require_once 'application/HttpUtils.php';
 require_once 'application/LinkDB.php';
 require_once 'application/LinkFilter.php';
 require_once 'application/LinkUtils.php';
+require_once 'application/NetscapeBookmarkUtils.php';
 require_once 'application/TimeZone.php';
 require_once 'application/Url.php';
 require_once 'application/Utils.php';
@@ -1584,44 +1585,36 @@ function renderPage()
     }
 
     // -------- Export as Netscape Bookmarks HTML file.
-    if ($targetPage == Router::$PAGE_EXPORT)
-    {
-        if (empty($_GET['what']))
-        {
+    if ($targetPage == Router::$PAGE_EXPORT) {
+        if (empty($_GET['selection'])) {
             $PAGE->assign('linkcount',count($LINKSDB));
             $PAGE->renderPage('export');
             exit;
         }
-        $exportWhat=$_GET['what'];
-        if (!array_intersect(array('all','public','private'),array($exportWhat))) die('What are you trying to export???');
 
-        header('Content-Type: text/html; charset=utf-8');
-        header('Content-disposition: attachment; filename=bookmarks_'.$exportWhat.'_'.strval(date('Ymd_His')).'.html');
-        $currentdate=date('Y/m/d H:i:s');
-        echo <<<HTML
-<!DOCTYPE NETSCAPE-Bookmark-file-1>
-<!-- This is an automatically generated file.
-     It will be read and overwritten.
-     DO NOT EDIT! -->
-<!-- Shaarli {$exportWhat} bookmarks export on {$currentdate} -->
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-<TITLE>Bookmarks</TITLE>
-<H1>Bookmarks</H1>
-HTML;
-        foreach($LINKSDB as $link)
-        {
-            if ($exportWhat=='all' ||
-               ($exportWhat=='private' && $link['private']!=0) ||
-               ($exportWhat=='public' && $link['private']==0))
-            {
-                $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
-                echo '<DT><A HREF="'.$link['url'].'" ADD_DATE="'.$date->getTimestamp().'" PRIVATE="'.$link['private'].'"';
-                if ($link['tags']!='') echo ' TAGS="'.str_replace(' ',',',$link['tags']).'"';
-                echo '>'.$link['title']."</A>\n";
-                if ($link['description']!='') echo '<DD>'.$link['description']."\n";
-            }
+        // export as bookmarks_(all|private|public)_YYYYmmdd_HHMMSS.html
+        $selection = $_GET['selection'];
+        try {
+            $PAGE->assign(
+                'links',
+                NetscapeBookmarkUtils::filterAndFormat($LINKSDB, $selection)
+            );
+        } catch (Exception $exc) {
+            header('Content-Type: text/plain; charset=utf-8');
+            echo $exc->getMessage();
+            exit;
         }
-                exit;
+        $now = new DateTime();
+        header('Content-Type: text/html; charset=utf-8');
+        header(
+            'Content-disposition: attachment; filename=bookmarks_'
+           .$selection.'_'.$now->format(LinkDB::LINK_DATE_FORMAT).'.html'
+        );
+        $PAGE->assign('date', $now->format(DateTime::RFC822));
+        $PAGE->assign('eol', PHP_EOL);
+        $PAGE->assign('selection', $selection);
+        $PAGE->renderPage('export.bookmarks');
+        exit;
     }
 
     // -------- User is uploading a file for import
