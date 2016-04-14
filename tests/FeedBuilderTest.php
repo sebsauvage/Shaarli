@@ -93,7 +93,7 @@ class FeedBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertContains('Permalink', $link['description']);
         $this->assertContains('http://host.tld/?WDWyig', $link['description']);
         $this->assertEquals(1, count($link['taglist']));
-        $this->assertEquals('stuff', $link['taglist'][0]);
+        $this->assertEquals('sTuff', $link['taglist'][0]);
 
         // Test URL with external link.
         $this->assertEquals('https://static.fsf.org/nosvn/faif-2.0.pdf', $data['links']['20150310_114633']['url']);
