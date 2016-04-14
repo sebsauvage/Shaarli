@@ -4,31 +4,49 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Shaarli - Plugin System</title>
+  <title>Shaarli – Plugin System</title>
   <style type="text/css">code{white-space: pre;}</style>
-  <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
   <style type="text/css">
+div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
 table.sourceCode { width: 100%; line-height: 100%; }
 td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
 td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; }
-code > span.dt { color: #902000; }
-code > span.dv { color: #40a070; }
-code > span.bn { color: #40a070; }
-code > span.fl { color: #40a070; }
-code > span.ch { color: #4070a0; }
-code > span.st { color: #4070a0; }
-code > span.co { color: #60a0b0; font-style: italic; }
-code > span.ot { color: #007020; }
-code > span.al { color: #ff0000; font-weight: bold; }
-code > span.fu { color: #06287e; }
-code > span.er { color: #ff0000; font-weight: bold; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
   </style>
   <link rel="stylesheet" href="github-markdown.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
 </head>
 <body>
 <div id="local-sidebar">
@@ -39,18 +57,26 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="Download.html">Download</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
+<li><a href="Server-security.html">Server security</a></li>
+<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
+<li><a href="Plugin-installation-&amp;-configuration.html">Plugin installation &amp; configuration</a></li>
 </ul></li>
+<li><a href="Docker.html">Docker</a></li>
+<li><a href="Plugin-list.html">Plugin list</a></li>
 <li><a href="Usage.html">Usage</a>
 <ul>
 <li><a href="Sharing-button.html">Sharing button</a> (bookmarklet)</li>
+<li><a href="Browsing-and-Searching.html">Browsing and Searching</a></li>
 <li><a href="Firefox-share.html">Firefox share</a></li>
 <li><a href="RSS-feeds.html">RSS feeds</a></li>
 </ul></li>
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
+<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
+<li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
 <li><a href="Datastore-hacks.html">Datastore hacks</a></li>
 </ul></li>
@@ -62,6 +88,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="Directory-structure.html">Directory structure</a></li>
 <li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
 <li><a href="Plugin-System.html">Plugin System</a></li>
+<li><a href="Release-Shaarli.html">Release Shaarli</a></li>
 <li><a href="Security.html">Security</a></li>
 <li><a href="Static-analysis.html">Static analysis</a></li>
 <li><a href="Theming.html">Theming</a></li>
@@ -77,32 +104,11 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </div>
 <h1 id="plugin-system">Plugin System</h1>
 <blockquote>
-<p>Note: Plugin current status - in developpement (not merged into master).</p>
+<p>Note: Plugin current status - in development (not merged into master).</p>
 </blockquote>
-<p><a href="#plugin-user-guide"><strong>I am a user.</strong> Plugin User Guide.</a><a href=".html"></a></p>
-<p><a href="#developper-api"><strong>I am a developper.</strong> Developper API.</a><a href=".html"></a></p>
+<p><a href="#developer-api"><strong>I am a developer.</strong> Developer API.</a><a href=".html"></a></p>
 <p><a href="#guide-for-template-designer"><strong>I am a template designer.</strong> Guide for template designer.</a><a href=".html"></a></p>
-<h2 id="plugin-user-guide">Plugin User Guide</h2>
-<h3 id="manage-plugins">Manage plugins</h3>
-<p>In <code>config.php</code>, change $GLOBALS<a href="&#39;ENABLED_PLUGINS&#39;]-array:.html">'config'['ENABLED_PLUGINS'] array:</a></p>
-<pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]](</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]</span>.html<span class="ot">)</span></code></pre>
-<p>Full list:</p>
-<pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]</span> = <span class="fu">array</span><span class="ot">(](</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]</span>-=-<span class="fu">array</span><span class="ot">(</span>.html<span class="ot">)</span>
-    <span class="st">&#39;qrcode&#39;</span><span class="ot">,</span> <span class="st">&#39;archiveorg&#39;</span><span class="ot">,</span> <span class="st">&#39;readityourself&#39;</span><span class="ot">,</span> <span class="st">&#39;playvideos&#39;</span><span class="ot">,</span>
-    <span class="st">&#39;wallabag&#39;</span><span class="ot">,</span> <span class="st">&#39;markdown&#39;</span><span class="ot">,</span> <span class="st">&#39;addlink_toolbar&#39;</span><span class="ot">,</span>
-<span class="ot">);</span></code></pre>
-<h3 id="list-of-plugins">List of plugins</h3>
-<p>Plugin maintained by the community:</p>
-<ul>
-<li>Archive.org - add a clickable icon to every link to archive.org.</li>
-<li>Addlink in toolbar - add a field to paste new links URL in toolbar.</li>
-<li>Markdown - write and display Shaare in Markdown.</li>
-<li>Play videos - popup to play all videos displayed in linklist.</li>
-<li>QRCode - add a clickable icon generating a QRCode for every link.</li>
-<li>ReadItYourself - add a clickable icon for ReadItYourself.</li>
-<li>Wallabag - add a clickable icon for Wallabag.</li>
-</ul>
-<h2 id="developper-api">Developper API</h2>
+<h2 id="developer-api">Developer API</h2>
 <h3 id="what-can-i-do-with-plugins">What can I do with plugins?</h3>
 <p>The plugin system let you:</p>
 <ul>
@@ -134,72 +140,86 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>Template placeholders are displayed in template in specific places.</p>
 <p>RainTPL displays every element contained in the placeholder's array. These element can be added by plugins.</p>
 <p>For example, let's add a value in the placeholder <code>top_placeholder</code> which is displayed at the top of my page:</p>
-<pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$data</span><span class="ot">[</span><span class="st">&#39;top_placeholder&#39;</span><span class="ot">[]</span> = <span class="st">&#39;My content&#39;</span><span class="ot">;](]</span>-=-<span class="st">&#39;My-content&#39;</span><span class="ot">;</span>.html<span class="ot">)</span>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$data</span><span class="ot">[</span><span class="st">&#39;top_placeholder&#39;</span><span class="ot">[]</span> = <span class="st">&#39;My content&#39;</span><span class="ot">;](]</span>-=-<span class="st">&#39;My-content&#39;</span><span class="ot">;</span>.html<span class="ot">)</span>
 <span class="co"># OR</span>
 <span class="fu">array_push</span><span class="ot">(</span><span class="kw">$data</span><span class="ot">[</span><span class="st">&#39;top_placeholder&#39;</span><span class="ot">],</span> <span class="st">&#39;My&#39;</span><span class="ot">,</span> <span class="st">&#39;content&#39;</span><span class="ot">);[](</span>.html<span class="ot">)</span>
 
-<span class="kw">return</span> <span class="kw">$data</span><span class="ot">;</span></code></pre>
+<span class="kw">return</span> <span class="kw">$data</span><span class="ot">;</span></code></pre></div>
 <h4 id="data-manipulation">Data manipulation</h4>
 <p>When a page is displayed, every variable send to the template engine is passed to plugins before that in <code>$data</code>.</p>
 <p>The data contained by this array can be altered before template rendering.</p>
 <p>For exemple, in linklist, it is possible to alter every title:</p>
-<pre class="sourceCode php"><code class="sourceCode php"><span class="co">// mind the reference if you want $data to be altered</span>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="co">// mind the reference if you want $data to be altered</span>
 <span class="kw">foreach</span> <span class="ot">(</span><span class="kw">$data</span><span class="ot">[</span><span class="st">&#39;links&#39;</span><span class="ot">]</span> <span class="kw">as</span> &amp;<span class="kw">$value</span><span class="ot">)</span> {<span class="ot">[](</span>.html<span class="ot">)</span>
     <span class="co">// String reverse every title.</span>
     <span class="kw">$value</span><span class="ot">[</span><span class="st">&#39;title&#39;</span><span class="ot">]</span> = <span class="fu">strrev</span><span class="ot">(</span><span class="kw">$value</span><span class="ot">[</span><span class="st">&#39;title&#39;</span><span class="ot">]);[](</span>.html<span class="ot">)</span>
 }
 
-<span class="kw">return</span> <span class="kw">$data</span><span class="ot">;</span></code></pre>
+<span class="kw">return</span> <span class="kw">$data</span><span class="ot">;</span></code></pre></div>
+<h3 id="metadata">Metadata</h3>
+<p>Every plugin needs a <code>&lt;plugin_name&gt;.meta</code> file, which is in fact an <code>.ini</code> file (<code>KEY=&quot;VALUE&quot;</code>), to be listed in plugin administration.</p>
+<p>Each file contain two keys:</p>
+<ul>
+<li><code>description</code>: plugin description</li>
+<li><code>parameters</code>: user parameter names, separated by a <code>;</code>.</li>
+</ul>
+<blockquote>
+<p>Note: In PHP, <code>parse_ini_file()</code> seems to want strings to be between by quotes <code>&quot;</code> in the ini file.</p>
+</blockquote>
 <h3 id="its-not-working">It's not working!</h3>
 <p>Use <code>demo_plugin</code> as a functional example. It covers most of the plugin system features.</p>
 <p>If it's still not working, please <a href="https://github.com/shaarli/Shaarli/issues/new">open an issue</a>.<a href=".html"></a></p>
 <h3 id="hooks">Hooks</h3>
-<table>
+<table style="width:42%;">
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 22%" />
+</colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Hooks</th>
+<th>Hooks</th>
 <th style="text-align: center;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><a href="#render_header">render_header</a></td>
+<td><a href="#render_header">render_header</a></td>
 <td style="text-align: center;">Allow plugin to add content in page headers.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="#render_includes">render_includes</a></td>
+<td><a href="#render_includes">render_includes</a></td>
 <td style="text-align: center;">Allow plugin to include their own CSS files.</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="#render_footer">render_footer</a></td>
+<td><a href="#render_footer">render_footer</a></td>
 <td style="text-align: center;">Allow plugin to add content in page footer and include their own JS files.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="#render_linklist">render_linklist</a></td>
+<td><a href="#render_linklist">render_linklist</a></td>
 <td style="text-align: center;">It allows to add content at the begining and end of the page, after every link displayed and to alter link data.</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="#render_editlink">render_editlink</a></td>
+<td><a href="#render_editlink">render_editlink</a></td>
 <td style="text-align: center;">Allow to add fields in the form, or display elements.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="#render_tools">render_tools</a></td>
+<td><a href="#render_tools">render_tools</a></td>
 <td style="text-align: center;">Allow to add content at the end of the page.</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="#render_picwall">render_picwall</a></td>
+<td><a href="#render_picwall">render_picwall</a></td>
 <td style="text-align: center;">Allow to add content at the top and bottom of the page.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="#render_tagcloud">render_tagcloud</a></td>
+<td><a href="#render_tagcloud">render_tagcloud</a></td>
 <td style="text-align: center;">Allow to add content at the top and bottom of the page.</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><a href="#render_daily">render_daily</a></td>
+<td><a href="#render_daily">render_daily</a></td>
 <td style="text-align: center;">Allow to add content at the top and bottom of the page, the bottom of each link and to alter data.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><a href="#savelink">savelink</a></td>
+<td><a href="#savelink">savelink</a></td>
 <td style="text-align: center;">Allow to alter the link being saved in the datastore.</td>
 </tr>
 </tbody>
@@ -393,6 +413,20 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li>tags</li>
 </ul>
 <h2 id="guide-for-template-designer">Guide for template designer</h2>
+<h3 id="plugin-administration">Plugin administration</h3>
+<p>Your theme must include a plugin administration page: <code>pluginsadmin.html</code>.</p>
+<blockquote>
+<p>Note: repo's template link needs to be added when the PR is merged.</p>
+</blockquote>
+<p>Use the default one as an example.</p>
+<p>Aside from classic RainTPL loops, plugins order is handle by JavaScript. You can just include <code>plugin_admin.js</code>, only if:</p>
+<ul>
+<li>you're using a table.</li>
+<li>you call orderUp() and orderUp() onclick on arrows.</li>
+<li>you add data-line and data-order to your rows.</li>
+</ul>
+<p>Otherwise, you can use your own JS as long as this field is send by the form:</p>
+<p><input type="hidden" name="order_{$key}" value="{$counter}"></p>
 <h3 id="placeholder-system">Placeholder system</h3>
 <p>In order to make plugins work with every custom themes, you need to add variable placeholder in your templates.</p>
 <p>It's a RainTPL loop like this:</p>
@@ -406,96 +440,104 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <pre><code>{loop=&quot;$plugins_header.buttons_toolbar&quot;}
     {$value}
 {/loop}</code></pre>
+<p>At the end of file, before clearing floating blocks:</p>
+<pre><code>{if=&quot;!empty($plugin_errors) &amp;&amp; isLoggedIn()&quot;}
+    &lt;ul class=&quot;errors&quot;&gt;
+        {loop=&quot;plugin_errors&quot;}
+            &lt;li&gt;{$value}&lt;/li&gt;
+        {/loop}
+    &lt;/ul&gt;
+{/if}</code></pre>
 <p><strong>includes.html</strong></p>
 <p>At the end of the file:</p>
-<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugins_includes.css_files&quot;}
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugins_includes.css_files&quot;}
 <span class="kw">&lt;link</span><span class="ot"> type=</span><span class="st">&quot;text/css&quot;</span><span class="ot"> rel=</span><span class="st">&quot;stylesheet&quot;</span><span class="ot"> href=</span><span class="st">&quot;{$value}#&quot;</span><span class="kw">/&gt;</span>
-{/loop}</code></pre>
+{/loop}</code></pre></div>
 <p><strong>page.footer.html</strong></p>
 <p>At the end of your footer notes:</p>
-<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugins_footer.text&quot;}
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugins_footer.text&quot;}
      {$value}
-{/loop}</code></pre>
+{/loop}</code></pre></div>
 <p>At the end of file:</p>
-<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugins_footer.js_files&quot;}
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugins_footer.js_files&quot;}
      <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;{$value}#&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
-{/loop}</code></pre>
+{/loop}</code></pre></div>
 <p><strong>linklist.html</strong></p>
 <p>After search fields:</p>
-<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugins_header.fields_toolbar&quot;}
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugins_header.fields_toolbar&quot;}
      {$value}
-{/loop}</code></pre>
+{/loop}</code></pre></div>
 <p>Before displaying the link list (after paging):</p>
-<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugin_start_zone&quot;}
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugin_start_zone&quot;}
      {$value}
-{/loop}</code></pre>
+{/loop}</code></pre></div>
 <p>For every links (icons):</p>
-<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$value.link_plugin&quot;}
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$value.link_plugin&quot;}
     <span class="kw">&lt;span&gt;</span>{$value}<span class="kw">&lt;/span&gt;</span>
-{/loop}</code></pre>
+{/loop}</code></pre></div>
 <p>Before end paging:</p>
-<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugin_end_zone&quot;}
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$plugin_end_zone&quot;}
      {$value}
-{/loop}</code></pre>
+{/loop}</code></pre></div>
 <p><strong>linklist.paging.html</strong></p>
 <p>After the &quot;private only&quot; icon:</p>
-<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$action_plugin&quot;}
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$action_plugin&quot;}
      {$value}
-{/loop}</code></pre>
+{/loop}</code></pre></div>
 <p><strong>editlink.html</strong></p>
 <p>After tags field:</p>
-<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$edit_link_plugin&quot;}
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$edit_link_plugin&quot;}
      {$value}
-{/loop}</code></pre>
+{/loop}</code></pre></div>
 <p><strong>tools.html</strong></p>
 <p>After the last tool:</p>
-<pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$tools_plugin&quot;}
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">{loop=&quot;$tools_plugin&quot;}
      {$value}
-{/loop}</code></pre>
+{/loop}</code></pre></div>
 <p><strong>picwall.html</strong></p>
 <p>Top:</p>
-<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_start_picwall&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_start_picwall&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
     {loop=&quot;$plugin_start_zone&quot;}
         {$value}
     {/loop}
-<span class="kw">&lt;/div&gt;</span></code></pre>
+<span class="kw">&lt;/div&gt;</span></code></pre></div>
 <p>Bottom:</p>
-<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_end_picwall&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_end_picwall&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
     {loop=&quot;$plugin_end_zone&quot;}
         {$value}
     {/loop}
-<span class="kw">&lt;/div&gt;</span></code></pre>
+<span class="kw">&lt;/div&gt;</span></code></pre></div>
 <p><strong>tagcloud.html</strong></p>
 <p>Top:</p>
-<pre class="sourceCode html"><code class="sourceCode html">   <span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_start_tagcloud&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">   <span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_start_tagcloud&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
         {loop=&quot;$plugin_start_zone&quot;}
             {$value}
         {/loop}
-    <span class="kw">&lt;/div&gt;</span></code></pre>
+    <span class="kw">&lt;/div&gt;</span></code></pre></div>
 <p>Bottom:</p>
-<pre class="sourceCode html"><code class="sourceCode html">    <span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_end_tagcloud&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">    <span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_end_tagcloud&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
         {loop=&quot;$plugin_end_zone&quot;}
             {$value}
         {/loop}
-    <span class="kw">&lt;/div&gt;</span></code></pre>
+    <span class="kw">&lt;/div&gt;</span></code></pre></div>
 <p><strong>daily.html</strong></p>
 <p>Top:</p>
-<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_start_picwall&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_start_picwall&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
      {loop=&quot;$plugin_start_zone&quot;}
          {$value}
      {/loop}
-<span class="kw">&lt;/div&gt;</span></code></pre>
+<span class="kw">&lt;/div&gt;</span></code></pre></div>
 <p>After every link:</p>
-<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;dailyEntryFooter&quot;</span><span class="kw">&gt;</span>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;dailyEntryFooter&quot;</span><span class="kw">&gt;</span>
      {loop=&quot;$link.link_plugin&quot;}
           {$value}
      {/loop}
-<span class="kw">&lt;/div&gt;</span></code></pre>
+<span class="kw">&lt;/div&gt;</span></code></pre></div>
 <p>Bottom:</p>
-<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_end_picwall&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;plugin_zone_end_picwall&quot;</span><span class="ot"> class=</span><span class="st">&quot;plugin_zone&quot;</span><span class="kw">&gt;</span>
     {loop=&quot;$plugin_end_zone&quot;}
         {$value}
     {/loop}
-<span class="kw">&lt;/div&gt;</span></code></pre>
+<span class="kw">&lt;/div&gt;</span></code></pre></div>
 </body>
 </html>

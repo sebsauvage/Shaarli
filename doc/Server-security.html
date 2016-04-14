@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Shaarli – Copy an existing installation over SSH and serve it locally</title>
+  <title>Shaarli – Server security</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 div.sourceCode { overflow-x: auto; }
@@ -102,65 +102,65 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul>
 </div>
-<h1 id="copy-an-existing-installation-over-ssh-and-serve-it-locally">Copy an existing installation over SSH and serve it locally</h1>
-<p>Example bash script:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/bash</span>
-<span class="co">#Description: Copy a Shaarli installation over SSH/SCP, serve it locally with php-cli</span>
-<span class="co">#Will create a local-shaarli/ directory when you run it, backup your Shaarli there, and serve it locally.</span>
-<span class="co">#Will NOT download linked pages. It&#39;s just a directly usable backup/copy/mirror of your Shaarli</span>
-<span class="co">#Requires: ssh, scp and a working SSH access to the server where your Shaarli is installed</span>
-<span class="co">#Usage: ./local-shaarli.sh</span>
-<span class="co">#Author: nodiscc (nodiscc@gmail.com)</span>
-<span class="co">#License: MIT (http://opensource.org/licenses/MIT)</span>
-<span class="kw">set</span> <span class="kw">-o</span> errexit
-<span class="kw">set</span> <span class="kw">-o</span> nounset
-
-<span class="co">##### CONFIG #################</span>
-<span class="co">#The port used by php&#39;s local server</span>
-<span class="ot">php_local_port=</span>7431
-
-<span class="co">#Name of the SSH server and path where Shaarli is installed</span>
-<span class="co">#TODO: pass these as command-line arguments</span>
-<span class="ot">remotehost=</span><span class="st">&quot;my.ssh.server&quot;</span>
-<span class="ot">remote_shaarli_dir=</span><span class="st">&quot;/var/www/shaarli&quot;</span>
-
-
-<span class="co">###### FUNCTIONS #############</span>
-<span class="fu">_main()</span> <span class="kw">{</span>
-    <span class="kw">_CBSyncShaarli</span>
-    <span class="kw">_CBServeShaarli</span>
-<span class="kw">}</span>
-
-<span class="fu">_CBSyncShaarli()</span> <span class="kw">{</span>
-    <span class="ot">remote_temp_dir=$(</span><span class="kw">ssh</span> <span class="ot">$remotehost</span> mktemp -d<span class="ot">)</span>
-    <span class="ot">remote_ssh_user=$(</span><span class="kw">ssh</span> <span class="ot">$remotehost</span> whoami<span class="ot">)</span>
-    <span class="kw">ssh</span> -t <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span> sudo cp -r <span class="st">&quot;</span><span class="ot">$remote_shaarli_dir</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span>
-    <span class="kw">ssh</span> -t <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span> sudo chown -R <span class="st">&quot;</span><span class="ot">$remote_ssh_user</span><span class="st">&quot;</span>:<span class="st">&quot;</span><span class="ot">$remote_ssh_user</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span>
-    <span class="kw">scp</span> -rq <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span>:<span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span> local-shaarli
-    <span class="kw">ssh</span> <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span> rm -r <span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span>
-<span class="kw">}</span>
-
-<span class="fu">_CBServeShaarli()</span> <span class="kw">{</span>
-    <span class="co">#TODO: allow serving a previously downloaded Shaarli</span>
-    <span class="co">#TODO: ask before overwriting local copy, if it exists</span>
-    <span class="kw">cd</span> local-shaarli/
-    <span class="kw">php</span> -S localhost:<span class="ot">${php_local_port}</span>
-    <span class="kw">echo</span> <span class="st">&quot;Please go to http://localhost:</span><span class="ot">${php_local_port}</span><span class="st">&quot;</span>
-<span class="kw">}</span>
-
-
-<span class="co">##### MAIN #################</span>
-
-<span class="kw">_main</span></code></pre></div>
-<p>This outputs:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">./local-shaarli.sh</span>
-<span class="kw">PHP</span> 5.6.0RC4 Development Server started at Mon Sep  1 21:56:19 2014
-<span class="kw">Listening</span> on http://localhost:7431
-<span class="kw">Document</span> root is /home/user/local-shaarli/shaarli
-<span class="kw">Press</span> Ctrl-C to quit.
-
-[<span class="kw">Mon</span> Sep  1 21:56:27 2014] ::1:57868 [200]: /[](.html)
-[<span class="kw">Mon</span> Sep  1 21:56:27 2014] ::1:57869 [200]: /index.html[](.html)
-[<span class="kw">Mon</span> Sep  1 21:56:37 2014] ::1:57881 [200]: /...[](.html)</code></pre></div>
+<h1 id="server-security">Server security</h1>
+<h2 id="php.ini">php.ini</h2>
+<p>PHP settings are defined in:</p>
+<ul>
+<li>a main configuration file, usually found under <code>/etc/php5/php.ini</code>; some distributions provide different configuration environments, e.g.
+<ul>
+<li><code>/etc/php5/php.ini</code> - used when running console scripts</li>
+<li><code>/etc/php5/apache2/php.ini</code> - used when a client requests PHP resources from Apache</li>
+<li><code>/etc/php5/php-fpm.conf</code> - used when PHP requests are proxied to PHP-FPM</li>
+</ul></li>
+<li>additional configuration files/entries, depending on the installed/enabled extensions:
+<ul>
+<li><code>/etc/php/conf.d/xdebug.ini</code></li>
+</ul></li>
+</ul>
+<h3 id="locate-.ini-files">Locate .ini files</h3>
+<h4 id="console-environment">Console environment</h4>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">php</span> --ini
+<span class="kw">Configuration</span> File (php.ini) <span class="kw">Path</span>: /etc/php
+<span class="kw">Loaded</span> Configuration File:         /etc/php/php.ini
+<span class="kw">Scan</span> for additional .ini files in: /etc/php/conf.d
+<span class="kw">Additional</span> .ini files parsed:      /etc/php/conf.d/xdebug.ini</code></pre></div>
+<h4 id="server-environment">Server environment</h4>
+<ul>
+<li>create a <code>phpinfo.php</code> script located in a path supported by the web server, e.g.
+<ul>
+<li>Apache (with user dirs enabled): <code>/home/myself/public_html/phpinfo.php</code></li>
+<li><code>/var/www/test/phpinfo.php</code></li>
+</ul></li>
+<li>make sure the script is readable by the web server user/group (usually, <code>www</code>, <code>www-data</code> or <code>httpd</code>)</li>
+<li>access the script from a web browser</li>
+<li><p>look at the <em>Loaded Configuration File</em> and <em>Scan this dir for additional .ini files</em> entries</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">&lt;?php</span> <span class="fu">phpinfo</span><span class="ot">();</span> <span class="kw">?&gt;</span></code></pre></div></li>
+</ul>
+<h2 id="fail2ban">fail2ban</h2>
+<p><code>fail2ban</code> is an intrusion prevention framework that reads server (Apache, SSH, etc.) and uses <code>iptables</code> profiles to block brute-force attempts:</p>
+<ul>
+<li><a href="http://www.fail2ban.org/wiki/index.php/Main_Page">Official website</a><a href=".html"></a></li>
+<li><a href="https://github.com/fail2ban/fail2ban">Source code</a><a href=".html"></a></li>
+</ul>
+<h3 id="read-shaarli-logs-to-ban-ips">Read Shaarli logs to ban IPs</h3>
+<p>Example configuration:</p>
+<ul>
+<li>allow 3 login attempts per IP address</li>
+<li>after 3 failures, permanently ban the corresponding IP adddress</li>
+</ul>
+<p><code>/etc/fail2ban/jail.local</code></p>
+<div class="sourceCode"><pre class="sourceCode ini"><code class="sourceCode ini"><span class="kw">[shaarli-auth][]</span><span class="dt">(.html)</span>
+<span class="dt">enabled  </span><span class="ot">=</span><span class="st"> </span><span class="kw">true</span>
+<span class="dt">port     </span><span class="ot">=</span><span class="st"> https,http</span>
+<span class="dt">filter   </span><span class="ot">=</span><span class="st"> shaarli-auth</span>
+<span class="dt">logpath  </span><span class="ot">=</span><span class="st"> /var/www/path/to/shaarli/data/log.txt</span>
+<span class="dt">maxretry </span><span class="ot">=</span><span class="st"> </span><span class="dv">3</span>
+<span class="dt">bantime </span><span class="ot">=</span><span class="st"> -</span><span class="dv">1</span></code></pre></div>
+<p><code>/etc/fail2ban/filter.d/shaarli-auth.conf</code></p>
+<div class="sourceCode"><pre class="sourceCode ini"><code class="sourceCode ini"><span class="kw">[INCLUDES][]</span><span class="dt">(.html)</span>
+<span class="dt">before </span><span class="ot">=</span><span class="st"> common.conf</span>
+<span class="kw">[Definition][]</span><span class="dt">(.html)</span>
+<span class="dt">failregex </span><span class="ot">=</span><span class="st"> \s-\s&lt;HOST&gt;\s-\sLogin failed for user.*$</span>
+<span class="dt">ignoreregex </span><span class="ot">=</span><span class="st"> </span></code></pre></div>
 </body>
 </html>

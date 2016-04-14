@@ -5,17 +5,18 @@
 
 Once your Shaarli instance is installed, the file `data/config.php` is generated:
 * it contains all settings, and can be edited to customize values
+* it defines which [plugins](Plugin-System) are enabled[](.html)
 * its values override those defined in `index.php`
 
 ## File and directory permissions
 The server process running Shaarli must have:
 - `read` access to the following resources:
-    - PHP scripts: `index.php`, `application/*.php`
-    - 3rd party PHP and Javascript libraries: `inc/*.php`, `inc\*.js`
+    - PHP scripts: `index.php`, `application/*.php`, `plugins/*.php`
+    - 3rd party PHP and Javascript libraries: `inc/*.php`, `inc/*.js`
     - static assets:
-        - CSS stylesheets: `inc\*.css`
-        - `images\*`
-    - RainTPL templates: `tpl\*.html`
+        - CSS stylesheets: `inc/*.css`
+        - `images/*`
+    - RainTPL templates: `tpl/*.html`
 - `read`, `write` and `execution` access to the following directories:
     - `cache` - thumbnail cache
     - `data` - link data store, configuration options
@@ -31,6 +32,8 @@ On a Linux distribution:
 - if you have a domain / subdomain to serve Shaarli, [configure the server](Server-configuration) accordingly[](.html)
 
 ## Example `data/config.php`
+See also [Plugin System](Plugin-System.html).
+
 ```php
 <?php 
 // User login
@@ -60,6 +63,10 @@ $GLOBALS['disablesessionprotection'] = false; [](.html)
 
 // Whether new links are private by default
 $GLOBALS['privateLinkByDefault'] = false;[](.html)
+
+// Enabled plugins
+// Note: each plugin may provide further settings through its own "config.php"
+$GLOBALS['config'['ENABLED_PLUGINS'] = array('addlink_toolbar', 'qrcode');]('ENABLED_PLUGINS']-=-array('addlink_toolbar',-'qrcode');.html)
 
 // Subdirectory where Shaarli stores its data files.
 // You can change it for better security.
@@ -133,5 +140,12 @@ $GLOBALS['config'['PUBSUBHUB_URL'] = '';]('PUBSUBHUB_URL']-=-'';.html)
 // Show an ATOM Feed button next to the Subscribe (RSS) button.
 // ATOM feeds are available at the address ?do=atom regardless of this option.
 $GLOBALS['config'['SHOW_ATOM'] = false;]('SHOW_ATOM']-=-false;.html)
+
+// Set this to true if the redirector requires encoded URL, false otherwise.
+$GLOBALS['config'['REDIRECTOR_URLENCODE'] = true;]('REDIRECTOR_URLENCODE']-=-true;.html)
 ?>
 ```
+
+## Additional configuration
+
+The playvideos plugin may require that you adapt your server's [Content Security Policy](https://github.com/shaarli/Shaarli/blob/master/plugins/playvideos/README.md#troubleshooting) configuration to work properly.[](.html)

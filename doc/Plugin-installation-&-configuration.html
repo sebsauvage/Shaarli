@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Shaarli – Copy an existing installation over SSH and serve it locally</title>
+  <title>Shaarli – Plugin installation & configuration</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 div.sourceCode { overflow-x: auto; }
@@ -102,65 +102,53 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul>
 </div>
-<h1 id="copy-an-existing-installation-over-ssh-and-serve-it-locally">Copy an existing installation over SSH and serve it locally</h1>
-<p>Example bash script:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/bash</span>
-<span class="co">#Description: Copy a Shaarli installation over SSH/SCP, serve it locally with php-cli</span>
-<span class="co">#Will create a local-shaarli/ directory when you run it, backup your Shaarli there, and serve it locally.</span>
-<span class="co">#Will NOT download linked pages. It&#39;s just a directly usable backup/copy/mirror of your Shaarli</span>
-<span class="co">#Requires: ssh, scp and a working SSH access to the server where your Shaarli is installed</span>
-<span class="co">#Usage: ./local-shaarli.sh</span>
-<span class="co">#Author: nodiscc (nodiscc@gmail.com)</span>
-<span class="co">#License: MIT (http://opensource.org/licenses/MIT)</span>
-<span class="kw">set</span> <span class="kw">-o</span> errexit
-<span class="kw">set</span> <span class="kw">-o</span> nounset
-
-<span class="co">##### CONFIG #################</span>
-<span class="co">#The port used by php&#39;s local server</span>
-<span class="ot">php_local_port=</span>7431
-
-<span class="co">#Name of the SSH server and path where Shaarli is installed</span>
-<span class="co">#TODO: pass these as command-line arguments</span>
-<span class="ot">remotehost=</span><span class="st">&quot;my.ssh.server&quot;</span>
-<span class="ot">remote_shaarli_dir=</span><span class="st">&quot;/var/www/shaarli&quot;</span>
-
-
-<span class="co">###### FUNCTIONS #############</span>
-<span class="fu">_main()</span> <span class="kw">{</span>
-    <span class="kw">_CBSyncShaarli</span>
-    <span class="kw">_CBServeShaarli</span>
-<span class="kw">}</span>
-
-<span class="fu">_CBSyncShaarli()</span> <span class="kw">{</span>
-    <span class="ot">remote_temp_dir=$(</span><span class="kw">ssh</span> <span class="ot">$remotehost</span> mktemp -d<span class="ot">)</span>
-    <span class="ot">remote_ssh_user=$(</span><span class="kw">ssh</span> <span class="ot">$remotehost</span> whoami<span class="ot">)</span>
-    <span class="kw">ssh</span> -t <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span> sudo cp -r <span class="st">&quot;</span><span class="ot">$remote_shaarli_dir</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span>
-    <span class="kw">ssh</span> -t <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span> sudo chown -R <span class="st">&quot;</span><span class="ot">$remote_ssh_user</span><span class="st">&quot;</span>:<span class="st">&quot;</span><span class="ot">$remote_ssh_user</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span>
-    <span class="kw">scp</span> -rq <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span>:<span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span> local-shaarli
-    <span class="kw">ssh</span> <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span> rm -r <span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span>
-<span class="kw">}</span>
-
-<span class="fu">_CBServeShaarli()</span> <span class="kw">{</span>
-    <span class="co">#TODO: allow serving a previously downloaded Shaarli</span>
-    <span class="co">#TODO: ask before overwriting local copy, if it exists</span>
-    <span class="kw">cd</span> local-shaarli/
-    <span class="kw">php</span> -S localhost:<span class="ot">${php_local_port}</span>
-    <span class="kw">echo</span> <span class="st">&quot;Please go to http://localhost:</span><span class="ot">${php_local_port}</span><span class="st">&quot;</span>
-<span class="kw">}</span>
-
-
-<span class="co">##### MAIN #################</span>
-
-<span class="kw">_main</span></code></pre></div>
-<p>This outputs:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">./local-shaarli.sh</span>
-<span class="kw">PHP</span> 5.6.0RC4 Development Server started at Mon Sep  1 21:56:19 2014
-<span class="kw">Listening</span> on http://localhost:7431
-<span class="kw">Document</span> root is /home/user/local-shaarli/shaarli
-<span class="kw">Press</span> Ctrl-C to quit.
-
-[<span class="kw">Mon</span> Sep  1 21:56:27 2014] ::1:57868 [200]: /[](.html)
-[<span class="kw">Mon</span> Sep  1 21:56:27 2014] ::1:57869 [200]: /index.html[](.html)
-[<span class="kw">Mon</span> Sep  1 21:56:37 2014] ::1:57881 [200]: /...[](.html)</code></pre></div>
+<h1 id="plugin-installation-configuration">Plugin installation &amp; configuration</h1>
+<h2 id="plugin-installation">Plugin installation</h2>
+<p>There is a bunch of plugins shipped with Shaarli, where there is nothing to do to install them.</p>
+<p>If you want to install a third party plugin:</p>
+<ul>
+<li>Download it.</li>
+<li>Put it in the <code>plugins</code> directory in Shaarli's installation folder.</li>
+<li>Make sure you put it correctly:</li>
+</ul>
+<pre><code>| index.php
+| plugins/
+|---| custom_plugin/
+|   |---| custom_plugin.php
+|   |---| ...
+</code></pre>
+<ul>
+<li>Make sure your webserver can read and write the files in your plugin folder.</li>
+</ul>
+<h2 id="plugin-configuration">Plugin configuration</h2>
+<p>In Shaarli's administration page (<code>Tools</code> link), go to <code>Plugin administration</code>.</p>
+<p>Here you can enable and disable all plugins available, and configure them.</p>
+<p><img src="https://camo.githubusercontent.com/5da68e191969007492ca0fbeb25f3b2357b748cc/687474703a2f2f692e696d6775722e636f6d2f766837544643712e706e67" alt="administration screenshot" /><a href=".html"></a></p>
+<h2 id="plugin-order">Plugin order</h2>
+<p>In the plugin administration page, you can move enabled plugins to the top or bottom of the list. The first plugins in the list will be processed first.</p>
+<p>This is important in case plugins are depending on each other. Read plugins README details for more information.</p>
+<p><strong>Use case</strong>: The (non existent) plugin <code>shaares_footer</code> adds a footer to every shaare in Markdown syntax. It needs to be processed <em>before</em> (higher in the list) the Markdown plugin. Otherwise its syntax won't be translated in HTML.</p>
+<h2 id="file-mode">File mode</h2>
+<p>Enabled plugin are stored in your <code>config.php</code> parameters file, under the <code>array</code>:</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]](</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]</span>.html<span class="ot">)</span></code></pre></div>
+<p>You can edit them manually here.<br />
+Example:</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]</span> = <span class="fu">array</span><span class="ot">(](</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]</span>-=-<span class="fu">array</span><span class="ot">(</span>.html<span class="ot">)</span>
+    <span class="st">&#39;qrcode&#39;</span><span class="ot">,</span> 
+    <span class="st">&#39;archiveorg&#39;</span><span class="ot">,</span>
+    <span class="st">&#39;wallabag&#39;</span><span class="ot">,</span>
+    <span class="st">&#39;markdown&#39;</span><span class="ot">,</span>
+<span class="ot">);</span></code></pre></div>
+<h3 id="plugin-usage">Plugin usage</h3>
+<p>Usage of each plugin is documented in it's README file:</p>
+<ul>
+<li><code>addlink-toolbar</code>: Adds the addlink input on the linklist page</li>
+<li><code>archiveorg</code>: For each link, add an Archive.org icon</li>
+<li><a href="https://github.com/shaarli/Shaarli/blob/master/plugins/markdown/README.md"><code>markdown</code></a>: Render shaare description with Markdown syntax.<a href=".html"></a></li>
+<li><a href="https://github.com/shaarli/Shaarli/blob/master/plugins/playvideos/README.md"><code>playvideos</code></a>: Add a button in the toolbar allowing to watch all videos.<a href=".html"></a></li>
+<li><code>qrcode</code>: For each link, add a QRCode icon.</li>
+<li><code>readityourself</code>: For each link, add a ReadItYourself icon to save the shaared URL</li>
+<li><a href="https://github.com/shaarli/Shaarli/blob/master/plugins/wallabag/README.md"><code>wallabag</code></a>: For each link, add a Wallabag icon to save it in your instance.<a href=".html"></a></li>
+</ul>
 </body>
 </html>

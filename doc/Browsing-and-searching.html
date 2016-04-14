@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Shaarli – Firefox share</title>
+  <title>Shaarli – Browsing and searching</title>
   <style type="text/css">code{white-space: pre;}</style>
   <link rel="stylesheet" href="github-markdown.css">
   <!--[if lt IE 9]>
@@ -65,32 +65,20 @@
 </ul></li>
 </ul>
 </div>
-<h1 id="firefox-share">Firefox share</h1>
-<h3 id="add-shaarli-as-a-sharing-service-to-firefox">Add Shaarli as a sharing service to Firefox</h3>
-<ul>
-<li>Open your Shaarli and <code>Login</code></li>
-<li>Click the <code>Tools</code> button in the top bar</li>
-<li>Click the <code>✚Add to Firefox social</code> button and accept the activation.</li>
-</ul>
-<h3 id="sharing-links-using-firefox-share">Sharing links using Firefox share</h3>
-<ul>
-<li>Add the sharing service as described above</li>
-<li>When you are visiting a webpage you would like to share with Shaarli, click the Firefox <em>Share</em> button <a href="images/firefoxshare.png.html">images/firefoxshare.png</a></li>
-<li>You can edit your link before and after saving, just like the bookmarklet above.</li>
-</ul>
-<table style="width:100%;">
-<colgroup>
-<col style="width: 8%" />
-<col style="width: 91%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th></th>
-<th>Your Shaarli instance must be hosted on an HTTPS (SSL/TLS secure connection) enabled server for Firefox Share to work. Firefox Share will not work over plain HTTP connections.</th>
-</tr>
-</thead>
-<tbody>
-</tbody>
-</table>
+<h1 id="browsing-and-searching">Browsing and searching</h1>
+<h1 id="browsing-and-searching-1">Browsing and Searching</h1>
+<p>Status: DRAFT</p>
+<p><embed src="(http://pix.toile-libre.org/upload/original/1455571378.png).html" /></p>
+<h2 id="plain-text-search">Plain text search</h2>
+<p>Use the <code>Search text</code> field to search in <em>any</em> of the fields of all links (Title, URL, Description...)</p>
+<p><strong>Exclude text/tags:</strong> Use the <code>-</code> operator before a word or tag (example <code>-uninteresting</code>) to prevent entries containing (or tagged) <code>uninteresting</code> from showing up in the search results.</p>
+<p><strong>Exact text search:</strong> Use double-quotes (example <code>&quot;exact search&quot;</code>) to search for the exact expression.</p>
+<p>Both exclude patterns and exact searches can be combined with normal searches (example <code>&quot;exact search&quot; term otherterm -notthis &quot;very exact&quot; stuff -notagain</code>)</p>
+<h2 id="tags-search">Tags search</h2>
+<p>Use the <code>Filter by tags</code> field to restrict displayed links to entries tagged with one or multiple tags (use space to separate tags).</p>
+<p><strong>Hidden tags:</strong> Tags starting with a dot <code>.</code> (example <code>.secret</code>) are private. They can only be seen and searched when logged in.</p>
+<p>Alternatively you can use the <code>Tag cloud</code> to discover all tags and click on any of them to display related links.</p>
+<h2 id="filtering-rss-feedspicture-wall">Filtering RSS feeds/Picture wall</h2>
+<p>RSS feeds can also be restricted to only return items matching a text/tag search: see <a href="RSS-feeds.html">RSS feeds</a>.</p>
 </body>
 </html>

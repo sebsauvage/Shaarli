@@ -4,31 +4,49 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Shaarli - Server configuration</title>
+  <title>Shaarli – Server configuration</title>
   <style type="text/css">code{white-space: pre;}</style>
-  <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
   <style type="text/css">
+div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
 table.sourceCode { width: 100%; line-height: 100%; }
 td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
 td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; }
-code > span.dt { color: #902000; }
-code > span.dv { color: #40a070; }
-code > span.bn { color: #40a070; }
-code > span.fl { color: #40a070; }
-code > span.ch { color: #4070a0; }
-code > span.st { color: #4070a0; }
-code > span.co { color: #60a0b0; font-style: italic; }
-code > span.ot { color: #007020; }
-code > span.al { color: #ff0000; font-weight: bold; }
-code > span.fu { color: #06287e; }
-code > span.er { color: #ff0000; font-weight: bold; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
   </style>
   <link rel="stylesheet" href="github-markdown.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
 </head>
 <body>
 <div id="local-sidebar">
@@ -39,18 +57,26 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="Download.html">Download</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
+<li><a href="Server-security.html">Server security</a></li>
+<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
+<li><a href="Plugin-installation-&amp;-configuration.html">Plugin installation &amp; configuration</a></li>
 </ul></li>
+<li><a href="Docker.html">Docker</a></li>
+<li><a href="Plugin-list.html">Plugin list</a></li>
 <li><a href="Usage.html">Usage</a>
 <ul>
 <li><a href="Sharing-button.html">Sharing button</a> (bookmarklet)</li>
+<li><a href="Browsing-and-Searching.html">Browsing and Searching</a></li>
 <li><a href="Firefox-share.html">Firefox share</a></li>
 <li><a href="RSS-feeds.html">RSS feeds</a></li>
 </ul></li>
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
+<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
+<li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
 <li><a href="Datastore-hacks.html">Datastore hacks</a></li>
 </ul></li>
@@ -62,6 +88,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="Directory-structure.html">Directory structure</a></li>
 <li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
 <li><a href="Plugin-System.html">Plugin System</a></li>
+<li><a href="Release-Shaarli.html">Release Shaarli</a></li>
 <li><a href="Security.html">Security</a></li>
 <li><a href="Static-analysis.html">Static analysis</a></li>
 <li><a href="Theming.html">Theming</a></li>
@@ -79,10 +106,10 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p><em>Example virtual host configurations for popular web servers</em></p>
 <ul>
 <li><a href="#apache">Apache</a><a href=".html"></a></li>
-<li><a href="#lighthttpd">LightHttpd</a> (empty)<a href=".html"></a></li>
 <li><a href="#nginx">Nginx</a><a href=".html"></a></li>
 </ul>
 <h2 id="prerequisites">Prerequisites</h2>
+<h3 id="shaarli">Shaarli</h3>
 <ul>
 <li>Shaarli is installed in a directory readable/writeable by the user</li>
 <li>the correct read/write permissions have been granted to the web server <em>user and/or group</em></li>
@@ -90,25 +117,35 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li>a key pair (public, private) and a certificate have been generated</li>
 <li>the appropriate server SSL extension is installed and active</li>
 </ul>
+<h3 id="https-tls-and-self-signed-certificates">HTTPS, TLS and self-signed certificates</h3>
 <p>Related guides:</p>
 <ul>
 <li><a href="http://www.xenocafe.com/tutorials/linux/centos/openssl/self_signed_certificates/index.php">How to Create Self-Signed SSL Certificates with OpenSSL</a><a href=".html"></a></li>
 <li><a href="https://workaround.org/certificate-authority">How do I create my own Certificate Authority?</a><a href=".html"></a></li>
+<li>Generate a self-signed certificate (will trigger browser warnings) with apache2: <code>make-ssl-cert generate-default-snakeoil --force-overwrite</code> will create <code>/etc/ssl/certs/ssl-cert-snakeoil.pem</code> and <code>/etc/ssl/private/ssl-cert-snakeoil.key</code></li>
 </ul>
+<h3 id="proxies">Proxies</h3>
+<p>If Shaarli is served behind a proxy (i.e. there is a proxy server between clients and the web server hosting Shaarli), please refer to the proxy server documentation for proper configuration. In particular, you have to ensure that the following server variables are properly set:</p>
+<ul>
+<li><code>X-Forwarded-Proto</code>;</li>
+<li><code>X-Forwarded-Host</code>;</li>
+<li><code>X-Forwarded-For</code>.</li>
+</ul>
+<p>See also <a href="https://github.com/shaarli/Shaarli/issues?utf8=%E2%9C%93&amp;q=label%3Aproxy+">proxy-related</a> issues.<a href=".html"></a></p>
 <h2 id="apache">Apache</h2>
 <h3 id="minimal">Minimal</h3>
-<pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:80</span><span class="fu">&gt;</span>
+<div class="sourceCode"><pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:80</span><span class="fu">&gt;</span>
     ServerName<span class="st">   shaarli.my-domain.org</span>
     DocumentRoot<span class="st"> /absolute/path/to/shaarli/</span>
-<span class="fu">&lt;/VirtualHost&gt;</span></code></pre>
+<span class="fu">&lt;/VirtualHost&gt;</span></code></pre></div>
 <h3 id="debug---log-all-the-things">Debug - Log all the things!</h3>
 <p>This configuration will log both Apache and PHP errors, which may prove useful to identify server configuration errors.</p>
 <p>See:</p>
 <ul>
 <li><a href="http://stackoverflow.com/q/176">Apache/PHP - error log per VirtualHost</a> (StackOverflow)<a href=".html"></a></li>
-<li><a href="PHP:%20php_value%20vs%20php_admin_value%20and%20the%20use%20of%20php_flag%20explained">PHP: php_value vs php_admin_value and the use of php_flag explained</a><a href=".html"></a></li>
+<li><a href="https://ma.ttias.be/php-php_value-vs-php_admin_value-and-the-use-of-php_flag-explained/">PHP: php_value vs php_admin_value and the use of php_flag explained</a><a href=".html"></a></li>
 </ul>
-<pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:80</span><span class="fu">&gt;</span>
+<div class="sourceCode"><pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:80</span><span class="fu">&gt;</span>
     ServerName<span class="st">   shaarli.my-domain.org</span>
     DocumentRoot<span class="st"> /absolute/path/to/shaarli/</span>
 
@@ -120,24 +157,24 @@ code > span.er { color: #ff0000; font-weight: bold; }
     php_flag  display_errors on
     php_value error_reporting 2147483647
     php_value error_log /var/log/apache2/shaarli-php-error.log
-<span class="fu">&lt;/VirtualHost&gt;</span></code></pre>
+<span class="fu">&lt;/VirtualHost&gt;</span></code></pre></div>
 <h3 id="standard---keep-access-and-error-logs">Standard - Keep access and error logs</h3>
-<pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:80</span><span class="fu">&gt;</span>
+<div class="sourceCode"><pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:80</span><span class="fu">&gt;</span>
     ServerName<span class="st">   shaarli.my-domain.org</span>
     DocumentRoot<span class="st"> /absolute/path/to/shaarli/</span>
 
     <span class="ot">LogLevel</span><span class="ch">  </span><span class="kw">warn</span>
     ErrorLog<span class="st">  /var/log/apache2/shaarli-error.log</span>
     CustomLog<span class="st"> /var/log/apache2/shaarli-access.log combined</span>
-<span class="fu">&lt;/VirtualHost&gt;</span></code></pre>
+<span class="fu">&lt;/VirtualHost&gt;</span></code></pre></div>
 <h3 id="paranoid---redirect-http-80-to-https-443">Paranoid - Redirect HTTP (:80) to HTTPS (:443)</h3>
 <p>See <a href="https://wiki.mozilla.org/Security/Server_Side_TLS#Apache">Server-side TLS</a> (Mozilla).<a href=".html"></a></p>
-<pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:443</span><span class="fu">&gt;</span>
+<div class="sourceCode"><pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:443</span><span class="fu">&gt;</span>
     ServerName<span class="st">   shaarli.my-domain.org</span>
     DocumentRoot<span class="st"> /absolute/path/to/shaarli/</span>
 
     <span class="ot">SSLEngine</span><span class="ch">             </span><span class="kw">on</span>
-    SSLCertificateFile<span class="st">    /absolute/path/to/the/website/certificate.crt</span>
+    SSLCertificateFile<span class="st">    /absolute/path/to/the/website/certificate.pem</span>
     SSLCertificateKeyFile<span class="st"> /absolute/path/to/the/website/key.key</span>
 
     <span class="fu">&lt;Directory</span><span class="ot"> /absolute/path/to/shaarli/</span><span class="fu">&gt;</span>
@@ -158,7 +195,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
     <span class="ot">LogLevel</span><span class="ch">  </span><span class="kw">warn</span>
     ErrorLog<span class="st">  /var/log/apache2/shaarli-error.log</span>
     CustomLog<span class="st"> /var/log/apache2/shaarli-access.log combined</span>
-<span class="fu">&lt;/VirtualHost&gt;</span></code></pre>
+<span class="fu">&lt;/VirtualHost&gt;</span></code></pre></div>
 <h2 id="lighthttpd">LightHttpd</h2>
 <h2 id="nginx">Nginx</h2>
 <h3 id="foreword">Foreword</h3>
@@ -204,13 +241,13 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><code>user:group = john:users</code>,</li>
 </ul>
 <p>which corresponds to the following service configuration:</p>
-<pre class="sourceCode ini"><code class="sourceCode ini"><span class="co">; /etc/php/php-fpm.conf</span>
+<div class="sourceCode"><pre class="sourceCode ini"><code class="sourceCode ini"><span class="co">; /etc/php/php-fpm.conf</span>
 <span class="dt">user </span><span class="ot">=</span><span class="st"> john</span>
 <span class="dt">group </span><span class="ot">=</span><span class="st"> users</span>
 
 <span class="kw">[...][]</span><span class="dt">(.html)</span>
 <span class="dt">listen.owner </span><span class="ot">=</span><span class="st"> john</span>
-<span class="dt">listen.group </span><span class="ot">=</span><span class="st"> users</span></code></pre>
+<span class="dt">listen.group </span><span class="ot">=</span><span class="st"> users</span></code></pre></div>
 <pre class="nginx"><code># /etc/nginx/nginx.conf
 user john users;
 
@@ -374,5 +411,10 @@ http {
         include php.conf;
     }
 }</code></pre>
+<h2 id="restricting-search-engines-and-web-crawler-traffic">Restricting search engines and web crawler traffic</h2>
+<p>Creating a <code>robots.txt</code> witht he following contents at the root of your Shaarli installation will prevent &quot;honest&quot; web crawlers from indexing each and every link and Daily page from a Shaarli instance, thus getting rid of a certain amount of unsollicited network traffic.</p>
+<pre><code>User-agent: *
+Disallow: /</code></pre>
+<p>See: <a href="http://www.robotstxt.org/" class="uri">http://www.robotstxt.org/</a>, <a href="http://www.robotstxt.org/robotstxt.html" class="uri">http://www.robotstxt.org/robotstxt.html</a>, <a href="http://www.robotstxt.org/meta.html" class="uri">http://www.robotstxt.org/meta.html</a></p>
 </body>
 </html>

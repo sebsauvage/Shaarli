@@ -4,31 +4,49 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Shaarli - GnuPG signature</title>
+  <title>Shaarli – GnuPG signature</title>
   <style type="text/css">code{white-space: pre;}</style>
-  <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
   <style type="text/css">
+div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
 table.sourceCode { width: 100%; line-height: 100%; }
 td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
 td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; }
-code > span.dt { color: #902000; }
-code > span.dv { color: #40a070; }
-code > span.bn { color: #40a070; }
-code > span.fl { color: #40a070; }
-code > span.ch { color: #4070a0; }
-code > span.st { color: #4070a0; }
-code > span.co { color: #60a0b0; font-style: italic; }
-code > span.ot { color: #007020; }
-code > span.al { color: #ff0000; font-weight: bold; }
-code > span.fu { color: #06287e; }
-code > span.er { color: #ff0000; font-weight: bold; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
   </style>
   <link rel="stylesheet" href="github-markdown.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
 </head>
 <body>
 <div id="local-sidebar">
@@ -39,18 +57,26 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="Download.html">Download</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
+<li><a href="Server-security.html">Server security</a></li>
+<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
+<li><a href="Plugin-installation-&amp;-configuration.html">Plugin installation &amp; configuration</a></li>
 </ul></li>
+<li><a href="Docker.html">Docker</a></li>
+<li><a href="Plugin-list.html">Plugin list</a></li>
 <li><a href="Usage.html">Usage</a>
 <ul>
 <li><a href="Sharing-button.html">Sharing button</a> (bookmarklet)</li>
+<li><a href="Browsing-and-Searching.html">Browsing and Searching</a></li>
 <li><a href="Firefox-share.html">Firefox share</a></li>
 <li><a href="RSS-feeds.html">RSS feeds</a></li>
 </ul></li>
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
+<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
+<li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
 <li><a href="Datastore-hacks.html">Datastore hacks</a></li>
 </ul></li>
@@ -62,6 +88,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="Directory-structure.html">Directory structure</a></li>
 <li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
 <li><a href="Plugin-System.html">Plugin System</a></li>
+<li><a href="Release-Shaarli.html">Release Shaarli</a></li>
 <li><a href="Security.html">Security</a></li>
 <li><a href="Static-analysis.html">Static analysis</a></li>
 <li><a href="Theming.html">Theming</a></li>
@@ -78,10 +105,13 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h1 id="gnupg-signature">GnuPG signature</h1>
 <h2 id="introduction">Introduction</h2>
 <h3 id="pgp-and-gpg">PGP and GPG</h3>
-<p><a href="https://gnupg.org/">Gnu Privacy Guard</a> (GnuPG) is an Open Source implementation of the <a href="https://en.wikipedia.org/wiki/Pretty_Good_Privacy#OpenPGP">Pretty Good [](.html)<br />Privacy</a> (OpenPGP) specification. Its main purposes are digital authentication,<br />signature and encryption.</p>
+<p><a href="https://gnupg.org/">Gnu Privacy Guard</a> (GnuPG) is an Open Source implementation of the <a href="https://en.wikipedia.org/wiki/Pretty_Good_Privacy#OpenPGP">Pretty Good [](.html)<br />
+Privacy</a> (OpenPGP) specification. Its main purposes are digital authentication,<br />
+signature and encryption.</p>
 <p>It is often used by the <a href="https://en.wikipedia.org/wiki/Free_and_open-source_software">FLOSS</a> community to verify:<a href=".html"></a></p>
 <ul>
-<li>Linux package signatures: Debian <a href="https://wiki.debian.org/SecureApt">SecureApt</a>, ArchLinux <a href="https://www.archlinux.org/master-keys/">Master [](.html)<br />Keys</a></li>
+<li>Linux package signatures: Debian <a href="https://wiki.debian.org/SecureApt">SecureApt</a>, ArchLinux <a href="https://www.archlinux.org/master-keys/">Master [](.html)<br />
+Keys</a></li>
 <li><a href="https://en.wikipedia.org/wiki/Revision_control">SCM</a> releases &amp; maintainer identity<a href=".html"></a></li>
 </ul>
 <h3 id="trust">Trust</h3>
@@ -95,9 +125,12 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="https://en.wikipedia.org/wiki/Web_of_trust">Web of trust</a><a href=".html"></a></li>
 </ul>
 <h2 id="generate-a-gpg-key">Generate a GPG key</h2>
-<p>See <a href="http://stackoverflow.com/a/16725717">Generating a GPG key for Git tagging</a>.<a href=".html"></a></p>
+<ul>
+<li><a href="http://stackoverflow.com/a/16725717">Generating a GPG key for Git tagging</a> (StackOverflow)<a href=".html"></a></li>
+<li><a href="https://help.github.com/articles/generating-a-gpg-key/">Generating a GPG key</a> (GitHub)<a href=".html"></a></li>
+</ul>
 <h3 id="gpg---provide-identity-information">gpg - provide identity information</h3>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">gpg</span> --gen-key
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">gpg</span> --gen-key
 
 <span class="kw">gpg</span> (GnuPG) <span class="kw">2.1.6;</span> <span class="kw">Copyright</span> (C) <span class="kw">2015</span> Free Software Foundation, Inc.
 <span class="kw">This</span> is free software: you are free to change and redistribute it.
@@ -116,7 +149,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <span class="kw">We</span> need to generate a lot of random bytes. It is a good idea to perform
 <span class="kw">some</span> other action (type on the keyboard, move the mouse, utilize the
 <span class="kw">disks</span>) <span class="kw">during</span> the prime generation<span class="kw">;</span> <span class="kw">this</span> gives the random number
-<span class="kw">generator</span> a better chance to gain enough entropy.</code></pre>
+<span class="kw">generator</span> a better chance to gain enough entropy.</code></pre></div>
 <h3 id="gpg---entropy-interlude">gpg - entropy interlude</h3>
 <p>At this point, you will:</p>
 <ul>
@@ -124,7 +157,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li>be asked to use your machine's input devices (mouse, keyboard, etc.) to generate random entropy; this step <em>may take some time</em></li>
 </ul>
 <h3 id="gpg---key-creation-confirmation">gpg - key creation confirmation</h3>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">gpg</span>: key A9D53A3E marked as ultimately trusted
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">gpg</span>: key A9D53A3E marked as ultimately trusted
 <span class="kw">public</span> and secret key created and signed.
 
 <span class="kw">gpg</span>: checking the trustdb
@@ -133,69 +166,11 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <span class="kw">pub</span>   rsa2048/A9D53A3E 2015-07-31
       <span class="kw">Key</span> fingerprint = AF2A 5381 E54B 2FD2 14C4  A9A3 0E35 ACA4 A9D5 3A3E
 <span class="kw">uid</span>       [ultimate] Marvin the Paranoid Android <span class="kw">&lt;</span>marvin@h2g2.net<span class="kw">&gt;</span>[](.html)
-<span class="kw">sub</span>   rsa2048/8C0EACF1 2015-07-31</code></pre>
+<span class="kw">sub</span>   rsa2048/8C0EACF1 2015-07-31</code></pre></div>
 <h3 id="gpg---submit-your-public-key-to-a-pgp-server-optional">gpg - submit your public key to a PGP server (Optional)</h3>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">gpg</span> --keyserver pgp.mit.edu --send-keys A9D53A3E
-<span class="kw">gpg</span>: sending key A9D53A3E to hkp server pgp.mit.edu</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">gpg</span> --keyserver pgp.mit.edu --send-keys A9D53A3E
+<span class="kw">gpg</span>: sending key A9D53A3E to hkp server pgp.mit.edu</code></pre></div>
 <h2 id="create-and-push-a-gpg-signed-tag">Create and push a GPG-signed tag</h2>
-<p>See <a href="http://git-scm.com/book/en/v2/Distributed-Git-Maintaining-a-Project#Tagging-Your-Releases">Git - Maintaining a project - Tagging your [](.html)<br />releases</a>.</p>
-<h3 id="prerequisites">Prerequisites</h3>
-<p>This guide assumes that you have:</p>
-<ul>
-<li>a GPG key matching your GitHub authentication credentials
-<ul>
-<li>i.e., the email address identified by the GPG key is the same as the one in your <code>~/.gitconfig</code></li>
-</ul></li>
-<li>a GitHub fork of Shaarli</li>
-<li>a local clone of your Shaarli fork, with the following remotes:
-<ul>
-<li><code>origin</code> pointing to your GitHub fork</li>
-<li><code>upstream</code> pointing to the main Shaarli repository</li>
-</ul></li>
-<li>maintainer permissions on the main Shaarli repository (to push the signed tag)</li>
-</ul>
-<h3 id="bump-shaarlis-version">Bump Shaarli's version</h3>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> /path/to/shaarli
-
-<span class="co"># create a new branch</span>
-$ <span class="kw">git</span> fetch upstream
-$ <span class="kw">git</span> checkout upstream/master -b v0.5.0
-
-<span class="co"># bump the version number</span>
-$ <span class="kw">vim</span> index.php shaarli_version.php
-
-<span class="co"># commit the changes</span>
-$ <span class="kw">git</span> add index.php shaarli_version.php
-$ <span class="kw">git</span> commit -s -m <span class="st">&quot;Bump version to v0.5.0&quot;</span>
-
-<span class="co"># push the commit on your GitHub fork</span>
-$ <span class="kw">git</span> push origin v0.5.0</code></pre>
-<h3 id="create-and-merge-a-pull-request">Create and merge a Pull Request</h3>
-<p>This one is pretty straightforward ;-)</p>
-<h3 id="create-and-push-a-signed-tag">Create and push a signed tag</h3>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># update your local copy</span>
-$ <span class="kw">git</span> checkout master
-$ <span class="kw">git</span> fetch upstream
-$ <span class="kw">git</span> pull upstream master
-
-<span class="co"># create a signed tag</span>
-$ <span class="kw">git</span> tag -s -m <span class="st">&quot;Release v0.5.0&quot;</span> v0.5.0
-
-<span class="co"># push it to &quot;upstream&quot;</span>
-$ <span class="kw">git</span> push --tags upstream</code></pre>
-<h3 id="verify-a-signed-tag">Verify a signed tag</h3>
-<p><a href="https://github.com/shaarli/Shaarli/releases/tag/v0.5.0"><code>v0.5.0</code></a> is the first GPG-signed tag pushed on the Community Shaarli.<a href=".html"></a></p>
-<p>Let's have a look at its signature!</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> /path/to/shaarli
-$ <span class="kw">git</span> fetch upstream
-
-<span class="co"># get the SHA1 reference of the tag</span>
-$ <span class="kw">git</span> show-ref tags/v0.5.0
-<span class="kw">f7762cf803f03f5caf4b8078359a63783d0090c1</span> refs/tags/v0.5.0
-
-<span class="co"># verify the tag signature information</span>
-$ <span class="kw">git</span> verify-tag f7762cf803f03f5caf4b8078359a63783d0090c1
-<span class="kw">gpg</span>: Signature made Thu 30 Jul 2015 11:46:34 CEST using RSA key ID 4100DF6F
-<span class="kw">gpg</span>: Good signature from <span class="st">&quot;VirtualTam &lt;virtualtam@flibidi.net&gt;&quot;</span> [ultimate][](.html)</code></pre>
+<p>See <a href="Release-Shaarli.html">Release Shaarli</a>.</p>
 </body>
 </html>

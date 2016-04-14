@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Shaarli - RSS feeds</title>
+  <title>Shaarli – RSS feeds</title>
   <style type="text/css">code{white-space: pre;}</style>
-  <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
   <link rel="stylesheet" href="github-markdown.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
 </head>
 <body>
 <div id="local-sidebar">
@@ -20,18 +20,26 @@
 <li><a href="Download.html">Download</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
+<li><a href="Server-security.html">Server security</a></li>
+<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
+<li><a href="Plugin-installation-&amp;-configuration.html">Plugin installation &amp; configuration</a></li>
 </ul></li>
+<li><a href="Docker.html">Docker</a></li>
+<li><a href="Plugin-list.html">Plugin list</a></li>
 <li><a href="Usage.html">Usage</a>
 <ul>
 <li><a href="Sharing-button.html">Sharing button</a> (bookmarklet)</li>
+<li><a href="Browsing-and-Searching.html">Browsing and Searching</a></li>
 <li><a href="Firefox-share.html">Firefox share</a></li>
 <li><a href="RSS-feeds.html">RSS feeds</a></li>
 </ul></li>
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
+<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
+<li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
 <li><a href="Datastore-hacks.html">Datastore hacks</a></li>
 </ul></li>
@@ -43,6 +51,7 @@
 <li><a href="Directory-structure.html">Directory structure</a></li>
 <li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
 <li><a href="Plugin-System.html">Plugin System</a></li>
+<li><a href="Release-Shaarli.html">Release Shaarli</a></li>
 <li><a href="Security.html">Security</a></li>
 <li><a href="Static-analysis.html">Static analysis</a></li>
 <li><a href="Theming.html">Theming</a></li>
@@ -57,6 +66,20 @@
 </ul>
 </div>
 <h1 id="rss-feeds">RSS feeds</h1>
+<h3 id="feeds-options">Feeds options</h3>
+<p>Feeds are available in ATOM with <code>?do=atom</code> and RSS with <code>do=RSS</code>.</p>
+<p>Options:</p>
+<ul>
+<li>You can use <code>permalinks</code> in the feed URL to get permalink to Shaares instead of direct link to shaared URL.
+<ul>
+<li>E.G. <code>https://my.shaarli.domain/?do=atom&amp;permalinks</code>.</li>
+</ul></li>
+<li>You can use <code>nb</code> parameter in the feed URL to specify the number of Shaares you want in a feed (default if not specified: <code>50</code>). The keyword <code>all</code> is available if you want everything.
+<ul>
+<li><code>https://my.shaarli.domain/?do=atom&amp;permalinks&amp;nb=42</code></li>
+<li><code>https://my.shaarli.domain/?do=atom&amp;permalinks&amp;nb=all</code></li>
+</ul></li>
+</ul>
 <h3 id="rss-feeds-or-picture-wall-for-a-specific-searchtag">RSS Feeds or Picture Wall for a specific search/tag</h3>
 <p>It is possible to filter RSS/ATOM feeds and Picture Wall on a Shaarli to <strong>only display results of a specific search, or for a specific tag</strong>.</p>
 <p>For example, if you want to subscribe only to links tagged <code>photography</code>:</p>
