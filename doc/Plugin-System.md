@@ -1,44 +1,11 @@
 #Plugin System
-> Note: Plugin current status - in developpement (not merged into master).
+> Note: Plugin current status - in development (not merged into master).
 
-[**I am a user.** Plugin User Guide.](#plugin-user-guide)[](.html)
-
-[**I am a developper.** Developper API.](#developper-api)[](.html)
+[**I am a developer.** Developer API.](#developer-api)[](.html)
 
 [**I am a template designer.** Guide for template designer.](#guide-for-template-designer)[](.html)
 
-## Plugin User Guide
-
-### Manage plugins
-
-In `config.php`, change $GLOBALS['config'['ENABLED_PLUGINS'] array:]('ENABLED_PLUGINS']-array:.html)
-
-```php
-$GLOBALS['config'['ENABLED_PLUGINS']]('ENABLED_PLUGINS'].html)
-```
-
-Full list:
-
-```php
-$GLOBALS['config'['ENABLED_PLUGINS'] = array(]('ENABLED_PLUGINS']-=-array(.html)
-    'qrcode', 'archiveorg', 'readityourself', 'playvideos',
-    'wallabag', 'markdown', 'addlink_toolbar',
-);
-```
-
-### List of plugins
-
-Plugin maintained by the community:
-
-  * Archive.org - add a clickable icon to every link to archive.org.
-  * Addlink in toolbar - add a field to paste new links URL in toolbar.
-  * Markdown - write and display Shaare in Markdown.
-  * Play videos - popup to play all videos displayed in linklist.
-  * QRCode - add a clickable icon generating a QRCode for every link.
-  * ReadItYourself - add a clickable icon for ReadItYourself.
-  * Wallabag - add a clickable icon for Wallabag.
-
-## Developper API
+## Developer API
 
 ### What can I do with plugins?
 
@@ -122,6 +89,17 @@ foreach ($data['links'] as &$value) {[](.html)
 
 return $data;
 ```
+
+### Metadata
+
+Every plugin needs a `<plugin_name>.meta` file, which is in fact an `.ini` file (`KEY="VALUE"`), to be listed in plugin administration.
+
+Each file contain two keys:
+
+  * `description`: plugin description
+  * `parameters`: user parameter names, separated by a `;`.
+
+> Note: In PHP, `parse_ini_file()` seems to want strings to be between by quotes `"` in the ini file.
 
 ### It's not working!
 
@@ -399,6 +377,24 @@ Allow to alter the link being saved in the datastore.
 
 ## Guide for template designer
 
+### Plugin administration
+
+Your theme must include a plugin administration page: `pluginsadmin.html`.
+
+> Note: repo's template link needs to be added when the PR is merged.
+
+Use the default one as an example.
+
+Aside from classic RainTPL loops, plugins order is handle by JavaScript. You can just include `plugin_admin.js`, only if:
+
+  * you're using a table.
+  * you call orderUp() and orderUp() onclick on arrows.
+  * you add data-line and data-order to your rows.
+
+Otherwise, you can use your own JS as long as this field is send by the form:
+
+<input type="hidden" name="order_{$key}" value="{$counter}">
+
 ### Placeholder system
 
 In order to make plugins work with every custom themes, you need to add variable placeholder in your templates. 
@@ -420,6 +416,16 @@ At the end of the menu:
     {loop="$plugins_header.buttons_toolbar"}
         {$value}
     {/loop}
+
+At the end of file, before clearing floating blocks:
+
+    {if="!empty($plugin_errors) && isLoggedIn()"}
+        <ul class="errors">
+            {loop="plugin_errors"}
+                <li>{$value}</li>
+            {/loop}
+        </ul>
+    {/if}
 
 **includes.html**
 

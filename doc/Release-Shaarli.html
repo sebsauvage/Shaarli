@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Shaarli – Copy an existing installation over SSH and serve it locally</title>
+  <title>Shaarli – Release Shaarli</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 div.sourceCode { overflow-x: auto; }
@@ -102,65 +102,70 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul>
 </div>
-<h1 id="copy-an-existing-installation-over-ssh-and-serve-it-locally">Copy an existing installation over SSH and serve it locally</h1>
-<p>Example bash script:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/bash</span>
-<span class="co">#Description: Copy a Shaarli installation over SSH/SCP, serve it locally with php-cli</span>
-<span class="co">#Will create a local-shaarli/ directory when you run it, backup your Shaarli there, and serve it locally.</span>
-<span class="co">#Will NOT download linked pages. It&#39;s just a directly usable backup/copy/mirror of your Shaarli</span>
-<span class="co">#Requires: ssh, scp and a working SSH access to the server where your Shaarli is installed</span>
-<span class="co">#Usage: ./local-shaarli.sh</span>
-<span class="co">#Author: nodiscc (nodiscc@gmail.com)</span>
-<span class="co">#License: MIT (http://opensource.org/licenses/MIT)</span>
-<span class="kw">set</span> <span class="kw">-o</span> errexit
-<span class="kw">set</span> <span class="kw">-o</span> nounset
+<h1 id="release-shaarli">Release Shaarli</h1>
+<p>See <a href="http://git-scm.com/book/en/v2/Distributed-Git-Maintaining-a-Project#Tagging-Your-Releases">Git - Maintaining a project - Tagging your [](.html)<br />
+releases</a>.</p>
+<h3 id="prerequisites">Prerequisites</h3>
+<p>This guide assumes that you have:</p>
+<ul>
+<li>a GPG key matching your GitHub authentication credentials
+<ul>
+<li>i.e., the email address identified by the GPG key is the same as the one in your <code>~/.gitconfig</code></li>
+</ul></li>
+<li>a GitHub fork of Shaarli</li>
+<li>a local clone of your Shaarli fork, with the following remotes:
+<ul>
+<li><code>origin</code> pointing to your GitHub fork</li>
+<li><code>upstream</code> pointing to the main Shaarli repository</li>
+</ul></li>
+<li>maintainer permissions on the main Shaarli repository (to push the signed tag)</li>
+<li><a href="http://pandoc.org/">Pandoc</a> needs to be installed.<a href=".html"></a></li>
+</ul>
+<h3 id="bump-shaarlis-version">Bump Shaarli's version</h3>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> /path/to/shaarli
 
-<span class="co">##### CONFIG #################</span>
-<span class="co">#The port used by php&#39;s local server</span>
-<span class="ot">php_local_port=</span>7431
+<span class="co"># create a new branch</span>
+$ <span class="kw">git</span> fetch upstream
+$ <span class="kw">git</span> checkout upstream/master -b v0.5.0
 
-<span class="co">#Name of the SSH server and path where Shaarli is installed</span>
-<span class="co">#TODO: pass these as command-line arguments</span>
-<span class="ot">remotehost=</span><span class="st">&quot;my.ssh.server&quot;</span>
-<span class="ot">remote_shaarli_dir=</span><span class="st">&quot;/var/www/shaarli&quot;</span>
+<span class="co"># bump the version number</span>
+$ <span class="kw">vim</span> index.php shaarli_version.php
 
+<span class="co"># rebuild the documentation from the wiki</span>
+$ <span class="kw">make</span> htmldoc
 
-<span class="co">###### FUNCTIONS #############</span>
-<span class="fu">_main()</span> <span class="kw">{</span>
-    <span class="kw">_CBSyncShaarli</span>
-    <span class="kw">_CBServeShaarli</span>
-<span class="kw">}</span>
+<span class="co"># commit the changes</span>
+$ <span class="kw">git</span> add index.php shaarli_version.php doc
+$ <span class="kw">git</span> commit -s -m <span class="st">&quot;Bump version to v0.5.0&quot;</span>
 
-<span class="fu">_CBSyncShaarli()</span> <span class="kw">{</span>
-    <span class="ot">remote_temp_dir=$(</span><span class="kw">ssh</span> <span class="ot">$remotehost</span> mktemp -d<span class="ot">)</span>
-    <span class="ot">remote_ssh_user=$(</span><span class="kw">ssh</span> <span class="ot">$remotehost</span> whoami<span class="ot">)</span>
-    <span class="kw">ssh</span> -t <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span> sudo cp -r <span class="st">&quot;</span><span class="ot">$remote_shaarli_dir</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span>
-    <span class="kw">ssh</span> -t <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span> sudo chown -R <span class="st">&quot;</span><span class="ot">$remote_ssh_user</span><span class="st">&quot;</span>:<span class="st">&quot;</span><span class="ot">$remote_ssh_user</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span>
-    <span class="kw">scp</span> -rq <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span>:<span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span> local-shaarli
-    <span class="kw">ssh</span> <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span> rm -r <span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span>
-<span class="kw">}</span>
+<span class="co"># push the commit on your GitHub fork</span>
+$ <span class="kw">git</span> push origin v0.5.0</code></pre></div>
+<h3 id="create-and-merge-a-pull-request">Create and merge a Pull Request</h3>
+<p>This one is pretty straightforward ;-)</p>
+<h3 id="create-and-push-a-signed-tag">Create and push a signed tag</h3>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># update your local copy</span>
+$ <span class="kw">git</span> checkout master
+$ <span class="kw">git</span> fetch upstream
+$ <span class="kw">git</span> pull upstream master
 
-<span class="fu">_CBServeShaarli()</span> <span class="kw">{</span>
-    <span class="co">#TODO: allow serving a previously downloaded Shaarli</span>
-    <span class="co">#TODO: ask before overwriting local copy, if it exists</span>
-    <span class="kw">cd</span> local-shaarli/
-    <span class="kw">php</span> -S localhost:<span class="ot">${php_local_port}</span>
-    <span class="kw">echo</span> <span class="st">&quot;Please go to http://localhost:</span><span class="ot">${php_local_port}</span><span class="st">&quot;</span>
-<span class="kw">}</span>
+<span class="co"># create a signed tag</span>
+$ <span class="kw">git</span> tag -s -m <span class="st">&quot;Release v0.5.0&quot;</span> v0.5.0
 
+<span class="co"># push it to &quot;upstream&quot;</span>
+$ <span class="kw">git</span> push --tags upstream</code></pre></div>
+<h3 id="verify-a-signed-tag">Verify a signed tag</h3>
+<p><a href="https://github.com/shaarli/Shaarli/releases/tag/v0.5.0"><code>v0.5.0</code></a> is the first GPG-signed tag pushed on the Community Shaarli.<a href=".html"></a></p>
+<p>Let's have a look at its signature!</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> /path/to/shaarli
+$ <span class="kw">git</span> fetch upstream
 
-<span class="co">##### MAIN #################</span>
+<span class="co"># get the SHA1 reference of the tag</span>
+$ <span class="kw">git</span> show-ref tags/v0.5.0
+<span class="kw">f7762cf803f03f5caf4b8078359a63783d0090c1</span> refs/tags/v0.5.0
 
-<span class="kw">_main</span></code></pre></div>
-<p>This outputs:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">./local-shaarli.sh</span>
-<span class="kw">PHP</span> 5.6.0RC4 Development Server started at Mon Sep  1 21:56:19 2014
-<span class="kw">Listening</span> on http://localhost:7431
-<span class="kw">Document</span> root is /home/user/local-shaarli/shaarli
-<span class="kw">Press</span> Ctrl-C to quit.
-
-[<span class="kw">Mon</span> Sep  1 21:56:27 2014] ::1:57868 [200]: /[](.html)
-[<span class="kw">Mon</span> Sep  1 21:56:27 2014] ::1:57869 [200]: /index.html[](.html)
-[<span class="kw">Mon</span> Sep  1 21:56:37 2014] ::1:57881 [200]: /...[](.html)</code></pre></div>
+<span class="co"># verify the tag signature information</span>
+$ <span class="kw">git</span> verify-tag f7762cf803f03f5caf4b8078359a63783d0090c1
+<span class="kw">gpg</span>: Signature made Thu 30 Jul 2015 11:46:34 CEST using RSA key ID 4100DF6F
+<span class="kw">gpg</span>: Good signature from <span class="st">&quot;VirtualTam &lt;virtualtam@flibidi.net&gt;&quot;</span> [ultimate][](.html)</code></pre></div>
 </body>
 </html>

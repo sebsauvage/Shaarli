@@ -15,6 +15,10 @@ _TODO: contact repos owners to see if they'd like to standardize their work with
 - [Shaarli.fr/my](https://www.shaarli.fr/my.php) - Unofficial, unsupported (old fork) hosted Shaarlis provider, courtesy of [DMeloni](https://github.com/DMeloni)[](.html)
 - [Shaarli Community](http://shaarferme.etudiant-libre.fr.nf/index.php) - Unknown Shaarli hoster (unsupported, old fork)[](.html)
 
+### Third party plugins
+
+ * [autosave](https://github.com/kalvn/shaarli-plugin-autosave) - periodically saves contents of the _Edit link/Save link_ dialog to your browser's LocalStorage to avoid data loss when typing a long entry.[](.html)
+
 ### Themes
 See [Theming](Theming.html) for the list of community-contributed themes, and an installation guide.
 
@@ -27,7 +31,7 @@ See [Theming](Theming.html) for the list of community-contributed themes, and an
 - [Self dead link](https://github.com/qwertygc/shaarli-dev-code/blob/master/self-dead-link.php) - Detect dead links on shaarli. This version use the database of shaarli. An [another version](https://github.com/qwertygc/shaarli-dev-code/blob/master/dead-link.php), can be used for others shaarli (but use most ressources).[](.html)
 
 ### Mobile Apps
-- [github.com/mro/ShaarliOS](https://github.com/mro/ShaarliOS#the-missing-ios-8-share-extension-to-shaarli) iOS share extension - see [#308](https://github.com/shaarli/Shaarli/issues/308#issuecomment-132303709) for some promo codes,[](.html)
+- [Shaarli💫](http://app.mro.name/Shaarli💫) iOS share extension - see [#308](https://github.com/shaarli/Shaarli/issues/308#issuecomment-184592070) for some promo codes,[](.html)
 - [Shaarli for Android](http://sebsauvage.net/links/?ZAyDzg) - Android application that adds Shaarli as a sharing provider[](.html)
 - [Shaarlier for Android](https://github.com/dimtion/Shaarlier) - Android application to simply add links directly into your Shaarli[](.html)
 

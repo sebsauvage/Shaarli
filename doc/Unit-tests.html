@@ -4,31 +4,49 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Shaarli - Unit tests</title>
+  <title>Shaarli – Unit tests</title>
   <style type="text/css">code{white-space: pre;}</style>
-  <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
   <style type="text/css">
+div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
 table.sourceCode { width: 100%; line-height: 100%; }
 td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
 td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; }
-code > span.dt { color: #902000; }
-code > span.dv { color: #40a070; }
-code > span.bn { color: #40a070; }
-code > span.fl { color: #40a070; }
-code > span.ch { color: #4070a0; }
-code > span.st { color: #4070a0; }
-code > span.co { color: #60a0b0; font-style: italic; }
-code > span.ot { color: #007020; }
-code > span.al { color: #ff0000; font-weight: bold; }
-code > span.fu { color: #06287e; }
-code > span.er { color: #ff0000; font-weight: bold; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
   </style>
   <link rel="stylesheet" href="github-markdown.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
 </head>
 <body>
 <div id="local-sidebar">
@@ -39,18 +57,26 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="Download.html">Download</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
+<li><a href="Server-security.html">Server security</a></li>
+<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
+<li><a href="Plugin-installation-&amp;-configuration.html">Plugin installation &amp; configuration</a></li>
 </ul></li>
+<li><a href="Docker.html">Docker</a></li>
+<li><a href="Plugin-list.html">Plugin list</a></li>
 <li><a href="Usage.html">Usage</a>
 <ul>
 <li><a href="Sharing-button.html">Sharing button</a> (bookmarklet)</li>
+<li><a href="Browsing-and-Searching.html">Browsing and Searching</a></li>
 <li><a href="Firefox-share.html">Firefox share</a></li>
 <li><a href="RSS-feeds.html">RSS feeds</a></li>
 </ul></li>
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
+<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
+<li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
 <li><a href="Datastore-hacks.html">Datastore hacks</a></li>
 </ul></li>
@@ -62,6 +88,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="Directory-structure.html">Directory structure</a></li>
 <li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
 <li><a href="Plugin-System.html">Plugin System</a></li>
+<li><a href="Release-Shaarli.html">Release Shaarli</a></li>
 <li><a href="Security.html">Security</a></li>
 <li><a href="Static-analysis.html">Static analysis</a></li>
 <li><a href="Theming.html">Theming</a></li>
@@ -84,27 +111,27 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li>a local version, downloadable <a href="https://getcomposer.org/download/">here</a><a href=".html"></a></li>
 </ul>
 <h4 id="sample-usage">Sample usage</h4>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># system-wide version</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># system-wide version</span>
 $ <span class="kw">composer</span> install
 $ <span class="kw">composer</span> update
 
 <span class="co"># local version</span>
 $ <span class="kw">php</span> composer.phar self-update
 $ <span class="kw">php</span> composer.phar install
-$ <span class="kw">php</span> composer.phar update</code></pre>
+$ <span class="kw">php</span> composer.phar update</code></pre></div>
 <h4 id="install-shaarli-dev-dependencies">Install Shaarli dev dependencies</h4>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> /path/to/shaarli
-$ <span class="kw">composer</span> update</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> /path/to/shaarli
+$ <span class="kw">composer</span> update</code></pre></div>
 <h4 id="install-and-enable-xdebug-to-generate-phpunit-coverage-reports">Install and enable Xdebug to generate PHPUnit coverage reports</h4>
 <p>For Debian-based distros:</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">aptitude</span> install php5-xdebug</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">aptitude</span> install php5-xdebug</code></pre></div>
 <p>For ArchLinux:</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pacman</span> -S xdebug</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pacman</span> -S xdebug</code></pre></div>
 <p>Then add the following line to <code>/etc/php/php.ini</code>:</p>
-<pre class="sourceCode ini"><code class="sourceCode ini"><span class="dt">zend_extension</span><span class="ot">=</span><span class="st">xdebug.so</span></code></pre>
+<div class="sourceCode"><pre class="sourceCode ini"><code class="sourceCode ini"><span class="dt">zend_extension</span><span class="ot">=</span><span class="st">xdebug.so</span></code></pre></div>
 <h4 id="run-unit-tests">Run unit tests</h4>
 <p>Successful test suite:</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">make</span> test
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">make</span> test
 
 <span class="kw">-------</span>
 <span class="kw">PHPUNIT</span>
@@ -117,9 +144,9 @@ $ <span class="kw">composer</span> update</code></pre>
 
 <span class="kw">Time</span>: 759 ms, Memory: 8.25Mb
 
-<span class="kw">OK</span> (36 tests, 65 assertions)</code></pre>
+<span class="kw">OK</span> (36 tests, 65 assertions)</code></pre></div>
 <p>Test suite with failures and errors:</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">make</span> test
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">make</span> test
 <span class="kw">-------</span>
 <span class="kw">PHPUNIT</span>
 <span class="kw">-------</span>
@@ -165,7 +192,7 @@ DBTest.php on line 79 and defined
 <span class="kw">/home/virtualtam/public_html/shaarli/tests</span>/LinkDBTest.php:<span class="kw">133</span>
 
 <span class="kw">FAILURES</span>!
-<span class="kw">Tests</span>: 36, Assertions: 63, Errors: 1, Failures: 2.</code></pre>
+<span class="kw">Tests</span>: 36, Assertions: 63, Errors: 1, Failures: 2.</code></pre></div>
 <h4 id="test-results-and-coverage">Test results and coverage</h4>
 <p>By default, PHPUnit will run all suitable tests found under the <code>tests</code> directory.</p>
 <p>Each test has 3 possible outcomes:</p>

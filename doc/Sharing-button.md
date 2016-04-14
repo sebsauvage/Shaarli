@@ -17,3 +17,15 @@ _This bookmarklet button is compatible with Firefox, Opera, Chrome and Safari. U
   * You will be able to edit this link later using the ![(https://raw.githubusercontent.com/shaarli/Shaarli/master/images/edit_icon.png) edit button.]((https://raw.githubusercontent.com/shaarli/Shaarli/master/images/edit_icon.png)-edit-button..html)
   * You can also check the “Private” box so that the link is saved but only visible to you. 
  * Click `Save`.**Voilà! Your link is now shared.**
+
+### Troubleshooting: The bookmarklet doesn't work with a few website (e.g. Github.com)
+
+Websites which enforce Content Security Policy (CSP), such as github.com, disallow usage of bookmarklets. Unfortunatly, there is nothing Shaarli can do about it.
+
+See [#196](https://github.com/shaarli/Shaarli#196).[](.html)
+
+There is an open bug for both Firefox and Chromium:
+
+  * https://bugzilla.mozilla.org/show_bug.cgi?id=866522
+  * https://code.google.com/p/chromium/issues/detail?id=233903
+

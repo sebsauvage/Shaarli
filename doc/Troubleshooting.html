@@ -4,31 +4,49 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Shaarli - Troubleshooting</title>
+  <title>Shaarli – Troubleshooting</title>
   <style type="text/css">code{white-space: pre;}</style>
-  <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
   <style type="text/css">
+div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
 table.sourceCode { width: 100%; line-height: 100%; }
 td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
 td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; }
-code > span.dt { color: #902000; }
-code > span.dv { color: #40a070; }
-code > span.bn { color: #40a070; }
-code > span.fl { color: #40a070; }
-code > span.ch { color: #4070a0; }
-code > span.st { color: #4070a0; }
-code > span.co { color: #60a0b0; font-style: italic; }
-code > span.ot { color: #007020; }
-code > span.al { color: #ff0000; font-weight: bold; }
-code > span.fu { color: #06287e; }
-code > span.er { color: #ff0000; font-weight: bold; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
   </style>
   <link rel="stylesheet" href="github-markdown.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
 </head>
 <body>
 <div id="local-sidebar">
@@ -39,18 +57,26 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="Download.html">Download</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
+<li><a href="Server-security.html">Server security</a></li>
+<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
+<li><a href="Plugin-installation-&amp;-configuration.html">Plugin installation &amp; configuration</a></li>
 </ul></li>
+<li><a href="Docker.html">Docker</a></li>
+<li><a href="Plugin-list.html">Plugin list</a></li>
 <li><a href="Usage.html">Usage</a>
 <ul>
 <li><a href="Sharing-button.html">Sharing button</a> (bookmarklet)</li>
+<li><a href="Browsing-and-Searching.html">Browsing and Searching</a></li>
 <li><a href="Firefox-share.html">Firefox share</a></li>
 <li><a href="RSS-feeds.html">RSS feeds</a></li>
 </ul></li>
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
+<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
+<li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
 <li><a href="Datastore-hacks.html">Datastore hacks</a></li>
 </ul></li>
@@ -62,6 +88,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="Directory-structure.html">Directory structure</a></li>
 <li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
 <li><a href="Plugin-System.html">Plugin System</a></li>
+<li><a href="Release-Shaarli.html">Release Shaarli</a></li>
 <li><a href="Security.html">Security</a></li>
 <li><a href="Static-analysis.html">Static analysis</a></li>
 <li><a href="Theming.html">Theming</a></li>
@@ -131,23 +158,24 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>Login form is protected against brute force attacks: 4 failed logins will ban the IP address from login for 30 minutes. Banned IPs can still browse links.</p>
 <p>To remove the current IP bans, delete the file <code>data/ipbans.php</code></p>
 <h3 id="list-of-all-login-attempts">List of all login attempts</h3>
-<p>The file <code>data/log.txt</code> shows all logins (successful or failed) and bans/lifted bans.<br />Search for <code>failed</code> in this file to look for unauthorized login attempts.</p>
+<p>The file <code>data/log.txt</code> shows all logins (successful or failed) and bans/lifted bans.<br />
+Search for <code>failed</code> in this file to look for unauthorized login attempts.</p>
 <h2 id="hosting-problems">Hosting problems</h2>
 <h3 id="old-php-versions">Old PHP versions</h3>
 <ul>
 <li>On <strong>free.fr</strong> : free.fr now support php 5.6.x(<a href="http://les.pages.perso.chez.free.fr/migrations/php5v6.io">link</a>)and so support now the tag autocompletion but you have to do the following : At the root of your webspace create a <code>sessions</code> directory and a <code>.htaccess</code> file containing:<a href=".html"></a></li>
 </ul>
-<pre class="sourceCode ini"><code class="sourceCode ini"><span class="dt">&lt;IfDefine Free&gt;</span>
+<div class="sourceCode"><pre class="sourceCode ini"><code class="sourceCode ini"><span class="dt">&lt;IfDefine Free&gt;</span>
 <span class="dt">php56 1</span>
-<span class="dt">&lt;/IfDefine&gt;</span></code></pre>
+<span class="dt">&lt;/IfDefine&gt;</span></code></pre></div>
 <ul>
 <li>If you have an error such as: <code>Parse error: syntax error, unexpected '=', expecting '(' in /links/index.php on line xxx</code>, it means that your host is using php4, not php5. Shaarli requires php 5.1. Try changing the file extension to <code>.php5</code></li>
 <li>On <strong>1and1</strong> : If you add the link from the page (and not from the bookmarklet), Shaarli will no be able to get the title of the page. You will have to enter it manually. (Because they have disabled the ability to download a file through HTTP).</li>
 <li>If you have the error <code>Warning: file_get_contents() [function.file-get-contents]: URL file-access is disabled in the server configuration in /…/index.php on line xxx</code>, it means that your host has disabled the ability to fetch a file by HTTP in the php config (Typically in 1and1 hosting). Bad host. Change host. Or comment the following lines:<a href=".html"></a></li>
 </ul>
-<pre class="sourceCode php"><code class="sourceCode php"><span class="co">//list($status,$headers,$data) = getHTTP($url,4); // Short timeout to keep the application responsive.</span>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="co">//list($status,$headers,$data) = getHTTP($url,4); // Short timeout to keep the application responsive.</span>
 <span class="co">// FIXME: Decode charset according to charset specified in either 1) HTTP response headers or 2) &lt;head&gt; in html </span>
-<span class="co">//if (strpos($status,&#39;200 OK&#39;)) $title=html_extract_title($data);</span></code></pre>
+<span class="co">//if (strpos($status,&#39;200 OK&#39;)) $title=html_extract_title($data);</span></code></pre></div>
 <ul>
 <li>On hosts which forbid outgoing HTTP requests (such as free.fr), some thumbnails will not work.</li>
 <li>On <strong>lost-oasis</strong>, RSS doesn't work correctly, because of this message at the begining of the RSS/ATOM feed : <code>&lt;? // tout ce qui est charge ici (generalement des includes et require) est charge en permanence. ?&gt;</code>. To fix this, remove this message from <code>php-include/prepend.php</code></li>

@@ -2,19 +2,29 @@
 *Example virtual host configurations for popular web servers*
 
 - [Apache](#apache)[](.html)
-- [LightHttpd](#lighthttpd) (empty)[](.html)
 - [Nginx](#nginx)[](.html)
 
 ## Prerequisites
+### Shaarli
 * Shaarli is installed in a directory readable/writeable by the user
 * the correct read/write permissions have been granted to the web server _user and/or group_
 * for HTTPS / SSL:
  * a key pair (public, private) and a certificate have been generated
  * the appropriate server SSL extension is installed and active
 
+### HTTPS, TLS and self-signed certificates
 Related guides:
 * [How to Create Self-Signed SSL Certificates with OpenSSL](http://www.xenocafe.com/tutorials/linux/centos/openssl/self_signed_certificates/index.php)[](.html)
 * [How do I create my own Certificate Authority?](https://workaround.org/certificate-authority)[](.html)
+* Generate a self-signed certificate (will trigger browser warnings) with apache2: `make-ssl-cert generate-default-snakeoil --force-overwrite` will create `/etc/ssl/certs/ssl-cert-snakeoil.pem` and `/etc/ssl/private/ssl-cert-snakeoil.key`
+
+### Proxies
+If Shaarli is served behind a proxy (i.e. there is a proxy server between clients and the web server hosting Shaarli), please refer to the proxy server documentation for proper configuration. In particular, you have to ensure that the following server variables are properly set:
+- `X-Forwarded-Proto`;
+- `X-Forwarded-Host`;
+- `X-Forwarded-For`.
+
+See also [proxy-related](https://github.com/shaarli/Shaarli/issues?utf8=%E2%9C%93&q=label%3Aproxy+) issues.[](.html)
 
 ## Apache
 ### Minimal
@@ -29,7 +39,7 @@ This configuration will log both Apache and PHP errors, which may prove useful t
 
 See:
 * [Apache/PHP - error log per VirtualHost](http://stackoverflow.com/q/176) (StackOverflow)[](.html)
-* [PHP: php_value vs php_admin_value and the use of php_flag explained](PHP: php_value vs php_admin_value and the use of php_flag explained)[](.html)
+* [PHP: php_value vs php_admin_value and the use of php_flag explained](https://ma.ttias.be/php-php_value-vs-php_admin_value-and-the-use-of-php_flag-explained/)[](.html)
 
 ```apache
 <VirtualHost *:80>
@@ -68,7 +78,7 @@ See [Server-side TLS](https://wiki.mozilla.org/Security/Server_Side_TLS#Apache) 
     DocumentRoot /absolute/path/to/shaarli/
 
     SSLEngine             on
-    SSLCertificateFile    /absolute/path/to/the/website/certificate.crt
+    SSLCertificateFile    /absolute/path/to/the/website/certificate.pem
     SSLCertificateKeyFile /absolute/path/to/the/website/key.key
 
     <Directory /absolute/path/to/shaarli/>
@@ -324,3 +334,15 @@ http {
     }
 }
 ```
+
+## Restricting search engines and web crawler traffic
+
+Creating a `robots.txt` witht he following contents at the root of your Shaarli installation will prevent "honest" web crawlers from indexing each and every link and Daily page from a Shaarli instance, thus getting rid of a certain amount of unsollicited network traffic.
+
+```
+User-agent: *
+Disallow: /
+```
+
+See: http://www.robotstxt.org/, http://www.robotstxt.org/robotstxt.html, http://www.robotstxt.org/meta.html
+
