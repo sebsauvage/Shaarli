@@ -322,7 +322,7 @@ class LinkFilter
         $tagsOut = $casesensitive ? $tags : mb_convert_case($tags, MB_CASE_LOWER, 'UTF-8');
         $tagsOut = str_replace(',', ' ', $tagsOut);
 
-        return array_filter(explode(' ', trim($tagsOut)), 'strlen');
+        return array_values(array_filter(explode(' ', trim($tagsOut)), 'strlen'));
     }
 }
 
