@@ -1519,7 +1519,7 @@ function renderPage()
 
     // -------- User want to post a new link: Display link edit form.
     if (isset($_GET['post'])) {
-        $url = cleanup_url(escape($_GET['post']));
+        $url = cleanup_url($_GET['post']);
 
         $link_is_new = false;
         // Check if URL is not already in database (in this case, we will edit the existing link)
@@ -1544,8 +1544,8 @@ function renderPage()
                     // Extract title.
                     $title = html_extract_title($content);
                     // Re-encode title in utf-8 if necessary.
-                    if (! empty($title) && $charset != 'utf-8') {
-                        $title = mb_convert_encoding($title, $charset, 'utf-8');
+                    if (! empty($title) && strtolower($charset) != 'utf-8') {
+                        $title = mb_convert_encoding($title, 'utf-8', $charset);
                     }
                 }
             }
@@ -1554,6 +1554,8 @@ function renderPage()
                 $url = '?' . smallHash($linkdate);
                 $title = 'Note: ';
             }
+            $url = escape($url);
+            $title = escape($title);
 
             $link = array(
                 'linkdate' => $linkdate,

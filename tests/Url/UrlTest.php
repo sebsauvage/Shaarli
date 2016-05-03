@@ -181,4 +181,19 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $url = new Url('ftp://save.tld/mysave');
         $this->assertFalse($url->isHttp());
     }
+
+    /**
+     * Test IndToAscii.
+     */
+    function testIndToAscii()
+    {
+        $ind = 'http://www.académie-française.fr/';
+        $expected = 'http://www.xn--acadmie-franaise-npb1a.fr/';
+        $url = new Url($ind);
+        $this->assertEquals($expected, $url->indToAscii());
+
+        $notInd = 'http://www.academie-francaise.fr/';
+        $url = new Url($notInd);
+        $this->assertEquals($notInd, $url->indToAscii());
+    }
 }

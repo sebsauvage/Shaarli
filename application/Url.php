@@ -62,7 +62,21 @@ function add_trailing_slash($url)
 {
     return $url . (!endsWith($url, '/') ? '/' : '');
 }
+/**
+ * Converts an URL with an IDN host to a ASCII one.
+ *
+ * @param string $url Input URL.
+ *
+ * @return string converted URL.
+ */
+function url_with_idn_to_ascii($url)
+{
+    $parts = parse_url($url);
+    $parts['host'] = idn_to_ascii($parts['host']);
 
+    $httpUrl = new \http\Url($parts);
+    return $httpUrl->toString();
+}
 /**
  * URL representation and cleanup utilities
  *
@@ -221,6 +235,22 @@ class Url
     }
 
     /**
+     * Converts an URL with an International Domain Name host to a ASCII one.
+     * This requires PHP-intl. If it's not available, just returns this->cleanup().
+     *
+     * @return string converted cleaned up URL.
+     */
+    public function indToAscii()
+    {
+        $out = $this->cleanup();
+        if (! function_exists('idn_to_ascii') || ! isset($this->parts['host'])) {
+            return $out;
+        }
+        $asciiHost = idn_to_ascii($this->parts['host']);
+        return str_replace($this->parts['host'], $asciiHost, $out);
+    }
+
+    /**
      * Get URL scheme.
      *
      * @return string the URL scheme or false if none is provided.
@@ -230,6 +260,18 @@ class Url
             return false;
         }
         return $this->parts['scheme'];
+    }
+
+    /**
+     * Get URL host.
+     *
+     * @return string the URL host or false if none is provided.
+     */
+    public function getHost() {
+        if (empty($this->parts['host'])) {
+            return false;
+        }
+        return $this->parts['host'];
     }
 
     /**

@@ -35,4 +35,31 @@ class GetHttpUrlTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($headers);
         $this->assertFalse($content);
     }
+
+    /**
+     * Test getAbsoluteUrl with relative target URL.
+     */
+    public function testGetAbsoluteUrlWithRelative()
+    {
+        $origin = 'http://non.existent/blabla/?test';
+        $target = '/stuff.php';
+
+        $expected = 'http://non.existent/stuff.php';
+        $this->assertEquals($expected, getAbsoluteUrl($origin, $target));
+
+        $target = 'stuff.php';
+        $expected = 'http://non.existent/blabla/stuff.php';
+        $this->assertEquals($expected, getAbsoluteUrl($origin, $target));
+    }
+
+    /**
+     * Test getAbsoluteUrl with absolute target URL.
+     */
+    public function testGetAbsoluteUrlWithAbsolute()
+    {
+        $origin = 'http://non.existent/blabla/?test';
+        $target = 'http://other.url/stuff.php';
+
+        $this->assertEquals($target, getAbsoluteUrl($origin, $target));
+    }
 }
