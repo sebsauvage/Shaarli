@@ -1277,11 +1277,15 @@ function renderPage()
     {
         if (!empty($_POST['title']) )
         {
-            if (!tokenOk($_POST['token'])) die('Wrong token.'); // Go away!
+            if (!tokenOk($_POST['token'])) {
+                die('Wrong token.'); // Go away!
+            }
             $tz = 'UTC';
-            if (!empty($_POST['continent']) && !empty($_POST['city']))
-                if (isTimeZoneValid($_POST['continent'],$_POST['city']))
-                    $tz = $_POST['continent'].'/'.$_POST['city'];
+            if (!empty($_POST['continent']) && !empty($_POST['city'])
+                && isTimeZoneValid($_POST['continent'], $_POST['city'])
+            ) {
+                $tz = $_POST['continent'] . '/' . $_POST['city'];
+            }
             $GLOBALS['timezone'] = $tz;
             $GLOBALS['title']=$_POST['title'];
             $GLOBALS['titleLink']=$_POST['titleLink'];
@@ -2108,10 +2112,10 @@ function install()
     if (!empty($_POST['setlogin']) && !empty($_POST['setpassword']))
     {
         $tz = 'UTC';
-        if (!empty($_POST['continent']) && !empty($_POST['city'])) {
-            if (isTimeZoneValid($_POST['continent'], $_POST['city'])) {
-                $tz = $_POST['continent'].'/'.$_POST['city'];
-            }
+        if (!empty($_POST['continent']) && !empty($_POST['city'])
+            && isTimeZoneValid($_POST['continent'], $_POST['city'])
+        ) {
+            $tz = $_POST['continent'].'/'.$_POST['city'];
         }
         $GLOBALS['timezone'] = $tz;
         // Everything is ok, let's create config file.

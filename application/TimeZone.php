@@ -101,10 +101,6 @@ function generateTimeZoneForm($preselectedTimezone='')
  */
 function isTimeZoneValid($continent, $city)
 {
-    if ($continent == 'UTC' && $city == 'UTC') {
-        return true;
-    }
-
     return in_array(
         $continent.'/'.$city,
         timezone_identifiers_list()
