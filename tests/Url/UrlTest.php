@@ -190,10 +190,10 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $ind = 'http://www.académie-française.fr/';
         $expected = 'http://www.xn--acadmie-franaise-npb1a.fr/';
         $url = new Url($ind);
-        $this->assertEquals($expected, $url->indToAscii());
+        $this->assertEquals($expected, $url->idnToAscii());
 
         $notInd = 'http://www.academie-francaise.fr/';
         $url = new Url($notInd);
-        $this->assertEquals($notInd, $url->indToAscii());
+        $this->assertEquals($notInd, $url->idnToAscii());
     }
 }

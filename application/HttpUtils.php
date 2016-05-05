@@ -27,7 +27,7 @@
 function get_http_response($url, $timeout = 30, $maxBytes = 4194304)
 {
     $urlObj = new Url($url);
-    $cleanUrl = $urlObj->indToAscii();
+    $cleanUrl = $urlObj->idnToAscii();
 
     if (! filter_var($cleanUrl, FILTER_VALIDATE_URL) || ! $urlObj->isHttp()) {
         return array(array(0 => 'Invalid HTTP Url'), false);
@@ -70,7 +70,7 @@ function get_http_response($url, $timeout = 30, $maxBytes = 4194304)
  * Retrieve HTTP headers, following n redirections (temporary and permanent ones).
  *
  * @param string $url              initial URL to reach.
- * @param int    $redirectionLimit max redirection follow..
+ * @param int    $redirectionLimit max redirection follow.
  *
  * @return array HTTP headers, or false if it failed.
  */
