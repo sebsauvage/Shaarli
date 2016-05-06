@@ -2,7 +2,13 @@
 <html>
 <head>{include="includes"}</head>
 <body
-{if="ban_canLogin()"} onload="document.loginform.login.focus();"{/if}>
+{if="ban_canLogin()"}
+  {if="empty($username)"}
+    onload="document.loginform.login.focus();"
+  {else}
+    onload="document.loginform.password.focus();"
+  {/if}
+{/if}>
 <div id="pageheader">
   {include="page.header"}
 
@@ -11,8 +17,11 @@
       You have been banned from login after too many failed attempts. Try later.
     {else}
       <form method="post" name="loginform">
-        <label for="login">Login: <input type="text" id="login" name="login" tabindex="1"></label>
-        <label for="password">Password: <input type="password" id="password" name="password" tabindex="2"></label>
+        <label for="login">Login: <input type="text" id="login" name="login" tabindex="1"
+           {if="!empty($username)"}value="{$username}"{/if}>
+        </label>
+        <label for="password">Password: <input type="password" id="password" name="password" tabindex="2">
+        </label>
         <input type="submit" value="Login" class="bigbutton" tabindex="4">
         <label for="longlastingsession">
           <input type="checkbox" name="longlastingsession" id="longlastingsession" tabindex="3">
