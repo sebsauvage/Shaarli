@@ -39,7 +39,7 @@ class NetscapeBookmarkUtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testFilterAndFormatInvalid()
     {
-        NetscapeBookmarkUtils::filterAndFormat(self::$linkDb, 'derp');
+        NetscapeBookmarkUtils::filterAndFormat(self::$linkDb, 'derp', false, '');
     }
 
     /**
@@ -47,7 +47,7 @@ class NetscapeBookmarkUtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testFilterAndFormatAll()
     {
-        $links = NetscapeBookmarkUtils::filterAndFormat(self::$linkDb, 'all');
+        $links = NetscapeBookmarkUtils::filterAndFormat(self::$linkDb, 'all', false, '');
         $this->assertEquals(self::$refDb->countLinks(), sizeof($links));
         foreach ($links as $link) {
             $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
@@ -67,7 +67,7 @@ class NetscapeBookmarkUtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testFilterAndFormatPrivate()
     {
-        $links = NetscapeBookmarkUtils::filterAndFormat(self::$linkDb, 'private');
+        $links = NetscapeBookmarkUtils::filterAndFormat(self::$linkDb, 'private', false, '');
         $this->assertEquals(self::$refDb->countPrivateLinks(), sizeof($links));
         foreach ($links as $link) {
             $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
@@ -87,7 +87,7 @@ class NetscapeBookmarkUtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testFilterAndFormatPublic()
     {
-        $links = NetscapeBookmarkUtils::filterAndFormat(self::$linkDb, 'public');
+        $links = NetscapeBookmarkUtils::filterAndFormat(self::$linkDb, 'public', false, '');
         $this->assertEquals(self::$refDb->countPublicLinks(), sizeof($links));
         foreach ($links as $link) {
             $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
@@ -100,5 +100,35 @@ class NetscapeBookmarkUtilsTest extends PHPUnit_Framework_TestCase
                 $link['taglist']
             );
         }
+    }
+
+    /**
+     * Do not prepend notes with the Shaarli index's URL
+     */
+    public function testFilterAndFormatDoNotPrependNoteUrl()
+    {
+        $links = NetscapeBookmarkUtils::filterAndFormat(self::$linkDb, 'public', false, '');
+        $this->assertEquals(
+            '?WDWyig',
+            $links[0]['url']
+        );
+    }
+
+    /**
+     * Prepend notes with the Shaarli index's URL
+     */
+    public function testFilterAndFormatPrependNoteUrl()
+    {
+        $indexUrl = 'http://localhost:7469/shaarli/';
+        $links = NetscapeBookmarkUtils::filterAndFormat(
+            self::$linkDb,
+            'public',
+            true,
+            $indexUrl
+        );
+        $this->assertEquals(
+            $indexUrl . '?WDWyig',
+            $links[0]['url']
+        );
     }
 }
