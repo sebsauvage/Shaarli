@@ -409,7 +409,7 @@ You use the community supported version of the original Shaarli project, by Seba
         $searchterm = !empty($filterRequest['searchterm']) ? escape($filterRequest['searchterm']) : '';
 
         // Search tags + fullsearch.
-        if (empty($type) && ! empty($searchtags) && ! empty($searchterm)) {
+        if (! empty($searchtags) && ! empty($searchterm)) {
             $type = LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT;
             $request = array($searchtags, $searchterm);
         }

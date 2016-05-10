@@ -93,4 +93,92 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
         $refDB = new ReferenceLinkDB();
         $this->assertEquals($refDB->countPrivateLinks(), count_private($refDB->getLinks()));
     }
+
+    /**
+     * Test text2clickable without a redirector being set.
+     */
+    public function testText2clickableWithoutRedirector()
+    {
+        $text = 'stuff http://hello.there/is=someone#here otherstuff';
+        $expectedText = 'stuff <a href="http://hello.there/is=someone#here">http://hello.there/is=someone#here</a> otherstuff';
+        $processedText = text2clickable($text, '');
+        $this->assertEquals($expectedText, $processedText);
+    }
+
+    /**
+     * Test text2clickable a redirector set.
+     */
+    public function testText2clickableWithRedirector()
+    {
+        $text = 'stuff http://hello.there/is=someone#here otherstuff';
+        $redirector = 'http://redirector.to';
+        $expectedText = 'stuff <a href="'.
+            $redirector .
+            urlencode('http://hello.there/is=someone#here') .
+            '">http://hello.there/is=someone#here</a> otherstuff';
+        $processedText = text2clickable($text, $redirector);
+        $this->assertEquals($expectedText, $processedText);
+    }
+
+    /**
+     * Test testSpace2nbsp.
+     */
+    public function testSpace2nbsp()
+    {
+        $text = '  Are you   thrilled  by flags   ?'. PHP_EOL .' Really?';
+        $expectedText = '&nbsp; Are you &nbsp; thrilled &nbsp;by flags &nbsp; ?'. PHP_EOL .'&nbsp;Really?';
+        $processedText = space2nbsp($text);
+        $this->assertEquals($expectedText, $processedText);
+    }
+
+    /**
+     * Test hashtags auto-link.
+     */
+    public function testHashtagAutolink()
+    {
+        $index = 'http://domain.tld/';
+        $rawDescription = '#hashtag\n
+            # nothashtag\n
+            test#nothashtag #hashtag \#nothashtag\n
+            test #hashtag #hashtag test #hashtag.test\n
+            #hashtag #hashtag-nothashtag #hashtag_hashtag\n
+            What is #ашок anyway?\n
+            カタカナ #カタカナ」カタカナ\n';
+        $autolinkedDescription = hashtag_autolink($rawDescription, $index);
+
+        $this->assertContains($this->getHashtagLink('hashtag', $index), $autolinkedDescription);
+        $this->assertNotContains(' #hashtag', $autolinkedDescription);
+        $this->assertNotContains('>#nothashtag', $autolinkedDescription);
+        $this->assertContains($this->getHashtagLink('ашок', $index), $autolinkedDescription);
+        $this->assertContains($this->getHashtagLink('カタカナ', $index), $autolinkedDescription);
+        $this->assertContains($this->getHashtagLink('hashtag_hashtag', $index), $autolinkedDescription);
+        $this->assertNotContains($this->getHashtagLink('hashtag-nothashtag', $index), $autolinkedDescription);
+    }
+
+    /**
+     * Test hashtags auto-link without index URL.
+     */
+    public function testHashtagAutolinkNoIndex()
+    {
+        $rawDescription = 'blabla #hashtag x#nothashtag';
+        $autolinkedDescription = hashtag_autolink($rawDescription);
+
+        $this->assertContains($this->getHashtagLink('hashtag'), $autolinkedDescription);
+        $this->assertNotContains(' #hashtag', $autolinkedDescription);
+        $this->assertNotContains('>#nothashtag', $autolinkedDescription);
+    }
+
+    /**
+     * Util function to build an hashtag link.
+     *
+     * @param string $hashtag Hashtag name.
+     * @param string $index   Index URL.
+     *
+     * @return string HTML hashtag link.
+     */
+    private function getHashtagLink($hashtag, $index = '')
+    {
+        $hashtagLink = '<a href="'. $index .'?addtag=$1" title="Hashtag $1">#$1</a>';
+        return str_replace('$1', $hashtag, $hashtagLink);
+    }
 }

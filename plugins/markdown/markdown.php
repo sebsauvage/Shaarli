@@ -151,7 +151,44 @@ function hook_markdown_render_editlink($data)
  */
 function reverse_text2clickable($description)
 {
-    return preg_replace('!<a +href="([^ ]*)">[^ ]+</a>!m', '$1', $description);
+    $descriptionLines = explode(PHP_EOL, $description);
+    $descriptionOut = '';
+    $codeBlockOn = false;
+    $lineCount = 0;
+
+    foreach ($descriptionLines as $descriptionLine) {
+        // Detect line of code
+        $codeLineOn = preg_match('/^    /', $descriptionLine) > 0;
+        // Detect and toggle block of code
+        if (!$codeBlockOn) {
+            $codeBlockOn = preg_match('/^```/', $descriptionLine) > 0;
+        }
+        elseif (preg_match('/^```/', $descriptionLine) > 0) {
+            $codeBlockOn = false;
+        }
+
+        $hashtagTitle = ' title="Hashtag [^"]+"';
+        // Reverse `inline code` hashtags.
+        $descriptionLine = preg_replace(
+            '!(`[^`\n]*)<a href="[^ ]*"'. $hashtagTitle .'>([^<]+)</a>([^`\n]*`)!m',
+            '$1$2$3',
+            $descriptionLine
+        );
+
+        // Reverse hashtag links if we're in a code block.
+        $hashtagFilter = ($codeBlockOn || $codeLineOn) ? $hashtagTitle : '';
+        $descriptionLine = preg_replace(
+            '!<a href="[^ ]*"'. $hashtagFilter .'>([^<]+)</a>!m',
+            '$1',
+            $descriptionLine
+        );
+
+        $descriptionOut .= $descriptionLine;
+        if ($lineCount++ < count($descriptionLines) - 1) {
+            $descriptionOut .= PHP_EOL;
+        }
+    }
+    return $descriptionOut;
 }
 
 /**
@@ -226,9 +263,9 @@ function process_markdown($description)
     $parsedown = new Parsedown();
 
     $processedDescription = $description;
-    $processedDescription = reverse_text2clickable($processedDescription);
     $processedDescription = reverse_nl2br($processedDescription);
     $processedDescription = reverse_space2nbsp($processedDescription);
+    $processedDescription = reverse_text2clickable($processedDescription);
     $processedDescription = unescape($processedDescription);
     $processedDescription = $parsedown
         ->setMarkupEscaped(false)

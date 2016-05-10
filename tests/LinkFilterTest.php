@@ -387,4 +387,30 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
             ))
         );
     }
+
+    /**
+     * Filter links by #hashtag.
+     */
+    public function testFilterByHashtag()
+    {
+        $hashtag = 'hashtag';
+        $this->assertEquals(
+            3,
+            count(self::$linkFilter->filter(
+                LinkFilter::$FILTER_TAG,
+                $hashtag
+            ))
+        );
+
+        $hashtag = 'private';
+        $this->assertEquals(
+            1,
+            count(self::$linkFilter->filter(
+                LinkFilter::$FILTER_TAG,
+                $hashtag,
+                false,
+                true
+            ))
+        );
+    }
 }
