@@ -162,6 +162,7 @@ require_once 'application/LinkDB.php';
 require_once 'application/LinkFilter.php';
 require_once 'application/LinkUtils.php';
 require_once 'application/NetscapeBookmarkUtils.php';
+require_once 'application/PageBuilder.php';
 require_once 'application/TimeZone.php';
 require_once 'application/Url.php';
 require_once 'application/Utils.php';
@@ -563,128 +564,6 @@ function tokenOk($token)
 }
 
 // ------------------------------------------------------------------------------------------
-/* This class is in charge of building the final page.
-   (This is basically a wrapper around RainTPL which pre-fills some fields.)
-   p = new pageBuilder;
-   p.assign('myfield','myvalue');
-   p.renderPage('mytemplate');
-
-*/
-class pageBuilder
-{
-    private $tpl; // RainTPL template
-
-    function __construct()
-    {
-        $this->tpl = false;
-    }
-
-    /**
-     * Initialize all default tpl tags.
-     */
-    private function initialize()
-    {
-        $this->tpl = new RainTPL;
-
-        try {
-            $version = ApplicationUtils::checkUpdate(
-                shaarli_version,
-                $GLOBALS['config']['UPDATECHECK_FILENAME'],
-                $GLOBALS['config']['UPDATECHECK_INTERVAL'],
-                $GLOBALS['config']['ENABLE_UPDATECHECK'],
-                isLoggedIn(),
-                $GLOBALS['config']['UPDATECHECK_BRANCH']
-            );
-            $this->tpl->assign('newVersion', escape($version));
-            $this->tpl->assign('versionError', '');
-
-        } catch (Exception $exc) {
-            logm($GLOBALS['config']['LOG_FILE'], $_SERVER['REMOTE_ADDR'], $exc->getMessage());
-            $this->tpl->assign('newVersion', '');
-            $this->tpl->assign('versionError', escape($exc->getMessage()));
-        }
-
-        $this->tpl->assign('feedurl', escape(index_url($_SERVER)));
-        $searchcrits = ''; // Search criteria
-        if (!empty($_GET['searchtags'])) {
-            $searchcrits .= '&searchtags=' . urlencode($_GET['searchtags']);
-        }
-        if (!empty($_GET['searchterm'])) {
-            $searchcrits .= '&searchterm=' . urlencode($_GET['searchterm']);
-        }
-        $this->tpl->assign('searchcrits', $searchcrits);
-        $this->tpl->assign('source', index_url($_SERVER));
-        $this->tpl->assign('version', shaarli_version);
-        $this->tpl->assign('scripturl', index_url($_SERVER));
-        $this->tpl->assign('pagetitle', 'Shaarli');
-        $this->tpl->assign('privateonly', !empty($_SESSION['privateonly'])); // Show only private links?
-        if (!empty($GLOBALS['title'])) {
-            $this->tpl->assign('pagetitle', $GLOBALS['title']);
-        }
-        if (!empty($GLOBALS['titleLink'])) {
-            $this->tpl->assign('titleLink', $GLOBALS['titleLink']);
-        }
-        if (!empty($GLOBALS['pagetitle'])) {
-            $this->tpl->assign('pagetitle', $GLOBALS['pagetitle']);
-        }
-        $this->tpl->assign('shaarlititle', empty($GLOBALS['title']) ? 'Shaarli': $GLOBALS['title']);
-        if (!empty($GLOBALS['plugin_errors'])) {
-            $this->tpl->assign('plugin_errors', $GLOBALS['plugin_errors']);
-        }
-    }
-
-    // The following assign() method is basically the same as RainTPL (except that it's lazy)
-    public function assign($what,$where)
-    {
-        if ($this->tpl===false) $this->initialize(); // Lazy initialization
-        $this->tpl->assign($what,$where);
-    }
-
-    /**
-     * Assign an array of data to the template builder.
-     *
-     * @param array $data Data to assign.
-     *
-     * @return false if invalid data.
-     */
-    public function assignAll($data)
-    {
-        // Lazy initialization
-        if ($this->tpl === false) {
-            $this->initialize();
-        }
-
-        if (empty($data) || !is_array($data)){
-            return false;
-        }
-
-        foreach ($data as $key => $value) {
-            $this->assign($key, $value);
-        }
-    }
-
-    // Render a specific page (using a template).
-    // e.g. pb.renderPage('picwall')
-    public function renderPage($page)
-    {
-        if ($this->tpl===false) $this->initialize(); // Lazy initialization
-        $this->tpl->draw($page);
-    }
-
-    /**
-    * Render a 404 page (uses the template : tpl/404.tpl)
-    *
-    * usage : $PAGE->render404('The link was deleted')
-    * @param string $message A messate to display what is not found
-    */
-    public function render404($message='The page you are trying to reach does not exist or has been deleted.') {
-        header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
-        $this->tpl->assign('error_message', $message);
-        $this->renderPage('404');
-    }
-}
-
-// ------------------------------------------------------------------------------------------
 // Daily RSS feed: 1 RSS entry per day giving all the links on that day.
 // Gives the last 7 days (which have links).
 // This RSS feed cannot be filtered.
@@ -912,7 +791,7 @@ function renderPage()
         die($e->getMessage());
     }
 
-    $PAGE = new pageBuilder;
+    $PAGE = new PageBuilder();
 
     // Determine which page will be rendered.
     $query = (isset($_SERVER['QUERY_STRING'])) ? $_SERVER['QUERY_STRING'] : '';
