@@ -77,3 +77,19 @@ function html_extract_charset($html)
 
     return false;
 }
+
+/**
+ * Count private links in given linklist.
+ *
+ * @param array $links Linklist.
+ *
+ * @return int Number of private links.
+ */
+function count_private($links)
+{
+    $cpt = 0;
+    foreach ($links as $link) {
+        $cpt = $link['private'] == true ? $cpt + 1 : $cpt;
+    }
+    return $cpt;
+}

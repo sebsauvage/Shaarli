@@ -736,7 +736,6 @@ function showDaily($pageBuilder, $LINKSDB)
     $dayDate = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $day.'_000000');
     $data = array(
         'linksToDisplay' => $linksToDisplay,
-        'linkcount' => count($LINKSDB),
         'cols' => $columns,
         'day' => $dayDate->getTimestamp(),
         'previousday' => $previousday,
@@ -792,6 +791,8 @@ function renderPage()
     }
 
     $PAGE = new PageBuilder();
+    $PAGE->assign('linkcount', count($LINKSDB));
+    $PAGE->assign('privateLinkcount', count_private($LINKSDB));
 
     // Determine which page will be rendered.
     $query = (isset($_SERVER['QUERY_STRING'])) ? $_SERVER['QUERY_STRING'] : '';
@@ -855,7 +856,6 @@ function renderPage()
         }
 
         $data = array(
-            'linkcount' => count($LINKSDB),
             'linksToDisplay' => $linksToDisplay,
         );
         $pluginManager->executeHooks('render_picwall', $data, array('loggedin' => isLoggedIn()));
@@ -905,7 +905,6 @@ function renderPage()
         }
 
         $data = array(
-            'linkcount' => count($LINKSDB),
             'tags' => $tagList,
         );
         $pluginManager->executeHooks('render_tagcloud', $data, array('loggedin' => isLoggedIn()));
@@ -1099,7 +1098,6 @@ function renderPage()
     if ($targetPage == Router::$PAGE_TOOLS)
     {
         $data = array(
-            'linkcount' => count($LINKSDB),
             'pageabsaddr' => index_url($_SERVER),
         );
         $pluginManager->executeHooks('render_tools', $data);
@@ -1144,7 +1142,6 @@ function renderPage()
         }
         else // show the change password form.
         {
-            $PAGE->assign('linkcount',count($LINKSDB));
             $PAGE->assign('token',getToken());
             $PAGE->renderPage('changepassword');
             exit;
@@ -1192,7 +1189,6 @@ function renderPage()
         }
         else // Show the configuration form.
         {
-            $PAGE->assign('linkcount',count($LINKSDB));
             $PAGE->assign('token',getToken());
             $PAGE->assign('title', empty($GLOBALS['title']) ? '' : $GLOBALS['title'] );
             $PAGE->assign('redirector', empty($GLOBALS['redirector']) ? '' : $GLOBALS['redirector'] );
@@ -1208,7 +1204,6 @@ function renderPage()
     if ($targetPage == Router::$PAGE_CHANGETAG)
     {
         if (empty($_POST['fromtag']) || (empty($_POST['totag']) && isset($_POST['renametag']))) {
-            $PAGE->assign('linkcount', count($LINKSDB));
             $PAGE->assign('token', getToken());
             $PAGE->assign('tags', $LINKSDB->allTags());
             $PAGE->renderPage('changetag');
@@ -1257,7 +1252,6 @@ function renderPage()
     // -------- User wants to add a link without using the bookmarklet: Show form.
     if ($targetPage == Router::$PAGE_ADDLINK)
     {
-        $PAGE->assign('linkcount',count($LINKSDB));
         $PAGE->renderPage('addlink');
         exit;
     }
@@ -1383,7 +1377,6 @@ function renderPage()
         $link = $LINKSDB[$_GET['edit_link']];  // Read database
         if (!$link) { header('Location: ?'); exit; } // Link not found in database.
         $data = array(
-            'linkcount' => count($LINKSDB),
             'link' => $link,
             'link_is_new' => false,
             'token' => getToken(),
@@ -1451,7 +1444,6 @@ function renderPage()
         }
 
         $data = array(
-            'linkcount' => count($LINKSDB),
             'link' => $link,
             'link_is_new' => $link_is_new,
             'token' => getToken(), // XSRF protection.
@@ -1473,7 +1465,6 @@ function renderPage()
         // Export links as a Netscape Bookmarks file
 
         if (empty($_GET['selection'])) {
-            $PAGE->assign('linkcount',count($LINKSDB));
             $PAGE->renderPage('export');
             exit;
         }
@@ -1532,7 +1523,6 @@ function renderPage()
     // -------- Show upload/import dialog:
     if ($targetPage == Router::$PAGE_IMPORT)
     {
-        $PAGE->assign('linkcount',count($LINKSDB));
         $PAGE->assign('token',getToken());
         $PAGE->assign('maxfilesize',getMaxFileSize());
         $PAGE->renderPage('import');
@@ -1764,7 +1754,6 @@ function buildLinkList($PAGE,$LINKSDB)
 
     // Fill all template fields.
     $data = array(
-        'linkcount' => count($LINKSDB),
         'previous_page_url' => $previous_page_url,
         'next_page_url' => $next_page_url,
         'page_current' => $page,
@@ -2039,7 +2028,7 @@ function install()
         $timezone_html = '<tr><td><b>Timezone:</b></td><td>'.$timezone_form.'</td></tr>';
     }
 
-    $PAGE = new pageBuilder;
+    $PAGE = new PageBuilder();
     $PAGE->assign('timezone_html',$timezone_html);
     $PAGE->assign('timezone_js',$timezone_js);
     $PAGE->renderPage('install');
