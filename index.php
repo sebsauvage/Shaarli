@@ -1199,12 +1199,6 @@ function renderPage()
             exit;
         }
 
-		// Same case as above except that user tried to access ?do=addlink without being logged in
-		// Note: passing empty parameters makes Shaarli generate default URLs and descriptions.
-		if (isset($_GET['do']) && $_GET['do'] === 'addlink') {
-			header('Location: ?do=login&post=');
-			exit;
-		}
         showLinkList($PAGE, $LINKSDB);
         if (isset($_GET['edit_link'])) {
             header('Location: ?do=login&edit_link='. escape($_GET['edit_link']));
