@@ -195,6 +195,7 @@ Items can be displayed in templates by adding an entry in `$data['<placeholder>'
 List of placeholders:
 
   * `text`: called after the end of the footer text.
+  * `endofpage`: called at the end of the page.
 
 ![text_example](http://i.imgur.com/L5S2YEH.png)[](.html)
 

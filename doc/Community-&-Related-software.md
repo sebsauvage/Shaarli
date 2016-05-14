@@ -13,11 +13,17 @@ _TODO: contact repos owners to see if they'd like to standardize their work with
 - [Original discussion page](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:discussion) (fr)[](.html)
 - [Original revisions history](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)[](.html)
 - [Shaarli.fr/my](https://www.shaarli.fr/my.php) - Unofficial, unsupported (old fork) hosted Shaarlis provider, courtesy of [DMeloni](https://github.com/DMeloni)[](.html)
-- [Shaarli Community](http://shaarferme.etudiant-libre.fr.nf/index.php) - Unknown Shaarli hoster (unsupported, old fork)[](.html)
+
 
 ### Third party plugins
 
- * [autosave](https://github.com/kalvn/shaarli-plugin-autosave) - periodically saves contents of the _Edit link/Save link_ dialog to your browser's LocalStorage to avoid data loss when typing a long entry.[](.html)
+
+  * [autosave](https://github.com/kalvn/shaarli-plugin-autosave) by [@kalvn](https://github.com/kalvn): Automatically saves data when editing a link to avoid any loss in case of crash or unexpected shutdown.[](.html)
+  * [Code Coloration](https://github.com/ArthurHoaro/code-coloration) by [@ArthurHoaro](https://github.com/ArthurHoaro): client side code syntax highlighter.[](.html)
+  * [social](https://github.com/alexisju/social) by [@alexisju](https://github.com/alexisju): share links to social networks.[](.html)
+  * [emojione](https://github.com/NerosTie/emojione) by [@NerosTie](https://github.com/NerosTie/emojione): Add colorful emojis to your Shaarli.[](.html)
+  * [launch](https://github.com/ArthurHoaro/launch-plugin) - Launch Plugin is a plugin designed to enhance and customize Launch Theme for Shaarli.[](.html)
+
 
 ### Themes
 See [Theming](Theming.html) for the list of community-contributed themes, and an installation guide.
