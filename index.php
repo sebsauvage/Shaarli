@@ -495,9 +495,9 @@ if (isset($_POST['login']))
     else
     {
         ban_loginFailed();
-        $redir = '';
+        $redir = '&username='. $_POST['login'];
         if (isset($_GET['post'])) {
-            $redir = '?post=' . urlencode($_GET['post']);
+            $redir .= '&post=' . urlencode($_GET['post']);
             foreach (array('description', 'source', 'title') as $param) {
                 if (!empty($_GET[$param])) {
                     $redir .= '&' . $param . '=' . urlencode($_GET[$param]);
@@ -943,6 +943,9 @@ function renderPage()
         if ($GLOBALS['config']['OPEN_SHAARLI']) { header('Location: ?'); exit; }  // No need to login for open Shaarli
         $token=''; if (ban_canLogin()) $token=getToken(); // Do not waste token generation if not useful.
         $PAGE->assign('token',$token);
+        if (isset($_GET['username'])) {
+            $PAGE->assign('username', escape($_GET['username']));
+        }
         $PAGE->assign('returnurl',(isset($_SERVER['HTTP_REFERER']) ? escape($_SERVER['HTTP_REFERER']):''));
         $PAGE->renderPage('loginform');
         exit;
