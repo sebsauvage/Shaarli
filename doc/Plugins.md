@@ -1,4 +1,4 @@
-#Plugin installation & configuration
+#Plugins
 ## Plugin installation
 
 There is a bunch of plugins shipped with Shaarli, where there is nothing to do to install them.
@@ -58,6 +58,8 @@ $GLOBALS['config'['ENABLED_PLUGINS'] = array(]('ENABLED_PLUGINS']-=-array(.html)
 
 ### Plugin usage
 
+#### Official plugins
+
 Usage of each plugin is documented in it's README file:
 
  * `addlink-toolbar`: Adds the addlink input on the linklist page
@@ -67,3 +69,9 @@ Usage of each plugin is documented in it's README file:
  * `qrcode`: For each link, add a QRCode icon.
  * `readityourself`: For each link, add a ReadItYourself icon to save the shaared URL
  * [`wallabag`](https://github.com/shaarli/Shaarli/blob/master/plugins/wallabag/README.md):  For each link, add a Wallabag icon to save it in your instance.[](.html)
+
+
+
+#### Third party plugins
+
+See [Community & related software](https://github.com/shaarli/Shaarli/wiki/Community-%26-Related-software#third-party-plugins)[](.html)
