@@ -84,4 +84,13 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
         $html = '<html><meta>stuff</meta><meta charset=""/></html>';
         $this->assertFalse(html_extract_charset($html));
     }
+
+    /**
+     * Test count_private.
+     */
+    public function testCountPrivateLinks()
+    {
+        $refDB = new ReferenceLinkDB();
+        $this->assertEquals($refDB->countPrivateLinks(), count_private($refDB->getLinks()));
+    }
 }
