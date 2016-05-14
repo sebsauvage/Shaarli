@@ -690,7 +690,7 @@ class pageBuilder
 // This RSS feed cannot be filtered.
 function showDailyRSS() {
     // Cache system
-    $query = $_SERVER["QUERY_STRING"];
+    $query = $_SERVER['QUERY_STRING'];
     $cache = new CachedPage(
         $GLOBALS['config']['PAGECACHE'],
         page_url($_SERVER),
@@ -948,7 +948,7 @@ function renderPage()
         exit;
     }
     // -------- User wants to logout.
-    if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=logout'))
+    if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=logout'))
     {
         invalidateCaches($GLOBALS['config']['PAGECACHE']);
         logout();
@@ -1630,7 +1630,7 @@ function renderPage()
     }
 
     // -------- User is uploading a file for import
-    if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=upload'))
+    if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=upload'))
     {
         // If file is too big, some form field may be missing.
         if (!isset($_POST['token']) || (!isset($_FILES)) || (isset($_FILES['filetoupload']['size']) && $_FILES['filetoupload']['size']==0))
@@ -1733,7 +1733,7 @@ function importFile($LINKSDB)
         {
             $link = array('linkdate'=>'','title'=>'','url'=>'','description'=>'','tags'=>'','private'=>0);
             $d = explode('<DD>',$html);
-            if (startswith($d[0],'<A '))
+            if (startsWith($d[0], '<A '))
             {
                 $link['description'] = (isset($d[1]) ? html_entity_decode(trim($d[1]),ENT_QUOTES,'UTF-8') : '');  // Get description (optional)
                 preg_match('!<A .*?>(.*?)</A>!i',$d[0],$matches); $link['title'] = (isset($matches[1]) ? trim($matches[1]) : '');  // Get title
@@ -2204,7 +2204,7 @@ function genThumbnail()
 
         // Is this a link to an image, or to a flickr page ?
         $imageurl='';
-        if (endswith(parse_url($url,PHP_URL_PATH),'.jpg'))
+        if (endsWith(parse_url($url, PHP_URL_PATH), '.jpg'))
         {  // This is a direct link to an image. e.g. http://farm1.staticflickr.com/5/5921913_ac83ed27bd_o.jpg
             preg_match('!(http://farm\d+\.staticflickr\.com/\d+/\d+_\w+_)\w.jpg!',$url,$matches);
             if (!empty($matches[1])) $imageurl=$matches[1].'m.jpg';
@@ -2381,8 +2381,8 @@ function resizeImage($filepath)
     return true;
 }
 
-if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=genthumbnail')) { genThumbnail(); exit; }  // Thumbnail generation/cache does not need the link database.
-if (isset($_SERVER["QUERY_STRING"]) && startswith($_SERVER["QUERY_STRING"],'do=dailyrss')) { showDailyRSS(); exit; }
+if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=genthumbnail')) { genThumbnail(); exit; }  // Thumbnail generation/cache does not need the link database.
+if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=dailyrss')) { showDailyRSS(); exit; }
 if (!isset($_SESSION['LINKS_PER_PAGE'])) $_SESSION['LINKS_PER_PAGE']=$GLOBALS['config']['LINKS_PER_PAGE'];
 renderPage();
 ?>
