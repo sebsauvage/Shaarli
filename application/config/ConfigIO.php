@@ -21,6 +21,8 @@ interface ConfigIO
      *
      * @param string $filepath Config file absolute path.
      * @param array  $conf   All configuration in an array.
+     *
+     * @return bool True if the configuration has been successfully written, false otherwise.
      */
     function write($filepath, $conf);
 

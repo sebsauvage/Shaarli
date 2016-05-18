@@ -47,7 +47,7 @@
         <td valign="top"><b>New link:</b></td>
         <td>
           <input type="checkbox" name="privateLinkByDefault" id="privateLinkByDefault"
-                 {if="!empty($GLOBALS['privateLinkByDefault'])"}checked{/if}/>
+                 {if="$private_links_default"}checked{/if}/>
           <label for="privateLinkByDefault">
             &nbsp;All new links are private by default
           </label>
@@ -57,7 +57,7 @@
         <td valign="top"><b>RSS direct links</b></td>
         <td>
           <input type="checkbox" name="enableRssPermalinks" id="enableRssPermalinks"
-                 {if="!empty($GLOBALS['config']['ENABLE_RSS_PERMALINKS'])"}checked{/if}/>
+                 {if="$enable_rss_permalinks"}checked{/if}/>
           <label for="enableRssPermalinks">
             &nbsp;Disable it to use permalinks in RSS feed instead of direct links to your shaared links. Currently <b>
             {if="$GLOBALS['config']['ENABLE_RSS_PERMALINKS']"}enabled{else}disabled{/if}.</b>
@@ -68,7 +68,7 @@
         <td valign="top"><b>Hide public links</b></td>
         <td>
           <input type="checkbox" name="hidePublicLinks" id="hidePublicLinks"
-                 {if="!empty($GLOBALS['config']['HIDE_PUBLIC_LINKS'])"}checked{/if}/>
+                 {if="$hide_public_links"}checked{/if}/>
           <label for="hidePublicLinks">&nbsp;Do not show any links if the user is not logged in.</label>
         </td>
       </tr>
@@ -76,7 +76,7 @@
         <td valign="top"><b>Update:</b></td>
         <td>
           <input type="checkbox" name="updateCheck" id="updateCheck"
-                 {if="!empty($GLOBALS['config']['ENABLE_UPDATECHECK'])"}checked{/if}/>
+                 {if="$enable_update_check"}checked{/if}/>
           <label for="updateCheck">&nbsp;Notify me when a new release is ready</label>
         </td>
       </tr>

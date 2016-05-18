@@ -1,5 +1,6 @@
 <?php
 
+require_once 'application/config/ConfigManager.php';
 require_once 'tests/Updater/DummyUpdater.php';
 
 /**
@@ -19,6 +20,16 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
     protected static $testDatastore = 'sandbox/datastore.php';
 
     /**
+     * @var string Config file path.
+     */
+    protected static $configFile = 'tests/Updater/config.php';
+
+    /**
+     * @var ConfigManager
+     */
+    protected $conf;
+
+    /**
      * Executed before each test.
      */
     public function setUp()
@@ -34,13 +45,19 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
             'disablesessionprotection' => false,
             'privateLinkByDefault' => false,
             'config' => array(
-                'CONFIG_FILE' => 'tests/Updater/config.php',
                 'DATADIR' => 'tests/Updater',
                 'PAGECACHE' => 'sandbox/pagecache',
                 'config1' => 'config1data',
                 'config2' => 'config2data',
             )
         );
+
+        ConfigManager::$CONFIG_FILE = 'tests/Updater/config';
+        $this->conf = ConfigManager::getInstance();
+        foreach (self::$configFields as $key => $value) {
+            $this->conf->set($key, $value);
+        }
+        $this->conf->write(true);
     }
 
     /**
@@ -50,16 +67,16 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        if (is_file(self::$configFields['config']['CONFIG_FILE'])) {
-            unlink(self::$configFields['config']['CONFIG_FILE']);
+        if (is_file(self::$configFile)) {
+            unlink(self::$configFile);
         }
 
         if (is_file(self::$configFields['config']['DATADIR'] . '/options.php')) {
             unlink(self::$configFields['config']['DATADIR'] . '/options.php');
         }
 
-        if (is_file(self::$configFields['config']['DATADIR'] . '/updates.json')) {
-            unlink(self::$configFields['config']['DATADIR'] . '/updates.json');
+        if (is_file(self::$configFields['config']['DATADIR'] . '/updates.txt')) {
+            unlink(self::$configFields['config']['DATADIR'] . '/updates.txt');
         }
     }
 
@@ -69,7 +86,7 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
     public function testReadEmptyUpdatesFile()
     {
         $this->assertEquals(array(), read_updates_file(''));
-        $updatesFile = self::$configFields['config']['DATADIR'] . '/updates.json';
+        $updatesFile = self::$configFields['config']['DATADIR'] . '/updates.txt';
         touch($updatesFile);
         $this->assertEquals(array(), read_updates_file($updatesFile));
     }
@@ -79,7 +96,7 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
      */
     public function testReadWriteUpdatesFile()
     {
-        $updatesFile = self::$configFields['config']['DATADIR'] . '/updates.json';
+        $updatesFile = self::$configFields['config']['DATADIR'] . '/updates.txt';
         $updatesMethods = array('m1', 'm2', 'm3');
 
         write_updates_file($updatesFile, $updatesMethods);
@@ -112,7 +129,7 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
      */
     public function testWriteUpdatesFileNotWritable()
     {
-        $updatesFile = self::$configFields['config']['DATADIR'] . '/updates.json';
+        $updatesFile = self::$configFields['config']['DATADIR'] . '/updates.txt';
         touch($updatesFile);
         chmod($updatesFile, 0444);
         @write_updates_file($updatesFile, array('test'));
@@ -131,10 +148,10 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
             'updateMethodDummy3',
             'updateMethodException',
         );
-        $updater = new DummyUpdater($updates, array(), array(), true);
+        $updater = new DummyUpdater($updates, array(), true);
         $this->assertEquals(array(), $updater->update());
 
-        $updater = new DummyUpdater(array(), array(), array(), false);
+        $updater = new DummyUpdater(array(), array(), false);
         $this->assertEquals(array(), $updater->update());
     }
 
@@ -149,7 +166,7 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
             'updateMethodDummy2',
             'updateMethodDummy3',
         );
-        $updater = new DummyUpdater($updates, array(), array(), true);
+        $updater = new DummyUpdater($updates, array(), true);
         $this->assertEquals($expectedUpdates, $updater->update());
     }
 
@@ -165,7 +182,7 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
         );
         $expectedUpdate = array('updateMethodDummy2');
 
-        $updater = new DummyUpdater($updates, array(), array(), true);
+        $updater = new DummyUpdater($updates, array(), true);
         $this->assertEquals($expectedUpdate, $updater->update());
     }
 
@@ -182,7 +199,7 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
             'updateMethodDummy3',
         );
 
-        $updater = new DummyUpdater($updates, array(), array(), true);
+        $updater = new DummyUpdater($updates, array(), true);
         $updater->update();
     }
 
@@ -195,26 +212,25 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateMergeDeprecatedConfig()
     {
-        // init
-        writeConfig(self::$configFields, true);
-        $configCopy = self::$configFields;
-        $invert = !$configCopy['privateLinkByDefault'];
-        $configCopy['privateLinkByDefault'] = $invert;
-
         // Use writeConfig to create a options.php
-        $configCopy['config']['CONFIG_FILE'] = 'tests/Updater/options.php';
-        writeConfig($configCopy, true);
+        ConfigManager::$CONFIG_FILE = 'tests/Updater/options';
+        $invert = !$this->conf->get('privateLinkByDefault');
+        $this->conf->set('privateLinkByDefault', $invert);
+        $this->conf->write(true);
 
-        $this->assertTrue(is_file($configCopy['config']['CONFIG_FILE']));
+        $optionsFile = 'tests/Updater/options.php';
+        $this->assertTrue(is_file($optionsFile));
+
+        ConfigManager::$CONFIG_FILE = 'tests/Updater/config';
 
         // merge configs
-        $updater = new Updater(array(), self::$configFields, array(), true);
+        $updater = new Updater(array(), array(), true);
         $updater->updateMethodMergeDeprecatedConfigFile();
 
         // make sure updated field is changed
-        include self::$configFields['config']['CONFIG_FILE'];
-        $this->assertEquals($invert, $GLOBALS['privateLinkByDefault']);
-        $this->assertFalse(is_file($configCopy['config']['CONFIG_FILE']));
+        $this->conf->reload();
+        $this->assertEquals($invert, $this->conf->get('privateLinkByDefault'));
+        $this->assertFalse(is_file($optionsFile));
     }
 
     /**
@@ -222,22 +238,22 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
      */
     public function testMergeDeprecatedConfigNoFile()
     {
-        writeConfig(self::$configFields, true);
-
-        $updater = new Updater(array(), self::$configFields, array(), true);
+        $updater = new Updater(array(), array(), true);
         $updater->updateMethodMergeDeprecatedConfigFile();
 
-        include self::$configFields['config']['CONFIG_FILE'];
-        $this->assertEquals(self::$configFields['login'], $GLOBALS['login']);
+        $this->assertEquals(self::$configFields['login'], $this->conf->get('login'));
     }
 
+    /**
+     * Test renameDashTags update method.
+     */
     public function testRenameDashTags()
     {
         $refDB = new ReferenceLinkDB();
         $refDB->write(self::$testDatastore);
         $linkDB = new LinkDB(self::$testDatastore, true, false);
         $this->assertEmpty($linkDB->filterSearch(array('searchtags' => 'exclude')));
-        $updater = new Updater(array(), self::$configFields, $linkDB, true);
+        $updater = new Updater(array(), $linkDB, true);
         $updater->updateMethodRenameDashTags();
         $this->assertNotEmpty($linkDB->filterSearch(array('searchtags' =>  'exclude')));
     }

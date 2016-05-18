@@ -29,21 +29,22 @@ class PageBuilder
     private function initialize()
     {
         $this->tpl = new RainTPL();
+        $conf = ConfigManager::getInstance();
 
         try {
             $version = ApplicationUtils::checkUpdate(
                 shaarli_version,
-                $GLOBALS['config']['UPDATECHECK_FILENAME'],
-                $GLOBALS['config']['UPDATECHECK_INTERVAL'],
-                $GLOBALS['config']['ENABLE_UPDATECHECK'],
+                $conf->get('config.UPDATECHECK_FILENAME'),
+                $conf->get('config.UPDATECHECK_INTERVAL'),
+                $conf->get('config.ENABLE_UPDATECHECK'),
                 isLoggedIn(),
-                $GLOBALS['config']['UPDATECHECK_BRANCH']
+                $conf->get('config.UPDATECHECK_BRANCH')
             );
             $this->tpl->assign('newVersion', escape($version));
             $this->tpl->assign('versionError', '');
 
         } catch (Exception $exc) {
-            logm($GLOBALS['config']['LOG_FILE'], $_SERVER['REMOTE_ADDR'], $exc->getMessage());
+            logm($conf->get('config.LOG_FILE'), $_SERVER['REMOTE_ADDR'], $exc->getMessage());
             $this->tpl->assign('newVersion', '');
             $this->tpl->assign('versionError', escape($exc->getMessage()));
         }
@@ -62,16 +63,19 @@ class PageBuilder
         $this->tpl->assign('scripturl', index_url($_SERVER));
         $this->tpl->assign('pagetitle', 'Shaarli');
         $this->tpl->assign('privateonly', !empty($_SESSION['privateonly'])); // Show only private links?
-        if (!empty($GLOBALS['title'])) {
-            $this->tpl->assign('pagetitle', $GLOBALS['title']);
+        if ($conf->exists('title')) {
+            $this->tpl->assign('pagetitle', $conf->get('title'));
         }
-        if (!empty($GLOBALS['titleLink'])) {
-            $this->tpl->assign('titleLink', $GLOBALS['titleLink']);
+        if ($conf->exists('titleLink')) {
+            $this->tpl->assign('titleLink', $conf->get('titleLink'));
         }
-        if (!empty($GLOBALS['pagetitle'])) {
-            $this->tpl->assign('pagetitle', $GLOBALS['pagetitle']);
+        if ($conf->exists('pagetitle')) {
+            $this->tpl->assign('pagetitle', $conf->get('pagetitle'));
         }
-        $this->tpl->assign('shaarlititle', empty($GLOBALS['title']) ? 'Shaarli': $GLOBALS['title']);
+        $this->tpl->assign('shaarlititle', $conf->get('title', 'Shaarli'));
+        $this->tpl->assign('openshaarli', $conf->get('config.OPEN_SHAARLI', false));
+        $this->tpl->assign('showatom', $conf->get('config.SHOW_ATOM', false));
+        // FIXME! Globals
         if (!empty($GLOBALS['plugin_errors'])) {
             $this->tpl->assign('plugin_errors', $GLOBALS['plugin_errors']);
         }

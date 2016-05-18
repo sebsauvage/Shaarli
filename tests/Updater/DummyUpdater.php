@@ -12,13 +12,12 @@ class DummyUpdater extends Updater
      * Object constructor.
      *
      * @param array   $doneUpdates Updates which are already done.
-     * @param array   $config      Shaarli's configuration array.
      * @param LinkDB  $linkDB      LinkDB instance.
      * @param boolean $isLoggedIn  True if the user is logged in.
      */
-    public function __construct($doneUpdates, $config, $linkDB, $isLoggedIn)
+    public function __construct($doneUpdates, $linkDB, $isLoggedIn)
     {
-        parent::__construct($doneUpdates, $config, $linkDB, $isLoggedIn);
+        parent::__construct($doneUpdates, $linkDB, $isLoggedIn);
 
         // Retrieve all update methods.
         // For unit test, only retrieve final methods,

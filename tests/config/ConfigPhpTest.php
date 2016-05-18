@@ -22,7 +22,7 @@ class ConfigPhpTest extends PHPUnit_Framework_TestCase
      */
     public function testRead()
     {
-        $conf = $this->configIO->read('tests/config/php/configOK');
+        $conf = $this->configIO->read('tests/utils/config/configPhp.php');
         $this->assertEquals('root', $conf['login']);
         $this->assertEquals('lala', $conf['redirector']);
         $this->assertEquals('data/datastore.php', $conf['config']['DATASTORE']);
@@ -42,7 +42,7 @@ class ConfigPhpTest extends PHPUnit_Framework_TestCase
      */
     public function testWriteNew()
     {
-        $dataFile = 'tests/config/php/configWrite';
+        $dataFile = 'tests/utils/config/configWrite.php';
         $data = array(
             'login' => 'root',
             'redirector' => 'lala',
@@ -60,8 +60,8 @@ $GLOBALS[\'redirector\'] = \'lala\';
 $GLOBALS[\'config\'][\'DATASTORE\'] = \'data/datastore.php\';
 $GLOBALS[\'plugins\'][\'WALLABAG_VERSION\'] = \'1\';
 ';
-        $this->assertEquals($expected, file_get_contents($dataFile .'.php'));
-        unlink($dataFile .'.php');
+        $this->assertEquals($expected, file_get_contents($dataFile));
+        unlink($dataFile);
     }
 
     /**
@@ -69,14 +69,14 @@ $GLOBALS[\'plugins\'][\'WALLABAG_VERSION\'] = \'1\';
      */
     public function testOverwrite()
     {
-        $source = 'tests/config/php/configOK.php';
-        $dest = 'tests/config/php/configOverwrite';
-        copy($source, $dest . '.php');
+        $source = 'tests/utils/config/configPhp.php';
+        $dest = 'tests/utils/config/configOverwrite.php';
+        copy($source, $dest);
         $conf = $this->configIO->read($dest);
         $conf['redirector'] = 'blabla';
         $this->configIO->write($dest, $conf);
         $conf = $this->configIO->read($dest);
         $this->assertEquals('blabla', $conf['redirector']);
-        unlink($dest .'.php');
+        unlink($dest);
     }
 }

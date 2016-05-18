@@ -76,7 +76,7 @@ class FeedBuilderTest extends PHPUnit_Framework_TestCase
         // Test headers (RSS)
         $this->assertEquals(self::$RSS_LANGUAGE, $data['language']);
         $this->assertEmpty($data['pubsubhub_url']);
-        $this->assertEquals('Tue, 10 Mar 2015 11:46:51 +0100', $data['last_update']);
+        $this->assertRegExp('/Tue, 10 Mar 2015 11:46:51 \+\d{4}/', $data['last_update']);
         $this->assertEquals(true, $data['show_dates']);
         $this->assertEquals('http://host.tld/index.php?do=feed', $data['self_link']);
         $this->assertEquals('http://host.tld/', $data['index_url']);
@@ -88,7 +88,7 @@ class FeedBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('20150310_114651', $link['linkdate']);
         $this->assertEquals('http://host.tld/?WDWyig', $link['guid']);
         $this->assertEquals('http://host.tld/?WDWyig', $link['url']);
-        $this->assertEquals('Tue, 10 Mar 2015 11:46:51 +0100', $link['iso_date']);
+        $this->assertRegExp('/Tue, 10 Mar 2015 11:46:51 \+\d{4}/', $link['iso_date']);
         $this->assertContains('Stallman has a beard', $link['description']);
         $this->assertContains('Permalink', $link['description']);
         $this->assertContains('http://host.tld/?WDWyig', $link['description']);
@@ -113,7 +113,7 @@ class FeedBuilderTest extends PHPUnit_Framework_TestCase
         $data = $feedBuilder->buildData();
         $this->assertEquals(ReferenceLinkDB::$NB_LINKS_TOTAL, count($data['links']));
         $link = array_shift($data['links']);
-        $this->assertEquals('2015-03-10T11:46:51+01:00', $link['iso_date']);
+        $this->assertRegExp('/2015-03-10T11:46:51\+\d{2}:+\d{2}/', $link['iso_date']);
     }
 
     /**

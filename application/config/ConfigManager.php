@@ -63,15 +63,24 @@ class ConfigManager
     }
 
     /**
+     * Reset the ConfigManager instance.
+     */
+    public static function reset()
+    {
+        self::$instance = null;
+        return self::getInstance();
+    }
+
+    /**
      * Rebuild the loaded config array from config files.
      */
     public function reload()
     {
-        $this->initialize();
+        $this->load();
     }
 
     /**
-     * Initialize loaded conf in ConfigManager.
+     * Initialize the ConfigIO and loaded the conf.
      */
     protected function initialize()
     {
@@ -81,7 +90,15 @@ class ConfigManager
             $this->configIO = new ConfigPhp();
         }*/
         $this->configIO = new ConfigPhp();
-        $this->loadedConfig = $this->configIO->read(self::$CONFIG_FILE);
+        $this->load();
+    }
+
+    /**
+     * Load configuration in the ConfigurationManager.
+     */
+    protected function load()
+    {
+        $this->loadedConfig = $this->configIO->read($this->getConfigFile());
         $this->setDefaultValues();
     }
 
@@ -117,9 +134,15 @@ class ConfigManager
      * @param string $value      Value to set.
      * @param bool   $write      Write the new setting in the config file, default false.
      * @param bool   $isLoggedIn User login state, default false.
+     *
+     * @throws Exception Invalid
      */
     public function set($setting, $value, $write = false, $isLoggedIn = false)
     {
+        if (empty($setting) || ! is_string($setting)) {
+            throw new Exception('Invalid setting key parameter. String expected, got: '. gettype($setting));
+        }
+
         $settings = explode('.', $setting);
         self::setConfig($settings, $value, $this->loadedConfig);
         if ($write) {
@@ -151,6 +174,8 @@ class ConfigManager
      *
      * @param bool $isLoggedIn User login state.
      *
+     * @return bool True if the configuration has been successfully written, false otherwise.
+     *
      * @throws MissingFieldConfigException: a mandatory field has not been provided in $conf.
      * @throws UnauthorizedConfigException: user is not authorize to change configuration.
      * @throws IOException: an error occurred while writing the new config file.
@@ -175,7 +200,7 @@ class ConfigManager
             }
         }
 
-        $this->configIO->write(self::$CONFIG_FILE, $this->loadedConfig);
+        return $this->configIO->write($this->getConfigFile(), $this->loadedConfig);
     }
 
     /**
@@ -326,6 +351,22 @@ class ConfigManager
         if (! $this->exists($key)) {
             $this->set($key, $value);
         }
+    }
+
+    /**
+     * @return ConfigIO
+     */
+    public function getConfigIO()
+    {
+        return $this->configIO;
+    }
+
+    /**
+     * @param ConfigIO $configIO
+     */
+    public function setConfigIO($configIO)
+    {
+        $this->configIO = $configIO;
     }
 }
 

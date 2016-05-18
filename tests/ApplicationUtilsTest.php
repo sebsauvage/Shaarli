@@ -3,6 +3,7 @@
  * ApplicationUtils' tests
  */
 
+require_once 'application/config/ConfigManager.php';
 require_once 'application/ApplicationUtils.php';
 
 /**
@@ -59,7 +60,7 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
                 $testTimeout
             )
         );
-        $this->assertRegexp(
+        $this->assertRegExp(
             self::$versionPattern,
             ApplicationUtils::getLatestGitVersionCode(
                 'https://raw.githubusercontent.com/shaarli/Shaarli/'
@@ -275,21 +276,21 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testCheckCurrentResourcePermissions()
     {
-        $config = array(
-            'CACHEDIR' => 'cache',
-            'CONFIG_FILE' => 'data/config.php',
-            'DATADIR' => 'data',
-            'DATASTORE' => 'data/datastore.php',
-            'IPBANS_FILENAME' => 'data/ipbans.php',
-            'LOG_FILE' => 'data/log.txt',
-            'PAGECACHE' => 'pagecache',
-            'RAINTPL_TMP' => 'tmp',
-            'RAINTPL_TPL' => 'tpl',
-            'UPDATECHECK_FILENAME' => 'data/lastupdatecheck.txt'
-        );
+        $conf = ConfigManager::getInstance();
+        $conf->set('config.CACHEDIR', 'cache');
+        $conf->set('config.CONFIG_FILE', 'data/config.php');
+        $conf->set('config.DATADIR', 'data');
+        $conf->set('config.DATASTORE', 'data/datastore.php');
+        $conf->set('config.IPBANS_FILENAME', 'data/ipbans.php');
+        $conf->set('config.LOG_FILE', 'data/log.txt');
+        $conf->set('config.PAGECACHE', 'pagecache');
+        $conf->set('config.RAINTPL_TMP', 'tmp');
+        $conf->set('config.RAINTPL_TPL', 'tpl');
+        $conf->set('config.UPDATECHECK_FILENAME', 'data/lastupdatecheck.txt');
+
         $this->assertEquals(
             array(),
-            ApplicationUtils::checkResourcePermissions($config)
+            ApplicationUtils::checkResourcePermissions()
         );
     }
 
@@ -298,18 +299,17 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testCheckCurrentResourcePermissionsErrors()
     {
-        $config = array(
-            'CACHEDIR' => 'null/cache',
-            'CONFIG_FILE' => 'null/data/config.php',
-            'DATADIR' => 'null/data',
-            'DATASTORE' => 'null/data/store.php',
-            'IPBANS_FILENAME' => 'null/data/ipbans.php',
-            'LOG_FILE' => 'null/data/log.txt',
-            'PAGECACHE' => 'null/pagecache',
-            'RAINTPL_TMP' => 'null/tmp',
-            'RAINTPL_TPL' => 'null/tpl',
-            'UPDATECHECK_FILENAME' => 'null/data/lastupdatecheck.txt'
-        );
+        $conf = ConfigManager::getInstance();
+        $conf->set('config.CACHEDIR', 'null/cache');
+        $conf->set('config.CONFIG_FILE', 'null/data/config.php');
+        $conf->set('config.DATADIR', 'null/data');
+        $conf->set('config.DATASTORE', 'null/data/store.php');
+        $conf->set('config.IPBANS_FILENAME', 'null/data/ipbans.php');
+        $conf->set('config.LOG_FILE', 'null/data/log.txt');
+        $conf->set('config.PAGECACHE', 'null/pagecache');
+        $conf->set('config.RAINTPL_TMP', 'null/tmp');
+        $conf->set('config.RAINTPL_TPL', 'null/tpl');
+        $conf->set('config.UPDATECHECK_FILENAME', 'null/data/lastupdatecheck.txt');
         $this->assertEquals(
             array(
                 '"null/tpl" directory is not readable',
@@ -322,7 +322,7 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
                 '"null/tmp" directory is not readable',
                 '"null/tmp" directory is not writable'
             ),
-            ApplicationUtils::checkResourcePermissions($config)
+            ApplicationUtils::checkResourcePermissions()
         );
     }
 }

@@ -28,7 +28,6 @@ class ConfigPhp implements ConfigIO
      */
     function read($filepath)
     {
-        $filepath .= $this->getExtension();
         if (! file_exists($filepath) || ! is_readable($filepath)) {
             return array();
         }
@@ -49,8 +48,6 @@ class ConfigPhp implements ConfigIO
      */
     function write($filepath, $conf)
     {
-        $filepath .= $this->getExtension();
-
         $configStr = '<?php '. PHP_EOL;
         foreach (self::$ROOT_KEYS as $key) {
             if (isset($conf[$key])) {

@@ -9,11 +9,13 @@ class IOException extends Exception
     /**
      * Construct a new IOException
      *
-     * @param string $path path to the ressource that cannot be accessed
+     * @param string $path    path to the resource that cannot be accessed
+     * @param string $message Custom exception message.
      */
-    public function __construct($path)
+    public function __construct($path, $message = '')
     {
         $this->path = $path;
-        $this->message = 'Error accessing '.$this->path;
+        $this->message = empty($message) ? 'Error accessing' : $message;
+        $this->message .= PHP_EOL . $this->path;
     }
 }

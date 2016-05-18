@@ -21,14 +21,14 @@
     <li><a href="?do=logout">Logout</a></li>
     <li><a href="?do=tools">Tools</a></li>
     <li><a href="?do=addlink">Add link</a></li>
-    {elseif="$GLOBALS['config']['OPEN_SHAARLI']"}
+    {elseif="$openshaarli"}
     <li><a href="?do=tools">Tools</a></li>
     <li><a href="?do=addlink">Add link</a></li>
     {else}
     <li><a href="?do=login">Login</a></li>
     {/if}
     <li><a href="{$feedurl}?do=rss{$searchcrits}" class="nomobile">RSS Feed</a></li>
-    {if="$GLOBALS['config']['SHOW_ATOM']"}
+    {if="$showatom"}
     <li><a href="{$feedurl}?do=atom{$searchcrits}" class="nomobile">ATOM Feed</a></li>
     {/if}
     <li><a href="?do=tagcloud">Tag cloud</a></li>
