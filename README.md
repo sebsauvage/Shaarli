@@ -26,6 +26,7 @@ Login: `demo`; Password: `demo`
 
 ### Installation & upgrade
 - [Download](https://github.com/shaarli/Shaarli/wiki/Download)
+- [Upgrade and migration](https://github.com/shaarli/Shaarli/wiki/Upgrade-and-migration)
 - [Server requirements](https://github.com/shaarli/Shaarli/wiki/Server-requirements)
 - [Server configuration](https://github.com/shaarli/Shaarli/wiki/Server-configuration)
 - [Shaarli configuration](https://github.com/shaarli/Shaarli/wiki/Shaarli-configuration)
