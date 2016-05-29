@@ -25,7 +25,8 @@ class PluginWallabagTest extends PHPUnit_Framework_TestCase
      */
     function testWallabagLinklist()
     {
-        $GLOBALS['plugins']['WALLABAG_URL'] = 'value';
+        $conf = ConfigManager::getInstance();
+        $conf->set('plugins.WALLABAG_URL', 'value');
         $str = 'http://randomstr.com/test';
         $data = array(
             'title' => $str,
@@ -45,7 +46,7 @@ class PluginWallabagTest extends PHPUnit_Framework_TestCase
         // plugin data
         $this->assertEquals(1, count($link['link_plugin']));
         $this->assertNotFalse(strpos($link['link_plugin'][0], urlencode($str)));
-        $this->assertNotFalse(strpos($link['link_plugin'][0], $GLOBALS['plugins']['WALLABAG_URL']));
+        $this->assertNotFalse(strpos($link['link_plugin'][0], $conf->get('plugins.WALLABAG_URL')));
     }
 }
 

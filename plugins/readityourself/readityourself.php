@@ -8,12 +8,9 @@
 // it seems kinda dead.
 // Not tested.
 
-// don't raise unnecessary warnings
-if (is_file(PluginManager::$PLUGINS_PATH . '/readityourself/config.php')) {
-    include PluginManager::$PLUGINS_PATH . '/readityourself/config.php';
-}
-
-if (empty($GLOBALS['plugins']['READITYOUSELF_URL'])) {
+$conf = ConfigManager::getInstance();
+$riyUrl = $conf->get('plugins.READITYOUSELF_URL');
+if (empty($riyUrl)) {
     $GLOBALS['plugin_errors'][] = 'Readityourself plugin error: '.
         'Please define "$GLOBALS[\'plugins\'][\'READITYOUSELF_URL\']" '.
         'in "plugins/readityourself/config.php" or in your Shaarli config.php file.';
@@ -28,14 +25,16 @@ if (empty($GLOBALS['plugins']['READITYOUSELF_URL'])) {
  */
 function hook_readityourself_render_linklist($data)
 {
-    if (!isset($GLOBALS['plugins']['READITYOUSELF_URL'])) {
+    $conf = ConfigManager::getInstance();
+    $riyUrl = $conf->get('plugins.READITYOUSELF_URL');
+    if (empty($riyUrl)) {
         return $data;
     }
 
     $readityourself_html = file_get_contents(PluginManager::$PLUGINS_PATH . '/readityourself/readityourself.html');
 
     foreach ($data['links'] as &$value) {
-        $readityourself = sprintf($readityourself_html, $GLOBALS['plugins']['READITYOUSELF_URL'], $value['url'], PluginManager::$PLUGINS_PATH);
+        $readityourself = sprintf($readityourself_html, $riyUrl, $value['url'], PluginManager::$PLUGINS_PATH);
         $value['link_plugin'][] = $readityourself;
     }
 

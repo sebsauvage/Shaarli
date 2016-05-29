@@ -6,12 +6,9 @@
 
 require_once 'WallabagInstance.php';
 
-// don't raise unnecessary warnings
-if (is_file(PluginManager::$PLUGINS_PATH . '/wallabag/config.php')) {
-    include PluginManager::$PLUGINS_PATH . '/wallabag/config.php';
-}
-
-if (empty($GLOBALS['plugins']['WALLABAG_URL'])) {
+$conf = ConfigManager::getInstance();
+$wallabagUrl = $conf->get('plugins.WALLABAG_URL');
+if (empty($wallabagUrl)) {
     $GLOBALS['plugin_errors'][] = 'Wallabag plugin error: '.
         'Please define "$GLOBALS[\'plugins\'][\'WALLABAG_URL\']" '.
         'in "plugins/wallabag/config.php" or in your Shaarli config.php file.';
@@ -26,14 +23,14 @@ if (empty($GLOBALS['plugins']['WALLABAG_URL'])) {
  */
 function hook_wallabag_render_linklist($data)
 {
-    if (!isset($GLOBALS['plugins']['WALLABAG_URL'])) {
+    $conf = ConfigManager::getInstance();
+    $wallabagUrl = $conf->get('plugins.WALLABAG_URL');
+    if (empty($wallabagUrl)) {
         return $data;
     }
 
-    $version = isset($GLOBALS['plugins']['WALLABAG_VERSION'])
-        ? $GLOBALS['plugins']['WALLABAG_VERSION']
-        : '';
-    $wallabagInstance = new WallabagInstance($GLOBALS['plugins']['WALLABAG_URL'], $version);
+    $version = $conf->get('plugins.WALLABAG_VERSION');
+    $wallabagInstance = new WallabagInstance($wallabagUrl, $version);
 
     $wallabagHtml = file_get_contents(PluginManager::$PLUGINS_PATH . '/wallabag/wallabag.html');
 
