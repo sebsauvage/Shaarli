@@ -9,7 +9,7 @@
 		<br><br>
 		<a href="?do=pluginadmin"><b>Plugin administration</b><span>: Enable, disable and configure plugins.</span></a>
     <br><br>
-		{if="!$GLOBALS['config']['OPEN_SHAARLI']"}<a href="?do=changepasswd"><b>Change password</b><span>: Change your password.</span></a>
+		{if="$openshaarli"}<a href="?do=changepasswd"><b>Change password</b><span>: Change your password.</span></a>
     <br><br>{/if}
 		<a href="?do=changetag"><b>Rename/delete tags</b><span>: Rename or delete a tag in all links</span></a>
     <br><br>

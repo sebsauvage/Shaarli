@@ -3,7 +3,7 @@
 // FIXME! Namespaces...
 require_once 'ConfigIO.php';
 require_once 'ConfigPhp.php';
-#require_once 'ConfigJson.php';
+require_once 'ConfigJson.php';
 
 /**
  * Class ConfigManager
@@ -84,12 +84,11 @@ class ConfigManager
      */
     protected function initialize()
     {
-        /*if (! file_exists(self::$CONFIG_FILE .'.php')) {
+        if (! file_exists(self::$CONFIG_FILE .'.php')) {
             $this->configIO = new ConfigJson();
         } else {
             $this->configIO = new ConfigPhp();
-        }*/
-        $this->configIO = new ConfigPhp();
+        }
         $this->load();
     }
 

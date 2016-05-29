@@ -142,6 +142,48 @@ class Updater
         $this->linkDB->savedb($conf->get('config.PAGECACHE'));
         return true;
     }
+
+    /**
+     * Move old configuration in PHP to the new config system in JSON format.
+     *
+     * Will rename 'config.php' into 'config.save.php' and create 'config.json'.
+     */
+    public function updateMethodConfigToJson()
+    {
+        $conf = ConfigManager::getInstance();
+
+        // JSON config already exists, nothing to do.
+        if ($conf->getConfigIO() instanceof ConfigJson) {
+            return true;
+        }
+
+        $configPhp = new ConfigPhp();
+        $configJson = new ConfigJson();
+        $oldConfig = $configPhp->read($conf::$CONFIG_FILE . '.php');
+        rename($conf->getConfigFile(), $conf::$CONFIG_FILE . '.save.php');
+        $conf->setConfigIO($configJson);
+        $conf->reload();
+
+        foreach (ConfigPhp::$ROOT_KEYS as $key) {
+            $conf->set($key, $oldConfig[$key]);
+        }
+
+        // Set sub config keys (config and plugins)
+        $subConfig = array('config', 'plugins');
+        foreach ($subConfig as $sub) {
+            foreach ($oldConfig[$sub] as $key => $value) {
+                $conf->set($sub .'.'. $key, $value);
+            }
+        }
+
+        try{
+            $conf->write($this->isLoggedIn);
+            return true;
+        } catch (IOException $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
 }
 
 /**
@@ -198,7 +240,6 @@ class UpdaterException extends Exception
         return $out;
     }
 }
-
 
 /**
  * Read the updates file, and return already done updates.

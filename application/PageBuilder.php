@@ -75,6 +75,7 @@ class PageBuilder
         $this->tpl->assign('shaarlititle', $conf->get('title', 'Shaarli'));
         $this->tpl->assign('openshaarli', $conf->get('config.OPEN_SHAARLI', false));
         $this->tpl->assign('showatom', $conf->get('config.SHOW_ATOM', false));
+        $this->tpl->assign('hide_timestamps', $conf->get('config.HIDE_TIMESTAMPS', false));
         // FIXME! Globals
         if (!empty($GLOBALS['plugin_errors'])) {
             $this->tpl->assign('plugin_errors', $GLOBALS['plugin_errors']);

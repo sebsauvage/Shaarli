@@ -20,9 +20,9 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
     protected static $testDatastore = 'sandbox/datastore.php';
 
     /**
-     * @var string Config file path.
+     * @var string Config file path (without extension).
      */
-    protected static $configFile = 'tests/Updater/config.php';
+    protected static $configFile = 'tests/utils/config/configUpdater';
 
     /**
      * @var ConfigManager
@@ -52,8 +52,9 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        ConfigManager::$CONFIG_FILE = 'tests/Updater/config';
-        $this->conf = ConfigManager::getInstance();
+        ConfigManager::$CONFIG_FILE = self::$configFile;
+        $this->conf = ConfigManager::reset();
+        $this->conf->reload();
         foreach (self::$configFields as $key => $value) {
             $this->conf->set($key, $value);
         }
@@ -67,8 +68,8 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        if (is_file(self::$configFile)) {
-            unlink(self::$configFile);
+        if (is_file('tests/Updater/config.json')) {
+            unlink('tests/Updater/config.json');
         }
 
         if (is_file(self::$configFields['config']['DATADIR'] . '/options.php')) {
@@ -214,6 +215,8 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
     {
         // Use writeConfig to create a options.php
         ConfigManager::$CONFIG_FILE = 'tests/Updater/options';
+        $this->conf->setConfigIO(new ConfigPhp());
+
         $invert = !$this->conf->get('privateLinkByDefault');
         $this->conf->set('privateLinkByDefault', $invert);
         $this->conf->write(true);
@@ -225,12 +228,15 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
 
         // merge configs
         $updater = new Updater(array(), array(), true);
+        // This writes a new config file in tests/Updater/config.php
         $updater->updateMethodMergeDeprecatedConfigFile();
 
         // make sure updated field is changed
         $this->conf->reload();
         $this->assertEquals($invert, $this->conf->get('privateLinkByDefault'));
         $this->assertFalse(is_file($optionsFile));
+        // Delete the generated file.
+        unlink($this->conf->getConfigFile());
     }
 
     /**
@@ -256,5 +262,53 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
         $updater = new Updater(array(), $linkDB, true);
         $updater->updateMethodRenameDashTags();
         $this->assertNotEmpty($linkDB->filterSearch(array('searchtags' =>  'exclude')));
+    }
+
+    /**
+     * Convert old PHP config file to JSON config.
+     */
+    public function testConfigToJson()
+    {
+        $configFile = 'tests/utils/config/configPhp';
+        ConfigManager::$CONFIG_FILE = $configFile;
+        $conf = ConfigManager::reset();
+
+        // The ConfigIO is initialized with ConfigPhp.
+        $this->assertTrue($conf->getConfigIO() instanceof ConfigPhp);
+
+        $updater = new Updater(array(), array(), false);
+        $done = $updater->updateMethodConfigToJson();
+        $this->assertTrue($done);
+
+        // The ConfigIO has been updated to ConfigJson.
+        $this->assertTrue($conf->getConfigIO() instanceof ConfigJson);
+        $this->assertTrue(file_exists($conf->getConfigFile()));
+
+        // Check JSON config data.
+        $conf->reload();
+        $this->assertEquals('root', $conf->get('login'));
+        $this->assertEquals('lala', $conf->get('redirector'));
+        $this->assertEquals('data/datastore.php', $conf->get('config.DATASTORE'));
+        $this->assertEquals('1', $conf->get('plugins.WALLABAG_VERSION'));
+
+        rename($configFile . '.save.php', $configFile . '.php');
+        unlink($conf->getConfigFile());
+    }
+
+    /**
+     * Launch config conversion update with an existing JSON file => nothing to do.
+     */
+    public function testConfigToJsonNothingToDo()
+    {
+        $configFile = 'tests/utils/config/configUpdateDone';
+        ConfigManager::$CONFIG_FILE = $configFile;
+        $conf = ConfigManager::reset();
+        $conf->reload();
+        $filetime = filemtime($conf->getConfigFile());
+        $updater = new Updater(array(), array(), false);
+        $done = $updater->updateMethodConfigToJson();
+        $this->assertTrue($done);
+        $expected = filemtime($conf->getConfigFile());
+        $this->assertEquals($expected, $filetime);
     }
 }
