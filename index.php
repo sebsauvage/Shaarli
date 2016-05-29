@@ -113,6 +113,8 @@ RainTPL::$cache_dir = $conf->get('config.RAINTPL_TMP'); // cache directory
 $pluginManager = PluginManager::getInstance();
 $pluginManager->load($conf->get('config.ENABLED_PLUGINS'));
 
+date_default_timezone_set($conf->get('timezone', 'UTC'));
+
 ob_start();  // Output buffering for the page cache.
 
 // In case stupid admin has left magic_quotes enabled in php.ini:
