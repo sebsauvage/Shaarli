@@ -34,17 +34,17 @@ class PageBuilder
         try {
             $version = ApplicationUtils::checkUpdate(
                 shaarli_version,
-                $conf->get('config.UPDATECHECK_FILENAME'),
-                $conf->get('config.UPDATECHECK_INTERVAL'),
-                $conf->get('config.ENABLE_UPDATECHECK'),
+                $conf->get('path.update_check'),
+                $conf->get('general.check_updates_interval'),
+                $conf->get('general.check_updates'),
                 isLoggedIn(),
-                $conf->get('config.UPDATECHECK_BRANCH')
+                $conf->get('general.check_updates_branch')
             );
             $this->tpl->assign('newVersion', escape($version));
             $this->tpl->assign('versionError', '');
 
         } catch (Exception $exc) {
-            logm($conf->get('config.LOG_FILE'), $_SERVER['REMOTE_ADDR'], $exc->getMessage());
+            logm($conf->get('path.log'), $_SERVER['REMOTE_ADDR'], $exc->getMessage());
             $this->tpl->assign('newVersion', '');
             $this->tpl->assign('versionError', escape($exc->getMessage()));
         }
@@ -63,20 +63,19 @@ class PageBuilder
         $this->tpl->assign('scripturl', index_url($_SERVER));
         $this->tpl->assign('pagetitle', 'Shaarli');
         $this->tpl->assign('privateonly', !empty($_SESSION['privateonly'])); // Show only private links?
-        if ($conf->exists('title')) {
-            $this->tpl->assign('pagetitle', $conf->get('title'));
+        if ($conf->exists('general.title')) {
+            $this->tpl->assign('pagetitle', $conf->get('general.title'));
         }
-        if ($conf->exists('titleLink')) {
-            $this->tpl->assign('titleLink', $conf->get('titleLink'));
+        if ($conf->exists('general.header_link')) {
+            $this->tpl->assign('titleLink', $conf->get('general.header_link'));
         }
         if ($conf->exists('pagetitle')) {
             $this->tpl->assign('pagetitle', $conf->get('pagetitle'));
         }
         $this->tpl->assign('shaarlititle', $conf->get('title', 'Shaarli'));
-        $this->tpl->assign('openshaarli', $conf->get('config.OPEN_SHAARLI', false));
-        $this->tpl->assign('showatom', $conf->get('config.SHOW_ATOM', false));
-        $this->tpl->assign('hide_timestamps', $conf->get('config.HIDE_TIMESTAMPS', false));
-        // FIXME! Globals
+        $this->tpl->assign('openshaarli', $conf->get('extras.open_shaarli', false));
+        $this->tpl->assign('showatom', $conf->get('extras.show_atom', false));
+        $this->tpl->assign('hide_timestamps', $conf->get('extras.hide_timestamps', false));
         if (!empty($GLOBALS['plugin_errors'])) {
             $this->tpl->assign('plugin_errors', $GLOBALS['plugin_errors']);
         }

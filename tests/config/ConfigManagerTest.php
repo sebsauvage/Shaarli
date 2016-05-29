@@ -131,7 +131,7 @@ class ConfigManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testExistsOk()
     {
-        $this->assertTrue($this->conf->exists('login'));
+        $this->assertTrue($this->conf->exists('credentials.login'));
         $this->assertTrue($this->conf->exists('config.foo'));
     }
 
@@ -163,12 +163,12 @@ class ConfigManagerTest extends PHPUnit_Framework_TestCase
     public function testReload()
     {
         ConfigManager::$CONFIG_FILE = 'tests/utils/config/configTmp';
-        $newConf = ConfigJson::$PHP_HEADER . '{ "key": "value" }';
+        $newConf = ConfigJson::getPhpHeaders() . '{ "key": "value" }';
         file_put_contents($this->conf->getConfigFile(), $newConf);
         $this->conf->reload();
         unlink($this->conf->getConfigFile());
         // Previous conf no longer exists, and new values have been loaded.
-        $this->assertFalse($this->conf->exists('login'));
+        $this->assertFalse($this->conf->exists('credentials.login'));
         $this->assertEquals('value', $this->conf->get('key'));
     }
 }

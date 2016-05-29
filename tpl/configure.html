@@ -36,7 +36,7 @@
         <td><b>Security:</b></td>
         <td>
           <input type="checkbox" name="disablesessionprotection" id="disablesessionprotection"
-                   {if="!empty($GLOBALS['disablesessionprotection'])"}checked{/if}>
+                   {if="$private_links_default"}checked{/if}>
           <label
             for="disablesessionprotection">&nbsp;Disable session cookie hijacking protection (Check this if you get
             disconnected often or if your IP address changes often.)</label>
@@ -60,7 +60,7 @@
                  {if="$enable_rss_permalinks"}checked{/if}/>
           <label for="enableRssPermalinks">
             &nbsp;Disable it to use permalinks in RSS feed instead of direct links to your shaared links. Currently <b>
-            {if="$GLOBALS['config']['ENABLE_RSS_PERMALINKS']"}enabled{else}disabled{/if}.</b>
+            {if="$enable_rss_permalinks"}enabled{else}disabled{/if}.</b>
           </label>
         </td>
       </tr>

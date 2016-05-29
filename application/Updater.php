@@ -109,8 +109,8 @@ class Updater
     {
         $conf = ConfigManager::getInstance();
 
-        if (is_file($conf->get('config.DATADIR') . '/options.php')) {
-            include $conf->get('config.DATADIR') . '/options.php';
+        if (is_file($conf->get('path.data_dir') . '/options.php')) {
+            include $conf->get('path.data_dir') . '/options.php';
 
             // Load GLOBALS into config
             $allowedKeys = array_merge(ConfigPhp::$ROOT_KEYS);
@@ -121,7 +121,7 @@ class Updater
                 }
             }
             $conf->write($this->isLoggedIn);
-            unlink($conf->get('config.DATADIR').'/options.php');
+            unlink($conf->get('path.data_dir').'/options.php');
         }
 
         return true;
@@ -139,14 +139,15 @@ class Updater
             $link['tags'] = implode(' ', array_unique(LinkFilter::tagsStrToArray($link['tags'], true)));
             $this->linkDB[$link['linkdate']] = $link;
         }
-        $this->linkDB->savedb($conf->get('config.PAGECACHE'));
+        $this->linkDB->savedb($conf->get('path.page_cache'));
         return true;
     }
 
     /**
      * Move old configuration in PHP to the new config system in JSON format.
      *
-     * Will rename 'config.php' into 'config.save.php' and create 'config.json'.
+     * Will rename 'config.php' into 'config.save.php' and create 'config.json.php'.
+     * It will also convert legacy setting keys to the new ones.
      */
     public function updateMethodConfigToJson()
     {
@@ -164,15 +165,21 @@ class Updater
         $conf->setConfigIO($configJson);
         $conf->reload();
 
+        $legacyMap = array_flip(ConfigPhp::$LEGACY_KEYS_MAPPING);
         foreach (ConfigPhp::$ROOT_KEYS as $key) {
-            $conf->set($key, $oldConfig[$key]);
+            $conf->set($legacyMap[$key], $oldConfig[$key]);
         }
 
         // Set sub config keys (config and plugins)
         $subConfig = array('config', 'plugins');
         foreach ($subConfig as $sub) {
             foreach ($oldConfig[$sub] as $key => $value) {
-                $conf->set($sub .'.'. $key, $value);
+                if (isset($legacyMap[$sub .'.'. $key])) {
+                    $configKey = $legacyMap[$sub .'.'. $key];
+                } else {
+                    $configKey = $sub .'.'. $key;
+                }
+                $conf->set($configKey, $value);
             }
         }
 

@@ -24,6 +24,51 @@ class ConfigPhp implements ConfigIO
     );
 
     /**
+     * Map legacy config keys with the new ones.
+     * If ConfigPhp is used, getting <newkey> will actually look for <legacykey>.
+     * The Updater will use this array to transform keys when switching to JSON.
+     *
+     * @var array current key => legacy key.
+     */
+    public static $LEGACY_KEYS_MAPPING = array(
+        'credentials.login' => 'login',
+        'credentials.hash' => 'hash',
+        'credentials.salt' => 'salt',
+        'path.data_dir' => 'config.DATADIR',
+        'path.config' => 'config.CONFIG_FILE',
+        'path.datastore' => 'config.DATASTORE',
+        'path.updates' => 'config.UPDATES_FILE',
+        'path.log' => 'config.LOG_FILE',
+        'path.update_check' => 'config.UPDATECHECK_FILENAME',
+        'path.raintpl_tpl' => 'config.RAINTPL_TPL',
+        'path.raintpl_tmp' => 'config.RAINTPL_TMP',
+        'path.thumbnails_cache' => 'config.CACHEDIR',
+        'path.page_cache' => 'config.PAGECACHE',
+        'path.ban_file' => 'config.IPBANS_FILENAME',
+        'security.session_protection_disabled' => 'disablesessionprotection',
+        'security.ban_after' => 'config.BAN_AFTER',
+        'security.ban_duration' => 'config.BAN_DURATION',
+        'general.title' => 'title',
+        'general.timezone' => 'timezone',
+        'general.header_link' => 'titleLink',
+        'general.check_updates' => 'config.ENABLE_UPDATECHECK',
+        'general.check_updates_branch' => 'config.UPDATECHECK_BRANCH',
+        'general.check_updates_interval' => 'config.UPDATECHECK_INTERVAL',
+        'general.default_private_links' => 'privateLinkByDefault',
+        'general.rss_permalinks' => 'config.ENABLE_RSS_PERMALINKS',
+        'general.links_per_page' => 'config.LINKS_PER_PAGE',
+        'general.enable_thumbnails' => 'config.ENABLE_THUMBNAILS',
+        'general.enable_localcache' => 'config.ENABLE_LOCALCACHE',
+        'general.enabled_plugins' => 'config.ENABLED_PLUGINS',
+        'extras.redirector' => 'redirector',
+        'extras.redirector_encode_url' => 'config.REDIRECTOR_URLENCODE',
+        'extras.show_atom' => 'config.SHOW_ATOM',
+        'extras.hide_public_links' => 'config.HIDE_PUBLIC_LINKS',
+        'extras.hide_timestamps' => 'config.HIDE_TIMESTAMPS',
+        'extras.open_shaarli' => 'config.OPEN_SHAARLI',
+    );
+
+    /**
      * @inheritdoc
      */
     function read($filepath)
