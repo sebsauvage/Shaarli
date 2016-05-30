@@ -191,6 +191,29 @@ class Updater
             return false;
         }
     }
+
+    /**
+     * Escape settings which have been manually escaped in every request in previous versions:
+     *   - general.title
+     *   - general.header_link
+     *   - extras.redirector
+     *
+     * @return bool true if the update is successful, false otherwise.
+     */
+    public function escapeUnescapedConfig()
+    {
+        $conf = ConfigManager::getInstance();
+        try {
+            $conf->set('general.title', escape($conf->get('general.title')));
+            $conf->set('general.header_link', escape($conf->get('general.header_link')));
+            $conf->set('extras.redirector', escape($conf->get('extras.redirector')));
+            $conf->write($this->isLoggedIn);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+        return true;
+    }
 }
 
 /**

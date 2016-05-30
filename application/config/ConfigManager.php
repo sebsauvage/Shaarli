@@ -9,6 +9,9 @@ require_once 'ConfigJson.php';
  * Class ConfigManager
  *
  * Singleton, manages all Shaarli's settings.
+ * See the documentation for more information on settings:
+ *   - doc/Shaarli-configuration.html
+ *   - https://github.com/shaarli/Shaarli/wiki/Shaarli-configuration
  */
 class ConfigManager
 {
@@ -286,81 +289,40 @@ class ConfigManager
      */
     protected function setDefaultValues()
     {
-        // Data subdirectory
         $this->setEmpty('path.data_dir', 'data');
-
-        // Main configuration file
         $this->setEmpty('path.config', 'data/config.php');
-
-        // Link datastore
         $this->setEmpty('path.datastore', 'data/datastore.php');
-
-        // Banned IPs
         $this->setEmpty('path.ban_file', 'data/ipbans.php');
-
-        // Processed updates file.
         $this->setEmpty('path.updates', 'data/updates.txt');
-
-        // Access log
         $this->setEmpty('path.log', 'data/log.txt');
-
-        // For updates check of Shaarli
         $this->setEmpty('path.update_check', 'data/lastupdatecheck.txt');
-
-        // Set ENABLE_UPDATECHECK to disabled by default.
-        $this->setEmpty('general.check_updates', false);
-
-        // RainTPL cache directory (keep the trailing slash!)
-        $this->setEmpty('path.raintpl_tmp', 'tmp/');
-        // Raintpl template directory (keep the trailing slash!)
         $this->setEmpty('path.raintpl_tpl', 'tpl/');
-
-        // Thumbnail cache directory
+        $this->setEmpty('path.raintpl_tmp', 'tmp/');
         $this->setEmpty('path.thumbnails_cache', 'cache');
-
-        // Atom & RSS feed cache directory
         $this->setEmpty('path.page_cache', 'pagecache');
 
-        // Ban IP after this many failures
         $this->setEmpty('security.ban_after', 4);
-        // Ban duration for IP address after login failures (in seconds)
         $this->setEmpty('security.ban_after', 1800);
+        $this->setEmpty('security.session_protection_disabled', false);
 
-        // Feed options
-        // Enable RSS permalinks by default.
-        // This corresponds to the default behavior of shaarli before this was added as an option.
+        $this->setEmpty('general.check_updates', false);
         $this->setEmpty('general.rss_permalinks', true);
-        // If true, an extra "ATOM feed" button will be displayed in the toolbar
-        $this->setEmpty('extras.show_atom', false);
-
-        // Link display options
-        $this->setEmpty('extras.hide_public_links', false);
-        $this->setEmpty('extras.hide_timestamps', false);
         $this->setEmpty('general.links_per_page', 20);
-
-        // Private checkbox is checked by default
         $this->setEmpty('general.default_private_links', false);
-
-        // Open Shaarli (true): anyone can add/edit/delete links without having to login
-        $this->setEmpty('extras.open_shaarli', false);
-
-        // Thumbnails
-        // Display thumbnails in links
         $this->setEmpty('general.enable_thumbnails', true);
-        // Store thumbnails in a local cache
         $this->setEmpty('general.enable_localcache', true);
-
-        // Update check frequency for Shaarli. 86400 seconds=24 hours
         $this->setEmpty('general.check_updates_branch', 'stable');
         $this->setEmpty('general.check_updates_interval', 86400);
+        $this->setEmpty('general.header_link', '?');
+        $this->setEmpty('general.enabled_plugins', array('qrcode'));
 
+        $this->setEmpty('extras.show_atom', false);
+        $this->setEmpty('extras.hide_public_links', false);
+        $this->setEmpty('extras.hide_timestamps', false);
+        $this->setEmpty('extras.open_shaarli', false);
         $this->setEmpty('extras.redirector', '');
         $this->setEmpty('extras.redirector_encode_url', true);
 
-        // Enabled plugins.
-        $this->setEmpty('general.enabled_plugins', array('qrcode'));
-
-        // Initialize plugin parameters array.
         $this->setEmpty('plugins', array());
     }
 
@@ -370,7 +332,7 @@ class ConfigManager
      * @param string $key   Setting key.
      * @param mixed  $value Setting value.
      */
-    protected function setEmpty($key, $value)
+    public function setEmpty($key, $value)
     {
         if (! $this->exists($key)) {
             $this->set($key, $value);

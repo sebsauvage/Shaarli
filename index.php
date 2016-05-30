@@ -106,7 +106,8 @@ if (isset($_COOKIE['shaarli']) && !is_session_id_valid($_COOKIE['shaarli'])) {
 }
 
 $conf = ConfigManager::getInstance();
-
+$conf->setEmpty('general.timezone', date_default_timezone_get());
+$conf->setEmpty('general.title', 'Shared links on '. escape(index_url($_SERVER)));
 RainTPL::$tpl_dir = $conf->get('path.raintpl_tpl'); // template directory
 RainTPL::$cache_dir = $conf->get('path.raintpl_tmp'); // cache directory
 
@@ -132,23 +133,6 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-// Handling of old config file which do not have the new parameters.
-if (! $conf->exists('general.title')) {
-    $conf->set('general.title', 'Shared links on '. escape(index_url($_SERVER)));
-}
-if (! $conf->exists('general.timezone')) {
-    $conf->set('general.timezone', date_default_timezone_get());
-}
-if (! $conf->exists('security.session_protection_disabled')) {
-    $conf->set('security.session_protection_disabled', false);
-}
-if (! $conf->exists('general.default_private_links')) {
-    $conf->set('general.default_private_links', false);
-}
-if (! $conf->exists('general.header_link')) {
-    $conf->set('general.header_link', '?');
-}
-
 if (! is_file($conf->getConfigFile())) {
     // Ensure Shaarli has proper access to its resources
     $errors = ApplicationUtils::checkResourcePermissions();
@@ -169,11 +153,6 @@ if (! is_file($conf->getConfigFile())) {
     // Display the installation form if no existing config is found
     install();
 }
-
-// FIXME! Update these value with Updater and escpae it during the install/config save.
-$conf->set('general.title', escape($conf->get('general.title')));
-$conf->set('general.header_link', escape($conf->get('general.header_link')));
-$conf->set('extras.redirector', escape($conf->get('extras.redirector')));
 
 // a token depending of deployment salt, user password, and the current ip
 define('STAY_SIGNED_IN_TOKEN', sha1($conf->get('credentials.hash') . $_SERVER['REMOTE_ADDR'] . $conf->get('credentials.salt')));
@@ -1101,9 +1080,9 @@ function renderPage()
                 $tz = $_POST['continent'] . '/' . $_POST['city'];
             }
             $conf->set('general.timezone', $tz);
-            $conf->set('general.title', $_POST['title']);
-            $conf->set('general.header_link', $_POST['titleLink']);
-            $conf->set('extras.redirector', $_POST['redirector']);
+            $conf->set('general.title', escape($_POST['title']));
+            $conf->set('general.header_link', escape($_POST['titleLink']));
+            $conf->set('extras.redirector', escape($_POST['redirector']));
             $conf->set('security.session_protection_disabled', !empty($_POST['disablesessionprotection']));
             $conf->set('general.default_private_links', !empty($_POST['privateLinkByDefault']));
             $conf->set('general.rss_permalinks', !empty($_POST['enableRssPermalinks']));
@@ -1951,7 +1930,7 @@ function install()
         $conf->set('credentials.salt', $salt);
         $conf->set('credentials.hash', sha1($_POST['setpassword'] . $login . $salt));
         if (!empty($_POST['title'])) {
-            $conf->set('general.title', $_POST['title']);
+            $conf->set('general.title', escape($_POST['title']));
         } else {
             $conf->set('general.title', 'Shared links on '.escape(index_url($_SERVER)));
         }
