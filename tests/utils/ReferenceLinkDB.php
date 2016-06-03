@@ -21,7 +21,7 @@ class ReferenceLinkDB
             'Stallman has a beard and is part of the Free Software Foundation (or not). Seriously, read this.',
             0,
             '20150310_114651',
-            'stuff'
+            'sTuff'
         );
 
         $this->addLink(
