@@ -10,9 +10,8 @@ require_once 'Parsedown.php';
 
 /*
  * If this tag is used on a shaare, the description won't be processed by Parsedown.
- * Using a private tag so it won't appear for visitors.
  */
-define('NO_MD_TAG', '.nomarkdown');
+define('NO_MD_TAG', 'nomarkdown');
 
 /**
  * Parse linklist descriptions.
@@ -25,11 +24,11 @@ function hook_markdown_render_linklist($data)
 {
     foreach ($data['links'] as &$value) {
         if (!empty($value['tags']) && noMarkdownTag($value['tags'])) {
+            $value['taglist'] = stripNoMarkdownTag($value['taglist']);
             continue;
         }
         $value['description'] = process_markdown($value['description']);
     }
-
     return $data;
 }
 
@@ -44,6 +43,7 @@ function hook_markdown_render_feed($data)
 {
     foreach ($data['links'] as &$value) {
         if (!empty($value['tags']) && noMarkdownTag($value['tags'])) {
+            $value['tags'] = stripNoMarkdownTag($value['tags']);
             continue;
         }
         $value['description'] = process_markdown($value['description']);
@@ -84,6 +84,19 @@ function hook_markdown_render_daily($data)
 function noMarkdownTag($tags)
 {
     return strpos($tags, NO_MD_TAG) !== false;
+}
+
+/**
+ * Remove the no-markdown meta tag so it won't be displayed.
+ *
+ * @param string $tags Tag list.
+ *
+ * @return string tag list without no markdown tag.
+ */
+function stripNoMarkdownTag($tags)
+{
+    unset($tags[array_search(NO_MD_TAG, $tags)]);
+    return array_values($tags);
 }
 
 /**

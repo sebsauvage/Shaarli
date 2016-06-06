@@ -125,7 +125,8 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
         $data = array(
             'links' => array(array(
                 'description' => $str,
-                'tags' => NO_MD_TAG
+                'tags' => NO_MD_TAG,
+                'taglist' => array(NO_MD_TAG),
             ))
         );
 
@@ -140,7 +141,8 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
                     // nth link
                     0 => array(
                         'formatedDescription' => $str,
-                        'tags' => NO_MD_TAG
+                        'tags' => NO_MD_TAG,
+                        'taglist' => array(),
                     ),
                 ),
             ),
