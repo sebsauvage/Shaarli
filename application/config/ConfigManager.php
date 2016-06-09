@@ -2,13 +2,13 @@
 
 // FIXME! Namespaces...
 require_once 'ConfigIO.php';
-require_once 'ConfigPhp.php';
 require_once 'ConfigJson.php';
+require_once 'ConfigPhp.php';
 
 /**
  * Class ConfigManager
  *
- * Singleton, manages all Shaarli's settings.
+ * Manages all Shaarli's settings.
  * See the documentation for more information on settings:
  *   - doc/Shaarli-configuration.html
  *   - https://github.com/shaarli/Shaarli/wiki/Shaarli-configuration
@@ -16,19 +16,14 @@ require_once 'ConfigJson.php';
 class ConfigManager
 {
     /**
-     * @var ConfigManager instance.
+     * @var string Flag telling a setting is not found.
      */
-    protected static $instance = null;
+    protected static $NOT_FOUND = 'NOT_FOUND';
 
     /**
      * @var string Config folder.
      */
-    public static $CONFIG_FILE = 'data/config';
-
-    /**
-     * @var string Flag telling a setting is not found.
-     */
-    protected static $NOT_FOUND = 'NOT_FOUND';
+    protected $configFile;
 
     /**
      * @var array Loaded config array.
@@ -41,37 +36,20 @@ class ConfigManager
     protected $configIO;
 
     /**
-     * Private constructor: new instances not allowed.
+     * Constructor.
      */
-    private function __construct() {}
-
-    /**
-     * Cloning isn't allowed either.
-     */
-    private function __clone() {}
-
-    /**
-     * Return existing instance of PluginManager, or create it.
-     *
-     * @return ConfigManager instance.
-     */
-    public static function getInstance()
+    public function __construct($configFile = 'data/config')
     {
-        if (!(self::$instance instanceof self)) {
-            self::$instance = new self();
-            self::$instance->initialize();
-        }
-
-        return self::$instance;
+        $this->configFile = $configFile;
+        $this->initialize();
     }
 
     /**
      * Reset the ConfigManager instance.
      */
-    public static function reset()
+    public function reset()
     {
-        self::$instance = null;
-        return self::getInstance();
+        $this->initialize();
     }
 
     /**
@@ -87,10 +65,10 @@ class ConfigManager
      */
     protected function initialize()
     {
-        if (! file_exists(self::$CONFIG_FILE .'.php')) {
-            $this->configIO = new ConfigJson();
-        } else {
+        if (file_exists($this->configFile . '.php')) {
             $this->configIO = new ConfigPhp();
+        } else {
+            $this->configIO = new ConfigJson();
         }
         $this->load();
     }
@@ -100,7 +78,7 @@ class ConfigManager
      */
     protected function load()
     {
-        $this->loadedConfig = $this->configIO->read($this->getConfigFile());
+        $this->loadedConfig = $this->configIO->read($this->getConfigFileExt());
         $this->setDefaultValues();
     }
 
@@ -213,7 +191,7 @@ class ConfigManager
         );
 
         // Only logged in user can alter config.
-        if (is_file(self::$CONFIG_FILE) && !$isLoggedIn) {
+        if (is_file($this->getConfigFileExt()) && !$isLoggedIn) {
             throw new UnauthorizedConfigException();
         }
 
@@ -224,17 +202,37 @@ class ConfigManager
             }
         }
 
-        return $this->configIO->write($this->getConfigFile(), $this->loadedConfig);
+        return $this->configIO->write($this->getConfigFileExt(), $this->loadedConfig);
     }
 
     /**
-     * Get the configuration file path.
+     * Set the config file path (without extension).
      *
-     * @return string Config file path.
+     * @param string $configFile File path.
+     */
+    public function setConfigFile($configFile)
+    {
+        $this->configFile = $configFile;
+    }
+
+    /**
+     * Return the configuration file path (without extension).
+     *
+     * @return string Config path.
      */
     public function getConfigFile()
     {
-        return self::$CONFIG_FILE . $this->configIO->getExtension();
+        return $this->configFile;
+    }
+
+    /**
+     * Get the configuration file path with its extension.
+     *
+     * @return string Config file path.
+     */
+    public function getConfigFileExt()
+    {
+        return $this->configFile . $this->configIO->getExtension();
     }
 
     /**
@@ -302,7 +300,7 @@ class ConfigManager
         $this->setEmpty('path.page_cache', 'pagecache');
 
         $this->setEmpty('security.ban_after', 4);
-        $this->setEmpty('security.ban_after', 1800);
+        $this->setEmpty('security.ban_duration', 1800);
         $this->setEmpty('security.session_protection_disabled', false);
 
         $this->setEmpty('general.check_updates', false);

@@ -276,7 +276,7 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testCheckCurrentResourcePermissions()
     {
-        $conf = ConfigManager::getInstance();
+        $conf = new ConfigManager('');
         $conf->set('path.thumbnails_cache', 'cache');
         $conf->set('path.config', 'data/config.php');
         $conf->set('path.data_dir', 'data');
@@ -290,7 +290,7 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array(),
-            ApplicationUtils::checkResourcePermissions()
+            ApplicationUtils::checkResourcePermissions($conf)
         );
     }
 
@@ -299,7 +299,7 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testCheckCurrentResourcePermissionsErrors()
     {
-        $conf = ConfigManager::getInstance();
+        $conf = new ConfigManager('');
         $conf->set('path.thumbnails_cache', 'null/cache');
         $conf->set('path.config', 'null/data/config.php');
         $conf->set('path.data_dir', 'null/data');
@@ -322,7 +322,7 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
                 '"null/tmp" directory is not readable',
                 '"null/tmp" directory is not writable'
             ),
-            ApplicationUtils::checkResourcePermissions()
+            ApplicationUtils::checkResourcePermissions($conf)
         );
     }
 }

@@ -18,6 +18,11 @@ class Updater
     protected $linkDB;
 
     /**
+     * @var ConfigManager $conf Configuration Manager instance.
+     */
+    protected $conf;
+
+    /**
      * @var bool True if the user is logged in, false otherwise.
      */
     protected $isLoggedIn;
@@ -30,14 +35,16 @@ class Updater
     /**
      * Object constructor.
      *
-     * @param array   $doneUpdates Updates which are already done.
-     * @param LinkDB  $linkDB      LinkDB instance.
-     * @param boolean $isLoggedIn  True if the user is logged in.
+     * @param array         $doneUpdates Updates which are already done.
+     * @param LinkDB        $linkDB      LinkDB instance.
+     * @oaram ConfigManager $conf        Configuration Manager instance.
+     * @param boolean       $isLoggedIn  True if the user is logged in.
      */
-    public function __construct($doneUpdates, $linkDB, $isLoggedIn)
+    public function __construct($doneUpdates, $linkDB, $conf, $isLoggedIn)
     {
         $this->doneUpdates = $doneUpdates;
         $this->linkDB = $linkDB;
+        $this->conf = $conf;
         $this->isLoggedIn = $isLoggedIn;
 
         // Retrieve all update methods.
@@ -107,21 +114,19 @@ class Updater
      */
     public function updateMethodMergeDeprecatedConfigFile()
     {
-        $conf = ConfigManager::getInstance();
-
-        if (is_file($conf->get('path.data_dir') . '/options.php')) {
-            include $conf->get('path.data_dir') . '/options.php';
+        if (is_file($this->conf->get('path.data_dir') . '/options.php')) {
+            include $this->conf->get('path.data_dir') . '/options.php';
 
             // Load GLOBALS into config
             $allowedKeys = array_merge(ConfigPhp::$ROOT_KEYS);
             $allowedKeys[] = 'config';
             foreach ($GLOBALS as $key => $value) {
                 if (in_array($key, $allowedKeys)) {
-                    $conf->set($key, $value);
+                    $this->conf->set($key, $value);
                 }
             }
-            $conf->write($this->isLoggedIn);
-            unlink($conf->get('path.data_dir').'/options.php');
+            $this->conf->write($this->isLoggedIn);
+            unlink($this->conf->get('path.data_dir').'/options.php');
         }
 
         return true;
@@ -132,14 +137,13 @@ class Updater
      */
     public function updateMethodRenameDashTags()
     {
-        $conf = ConfigManager::getInstance();
         $linklist = $this->linkDB->filterSearch();
         foreach ($linklist as $link) {
             $link['tags'] = preg_replace('/(^| )\-/', '$1', $link['tags']);
             $link['tags'] = implode(' ', array_unique(LinkFilter::tagsStrToArray($link['tags'], true)));
             $this->linkDB[$link['linkdate']] = $link;
         }
-        $this->linkDB->savedb($conf->get('path.page_cache'));
+        $this->linkDB->savedb($this->conf->get('path.page_cache'));
         return true;
     }
 
@@ -151,23 +155,21 @@ class Updater
      */
     public function updateMethodConfigToJson()
     {
-        $conf = ConfigManager::getInstance();
-
         // JSON config already exists, nothing to do.
-        if ($conf->getConfigIO() instanceof ConfigJson) {
+        if ($this->conf->getConfigIO() instanceof ConfigJson) {
             return true;
         }
 
         $configPhp = new ConfigPhp();
         $configJson = new ConfigJson();
-        $oldConfig = $configPhp->read($conf::$CONFIG_FILE . '.php');
-        rename($conf->getConfigFile(), $conf::$CONFIG_FILE . '.save.php');
-        $conf->setConfigIO($configJson);
-        $conf->reload();
+        $oldConfig = $configPhp->read($this->conf->getConfigFile() . '.php');
+        rename($this->conf->getConfigFileExt(), $this->conf->getConfigFile() . '.save.php');
+        $this->conf->setConfigIO($configJson);
+        $this->conf->reload();
 
         $legacyMap = array_flip(ConfigPhp::$LEGACY_KEYS_MAPPING);
         foreach (ConfigPhp::$ROOT_KEYS as $key) {
-            $conf->set($legacyMap[$key], $oldConfig[$key]);
+            $this->conf->set($legacyMap[$key], $oldConfig[$key]);
         }
 
         // Set sub config keys (config and plugins)
@@ -179,12 +181,12 @@ class Updater
                 } else {
                     $configKey = $sub .'.'. $key;
                 }
-                $conf->set($configKey, $value);
+                $this->conf->set($configKey, $value);
             }
         }
 
         try{
-            $conf->write($this->isLoggedIn);
+            $this->conf->write($this->isLoggedIn);
             return true;
         } catch (IOException $e) {
             error_log($e->getMessage());
@@ -202,12 +204,11 @@ class Updater
      */
     public function escapeUnescapedConfig()
     {
-        $conf = ConfigManager::getInstance();
         try {
-            $conf->set('general.title', escape($conf->get('general.title')));
-            $conf->set('general.header_link', escape($conf->get('general.header_link')));
-            $conf->set('extras.redirector', escape($conf->get('extras.redirector')));
-            $conf->write($this->isLoggedIn);
+            $this->conf->set('general.title', escape($this->conf->get('general.title')));
+            $this->conf->set('general.header_link', escape($this->conf->get('general.header_link')));
+            $this->conf->set('extras.redirector', escape($this->conf->get('extras.redirector')));
+            $this->conf->write($this->isLoggedIn);
         } catch (Exception $e) {
             error_log($e->getMessage());
             return false;

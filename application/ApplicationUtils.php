@@ -132,12 +132,13 @@ class ApplicationUtils
     /**
      * Checks Shaarli has the proper access permissions to its resources
      *
+     * @param ConfigManager $conf Configuration Manager instance.
+     *
      * @return array A list of the detected configuration issues
      */
-    public static function checkResourcePermissions()
+    public static function checkResourcePermissions($conf)
     {
         $errors = array();
-        $conf = ConfigManager::getInstance();
 
         // Check script and template directories are readable
         foreach (array(
@@ -168,7 +169,7 @@ class ApplicationUtils
 
         // Check configuration files are readable and writeable
         foreach (array(
-            $conf->getConfigFile(),
+            $conf->getConfigFileExt(),
             $conf->get('path.datastore'),
             $conf->get('path.ban_file'),
             $conf->get('path.log'),
