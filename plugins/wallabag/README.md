@@ -12,31 +12,26 @@ The directory structure should look like:
     └── plugins
         └── wallabag
             ├── README.md
-            ├── config.php.dist
             ├── wallabag.html
+            ├── wallabag.meta
             ├── wallabag.php
-            └── wallabag.png
+            ├── wallabag.php
+            └── WallabagInstance.php
 ```
 
-To enable the plugin, add `'wallabag'` to your list of enabled plugins in `data/options.php` (`PLUGINS` array).
-This should look like:
+To enable the plugin, you can either:
 
-```
-$GLOBALS['config']['PLUGINS'] = array('qrcode', 'any_other_plugin', 'wallabag')
-```
+  * enable it in the plugins administration page (`?do=pluginadmin`). 
+  * add `wallabag` to your list of enabled plugins in `data/config.json.php` (`general.enabled_plugins` section).
 
 ### Configuration
 
-Copy `config.php.dist` into `config.php` and setup your instance.
+Go to the plugin administration page, and edit the following settings (with the plugin enabled).
 
-*Wallabag instance URL*
-```
-$GLOBALS['config']['WALLABAG_URL'] = 'http://v2.wallabag.org' ;
-```
+**WALLABAG_URL**: *Wallabag instance URL*  
+Example value: `http://v2.wallabag.org`
 
-*Wallabag version*: either `1` (for 1.x) or `2` (for 2.x)
-```
-$GLOBALS['config']['WALLABAG_VERSION'] = 2;
-```
+**WALLABAG_VERSION**: *Wallabag version*  
+Value: either `1` (for 1.x) or `2` (for 2.x)
 
-> Note: these settings can also be set in `data/config.php`.
+> Note: these settings can also be set in `data/config.json.php`, in the plugins section.

@@ -1,4 +1,0 @@
-<?php
-
-$GLOBALS['plugins']['WALLABAG_URL'] = 'https://demo.wallabag.org';
-$GLOBALS['plugins']['WALLABAG_VERSION'] = 1;
