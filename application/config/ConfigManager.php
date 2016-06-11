@@ -186,8 +186,8 @@ class ConfigManager
             'general.timezone',
             'general.title',
             'general.header_link',
-            'general.default_private_links',
-            'extras.redirector',
+            'privacy.default_private_links',
+            'redirector.url',
         );
 
         // Only logged in user can alter config.
@@ -287,39 +287,43 @@ class ConfigManager
      */
     protected function setDefaultValues()
     {
-        $this->setEmpty('path.data_dir', 'data');
-        $this->setEmpty('path.config', 'data/config.php');
-        $this->setEmpty('path.datastore', 'data/datastore.php');
-        $this->setEmpty('path.ban_file', 'data/ipbans.php');
-        $this->setEmpty('path.updates', 'data/updates.txt');
-        $this->setEmpty('path.log', 'data/log.txt');
-        $this->setEmpty('path.update_check', 'data/lastupdatecheck.txt');
-        $this->setEmpty('path.raintpl_tpl', 'tpl/');
-        $this->setEmpty('path.raintpl_tmp', 'tmp/');
-        $this->setEmpty('path.thumbnails_cache', 'cache');
-        $this->setEmpty('path.page_cache', 'pagecache');
+        $this->setEmpty('resource.data_dir', 'data');
+        $this->setEmpty('resource.config', 'data/config.php');
+        $this->setEmpty('resource.datastore', 'data/datastore.php');
+        $this->setEmpty('resource.ban_file', 'data/ipbans.php');
+        $this->setEmpty('resource.updates', 'data/updates.txt');
+        $this->setEmpty('resource.log', 'data/log.txt');
+        $this->setEmpty('resource.update_check', 'data/lastupdatecheck.txt');
+        $this->setEmpty('resource.raintpl_tpl', 'tpl/');
+        $this->setEmpty('resource.raintpl_tmp', 'tmp/');
+        $this->setEmpty('resource.thumbnails_cache', 'cache');
+        $this->setEmpty('resource.page_cache', 'pagecache');
 
         $this->setEmpty('security.ban_after', 4);
         $this->setEmpty('security.ban_duration', 1800);
         $this->setEmpty('security.session_protection_disabled', false);
+        $this->setEmpty('security.open_shaarli', false);
 
-        $this->setEmpty('general.check_updates', false);
-        $this->setEmpty('general.rss_permalinks', true);
-        $this->setEmpty('general.links_per_page', 20);
-        $this->setEmpty('general.default_private_links', false);
-        $this->setEmpty('general.enable_thumbnails', true);
-        $this->setEmpty('general.enable_localcache', true);
-        $this->setEmpty('general.check_updates_branch', 'stable');
-        $this->setEmpty('general.check_updates_interval', 86400);
         $this->setEmpty('general.header_link', '?');
+        $this->setEmpty('general.links_per_page', 20);
         $this->setEmpty('general.enabled_plugins', array('qrcode'));
 
-        $this->setEmpty('extras.show_atom', false);
-        $this->setEmpty('extras.hide_public_links', false);
-        $this->setEmpty('extras.hide_timestamps', false);
-        $this->setEmpty('extras.open_shaarli', false);
-        $this->setEmpty('extras.redirector', '');
-        $this->setEmpty('extras.redirector_encode_url', true);
+        $this->setEmpty('updates.check_updates', false);
+        $this->setEmpty('updates.check_updates_branch', 'stable');
+        $this->setEmpty('updates.check_updates_interval', 86400);
+
+        $this->setEmpty('feed.rss_permalinks', true);
+        $this->setEmpty('feed.show_atom', false);
+
+        $this->setEmpty('privacy.default_private_links', false);
+        $this->setEmpty('privacy.hide_public_links', false);
+        $this->setEmpty('privacy.hide_timestamps', false);
+
+        $this->setEmpty('thumbnail.enable_thumbnails', true);
+        $this->setEmpty('thumbnail.enable_localcache', true);
+
+        $this->setEmpty('redirector.url', '');
+        $this->setEmpty('redirector.encode_url', true);
 
         $this->setEmpty('plugins', array());
     }

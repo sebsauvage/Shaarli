@@ -38,7 +38,7 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
     public function testReadEmptyUpdatesFile()
     {
         $this->assertEquals(array(), read_updates_file(''));
-        $updatesFile = $this->conf->get('path.data_dir') . '/updates.txt';
+        $updatesFile = $this->conf->get('resource.data_dir') . '/updates.txt';
         touch($updatesFile);
         $this->assertEquals(array(), read_updates_file($updatesFile));
         unlink($updatesFile);
@@ -49,7 +49,7 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
      */
     public function testReadWriteUpdatesFile()
     {
-        $updatesFile = $this->conf->get('path.data_dir') . '/updates.txt';
+        $updatesFile = $this->conf->get('resource.data_dir') . '/updates.txt';
         $updatesMethods = array('m1', 'm2', 'm3');
 
         write_updates_file($updatesFile, $updatesMethods);
@@ -83,7 +83,7 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
      */
     public function testWriteUpdatesFileNotWritable()
     {
-        $updatesFile = $this->conf->get('path.data_dir') . '/updates.txt';
+        $updatesFile = $this->conf->get('resource.data_dir') . '/updates.txt';
         touch($updatesFile);
         chmod($updatesFile, 0444);
         try {
@@ -189,7 +189,7 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
 
         // make sure updated field is changed
         $this->conf->reload();
-        $this->assertTrue($this->conf->get('general.default_private_links'));
+        $this->assertTrue($this->conf->get('privacy.default_private_links'));
         $this->assertFalse(is_file($optionsFile));
         // Delete the generated file.
         unlink($this->conf->getConfigFileExt());
@@ -243,8 +243,8 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
         // Check JSON config data.
         $this->conf->reload();
         $this->assertEquals('root', $this->conf->get('credentials.login'));
-        $this->assertEquals('lala', $this->conf->get('extras.redirector'));
-        $this->assertEquals('data/datastore.php', $this->conf->get('path.datastore'));
+        $this->assertEquals('lala', $this->conf->get('redirector.url'));
+        $this->assertEquals('data/datastore.php', $this->conf->get('resource.datastore'));
         $this->assertEquals('1', $this->conf->get('plugins.WALLABAG_VERSION'));
 
         rename($configFile . '.save.php', $configFile . '.php');

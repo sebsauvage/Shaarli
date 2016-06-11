@@ -114,8 +114,8 @@ class Updater
      */
     public function updateMethodMergeDeprecatedConfigFile()
     {
-        if (is_file($this->conf->get('path.data_dir') . '/options.php')) {
-            include $this->conf->get('path.data_dir') . '/options.php';
+        if (is_file($this->conf->get('resource.data_dir') . '/options.php')) {
+            include $this->conf->get('resource.data_dir') . '/options.php';
 
             // Load GLOBALS into config
             $allowedKeys = array_merge(ConfigPhp::$ROOT_KEYS);
@@ -126,7 +126,7 @@ class Updater
                 }
             }
             $this->conf->write($this->isLoggedIn);
-            unlink($this->conf->get('path.data_dir').'/options.php');
+            unlink($this->conf->get('resource.data_dir').'/options.php');
         }
 
         return true;
@@ -143,7 +143,7 @@ class Updater
             $link['tags'] = implode(' ', array_unique(LinkFilter::tagsStrToArray($link['tags'], true)));
             $this->linkDB[$link['linkdate']] = $link;
         }
-        $this->linkDB->savedb($this->conf->get('path.page_cache'));
+        $this->linkDB->savedb($this->conf->get('resource.page_cache'));
         return true;
     }
 
@@ -207,7 +207,7 @@ class Updater
         try {
             $this->conf->set('general.title', escape($this->conf->get('general.title')));
             $this->conf->set('general.header_link', escape($this->conf->get('general.header_link')));
-            $this->conf->set('extras.redirector', escape($this->conf->get('extras.redirector')));
+            $this->conf->set('redirector.url', escape($this->conf->get('redirector.url')));
             $this->conf->write($this->isLoggedIn);
         } catch (Exception $e) {
             error_log($e->getMessage());

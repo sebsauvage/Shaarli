@@ -277,16 +277,16 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
     public function testCheckCurrentResourcePermissions()
     {
         $conf = new ConfigManager('');
-        $conf->set('path.thumbnails_cache', 'cache');
-        $conf->set('path.config', 'data/config.php');
-        $conf->set('path.data_dir', 'data');
-        $conf->set('path.datastore', 'data/datastore.php');
-        $conf->set('path.ban_file', 'data/ipbans.php');
-        $conf->set('path.log', 'data/log.txt');
-        $conf->set('path.page_cache', 'pagecache');
-        $conf->set('path.raintpl_tmp', 'tmp');
-        $conf->set('path.raintpl_tpl', 'tpl');
-        $conf->set('path.update_check', 'data/lastupdatecheck.txt');
+        $conf->set('resource.thumbnails_cache', 'cache');
+        $conf->set('resource.config', 'data/config.php');
+        $conf->set('resource.data_dir', 'data');
+        $conf->set('resource.datastore', 'data/datastore.php');
+        $conf->set('resource.ban_file', 'data/ipbans.php');
+        $conf->set('resource.log', 'data/log.txt');
+        $conf->set('resource.page_cache', 'pagecache');
+        $conf->set('resource.raintpl_tmp', 'tmp');
+        $conf->set('resource.raintpl_tpl', 'tpl');
+        $conf->set('resource.update_check', 'data/lastupdatecheck.txt');
 
         $this->assertEquals(
             array(),
@@ -300,16 +300,16 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
     public function testCheckCurrentResourcePermissionsErrors()
     {
         $conf = new ConfigManager('');
-        $conf->set('path.thumbnails_cache', 'null/cache');
-        $conf->set('path.config', 'null/data/config.php');
-        $conf->set('path.data_dir', 'null/data');
-        $conf->set('path.datastore', 'null/data/store.php');
-        $conf->set('path.ban_file', 'null/data/ipbans.php');
-        $conf->set('path.log', 'null/data/log.txt');
-        $conf->set('path.page_cache', 'null/pagecache');
-        $conf->set('path.raintpl_tmp', 'null/tmp');
-        $conf->set('path.raintpl_tpl', 'null/tpl');
-        $conf->set('path.update_check', 'null/data/lastupdatecheck.txt');
+        $conf->set('resource.thumbnails_cache', 'null/cache');
+        $conf->set('resource.config', 'null/data/config.php');
+        $conf->set('resource.data_dir', 'null/data');
+        $conf->set('resource.datastore', 'null/data/store.php');
+        $conf->set('resource.ban_file', 'null/data/ipbans.php');
+        $conf->set('resource.log', 'null/data/log.txt');
+        $conf->set('resource.page_cache', 'null/pagecache');
+        $conf->set('resource.raintpl_tmp', 'null/tmp');
+        $conf->set('resource.raintpl_tpl', 'null/tpl');
+        $conf->set('resource.update_check', 'null/data/lastupdatecheck.txt');
         $this->assertEquals(
             array(
                 '"null/tpl" directory is not readable',

@@ -10,17 +10,19 @@
     },
     "general": {
         "timezone":"Europe\/Paris",
-        "default_private_linksheader_link":true,
         "title": "Shaarli",
         "header_link": "?"
     },
-    "extras": {
-        "redirector":"lala"
+    "privacy": {
+        "default_private_links":true
+    },
+    "redirector": {
+        "url":"lala"
     },
     "config": {
         "foo": "bar"
     },
-    "path": {
+    "resource": {
         "datastore": "tests\/utils\/config\/datastore.php",
         "data_dir": "tests\/utils\/config"
     },

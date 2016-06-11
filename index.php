@@ -108,8 +108,8 @@ if (isset($_COOKIE['shaarli']) && !is_session_id_valid($_COOKIE['shaarli'])) {
 $conf = new ConfigManager();
 $conf->setEmpty('general.timezone', date_default_timezone_get());
 $conf->setEmpty('general.title', 'Shared links on '. escape(index_url($_SERVER)));
-RainTPL::$tpl_dir = $conf->get('path.raintpl_tpl'); // template directory
-RainTPL::$cache_dir = $conf->get('path.raintpl_tmp'); // cache directory
+RainTPL::$tpl_dir = $conf->get('resource.raintpl_tpl'); // template directory
+RainTPL::$cache_dir = $conf->get('resource.raintpl_tmp'); // cache directory
 
 $pluginManager = new PluginManager($conf);
 $pluginManager->load($conf->get('general.enabled_plugins'));
@@ -172,7 +172,7 @@ header('Content-Type: text/html; charset=utf-8'); // We use UTF-8 for proper int
  */
 function setup_login_state($conf)
 {
-	if ($conf->get('extras.open_shaarli')) {
+	if ($conf->get('security.open_shaarli')) {
 	    return true;
 	}
 	$userIsLoggedIn = false; // By default, we do not consider the user as logged in;
@@ -273,10 +273,10 @@ function check_auth($login, $password, $conf)
     if ($login == $conf->get('credentials.login') && $hash == $conf->get('credentials.hash'))
     {   // Login/password is correct.
 		fillSessionInfo($conf);
-        logm($conf->get('path.log'), $_SERVER['REMOTE_ADDR'], 'Login successful');
+        logm($conf->get('resource.log'), $_SERVER['REMOTE_ADDR'], 'Login successful');
         return true;
     }
-    logm($conf->get('path.log'), $_SERVER['REMOTE_ADDR'], 'Login failed for user '.$login);
+    logm($conf->get('resource.log'), $_SERVER['REMOTE_ADDR'], 'Login failed for user '.$login);
     return false;
 }
 
@@ -302,14 +302,14 @@ function logout() {
 // ------------------------------------------------------------------------------------------
 // Brute force protection system
 // Several consecutive failed logins will ban the IP address for 30 minutes.
-if (!is_file($conf->get('path.ban_file', 'data/ipbans.php'))) {
+if (!is_file($conf->get('resource.ban_file', 'data/ipbans.php'))) {
     // FIXME! globals
     file_put_contents(
-        $conf->get('path.ban_file', 'data/ipbans.php'),
+        $conf->get('resource.ban_file', 'data/ipbans.php'),
         "<?php\n\$GLOBALS['IPBANS']=".var_export(array('FAILURES'=>array(),'BANS'=>array()),true).";\n?>"
     );
 }
-include $conf->get('path.ban_file', 'data/ipbans.php');
+include $conf->get('resource.ban_file', 'data/ipbans.php');
 /**
  * Signal a failed login. Will ban the IP if too many failures:
  *
@@ -324,11 +324,11 @@ function ban_loginFailed($conf)
     if ($gb['FAILURES'][$ip] > ($conf->get('security.ban_after') - 1))
     {
         $gb['BANS'][$ip] = time() + $conf->get('security.ban_after', 1800);
-        logm($conf->get('path.log'), $_SERVER['REMOTE_ADDR'], 'IP address banned from login');
+        logm($conf->get('resource.log'), $_SERVER['REMOTE_ADDR'], 'IP address banned from login');
     }
     $GLOBALS['IPBANS'] = $gb;
     file_put_contents(
-        $conf->get('path.ban_file', 'data/ipbans.php'),
+        $conf->get('resource.ban_file', 'data/ipbans.php'),
         "<?php\n\$GLOBALS['IPBANS']=".var_export($gb,true).";\n?>"
     );
 }
@@ -345,7 +345,7 @@ function ban_loginOk($conf)
     unset($gb['FAILURES'][$ip]); unset($gb['BANS'][$ip]);
     $GLOBALS['IPBANS'] = $gb;
     file_put_contents(
-        $conf->get('path.ban_file', 'data/ipbans.php'),
+        $conf->get('resource.ban_file', 'data/ipbans.php'),
         "<?php\n\$GLOBALS['IPBANS']=".var_export($gb,true).";\n?>"
     );
 }
@@ -365,10 +365,10 @@ function ban_canLogin($conf)
         // User is banned. Check if the ban has expired:
         if ($gb['BANS'][$ip]<=time())
         {   // Ban expired, user can try to login again.
-            logm($conf->get('path.log'), $_SERVER['REMOTE_ADDR'], 'Ban lifted.');
+            logm($conf->get('resource.log'), $_SERVER['REMOTE_ADDR'], 'Ban lifted.');
             unset($gb['FAILURES'][$ip]); unset($gb['BANS'][$ip]);
             file_put_contents(
-                $conf->get('path.ban_file', 'data/ipbans.php'),
+                $conf->get('resource.ban_file', 'data/ipbans.php'),
                 "<?php\n\$GLOBALS['IPBANS']=".var_export($gb,true).";\n?>"
             );
             return true; // Ban has expired, user can login.
@@ -533,11 +533,11 @@ function showDailyRSS($conf) {
     // If cached was not found (or not usable), then read the database and build the response:
     // Read links from database (and filter private links if used it not logged in).
     $LINKSDB = new LinkDB(
-        $conf->get('path.datastore'),
+        $conf->get('resource.datastore'),
         isLoggedIn(),
-        $conf->get('extras.hide_public_links'),
-        $conf->get('extras.redirector'),
-        $conf->get('extras.redirector_encode_url')
+        $conf->get('privacy.hide_public_links'),
+        $conf->get('redirector.url'),
+        $conf->get('redirector.encode_url')
     );
 
     /* Some Shaarlies may have very few links, so we need to look
@@ -590,7 +590,7 @@ function showDailyRSS($conf) {
         // We pre-format some fields for proper output.
         foreach ($linkdates as $linkdate) {
             $l = $LINKSDB[$linkdate];
-            $l['formatedDescription'] = format_description($l['description'], $conf->get('extras.redirector'));
+            $l['formatedDescription'] = format_description($l['description'], $conf->get('redirector.url'));
             $l['thumbnail'] = thumbnail($conf, $l['url']);
             $l_date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $l['linkdate']);
             $l['timestamp'] = $l_date->getTimestamp();
@@ -607,7 +607,7 @@ function showDailyRSS($conf) {
         $tpl->assign('absurl', $absurl);
         $tpl->assign('links', $links);
         $tpl->assign('rssdate', escape($dayDate->format(DateTime::RSS)));
-        $tpl->assign('hide_timestamps', $conf->get('extras.hide_timestamps', false));
+        $tpl->assign('hide_timestamps', $conf->get('privacy.hide_timestamps', false));
         $html = $tpl->draw('dailyrss', $return_string=true);
 
         echo $html . PHP_EOL;
@@ -657,7 +657,7 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager)
         $taglist = explode(' ',$link['tags']);
         uasort($taglist, 'strcasecmp');
         $linksToDisplay[$key]['taglist']=$taglist;
-        $linksToDisplay[$key]['formatedDescription'] = format_description($link['description'], $conf->get('extras.redirector'));
+        $linksToDisplay[$key]['formatedDescription'] = format_description($link['description'], $conf->get('redirector.url'));
         $linksToDisplay[$key]['thumbnail'] = thumbnail($conf, $link['url']);
         $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
         $linksToDisplay[$key]['timestamp'] = $date->getTimestamp();
@@ -726,15 +726,15 @@ function showLinkList($PAGE, $LINKSDB, $conf, $pluginManager) {
 function renderPage($conf, $pluginManager)
 {
     $LINKSDB = new LinkDB(
-        $conf->get('path.datastore'),
+        $conf->get('resource.datastore'),
         isLoggedIn(),
-        $conf->get('extras.hide_public_links'),
-        $conf->get('extras.redirector'),
-        $conf->get('extras.redirector_encode_url')
+        $conf->get('privacy.hide_public_links'),
+        $conf->get('redirector.url'),
+        $conf->get('redirector.encode_url')
     );
 
     $updater = new Updater(
-        read_updates_file($conf->get('path.updates')),
+        read_updates_file($conf->get('resource.updates')),
         $LINKSDB,
         $conf,
         isLoggedIn()
@@ -743,7 +743,7 @@ function renderPage($conf, $pluginManager)
         $newUpdates = $updater->update();
         if (! empty($newUpdates)) {
             write_updates_file(
-                $conf->get('path.updates'),
+                $conf->get('resource.updates'),
                 $updater->getDoneUpdates()
             );
         }
@@ -782,7 +782,7 @@ function renderPage($conf, $pluginManager)
     // -------- Display login form.
     if ($targetPage == Router::$PAGE_LOGIN)
     {
-        if ($conf->get('extras.open_shaarli')) { header('Location: ?'); exit; }  // No need to login for open Shaarli
+        if ($conf->get('security.open_shaarli')) { header('Location: ?'); exit; }  // No need to login for open Shaarli
         $token=''; if (ban_canLogin($conf)) $token=getToken($conf); // Do not waste token generation if not useful.
         $PAGE->assign('token',$token);
         if (isset($_GET['username'])) {
@@ -795,7 +795,7 @@ function renderPage($conf, $pluginManager)
     // -------- User wants to logout.
     if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=logout'))
     {
-        invalidateCaches($conf->get('path.page_cache'));
+        invalidateCaches($conf->get('resource.page_cache'));
         logout();
         header('Location: ?');
         exit;
@@ -895,7 +895,7 @@ function renderPage($conf, $pluginManager)
         // Cache system
         $query = $_SERVER['QUERY_STRING'];
         $cache = new CachedPage(
-            $conf->get('path.page_cache'),
+            $conf->get('resource.page_cache'),
             page_url($_SERVER),
             startsWith($query,'do='. $targetPage) && !isLoggedIn()
         );
@@ -908,8 +908,8 @@ function renderPage($conf, $pluginManager)
         // Generate data.
         $feedGenerator = new FeedBuilder($LINKSDB, $feedType, $_SERVER, $_GET, isLoggedIn());
         $feedGenerator->setLocale(strtolower(setlocale(LC_COLLATE, 0)));
-        $feedGenerator->setHideDates($conf->get('extras.hide_timestamps') && !isLoggedIn());
-        $feedGenerator->setUsePermalinks(isset($_GET['permalinks']) || !$conf->get('general.rss_permalinks'));
+        $feedGenerator->setHideDates($conf->get('privacy.hide_timestamps') && !isLoggedIn());
+        $feedGenerator->setUsePermalinks(isset($_GET['permalinks']) || !$conf->get('feed.rss_permalinks'));
         $pshUrl = $conf->get('config.PUBSUBHUB_URL');
         if (!empty($pshUrl)) {
             $feedGenerator->setPubsubhubUrl($pshUrl);
@@ -1072,7 +1072,7 @@ function renderPage($conf, $pluginManager)
     // -------- User wants to change his/her password.
     if ($targetPage == Router::$PAGE_CHANGEPASSWORD)
     {
-        if ($conf->get('extras.open_shaarli')) {
+        if ($conf->get('security.open_shaarli')) {
             die('You are not supposed to change a password on an Open Shaarli.');
         }
 
@@ -1128,12 +1128,12 @@ function renderPage($conf, $pluginManager)
             $conf->set('general.timezone', $tz);
             $conf->set('general.title', escape($_POST['title']));
             $conf->set('general.header_link', escape($_POST['titleLink']));
-            $conf->set('extras.redirector', escape($_POST['redirector']));
+            $conf->set('redirector.url', escape($_POST['redirector']));
             $conf->set('security.session_protection_disabled', !empty($_POST['disablesessionprotection']));
-            $conf->set('general.default_private_links', !empty($_POST['privateLinkByDefault']));
-            $conf->set('general.rss_permalinks', !empty($_POST['enableRssPermalinks']));
-            $conf->set('general.check_updates', !empty($_POST['updateCheck']));
-            $conf->set('extras.hide_public_links', !empty($_POST['hidePublicLinks']));
+            $conf->set('privacy.default_private_links', !empty($_POST['privateLinkByDefault']));
+            $conf->set('feed.rss_permalinks', !empty($_POST['enableRssPermalinks']));
+            $conf->set('updates.check_updates', !empty($_POST['updateCheck']));
+            $conf->set('privacy.hide_public_links', !empty($_POST['hidePublicLinks']));
             try {
                 $conf->write(isLoggedIn());
             }
@@ -1154,14 +1154,14 @@ function renderPage($conf, $pluginManager)
         {
             $PAGE->assign('token',getToken($conf));
             $PAGE->assign('title', $conf->get('general.title'));
-            $PAGE->assign('redirector', $conf->get('extras.redirector'));
+            $PAGE->assign('redirector', $conf->get('redirector.url'));
             list($timezone_form, $timezone_js) = generateTimeZoneForm($conf->get('general.timezone'));
             $PAGE->assign('timezone_form', $timezone_form);
             $PAGE->assign('timezone_js',$timezone_js);
-            $PAGE->assign('private_links_default', $conf->get('general.default_private_links', false));
-            $PAGE->assign('enable_rss_permalinks', $conf->get('general.rss_permalinks', false));
-            $PAGE->assign('enable_update_check', $conf->get('general.check_updates', true));
-            $PAGE->assign('hide_public_links', $conf->get('extras.hide_public_links', false));
+            $PAGE->assign('private_links_default', $conf->get('privacy.default_private_links', false));
+            $PAGE->assign('enable_rss_permalinks', $conf->get('feed.rss_permalinks', false));
+            $PAGE->assign('enable_update_check', $conf->get('updates.check_updates', true));
+            $PAGE->assign('hide_public_links', $conf->get('privacy.hide_public_links', false));
             $PAGE->renderPage('configure');
             exit;
         }
@@ -1193,7 +1193,7 @@ function renderPage($conf, $pluginManager)
                 $value['tags']=trim(implode(' ',$tags));
                 $LINKSDB[$key]=$value;
             }
-            $LINKSDB->savedb($conf->get('path.page_cache'));
+            $LINKSDB->savedb($conf->get('resource.page_cache'));
             echo '<script>alert("Tag was removed from '.count($linksToAlter).' links.");document.location=\'?\';</script>';
             exit;
         }
@@ -1210,7 +1210,7 @@ function renderPage($conf, $pluginManager)
                 $value['tags']=trim(implode(' ',$tags));
                 $LINKSDB[$key]=$value;
             }
-            $LINKSDB->savedb($conf->get('path.page_cache')); // Save to disk.
+            $LINKSDB->savedb($conf->get('resource.page_cache')); // Save to disk.
             echo '<script>alert("Tag was renamed in '.count($linksToAlter).' links.");document.location=\'?searchtags='.urlencode($_POST['totag']).'\';</script>';
             exit;
         }
@@ -1261,7 +1261,7 @@ function renderPage($conf, $pluginManager)
         $pluginManager->executeHooks('save_link', $link);
 
         $LINKSDB[$linkdate] = $link;
-        $LINKSDB->savedb($conf->get('path.page_cache'));
+        $LINKSDB->savedb($conf->get('resource.page_cache'));
         pubsubhub($conf);
 
         // If we are called from the bookmarklet, we must close the popup:
@@ -1303,7 +1303,7 @@ function renderPage($conf, $pluginManager)
         $pluginManager->executeHooks('delete_link', $LINKSDB[$linkdate]);
 
         unset($LINKSDB[$linkdate]);
-        $LINKSDB->savedb('path.page_cache'); // save to disk
+        $LINKSDB->savedb('resource.page_cache'); // save to disk
 
         // If we are called from the bookmarklet, we must close the popup:
         if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) { echo '<script>self.close();</script>'; exit; }
@@ -1629,7 +1629,7 @@ function importFile($LINKSDB, $conf)
                 }
             }
         }
-        $LINKSDB->savedb($conf->get('path.page_cache'));
+        $LINKSDB->savedb($conf->get('resource.page_cache'));
 
         echo '<script>alert("File '.json_encode($filename).' ('.$filesize.' bytes) was successfully processed: '.$import_count.' links imported.");document.location=\'?\';</script>';
     }
@@ -1693,7 +1693,7 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
     while ($i<$end && $i<count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
-        $link['description'] = format_description($link['description'], $conf->get('extras.redirector'));
+        $link['description'] = format_description($link['description'], $conf->get('redirector.url'));
         $classLi =  ($i % 2) != 0 ? '' : 'publicLinkHightLight';
         $link['class'] = $link['private'] == 0 ? $classLi : 'private';
         $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
@@ -1735,7 +1735,7 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
         'result_count' => count($linksToDisplay),
         'search_term' => $searchterm,
         'search_tags' => $searchtags,
-        'redirector' => $conf->get('extras.redirector'),  // Optional redirector URL.
+        'redirector' => $conf->get('redirector.url'),  // Optional redirector URL.
         'token' => $token,
         'links' => $linkDisp,
         'tags' => $LINKSDB->allTags(),
@@ -1773,7 +1773,7 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
  */
 function computeThumbnail($conf, $url, $href = false)
 {
-    if (!$conf->get('general.enable_thumbnails')) return array();
+    if (!$conf->get('thumbnail.enable_thumbnails')) return array();
     if ($href==false) $href=$url;
 
     // For most hosts, the URL of the thumbnail can be easily deduced from the URL of the link.
@@ -1841,7 +1841,7 @@ function computeThumbnail($conf, $url, $href = false)
     // So we deport the thumbnail generation in order not to slow down page generation
     // (and we also cache the thumbnail)
 
-    if (! $conf->get('general.enable_localcache')) return array(); // If local cache is disabled, no thumbnails for services which require the use a local cache.
+    if (! $conf->get('thumbnail.enable_localcache')) return array(); // If local cache is disabled, no thumbnails for services which require the use a local cache.
 
     if ($domain=='flickr.com' || endsWith($domain,'.flickr.com')
         || $domain=='vimeo.com'
@@ -1996,7 +1996,7 @@ function install($conf)
         } else {
             $conf->set('general.title', 'Shared links on '.escape(index_url($_SERVER)));
         }
-        $conf->set('general.check_updates', !empty($_POST['updateCheck']));
+        $conf->set('updates.check_updates', !empty($_POST['updateCheck']));
         try {
             // Everything is ok, let's create config file.
             $conf->write(isLoggedIn());
@@ -2047,7 +2047,7 @@ function genThumbnail($conf)
     $sign = hash_hmac('sha256', $_GET['url'], $conf->get('credentials.salt'));
     if ($sign!=$_GET['hmac']) die('Naughty boy!');
 
-    $cacheDir = $conf->get('path.thumbnails_cache', 'cache');
+    $cacheDir = $conf->get('resource.thumbnails_cache', 'cache');
     // Let's see if we don't already have the image for this URL in the cache.
     $thumbname=hash('sha1',$_GET['url']).'.jpg';
     if (is_file($cacheDir .'/'. $thumbname))

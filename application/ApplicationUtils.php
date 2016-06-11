@@ -145,7 +145,7 @@ class ApplicationUtils
             'application',
             'inc',
             'plugins',
-            $conf->get('path.raintpl_tpl'),
+            $conf->get('resource.raintpl_tpl'),
         ) as $path) {
             if (! is_readable(realpath($path))) {
                 $errors[] = '"'.$path.'" directory is not readable';
@@ -154,10 +154,10 @@ class ApplicationUtils
 
         // Check cache and data directories are readable and writeable
         foreach (array(
-            $conf->get('path.thumbnails_cache'),
-            $conf->get('path.data_dir'),
-            $conf->get('path.page_cache'),
-            $conf->get('path.raintpl_tmp'),
+            $conf->get('resource.thumbnails_cache'),
+            $conf->get('resource.data_dir'),
+            $conf->get('resource.page_cache'),
+            $conf->get('resource.raintpl_tmp'),
         ) as $path) {
             if (! is_readable(realpath($path))) {
                 $errors[] = '"'.$path.'" directory is not readable';
@@ -170,10 +170,10 @@ class ApplicationUtils
         // Check configuration files are readable and writeable
         foreach (array(
             $conf->getConfigFileExt(),
-            $conf->get('path.datastore'),
-            $conf->get('path.ban_file'),
-            $conf->get('path.log'),
-            $conf->get('path.update_check'),
+            $conf->get('resource.datastore'),
+            $conf->get('resource.ban_file'),
+            $conf->get('resource.log'),
+            $conf->get('resource.update_check'),
         ) as $path) {
             if (! is_file(realpath($path))) {
                 # the file may not exist yet

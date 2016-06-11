@@ -41,17 +41,17 @@ class PageBuilder
         try {
             $version = ApplicationUtils::checkUpdate(
                 shaarli_version,
-                $this->conf->get('path.update_check'),
-                $this->conf->get('general.check_updates_interval'),
-                $this->conf->get('general.check_updates'),
+                $this->conf->get('resource.update_check'),
+                $this->conf->get('updates.check_updates_interval'),
+                $this->conf->get('updates.check_updates'),
                 isLoggedIn(),
-                $this->conf->get('general.check_updates_branch')
+                $this->conf->get('updates.check_updates_branch')
             );
             $this->tpl->assign('newVersion', escape($version));
             $this->tpl->assign('versionError', '');
 
         } catch (Exception $exc) {
-            logm($this->conf->get('path.log'), $_SERVER['REMOTE_ADDR'], $exc->getMessage());
+            logm($this->conf->get('resource.log'), $_SERVER['REMOTE_ADDR'], $exc->getMessage());
             $this->tpl->assign('newVersion', '');
             $this->tpl->assign('versionError', escape($exc->getMessage()));
         }
@@ -80,9 +80,9 @@ class PageBuilder
             $this->tpl->assign('pagetitle', $this->conf->get('pagetitle'));
         }
         $this->tpl->assign('shaarlititle', $this->conf->get('title', 'Shaarli'));
-        $this->tpl->assign('openshaarli', $this->conf->get('extras.open_shaarli', false));
-        $this->tpl->assign('showatom', $this->conf->get('extras.show_atom', false));
-        $this->tpl->assign('hide_timestamps', $this->conf->get('extras.hide_timestamps', false));
+        $this->tpl->assign('openshaarli', $this->conf->get('security.open_shaarli', false));
+        $this->tpl->assign('showatom', $this->conf->get('feed.show_atom', false));
+        $this->tpl->assign('hide_timestamps', $this->conf->get('privacy.hide_timestamps', false));
         if (!empty($GLOBALS['plugin_errors'])) {
             $this->tpl->assign('plugin_errors', $GLOBALS['plugin_errors']);
         }
