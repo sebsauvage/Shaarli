@@ -86,6 +86,8 @@ class PageBuilder
         if (!empty($GLOBALS['plugin_errors'])) {
             $this->tpl->assign('plugin_errors', $GLOBALS['plugin_errors']);
         }
+        // To be removed with a proper theme configuration.
+        $this->tpl->assign('conf', $this->conf);
     }
 
     /**
