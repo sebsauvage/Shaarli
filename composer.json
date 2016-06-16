@@ -1,11 +1,17 @@
 {
     "name": "shaarli/shaarli",
-    "description": "The personal, minimalist, super-fast, no-database delicious clone",
+    "description": "The personal, minimalist, super-fast, database-free bookmarking service",
+    "type": "project",
     "license": "MIT",
+    "homepage": "https://github.com/shaarli/Shaarli",
     "support": {
-        "issues": "https://github.com/shaarli/Shaarli/issues"
+        "issues": "https://github.com/shaarli/Shaarli/issues",
+        "wiki": "https://github.com/shaarli/Shaarli/wiki"
     },
-    "require": {},
+    "keywords": ["bookmark", "link", "share", "web"],
+    "require": {
+        "php": ">=5.3.4"
+    },
     "require-dev": {
         "phpmd/phpmd" : "@stable",
         "phpunit/phpunit": "4.8.*",
