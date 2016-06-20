@@ -30,3 +30,5 @@
         "WALLABAG_VERSION": 1
     }
 }
+*/ ?>
+

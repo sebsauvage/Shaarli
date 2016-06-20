@@ -88,7 +88,7 @@ class ConfigJsonTest extends PHPUnit_Framework_TestCase
         } else {
             $expected = '{"credentials":{"login":"root"},"resource":{"datastore":"data\/datastore.php"},"redirector":{"url":"lala"},"plugins":{"WALLABAG_VERSION":"1"}}';
         }
-        $expected = ConfigJson::getPhpHeaders() . $expected;
+        $expected = ConfigJson::getPhpHeaders() . $expected . ConfigJson::getPhpSuffix();
         $this->assertEquals($expected, file_get_contents($dataFile));
         unlink($dataFile);
     }
