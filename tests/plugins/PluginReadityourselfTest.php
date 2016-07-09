@@ -4,6 +4,8 @@
  * PluginReadityourselfTest.php.php
  */
 
+// FIXME! add an init method.
+$conf = new ConfigManager('');
 require_once 'plugins/readityourself/readityourself.php';
 
 /**
@@ -25,7 +27,8 @@ class PluginReadityourselfTest extends PHPUnit_Framework_TestCase
      */
     function testReadityourselfLinklist()
     {
-        $GLOBALS['plugins']['READITYOUSELF_URL'] = 'value';
+        $conf = new ConfigManager('');
+        $conf->set('plugins.READITYOUSELF_URL', 'value');
         $str = 'http://randomstr.com/test';
         $data = array(
             'title' => $str,
@@ -36,7 +39,7 @@ class PluginReadityourselfTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $data = hook_readityourself_render_linklist($data);
+        $data = hook_readityourself_render_linklist($data, $conf);
         $link = $data['links'][0];
         // data shouldn't be altered
         $this->assertEquals($str, $data['title']);
@@ -52,7 +55,8 @@ class PluginReadityourselfTest extends PHPUnit_Framework_TestCase
      */
     function testReadityourselfLinklistWithoutConfig()
     {
-        unset($GLOBALS['plugins']['READITYOUSELF_URL']);
+        $conf = new ConfigManager('');
+        $conf->set('plugins.READITYOUSELF_URL', null);
         $str = 'http://randomstr.com/test';
         $data = array(
             'title' => $str,
@@ -63,7 +67,7 @@ class PluginReadityourselfTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $data = hook_readityourself_render_linklist($data);
+        $data = hook_readityourself_render_linklist($data, $conf);
         $link = $data['links'][0];
         // data shouldn't be altered
         $this->assertEquals($str, $data['title']);

@@ -15,12 +15,20 @@ class PageBuilder
     private $tpl;
 
     /**
+     * @var ConfigManager $conf Configuration Manager instance.
+     */
+    protected $conf;
+
+    /**
      * PageBuilder constructor.
      * $tpl is initialized at false for lazy loading.
+     *
+     * @param ConfigManager $conf Configuration Manager instance (reference).
      */
-    function __construct()
+    function __construct(&$conf)
     {
         $this->tpl = false;
+        $this->conf = $conf;
     }
 
     /**
@@ -33,17 +41,17 @@ class PageBuilder
         try {
             $version = ApplicationUtils::checkUpdate(
                 shaarli_version,
-                $GLOBALS['config']['UPDATECHECK_FILENAME'],
-                $GLOBALS['config']['UPDATECHECK_INTERVAL'],
-                $GLOBALS['config']['ENABLE_UPDATECHECK'],
+                $this->conf->get('resource.update_check'),
+                $this->conf->get('updates.check_updates_interval'),
+                $this->conf->get('updates.check_updates'),
                 isLoggedIn(),
-                $GLOBALS['config']['UPDATECHECK_BRANCH']
+                $this->conf->get('updates.check_updates_branch')
             );
             $this->tpl->assign('newVersion', escape($version));
             $this->tpl->assign('versionError', '');
 
         } catch (Exception $exc) {
-            logm($GLOBALS['config']['LOG_FILE'], $_SERVER['REMOTE_ADDR'], $exc->getMessage());
+            logm($this->conf->get('resource.log'), $_SERVER['REMOTE_ADDR'], $exc->getMessage());
             $this->tpl->assign('newVersion', '');
             $this->tpl->assign('versionError', escape($exc->getMessage()));
         }
@@ -62,19 +70,24 @@ class PageBuilder
         $this->tpl->assign('scripturl', index_url($_SERVER));
         $this->tpl->assign('pagetitle', 'Shaarli');
         $this->tpl->assign('privateonly', !empty($_SESSION['privateonly'])); // Show only private links?
-        if (!empty($GLOBALS['title'])) {
-            $this->tpl->assign('pagetitle', $GLOBALS['title']);
+        if ($this->conf->exists('general.title')) {
+            $this->tpl->assign('pagetitle', $this->conf->get('general.title'));
         }
-        if (!empty($GLOBALS['titleLink'])) {
-            $this->tpl->assign('titleLink', $GLOBALS['titleLink']);
+        if ($this->conf->exists('general.header_link')) {
+            $this->tpl->assign('titleLink', $this->conf->get('general.header_link'));
         }
-        if (!empty($GLOBALS['pagetitle'])) {
-            $this->tpl->assign('pagetitle', $GLOBALS['pagetitle']);
+        if ($this->conf->exists('pagetitle')) {
+            $this->tpl->assign('pagetitle', $this->conf->get('pagetitle'));
         }
-        $this->tpl->assign('shaarlititle', empty($GLOBALS['title']) ? 'Shaarli': $GLOBALS['title']);
+        $this->tpl->assign('shaarlititle', $this->conf->get('title', 'Shaarli'));
+        $this->tpl->assign('openshaarli', $this->conf->get('security.open_shaarli', false));
+        $this->tpl->assign('showatom', $this->conf->get('feed.show_atom', false));
+        $this->tpl->assign('hide_timestamps', $this->conf->get('privacy.hide_timestamps', false));
         if (!empty($GLOBALS['plugin_errors'])) {
             $this->tpl->assign('plugin_errors', $GLOBALS['plugin_errors']);
         }
+        // To be removed with a proper theme configuration.
+        $this->tpl->assign('conf', $this->conf);
     }
 
     /**
@@ -85,7 +98,6 @@ class PageBuilder
      */
     public function assign($placeholder, $value)
     {
-        // Lazy initialization
         if ($this->tpl === false) {
             $this->initialize();
         }
@@ -101,7 +113,6 @@ class PageBuilder
      */
     public function assignAll($data)
     {
-        // Lazy initialization
         if ($this->tpl === false) {
             $this->initialize();
         }
@@ -113,6 +124,7 @@ class PageBuilder
         foreach ($data as $key => $value) {
             $this->assign($key, $value);
         }
+        return true;
     }
 
     /**
@@ -123,10 +135,10 @@ class PageBuilder
      */
     public function renderPage($page)
     {
-        // Lazy initialization
-        if ($this->tpl===false) {
+        if ($this->tpl === false) {
             $this->initialize();
         }
+
         $this->tpl->draw($page);
     }
 

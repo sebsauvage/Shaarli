@@ -132,11 +132,11 @@ class ApplicationUtils
     /**
      * Checks Shaarli has the proper access permissions to its resources
      *
-     * @param array $globalConfig The $GLOBALS['config'] array
+     * @param ConfigManager $conf Configuration Manager instance.
      *
      * @return array A list of the detected configuration issues
      */
-    public static function checkResourcePermissions($globalConfig)
+    public static function checkResourcePermissions($conf)
     {
         $errors = array();
 
@@ -145,7 +145,7 @@ class ApplicationUtils
             'application',
             'inc',
             'plugins',
-            $globalConfig['RAINTPL_TPL']
+            $conf->get('resource.raintpl_tpl'),
         ) as $path) {
             if (! is_readable(realpath($path))) {
                 $errors[] = '"'.$path.'" directory is not readable';
@@ -154,10 +154,10 @@ class ApplicationUtils
 
         // Check cache and data directories are readable and writeable
         foreach (array(
-            $globalConfig['CACHEDIR'],
-            $globalConfig['DATADIR'],
-            $globalConfig['PAGECACHE'],
-            $globalConfig['RAINTPL_TMP']
+            $conf->get('resource.thumbnails_cache'),
+            $conf->get('resource.data_dir'),
+            $conf->get('resource.page_cache'),
+            $conf->get('resource.raintpl_tmp'),
         ) as $path) {
             if (! is_readable(realpath($path))) {
                 $errors[] = '"'.$path.'" directory is not readable';
@@ -169,11 +169,11 @@ class ApplicationUtils
 
         // Check configuration files are readable and writeable
         foreach (array(
-            $globalConfig['CONFIG_FILE'],
-            $globalConfig['DATASTORE'],
-            $globalConfig['IPBANS_FILENAME'],
-            $globalConfig['LOG_FILE'],
-            $globalConfig['UPDATECHECK_FILENAME']
+            $conf->getConfigFileExt(),
+            $conf->get('resource.datastore'),
+            $conf->get('resource.ban_file'),
+            $conf->get('resource.log'),
+            $conf->get('resource.update_check'),
         ) as $path) {
             if (! is_file(realpath($path))) {
                 # the file may not exist yet
