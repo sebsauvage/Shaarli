@@ -91,5 +91,80 @@ function count_private($links)
     foreach ($links as $link) {
         $cpt = $link['private'] == true ? $cpt + 1 : $cpt;
     }
+
     return $cpt;
+}
+
+/**
+ * In a string, converts URLs to clickable links.
+ *
+ * @param string $text       input string.
+ * @param string $redirector if a redirector is set, use it to gerenate links.
+ *
+ * @return string returns $text with all links converted to HTML links.
+ *
+ * @see Function inspired from http://www.php.net/manual/en/function.preg-replace.php#85722
+ */
+function text2clickable($text, $redirector = '')
+{
+    $regex = '!(((?:https?|ftp|file)://|apt:|magnet:)\S+[[:alnum:]]/?)!si';
+
+    if (empty($redirector)) {
+        return preg_replace($regex, '<a href="$1">$1</a>', $text);
+    }
+    // Redirector is set, urlencode the final URL.
+    return preg_replace_callback(
+        $regex,
+        function ($matches) use ($redirector) {
+            return '<a href="' . $redirector . urlencode($matches[1]) .'">'. $matches[1] .'</a>';
+        },
+        $text
+    );
+}
+
+/**
+ * Auto-link hashtags.
+ *
+ * @param string $description Given description.
+ * @param string $indexUrl    Root URL.
+ *
+ * @return string Description with auto-linked hashtags.
+ */
+function hashtag_autolink($description, $indexUrl = '')
+{
+    /*
+     * To support unicode: http://stackoverflow.com/a/35498078/1484919
+     * \p{Pc} - to match underscore
+     * \p{N} - numeric character in any script
+     * \p{L} - letter from any language
+     * \p{Mn} - any non marking space (accents, umlauts, etc)
+     */
+    $regex = '/(^|\s)#([\p{Pc}\p{N}\p{L}\p{Mn}]+)/mui';
+    $replacement = '$1<a href="'. $indexUrl .'?addtag=$2" title="Hashtag $2">#$2</a>';
+    return preg_replace($regex, $replacement, $description);
+}
+
+/**
+ * This function inserts &nbsp; where relevant so that multiple spaces are properly displayed in HTML
+ * even in the absence of <pre>  (This is used in description to keep text formatting).
+ *
+ * @param string $text input text.
+ *
+ * @return string formatted text.
+ */
+function space2nbsp($text)
+{
+    return preg_replace('/(^| ) /m', '$1&nbsp;', $text);
+}
+
+/**
+ * Format Shaarli's description
+ *
+ * @param string $description shaare's description.
+ * @param string $redirector  if a redirector is set, use it to gerenate links.
+ *
+ * @return string formatted description.
+ */
+function format_description($description, $redirector = '', $indexUrl = '') {
+    return nl2br(space2nbsp(hashtag_autolink(text2clickable($description, $redirector), $indexUrl)));
 }

@@ -198,59 +198,6 @@ function is_session_id_valid($sessionId)
 }
 
 /**
- * In a string, converts URLs to clickable links.
- *
- * @param string $text       input string.
- * @param string $redirector if a redirector is set, use it to gerenate links.
- *
- * @return string returns $text with all links converted to HTML links.
- *
- * @see Function inspired from http://www.php.net/manual/en/function.preg-replace.php#85722
- */
-function text2clickable($text, $redirector)
-{
-    $regex = '!(((?:https?|ftp|file)://|apt:|magnet:)\S+[[:alnum:]]/?)!si';
-
-    if (empty($redirector)) {
-        return preg_replace($regex, '<a href="$1">$1</a>', $text);
-    }
-    // Redirector is set, urlencode the final URL.
-    return preg_replace_callback(
-        $regex,
-        function ($matches) use ($redirector) {
-            return '<a href="' . $redirector . urlencode($matches[1]) .'">'. $matches[1] .'</a>';
-        },
-        $text
-    );
-}
-
-/**
- * This function inserts &nbsp; where relevant so that multiple spaces are properly displayed in HTML
- * even in the absence of <pre>  (This is used in description to keep text formatting).
- *
- * @param string $text input text.
- *
- * @return string formatted text.
- */
-function space2nbsp($text)
-{
-    return preg_replace('/(^| ) /m', '$1&nbsp;', $text);
-}
-
-/**
- * Format Shaarli's description
- * TODO: Move me to ApplicationUtils when it's ready.
- *
- * @param string $description shaare's description.
- * @param string $redirector  if a redirector is set, use it to gerenate links.
- *
- * @return string formatted description.
- */
-function format_description($description, $redirector = false) {
-    return nl2br(space2nbsp(text2clickable($description, $redirector)));
-}
-
-/**
  * Sniff browser language to set the locale automatically.
  * Note that is may not work on your server if the corresponding locale is not installed.
  *
