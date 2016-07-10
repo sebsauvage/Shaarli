@@ -1159,6 +1159,7 @@ function renderPage($conf, $pluginManager)
             $PAGE->assign('timezone_form', $timezone_form);
             $PAGE->assign('timezone_js',$timezone_js);
             $PAGE->assign('private_links_default', $conf->get('privacy.default_private_links', false));
+            $PAGE->assign('session_protection_disabled', $conf->get('security.session_protection_disabled', false));
             $PAGE->assign('enable_rss_permalinks', $conf->get('feed.rss_permalinks', false));
             $PAGE->assign('enable_update_check', $conf->get('updates.check_updates', true));
             $PAGE->assign('hide_public_links', $conf->get('privacy.hide_public_links', false));
