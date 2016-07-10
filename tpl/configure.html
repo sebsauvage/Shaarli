@@ -36,7 +36,7 @@
         <td><b>Security:</b></td>
         <td>
           <input type="checkbox" name="disablesessionprotection" id="disablesessionprotection"
-                   {if="$private_links_default"}checked{/if}>
+                   {if="$session_protection_disabled"}checked{/if}>
           <label
             for="disablesessionprotection">&nbsp;Disable session cookie hijacking protection (Check this if you get
             disconnected often or if your IP address changes often.)</label>
