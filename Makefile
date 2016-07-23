@@ -1,5 +1,5 @@
 # The personal, minimalist, super-fast, database free, bookmarking service.
-# Makefile for PHP code analysis & testing
+# Makefile for PHP code analysis & testing, documentation and release generation
 
 # Prerequisites:
 # - install Composer, either:
@@ -126,6 +126,34 @@ test:
 	@echo "-------"
 	@mkdir -p sandbox
 	@$(BIN)/phpunit tests
+
+##
+# Custom release archive generation
+#
+# For each tagged revision, GitHub provides tar and zip archives that correspond
+# to the output of git-archive
+#
+# These targets produce similar archives, featuring 3rd-party dependencies
+# to ease deployment on shared hosting.
+##
+ARCHIVE_VERSION := shaarli-$$(git describe)-full
+
+release_archive: release_tar release_zip
+
+### download 3rd-party PHP libraries
+composer_dependencies: clean
+	composer update --no-dev
+	find vendor/ -name ".git" -type d -exec rm -rf {} +
+
+### generate a release tarball and include 3rd-party dependencies
+release_tar: composer_dependencies
+	git archive -o $(ARCHIVE_VERSION).tar HEAD
+	tar rvf $(ARCHIVE_VERSION).tar vendor/
+
+### generate a release zip and include 3rd-party dependencies
+release_zip: composer_dependencies
+	git archive -o $(ARCHIVE_VERSION).zip -9 HEAD
+	zip -r $(ARCHIVE_VERSION).zip vendor/
 
 ##
 # Targets for repository and documentation maintenance
