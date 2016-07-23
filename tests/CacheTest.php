@@ -64,10 +64,13 @@ class CacheTest extends PHPUnit_Framework_TestCase
      */
     public function testPurgeCachedPagesMissingDir()
     {
+        $oldlog = ini_get('error_log');
+        ini_set('error_log', '/dev/null');
         $this->assertEquals(
             'Cannot purge sandbox/dummycache_missing: no directory',
             purgeCachedPages(self::$testCacheDir.'_missing')
         );
+        ini_set('error_log', $oldlog);
     }
 
     /**
