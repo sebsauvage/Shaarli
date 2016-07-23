@@ -1,4 +1,4 @@
-# Shaarli, the personal, minimalist, super-fast, no-database delicious clone.
+# The personal, minimalist, super-fast, database free, bookmarking service.
 # Makefile for PHP code analysis & testing
 
 # Prerequisites:
