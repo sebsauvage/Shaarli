@@ -68,18 +68,12 @@ class PageBuilder
         $this->tpl->assign('source', index_url($_SERVER));
         $this->tpl->assign('version', shaarli_version);
         $this->tpl->assign('scripturl', index_url($_SERVER));
-        $this->tpl->assign('pagetitle', 'Shaarli');
         $this->tpl->assign('privateonly', !empty($_SESSION['privateonly'])); // Show only private links?
-        if ($this->conf->exists('general.title')) {
-            $this->tpl->assign('pagetitle', $this->conf->get('general.title'));
-        }
+        $this->tpl->assign('pagetitle', $this->conf->get('general.title', 'Shaarli'));
         if ($this->conf->exists('general.header_link')) {
             $this->tpl->assign('titleLink', $this->conf->get('general.header_link'));
         }
-        if ($this->conf->exists('pagetitle')) {
-            $this->tpl->assign('pagetitle', $this->conf->get('pagetitle'));
-        }
-        $this->tpl->assign('shaarlititle', $this->conf->get('title', 'Shaarli'));
+        $this->tpl->assign('shaarlititle', $this->conf->get('general.title', 'Shaarli'));
         $this->tpl->assign('openshaarli', $this->conf->get('security.open_shaarli', false));
         $this->tpl->assign('showatom', $this->conf->get('feed.show_atom', false));
         $this->tpl->assign('hide_timestamps', $this->conf->get('privacy.hide_timestamps', false));
