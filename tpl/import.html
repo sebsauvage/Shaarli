@@ -3,18 +3,30 @@
 <head>{include="includes"}</head>
 <body onload="document.uploadform.filetoupload.focus();">
 <div id="pageheader">
-	{include="page.header"}
-	<div id="uploaddiv">
-	Import Netscape HTML bookmarks (as exported from Firefox/Chrome/Opera/Delicious/Diigo...) (Max: {$maxfilesize} bytes).
-	<form method="POST" action="?do=upload" enctype="multipart/form-data" name="uploadform" id="uploadform">
-	    <input type="hidden" name="token" value="{$token}">
-	    <input type="file" name="filetoupload">
-	    <input type="hidden" name="MAX_FILE_SIZE" value="{$maxfilesize}">
-	    <input type="submit" name="import_file" value="Import" class="bigbutton"><br>
-	    <input type="checkbox" name="private" id="private"><label for="private">&nbsp;Import all links as private</label><br>
-	    <input type="checkbox" name="overwrite" id="overwrite"><label for="overwrite">&nbsp;Overwrite existing links</label>
-	</form>
-	</div>
+  {include="page.header"}
+  <div id="uploaddiv">
+    Import Netscape HTML bookmarks (as exported from Firefox/Chrome/Opera/Delicious/Diigo...) (Max: {$maxfilesize} bytes).
+    <form method="POST" action="?do=import" enctype="multipart/form-data"
+          name="uploadform" id="uploadform">
+      <input type="hidden" name="token" value="{$token}">
+      <input type="hidden" name="MAX_FILE_SIZE" value="{$maxfilesize}">
+      <input type="file" name="filetoupload">
+      <input type="submit" name="import_file" value="Import" class="bigbutton"><br>
+
+      <label for="privacy">&nbsp;Visibility:</label><br>
+      <input type="radio" name="privacy" value="default" checked="true">
+      &nbsp;Use values from the imported file, default to public<br>
+      <input type="radio" name="privacy" value="private">
+      &nbsp;Import all bookmarks as private<br>
+      <input type="radio" name="privacy" value="public">
+      &nbsp;Import all bookmarks as public<br>
+
+      <input type="checkbox" name="overwrite" id="overwrite">
+      <label for="overwrite">&nbsp;Overwrite existing bookmarks</label><br>
+      <label for="default_tags">&nbsp;Add default tags</label>
+      <input type="text" name="default_tags" id="default_tags">
+    </form>
+  </div>
 </div>
 {include="page.footer"}
 </body>
