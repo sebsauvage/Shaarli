@@ -263,4 +263,28 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
         $expected = filemtime($this->conf->getConfigFileExt());
         $this->assertEquals($expected, $filetime);
     }
+
+    /**
+     * Test escapeUnescapedConfig with valid data.
+     */
+    public function testEscapeConfig()
+    {
+        $sandbox = 'sandbox/config';
+        copy(self::$configFile .'.json.php', $sandbox .'.json.php');
+        $this->conf = new ConfigManager($sandbox);
+        $title = '<script>alert("title");</script>';
+        $headerLink = '<script>alert("header_link");</script>';
+        $redirectorUrl = '<script>alert("redirector");</script>';
+        $this->conf->set('general.title', $title);
+        $this->conf->set('general.header_link', $headerLink);
+        $this->conf->set('redirector.url', $redirectorUrl);
+        $updater = new Updater(array(), array(), $this->conf, true);
+        $done = $updater->updateMethodEscapeUnescapedConfig();
+        $this->assertTrue($done);
+        $this->conf->reload();
+        $this->assertEquals(escape($title), $this->conf->get('general.title'));
+        $this->assertEquals(escape($headerLink), $this->conf->get('general.header_link'));
+        $this->assertEquals(escape($redirectorUrl), $this->conf->get('redirector.url'));
+        unlink($sandbox .'.json.php');
+    }
 }

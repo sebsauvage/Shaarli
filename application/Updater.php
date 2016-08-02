@@ -198,11 +198,11 @@ class Updater
      * Escape settings which have been manually escaped in every request in previous versions:
      *   - general.title
      *   - general.header_link
-     *   - extras.redirector
+     *   - redirector.url
      *
      * @return bool true if the update is successful, false otherwise.
      */
-    public function escapeUnescapedConfig()
+    public function updateMethodEscapeUnescapedConfig()
     {
         try {
             $this->conf->set('general.title', escape($this->conf->get('general.title')));
