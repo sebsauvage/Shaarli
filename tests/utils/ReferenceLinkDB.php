@@ -75,7 +75,7 @@ class ReferenceLinkDB
             '',
             1,
             '20121206_182539',
-            'dev cartoon'
+            'dev cartoon tag1  tag2   tag3  tag4   '
         );
     }
 

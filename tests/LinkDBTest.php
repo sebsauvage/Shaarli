@@ -317,6 +317,10 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
                 '-exclude' => 1,
                 '.hidden' => 1,
                 'hashtag' => 2,
+                'tag1' => 1,
+                'tag2' => 1,
+                'tag3' => 1,
+                'tag4' => 1,
             ),
             self::$privateLinkDB->allTags()
         );
