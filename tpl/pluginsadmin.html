@@ -104,11 +104,12 @@
                   <div class="plugin_parameter">
                     <div class="float_label">
                       <label for="{$key}">
-                        <code>{$key}</code>
+                        <code>{$key}</code><br>
+                        {$value.desc}
                       </label>
                     </div>
                     <div class="float_input">
-                      <input name="{$key}" value="{$value}" id="{$key}"/>
+                      <input name="{$key}" value="{$value.value}" id="{$key}"/>
                     </div>
                   </div>
                 {/loop}

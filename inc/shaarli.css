@@ -1156,7 +1156,7 @@ ul.errors {
 }
 
 #pluginsadmin .plugin_parameter {
-    padding: 5px 0;
+    padding: 10px 0;
     border-width: 1px 0;
     border-style: solid;
     border-color: #c0c0c0;
@@ -1164,7 +1164,7 @@ ul.errors {
 
 #pluginsadmin .float_label {
     float: left;
-    width: 20%;
+    width: 40%;
 }
 
 #pluginsadmin a {
