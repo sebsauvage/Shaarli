@@ -1,0 +1,2 @@
+description="Enable PubSubHubbub feed publishing."
+parameters="PUBSUBHUB_URL"
