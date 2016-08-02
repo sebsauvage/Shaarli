@@ -79,8 +79,14 @@ class PluginManagerTest extends PHPUnit_Framework_TestCase
         $this->pluginManager->load(array(self::$pluginName));
 
         $expectedParameters = array(
-            'pop' => '',
-            'hip' => '',
+            'pop' => array(
+                'value' => '',
+                'desc'  => 'pop description',
+            ),
+            'hip' => array(
+                'value' => '',
+                'desc' => '',
+            ),
         );
         $meta = $this->pluginManager->getPluginsMeta();
         $this->assertEquals('test plugin', $meta[self::$pluginName]['description']);

@@ -101,9 +101,9 @@ class ConfigPluginTest extends PHPUnit_Framework_TestCase
         $plugins = array(
             'plugin_name' => array(
                 'parameters' => array(
-                    'param1' => true,
-                    'param2' => false,
-                    'param3' => '',
+                    'param1' => array('value' => true),
+                    'param2' => array('value' => false),
+                    'param3' => array('value' => ''),
                 )
             )
         );
@@ -114,8 +114,8 @@ class ConfigPluginTest extends PHPUnit_Framework_TestCase
         );
 
         $result = load_plugin_parameter_values($plugins, $parameters);
-        $this->assertEquals('value1', $result['plugin_name']['parameters']['param1']);
-        $this->assertEquals('value2', $result['plugin_name']['parameters']['param2']);
-        $this->assertEquals('', $result['plugin_name']['parameters']['param3']);
+        $this->assertEquals('value1', $result['plugin_name']['parameters']['param1']['value']);
+        $this->assertEquals('value2', $result['plugin_name']['parameters']['param2']['value']);
+        $this->assertEquals('', $result['plugin_name']['parameters']['param3']['value']);
     }
 }

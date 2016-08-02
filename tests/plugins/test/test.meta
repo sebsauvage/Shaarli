@@ -1,2 +1,4 @@
 description="test plugin"
 parameters="pop;hip"
+parameter.pop="pop description"
+parameter.hip=
