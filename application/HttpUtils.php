@@ -215,3 +215,29 @@ function page_url($server)
     }
     return index_url($server);
 }
+
+/**
+ * Retrieve the initial IP forwarded by the reverse proxy.
+ *
+ * Inspired from: https://github.com/zendframework/zend-http/blob/master/src/PhpEnvironment/RemoteAddress.php
+ *
+ * @param array $server     $_SERVER array which contains HTTP headers.
+ * @param array $trustedIps List of trusted IP from the configuration.
+ *
+ * @return string|bool The forwarded IP, or false if none could be extracted.
+ */
+function getIpAddressFromProxy($server, $trustedIps)
+{
+    $forwardedIpHeader = 'HTTP_X_FORWARDED_FOR';
+    if (empty($server[$forwardedIpHeader])) {
+        return false;
+    }
+
+    $ips = preg_split('/\s*,\s*/', $server[$forwardedIpHeader]);
+    $ips = array_diff($ips, $trustedIps);
+    if (empty($ips)) {
+        return false;
+    }
+
+    return array_pop($ips);
+}

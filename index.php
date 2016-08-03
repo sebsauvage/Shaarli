@@ -318,8 +318,17 @@ include $conf->get('resource.ban_file', 'data/ipbans.php');
 function ban_loginFailed($conf)
 {
     $ip = $_SERVER['REMOTE_ADDR'];
+    $trusted = $conf->get('security.trusted_proxies', array());
+    if (in_array($ip, $trusted)) {
+        $ip = getIpAddressFromProxy($_SERVER, $trusted);
+        if (!$ip) {
+            return;
+        }
+    }
     $gb = $GLOBALS['IPBANS'];
-    if (!isset($gb['FAILURES'][$ip])) $gb['FAILURES'][$ip]=0;
+    if (! isset($gb['FAILURES'][$ip])) {
+        $gb['FAILURES'][$ip]=0;
+    }
     $gb['FAILURES'][$ip]++;
     if ($gb['FAILURES'][$ip] > ($conf->get('security.ban_after') - 1))
     {
