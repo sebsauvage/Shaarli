@@ -1227,6 +1227,9 @@ function renderPage($conf, $pluginManager)
     // -------- User clicked the "Save" button when editing a link: Save link to database.
     if (isset($_POST['save_edit']))
     {
+        $linkdate = $_POST['lf_linkdate'];
+        $updated = isset($LINKSDB[$linkdate]) ? strval(date('Ymd_His')) : false;
+
         // Go away!
         if (! tokenOk($_POST['token'])) {
             die('Wrong token.');
@@ -1237,7 +1240,7 @@ function renderPage($conf, $pluginManager)
         $tags = preg_replace('/(^| )\-/', '$1', $tags);
         // Remove duplicates.
         $tags = implode(' ', array_unique(explode(' ', $tags)));
-        $linkdate = $_POST['lf_linkdate'];
+
         $url = trim($_POST['lf_url']);
         if (! startsWith($url, 'http:') && ! startsWith($url, 'https:')
             && ! startsWith($url, 'ftp:') && ! startsWith($url, 'magnet:')
@@ -1252,6 +1255,7 @@ function renderPage($conf, $pluginManager)
             'description' => $_POST['lf_description'],
             'private' => (isset($_POST['lf_private']) ? 1 : 0),
             'linkdate' => $linkdate,
+            'updated' => $updated,
             'tags' => str_replace(',', ' ', $tags)
         );
         // If title is empty, use the URL as title.
@@ -1696,6 +1700,12 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
         $link['class'] = $link['private'] == 0 ? $classLi : 'private';
         $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
         $link['timestamp'] = $date->getTimestamp();
+        if (! empty($link['updated'])) {
+            $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['updated']);
+            $link['updated_timestamp'] = $date->getTimestamp();
+        } else {
+            $link['updated_timestamp'] = '';
+        }
         $taglist = explode(' ', $link['tags']);
         uasort($taglist, 'strcasecmp');
         $link['taglist'] = $taglist;

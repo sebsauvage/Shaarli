@@ -89,7 +89,16 @@
                 <br>
                 {if="$value.description"}<div class="linkdescription">{$value.description}</div>{/if}
                 {if="!$hide_timestamps || isLoggedIn()"}
-                    <span class="linkdate" title="Permalink"><a href="?{$value.linkdate|smallHash}">{function="strftime('%c', $value.timestamp)"} - permalink</a> - </span>
+                    {$updated=$value.updated_timestamp ? 'Edited: '. strftime('%c', $value.updated_timestamp) : 'Permalink'}
+                    <span class="linkdate" title="Permalink">
+                        <a href="?{$value.linkdate|smallHash}">
+                            <span title="{$updated}">
+                                {function="strftime('%c', $value.timestamp)"}
+                                {if="$value.updated_timestamp"}*{/if}
+                            </span>
+                            - permalink
+                        </a> -
+                    </span>
                 {else}
                     <span class="linkdate" title="Short link here"><a href="?{$value.shorturl}">permalink</a> - </span>
                 {/if}
