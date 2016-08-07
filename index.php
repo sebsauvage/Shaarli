@@ -1412,7 +1412,7 @@ function renderPage($conf, $pluginManager)
             'http_referer' => (isset($_SERVER['HTTP_REFERER']) ? escape($_SERVER['HTTP_REFERER']) : ''),
             'source' => (isset($_GET['source']) ? $_GET['source'] : ''),
             'tags' => $LINKSDB->allTags(),
-            'default_private_links' => $conf->get('default_private_links', false),
+            'default_private_links' => $conf->get('privacy.default_private_links', false),
         );
         $pluginManager->executeHooks('render_editlink', $data);
 
