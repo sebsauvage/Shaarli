@@ -53,6 +53,7 @@ require_once 'application/config/ConfigPlugin.php';
 require_once 'application/FeedBuilder.php';
 require_once 'application/FileUtils.php';
 require_once 'application/HttpUtils.php';
+require_once 'application/Languages.php';
 require_once 'application/LinkDB.php';
 require_once 'application/LinkFilter.php';
 require_once 'application/LinkUtils.php';
