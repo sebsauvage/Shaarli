@@ -9,15 +9,9 @@
         "wiki": "https://github.com/shaarli/Shaarli/wiki"
     },
     "keywords": ["bookmark", "link", "share", "web"],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/shaarli/netscape-bookmark-parser"
-        }
-    ],
     "require": {
         "php": ">=5.3.4",
-        "kafene/netscape-bookmark-parser": "dev-shaarli-stable"
+        "shaarli/netscape-bookmark-parser": "1.*"
     },
     "require-dev": {
         "phpmd/phpmd" : "@stable",
