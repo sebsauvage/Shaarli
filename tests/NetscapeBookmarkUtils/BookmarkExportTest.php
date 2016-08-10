@@ -3,9 +3,9 @@
 require_once 'application/NetscapeBookmarkUtils.php';
 
 /**
- * Netscape bookmark import and export
+ * Netscape bookmark export
  */
-class NetscapeBookmarkUtilsTest extends PHPUnit_Framework_TestCase
+class BookmarkExportTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var string datastore to test write operations
