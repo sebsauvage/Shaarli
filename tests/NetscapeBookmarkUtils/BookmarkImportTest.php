@@ -83,6 +83,34 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Ensure IE dumps are supported
+     */
+    public function testImportInternetExplorerEncoding()
+    {
+        $files = file2array('internet_explorer_encoding.htm');
+        $this->assertEquals(
+            'File internet_explorer_encoding.htm (356 bytes) was successfully processed:'
+            .' 1 links imported, 0 links overwritten, 0 links skipped.',
+            NetscapeBookmarkUtils::import(array(), $files, $this->linkDb, $this->pagecache)
+        );
+        $this->assertEquals(1, count($this->linkDb));
+        $this->assertEquals(0, count_private($this->linkDb));
+
+        $this->assertEquals(
+            array(
+                'linkdate' => '20160618_173944',
+                'title' => 'Hg Init a Mercurial tutorial by Joel Spolsky',
+                'url' => 'http://hginit.com/',
+                'description' => '',
+                'private' => 0,
+                'tags' => ''
+            ),
+            $this->linkDb->getLinkFromUrl('http://hginit.com/')
+        );
+    }
+
+
+    /**
      * Import bookmarks nested in a folder hierarchy
      */
     public function testImportNested()
