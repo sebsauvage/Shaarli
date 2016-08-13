@@ -98,8 +98,7 @@ class NetscapeBookmarkUtils
         $filesize = $files['filetoupload']['size'];
         $data = file_get_contents($files['filetoupload']['tmp_name']);
 
-        // Sniff file type
-        if (! startsWith($data, '<!DOCTYPE NETSCAPE-Bookmark-file-1>')) {
+        if (strpos($data, '<!DOCTYPE NETSCAPE-Bookmark-file-1>') === false) {
             return self::importStatus($filename, $filesize);
         }
 
