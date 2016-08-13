@@ -1,2 +1,4 @@
 description="For each link, add a Wallabag icon to save it in your instance."
 parameters="WALLABAG_URL;WALLABAG_VERSION"
+parameter.WALLABAG_URL="Wallabag API URL"
+parameter.WALLABAG_VERSION="Wallabag API version (1 or 2)"
