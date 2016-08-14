@@ -1,25 +1,33 @@
 FROM debian:jessie
 MAINTAINER Shaarli Community
 
+ENV TERM dumb
 RUN apt-get update \
-    && apt-get install -y \
-       nginx-light php5-fpm php5-gd supervisor \
-       git nano
+    && apt-get install --no-install-recommends -y \
+       ca-certificates \
+       nginx-light \
+       php5-curl \
+       php5-fpm \
+       php5-gd \
+       php5-intl \
+       supervisor \
+       git \
+       nano \
+    && apt-get clean
+
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY supervised.conf /etc/supervisor/conf.d/supervised.conf
 
 ADD https://getcomposer.org/composer.phar /usr/local/bin/composer
 RUN chmod 755 /usr/local/bin/composer
 
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY supervised.conf /etc/supervisor/conf.d/supervised.conf
-RUN echo "<?php phpinfo(); ?>" > /var/www/index.php
-
 WORKDIR /var/www
+RUN git clone https://github.com/shaarli/Shaarli.git shaarli \
+    && cd shaarli \
+    && composer --prefer-dist install
 RUN rm -rf html \
-    && git clone https://github.com/shaarli/Shaarli.git shaarli \
+    && echo "<?php phpinfo(); ?>" > index.php \
     && chown -R www-data:www-data .
-
-WORKDIR /var/www/shaarli
-RUN composer install
 
 VOLUME /var/www/shaarli/data
 

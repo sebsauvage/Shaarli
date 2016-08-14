@@ -1,17 +1,32 @@
 FROM debian:jessie
 MAINTAINER Shaarli Community
 
+ENV TERM dumb
 RUN apt-get update \
-    && apt-get install -y curl nginx-light php5-fpm php5-gd supervisor
+    && apt-get install --no-install-recommends -y \
+       ca-certificates \
+       curl \
+       nginx-light \
+       php5-curl \
+       php5-fpm \
+       php5-gd \
+       php5-intl \
+       supervisor \
+    && apt-get clean
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervised.conf /etc/supervisor/conf.d/supervised.conf
 
+ADD https://getcomposer.org/composer.phar /usr/local/bin/composer
+RUN chmod 755 /usr/local/bin/composer
+
 WORKDIR /var/www
-RUN rm -rf html \
-    && curl -L https://github.com/shaarli/Shaarli/archive/master.tar.gz | tar xvzf - \
+RUN curl -L https://github.com/shaarli/Shaarli/archive/master.tar.gz | tar xzf - \
     && mv Shaarli-master shaarli \
-    && chown -R www-data:www-data shaarli
+    && cd shaarli \
+    && composer --prefer-dist --no-dev install
+RUN rm -rf html \
+    && chown -R www-data:www-data .
 
 VOLUME /var/www/shaarli/data
 
