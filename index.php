@@ -45,6 +45,16 @@ error_reporting(E_ALL^E_WARNING);
 
 
 // 3rd-party libraries
+if (! file_exists(__DIR__ . '/vendor/autoload.php')) {
+    header('Content-Type: text/plain; charset=utf-8');
+    echo "Error: missing Composer configuration\n\n"
+        ."If you installed Shaarli through Git or using the development branch,\n"
+        ."please refer to the installation documentation to install PHP"
+        ." dependencies using Composer:\n"
+        ."- https://github.com/shaarli/Shaarli/wiki/Server-requirements\n"
+        ."- https://github.com/shaarli/Shaarli/wiki/Download-and-Installation";
+    exit;
+}
 require_once 'inc/rain.tpl.class.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
