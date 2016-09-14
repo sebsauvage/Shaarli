@@ -22,7 +22,7 @@ RUN chmod 755 /usr/local/bin/composer
 
 WORKDIR /var/www
 RUN curl -L https://github.com/shaarli/Shaarli/archive/stable.tar.gz | tar xzf - \
-    && mv Shaarli-stable shaarli
+    && mv Shaarli-stable shaarli \
     && cd shaarli \
     && composer --prefer-dist --no-dev install
 RUN rm -rf html \
