@@ -28,6 +28,7 @@ $GLOBALS['config'['RAINTPL_TPL'] = 'tpl/my-template/';]('RAINTPL_TPL']-=-'tpl/my
 - [kalvn/shaarli-blocks](https://github.com/kalvn/shaarli-blocks) - A template/theme for Shaarli[](.html)
 - [kalvn/Shaarli-Material](https://github.com/kalvn/Shaarli-Material) - A theme (template) based on Google's Material Design for Shaarli, the superfast delicious clone.[](.html)
 - [misterair/Limonade](https://github.com/misterair/limonade) - A fork of (legacy) Shaarli with a new template[](.html)
+- [mrjovanovic/serious-theme-shaarli](https://github.com/mrjovanovic/serious-theme-shaarli) - A serious theme for SHaarli.[](.html)
 - [Vinm/Blue-theme-for Shaarli](https://github.com/Vinm/Blue-theme-for-Shaarli) - A template/theme for Shaarli ([unmaintained](https://github.com/Vinm/Blue-theme-for-Shaarli/issues/2), compatibility unknown)[](.html)
 - [vivienhaese/shaarlitheme](https://github.com/vivienhaese/shaarlitheme) - A Shaarli fork meant to be run in an openshift instance[](.html)
 

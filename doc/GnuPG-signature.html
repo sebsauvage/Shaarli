@@ -52,13 +52,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="local-sidebar">
 <ul>
 <li><a href="Home.html">Home</a></li>
-<li>Installation
+<li>Setup
 <ul>
-<li><a href="Download.html">Download</a></li>
+<li><a href="Download-and-Installation.html">Download and Installation</a></li>
+<li><a href="Upgrade-and-migration.html">Upgrade and migration</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
 <li><a href="Server-security.html">Server security</a></li>
-<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
 <li><a href="Plugins.html">Plugins</a></li>
 </ul></li>
@@ -73,7 +73,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
-<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
 <li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
@@ -97,7 +96,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><a href="FAQ.html">FAQ</a></li>
 <li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
-<li><a href="TODO.html">TODO</a></li>
 </ul></li>
 </ul>
 </div>
@@ -129,26 +127,26 @@ Keys</a></li>
 <li><a href="https://help.github.com/articles/generating-a-gpg-key/">Generating a GPG key</a> (GitHub)<a href=".html"></a></li>
 </ul>
 <h3 id="gpg---provide-identity-information">gpg - provide identity information</h3>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">gpg</span> --gen-key
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">gpg</span> --gen-key
 
-<span class="kw">gpg</span> (GnuPG) <span class="kw">2.1.6;</span> <span class="kw">Copyright</span> (C) <span class="kw">2015</span> Free Software Foundation, Inc.
-<span class="kw">This</span> is free software: you are free to change and redistribute it.
-<span class="kw">There</span> is NO WARRANTY, to the extent permitted by law.
+<span class="ex">gpg</span> (GnuPG) <span class="ex">2.1.6</span><span class="kw">;</span> <span class="ex">Copyright</span> (C) <span class="ex">2015</span> Free Software Foundation, Inc.
+<span class="ex">This</span> is free software: you are free to change and redistribute it.
+<span class="ex">There</span> is NO WARRANTY, to the extent permitted by law.
 
-<span class="kw">Note</span>: Use <span class="st">&quot;gpg2 --full-gen-key&quot;</span> for a full featured key generation dialog.
+<span class="ex">Note</span>: Use <span class="st">&quot;gpg2 --full-gen-key&quot;</span> for a full featured key generation dialog.
 
-<span class="kw">GnuPG</span> needs to construct a user ID to identify your key.
+<span class="ex">GnuPG</span> needs to construct a user ID to identify your key.
 
-<span class="kw">Real</span> name: Marvin the Paranoid Android
-<span class="kw">Email</span> address: marvin@h2g2.net
-<span class="kw">You</span> selected this USER-ID:
+<span class="ex">Real</span> name: Marvin the Paranoid Android
+<span class="ex">Email</span> address: marvin@h2g2.net
+<span class="ex">You</span> selected this USER-ID:
     <span class="st">&quot;Marvin the Paranoid Android &lt;marvin@h2g2.net&gt;&quot;</span>
 
-<span class="kw">Change</span> (N)<span class="kw">ame</span>, (E)<span class="kw">mail</span>, or (O)<span class="kw">kay</span>/<span class="kw">(Q)uit?</span> o
-<span class="kw">We</span> need to generate a lot of random bytes. It is a good idea to perform
-<span class="kw">some</span> other action (type on the keyboard, move the mouse, utilize the
-<span class="kw">disks</span>) <span class="kw">during</span> the prime generation<span class="kw">;</span> <span class="kw">this</span> gives the random number
-<span class="kw">generator</span> a better chance to gain enough entropy.</code></pre></div>
+<span class="ex">Change</span> (N)<span class="ex">ame</span>, (E)<span class="ex">mail</span>, or (O)<span class="ex">kay</span>/<span class="kw">(</span><span class="ex">Q</span><span class="kw">)</span><span class="ex">uit?</span> o
+<span class="ex">We</span> need to generate a lot of random bytes. It is a good idea to perform
+<span class="ex">some</span> other action (type on the keyboard, move the mouse, utilize the
+<span class="ex">disks</span>) <span class="ex">during</span> the prime generation<span class="kw">;</span> <span class="ex">this</span> gives the random number
+<span class="ex">generator</span> a better chance to gain enough entropy.</code></pre></div>
 <h3 id="gpg---entropy-interlude">gpg - entropy interlude</h3>
 <p>At this point, you will:</p>
 <ul>
@@ -156,19 +154,19 @@ Keys</a></li>
 <li>be asked to use your machine's input devices (mouse, keyboard, etc.) to generate random entropy; this step <em>may take some time</em></li>
 </ul>
 <h3 id="gpg---key-creation-confirmation">gpg - key creation confirmation</h3>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">gpg</span>: key A9D53A3E marked as ultimately trusted
-<span class="kw">public</span> and secret key created and signed.
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">gpg</span>: key A9D53A3E marked as ultimately trusted
+<span class="ex">public</span> and secret key created and signed.
 
-<span class="kw">gpg</span>: checking the trustdb
-<span class="kw">gpg</span>: 3 marginal(s) <span class="kw">needed</span>, 1 complete(s) <span class="kw">needed</span>, PGP trust model
-<span class="kw">gpg</span>: depth: 0  valid:   2  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 2u
-<span class="kw">pub</span>   rsa2048/A9D53A3E 2015-07-31
-      <span class="kw">Key</span> fingerprint = AF2A 5381 E54B 2FD2 14C4  A9A3 0E35 ACA4 A9D5 3A3E
-<span class="kw">uid</span>       [ultimate] Marvin the Paranoid Android <span class="kw">&lt;</span>marvin@h2g2.net<span class="kw">&gt;</span>[](.html)
-<span class="kw">sub</span>   rsa2048/8C0EACF1 2015-07-31</code></pre></div>
+<span class="ex">gpg</span>: checking the trustdb
+<span class="ex">gpg</span>: 3 marginal(s) <span class="ex">needed</span>, 1 complete(s) <span class="ex">needed</span>, PGP trust model
+<span class="ex">gpg</span>: depth: 0  valid:   2  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 2u
+<span class="ex">pub</span>   rsa2048/A9D53A3E 2015-07-31
+      <span class="ex">Key</span> fingerprint = AF2A 5381 E54B 2FD2 14C4  A9A3 0E35 ACA4 A9D5 3A3E
+<span class="ex">uid</span>       [ultimate] Marvin the Paranoid Android <span class="op">&lt;</span>marvin@h2g2.net<span class="op">&gt;</span>[](.html)
+<span class="ex">sub</span>   rsa2048/8C0EACF1 2015-07-31</code></pre></div>
 <h3 id="gpg---submit-your-public-key-to-a-pgp-server-optional">gpg - submit your public key to a PGP server (Optional)</h3>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">gpg</span> --keyserver pgp.mit.edu --send-keys A9D53A3E
-<span class="kw">gpg</span>: sending key A9D53A3E to hkp server pgp.mit.edu</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">gpg</span> --keyserver pgp.mit.edu --send-keys A9D53A3E
+<span class="ex">gpg</span>: sending key A9D53A3E to hkp server pgp.mit.edu</code></pre></div>
 <h2 id="create-and-push-a-gpg-signed-tag">Create and push a GPG-signed tag</h2>
 <p>See <a href="Release-Shaarli.html">Release Shaarli</a>.</p>
 </body>

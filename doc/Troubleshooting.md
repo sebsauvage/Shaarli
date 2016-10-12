@@ -25,6 +25,7 @@ HTTP settings are available by browsing `about:config`, here are the available s
 `network.http.referer.spoofSource` - Referer spoofing (~faking)
 - false (default): real referer
 - true: spoof referer (use target URI as referer)
+  - known to break some functionality in Shaarli
 
 `network.http.referer.trimmingPolicy` - trim the URI not to send a full Referer
 - 0 (default): send full URI
@@ -32,7 +33,7 @@ HTTP settings are available by browsing `about:config`, here are the available s
 - 2: scheme+host+port
 
 ### Firefox, localhost and redirections
-`localhost` is not a proper Fully Qualified Domain Name (FQDN); if Firefox has been set up to spoof referers, or anly accept requests from the same base domain/host, Shaarli redirections will not work properly.
+`localhost` is not a proper Fully Qualified Domain Name (FQDN); if Firefox has been set up to spoof referers, or only accept requests from the same base domain/host, Shaarli redirections will not work properly.
 
 To solve this, assign a local domain to your host, e.g.
 ```

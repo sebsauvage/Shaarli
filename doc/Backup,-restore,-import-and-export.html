@@ -52,13 +52,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="local-sidebar">
 <ul>
 <li><a href="Home.html">Home</a></li>
-<li>Installation
+<li>Setup
 <ul>
-<li><a href="Download.html">Download</a></li>
+<li><a href="Download-and-Installation.html">Download and Installation</a></li>
+<li><a href="Upgrade-and-migration.html">Upgrade and migration</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
 <li><a href="Server-security.html">Server security</a></li>
-<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
 <li><a href="Plugins.html">Plugins</a></li>
 </ul></li>
@@ -73,7 +73,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
-<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
 <li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
@@ -97,15 +96,21 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><a href="FAQ.html">FAQ</a></li>
 <li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
-<li><a href="TODO.html">TODO</a></li>
 </ul></li>
 </ul>
 </div>
 <h1 id="backup-restore-import-and-export">Backup, restore, import and export</h1>
+<ul>
+<li><a href="#backup-and-restore-the-datastore-file">Backup and restore the datastore file</a><a href=".html"></a></li>
+<li><a href="#export-links-as">Export links as...</a><a href=".html"></a></li>
+<li><a href="#import-links-from">Import links from...</a><a href=".html"></a></li>
+<li><a href="#import-shaarli-links-to-firefox">Import Shaarli links to Firefox</a><a href=".html"></a></li>
+</ul>
+<hr />
 <h2 id="backup-and-restore-the-datastore-file">Backup and restore the datastore file</h2>
 <p>Backup the file <code>data/datastore.php</code> (by FTP or SSH). Restore by putting the file back in place.</p>
 <p>Example command:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">rsync</span> -avzP my.server.com:/var/www/shaarli/data/datastore.php datastore-<span class="ot">$(</span><span class="kw">date</span> +%Y-%m-%d_%H%M<span class="ot">)</span>.php</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="fu">rsync</span> -avzP my.server.com:/var/www/shaarli/data/datastore.php datastore-<span class="va">$(</span><span class="fu">date</span> +%Y-%m-%d_%H%M<span class="va">)</span>.php</code></pre></div>
 <h2 id="export-links-as...">Export links as...</h2>
 <p>To export links as an HTML file, under <em>Tools &gt; Export</em>, choose:</p>
 <ul>
@@ -118,7 +123,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>This can be done using the <a href="https://github.com/nodiscc/shaarchiver">shaarchiver</a> tool.<a href=".html"></a></li>
 </ul>
 <p>Example command:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">./export-bookmarks.py</span> --url=https://my.server.com/shaarli --username=myusername --password=mysupersecretpassword --download-dir=./ --type=all</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./export-bookmarks.py</span> --url=https://my.server.com/shaarli --username=myusername --password=mysupersecretpassword --download-dir=./ --type=all</code></pre></div>
 <h2 id="import-links-from...">Import links from...</h2>
 <h3 id="diigo">Diigo</h3>
 <p>If you export your bookmark from Diigo, make sure you use the Delicious export, not the Netscape export. (Their Netscape export is broken, and they don't seem to be interested in fixing it.)</p>
@@ -126,5 +131,20 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>See <a href="https://github.com/sebsauvage/Shaarli/issues/146">this issue</a> for import tweaks.<a href=".html"></a></p>
 <h3 id="semanticscuttle">SemanticScuttle</h3>
 <p>To correctly import the tags from a <a href="http://semanticscuttle.sourceforge.net/">SemanticScuttle</a> HTML export, edit the HTML file before importing and replace all occurences of <code>tags=</code> (lowercase) to <code>TAGS=</code> (uppercase).<a href=".html"></a></p>
+<h3 id="scuttle">Scuttle</h3>
+<p>Shaarli cannot import data directly from <a href="https://github.com/scronide/scuttle">Scuttle</a>. However, you can use this third party tool: <a href="https://github.com/q2apro/scuttle-to-shaarli" class="uri">https://github.com/q2apro/scuttle-to-shaarli</a> to export the Scuttle database to the Netscape HTML format compatible with the Shaarli importer.<a href=".html"></a></p>
+<h2 id="import-shaarli-links-to-firefox">Import Shaarli links to Firefox</h2>
+<ul>
+<li>Export your Shaarli links as described above.</li>
+<li>For compatibility reasons, check <code>Prepend note permalinks with this Shaarli instance's URL (useful to import bookmarks in a web browser)</code></li>
+<li>In Firefox, open the bookmark manager (not the sidebar! <code>Bookmarks menu &gt; Show all bookmarks</code> or <code>Ctrl+Shift+B</code>)</li>
+<li>Select <code>Import and Backup &gt; Import bookmarks in HTML format</code></li>
+</ul>
+<p>Your bookmarks will be imported in Firefox, ready to use, with tags and descriptions retained. &quot;Self&quot; (notes) shaares will still point to the Shaarli instance you exported them from, but the note text can be viewed directly in the bookmark properties inside your browser. Depending on the number of bookmarks, the import can take some time.</p>
+<p>You may be interested in these Firefox addons to manage links imported from Shaarli</p>
+<ul>
+<li><a href="https://addons.mozilla.org/en-US/firefox/addon/bookmark-deduplicator/">Bookmark Deduplicator</a> - provides an easy way to deduplicate your bookmarks<a href=".html"></a></li>
+<li><a href="https://addons.mozilla.org/en-US/firefox/addon/tagsieve/">TagSieve</a> - browse your bookmarks by their tags<a href=".html"></a></li>
+</ul>
 </body>
 </html>

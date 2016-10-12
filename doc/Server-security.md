@@ -58,3 +58,17 @@ before = common.conf
 failregex = \s-\s<HOST>\s-\sLogin failed for user.*$
 ignoreregex = 
 ```
+
+## Robots - Restricting search engines and web crawler traffic
+
+Creating a `robots.txt` with the following contents at the root of your Shaarli installation will prevent _honest_ web crawlers from indexing each and every link and Daily page from a Shaarli instance, thus getting rid of a certain amount of unsollicited network traffic.
+
+```
+User-agent: *
+Disallow: /
+```
+
+See:
+- http://www.robotstxt.org/
+- http://www.robotstxt.org/robotstxt.html
+- http://www.robotstxt.org/meta.html

@@ -2,7 +2,7 @@
 See  [Git - Maintaining a project - Tagging your [](.html)
 releases](http://git-scm.com/book/en/v2/Distributed-Git-Maintaining-a-Project#Tagging-Your-Releases).
 
-### Prerequisites
+## Prerequisites
 This guide assumes that you have:
 - a GPG key matching your GitHub authentication credentials
     - i.e., the email address identified by the GPG key is the same as the one in your `~/.gitconfig` 
@@ -11,8 +11,9 @@ This guide assumes that you have:
     - `origin` pointing to your GitHub fork
     - `upstream` pointing to the main Shaarli repository
 - maintainer permissions on the main Shaarli repository (to push the signed tag)
-- [Pandoc](http://pandoc.org/) needs to be installed.[](.html)
+- [Composer](https://getcomposer.org/) and [Pandoc](http://pandoc.org/) need to be installed[](.html)
 
+## Increment the version code, create and push a signed tag
 ### Bump Shaarli's version
 ```bash
 $ cd /path/to/shaarli
@@ -70,3 +71,22 @@ $ git verify-tag f7762cf803f03f5caf4b8078359a63783d0090c1
 gpg: Signature made Thu 30 Jul 2015 11:46:34 CEST using RSA key ID 4100DF6F
 gpg: Good signature from "VirtualTam <virtualtam@flibidi.net>" [ultimate][](.html)
 ```
+
+## Generate and upload all-in-one release archives
+Users with a shared hosting may have:
+- no SSH access
+- no possibility to install PHP packages or server extensions
+- no possibility to run scripts
+
+To ease Shaarli installations, it is possible to generate and upload additional release archives,
+that will contain Shaarli code plus all required third-party libraries:
+
+```bash
+$ make release_archive
+```
+
+This will create the following archives:
+- `shaarli-vX.Y.Z-full.tar`
+- `shaarli-vX.Y.Z-full.zip`
+
+The archives need to be manually uploaded on the previously created GitHub release.

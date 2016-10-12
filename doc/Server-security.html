@@ -52,13 +52,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="local-sidebar">
 <ul>
 <li><a href="Home.html">Home</a></li>
-<li>Installation
+<li>Setup
 <ul>
-<li><a href="Download.html">Download</a></li>
+<li><a href="Download-and-Installation.html">Download and Installation</a></li>
+<li><a href="Upgrade-and-migration.html">Upgrade and migration</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
 <li><a href="Server-security.html">Server security</a></li>
-<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
 <li><a href="Plugins.html">Plugins</a></li>
 </ul></li>
@@ -73,7 +73,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
-<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
 <li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
@@ -97,7 +96,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><a href="FAQ.html">FAQ</a></li>
 <li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
-<li><a href="TODO.html">TODO</a></li>
 </ul></li>
 </ul>
 </div>
@@ -118,11 +116,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 <h3 id="locate-.ini-files">Locate .ini files</h3>
 <h4 id="console-environment">Console environment</h4>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">php</span> --ini
-<span class="kw">Configuration</span> File (php.ini) <span class="kw">Path</span>: /etc/php
-<span class="kw">Loaded</span> Configuration File:         /etc/php/php.ini
-<span class="kw">Scan</span> for additional .ini files in: /etc/php/conf.d
-<span class="kw">Additional</span> .ini files parsed:      /etc/php/conf.d/xdebug.ini</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">php</span> --ini
+<span class="ex">Configuration</span> File (php.ini) <span class="ex">Path</span>: /etc/php
+<span class="ex">Loaded</span> Configuration File:         /etc/php/php.ini
+<span class="ex">Scan</span> for additional .ini files in: /etc/php/conf.d
+<span class="ex">Additional</span> .ini files parsed:      /etc/php/conf.d/xdebug.ini</code></pre></div>
 <h4 id="server-environment">Server environment</h4>
 <ul>
 <li>create a <code>phpinfo.php</code> script located in a path supported by the web server, e.g.
@@ -161,5 +159,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">[Definition][]</span><span class="dt">(.html)</span>
 <span class="dt">failregex </span><span class="ot">=</span><span class="st"> \s-\s&lt;HOST&gt;\s-\sLogin failed for user.*$</span>
 <span class="dt">ignoreregex </span><span class="ot">=</span><span class="st"> </span></code></pre></div>
+<h2 id="robots---restricting-search-engines-and-web-crawler-traffic">Robots - Restricting search engines and web crawler traffic</h2>
+<p>Creating a <code>robots.txt</code> with the following contents at the root of your Shaarli installation will prevent <em>honest</em> web crawlers from indexing each and every link and Daily page from a Shaarli instance, thus getting rid of a certain amount of unsollicited network traffic.</p>
+<pre><code>User-agent: *
+Disallow: /</code></pre>
+<p>See:</p>
+<ul>
+<li><a href="http://www.robotstxt.org/" class="uri">http://www.robotstxt.org/</a></li>
+<li><a href="http://www.robotstxt.org/robotstxt.html" class="uri">http://www.robotstxt.org/robotstxt.html</a></li>
+<li><a href="http://www.robotstxt.org/meta.html" class="uri">http://www.robotstxt.org/meta.html</a></li>
+</ul>
 </body>
 </html>

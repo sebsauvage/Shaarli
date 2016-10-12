@@ -52,13 +52,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="local-sidebar">
 <ul>
 <li><a href="Home.html">Home</a></li>
-<li>Installation
+<li>Setup
 <ul>
-<li><a href="Download.html">Download</a></li>
+<li><a href="Download-and-Installation.html">Download and Installation</a></li>
+<li><a href="Upgrade-and-migration.html">Upgrade and migration</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
 <li><a href="Server-security.html">Server security</a></li>
-<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
 <li><a href="Plugins.html">Plugins</a></li>
 </ul></li>
@@ -73,7 +73,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
-<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
 <li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
@@ -97,14 +96,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><a href="FAQ.html">FAQ</a></li>
 <li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
-<li><a href="TODO.html">TODO</a></li>
 </ul></li>
 </ul>
 </div>
 <h1 id="release-shaarli">Release Shaarli</h1>
 <p>See <a href="http://git-scm.com/book/en/v2/Distributed-Git-Maintaining-a-Project#Tagging-Your-Releases">Git - Maintaining a project - Tagging your [](.html)<br />
 releases</a>.</p>
-<h3 id="prerequisites">Prerequisites</h3>
+<h2 id="prerequisites">Prerequisites</h2>
 <p>This guide assumes that you have:</p>
 <ul>
 <li>a GPG key matching your GitHub authentication credentials
@@ -118,53 +116,70 @@ releases</a>.</p>
 <li><code>upstream</code> pointing to the main Shaarli repository</li>
 </ul></li>
 <li>maintainer permissions on the main Shaarli repository (to push the signed tag)</li>
-<li><a href="http://pandoc.org/">Pandoc</a> needs to be installed.<a href=".html"></a></li>
+<li><a href="https://getcomposer.org/">Composer</a> and <a href="http://pandoc.org/">Pandoc</a> need to be installed<a href=".html"></a></li>
 </ul>
+<h2 id="increment-the-version-code-create-and-push-a-signed-tag">Increment the version code, create and push a signed tag</h2>
 <h3 id="bump-shaarlis-version">Bump Shaarli's version</h3>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> /path/to/shaarli
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="bu">cd</span> /path/to/shaarli
 
 <span class="co"># create a new branch</span>
-$ <span class="kw">git</span> fetch upstream
-$ <span class="kw">git</span> checkout upstream/master -b v0.5.0
+$ <span class="fu">git</span> fetch upstream
+$ <span class="fu">git</span> checkout upstream/master -b v0.5.0
 
 <span class="co"># bump the version number</span>
-$ <span class="kw">vim</span> index.php shaarli_version.php
+$ <span class="ex">vim</span> index.php shaarli_version.php
 
 <span class="co"># rebuild the documentation from the wiki</span>
-$ <span class="kw">make</span> htmldoc
+$ <span class="fu">make</span> htmldoc
 
 <span class="co"># commit the changes</span>
-$ <span class="kw">git</span> add index.php shaarli_version.php doc
-$ <span class="kw">git</span> commit -s -m <span class="st">&quot;Bump version to v0.5.0&quot;</span>
+$ <span class="fu">git</span> add index.php shaarli_version.php doc
+$ <span class="fu">git</span> commit -s -m <span class="st">&quot;Bump version to v0.5.0&quot;</span>
 
 <span class="co"># push the commit on your GitHub fork</span>
-$ <span class="kw">git</span> push origin v0.5.0</code></pre></div>
+$ <span class="fu">git</span> push origin v0.5.0</code></pre></div>
 <h3 id="create-and-merge-a-pull-request">Create and merge a Pull Request</h3>
 <p>This one is pretty straightforward ;-)</p>
 <h3 id="create-and-push-a-signed-tag">Create and push a signed tag</h3>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># update your local copy</span>
-$ <span class="kw">git</span> checkout master
-$ <span class="kw">git</span> fetch upstream
-$ <span class="kw">git</span> pull upstream master
+$ <span class="fu">git</span> checkout master
+$ <span class="fu">git</span> fetch upstream
+$ <span class="fu">git</span> pull upstream master
 
 <span class="co"># create a signed tag</span>
-$ <span class="kw">git</span> tag -s -m <span class="st">&quot;Release v0.5.0&quot;</span> v0.5.0
+$ <span class="fu">git</span> tag -s -m <span class="st">&quot;Release v0.5.0&quot;</span> v0.5.0
 
 <span class="co"># push it to &quot;upstream&quot;</span>
-$ <span class="kw">git</span> push --tags upstream</code></pre></div>
+$ <span class="fu">git</span> push --tags upstream</code></pre></div>
 <h3 id="verify-a-signed-tag">Verify a signed tag</h3>
 <p><a href="https://github.com/shaarli/Shaarli/releases/tag/v0.5.0"><code>v0.5.0</code></a> is the first GPG-signed tag pushed on the Community Shaarli.<a href=".html"></a></p>
 <p>Let's have a look at its signature!</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> /path/to/shaarli
-$ <span class="kw">git</span> fetch upstream
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="bu">cd</span> /path/to/shaarli
+$ <span class="fu">git</span> fetch upstream
 
 <span class="co"># get the SHA1 reference of the tag</span>
-$ <span class="kw">git</span> show-ref tags/v0.5.0
-<span class="kw">f7762cf803f03f5caf4b8078359a63783d0090c1</span> refs/tags/v0.5.0
+$ <span class="fu">git</span> show-ref tags/v0.5.0
+<span class="ex">f7762cf803f03f5caf4b8078359a63783d0090c1</span> refs/tags/v0.5.0
 
 <span class="co"># verify the tag signature information</span>
-$ <span class="kw">git</span> verify-tag f7762cf803f03f5caf4b8078359a63783d0090c1
-<span class="kw">gpg</span>: Signature made Thu 30 Jul 2015 11:46:34 CEST using RSA key ID 4100DF6F
-<span class="kw">gpg</span>: Good signature from <span class="st">&quot;VirtualTam &lt;virtualtam@flibidi.net&gt;&quot;</span> [ultimate][](.html)</code></pre></div>
+$ <span class="fu">git</span> verify-tag f7762cf803f03f5caf4b8078359a63783d0090c1
+<span class="ex">gpg</span>: Signature made Thu 30 Jul 2015 11:46:34 CEST using RSA key ID 4100DF6F
+<span class="ex">gpg</span>: Good signature from <span class="st">&quot;VirtualTam &lt;virtualtam@flibidi.net&gt;&quot;</span> [ultimate][](.html)</code></pre></div>
+<h2 id="generate-and-upload-all-in-one-release-archives">Generate and upload all-in-one release archives</h2>
+<p>Users with a shared hosting may have:</p>
+<ul>
+<li>no SSH access</li>
+<li>no possibility to install PHP packages or server extensions</li>
+<li>no possibility to run scripts</li>
+</ul>
+<p>To ease Shaarli installations, it is possible to generate and upload additional release archives,<br />
+that will contain Shaarli code plus all required third-party libraries:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">make</span> release_archive</code></pre></div>
+<p>This will create the following archives:</p>
+<ul>
+<li><code>shaarli-vX.Y.Z-full.tar</code></li>
+<li><code>shaarli-vX.Y.Z-full.zip</code></li>
+</ul>
+<p>The archives need to be manually uploaded on the previously created GitHub release.</p>
 </body>
 </html>

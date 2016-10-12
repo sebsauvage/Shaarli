@@ -52,13 +52,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="local-sidebar">
 <ul>
 <li><a href="Home.html">Home</a></li>
-<li>Installation
+<li>Setup
 <ul>
-<li><a href="Download.html">Download</a></li>
+<li><a href="Download-and-Installation.html">Download and Installation</a></li>
+<li><a href="Upgrade-and-migration.html">Upgrade and migration</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
 <li><a href="Server-security.html">Server security</a></li>
-<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
 <li><a href="Plugins.html">Plugins</a></li>
 </ul></li>
@@ -73,7 +73,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
-<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
 <li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
@@ -97,33 +96,32 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><a href="FAQ.html">FAQ</a></li>
 <li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
-<li><a href="TODO.html">TODO</a></li>
 </ul></li>
 </ul>
 </div>
 <h1 id="create-and-serve-multiple-shaarlis-farm">Create and serve multiple Shaarlis (farm)</h1>
 <p>Example bash script (creates multiple shaarli instances and generates an HTML index of them)</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/bash</span>
-<span class="kw">set</span> <span class="kw">-o</span> errexit
-<span class="kw">set</span> <span class="kw">-o</span> nounset
+<span class="kw">set</span> <span class="ex">-o</span> errexit
+<span class="kw">set</span> <span class="ex">-o</span> nounset
 
 <span class="co">#config</span>
-<span class="ot">shaarli_base_dir=</span><span class="st">&#39;/var/www/shaarli&#39;</span>
-<span class="ot">accounts=</span><span class="st">&#39;bob john whatever username&#39;</span>
-<span class="ot">shaarli_repo_url=</span><span class="st">&#39;https://github.com/shaarli/Shaarli&#39;</span>
-<span class="ot">ref=</span><span class="st">&quot;master&quot;</span>
+<span class="va">shaarli_base_dir=</span><span class="st">&#39;/var/www/shaarli&#39;</span>
+<span class="va">accounts=</span><span class="st">&#39;bob john whatever username&#39;</span>
+<span class="va">shaarli_repo_url=</span><span class="st">&#39;https://github.com/shaarli/Shaarli&#39;</span>
+<span class="va">ref=</span><span class="st">&quot;master&quot;</span>
 
 <span class="co">#clone multiple shaarli instances</span>
-<span class="kw">if [</span> <span class="ot">!</span> <span class="ot">-d</span> <span class="st">&quot;</span><span class="ot">$shaarli_base_dir</span><span class="st">&quot;</span><span class="kw"> ]</span>; <span class="kw">then</span> <span class="kw">mkdir</span> <span class="st">&quot;</span><span class="ot">$shaarli_base_dir</span><span class="st">&quot;</span><span class="kw">;</span> <span class="kw">fi</span>[]<span class="kw">(.html)</span>
+<span class="kw">if</span><span class="bu"> [</span> <span class="ot">!</span> <span class="ot">-d</span> <span class="st">&quot;</span><span class="va">$shaarli_base_dir</span><span class="st">&quot;</span><span class="bu"> ]</span>; <span class="kw">then</span> <span class="fu">mkdir</span> <span class="st">&quot;</span><span class="va">$shaarli_base_dir</span><span class="st">&quot;</span><span class="kw">;</span> <span class="kw">fi</span>[]<span class="kw">(</span><span class="ex">.html</span><span class="kw">)</span>
    
-<span class="kw">for</span> <span class="kw">account</span> in <span class="ot">$accounts</span><span class="kw">;</span> <span class="kw">do</span>
-    <span class="kw">if [</span> <span class="ot">-d</span> <span class="st">&quot;</span><span class="ot">$shaarli_base_dir</span><span class="st">/</span><span class="ot">$account</span><span class="st">&quot;</span><span class="kw"> ]</span>;[]<span class="kw">(.html)</span>
-    <span class="kw">then</span> <span class="kw">echo</span> <span class="st">&quot;[info] account </span><span class="ot">$account</span><span class="st"> already exists, skipping&quot;</span><span class="kw">;</span>[]<span class="kw">(.html)</span>
-    <span class="kw">else</span> <span class="kw">echo</span> <span class="st">&quot;[info] creating new account </span><span class="ot">$account</span><span class="st"> ...&quot;</span><span class="kw">;</span> <span class="kw">git</span> clone --quiet <span class="st">&quot;</span><span class="ot">$shaarli_repo_url</span><span class="st">&quot;</span> -b <span class="st">&quot;</span><span class="ot">$ref</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="ot">$shaarli_base_dir</span><span class="st">/</span><span class="ot">$account</span><span class="st">&quot;</span><span class="kw">;</span> <span class="kw">fi</span>[]<span class="kw">(.html)</span>
+<span class="kw">for</span> <span class="ex">account</span> in <span class="va">$accounts</span><span class="kw">;</span> <span class="kw">do</span>
+    <span class="kw">if</span><span class="bu"> [</span> <span class="ot">-d</span> <span class="st">&quot;</span><span class="va">$shaarli_base_dir</span><span class="st">/</span><span class="va">$account</span><span class="st">&quot;</span><span class="bu"> ]</span>;[]<span class="kw">(</span><span class="ex">.html</span><span class="kw">)</span>
+    <span class="kw">then</span> <span class="bu">echo</span> <span class="st">&quot;[info] account </span><span class="va">$account</span><span class="st"> already exists, skipping&quot;</span><span class="kw">;</span>[]<span class="kw">(</span><span class="ex">.html</span><span class="kw">)</span>
+    <span class="kw">else</span> <span class="bu">echo</span> <span class="st">&quot;[info] creating new account </span><span class="va">$account</span><span class="st"> ...&quot;</span><span class="kw">;</span> <span class="fu">git</span> clone --quiet <span class="st">&quot;</span><span class="va">$shaarli_repo_url</span><span class="st">&quot;</span> -b <span class="st">&quot;</span><span class="va">$ref</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">$shaarli_base_dir</span><span class="st">/</span><span class="va">$account</span><span class="st">&quot;</span><span class="kw">;</span> <span class="kw">fi</span>[]<span class="kw">(</span><span class="ex">.html</span><span class="kw">)</span>
 <span class="kw">done</span>
 
 <span class="co">#generate html index of shaarlis</span>
-<span class="ot">htmlhead=</span><span class="st">&#39;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot; &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt;</span>
+<span class="va">htmlhead=</span><span class="st">&#39;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot; &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt;</span>
 <span class="st">&lt;!-- Minimal html template thanks to http://www.sitepoint.com/a-minimal-html-document/ --&gt;</span>
 <span class="st">&lt;html lang=&quot;en&quot;&gt;</span>
 <span class="st">    &lt;head&gt;</span>
@@ -136,9 +134,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="st">    &lt;h1&gt;My Shaarli farm&lt;/h1&gt;</span>
 <span class="st">    &lt;ul style=&quot;list-style-type: none;&quot;&gt;&#39;</span>
 
-<span class="ot">accountlinks=</span><span class="st">&#39;&#39;</span>
+<span class="va">accountlinks=</span><span class="st">&#39;&#39;</span>
     
-<span class="ot">htmlfooter=</span><span class="st">&#39;</span>
+<span class="va">htmlfooter=</span><span class="st">&#39;</span>
 <span class="st">    &lt;/ul&gt;</span>
 <span class="st">    &lt;/div&gt;</span>
 <span class="st">    &lt;/body&gt;</span>
@@ -146,14 +144,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     
 
 
-<span class="kw">for</span> <span class="kw">account</span> in <span class="ot">$accounts</span><span class="kw">;</span> <span class="kw">do</span> <span class="ot">accountlinks=</span><span class="st">&quot;</span><span class="ot">$accountlinks</span><span class="st">\n&lt;li&gt;&lt;a href=</span><span class="dt">\&quot;</span><span class="ot">$account</span><span class="dt">\&quot;</span><span class="st">&gt;</span><span class="ot">$account</span><span class="st">&lt;/a&gt;&lt;/li&gt;&quot;</span>; <span class="kw">done</span>
-<span class="kw">if [</span> <span class="ot">-d</span> <span class="st">&quot;</span><span class="ot">$shaarli_base_dir</span><span class="st">/index.html&quot;</span><span class="kw"> ]</span>; <span class="kw">then</span> <span class="kw">echo</span> <span class="st">&quot;[removing old index.html]&quot;</span><span class="kw">;</span> <span class="kw">rm</span> <span class="st">&quot;</span><span class="ot">$shaarli_base_dir</span><span class="st">/index.html&quot;</span> ]<span class="kw">;</span> <span class="kw">fi</span>[]<span class="kw">(.html)</span>
-<span class="kw">echo</span> <span class="st">&quot;[info] generating new index of shaarlis&quot;</span>[](.html)
-<span class="kw">echo</span> -e <span class="st">&quot;</span><span class="ot">$htmlhead</span><span class="st"> </span><span class="ot">$accountlinks</span><span class="st"> </span><span class="ot">$htmlfooter</span><span class="st">&quot;</span> <span class="kw">&gt;</span> <span class="st">&quot;</span><span class="ot">$shaarli_base_dir</span><span class="st">/index.html&quot;</span>
-<span class="kw">echo</span> <span class="st">&#39;[info] done.&#39;</span>[](.html)
-<span class="kw">echo</span> <span class="st">&quot;[info] list of accounts: </span><span class="ot">$accounts</span><span class="st">&quot;</span>[](.html)
-<span class="kw">echo</span> <span class="st">&quot;[info] contents of </span><span class="ot">$shaarli_base_dir</span><span class="st">:&quot;</span>[](.html)
-<span class="kw">tree</span> -a -L 1 <span class="st">&quot;</span><span class="ot">$shaarli_base_dir</span><span class="st">&quot;</span></code></pre></div>
+<span class="kw">for</span> <span class="ex">account</span> in <span class="va">$accounts</span><span class="kw">;</span> <span class="kw">do</span> <span class="va">accountlinks=</span><span class="st">&quot;</span><span class="va">$accountlinks</span><span class="st">\n&lt;li&gt;&lt;a href=</span><span class="dt">\&quot;</span><span class="va">$account</span><span class="dt">\&quot;</span><span class="st">&gt;</span><span class="va">$account</span><span class="st">&lt;/a&gt;&lt;/li&gt;&quot;</span>; <span class="kw">done</span>
+<span class="kw">if</span><span class="bu"> [</span> <span class="ot">-d</span> <span class="st">&quot;</span><span class="va">$shaarli_base_dir</span><span class="st">/index.html&quot;</span><span class="bu"> ]</span>; <span class="kw">then</span> <span class="bu">echo</span> <span class="st">&quot;[removing old index.html]&quot;</span><span class="kw">;</span> <span class="fu">rm</span> <span class="st">&quot;</span><span class="va">$shaarli_base_dir</span><span class="st">/index.html&quot;</span> ]<span class="kw">;</span> <span class="kw">fi</span>[]<span class="kw">(</span><span class="ex">.html</span><span class="kw">)</span>
+<span class="bu">echo</span> <span class="st">&quot;[info] generating new index of shaarlis&quot;</span>[](.html)
+<span class="bu">echo</span> -e <span class="st">&quot;</span><span class="va">$htmlhead</span><span class="st"> </span><span class="va">$accountlinks</span><span class="st"> </span><span class="va">$htmlfooter</span><span class="st">&quot;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$shaarli_base_dir</span><span class="st">/index.html&quot;</span>
+<span class="bu">echo</span> <span class="st">&#39;[info] done.&#39;</span>[](.html)
+<span class="bu">echo</span> <span class="st">&quot;[info] list of accounts: </span><span class="va">$accounts</span><span class="st">&quot;</span>[](.html)
+<span class="bu">echo</span> <span class="st">&quot;[info] contents of </span><span class="va">$shaarli_base_dir</span><span class="st">:&quot;</span>[](.html)
+<span class="ex">tree</span> -a -L 1 <span class="st">&quot;</span><span class="va">$shaarli_base_dir</span><span class="st">&quot;</span></code></pre></div>
 <p>This script just serves as an example. More precise or complex (applying custom configuration, etc) automation is possible using configuration management software like <a href="https://www.ansible.com/">Ansible</a><a href=".html"></a></p>
 </body>
 </html>

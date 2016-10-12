@@ -52,13 +52,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="local-sidebar">
 <ul>
 <li><a href="Home.html">Home</a></li>
-<li>Installation
+<li>Setup
 <ul>
-<li><a href="Download.html">Download</a></li>
+<li><a href="Download-and-Installation.html">Download and Installation</a></li>
+<li><a href="Upgrade-and-migration.html">Upgrade and migration</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
 <li><a href="Server-security.html">Server security</a></li>
-<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
 <li><a href="Plugins.html">Plugins</a></li>
 </ul></li>
@@ -73,7 +73,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
-<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
 <li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
@@ -97,7 +96,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><a href="FAQ.html">FAQ</a></li>
 <li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
-<li><a href="TODO.html">TODO</a></li>
 </ul></li>
 </ul>
 </div>
@@ -133,7 +131,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>See also <a href="https://github.com/shaarli/Shaarli/issues?utf8=%E2%9C%93&amp;q=label%3Aproxy+">proxy-related</a> issues.<a href=".html"></a></p>
 <h2 id="apache">Apache</h2>
 <h3 id="minimal">Minimal</h3>
-<div class="sourceCode"><pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:80</span><span class="fu">&gt;</span>
+<div class="sourceCode"><pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="at"> *:80</span><span class="fu">&gt;</span>
     ServerName<span class="st">   shaarli.my-domain.org</span>
     DocumentRoot<span class="st"> /absolute/path/to/shaarli/</span>
 <span class="fu">&lt;/VirtualHost&gt;</span></code></pre></div>
@@ -144,11 +142,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="http://stackoverflow.com/q/176">Apache/PHP - error log per VirtualHost</a> (StackOverflow)<a href=".html"></a></li>
 <li><a href="https://ma.ttias.be/php-php_value-vs-php_admin_value-and-the-use-of-php_flag-explained/">PHP: php_value vs php_admin_value and the use of php_flag explained</a><a href=".html"></a></li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:80</span><span class="fu">&gt;</span>
+<div class="sourceCode"><pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="at"> *:80</span><span class="fu">&gt;</span>
     ServerName<span class="st">   shaarli.my-domain.org</span>
     DocumentRoot<span class="st"> /absolute/path/to/shaarli/</span>
 
-    <span class="ot">LogLevel</span><span class="ch">  </span><span class="kw">warn</span>
+    <span class="ex">LogLevel</span><span class="ch">  </span><span class="kw">warn</span>
     ErrorLog<span class="st">  /var/log/apache2/shaarli-error.log</span>
     CustomLog<span class="st"> /var/log/apache2/shaarli-access.log combined</span>
 
@@ -158,40 +156,40 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     php_value error_log /var/log/apache2/shaarli-php-error.log
 <span class="fu">&lt;/VirtualHost&gt;</span></code></pre></div>
 <h3 id="standard---keep-access-and-error-logs">Standard - Keep access and error logs</h3>
-<div class="sourceCode"><pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:80</span><span class="fu">&gt;</span>
+<div class="sourceCode"><pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="at"> *:80</span><span class="fu">&gt;</span>
     ServerName<span class="st">   shaarli.my-domain.org</span>
     DocumentRoot<span class="st"> /absolute/path/to/shaarli/</span>
 
-    <span class="ot">LogLevel</span><span class="ch">  </span><span class="kw">warn</span>
+    <span class="ex">LogLevel</span><span class="ch">  </span><span class="kw">warn</span>
     ErrorLog<span class="st">  /var/log/apache2/shaarli-error.log</span>
     CustomLog<span class="st"> /var/log/apache2/shaarli-access.log combined</span>
 <span class="fu">&lt;/VirtualHost&gt;</span></code></pre></div>
 <h3 id="paranoid---redirect-http-80-to-https-443">Paranoid - Redirect HTTP (:80) to HTTPS (:443)</h3>
 <p>See <a href="https://wiki.mozilla.org/Security/Server_Side_TLS#Apache">Server-side TLS</a> (Mozilla).<a href=".html"></a></p>
-<div class="sourceCode"><pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="ot"> *:443</span><span class="fu">&gt;</span>
+<div class="sourceCode"><pre class="sourceCode apache"><code class="sourceCode apache"><span class="fu">&lt;VirtualHost</span><span class="at"> *:443</span><span class="fu">&gt;</span>
     ServerName<span class="st">   shaarli.my-domain.org</span>
     DocumentRoot<span class="st"> /absolute/path/to/shaarli/</span>
 
-    <span class="ot">SSLEngine</span><span class="ch">             </span><span class="kw">on</span>
+    <span class="ex">SSLEngine</span><span class="ch">             </span><span class="kw">on</span>
     SSLCertificateFile<span class="st">    /absolute/path/to/the/website/certificate.pem</span>
     SSLCertificateKeyFile<span class="st"> /absolute/path/to/the/website/key.key</span>
 
-    <span class="fu">&lt;Directory</span><span class="ot"> /absolute/path/to/shaarli/</span><span class="fu">&gt;</span>
-        <span class="ot">AllowOverride</span><span class="ch"> </span><span class="kw">All</span>
-        <span class="ot">Options</span><span class="ch"> </span><span class="kw">Indexes</span><span class="ch"> </span><span class="kw">FollowSymLinks</span><span class="ch"> </span><span class="kw">MultiViews</span>
-        <span class="ot">Order</span><span class="ch"> </span><span class="kw">allow,deny</span>
+    <span class="fu">&lt;Directory</span><span class="at"> /absolute/path/to/shaarli/</span><span class="fu">&gt;</span>
+        <span class="ex">AllowOverride</span><span class="ch"> </span><span class="kw">All</span>
+        <span class="ex">Options</span><span class="ch"> </span><span class="kw">Indexes</span><span class="ch"> </span><span class="kw">FollowSymLinks</span><span class="ch"> </span><span class="kw">MultiViews</span>
+        <span class="ex">Order</span><span class="ch"> </span><span class="kw">allow,deny</span>
         allow<span class="st"> from all</span>
     <span class="fu">&lt;/Directory&gt;</span>
 
-    <span class="ot">LogLevel</span><span class="ch">  </span><span class="kw">warn</span>
+    <span class="ex">LogLevel</span><span class="ch">  </span><span class="kw">warn</span>
     ErrorLog<span class="st">  /var/log/apache2/shaarli-error.log</span>
     CustomLog<span class="st"> /var/log/apache2/shaarli-access.log combined</span>
 <span class="fu">&lt;/VirtualHost&gt;</span>
-<span class="fu">&lt;VirtualHost</span><span class="ot"> *:80</span><span class="fu">&gt;</span>
+<span class="fu">&lt;VirtualHost</span><span class="at"> *:80</span><span class="fu">&gt;</span>
     ServerName<span class="st">   shaarli.my-domain.org</span>
     Redirect<span class="st"> 301 / https://shaarli.my-domain.org</span>
 
-    <span class="ot">LogLevel</span><span class="ch">  </span><span class="kw">warn</span>
+    <span class="ex">LogLevel</span><span class="ch">  </span><span class="kw">warn</span>
     ErrorLog<span class="st">  /var/log/apache2/shaarli-error.log</span>
     CustomLog<span class="st"> /var/log/apache2/shaarli-access.log combined</span>
 <span class="fu">&lt;/VirtualHost&gt;</span></code></pre></div>
@@ -410,10 +408,5 @@ http {
         include php.conf;
     }
 }</code></pre>
-<h2 id="restricting-search-engines-and-web-crawler-traffic">Restricting search engines and web crawler traffic</h2>
-<p>Creating a <code>robots.txt</code> witht he following contents at the root of your Shaarli installation will prevent &quot;honest&quot; web crawlers from indexing each and every link and Daily page from a Shaarli instance, thus getting rid of a certain amount of unsollicited network traffic.</p>
-<pre><code>User-agent: *
-Disallow: /</code></pre>
-<p>See: <a href="http://www.robotstxt.org/" class="uri">http://www.robotstxt.org/</a>, <a href="http://www.robotstxt.org/robotstxt.html" class="uri">http://www.robotstxt.org/robotstxt.html</a>, <a href="http://www.robotstxt.org/meta.html" class="uri">http://www.robotstxt.org/meta.html</a></p>
 </body>
 </html>

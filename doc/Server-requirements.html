@@ -15,13 +15,13 @@
 <div id="local-sidebar">
 <ul>
 <li><a href="Home.html">Home</a></li>
-<li>Installation
+<li>Setup
 <ul>
-<li><a href="Download.html">Download</a></li>
+<li><a href="Download-and-Installation.html">Download and Installation</a></li>
+<li><a href="Upgrade-and-migration.html">Upgrade and migration</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
 <li><a href="Server-security.html">Server security</a></li>
-<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
 <li><a href="Plugins.html">Plugins</a></li>
 </ul></li>
@@ -36,7 +36,6 @@
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
-<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
 <li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
@@ -60,7 +59,6 @@
 <ul>
 <li><a href="FAQ.html">FAQ</a></li>
 <li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
-<li><a href="TODO.html">TODO</a></li>
 </ul></li>
 </ul>
 </div>
@@ -96,18 +94,18 @@
 </tr>
 <tr class="odd">
 <td style="text-align: center;">5.5</td>
-<td style="text-align: center;">Supported</td>
+<td style="text-align: center;">EOL: 2016-07-10</td>
 <td style="text-align: center;">✅</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">5.4</td>
 <td style="text-align: center;">EOL: 2015-09-14</td>
-<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅ (up to Shaarli 0.8.x)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">5.3</td>
 <td style="text-align: center;">EOL: 2014-08-14</td>
-<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅ (up to Shaarli 0.8.x)</td>
 </tr>
 </tbody>
 </table>
@@ -115,6 +113,25 @@
 <ul>
 <li><a href="https://github.com/shaarli/Shaarli/blob/master/.travis.yml">Travis configuration</a><a href=".html"></a></li>
 </ul>
+<h3 id="dependency-management">Dependency management</h3>
+<p>Starting with Shaarli <code>v0.8.x</code>, <a href="https://getcomposer.org/">Composer</a> is used to resolve,<a href=".html"></a><br />
+download and install third-party PHP dependencies.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Library</th>
+<th style="text-align: center;">Required?</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://packagist.org/packages/shaarli/netscape-bookmark-parser"><code>shaarli/netscape-bookmark-parser</code></a></td>
+<td style="text-align: center;">All</td>
+<td>Import bookmarks from Netscape files<a href=".html"></a></td>
+</tr>
+</tbody>
+</table>
 <h3 id="extensions">Extensions</h3>
 <table style="width:19%;">
 <colgroup>
@@ -142,13 +159,18 @@
 </tr>
 <tr class="odd">
 <td><a href="http://php.net/manual/en/book.image.php"><code>php-gd</code></a></td>
-<td style="text-align: center;">-</td>
+<td style="text-align: center;">optional</td>
 <td>thumbnail resizing<a href=".html"></a></td>
 </tr>
 <tr class="even">
-<td><a href="http://php.net/manual/fr/book.intl.php"><code>php-intl</code></a></td>
-<td style="text-align: center;">Optional</td>
-<td>Tag cloud intelligent sorting (eg. <code>e-&gt;è-&gt;f</code>)<a href=".html"></a></td>
+<td><a href="http://php.net/manual/en/book.intl.php"><code>php-intl</code></a></td>
+<td style="text-align: center;">optional</td>
+<td>localized text sorting (e.g. <code>e-&gt;è-&gt;f</code>)<a href=".html"></a></td>
+</tr>
+<tr class="odd">
+<td><a href="http://php.net/manual/en/book.curl.php"><code>php-curl</code></a></td>
+<td style="text-align: center;">optional</td>
+<td>using cURL for fetching webpages and thumbnails in a more robust way<a href=".html"></a></td>
 </tr>
 </tbody>
 </table>
