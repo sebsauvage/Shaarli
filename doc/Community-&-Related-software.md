@@ -21,8 +21,9 @@ _TODO: contact repos owners to see if they'd like to standardize their work with
   * [autosave](https://github.com/kalvn/shaarli-plugin-autosave) by [@kalvn](https://github.com/kalvn): Automatically saves data when editing a link to avoid any loss in case of crash or unexpected shutdown.[](.html)
   * [Code Coloration](https://github.com/ArthurHoaro/code-coloration) by [@ArthurHoaro](https://github.com/ArthurHoaro): client side code syntax highlighter.[](.html)
   * [social](https://github.com/alexisju/social) by [@alexisju](https://github.com/alexisju): share links to social networks.[](.html)
-  * [emojione](https://github.com/NerosTie/emojione) by [@NerosTie](https://github.com/NerosTie/emojione): Add colorful emojis to your Shaarli.[](.html)
+  * [emojione](https://github.com/NerosTie/emojione) by [@NerosTie](https://github.com/NerosTie): Add colorful emojis to your Shaarli.[](.html)
   * [launch](https://github.com/ArthurHoaro/launch-plugin) - Launch Plugin is a plugin designed to enhance and customize Launch Theme for Shaarli.[](.html)
+  * [Disqus](https://github.com/kalvn/shaarli-plugin-disqus) by [@kalvn](https://github.com/kalvn): Adds Disqus comment system to your Shaarli.[](.html)
 
 
 ### Themes

@@ -1,11 +1,11 @@
 #_Sidebar
 - [Home](Home.html)
-- Installation
-    - [Download](Download.html)
+- Setup
+    - [Download and Installation](Download-and-Installation.html)
+    - [Upgrade and migration](Upgrade-and-migration.html)
     - [Server requirements](Server-requirements.html)
     - [Server configuration](Server-configuration.html)
     - [Server security](Server-security.html)
-    - [Shaarli installation](Shaarli-installation.html)
     - [Shaarli configuration](Shaarli-configuration.html)
     - [Plugins](Plugins.html)
 - [Docker](Docker.html)
@@ -16,7 +16,6 @@
     - [RSS feeds](RSS-feeds.html)
 - How To
     - [Backup, restore, import and export](Backup,-restore,-import-and-export.html)
-    - [Upgrade from original sebsauvage/Shaarli](Upgrade-from-original-sebsauvage/Shaarli.html)
     - [Copy an existing installation over SSH and serve it locally](Copy-an-existing-installation-over-SSH-and-serve-it-locally.html)
     - [Create and serve multiple Shaarlis (farm)](Create-and-serve-multiple-Shaarlis-(farm).html)
     - [Download CSS styles from an OPML list](Download-CSS-styles-from-an-OPML-list.html)
@@ -36,4 +35,3 @@
 - About
     - [FAQ](FAQ.html)
     - [Community & Related software](Community-&-Related-software.html)
-    - [TODO](TODO.html)

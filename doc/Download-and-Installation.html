@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Shaarli – Download</title>
+  <title>Shaarli – Download and Installation</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 div.sourceCode { overflow-x: auto; }
@@ -52,13 +52,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="local-sidebar">
 <ul>
 <li><a href="Home.html">Home</a></li>
-<li>Installation
+<li>Setup
 <ul>
-<li><a href="Download.html">Download</a></li>
+<li><a href="Download-and-Installation.html">Download and Installation</a></li>
+<li><a href="Upgrade-and-migration.html">Upgrade and migration</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
 <li><a href="Server-security.html">Server security</a></li>
-<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
 <li><a href="Plugins.html">Plugins</a></li>
 </ul></li>
@@ -73,7 +73,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
-<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
 <li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
@@ -97,27 +96,70 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><a href="FAQ.html">FAQ</a></li>
 <li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
-<li><a href="TODO.html">TODO</a></li>
 </ul></li>
 </ul>
 </div>
-<h1 id="download">Download</h1>
-<h2 id="get-shaarli">Get Shaarli!</h2>
-<h3 id="latest-stable-revision">Latest stable revision</h3>
-<p>This revision has been <a href="https://github.com/shaarli/Shaarli/releases">released</a> and tested.<a href=".html"></a></p>
-<h4 id="clone-with-git-recommended">Clone with Git (recommended)</h4>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> clone https://github.com/shaarli/Shaarli.git -b stable shaarli</code></pre></div>
-<h4 id="download-as-an-archive">Download as an archive</h4>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">wget</span> https://github.com/shaarli/Shaarli/archive/stable.zip
-$ <span class="kw">unzip</span> stable.zip
-$ <span class="kw">mv</span> Shaarli-stable shaarli</code></pre></div>
-<p>Tarballs are also available:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">wget</span> https://github.com/shaarli/Shaarli/archive/stable.tar.gz
-$ <span class="kw">tar</span> xvf stable.tar.gz
-$ <span class="kw">mv</span> Shaarli-stable shaarli</code></pre></div>
-<h3 id="development-mainline">Development (mainline)</h3>
+<h1 id="download-and-installation">Download and Installation</h1>
+<h1 id="get-shaarli">Get Shaarli!</h1>
+<p>To install Shaarli, simply place the files in a directory under your webserver's Document Root (or directly at the document root). Make sure your <a href="Server-requirements">server</a> is properly <a href="Server-configuration">configured</a>.<a href=".html"></a></p>
+<p>Several releases are available:</p>
+<hr />
+<h2 id="latest-release-recommended">Latest release (recommended)</h2>
+<p>Get the latest released version from the <a href="https://github.com/shaarli/Shaarli/releases">releases</a> page.<a href=".html"></a></p>
+<p>The current latest released version is <code>v0.7.0</code>.</p>
+<h3 id="download-as-an-archive">Download as an archive</h3>
+<p>As a .zip archive:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">wget</span> https://github.com/shaarli/Shaarli/archive/v0.7.0.zip
+$ <span class="fu">unzip</span> Shaarli-v0.7.0.zip
+$ <span class="fu">mv</span> Shaarli-v0.7.0 /path/to/shaarli/</code></pre></div>
+<table style="width:46%;">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>!</th>
+<th>In most cases, download Shaarli from the <a href="https://github.com/shaarli/Shaarli/releases">releases</a> page. Cloning using <code>git</code> or downloading Github branches as zip files requires additional steps (see below).</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<hr />
+<h2 id="stable-version">Stable version</h2>
+<p>The stable version has been experienced by Shaarli users, and will receive security updates.</p>
+<h3 id="download-as-an-archive-1">Download as an archive</h3>
+<p>As a .zip archive:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">wget</span> https://github.com/shaarli/Shaarli/archive/stable.zip
+$ <span class="fu">unzip</span> stable.zip
+$ <span class="fu">mv</span> Shaarli-stable /path/to/shaarli/</code></pre></div>
+<p>As a .tar.gz archive :</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">wget</span> https://github.com/shaarli/Shaarli/archive/stable.tar.gz
+$ <span class="fu">tar</span> xvf stable.tar.gz
+$ <span class="fu">mv</span> Shaarli-stable /path/to/shaarli/</code></pre></div>
+<h3 id="clone-with-git">Clone with Git</h3>
+<p><a href="https://getcomposer.org/">Composer</a> is required to build a functional Shaarli installation when pulling from git.<a href=".html"></a></p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">git</span> clone https://github.com/shaarli/Shaarli.git -b stable /path/to/shaarli/
+<span class="co"># install/update third-party dependencies</span>
+$ <span class="bu">cd</span> /path/to/shaarli/
+$ <span class="ex">composer</span> update --no-dev</code></pre></div>
+<hr />
+<h2 id="development-version-mainline">Development version (mainline)</h2>
 <p><em>Use at your own risk!</em></p>
-<p>To get the latest changes:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> clone https://github.com/shaarli/Shaarli.git shaarli</code></pre></div>
+<p>To get the latest changes from the <code>master</code> branch:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># clone the repository  </span>
+$ <span class="fu">git</span> clone https://github.com/shaarli/Shaarli.git master /path/to/shaarli/
+<span class="co"># install/update third-party dependencies</span>
+$ <span class="bu">cd</span> /path/to/shaarli
+$ <span class="ex">composer</span> update --no-dev</code></pre></div>
+<hr />
+<h2 id="finish-installation">Finish Installation</h2>
+<p>Once Shaarli is downloaded and files have been placed at the correct location, open it this location your favorite browser.</p>
+<p><img src="http://i.imgur.com/wuMpDSN.png" alt="install screenshot" /><a href=".html"></a></p>
+<p>Setup your Shaarli installation, and it's ready to use!</p>
+<hr />
+<h2 id="updating-shaarli">Updating Shaarli</h2>
+<p>See <a href="Upgrade-and-migration">Upgrade and Migration</a><a href=".html"></a></p>
 </body>
 </html>

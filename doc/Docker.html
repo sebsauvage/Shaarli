@@ -52,13 +52,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="local-sidebar">
 <ul>
 <li><a href="Home.html">Home</a></li>
-<li>Installation
+<li>Setup
 <ul>
-<li><a href="Download.html">Download</a></li>
+<li><a href="Download-and-Installation.html">Download and Installation</a></li>
+<li><a href="Upgrade-and-migration.html">Upgrade and migration</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
 <li><a href="Server-security.html">Server security</a></li>
-<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
 <li><a href="Plugins.html">Plugins</a></li>
 </ul></li>
@@ -73,7 +73,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
-<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
 <li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
@@ -97,7 +96,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><a href="FAQ.html">FAQ</a></li>
 <li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
-<li><a href="TODO.html">TODO</a></li>
 </ul></li>
 </ul>
 </div>
@@ -112,18 +110,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Install <a href="https://www.docker.com/">Docker</a>, by following the instructions relevant<a href=".html"></a><br />
 to your OS / distribution, and start the service.</p>
 <h4 id="search-an-image-on-dockerhub">Search an image on <a href="https://hub.docker.com/">DockerHub</a><a href=".html"></a></h4>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">docker</span> search debian
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">docker</span> search debian
 
-<span class="kw">NAME</span>            DESCRIPTION                                     STARS   OFFICIAL   AUTOMATED
-<span class="kw">ubuntu</span>          Ubuntu is a Debian-based Linux operating s...   2065    [OK][](.html)
-<span class="kw">debian</span>          Debian is a Linux distribution that<span class="st">&#39;s comp...   603     [OK][](.html)</span>
+<span class="ex">NAME</span>            DESCRIPTION                                     STARS   OFFICIAL   AUTOMATED
+<span class="ex">ubuntu</span>          Ubuntu is a Debian-based Linux operating s...   2065    [OK][](.html)
+<span class="ex">debian</span>          Debian is a Linux distribution that<span class="st">&#39;s comp...   603     [OK][](.html)</span>
 <span class="st">google/debian                                                   47                 [OK][](.html)</span></code></pre></div>
 <h4 id="show-available-tags-for-a-repository">Show available tags for a repository</h4>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">curl</span> https://index.docker.io/v1/repositories/debian/tags <span class="kw">|</span> <span class="kw">python</span> -m json.tool
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">curl</span> https://index.docker.io/v1/repositories/debian/tags <span class="kw">|</span> <span class="ex">python</span> -m json.tool
 
-<span class="kw">%</span> Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-<span class="kw">Dload</span>  Upload   Total   Spent    Left  Speed
-<span class="kw">100</span>  1283    0  1283    0     0    433      0 --:--:--  0:00:02 --:--:--   433</code></pre></div>
+<span class="ex">%</span> Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+<span class="ex">Dload</span>  Upload   Total   Spent    Left  Speed
+<span class="ex">100</span>  1283    0  1283    0     0    433      0 --:--:--  0:00:02 --:--:--   433</code></pre></div>
 <p>Sample output:</p>
 <div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="ot">[[]</span><span class="er">(.html)</span>
     <span class="fu">{</span>
@@ -148,14 +146,14 @@ to your OS / distribution, and start the service.</p>
     <span class="fu">}</span>
 <span class="ot">]</span></code></pre></div>
 <h4 id="pull-an-image-from-dockerhub">Pull an image from DockerHub</h4>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">docker</span> pull repository[:tag][](.html)
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">docker</span> pull repository[:tag][](.html)
 
-$ <span class="kw">docker</span> pull debian:wheezy
-<span class="kw">wheezy</span>: Pulling from debian
-<span class="kw">4c8cbfd2973e</span>: Pull complete
-<span class="kw">60c52dbe9d91</span>: Pull complete
-<span class="kw">Digest</span>: sha256:c584131da2ac1948aa3e66468a4424b6aea2f33acba7cec0b631bdb56254c4fe
-<span class="kw">Status</span>: Downloaded newer image for debian:wheezy</code></pre></div>
+$ <span class="ex">docker</span> pull debian:wheezy
+<span class="ex">wheezy</span>: Pulling from debian
+<span class="ex">4c8cbfd2973e</span>: Pull complete
+<span class="ex">60c52dbe9d91</span>: Pull complete
+<span class="ex">Digest</span>: sha256:c584131da2ac1948aa3e66468a4424b6aea2f33acba7cec0b631bdb56254c4fe
+<span class="ex">Status</span>: Downloaded newer image for debian:wheezy</code></pre></div>
 <h2 id="get-and-run-a-shaarli-image">Get and run a Shaarli image</h2>
 <h3 id="dockerhub-repository">DockerHub repository</h3>
 <p>The images can be found in the <a href="https://hub.docker.com/r/shaarli/shaarli/"><code>shaarli/shaarli</code></a><a href=".html"></a><br />
@@ -173,53 +171,53 @@ repository.</p>
 <li><a href="http://nginx.org/">Nginx</a><a href=".html"></a></li>
 </ul>
 <h3 id="download-from-dockerhub">Download from DockerHub</h3>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">docker</span> pull shaarli/shaarli
-<span class="kw">latest</span>: Pulling from shaarli/shaarli
-<span class="kw">32716d9fcddb</span>: Pull complete
-<span class="kw">84899d045435</span>: Pull complete
-<span class="kw">4b6ad7444763</span>: Pull complete
-<span class="kw">e0345ef7a3e0</span>: Pull complete
-<span class="kw">5c1dd344094f</span>: Pull complete
-<span class="kw">6422305a200b</span>: Pull complete
-<span class="kw">7d63f861dbef</span>: Pull complete
-<span class="kw">3eb97210645c</span>: Pull complete
-<span class="kw">869319d746ff</span>: Already exists
-<span class="kw">869319d746ff</span>: Pulling fs layer
-<span class="kw">902b87aaaec9</span>: Already exists
-<span class="kw">Digest</span>: sha256:f836b4627b958b3f83f59c332f22f02fcd495ace3056f2be2c4912bd8704cc98
-<span class="kw">Status</span>: Downloaded newer image for shaarli/shaarli:latest</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">docker</span> pull shaarli/shaarli
+<span class="ex">latest</span>: Pulling from shaarli/shaarli
+<span class="ex">32716d9fcddb</span>: Pull complete
+<span class="ex">84899d045435</span>: Pull complete
+<span class="ex">4b6ad7444763</span>: Pull complete
+<span class="ex">e0345ef7a3e0</span>: Pull complete
+<span class="ex">5c1dd344094f</span>: Pull complete
+<span class="ex">6422305a200b</span>: Pull complete
+<span class="ex">7d63f861dbef</span>: Pull complete
+<span class="ex">3eb97210645c</span>: Pull complete
+<span class="ex">869319d746ff</span>: Already exists
+<span class="ex">869319d746ff</span>: Pulling fs layer
+<span class="ex">902b87aaaec9</span>: Already exists
+<span class="ex">Digest</span>: sha256:f836b4627b958b3f83f59c332f22f02fcd495ace3056f2be2c4912bd8704cc98
+<span class="ex">Status</span>: Downloaded newer image for shaarli/shaarli:latest</code></pre></div>
 <h3 id="create-and-start-a-new-container-from-the-image">Create and start a new container from the image</h3>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># map the host&#39;s :8000 port to the container&#39;s :80 port</span>
-$ <span class="kw">docker</span> create -p 8000:80 shaarli/shaarli
-<span class="kw">d40b7af693d678958adedfb88f87d6ea0237186c23de5c4102a55a8fcb499101</span>
+$ <span class="ex">docker</span> create -p 8000:80 shaarli/shaarli
+<span class="ex">d40b7af693d678958adedfb88f87d6ea0237186c23de5c4102a55a8fcb499101</span>
 
 <span class="co"># launch the container in the background</span>
-$ <span class="kw">docker</span> start d40b7af693d678958adedfb88f87d6ea0237186c23de5c4102a55a8fcb499101
-<span class="kw">d40b7af693d678958adedfb88f87d6ea0237186c23de5c4102a55a8fcb499101</span>
+$ <span class="ex">docker</span> start d40b7af693d678958adedfb88f87d6ea0237186c23de5c4102a55a8fcb499101
+<span class="ex">d40b7af693d678958adedfb88f87d6ea0237186c23de5c4102a55a8fcb499101</span>
 
 <span class="co"># list active containers</span>
-$ <span class="kw">docker</span> ps
-<span class="kw">CONTAINER</span> ID  IMAGE            COMMAND               CREATED         STATUS        PORTS                 NAMES
-<span class="kw">d40b7af693d6</span>  shaarli/shaarli  /usr/bin/supervisor  15 seconds ago  Up 4 seconds  0.0.0.0:8000-<span class="kw">&gt;</span>80/tcp  backstabbing_galileo</code></pre></div>
+$ <span class="ex">docker</span> ps
+<span class="ex">CONTAINER</span> ID  IMAGE            COMMAND               CREATED         STATUS        PORTS                 NAMES
+<span class="ex">d40b7af693d6</span>  shaarli/shaarli  /usr/bin/supervisor  15 seconds ago  Up 4 seconds  0.0.0.0:8000-<span class="op">&gt;</span>80/tcp  backstabbing_galileo</code></pre></div>
 <h3 id="stop-and-destroy-a-container">Stop and destroy a container</h3>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">docker</span> stop backstabbing_galileo  <span class="co"># those docker guys are really rude to physicists!</span>
-<span class="kw">backstabbing_galileo</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">docker</span> stop backstabbing_galileo  <span class="co"># those docker guys are really rude to physicists!</span>
+<span class="ex">backstabbing_galileo</span>
 
 <span class="co"># check the container is stopped</span>
-$ <span class="kw">docker</span> ps
-<span class="kw">CONTAINER</span> ID  IMAGE            COMMAND               CREATED         STATUS        PORTS                 NAMES
+$ <span class="ex">docker</span> ps
+<span class="ex">CONTAINER</span> ID  IMAGE            COMMAND               CREATED         STATUS        PORTS                 NAMES
 
 <span class="co"># list ALL containers</span>
-$ <span class="kw">docker</span> ps -a
-<span class="kw">CONTAINER</span> ID        IMAGE               COMMAND                CREATED             STATUS                      PORTS               NAMES
-<span class="kw">d40b7af693d6</span>        shaarli/shaarli     /usr/bin/supervisor   5 minutes ago       Exited (0) <span class="kw">48</span> seconds ago                       backstabbing_galileo
+$ <span class="ex">docker</span> ps -a
+<span class="ex">CONTAINER</span> ID        IMAGE               COMMAND                CREATED             STATUS                      PORTS               NAMES
+<span class="ex">d40b7af693d6</span>        shaarli/shaarli     /usr/bin/supervisor   5 minutes ago       Exited (0) <span class="ex">48</span> seconds ago                       backstabbing_galileo
 
 <span class="co"># destroy the container</span>
-$ <span class="kw">docker</span> rm backstabbing_galileo  <span class="co"># let&#39;s put an end to these barbarian practices</span>
-<span class="kw">backstabbing_galileo</span>
+$ <span class="ex">docker</span> rm backstabbing_galileo  <span class="co"># let&#39;s put an end to these barbarian practices</span>
+<span class="ex">backstabbing_galileo</span>
 
-$ <span class="kw">docker</span> ps -a
-<span class="kw">CONTAINER</span> ID  IMAGE            COMMAND               CREATED         STATUS        PORTS                 NAMES</code></pre></div>
+$ <span class="ex">docker</span> ps -a
+<span class="ex">CONTAINER</span> ID  IMAGE            COMMAND               CREATED         STATUS        PORTS                 NAMES</code></pre></div>
 <h2 id="resources">Resources</h2>
 <h3 id="docker-1">Docker</h3>
 <ul>

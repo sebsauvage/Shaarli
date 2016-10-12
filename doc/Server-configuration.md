@@ -334,15 +334,3 @@ http {
     }
 }
 ```
-
-## Restricting search engines and web crawler traffic
-
-Creating a `robots.txt` witht he following contents at the root of your Shaarli installation will prevent "honest" web crawlers from indexing each and every link and Daily page from a Shaarli instance, thus getting rid of a certain amount of unsollicited network traffic.
-
-```
-User-agent: *
-Disallow: /
-```
-
-See: http://www.robotstxt.org/, http://www.robotstxt.org/robotstxt.html, http://www.robotstxt.org/meta.html
-

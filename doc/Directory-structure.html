@@ -52,13 +52,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="local-sidebar">
 <ul>
 <li><a href="Home.html">Home</a></li>
-<li>Installation
+<li>Setup
 <ul>
-<li><a href="Download.html">Download</a></li>
+<li><a href="Download-and-Installation.html">Download and Installation</a></li>
+<li><a href="Upgrade-and-migration.html">Upgrade and migration</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
 <li><a href="Server-security.html">Server security</a></li>
-<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
 <li><a href="Plugins.html">Plugins</a></li>
 </ul></li>
@@ -73,7 +73,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
-<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
 <li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
@@ -97,39 +96,38 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><a href="FAQ.html">FAQ</a></li>
 <li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
-<li><a href="TODO.html">TODO</a></li>
 </ul></li>
 </ul>
 </div>
 <h1 id="directory-structure">Directory structure</h1>
 <p>Here is the directory structure of Shaarli and the purpose of the different files:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="kw">index.php</span>        <span class="co"># Main program</span>
-    <span class="kw">application/</span>     <span class="co"># Shaarli classes</span>
-        ├── <span class="kw">LinkDB.php</span>
-        └── <span class="kw">Utils.php</span>
-    <span class="kw">tests/</span>       <span class="co"># Shaarli unitary &amp; functional tests</span>
-        ├── <span class="kw">LinkDBTest.php</span>
-        ├── <span class="kw">utils</span>  <span class="co"># utilities to ease testing</span>
-        │   └── <span class="kw">ReferenceLinkDB.php</span>
-        └── <span class="kw">UtilsTest.php</span>
-    <span class="kw">COPYING</span>          <span class="co"># Shaarli license</span>
-    <span class="kw">inc/</span>             <span class="co"># static assets and 3rd party libraries</span>
-        ├── <span class="kw">awesomplete.*</span>          <span class="co"># tags autocompletion library</span>
-        ├── <span class="kw">blazy.*</span>                <span class="co"># picture wall lazy image loading library</span>
-        ├── <span class="kw">shaarli.css</span>, reset.css <span class="co"># Shaarli stylesheet.</span>
-        ├── <span class="kw">qr.*</span>                   <span class="co"># qr code generation library</span>
-        └──<span class="kw">rain.tpl.class.php</span>      <span class="co"># RainTPL templating library</span>
-    <span class="kw">tpl/</span>             <span class="co"># RainTPL templates for Shaarli. They are used to build the pages.</span>
-    <span class="kw">images/</span>          <span class="co"># Images and icons used in Shaarli</span>
-    <span class="kw">data/</span>            <span class="co"># data storage: bookmark database, configuration, logs, banlist…</span>
-        ├── <span class="kw">config.php</span>             <span class="co"># Shaarli configuration (login, password, timezone, title…)</span>
-        ├── <span class="kw">datastore.php</span>          <span class="co"># Your link database (compressed).</span>
-        ├── <span class="kw">ipban.php</span>              <span class="co"># IP address ban system data</span>
-        ├── <span class="kw">lastupdatecheck.txt</span>    <span class="co"># Update check timestamp file</span>
-        └──<span class="kw">log.txt</span>                 <span class="co"># login/IPban log.</span>
-    <span class="kw">cache/</span>           <span class="co"># thumbnails cache</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">index.php</span>        <span class="co"># Main program</span>
+    <span class="ex">application/</span>     <span class="co"># Shaarli classes</span>
+        ├── <span class="ex">LinkDB.php</span>
+        └── <span class="ex">Utils.php</span>
+    <span class="ex">tests/</span>       <span class="co"># Shaarli unitary &amp; functional tests</span>
+        ├── <span class="ex">LinkDBTest.php</span>
+        ├── <span class="ex">utils</span>  <span class="co"># utilities to ease testing</span>
+        │   └── <span class="ex">ReferenceLinkDB.php</span>
+        └── <span class="ex">UtilsTest.php</span>
+    <span class="ex">COPYING</span>          <span class="co"># Shaarli license</span>
+    <span class="ex">inc/</span>             <span class="co"># static assets and 3rd party libraries</span>
+        ├── <span class="ex">awesomplete.*</span>          <span class="co"># tags autocompletion library</span>
+        ├── <span class="ex">blazy.*</span>                <span class="co"># picture wall lazy image loading library</span>
+        ├── <span class="ex">shaarli.css</span>, reset.css <span class="co"># Shaarli stylesheet.</span>
+        ├── <span class="ex">qr.*</span>                   <span class="co"># qr code generation library</span>
+        └──<span class="ex">rain.tpl.class.php</span>      <span class="co"># RainTPL templating library</span>
+    <span class="ex">tpl/</span>             <span class="co"># RainTPL templates for Shaarli. They are used to build the pages.</span>
+    <span class="ex">images/</span>          <span class="co"># Images and icons used in Shaarli</span>
+    <span class="ex">data/</span>            <span class="co"># data storage: bookmark database, configuration, logs, banlist…</span>
+        ├── <span class="ex">config.php</span>             <span class="co"># Shaarli configuration (login, password, timezone, title…)</span>
+        ├── <span class="ex">datastore.php</span>          <span class="co"># Your link database (compressed).</span>
+        ├── <span class="ex">ipban.php</span>              <span class="co"># IP address ban system data</span>
+        ├── <span class="ex">lastupdatecheck.txt</span>    <span class="co"># Update check timestamp file</span>
+        └──<span class="ex">log.txt</span>                 <span class="co"># login/IPban log.</span>
+    <span class="ex">cache/</span>           <span class="co"># thumbnails cache</span>
                      <span class="co"># This directory is automatically created. You can erase it anytime you want.</span>
-    <span class="kw">tmp/</span>             <span class="co"># Temporary directory for compiled RainTPL templates.</span>
+    <span class="ex">tmp/</span>             <span class="co"># Temporary directory for compiled RainTPL templates.</span>
                      <span class="co"># This directory is automatically created. You can erase it anytime you want.</span></code></pre></div>
 </body>
 </html>

@@ -10,4 +10,5 @@
 - [qr.js](http://neocotic.com/qr.js/) ([GitHub](https://github.com/neocotic/qr.js)) - QR code generation[](.html)
 
 ## PHP
+- [shaarli/netscape-bookmark-parser](https://github.com/shaarli/netscape-bookmark-parser) - Netscape bookmark parser[](.html)
 - [RainTPL](https://github.com/rainphp/raintpl) - HTML templating for PHP[](.html)

@@ -52,13 +52,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="local-sidebar">
 <ul>
 <li><a href="Home.html">Home</a></li>
-<li>Installation
+<li>Setup
 <ul>
-<li><a href="Download.html">Download</a></li>
+<li><a href="Download-and-Installation.html">Download and Installation</a></li>
+<li><a href="Upgrade-and-migration.html">Upgrade and migration</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
 <li><a href="Server-security.html">Server security</a></li>
-<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
 <li><a href="Plugins.html">Plugins</a></li>
 </ul></li>
@@ -73,7 +73,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
-<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
 <li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
@@ -97,7 +96,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><a href="FAQ.html">FAQ</a></li>
 <li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
-<li><a href="TODO.html">TODO</a></li>
 </ul></li>
 </ul>
 </div>
@@ -132,6 +130,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="https://github.com/kalvn/shaarli-blocks">kalvn/shaarli-blocks</a> - A template/theme for Shaarli<a href=".html"></a></li>
 <li><a href="https://github.com/kalvn/Shaarli-Material">kalvn/Shaarli-Material</a> - A theme (template) based on Google's Material Design for Shaarli, the superfast delicious clone.<a href=".html"></a></li>
 <li><a href="https://github.com/misterair/limonade">misterair/Limonade</a> - A fork of (legacy) Shaarli with a new template<a href=".html"></a></li>
+<li><a href="https://github.com/mrjovanovic/serious-theme-shaarli">mrjovanovic/serious-theme-shaarli</a> - A serious theme for SHaarli.<a href=".html"></a></li>
 <li><a href="https://github.com/Vinm/Blue-theme-for-Shaarli">Vinm/Blue-theme-for Shaarli</a> - A template/theme for Shaarli (<a href="https://github.com/Vinm/Blue-theme-for-Shaarli/issues/2">unmaintained</a>, compatibility unknown)<a href=".html"></a></li>
 <li><a href="https://github.com/vivienhaese/shaarlitheme">vivienhaese/shaarlitheme</a> - A Shaarli fork meant to be run in an openshift instance<a href=".html"></a></li>
 </ul>
@@ -142,17 +141,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>user sites are enabled, e.g. <code>/home/user/public_html/somedir</code> is served as <code>http://localhost/~user/somedir</code></li>
 <li><code>http</code> is the name of the Apache user</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> ~/public_html
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="bu">cd</span> ~/public_html
 
 <span class="co"># clone repositories</span>
-$ <span class="kw">git</span> clone https://github.com/shaarli/Shaarli.git shaarli
-$ <span class="kw">pushd</span> shaarli/tpl
-$ <span class="kw">git</span> clone https://github.com/alexisju/albinomouse-template.git
-$ <span class="kw">popd</span>
+$ <span class="fu">git</span> clone https://github.com/shaarli/Shaarli.git shaarli
+$ <span class="bu">pushd</span> shaarli/tpl
+$ <span class="fu">git</span> clone https://github.com/alexisju/albinomouse-template.git
+$ <span class="bu">popd</span>
 
 <span class="co"># set access rights for Apache</span>
-$ <span class="kw">chgrp</span> -R http shaarli
-$ <span class="kw">chmod</span> g+rwx shaarli shaarli/cache shaarli/data shaarli/pagecache shaarli/tmp</code></pre></div>
+$ <span class="fu">chgrp</span> -R http shaarli
+$ <span class="fu">chmod</span> g+rwx shaarli shaarli/cache shaarli/data shaarli/pagecache shaarli/tmp</code></pre></div>
 <p>Get config written:</p>
 <ul>
 <li>go to the freshly installed site</li>
@@ -161,6 +160,6 @@ $ <span class="kw">chmod</span> g+rwx shaarli shaarli/cache shaarli/data shaarli
 </ul>
 <p>Edit Shaarli's <a href="configuration%7CShaarli-configuration.html">configuration|Shaarli configuration</a>:</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># the file should be owned by Apache, thus not writeable =&gt; sudo</span>
-$ <span class="kw">sudo</span> sed -i s=tpl=tpl/albinomouse-template=g shaarli/data/config.php</code></pre></div>
+$ <span class="fu">sudo</span> sed -i s=tpl=tpl/albinomouse-template=g shaarli/data/config.php</code></pre></div>
 </body>
 </html>

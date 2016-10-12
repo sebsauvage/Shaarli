@@ -52,13 +52,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="local-sidebar">
 <ul>
 <li><a href="Home.html">Home</a></li>
-<li>Installation
+<li>Setup
 <ul>
-<li><a href="Download.html">Download</a></li>
+<li><a href="Download-and-Installation.html">Download and Installation</a></li>
+<li><a href="Upgrade-and-migration.html">Upgrade and migration</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
 <li><a href="Server-security.html">Server security</a></li>
-<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
 <li><a href="Plugins.html">Plugins</a></li>
 </ul></li>
@@ -73,7 +73,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
-<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
 <li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
@@ -97,7 +96,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><a href="FAQ.html">FAQ</a></li>
 <li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
-<li><a href="TODO.html">TODO</a></li>
 </ul></li>
 </ul>
 </div>
@@ -111,55 +109,55 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#Usage: ./local-shaarli.sh</span>
 <span class="co">#Author: nodiscc (nodiscc@gmail.com)</span>
 <span class="co">#License: MIT (http://opensource.org/licenses/MIT)</span>
-<span class="kw">set</span> <span class="kw">-o</span> errexit
-<span class="kw">set</span> <span class="kw">-o</span> nounset
+<span class="kw">set</span> <span class="ex">-o</span> errexit
+<span class="kw">set</span> <span class="ex">-o</span> nounset
 
 <span class="co">##### CONFIG #################</span>
 <span class="co">#The port used by php&#39;s local server</span>
-<span class="ot">php_local_port=</span>7431
+<span class="va">php_local_port=</span>7431
 
 <span class="co">#Name of the SSH server and path where Shaarli is installed</span>
 <span class="co">#TODO: pass these as command-line arguments</span>
-<span class="ot">remotehost=</span><span class="st">&quot;my.ssh.server&quot;</span>
-<span class="ot">remote_shaarli_dir=</span><span class="st">&quot;/var/www/shaarli&quot;</span>
+<span class="va">remotehost=</span><span class="st">&quot;my.ssh.server&quot;</span>
+<span class="va">remote_shaarli_dir=</span><span class="st">&quot;/var/www/shaarli&quot;</span>
 
 
 <span class="co">###### FUNCTIONS #############</span>
 <span class="fu">_main()</span> <span class="kw">{</span>
-    <span class="kw">_CBSyncShaarli</span>
-    <span class="kw">_CBServeShaarli</span>
+    <span class="ex">_CBSyncShaarli</span>
+    <span class="ex">_CBServeShaarli</span>
 <span class="kw">}</span>
 
 <span class="fu">_CBSyncShaarli()</span> <span class="kw">{</span>
-    <span class="ot">remote_temp_dir=$(</span><span class="kw">ssh</span> <span class="ot">$remotehost</span> mktemp -d<span class="ot">)</span>
-    <span class="ot">remote_ssh_user=$(</span><span class="kw">ssh</span> <span class="ot">$remotehost</span> whoami<span class="ot">)</span>
-    <span class="kw">ssh</span> -t <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span> sudo cp -r <span class="st">&quot;</span><span class="ot">$remote_shaarli_dir</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span>
-    <span class="kw">ssh</span> -t <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span> sudo chown -R <span class="st">&quot;</span><span class="ot">$remote_ssh_user</span><span class="st">&quot;</span>:<span class="st">&quot;</span><span class="ot">$remote_ssh_user</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span>
-    <span class="kw">scp</span> -rq <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span>:<span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span> local-shaarli
-    <span class="kw">ssh</span> <span class="st">&quot;</span><span class="ot">$remotehost</span><span class="st">&quot;</span> rm -r <span class="st">&quot;</span><span class="ot">$remote_temp_dir</span><span class="st">&quot;</span>
+    <span class="va">remote_temp_dir=$(</span><span class="fu">ssh</span> <span class="va">$remotehost</span> mktemp -d<span class="va">)</span>
+    <span class="va">remote_ssh_user=$(</span><span class="fu">ssh</span> <span class="va">$remotehost</span> whoami<span class="va">)</span>
+    <span class="fu">ssh</span> -t <span class="st">&quot;</span><span class="va">$remotehost</span><span class="st">&quot;</span> sudo cp -r <span class="st">&quot;</span><span class="va">$remote_shaarli_dir</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">$remote_temp_dir</span><span class="st">&quot;</span>
+    <span class="fu">ssh</span> -t <span class="st">&quot;</span><span class="va">$remotehost</span><span class="st">&quot;</span> sudo chown -R <span class="st">&quot;</span><span class="va">$remote_ssh_user</span><span class="st">&quot;</span>:<span class="st">&quot;</span><span class="va">$remote_ssh_user</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">$remote_temp_dir</span><span class="st">&quot;</span>
+    <span class="fu">scp</span> -rq <span class="st">&quot;</span><span class="va">$remotehost</span><span class="st">&quot;</span>:<span class="st">&quot;</span><span class="va">$remote_temp_dir</span><span class="st">&quot;</span> local-shaarli
+    <span class="fu">ssh</span> <span class="st">&quot;</span><span class="va">$remotehost</span><span class="st">&quot;</span> rm -r <span class="st">&quot;</span><span class="va">$remote_temp_dir</span><span class="st">&quot;</span>
 <span class="kw">}</span>
 
 <span class="fu">_CBServeShaarli()</span> <span class="kw">{</span>
     <span class="co">#TODO: allow serving a previously downloaded Shaarli</span>
     <span class="co">#TODO: ask before overwriting local copy, if it exists</span>
-    <span class="kw">cd</span> local-shaarli/
-    <span class="kw">php</span> -S localhost:<span class="ot">${php_local_port}</span>
-    <span class="kw">echo</span> <span class="st">&quot;Please go to http://localhost:</span><span class="ot">${php_local_port}</span><span class="st">&quot;</span>
+    <span class="bu">cd</span> local-shaarli/
+    <span class="ex">php</span> -S localhost:<span class="va">${php_local_port}</span>
+    <span class="bu">echo</span> <span class="st">&quot;Please go to http://localhost:</span><span class="va">${php_local_port}</span><span class="st">&quot;</span>
 <span class="kw">}</span>
 
 
 <span class="co">##### MAIN #################</span>
 
-<span class="kw">_main</span></code></pre></div>
+<span class="ex">_main</span></code></pre></div>
 <p>This outputs:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">./local-shaarli.sh</span>
-<span class="kw">PHP</span> 5.6.0RC4 Development Server started at Mon Sep  1 21:56:19 2014
-<span class="kw">Listening</span> on http://localhost:7431
-<span class="kw">Document</span> root is /home/user/local-shaarli/shaarli
-<span class="kw">Press</span> Ctrl-C to quit.
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">./local-shaarli.sh</span>
+<span class="ex">PHP</span> 5.6.0RC4 Development Server started at Mon Sep  1 21:56:19 2014
+<span class="ex">Listening</span> on http://localhost:7431
+<span class="ex">Document</span> root is /home/user/local-shaarli/shaarli
+<span class="ex">Press</span> Ctrl-C to quit.
 
-[<span class="kw">Mon</span> Sep  1 21:56:27 2014] ::1:57868 [200]: /[](.html)
-[<span class="kw">Mon</span> Sep  1 21:56:27 2014] ::1:57869 [200]: /index.html[](.html)
-[<span class="kw">Mon</span> Sep  1 21:56:37 2014] ::1:57881 [200]: /...[](.html)</code></pre></div>
+[<span class="ex">Mon</span> Sep  1 21:56:27 2014] ::1:57868 [200]: /[](.html)
+[<span class="ex">Mon</span> Sep  1 21:56:27 2014] ::1:57869 [200]: /index.html[](.html)
+[<span class="ex">Mon</span> Sep  1 21:56:37 2014] ::1:57881 [200]: /...[](.html)</code></pre></div>
 </body>
 </html>

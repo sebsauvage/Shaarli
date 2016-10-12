@@ -1,2 +1,2 @@
 #_Footer
-_Shaarli, the personal, minimalist, super-fast, no-database delicious clone_
+_Shaarli, the personal, minimalist, super-fast, database-free bookmarking service_

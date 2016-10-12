@@ -52,13 +52,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="local-sidebar">
 <ul>
 <li><a href="Home.html">Home</a></li>
-<li>Installation
+<li>Setup
 <ul>
-<li><a href="Download.html">Download</a></li>
+<li><a href="Download-and-Installation.html">Download and Installation</a></li>
+<li><a href="Upgrade-and-migration.html">Upgrade and migration</a></li>
 <li><a href="Server-requirements.html">Server requirements</a></li>
 <li><a href="Server-configuration.html">Server configuration</a></li>
 <li><a href="Server-security.html">Server security</a></li>
-<li><a href="Shaarli-installation.html">Shaarli installation</a></li>
 <li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
 <li><a href="Plugins.html">Plugins</a></li>
 </ul></li>
@@ -73,7 +73,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>How To
 <ul>
 <li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
-<li><a href="Upgrade-from-original-sebsauvage/Shaarli.html">Upgrade from original sebsauvage/Shaarli</a></li>
 <li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
 <li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
 <li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
@@ -97,7 +96,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><a href="FAQ.html">FAQ</a></li>
 <li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
-<li><a href="TODO.html">TODO</a></li>
 </ul></li>
 </ul>
 </div>
@@ -111,87 +109,87 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 <h4 id="sample-usage">Sample usage</h4>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># system-wide version</span>
-$ <span class="kw">composer</span> install
-$ <span class="kw">composer</span> update
+$ <span class="ex">composer</span> install
+$ <span class="ex">composer</span> update
 
 <span class="co"># local version</span>
-$ <span class="kw">php</span> composer.phar self-update
-$ <span class="kw">php</span> composer.phar install
-$ <span class="kw">php</span> composer.phar update</code></pre></div>
+$ <span class="ex">php</span> composer.phar self-update
+$ <span class="ex">php</span> composer.phar install
+$ <span class="ex">php</span> composer.phar update</code></pre></div>
 <h4 id="install-shaarli-dev-dependencies">Install Shaarli dev dependencies</h4>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> /path/to/shaarli
-$ <span class="kw">composer</span> update</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="bu">cd</span> /path/to/shaarli
+$ <span class="ex">composer</span> update</code></pre></div>
 <h4 id="install-and-enable-xdebug-to-generate-phpunit-coverage-reports">Install and enable Xdebug to generate PHPUnit coverage reports</h4>
 <p>For Debian-based distros:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">aptitude</span> install php5-xdebug</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">aptitude</span> install php5-xdebug</code></pre></div>
 <p>For ArchLinux:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pacman</span> -S xdebug</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">pacman</span> -S xdebug</code></pre></div>
 <p>Then add the following line to <code>/etc/php/php.ini</code>:</p>
 <div class="sourceCode"><pre class="sourceCode ini"><code class="sourceCode ini"><span class="dt">zend_extension</span><span class="ot">=</span><span class="st">xdebug.so</span></code></pre></div>
 <h4 id="run-unit-tests">Run unit tests</h4>
 <p>Successful test suite:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">make</span> test
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">make</span> test
 
-<span class="kw">-------</span>
-<span class="kw">PHPUNIT</span>
-<span class="kw">-------</span>
-<span class="kw">PHPUnit</span> 4.6.9 by Sebastian Bergmann and contributors.
+<span class="ex">-------</span>
+<span class="ex">PHPUNIT</span>
+<span class="ex">-------</span>
+<span class="ex">PHPUnit</span> 4.6.9 by Sebastian Bergmann and contributors.
 
-<span class="kw">Configuration</span> read from /home/virtualtam/public_html/shaarli/phpunit.xml
+<span class="ex">Configuration</span> read from /home/virtualtam/public_html/shaarli/phpunit.xml
 
-<span class="kw">....................................</span>
+<span class="ex">....................................</span>
 
-<span class="kw">Time</span>: 759 ms, Memory: 8.25Mb
+<span class="ex">Time</span>: 759 ms, Memory: 8.25Mb
 
-<span class="kw">OK</span> (36 tests, 65 assertions)</code></pre></div>
+<span class="ex">OK</span> (36 tests, 65 assertions)</code></pre></div>
 <p>Test suite with failures and errors:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">make</span> test
-<span class="kw">-------</span>
-<span class="kw">PHPUNIT</span>
-<span class="kw">-------</span>
-<span class="kw">PHPUnit</span> 4.6.9 by Sebastian Bergmann and contributors.
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">make</span> test
+<span class="ex">-------</span>
+<span class="ex">PHPUNIT</span>
+<span class="ex">-------</span>
+<span class="ex">PHPUnit</span> 4.6.9 by Sebastian Bergmann and contributors.
 
-<span class="kw">Configuration</span> read from /home/virtualtam/public_html/shaarli/phpunit.xml
+<span class="ex">Configuration</span> read from /home/virtualtam/public_html/shaarli/phpunit.xml
 
-<span class="kw">E..FF...............................</span>
+<span class="ex">E..FF...............................</span>
 
-<span class="kw">Time</span>: 802 ms, Memory: 8.25Mb
+<span class="ex">Time</span>: 802 ms, Memory: 8.25Mb
 
-<span class="kw">There</span> was 1 error:
+<span class="ex">There</span> was 1 error:
 
-<span class="kw">1</span>) <span class="kw">LinkDBTest</span>::testConstructLoggedIn
-<span class="kw">Missing</span> argument 2 for LinkDB::__construct(), <span class="kw">called</span> in /home/virtualtam/public_html/shaarli/tests/Link\
+<span class="ex">1</span>) <span class="ex">LinkDBTest</span>::testConstructLoggedIn
+<span class="ex">Missing</span> argument 2 for LinkDB::__construct(), <span class="ex">called</span> in /home/virtualtam/public_html/shaarli/tests/Link\
 DBTest.php on line 79 and defined
 
-<span class="kw">/home/virtualtam/public_html/shaarli/application</span>/LinkDB.php:<span class="kw">58</span>
-<span class="kw">/home/virtualtam/public_html/shaarli/tests</span>/LinkDBTest.php:<span class="kw">79</span>
+<span class="ex">/home/virtualtam/public_html/shaarli/application</span>/LinkDB.php:<span class="ex">58</span>
+<span class="ex">/home/virtualtam/public_html/shaarli/tests</span>/LinkDBTest.php:<span class="ex">79</span>
 
-<span class="kw">--</span>
+<span class="ex">--</span>
 
-<span class="kw">There</span> were 2 failures:
+<span class="ex">There</span> were 2 failures:
 
-<span class="kw">1</span>) <span class="kw">LinkDBTest</span>::testCheckDBNew
-<span class="kw">Failed</span> asserting that two strings are equal.
-<span class="kw">---</span> Expected
-<span class="kw">+++</span> Actual
-<span class="kw">@@</span> @@
-<span class="kw">-</span><span class="st">&#39;e3edea8ea7bb50be4bcb404df53fbb4546a7156e&#39;</span>
-<span class="kw">+</span><span class="st">&#39;85eab0c610d4f68025f6ed6e6b6b5fabd4b55834&#39;</span>
+<span class="ex">1</span>) <span class="ex">LinkDBTest</span>::testCheckDBNew
+<span class="ex">Failed</span> asserting that two strings are equal.
+<span class="ex">---</span> Expected
+<span class="ex">+++</span> Actual
+<span class="ex">@@</span> @@
+<span class="ex">-</span><span class="st">&#39;e3edea8ea7bb50be4bcb404df53fbb4546a7156e&#39;</span>
+<span class="ex">+</span><span class="st">&#39;85eab0c610d4f68025f6ed6e6b6b5fabd4b55834&#39;</span>
 
-<span class="kw">/home/virtualtam/public_html/shaarli/tests</span>/LinkDBTest.php:<span class="kw">121</span>
+<span class="ex">/home/virtualtam/public_html/shaarli/tests</span>/LinkDBTest.php:<span class="ex">121</span>
 
-<span class="kw">2</span>) <span class="kw">LinkDBTest</span>::testCheckDBLoad
-<span class="kw">Failed</span> asserting that two strings are equal.
-<span class="kw">---</span> Expected
-<span class="kw">+++</span> Actual
-<span class="kw">@@</span> @@
-<span class="kw">-</span><span class="st">&#39;e3edea8ea7bb50be4bcb404df53fbb4546a7156e&#39;</span>
-<span class="kw">+</span><span class="st">&#39;85eab0c610d4f68025f6ed6e6b6b5fabd4b55834&#39;</span>
+<span class="ex">2</span>) <span class="ex">LinkDBTest</span>::testCheckDBLoad
+<span class="ex">Failed</span> asserting that two strings are equal.
+<span class="ex">---</span> Expected
+<span class="ex">+++</span> Actual
+<span class="ex">@@</span> @@
+<span class="ex">-</span><span class="st">&#39;e3edea8ea7bb50be4bcb404df53fbb4546a7156e&#39;</span>
+<span class="ex">+</span><span class="st">&#39;85eab0c610d4f68025f6ed6e6b6b5fabd4b55834&#39;</span>
 
-<span class="kw">/home/virtualtam/public_html/shaarli/tests</span>/LinkDBTest.php:<span class="kw">133</span>
+<span class="ex">/home/virtualtam/public_html/shaarli/tests</span>/LinkDBTest.php:<span class="ex">133</span>
 
-<span class="kw">FAILURES</span>!
-<span class="kw">Tests</span>: 36, Assertions: 63, Errors: 1, Failures: 2.</code></pre></div>
+<span class="ex">FAILURES</span>!
+<span class="ex">Tests</span>: 36, Assertions: 63, Errors: 1, Failures: 2.</code></pre></div>
 <h4 id="test-results-and-coverage">Test results and coverage</h4>
 <p>By default, PHPUnit will run all suitable tests found under the <code>tests</code> directory.</p>
 <p>Each test has 3 possible outcomes:</p>
