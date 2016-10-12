@@ -154,17 +154,23 @@ class FeedBuilder
         }
         $link['description'] = format_description($link['description']) . PHP_EOL .'<br>&#8212; '. $permalink;
 
-        $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
+        $pubDate = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
+        $link['pub_iso_date'] = $this->getIsoDate($pubDate);
 
-        if ($this->feedType == self::$FEED_RSS) {
-            $link['iso_date'] = $date->format(DateTime::RSS);
+        // atom:entry elements MUST contain exactly one atom:updated element.
+        if (!empty($link['updated'])) {
+            $upDate = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['updated']);
+            $link['up_iso_date'] = $this->getIsoDate($upDate, DateTime::ATOM);
         } else {
-            $link['iso_date'] = $date->format(DateTime::ATOM);
+            $link['up_iso_date'] = $this->getIsoDate($pubDate, DateTime::ATOM);;
         }
 
         // Save the more recent item.
-        if (empty($this->latestDate) || $this->latestDate < $date) {
-            $this->latestDate = $date;
+        if (empty($this->latestDate) || $this->latestDate < $pubDate) {
+            $this->latestDate = $pubDate;
+        }
+        if (!empty($upDate) && $this->latestDate < $upDate) {
+            $this->latestDate = $upDate;
         }
 
         $taglist = array_filter(explode(' ', $link['tags']), 'strlen');
@@ -247,6 +253,26 @@ class FeedBuilder
 
         $type = ($this->feedType == self::$FEED_RSS) ? DateTime::RSS : DateTime::ATOM;
         return $this->latestDate->format($type);
+    }
+
+    /**
+     * Get ISO date from DateTime according to feed type.
+     *
+     * @param DateTime    $date   Date to format.
+     * @param string|bool $format Force format.
+     *
+     * @return string Formatted date.
+     */
+    protected function getIsoDate(DateTime $date, $format = false)
+    {
+        if ($format !== false) {
+            return $date->format($format);
+        }
+        if ($this->feedType == self::$FEED_RSS) {
+            return $date->format(DateTime::RSS);
+
+        }
+        return $date->format(DateTime::ATOM);
     }
 
     /**

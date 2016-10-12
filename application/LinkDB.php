@@ -12,8 +12,9 @@
  *
  * Available keys:
  *  - description: description of the entry
- *  - linkdate: date of the creation of this entry, in the form YYYYMMDD_HHMMSS
+ *  - linkdate: creation date of this entry, format: YYYYMMDD_HHMMSS
  *              (e.g.'20110914_192317')
+ *  - updated:  last modification date of this entry, format: YYYYMMDD_HHMMSS
  *  - private:  Is this link private? 0=no, other value=yes
  *  - tags:     tags attached to this entry (separated by spaces)
  *  - title     Title of the link
