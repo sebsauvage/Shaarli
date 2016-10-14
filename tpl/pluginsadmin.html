@@ -105,7 +105,9 @@
                     <div class="float_label">
                       <label for="{$key}">
                         <code>{$key}</code><br>
-                        {$value.desc}
+                        {if="isset($value.desc)"}
+                          {$value.desc}
+                        {/if}
                       </label>
                     </div>
                     <div class="float_input">
