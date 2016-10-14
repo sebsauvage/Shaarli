@@ -25,6 +25,11 @@ class PluginManager
     protected $conf;
 
     /**
+     * @var array List of plugin errors.
+     */
+    protected $errors;
+
+    /**
      * Plugins subdirectory.
      * @var string $PLUGINS_PATH
      */
@@ -44,6 +49,7 @@ class PluginManager
     public function __construct(&$conf)
     {
         $this->conf = $conf;
+        $this->errors = array();
     }
 
     /**
@@ -106,6 +112,7 @@ class PluginManager
 
     /**
      * Load a single plugin from its files.
+     * Call the init function if it exists, and collect errors.
      * Add them in $loadedPlugins if successful.
      *
      * @param string $dir        plugin's directory.
@@ -127,6 +134,14 @@ class PluginManager
 
         $conf = $this->conf;
         include_once $pluginFilePath;
+
+        $initFunction = $pluginName . '_init';
+        if (function_exists($initFunction)) {
+            $errors = call_user_func($initFunction, $this->conf);
+            if (!empty($errors)) {
+                $this->errors = array_merge($this->errors, $errors);
+            }
+        }
 
         $this->loadedPlugins[] = $pluginName;
     }
@@ -194,6 +209,16 @@ class PluginManager
         }
 
         return $metaData;
+    }
+
+    /**
+     * Return the list of encountered errors.
+     *
+     * @return array List of errors (empty array if none exists).
+     */
+    public function getErrors()
+    {
+        return $this->errors;
     }
 }
 

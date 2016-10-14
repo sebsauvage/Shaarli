@@ -4,8 +4,6 @@
  * PluginReadityourselfTest.php.php
  */
 
-// FIXME! add an init method.
-$conf = new ConfigManager('');
 require_once 'plugins/readityourself/readityourself.php';
 
 /**
@@ -20,6 +18,27 @@ class PluginReadityourselfTest extends PHPUnit_Framework_TestCase
     function setUp()
     {
         PluginManager::$PLUGINS_PATH = 'plugins';
+    }
+
+    /**
+     * Test Readityourself init without errors.
+     */
+    function testReadityourselfInitNoError()
+    {
+        $conf = new ConfigManager('');
+        $conf->set('plugins.READITYOUSELF_URL', 'value');
+        $errors = readityourself_init($conf);
+        $this->assertEmpty($errors);
+    }
+
+    /**
+     * Test Readityourself init with errors.
+     */
+    function testReadityourselfInitError()
+    {
+        $conf = new ConfigManager('');
+        $errors = readityourself_init($conf);
+        $this->assertNotEmpty($errors);
     }
 
     /**

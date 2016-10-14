@@ -4,8 +4,6 @@
  * PluginWallabagTest.php.php
  */
 
-// FIXME! add an init method.
-$conf = new ConfigManager('');
 require_once 'plugins/wallabag/wallabag.php';
 
 /**
@@ -20,6 +18,27 @@ class PluginWallabagTest extends PHPUnit_Framework_TestCase
     function setUp()
     {
         PluginManager::$PLUGINS_PATH = 'plugins';
+    }
+
+    /**
+     * Test wallabag init without errors.
+     */
+    function testWallabagInitNoError()
+    {
+        $conf = new ConfigManager('');
+        $conf->set('plugins.WALLABAG_URL', 'value');
+        $errors = wallabag_init($conf);
+        $this->assertEmpty($errors);
+    }
+
+    /**
+     * Test wallabag init with errors.
+     */
+    function testWallabagInitError()
+    {
+        $conf = new ConfigManager('');
+        $errors = wallabag_init($conf);
+        $this->assertNotEmpty($errors);
     }
 
     /**

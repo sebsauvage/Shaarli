@@ -15,6 +15,23 @@
  */
 
 /**
+ * Initialization function.
+ * It will be called when the plugin is loaded.
+ * This function can be used to return a list of initialization errors.
+ *
+ * @param $conf ConfigManager instance.
+ *
+ * @return array List of errors (optional).
+ */
+function demo_plugin_init($conf)
+{
+    $conf->get('toto', 'nope');
+
+    $errors[] = 'This a demo init error.';
+    return $errors;
+}
+
+/**
  * Hook render_header.
  * Executed on every page redering.
  *

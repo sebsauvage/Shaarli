@@ -8,10 +8,21 @@
 // it seems kinda dead.
 // Not tested.
 
-$riyUrl = $conf->get('plugins.READITYOUSELF_URL');
-if (empty($riyUrl)) {
-    $GLOBALS['plugin_errors'][] = 'Readityourself plugin error: '.
-        'Please define the "READITYOUSELF_URL" setting in the plugin administration page.';
+/**
+ * Init function, return an error if the server is not set.
+ *
+ * @param $conf ConfigManager instance.
+ *
+ * @return array Eventual error.
+ */
+function readityourself_init($conf)
+{
+    $riyUrl = $conf->get('plugins.READITYOUSELF_URL');
+    if (empty($riyUrl)) {
+        $error = 'Readityourself plugin error: '.
+            'Please define the "READITYOUSELF_URL" setting in the plugin administration page.';
+        return array($error);
+    }
 }
 
 /**

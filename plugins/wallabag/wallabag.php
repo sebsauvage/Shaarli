@@ -6,10 +6,21 @@
 
 require_once 'WallabagInstance.php';
 
-$wallabagUrl = $conf->get('plugins.WALLABAG_URL');
-if (empty($wallabagUrl)) {
-    $GLOBALS['plugin_errors'][] = 'Wallabag plugin error: '.
-        'Please define the "WALLABAG_URL" setting in the plugin administration page.';
+/**
+ * Init function, return an error if the server is not set.
+ *
+ * @param $conf ConfigManager instance.
+ *
+ * @return array Eventual error.
+ */
+function wallabag_init($conf)
+{
+    $wallabagUrl = $conf->get('plugins.WALLABAG_URL');
+    if (empty($wallabagUrl)) {
+        $error = 'Wallabag plugin error: '.
+            'Please define the "WALLABAG_URL" setting in the plugin administration page.';
+        return array($error);
+    }
 }
 
 /**

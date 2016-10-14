@@ -77,9 +77,6 @@ class PageBuilder
         $this->tpl->assign('openshaarli', $this->conf->get('security.open_shaarli', false));
         $this->tpl->assign('showatom', $this->conf->get('feed.show_atom', false));
         $this->tpl->assign('hide_timestamps', $this->conf->get('privacy.hide_timestamps', false));
-        if (!empty($GLOBALS['plugin_errors'])) {
-            $this->tpl->assign('plugin_errors', $GLOBALS['plugin_errors']);
-        }
         $this->tpl->assign('token', getToken($this->conf));
         // To be removed with a proper theme configuration.
         $this->tpl->assign('conf', $this->conf);
