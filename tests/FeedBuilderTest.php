@@ -217,4 +217,37 @@ class FeedBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(ReferenceLinkDB::$NB_LINKS_TOTAL, count($data['links']));
         $this->assertEquals('http://pubsubhub.io', $data['pubsubhub_url']);
     }
+
+    /**
+     * Test buildData when Shaarli is served from a subdirectory
+     */
+    public function testBuildDataServerSubdir()
+    {
+        $serverInfo = array(
+            'HTTPS' => 'Off',
+            'SERVER_NAME' => 'host.tld',
+            'SERVER_PORT' => '8080',
+            'SCRIPT_NAME' => '/~user/shaarli/index.php',
+            'REQUEST_URI' => '/~user/shaarli/index.php?do=feed',
+        );
+        $feedBuilder = new FeedBuilder(
+            self::$linkDB,
+            FeedBuilder::$FEED_ATOM,
+            $serverInfo,
+            null,
+            false
+        );
+        $feedBuilder->setLocale(self::$LOCALE);
+        $data = $feedBuilder->buildData();
+
+        $this->assertEquals(
+            'http://host.tld:8080/~user/shaarli/index.php?do=feed',
+            $data['self_link']
+        );
+
+        // Test first link (note link)
+        $link = array_shift($data['links']);
+        $this->assertEquals('http://host.tld:8080/~user/shaarli/?WDWyig', $link['guid']);
+        $this->assertEquals('http://host.tld:8080/~user/shaarli/?WDWyig', $link['url']);
+    }
 }
