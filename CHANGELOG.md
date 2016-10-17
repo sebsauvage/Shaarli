@@ -303,7 +303,7 @@ This release has been YANKED as it points to a tag that does not follow our nami
 ### Fixed
 - Fix problems when running Shaarli behind a reverse proxy (invalid RSS feed URL)
 - Update check now checks against the community fork version
-- Include cache/ data/ pagecache/ and tmp/ directories in the repository
+- Include `cache/`, `data/`, `pagecache/` and `tmp/` directories in the repository
 - Fix duplicate tag search returning no results
 - Fix unnecessary 404 error on "Add link" when the user is logged out
 - Fixes to copyright/licensing information and unlicensed media
@@ -369,3 +369,358 @@ This release has been YANKED as it points to a tag that does not follow our nami
 
 ## [v0.0.40beta](https://github.com/shaarli/Shaarli/releases/tag/v0.0.40beta) - 2013-02-26
 Initial release on GitHub.
+
+## [v0.0.40beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2012-08-24
+### Added
+- Flickr thumbnail now also support albums, galleries and users
+- Add a configuration option to disable session cookie protection.
+  Check this if your get disconnected often or your IP address changes often.
+
+### Removed
+- Removed the xml comment in cached RSS/ATOM feed
+  (although W3C-compliant, this may cause problems in some feed readers).
+
+### Fixed
+- A bug in the RSS cache would present old items as new in some cases
+- A small bug (non-initialized variable) in page cache cleaning.
+- Proper "Nothing found" message when search returns no results.
+- No more 404 error when searching with empty input.
+- Flickr thumbnails are back (Flick has made some changes in their domains).
+
+## [v0.0.39beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2012-08-10
+### Added
+- A cache for RSS feed, ATOM feed and Daily RSS feed, because these URLs are massively hammered. Cache is automatically purged whenever the database is changed. This will reduce server load. I may add cache to other pages later.
+
+### Changed
+- No more global $LINKSDB (Yuk).
+- Background color was removed when hovering a link.
+
+### Fixed
+- Small bug corrected in config screen on timezones.
+- Calling a non-existing permalink now returns a crude 404 error instead of 200 (OK).
+  This is done on purpose.
+- The shaarli session cookie now has a proper path.
+  Thus you can now install several Shaarlis on the same server in different paths,
+  and each will have its session.
+- Now when you delete a link, you go back the same page/search parameters you were on.
+- `error_get_last()` removed to ensure PHP 5.1 compatibility
+  (Yes, now it works on free.fr hosting)
+- Added `dialog=1` in bookmarklet code for some browsers.
+
+## [v0.0.38beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2012-02-06
+### Added
+- Automatic creation of the `tmp` directory with proper rights (for RainTPL).
+- When you click the key to see only private links, it turns yellow.
+
+### Changed
+- The "Daily" page now automatically skips empty days. 
+
+### Fixed
+- Corrected the tag encoding (there was a bug when selecting a second tag which contains accented characters).
+
+## [v0.0.37beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2012-02-01
+### Added
+- Basic CSS for mobiles, which makes Shaarli //much// more usable on mobile devices.
+- Picture wall no more instantly kills your browser. Now it uses [lazy image loading](http://www.appelsiini.net/projects/lazyload): The picture are loaded only as you scroll the page. This will reduce browser memory usage (especially on mobile devices) and will reduce server load. If you have javascript disabled, the page will still work as before (all images loaded at once).
+- RSS feed for the "Daily" page. 1 RSS entry per day, with all links of that day. RSS feed provides the last 7 days (only non-empty days are returned).
+- In link list, added an icon to see only private links. Click to toggle (only private / all).
+
+## [v0.0.36beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2012-01-25
+### Added
+- Shaarli licence in COPYING
+
+### Changed
+- Display adjustments in "Daily" page.
+
+### Fixed
+- Improper text color in install form.
+- Error in QRCode url (missing '?')
+
+## [v0.0.35beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2012-01-25
+### Fixed
+- Corrected a bug introduced in 0.0.34 which would improperly preprend data to URLs.
+
+## [v0.0.34beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2012-01-25
+### Added
+- There is now a QR-Code of each permalink to easily open a link on your smartphone.
+- Protocols `file:` and `apt:` are now also converted to clickable links (patch by Francis Chavanon)
+- Thumbnail support for http://xkcd.com/ (patch by Emilien Klein).
+- Thumbnail support for http://pix.toile-libre.org/
+- Well I had //some// mercy for users with antique browsers (IE) which do not have support for gradients: I added a few `background-color`.
+- First version of the "Shaarli Daily", a page showing all links of a specific day. By default, you see the links of the previous day. There is still work to do on this page (error checking, better navigation (calendar?), RSS feed, CSS for mobile and printing...)
+
+### Changed
+- Upgraded bundled versions of jQuery (1.7.1) and jQuery UI (1.8.17).
+- Upgraded bundled version of RainTPL (2.7).
+- Changed HTTPS detection code.
+
+### Fixed
+- In link edition, you can now click the word "Private" to check the box.
+- Clicking a tag would not work properly if the tag contained special characters (like +).
+- Added proper jQuery licence (shame on me).
+
+## [v0.0.33beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2012-01-17
+### Added
+- Shaarli packaged to ease Linux distributions integration
+  As a simple user, you do not need to cope with these versions.
+  Future releases of Shaarli will also be customized and published in these directories.
+  Differences with the standard Shaarli version:
+    - deb:
+        - .tar.gz instead of .zip
+        - COPYING licence file added
+        - jQuery/jQuery-UI libraries removed to cope with Debian rules.
+          This version links to the libs hosted at http://code.jquery.com
+    - rpm:
+        - sources located in a subdirectory with the same name as the zip file.
+        - COPYING licence file added
+    - WARNING: When downloading the .tar.gz, always use wget (and not your browser),
+      otherwise the .tar.gz will be corrupted.
+
+### Fixed
+- ATOM feed validates again.
+
+### Security
+- XSS vulnerability patched (thanks to Stanislas D. !)
+
+## [v0.0.32beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2011-12-16
+### Added
+- Better check on URL parameters (patch by gege2061).
+
+### Changed
+- HTML generation moved to RainTPL templates (in the `tpl/` directory).
+- Better detection of HTTPS (patch by gege2061).
+- In RSS/ATOM feeds, the GUID is now the permalink instead of the final URL (patch by gege2061).
+- Jerrywham CSS patch included.
+- Multiple spaces are now respected in description. Thus you can use Shaarli as a personal pastebin (for posting source code, for example). I also added a max-height and overflow:auto so that content can be scrolled if too large.
+
+### Removed
+- Page time generation was removed.
+
+### Fixed
+- Tab order changed in login screen.
+- Permalinks now work even if additional parameters have been added (eg. /?E8Yj2Q&utm_source=blablabla...)
+- user.css is included only if the file is present (This prevent a useless CSS include which makes a harmless but useless 404 error.).
+
+## [v0.0.31beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2011-11-29
+### Added
+- Support for TED Talks (ted.com/talks) thumbnails (patch by Emilien K.)
+- partial [patch](http://www.idleman.fr/blog/?p=508) by Idleman: Better design consistency, icon on private links. In-page popup was not included because it causes problem on some websites.
+- Support for bookmark files without ADD_DATE attributes.
+- Logo is clickable.
+- `user.css` can be added to overload Shaarli base CSS.(patch by Jerrywham)  Just put `user.css` in the same directory as shaarli.css. Example: <code css>#pageheader { background: blue; }</code>Please note that Shaarli CSS are not stable and may completely change on each version.
+
+### Changed
+- Edit and Delete buttons in link list were replaced with icons. (patch by Jerrywham)
+
+### Fixed
+- Better error handling in thumbnail generation (patch by Emilien K.)
+- The top menu is no longer displayed in bookmarklet popup.
+- Bookmark which have the exact same date/time are now correctly imported. Most remaining import problem should be solved now.
+- Comment in Shaarli export moved to beginning of file to prevent clash with last link description.
+
+## [v0.0.30beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2011-11-18
+### Added
+- Now links also have a small `delete` button in list (after the `edit` button).
+
+### Fixed
+- Moved the call to PubSubHub.
+
+## [v0.0.29beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2011-11-18
+### Fixed
+- Corrected a bug introduced in 0.0.28 (there was an error if you use the bookmarklet and you're not logged in).
+
+## [v0.0.28beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2011-11-17
+### Added
+- Thumbnail support for youtu.be URLs (YouTube short url service).
+- PubSubHub protocol support (from http://aldarone.fr/les-flux-rss-shaarli-et-pubsubhubbub/). Warning: This was not tested. You need to set your hub url in `$GLOBALS['config']['PUBSUBHUB_URL']` and put the official client (`publisher.php`) in the same directory as Shaarli index.php.
+- RSS and ATOM feeds now also contain tags (in `category` tags, as per their respective specifications).
+
+### Changed
+- New Shaarli theme and logo by Idle (http://www.idleman.fr/blog/?p=469)
+- In picture wall, pictures point to Shaarli permalink instead of final URL. This way, users can read the description.
+- In RSS/ATOM feeds, guid and link URL of permalinks are now proper absolute URLs.
+- In RSS/ATOM feeds, URLs are now clickable.
+- http_parse_headers() function renamed to http_parse_headers_shaarli() to prevent name collision with some PHP extensions.
+
+### Fixed
+- Thumbnails removed for imgur.com/a/ URLs (Thumbnails are not available for albums on imgur).
+- Shaarli now correctly only tries to get thumbnails for vimeo video URLs.
+- A bug in imgur.com URLs handling would cause some thumbnails not to appear. This has been corrected. You should see //more// thumbnails now.
+
+- The search engine would not return a result if the word to search was the first in description.
+- Extracted title is now correct if the page has two `title` html tags.
+
+## [v0.0.27beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2011-10-18
+### Added
+- Picture wall (which can be filtered too: It will use the same filters (tags,text search) as current page when clicked.)
+
+## [v0.0.26beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2011-10-17
+### Changed
+- Made permalink more visible (smallHash).
+
+### Fixed
+- Removed extras space in description when URLs are converted to clickable links.
+- Thumbnail for subreddit imgur urls (/r/...) were corrected (thanks to Accent Grave).
+
+## [v0.0.25beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2011-10-13
+### Added
+- Better CSS for printing (thanks to jerrywham suggestion)
+- You can now use a redirector or anonymizing proxy for links (such as http://anonym.to/? to mask you HTTP_REFERER). Just go to Tools > Configure > Redirector. (thanks to Accent Grave for the suggestion)
+- The option ENABLE_LOCALCACHE can be set to `false` for those who have a limited quota on their host. This will disable the local thumbnail cache. Services which require the use of the cache will have no thumbnails (vimeo, flickr, direct link to image). Other services will still have a thumbnail (youtube,imgur.com,dailymotion,imageshack.us).
+
+### Changed
+- Now thumbnails generated by Shaarli are croped to a height of 120 pixels.
+- YouTube thumbnails now use `default.jpg` instead of `2.jpg` (This is usually more pertinent).
+- As per request, configuration options (such as HIDE_TIMESTAMPS, ENABLE_THUMBNAILS, etc.) can now be put in a an external file so that you do not have to tweak them again when you upgrade Shaarli. Just add the file `data/options.php`.
+- If a single link is displayed, the page title contains the title of the link.
+- Shaarli page title is clickable (and has the same link as "Home").
+- A few CSS tweaks (thanks to maethor for suggestion)
+
+### Fixed
+- Shaarli now supports newlines in titles (thanks to dixy).
+- The link to the RSS feed in page header was not correct.
+
+## [v0.0.24beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Added
+- As per request, you can now post an entry without a link. (You can use Shaarli as a kind of "personal twitter").
+- Each Shaarli entry now has a short link (just click on the date of a link). Now you can send a link that points to a single entry in your Shaarli.
+- In descriptions, URLs are now clickable.
+- Thumbnails will be generated for all link pointing to .jpg/png/gif (as long as the images are less than 4 Mb and take less than 30 seconds to download).
+
+### Fixed
+- Now thumnails also work for imgur gallery links (/gallery/...) (Thanks to Accent Grave for the correction)
+- Removed useless debugging information in log.
+- The filter in RSS/ATOM feed now works again properly (it was broken in 0.0.17beta)
+
+## [v0.0.23beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Added
+- Added thumbnail support for imageshack.us
+
+### Changed
+- Now you can clic the sentence "Stay signed in" to tick the checkbox (patch by Emilien).
+- In tag editing, comma (,) are now automatically converted to spaces.
+- In tag editing, autocomplete no longuer suggests a tag you have already entered in the same line.
+
+## [v0.0.22beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Added
+- Support for thumbnails for flickr.com.
+- As per request, you can now stay signed in (Your session will be kept open even if you close the browser). This is just a checkbox in login screen.
+
+### Changed
+- Some hosts (flickr, vimeo) are slow as hell for the thumbnails, or require an extra HTTP request. For these hosts the thumbnail generation has been deported outside the generation of the page to keep Shaarli snappy. For those slow services the thumbnails are also cached.
+
+### Fixed
+- Title was not properly passed if you had to login when using the bookmarklet (patch by shenshei).
+
+## [v0.0.21beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Added
+- Thumbnails for some services (currently supports: YouTube.com, dailymotion.com, vimeo.com (slow!) and imgur.com). Thumbnails are enabled by default, but you can turn them off (set `define('ENABLE_THUMBNAILS',true);` to false.)
+
+### Changed
+- Removed the focus on the searchbox (this is cumbersome when you want to browse pages and scroll with the keyboard).
+
+## [v0.0.20beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Fixed
+- RSS feed is now served as `application/rss+xml` instead of `application/xhtml+xml` (which was causing problem in //RSS Lounge//)
+- ATOM feed is now served as `application/atom+xml` instead of `application/xhtml+xml`
+
+## [v0.0.19beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Added
+- ATOM feed.
+
+### Fixed
+- Patch by Emilien to remove the update notification after the update.
+
+## [v0.0.18beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Added
+- You can now configure the title of your page.
+- New screen to configure title and timezone.
+
+### Changed
+- Nicer timezone selection patch by killruana.
+
+### Fixed
+- New lines now appear correctly in the RSS feed descriptions. 
+
+## [v0.0.17beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Added
+- Change password screen added (based on a patch by killruana).
+- Autocomplete in the tag search form.
+- You can rename or delete a tag in all links (very handy if you misspelled a tag or want to merge tags).
+- When you click the RSS feed, the feed will be filtered with the same filters as the page you were viewing.
+
+### Changed
+- CSS adjustments by jerrywham.
+- Minor corrections.
+
+## [v0.0.16beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Added
+- Upgrade notification: If a new version of Shaarli is available, you will be notified by a discrete message in top-right corner. This message will only be visible if you are logged in, and the check will be performed at most once a day.
+- Preliminary tag cloud (ugly for the moment, I need to find something better).
+
+### Changed
+- Replaced `preg_match()` with `version_compare()` to check PHP version.
+- Includes a patch by Emilien K. to mask dates if user is not logged in. The option can be activated by changing `define('HIDE_TIMESTAMPS',false);` to `true`.
+
+## [v0.0.15beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Added
+- New in import: Option to overwrite existing links when importing.
+- On free.fr, automatic creation of the `/sessions` directory.
+
+### Changed
+- CSS Stylesheet is now an external file (shaarli.css). This reduces page size and eases customization.
+
+### Removed
+- Removed some parameters in URL added by some feed proxies (`#xtor=RSS-...`)
+
+### Fixed
+- Bug corrected: Prevented loop on login screen upon successful login after a failed login.
+- Bug corrected in import: HTML entities were not properly decoded. If you imported your Delicious/Diigo bookmarks, your should import them again an use the 'overwrite' option of the import feature.
+
+## [v0.0.14beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Added
+- You no longer need to disable `magic_quotes` on your host. Shaarli will cope with this option beeing activated. 
+
+## [v0.0.13beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Added
+- Import: New option to import html bookmark file as private links.
+- Import: Importing a bookmark file will not overwrite existing links anymore.
+- Export: New options to export only public or private links.
+
+### Changed
+- In tag autocomplete, tags are presented in use order (most used tags first, instead of alphabetical order).
+- RSS Feed can now be filtered by tags or fulltext search. Just add to the feed url:
+  - `&searchtags=minecraft+video` for tag filtering
+  - `&searchterm=portal` for fulltext search to the feed url.
+
+## [v0.0.12beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Added
+- Added a check that the config file was properly created (in case Shaarli does not have the write rights in its folder).
+- Open Shaarli: There is an option to open your Shaarli to anyone. Anybody will be able to add/edit/delete links without having to login. In code, change `define('OPEN_SHAARLI',false);` to `true`. Note: No anti-spam for the moment. You are warned.
+- Autocomplete for tags.
+
+## [v0.0.11beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Added
+- Add a check and a warning for some hosts which still have magic_quotes activated.
+
+## [v0.0.10beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Added
+- Get rid of `&quot;` in titles.
+
+## [v0.0.9beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Added
+- Now works on hosts free.fr and 1and1
+- Now works with PHP 5.1
+- PHP version is now checked and an error message is displayed if version is not correct.
+
+### Fixed
+- No more error messages if the browser does not send `HTTP_REFERER`
+- No more error messages if the host has disabled http protocol in PHP config (eg. 1and1).
+
+## [v0.0.8beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+### Changed
+- In RSS feed, GUID content replaced with the URL of the link, because some stupid RSS reader (like Google Reader) use `<guid>` as a link instead of using `<link>`.
+
+## [v0.0.7beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history) - 2011-09-16
+First public release by Sebsauvage, see original article:
+[Adieu Delicious, Diigo et StumbleUpon. Salut Shaarli !](http://sebsauvage.net/rhaa/index.php?2011/09/16/09/29/58-adieu-delicious-diigo-et-stumbleupon-salut-shaarli-) (FR)
