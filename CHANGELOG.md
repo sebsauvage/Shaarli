@@ -316,3 +316,56 @@ This release has been YANKED as it points to a tag that does not follow our nami
 ### Security
 - Do not leak server's PHP version and Shaarli's full path on errors
 - Prevent Shaarli from sending a lot of duplicate cookies
+
+## [v0.0.42beta](https://github.com/shaarli/Shaarli/releases/tag/v0.0.42beta) - 2014-07-27
+### Added
+- Add QRCode Javascript library
+- Allow importing bookmarks with the same timestamp (hack)
+- Allow putting a description in the bookmarklet URL
+- Add `json_encode()` implementation for PHP<5.2
+- Highlight search results
+
+### Changed
+- Improve 'Stay signed in' behaviour
+- Improve `smallHash()`
+- Refactor QRCode generation
+- Update Javascript lazyloading
+- Update CSS
+
+### Removed
+- Remove jQuery from almost all pages
+
+### Fixed
+- Fix overlapping tags
+- Fix field foxus in the bookmarklet
+- Fix error message when `data/` is not writable
+- Fix HTML generation
+
+### Security
+- Fix XSS flaw
+
+## [v0.0.41beta](https://github.com/shaarli/Shaarli/releases/tag/v0.0.41beta) - 2013-03-08
+### Added
+- Add HTTPS to the allowed protocols
+- Add support for magnet links in link descriptions
+- Allow creating new links as private by default
+- Allow disabling jQuery
+- Check write permissions
+- Check session support before installation
+
+### Changed
+- Improve token security
+- RSS feed: allow inverting links/permalinks
+
+### Fixed
+- Fix display issues during installation
+- Fix popup redirection after login failure
+- Fix RSS formatting for Thunderbird
+- Fix thumbnail creation
+- Fix cache purge
+
+### Security
+- Fix login issue with WebKit browsers
+
+## [v0.0.40beta](https://github.com/shaarli/Shaarli/releases/tag/v0.0.40beta) - 2013-02-26
+Initial release on GitHub.
