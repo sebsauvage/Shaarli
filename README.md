@@ -16,6 +16,7 @@ _It is designed to be personal (single-user), fast and handy._
 
 ## Quickstart
 - [Wiki/documentation](https://github.com/shaarli/Shaarli/wiki)
+- [Change log](CHANGELOG.md)
 - [Bugs/Feature requests/Discussion](https://github.com/shaarli/Shaarli/issues/)
 
 ### Demo
