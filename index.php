@@ -778,6 +778,7 @@ function renderPage($conf, $pluginManager)
     $PAGE = new PageBuilder($conf);
     $PAGE->assign('linkcount', count($LINKSDB));
     $PAGE->assign('privateLinkcount', count_private($LINKSDB));
+    $PAGE->assign('plugin_errors', $pluginManager->getErrors());
 
     // Determine which page will be rendered.
     $query = (isset($_SERVER['QUERY_STRING'])) ? $_SERVER['QUERY_STRING'] : '';
