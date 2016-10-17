@@ -12,7 +12,7 @@
       <!-- PubSubHubbub Discovery -->
       <atom:link rel="hub" href="{$pubsubhub_url}" />
     {/if}
-    {loop="links"}
+    {loop="$links"}
       <item>
         <title>{$value.title}</title>
         <guid isPermaLink="{if="$usepermalinks"}true{else}false{/if}">{$value.guid}</guid>

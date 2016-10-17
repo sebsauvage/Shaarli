@@ -63,7 +63,7 @@
         </div>
     {/if}
     <ul>
-        {loop="links"}
+        {loop="$links"}
         <li{if="$value.class"} class="{$value.class}"{/if}>
             <a id="{$value.shorturl}"></a>
             <div class="thumbnail">{$value.url|thumbnail}</div>
@@ -110,7 +110,7 @@
                 <a href="{$value.real_url}"><span class="linkurl" title="Short link">{$value.url}</span></a><br>
                 {if="$value.tags"}
                     <div class="linktaglist">
-                    {loop="value.taglist"}<span class="linktag" title="Add tag"><a href="?addtag={$value|urlencode}">{$value}</a></span> {/loop}
+                    {loop="$value.taglist"}<span class="linktag" title="Add tag"><a href="?addtag={$value|urlencode}">{$value}</a></span> {/loop}
                     </div>
                 {/if}
 

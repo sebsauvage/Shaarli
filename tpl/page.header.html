@@ -43,7 +43,7 @@
 
 {if="!empty($plugin_errors) && isLoggedIn()"}
     <ul class="errors">
-        {loop="plugin_errors"}
+        {loop="$plugin_errors"}
             <li>{$value}</li>
         {/loop}
     </ul>
