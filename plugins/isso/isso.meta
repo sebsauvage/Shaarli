@@ -1,0 +1,3 @@
+description="Let visitor comment your shaares on permalinks with Isso."
+parameters="ISSO_SERVER"
+parameter.ISSO_SERVER="Isso server URL (without 'http://')"
