@@ -5,6 +5,27 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [v0.8.1](https://github.com/shaarli/Shaarli/releases/tag/v0.8.1) - UNPUBLISHED
+## Added
+- Add CHANGELOG.md to track the whole project's history
+- Save the last edition date for shaares and use it in Atom/RSS feeds
+- Plugins:
+    - Add an [Isso](https://posativ.org/isso/) plugin to enable user comments on permalinks
+    - Allow defining init functions, e.g. for performing checks and error processing
+
+## Changed
+- Cleanup `{loop}` declarations in templates
+
+## Fixed
+- Fix the server `<self>` value in Atom/RSS feeds
+- Plugins:
+    - Tools: only display parameter description when it exists
+    - archive.org: do not propose archival of private notes
+
+## Security
+- Allow whitelisting trusted IPs, else continue banning clients upon login failure
+
+
 ## [v0.8.0](https://github.com/shaarli/Shaarli/releases/tag/v0.8.0) - 2016-10-12
 Shaarli now uses [Composer](https://getcomposer.org/) to handle its dependencies.
 Please use our release archives, or follow the
@@ -816,7 +837,7 @@ Initial release on GitHub.
 
 ## [v0.0.11beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
 ### Added
-- Add a check and a warning for some hosts which still have `magic`_quotes activated
+- Add a check and a warning for some hosts which still have `magic_quotes` activated
 
 
 ## [v0.0.10beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
