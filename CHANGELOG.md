@@ -6,23 +6,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [v0.8.1](https://github.com/shaarli/Shaarli/releases/tag/v0.8.1) - UNPUBLISHED
-## Added
+### Added
 - Add CHANGELOG.md to track the whole project's history
 - Save the last edition date for shaares and use it in Atom/RSS feeds
 - Plugins:
     - Add an [Isso](https://posativ.org/isso/) plugin to enable user comments on permalinks
     - Allow defining init functions, e.g. for performing checks and error processing
 
-## Changed
+### Changed
 - Cleanup `{loop}` declarations in templates
+- Release archives now have the same structure as GitHub-generated archives:
+    - archives contain a `Shaarli` directory, itself containing sources + dependencies
+    - the tarball is now gzipped
 
-## Fixed
+### Fixed
 - Fix the server `<self>` value in Atom/RSS feeds
 - Plugins:
     - Tools: only display parameter description when it exists
     - archive.org: do not propose archival of private notes
 
-## Security
+### Security
 - Allow whitelisting trusted IPs, else continue banning clients upon login failure
 
 

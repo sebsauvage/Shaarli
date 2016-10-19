@@ -137,6 +137,7 @@ test:
 # to ease deployment on shared hosting.
 ##
 ARCHIVE_VERSION := shaarli-$$(git describe)-full
+ARCHIVE_PREFIX=Shaarli/
 
 release_archive: release_tar release_zip
 
@@ -147,13 +148,17 @@ composer_dependencies: clean
 
 ### generate a release tarball and include 3rd-party dependencies
 release_tar: composer_dependencies
-	git archive -o $(ARCHIVE_VERSION).tar HEAD
-	tar rvf $(ARCHIVE_VERSION).tar vendor/
+	git archive --prefix=$(ARCHIVE_PREFIX) -o $(ARCHIVE_VERSION).tar HEAD
+	tar rvf $(ARCHIVE_VERSION).tar --transform "s|^vendor|$(ARCHIVE_PREFIX)vendor|" vendor/
+	gzip $(ARCHIVE_VERSION).tar
 
 ### generate a release zip and include 3rd-party dependencies
 release_zip: composer_dependencies
-	git archive -o $(ARCHIVE_VERSION).zip -9 HEAD
-	zip -r $(ARCHIVE_VERSION).zip vendor/
+	git archive --prefix=$(ARCHIVE_PREFIX) -o $(ARCHIVE_VERSION).zip -9 HEAD
+	mkdir $(ARCHIVE_PREFIX)
+	rsync -a vendor/ $(ARCHIVE_PREFIX)vendor/
+	zip -r $(ARCHIVE_VERSION).zip $(ARCHIVE_PREFIX)vendor/
+	rm -rf $(ARCHIVE_PREFIX)
 
 ##
 # Targets for repository and documentation maintenance
