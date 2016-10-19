@@ -249,5 +249,6 @@ class FeedBuilderTest extends PHPUnit_Framework_TestCase
         $link = array_shift($data['links']);
         $this->assertEquals('http://host.tld:8080/~user/shaarli/?WDWyig', $link['guid']);
         $this->assertEquals('http://host.tld:8080/~user/shaarli/?WDWyig', $link['url']);
+        $this->assertContains('http://host.tld:8080/~user/shaarli/?addtag=hashtag', $link['description']);
     }
 }

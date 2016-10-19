@@ -153,7 +153,8 @@ class FeedBuilder
         } else {
             $permalink = '<a href="'. $link['guid'] .'" title="Permalink">Permalink</a>';
         }
-        $link['description'] = format_description($link['description']) . PHP_EOL .'<br>&#8212; '. $permalink;
+        $link['description']  = format_description($link['description'], '', $pageaddr);
+        $link['description'] .= PHP_EOL .'<br>&#8212; '. $permalink;
 
         $pubDate = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
         $link['pub_iso_date'] = $this->getIsoDate($pubDate);
