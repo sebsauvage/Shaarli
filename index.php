@@ -606,8 +606,6 @@ function showDailyRSS($conf) {
         $absurl = escape(index_url($_SERVER).'?do=daily&day='.$day);  // Absolute URL of the corresponding "Daily" page.
 
         // Build the HTML body of this RSS entry.
-        $html = '';
-        $href = '';
         $links = array();
 
         // We pre-format some fields for proper output.
@@ -833,7 +831,7 @@ function renderPage($conf, $pluginManager)
         // Get only links which have a thumbnail.
         foreach($links as $link)
         {
-            $permalink='?'.escape(smallhash($link['linkdate']));
+            $permalink='?'.escape(smallHash($link['linkdate']));
             $thumb=lazyThumbnail($conf, $link['url'],$permalink);
             if ($thumb!='') // Only output links which have a thumbnail.
             {
@@ -867,7 +865,7 @@ function renderPage($conf, $pluginManager)
             $maxcount = max($maxcount, $value);
         }
 
-        // Sort tags alphabetically: case insensitive, support locale if avalaible.
+        // Sort tags alphabetically: case insensitive, support locale if available.
         uksort($tags, function($a, $b) {
             // Collator is part of PHP intl.
             if (class_exists('Collator')) {
@@ -1669,8 +1667,6 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
     if ($page>1) {
         $next_page_url = '?page=' . ($page-1) . $searchtermUrl . $searchtagsUrl;
     }
-
-    $token = isLoggedIn() ? getToken($conf) : '';
 
     // Fill all template fields.
     $data = array(

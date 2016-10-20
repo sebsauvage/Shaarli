@@ -35,7 +35,7 @@ class CachedPage
     /**
      * Returns the cached version of a page, if it exists and should be cached
      *
-     * @return a cached version of the page if it exists, null otherwise
+     * @return string a cached version of the page if it exists, null otherwise
      */
     public function cachedVersion()
     {

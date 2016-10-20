@@ -37,7 +37,7 @@ class Updater
      *
      * @param array         $doneUpdates Updates which are already done.
      * @param LinkDB        $linkDB      LinkDB instance.
-     * @oaram ConfigManager $conf        Configuration Manager instance.
+     * @param ConfigManager $conf        Configuration Manager instance.
      * @param boolean       $isLoggedIn  True if the user is logged in.
      */
     public function __construct($doneUpdates, $linkDB, $conf, $isLoggedIn)
