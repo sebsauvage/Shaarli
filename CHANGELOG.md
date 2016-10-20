@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [v0.8.1](https://github.com/shaarli/Shaarli/releases/tag/v0.8.1) - UNPUBLISHED
 ### Added
 - Add CHANGELOG.md to track the whole project's history
+- Enable Composer cache for Travis builds
 - Save the last edition date for shaares and use it in Atom/RSS feeds
 - Plugins:
     - Add an [Isso](https://posativ.org/isso/) plugin to enable user comments on permalinks
