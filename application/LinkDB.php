@@ -87,7 +87,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      * @param string  $redirector       link redirector set in user settings.
      * @param boolean $redirectorEncode Enable urlencode on redirected urls (default: true).
      */
-    function __construct(
+    public function __construct(
         $datastore,
         $isLoggedIn,
         $hidePublicLinks,
@@ -164,7 +164,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     /**
      * Iterator - Returns the current element
      */
-    function current()
+    public function current()
     {
         return $this->links[$this->keys[$this->position]];
     }
@@ -172,7 +172,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     /**
      * Iterator - Returns the key of the current element
      */
-    function key()
+    public function key()
     {
         return $this->keys[$this->position];
     }
@@ -180,7 +180,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     /**
      * Iterator - Moves forward to next element
      */
-    function next()
+    public function next()
     {
         ++$this->position;
     }
@@ -190,7 +190,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      *
      * Entries are sorted by date (latest first)
      */
-    function rewind()
+    public function rewind()
     {
         $this->keys = array_keys($this->links);
         rsort($this->keys);
@@ -200,7 +200,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     /**
      * Iterator - Checks if current position is valid
      */
-    function valid()
+    public function valid()
     {
         return isset($this->keys[$this->position]);
     }

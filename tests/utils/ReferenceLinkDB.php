@@ -13,7 +13,7 @@ class ReferenceLinkDB
     /**
      * Populates the test DB with reference data
      */
-    function __construct()
+    public function __construct()
     {
         $this->addLink(
             'Link title: @website',
