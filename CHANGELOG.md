@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Plugins:
     - Tools: only display parameter description when it exists
     - archive.org: do not propose archival of private notes
+- Use absolute URL for hashtags in RSS and ATOM feeds
 
 ### Security
 - Allow whitelisting trusted IPs, else continue banning clients upon login failure
