@@ -81,7 +81,7 @@ function html_extract_charset($html)
 /**
  * Count private links in given linklist.
  *
- * @param array $links Linklist.
+ * @param array|Countable $links Linklist.
  *
  * @return int Number of private links.
  */
@@ -162,6 +162,7 @@ function space2nbsp($text)
  *
  * @param string $description shaare's description.
  * @param string $redirector  if a redirector is set, use it to gerenate links.
+ * @param string $indexUrl    URL to Shaarli's index.
  *
  * @return string formatted description.
  */

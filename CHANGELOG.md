@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Release archives now have the same structure as GitHub-generated archives:
     - archives contain a `Shaarli` directory, itself containing sources + dependencies
     - the tarball is now gzipped
+- Minor code cleanup: PHPDoc, spelling, unused variables, etc.
 
 ### Fixed
 - Fix the server `<self>` value in Atom/RSS feeds

@@ -15,6 +15,9 @@ class ApplicationUtils
      *
      * The code is read from the raw content of the version file on the Git server.
      *
+     * @param string $url     URL to reach to get the latest version.
+     * @param int    $timeout Timeout to check the URL (in seconds).
+     *
      * @return mixed the version code from the repository if available, else 'false'
      */
     public static function getLatestGitVersionCode($url, $timeout=2)
@@ -49,6 +52,7 @@ class ApplicationUtils
      * @param int    $checkInterval  the minimum interval between update checks (in seconds
      * @param bool   $enableCheck    whether to check for new versions
      * @param bool   $isLoggedIn     whether the user is logged in
+     * @param string $branch         check update for the given branch
      *
      * @throws Exception an invalid branch has been set for update checks
      *
@@ -152,7 +156,7 @@ class ApplicationUtils
             }
         }
 
-        // Check cache and data directories are readable and writeable
+        // Check cache and data directories are readable and writable
         foreach (array(
             $conf->get('resource.thumbnails_cache'),
             $conf->get('resource.data_dir'),
@@ -167,7 +171,7 @@ class ApplicationUtils
             }
         }
 
-        // Check configuration files are readable and writeable
+        // Check configuration files are readable and writable
         foreach (array(
             $conf->getConfigFileExt(),
             $conf->get('resource.datastore'),

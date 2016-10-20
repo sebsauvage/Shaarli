@@ -21,7 +21,7 @@ class ConfigJson implements ConfigIO
         $data = json_decode($data, true);
         if ($data === null) {
             $error = json_last_error();
-            throw new Exception('An error occured while parsing JSON file: error code #'. $error);
+            throw new Exception('An error occurred while parsing JSON file: error code #'. $error);
         }
         return $data;
     }

@@ -62,21 +62,7 @@ function add_trailing_slash($url)
 {
     return $url . (!endsWith($url, '/') ? '/' : '');
 }
-/**
- * Converts an URL with an IDN host to a ASCII one.
- *
- * @param string $url Input URL.
- *
- * @return string converted URL.
- */
-function url_with_idn_to_ascii($url)
-{
-    $parts = parse_url($url);
-    $parts['host'] = idn_to_ascii($parts['host']);
 
-    $httpUrl = new \http\Url($parts);
-    return $httpUrl->toString();
-}
 /**
  * URL representation and cleanup utilities
  *

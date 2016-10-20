@@ -37,6 +37,8 @@ class ConfigManager
 
     /**
      * Constructor.
+     *
+     * @param string $configFile Configuration file path without extension.
      */
     public function __construct($configFile = 'data/config')
     {

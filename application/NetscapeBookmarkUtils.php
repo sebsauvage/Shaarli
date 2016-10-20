@@ -86,7 +86,7 @@ class NetscapeBookmarkUtils
      * Imports Web bookmarks from an uploaded Netscape bookmark dump
      *
      * @param array  $post      Server $_POST parameters
-     * @param array  $file      Server $_FILES parameters
+     * @param array  $files     Server $_FILES parameters
      * @param LinkDB $linkDb    Loaded LinkDB instance
      * @param string $pagecache Page cache
      *
