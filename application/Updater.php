@@ -143,7 +143,7 @@ class Updater
             $link['tags'] = implode(' ', array_unique(LinkFilter::tagsStrToArray($link['tags'], true)));
             $this->linkDB[$link['linkdate']] = $link;
         }
-        $this->linkDB->savedb($this->conf->get('resource.page_cache'));
+        $this->linkDB->save($this->conf->get('resource.page_cache'));
         return true;
     }
 

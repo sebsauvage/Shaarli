@@ -100,8 +100,8 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         $this->hidePublicLinks = $hidePublicLinks;
         $this->redirector = $redirector;
         $this->redirectorEncode = $redirectorEncode === true;
-        $this->checkDB();
-        $this->readDB();
+        $this->check();
+        $this->read();
     }
 
     /**
@@ -210,7 +210,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      *
      * If no DB file is found, creates a dummy DB.
      */
-    private function checkDB()
+    private function check()
     {
         if (file_exists($this->datastore)) {
             return;
@@ -243,13 +243,13 @@ You use the community supported version of the original Shaarli project, by Seba
         $this->links[$link['linkdate']] = $link;
 
         // Write database to disk
-        $this->writeDB();
+        $this->write();
     }
 
     /**
      * Reads database from disk to memory
      */
-    private function readDB()
+    private function read()
     {
 
         // Public links are hidden and user not logged in => nothing to show
@@ -315,7 +315,7 @@ You use the community supported version of the original Shaarli project, by Seba
      *
      * @throws IOException the datastore is not writable
      */
-    private function writeDB()
+    private function write()
     {
         if (is_file($this->datastore) && !is_writeable($this->datastore)) {
             // The datastore exists but is not writeable
@@ -337,14 +337,14 @@ You use the community supported version of the original Shaarli project, by Seba
      *
      * @param string $pageCacheDir page cache directory
      */
-    public function savedb($pageCacheDir)
+    public function save($pageCacheDir)
     {
         if (!$this->loggedIn) {
             // TODO: raise an Exception instead
             die('You are not authorized to change the database.');
         }
 
-        $this->writeDB();
+        $this->write();
 
         invalidateCaches($pageCacheDir);
     }

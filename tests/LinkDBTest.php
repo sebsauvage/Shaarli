@@ -117,7 +117,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
         unlink(self::$testDatastore);
         $this->assertFileNotExists(self::$testDatastore);
 
-        $checkDB = self::getMethod('checkDB');
+        $checkDB = self::getMethod('check');
         $checkDB->invokeArgs($linkDB, array());
         $this->assertFileExists(self::$testDatastore);
 
@@ -134,7 +134,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
         $datastoreSize = filesize(self::$testDatastore);
         $this->assertGreaterThan(0, $datastoreSize);
 
-        $checkDB = self::getMethod('checkDB');
+        $checkDB = self::getMethod('check');
         $checkDB->invokeArgs($linkDB, array());
 
         // ensure the datastore is left unmodified
@@ -180,7 +180,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     /**
      * Save the links to the DB
      */
-    public function testSaveDB()
+    public function testSave()
     {
         $testDB = new LinkDB(self::$testDatastore, true, false);
         $dbSize = sizeof($testDB);
@@ -194,7 +194,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
             'tags'=>'unit test'
         );
         $testDB[$link['linkdate']] = $link;
-        $testDB->savedb('tests');
+        $testDB->save('tests');
 
         $testDB = new LinkDB(self::$testDatastore, true, false);
         $this->assertEquals($dbSize + 1, sizeof($testDB));

@@ -183,7 +183,7 @@ class NetscapeBookmarkUtils
             $importCount++;
         }
 
-        $linkDb->savedb($pagecache);
+        $linkDb->save($pagecache);
         return self::importStatus(
             $filename,
             $filesize,

@@ -1211,7 +1211,7 @@ function renderPage($conf, $pluginManager)
                 $value['tags']=trim(implode(' ',$tags));
                 $LINKSDB[$key]=$value;
             }
-            $LINKSDB->savedb($conf->get('resource.page_cache'));
+            $LINKSDB->save($conf->get('resource.page_cache'));
             echo '<script>alert("Tag was removed from '.count($linksToAlter).' links.");document.location=\'?\';</script>';
             exit;
         }
@@ -1228,7 +1228,7 @@ function renderPage($conf, $pluginManager)
                 $value['tags']=trim(implode(' ',$tags));
                 $LINKSDB[$key]=$value;
             }
-            $LINKSDB->savedb($conf->get('resource.page_cache')); // Save to disk.
+            $LINKSDB->save($conf->get('resource.page_cache')); // Save to disk.
             echo '<script>alert("Tag was renamed in '.count($linksToAlter).' links.");document.location=\'?searchtags='.urlencode($_POST['totag']).'\';</script>';
             exit;
         }
@@ -1283,7 +1283,7 @@ function renderPage($conf, $pluginManager)
         $pluginManager->executeHooks('save_link', $link);
 
         $LINKSDB[$linkdate] = $link;
-        $LINKSDB->savedb($conf->get('resource.page_cache'));
+        $LINKSDB->save($conf->get('resource.page_cache'));
         pubsubhub($conf);
 
         // If we are called from the bookmarklet, we must close the popup:
@@ -1325,7 +1325,7 @@ function renderPage($conf, $pluginManager)
         $pluginManager->executeHooks('delete_link', $LINKSDB[$linkdate]);
 
         unset($LINKSDB[$linkdate]);
-        $LINKSDB->savedb('resource.page_cache'); // save to disk
+        $LINKSDB->save('resource.page_cache'); // save to disk
 
         // If we are called from the bookmarklet, we must close the popup:
         if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) { echo '<script>self.close();</script>'; exit; }
