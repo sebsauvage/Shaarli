@@ -72,10 +72,6 @@ Files: plugins/wallabag/wallabag.png
 License: MIT License (http://opensource.org/licenses/MIT)
 Copyright: (C) 2015 Nicolas Lœuillet - https://github.com/wallabag/wallabag
 
-Files: plugins/markdown/Parsedown.php
-License: MIT License (http://opensource.org/licenses/MIT)
-Copyright: (C) 2015 Emanuil Rusev - https://github.com/erusev/parsedown
-
 ----------------------------------------------------
 ZLIB/LIBPNG LICENSE
 

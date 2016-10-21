@@ -6,8 +6,6 @@
  * Shaare's descriptions are parsed with Markdown.
  */
 
-require_once 'Parsedown.php';
-
 /*
  * If this tag is used on a shaare, the description won't be processed by Parsedown.
  */
