@@ -6,8 +6,6 @@
  * Shaare's descriptions are parsed with Markdown.
  */
 
-require_once 'Parsedown.php';
-
 /*
  * If this tag is used on a shaare, the description won't be processed by Parsedown.
  */
@@ -157,8 +155,9 @@ function reverse_text2clickable($description)
     $lineCount = 0;
 
     foreach ($descriptionLines as $descriptionLine) {
-        // Detect line of code
-        $codeLineOn = preg_match('/^    /', $descriptionLine) > 0;
+        // Detect line of code: starting with 4 spaces,
+        // except lists which can start with +/*/- or `2.` after spaces.
+        $codeLineOn = preg_match('/^    +(?=[^\+\*\-])(?=(?!\d\.).)/', $descriptionLine) > 0;
         // Detect and toggle block of code
         if (!$codeBlockOn) {
             $codeBlockOn = preg_match('/^```/', $descriptionLine) > 0;
@@ -175,10 +174,10 @@ function reverse_text2clickable($description)
             $descriptionLine
         );
 
-        // Reverse hashtag links if we're in a code block.
-        $hashtagFilter = ($codeBlockOn || $codeLineOn) ? $hashtagTitle : '';
+        // Reverse all links in code blocks, only non hashtag elsewhere.
+        $hashtagFilter = (!$codeBlockOn && !$codeLineOn) ? '(?!'. $hashtagTitle .')': '(?:'. $hashtagTitle .')?';
         $descriptionLine = preg_replace(
-            '!<a href="[^ ]*"'. $hashtagFilter .'>([^<]+)</a>!m',
+            '#<a href="[^ ]*"'. $hashtagFilter .'>([^<]+)</a>#m',
             '$1',
             $descriptionLine
         );
