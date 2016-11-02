@@ -1,0 +1,4 @@
+description="A plugin that adds Piwik tracking code to Shaarli pages."
+parameters="PIWIK_URL;PIWIK_SITEID"
+parameter.PIWIK_URL="Piwik URL"
+parameter.PIWIK_SITEID="Piwik site ID"
