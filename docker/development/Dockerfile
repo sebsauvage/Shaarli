@@ -15,6 +15,8 @@ RUN apt-get update \
        nano \
     && apt-get clean
 
+RUN sed -i 's/post_max_size.*/post_max_size = 10M/' /etc/php5/fpm/php.ini
+RUN sed -i 's/upload_max_filesize.*/upload_max_filesize = 10M/' /etc/php5/fpm/php.ini
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervised.conf /etc/supervisor/conf.d/supervised.conf
 
