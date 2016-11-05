@@ -1325,21 +1325,21 @@ function renderPage($conf, $pluginManager)
     }
 
     // -------- User clicked the "Delete" button when editing a link: Delete link from database.
-    if (isset($_POST['delete_link']))
+    if ($targetPage == Router::$PAGE_DELETELINK)
     {
-        if (!tokenOk($_POST['token'])) die('Wrong token.');
-
         // We do not need to ask for confirmation:
         // - confirmation is handled by JavaScript
         // - we are protected from XSRF by the token.
 
-        // FIXME! We keep `lf_linkdate` for consistency before a proper API. To be removed.
-        $id = isset($_POST['lf_id']) ? intval(escape($_POST['lf_id'])) : intval(escape($_POST['lf_linkdate']));
+        if (! tokenOk($_GET['token'])) {
+            die('Wrong token.');
+        }
 
-        $pluginManager->executeHooks('delete_link', $LINKSDB[$id]);
-
+        $id = intval(escape($_GET['lf_linkdate']));
+        $link = $LINKSDB[$id];
+        $pluginManager->executeHooks('delete_link', $link);
         unset($LINKSDB[$id]);
-        $LINKSDB->save('resource.page_cache'); // save to disk
+        $LINKSDB->save($conf->get('resource.page_cache')); // save to disk
 
         // If we are called from the bookmarklet, we must close the popup:
         if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) { echo '<script>self.close();</script>'; exit; }
