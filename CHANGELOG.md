@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     - archives contain a `Shaarli` directory, itself containing sources + dependencies
     - the tarball is now gzipped
 - Minor code cleanup: PHPDoc, spelling, unused variables, etc.
+- Docker: explicitly set the maximum file upload size to 10 MiB
 
 ### Fixed
 - Fix the server `<self>` value in Atom/RSS feeds
@@ -27,6 +28,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     - Tools: only display parameter description when it exists
     - archive.org: do not propose archival of private notes
 - Use absolute URL for hashtags in RSS and ATOM feeds
+- Docker: specify the location of the favicon
 
 ### Security
 - Allow whitelisting trusted IPs, else continue banning clients upon login failure
