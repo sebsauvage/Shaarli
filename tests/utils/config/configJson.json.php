@@ -29,6 +29,9 @@
     },
     "plugins": {
         "WALLABAG_VERSION": 1
+    },
+    "dev": {
+        "debug": true
     }
 }
 */ ?>

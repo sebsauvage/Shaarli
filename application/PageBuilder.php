@@ -105,6 +105,11 @@ class PageBuilder
         if ($this->linkDB !== null) {
             $this->tpl->assign('tags', $this->linkDB->linksCountPerTag());
         }
+
+        $this->tpl->assign('thumbnails_enabled', $this->conf->get('thumbnails.enabled'));
+        $this->tpl->assign('thumbnails_width', $this->conf->get('thumbnails.width'));
+        $this->tpl->assign('thumbnails_height', $this->conf->get('thumbnails.height'));
+
         // To be removed with a proper theme configuration.
         $this->tpl->assign('conf', $this->conf);
     }

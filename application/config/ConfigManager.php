@@ -319,6 +319,10 @@ class ConfigManager
         $this->setEmpty('general.enabled_plugins', self::$DEFAULT_PLUGINS);
         $this->setEmpty('general.default_note_title', 'Note: ');
 
+        $this->setEmpty('thumbnails.enabled', true);
+        $this->setEmpty('thumbnails.width', 120);
+        $this->setEmpty('thumbnails.height', 120);
+
         $this->setEmpty('updates.check_updates', false);
         $this->setEmpty('updates.check_updates_branch', 'stable');
         $this->setEmpty('updates.check_updates_interval', 86400);

@@ -80,7 +80,16 @@
         {loop="$links"}
         <li{if="$value.class"} class="{$value.class}"{/if}>
             <a id="{$value.shorturl}"></a>
-            <div class="thumbnail">{$value.url|thumbnail}</div>
+            {if="$thumbnails_enabled && !empty($value.thumbnail)"}
+                <div class="thumbnail">
+                    <a href="{$value.real_url}">
+                        {ignore}RainTPL hack: put the 2 src on two different line to avoid path replace bug{/ignore}
+                        <img data-src="{$value.thumbnail}#" class="b-lazy"
+                             src="#"
+                             alt="thumbnail" width="{$thumbnails_width}" height="{$thumbnails_height}" />
+                    </a>
+                </div>
+            {/if}
             <div class="linkcontainer">
                 {if="$is_logged_in"}
                     <div class="linkeditbuttons">

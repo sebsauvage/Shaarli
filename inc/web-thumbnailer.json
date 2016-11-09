@@ -1,0 +1,9 @@
+{
+  "settings": {
+    "default": {
+      "_comment": "infinite cache",
+      "cache_duration": -1,
+      "timeout": 60
+    }
+  }
+}

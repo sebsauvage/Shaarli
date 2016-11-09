@@ -701,8 +701,8 @@ a.bigbutton, #pageheader a.bigbutton {
     position: relative;
     display: table-cell;
     vertical-align: middle;
-    width: 90px;
-    height: 90px;
+    width: 120px;
+    height: 120px;
     overflow: hidden;
     text-align: center;
     float: left;
@@ -739,9 +739,9 @@ a.bigbutton, #pageheader a.bigbutton {
     position: absolute;
     top: 0;
     left: 0;
-    width: 90px;
+    width: 120px;
     font-weight: bold;
-    font-size: 8pt;
+    font-size: 9pt;
     color: #fff;
     text-align: left;
     background-color: transparent;
