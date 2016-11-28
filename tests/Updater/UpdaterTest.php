@@ -214,6 +214,7 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
         $refDB = new ReferenceLinkDB();
         $refDB->write(self::$testDatastore);
         $linkDB = new LinkDB(self::$testDatastore, true, false);
+
         $this->assertEmpty($linkDB->filterSearch(array('searchtags' => 'exclude')));
         $updater = new Updater(array(), $linkDB, $this->conf, true);
         $updater->updateMethodRenameDashTags();
@@ -286,5 +287,102 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
         $this->assertEquals(escape($headerLink), $this->conf->get('general.header_link'));
         $this->assertEquals(escape($redirectorUrl), $this->conf->get('redirector.url'));
         unlink($sandbox .'.json.php');
+    }
+
+    /**
+     * Test updateMethodDatastoreIds().
+     */
+    public function testDatastoreIds()
+    {
+        $links = array(
+            '20121206_182539' => array(
+                'linkdate' => '20121206_182539',
+                'title' => 'Geek and Poke',
+                'url' => 'http://geek-and-poke.com/',
+                'description' => 'desc',
+                'tags' => 'dev cartoon tag1  tag2   tag3  tag4   ',
+                'updated' => '20121206_190301',
+                'private' => false,
+            ),
+            '20121206_172539' => array(
+                'linkdate' => '20121206_172539',
+                'title' => 'UserFriendly - Samba',
+                'url' => 'http://ars.userfriendly.org/cartoons/?id=20010306',
+                'description' => '',
+                'tags' => 'samba cartoon web',
+                'private' => false,
+            ),
+            '20121206_142300' => array(
+                'linkdate' => '20121206_142300',
+                'title' => 'UserFriendly - Web Designer',
+                'url' => 'http://ars.userfriendly.org/cartoons/?id=20121206',
+                'description' => 'Naming conventions... #private',
+                'tags' => 'samba cartoon web',
+                'private' => true,
+            ),
+        );
+        $refDB = new ReferenceLinkDB();
+        $refDB->setLinks($links);
+        $refDB->write(self::$testDatastore);
+        $linkDB = new LinkDB(self::$testDatastore, true, false);
+
+        $checksum = hash_file('sha1', self::$testDatastore);
+
+        $this->conf->set('resource.data_dir', 'sandbox');
+        $this->conf->set('resource.datastore', self::$testDatastore);
+
+        $updater = new Updater(array(), $linkDB, $this->conf, true);
+        $this->assertTrue($updater->updateMethodDatastoreIds());
+
+        $linkDB = new LinkDB(self::$testDatastore, true, false);
+
+        $backup = glob($this->conf->get('resource.data_dir') . '/datastore.'. date('YmdH') .'*.php');
+        $backup = $backup[0];
+
+        $this->assertFileExists($backup);
+        $this->assertEquals($checksum, hash_file('sha1', $backup));
+        unlink($backup);
+
+        $this->assertEquals(3, count($linkDB));
+        $this->assertTrue(isset($linkDB[0]));
+        $this->assertFalse(isset($linkDB[0]['linkdate']));
+        $this->assertEquals(0, $linkDB[0]['id']);
+        $this->assertEquals('UserFriendly - Web Designer', $linkDB[0]['title']);
+        $this->assertEquals('http://ars.userfriendly.org/cartoons/?id=20121206', $linkDB[0]['url']);
+        $this->assertEquals('Naming conventions... #private', $linkDB[0]['description']);
+        $this->assertEquals('samba cartoon web', $linkDB[0]['tags']);
+        $this->assertTrue($linkDB[0]['private']);
+        $this->assertEquals(DateTime::createFromFormat('Ymd_His', '20121206_142300'), $linkDB[0]['created']);
+
+        $this->assertTrue(isset($linkDB[1]));
+        $this->assertFalse(isset($linkDB[1]['linkdate']));
+        $this->assertEquals(1, $linkDB[1]['id']);
+        $this->assertEquals('UserFriendly - Samba', $linkDB[1]['title']);
+        $this->assertEquals(DateTime::createFromFormat('Ymd_His', '20121206_172539'), $linkDB[1]['created']);
+
+        $this->assertTrue(isset($linkDB[2]));
+        $this->assertFalse(isset($linkDB[2]['linkdate']));
+        $this->assertEquals(2, $linkDB[2]['id']);
+        $this->assertEquals('Geek and Poke', $linkDB[2]['title']);
+        $this->assertEquals(DateTime::createFromFormat('Ymd_His', '20121206_182539'), $linkDB[2]['created']);
+        $this->assertEquals(DateTime::createFromFormat('Ymd_His', '20121206_190301'), $linkDB[2]['updated']);
+    }
+
+    /**
+     * Test updateMethodDatastoreIds() with the update already applied: nothing to do.
+     */
+    public function testDatastoreIdsNothingToDo()
+    {
+        $refDB = new ReferenceLinkDB();
+        $refDB->write(self::$testDatastore);
+        $linkDB = new LinkDB(self::$testDatastore, true, false);
+
+        $this->conf->set('resource.data_dir', 'sandbox');
+        $this->conf->set('resource.datastore', self::$testDatastore);
+
+        $checksum = hash_file('sha1', self::$testDatastore);
+        $updater = new Updater(array(), $linkDB, $this->conf, true);
+        $this->assertTrue($updater->updateMethodDatastoreIds());
+        $this->assertEquals($checksum, hash_file('sha1', self::$testDatastore));
     }
 }

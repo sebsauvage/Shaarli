@@ -159,7 +159,7 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             'MediaGoblin',
-            $links['20130614_184135']['title']
+            $links[7]['title']
         );
     }
 
@@ -286,7 +286,7 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            6,
+            7,
             count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, '-revolution'))
         );
     }
@@ -346,7 +346,7 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            6,
+            7,
             count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, '-free'))
         );
     }

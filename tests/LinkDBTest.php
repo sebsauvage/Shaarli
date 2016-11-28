@@ -186,14 +186,15 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
         $dbSize = sizeof($testDB);
 
         $link = array(
+            'id' => 42,
             'title'=>'an additional link',
             'url'=>'http://dum.my',
             'description'=>'One more',
             'private'=>0,
-            'linkdate'=>'20150518_190000',
+            'created'=> DateTime::createFromFormat('Ymd_His', '20150518_190000'),
             'tags'=>'unit test'
         );
-        $testDB[$link['linkdate']] = $link;
+        $testDB[$link['id']] = $link;
         $testDB->save('tests');
 
         $testDB = new LinkDB(self::$testDatastore, true, false);
@@ -238,12 +239,12 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     public function testDays()
     {
         $this->assertEquals(
-            array('20121206', '20130614', '20150310'),
+            array('20100310', '20121206', '20130614', '20150310'),
             self::$publicLinkDB->days()
         );
 
         $this->assertEquals(
-            array('20121206', '20130614', '20141125', '20150310'),
+            array('20100310', '20121206', '20130614', '20141125', '20150310'),
             self::$privateLinkDB->days()
         );
     }
@@ -290,10 +291,11 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
                 'stallman' => 1,
                 'free' => 1,
                 '-exclude' => 1,
-                // The DB contains a link with `sTuff` and another one with `stuff` tag.
-                // They need to be grouped with the first case found (`sTuff`).
-                'sTuff' => 2,
                 'hashtag' => 2,
+                // The DB contains a link with `sTuff` and another one with `stuff` tag.
+                // They need to be grouped with the first case found - order by date DESC: `sTuff`.
+                'sTuff' => 2,
+                'ut' => 1,
             ),
             self::$publicLinkDB->allTags()
         );
@@ -321,6 +323,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
                 'tag2' => 1,
                 'tag3' => 1,
                 'tag4' => 1,
+                'ut' => 1,
             ),
             self::$privateLinkDB->allTags()
         );
@@ -411,6 +414,11 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
             1,
             count(self::$publicLinkDB->filterHash($request))
         );
+        $request = smallHash('20150310_114633' . 8);
+        $this->assertEquals(
+            1,
+            count(self::$publicLinkDB->filterHash($request))
+        );
     }
 
     /**
@@ -432,5 +440,24 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     public function testFilterHashInValid()
     {
         self::$publicLinkDB->filterHash('');
+    }
+
+    /**
+     * Test reorder with asc/desc parameter.
+     */
+    public function testReorderLinksDesc()
+    {
+        self::$publicLinkDB->reorder('ASC');
+        $linkIdToTest = 42;
+        foreach (self::$publicLinkDB as $key => $value) {
+            $this->assertEquals($linkIdToTest, $key);
+            break;
+        }
+        self::$publicLinkDB->reorder('DESC');
+        $linkIdToTest = 41;
+        foreach (self::$publicLinkDB as $key => $value) {
+            $this->assertEquals($linkIdToTest, $key);
+            break;
+        }
     }
 }

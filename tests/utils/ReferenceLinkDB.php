@@ -4,7 +4,7 @@
  */
 class ReferenceLinkDB
 {
-    public static $NB_LINKS_TOTAL = 7;
+    public static $NB_LINKS_TOTAL = 8;
 
     private $_links = array();
     private $_publicCount = 0;
@@ -16,66 +16,87 @@ class ReferenceLinkDB
     public function __construct()
     {
         $this->addLink(
+            41,
             'Link title: @website',
             '?WDWyig',
             'Stallman has a beard and is part of the Free Software Foundation (or not). Seriously, read this. #hashtag',
             0,
-            '20150310_114651',
-            'sTuff'
+            DateTime::createFromFormat('Ymd_His', '20150310_114651'),
+            'sTuff',
+            null,
+            'WDWyig'
         );
 
         $this->addLink(
+            42,
+            'Note: I have a big ID but an old date',
+            '?WDWyig',
+            'Used to test links reordering.',
+            0,
+            DateTime::createFromFormat('Ymd_His', '20100310_101010'),
+            'ut'
+        );
+
+        $this->addLink(
+            8,
             'Free as in Freedom 2.0 @website',
             'https://static.fsf.org/nosvn/faif-2.0.pdf',
             'Richard Stallman and the Free Software Revolution. Read this. #hashtag',
             0,
-            '20150310_114633',
+            DateTime::createFromFormat('Ymd_His', '20150310_114633'),
             'free gnu software stallman -exclude stuff hashtag',
-            '20160803_093033'
+            DateTime::createFromFormat('Ymd_His', '20160803_093033')
         );
 
         $this->addLink(
+            7,
             'MediaGoblin',
             'http://mediagoblin.org/',
             'A free software media publishing platform #hashtagOther',
             0,
-            '20130614_184135',
-            'gnu media web .hidden hashtag'
+            DateTime::createFromFormat('Ymd_His', '20130614_184135'),
+            'gnu media web .hidden hashtag',
+            null,
+            'IuWvgA'
         );
 
         $this->addLink(
+            6,
             'w3c-markup-validator',
             'https://dvcs.w3.org/hg/markup-validator/summary',
             'Mercurial repository for the W3C Validator #private',
             1,
-            '20141125_084734',
+            DateTime::createFromFormat('Ymd_His', '20141125_084734'),
             'css html w3c web Mercurial'
         );
 
         $this->addLink(
+            4,
             'UserFriendly - Web Designer',
             'http://ars.userfriendly.org/cartoons/?id=20121206',
             'Naming conventions... #private',
             0,
-            '20121206_142300',
+            DateTime::createFromFormat('Ymd_His', '20121206_142300'),
             'dev cartoon web'
         );
 
         $this->addLink(
+            1,
             'UserFriendly - Samba',
             'http://ars.userfriendly.org/cartoons/?id=20010306',
             'Tropical printing',
             0,
-            '20121206_172539',
+            DateTime::createFromFormat('Ymd_His', '20121206_172539'),
             'samba cartoon web'
         );
 
         $this->addLink(
+            0,
             'Geek and Poke',
             'http://geek-and-poke.com/',
             '',
             1,
-            '20121206_182539',
+            DateTime::createFromFormat('Ymd_His', '20121206_182539'),
             'dev cartoon tag1  tag2   tag3  tag4   '
         );
     }
@@ -83,18 +104,20 @@ class ReferenceLinkDB
     /**
      * Adds a new link
      */
-    protected function addLink($title, $url, $description, $private, $date, $tags, $updated = '')
+    protected function addLink($id, $title, $url, $description, $private, $date, $tags, $updated = '', $shorturl = '')
     {
         $link = array(
+            'id' => $id,
             'title' => $title,
             'url' => $url,
             'description' => $description,
             'private' => $private,
-            'linkdate' => $date,
             'tags' => $tags,
+            'created' => $date,
             'updated' => $updated,
+            'shorturl' => $shorturl ? $shorturl : smallHash($date->format('Ymd_His') . $id),
         );
-        $this->_links[$date] = $link;
+        $this->_links[$id] = $link;
 
         if ($private) {
             $this->_privateCount++;
@@ -141,5 +164,15 @@ class ReferenceLinkDB
     public function getLinks()
     {
         return $this->_links;
+    }
+
+    /**
+     * Setter to override link creation.
+     *
+     * @param array $links List of links.
+     */
+    public function setLinks($links)
+    {
+        $this->_links = $links;
     }
 }
