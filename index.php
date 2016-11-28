@@ -564,24 +564,23 @@ function showDailyRSS($conf) {
     );
 
     /* Some Shaarlies may have very few links, so we need to look
-       back in time (rsort()) until we have enough days ($nb_of_days).
+       back in time until we have enough days ($nb_of_days).
     */
-    $linkdates = array();
-    foreach ($LINKSDB as $linkdate => $value) {
-        $linkdates[] = $linkdate;
+    $ids = array();
+    foreach ($LINKSDB as $id => $value) {
+        $ids[] = $id;
     }
-    rsort($linkdates);
     $nb_of_days = 7; // We take 7 days.
     $today = date('Ymd');
     $days = array();
 
-    foreach ($linkdates as $linkdate) {
-        $day = substr($linkdate, 0, 8); // Extract day (without time)
-        if (strcmp($day,$today) < 0) {
+    foreach ($ids as $id) {
+        $day = $LINKSDB[$id]['created']->format('Ymd'); // Extract day (without time)
+        if (strcmp($day, $today) < 0) {
             if (empty($days[$day])) {
                 $days[$day] = array();
             }
-            $days[$day][] = $linkdate;
+            $days[$day][] = $id;
         }
 
         if (count($days) > $nb_of_days) {
@@ -601,7 +600,7 @@ function showDailyRSS($conf) {
     echo '<copyright>'. $pageaddr .'</copyright>'. PHP_EOL;
 
     // For each day.
-    foreach ($days as $day => $linkdates) {
+    foreach ($days as $day => $ids) {
         $dayDate = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $day.'_000000');
         $absurl = escape(index_url($_SERVER).'?do=daily&day='.$day);  // Absolute URL of the corresponding "Daily" page.
 
@@ -609,16 +608,15 @@ function showDailyRSS($conf) {
         $links = array();
 
         // We pre-format some fields for proper output.
-        foreach ($linkdates as $linkdate) {
-            $l = $LINKSDB[$linkdate];
+        foreach ($ids as $id) {
+            $l = $LINKSDB[$id];
             $l['formatedDescription'] = format_description($l['description'], $conf->get('redirector.url'));
             $l['thumbnail'] = thumbnail($conf, $l['url']);
-            $l_date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $l['linkdate']);
-            $l['timestamp'] = $l_date->getTimestamp();
+            $l['timestamp'] = $l['created']->getTimestamp();
             if (startsWith($l['url'], '?')) {
                 $l['url'] = index_url($_SERVER) . $l['url'];  // make permalink URL absolute
             }
-            $links[$linkdate] = $l;
+            $links[$id] = $l;
         }
 
         // Then build the HTML for this day:
@@ -677,11 +675,11 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager)
 
         $taglist = explode(' ',$link['tags']);
         uasort($taglist, 'strcasecmp');
+        $linksToDisplay[$key]['shorturl'] = smallHash($link['created']->format('Ymd_His'));
         $linksToDisplay[$key]['taglist']=$taglist;
         $linksToDisplay[$key]['formatedDescription'] = format_description($link['description'], $conf->get('redirector.url'));
         $linksToDisplay[$key]['thumbnail'] = thumbnail($conf, $link['url']);
-        $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
-        $linksToDisplay[$key]['timestamp'] = $date->getTimestamp();
+        $linksToDisplay[$key]['timestamp'] =  $link['created']->getTimestamp();
     }
 
     /* We need to spread the articles on 3 columns.
@@ -831,7 +829,7 @@ function renderPage($conf, $pluginManager)
         // Get only links which have a thumbnail.
         foreach($links as $link)
         {
-            $permalink='?'.escape(smallHash($link['linkdate']));
+            $permalink='?'.escape(smallHash($link['created']->format('Ymd_His')));
             $thumb=lazyThumbnail($conf, $link['url'],$permalink);
             if ($thumb!='') // Only output links which have a thumbnail.
             {
@@ -1245,13 +1243,28 @@ function renderPage($conf, $pluginManager)
     // -------- User clicked the "Save" button when editing a link: Save link to database.
     if (isset($_POST['save_edit']))
     {
-        $linkdate = $_POST['lf_linkdate'];
-        $updated = isset($LINKSDB[$linkdate]) ? strval(date('Ymd_His')) : false;
-
         // Go away!
         if (! tokenOk($_POST['token'])) {
             die('Wrong token.');
         }
+
+        // lf_id should only be present if the link exists.
+        $id = !empty($_POST['lf_id']) ? (int) escape($_POST['lf_id']) : $LINKSDB->getNextId();
+        // Linkdate is kept here to:
+        //   - use the same permalink for notes as they're displayed when creating them
+        //   - let users hack creation date of their posts
+        //     See: https://github.com/shaarli/Shaarli/wiki/Datastore-hacks#changing-the-timestamp-for-a-link
+        $linkdate = escape($_POST['lf_linkdate']);
+        if (isset($LINKSDB[$id])) {
+            // Edit
+            $created = DateTime::createFromFormat('Ymd_His', $linkdate);
+            $updated = new DateTime();
+        } else {
+            // New link
+            $created = DateTime::createFromFormat('Ymd_His', $linkdate);
+            $updated = null;
+        }
+
         // Remove multiple spaces.
         $tags = trim(preg_replace('/\s\s+/', ' ', $_POST['lf_tags']));
         // Remove first '-' char in tags.
@@ -1268,14 +1281,16 @@ function renderPage($conf, $pluginManager)
         }
 
         $link = array(
+            'id' => $id,
             'title' => trim($_POST['lf_title']),
             'url' => $url,
             'description' => $_POST['lf_description'],
             'private' => (isset($_POST['lf_private']) ? 1 : 0),
-            'linkdate' => $linkdate,
+            'created' => $created,
             'updated' => $updated,
             'tags' => str_replace(',', ' ', $tags)
         );
+
         // If title is empty, use the URL as title.
         if ($link['title'] == '') {
             $link['title'] = $link['url'];
@@ -1283,7 +1298,7 @@ function renderPage($conf, $pluginManager)
 
         $pluginManager->executeHooks('save_link', $link);
 
-        $LINKSDB[$linkdate] = $link;
+        $LINKSDB[$id] = $link;
         $LINKSDB->save($conf->get('resource.page_cache'));
         pubsubhub($conf);
 
@@ -1296,7 +1311,7 @@ function renderPage($conf, $pluginManager)
         $returnurl = !empty($_POST['returnurl']) ? $_POST['returnurl'] : '?';
         $location = generateLocation($returnurl, $_SERVER['HTTP_HOST'], array('addlink', 'post', 'edit_link'));
         // Scroll to the link which has been edited.
-        $location .= '#' . smallHash($_POST['lf_linkdate']);
+        $location .= '#' . smallHash($created->format('Ymd_His'));
         // After saving the link, redirect to the page the user was on.
         header('Location: '. $location);
         exit;
@@ -1307,8 +1322,10 @@ function renderPage($conf, $pluginManager)
     {
         // If we are called from the bookmarklet, we must close the popup:
         if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) { echo '<script>self.close();</script>'; exit; }
+        $link = $LINKSDB[(int) escape($_POST['lf_id'])];
         $returnurl = ( isset($_POST['returnurl']) ? $_POST['returnurl'] : '?' );
-        $returnurl .= '#'.smallHash($_POST['lf_linkdate']);  // Scroll to the link which has been edited.
+        // Scroll to the link which has been edited.
+        $returnurl .= '#'.smallHash($link['created']->format('Ymd_His'));
         $returnurl = generateLocation($returnurl, $_SERVER['HTTP_HOST'], array('addlink', 'post', 'edit_link'));
         header('Location: '.$returnurl); // After canceling, redirect to the page the user was on.
         exit;
@@ -1318,14 +1335,17 @@ function renderPage($conf, $pluginManager)
     if (isset($_POST['delete_link']))
     {
         if (!tokenOk($_POST['token'])) die('Wrong token.');
+
         // We do not need to ask for confirmation:
         // - confirmation is handled by JavaScript
         // - we are protected from XSRF by the token.
-        $linkdate=$_POST['lf_linkdate'];
 
-        $pluginManager->executeHooks('delete_link', $LINKSDB[$linkdate]);
+        // FIXME! We keep `lf_linkdate` for consistency before a proper API. To be removed.
+        $id = isset($_POST['lf_id']) ? (int) escape($_POST['lf_id']) : (int) escape($_POST['lf_linkdate']);
 
-        unset($LINKSDB[$linkdate]);
+        $pluginManager->executeHooks('delete_link', $LINKSDB[$id]);
+
+        unset($LINKSDB[$id]);
         $LINKSDB->save('resource.page_cache'); // save to disk
 
         // If we are called from the bookmarklet, we must close the popup:
@@ -1364,8 +1384,10 @@ function renderPage($conf, $pluginManager)
     // -------- User clicked the "EDIT" button on a link: Display link edit form.
     if (isset($_GET['edit_link']))
     {
-        $link = $LINKSDB[$_GET['edit_link']];  // Read database
+        $id = (int) escape($_GET['edit_link']);
+        $link = $LINKSDB[$id];  // Read database
         if (!$link) { header('Location: ?'); exit; } // Link not found in database.
+        $link['linkdate'] = $link['created']->format('Ymd_His');
         $data = array(
             'link' => $link,
             'link_is_new' => false,
@@ -1389,7 +1411,7 @@ function renderPage($conf, $pluginManager)
         $link_is_new = false;
         // Check if URL is not already in database (in this case, we will edit the existing link)
         $link = $LINKSDB->getLinkFromUrl($url);
-        if (!$link)
+        if (! $link)
         {
             $link_is_new = true;
             $linkdate = strval(date('Ymd_His'));
@@ -1430,6 +1452,8 @@ function renderPage($conf, $pluginManager)
                 'tags' => $tags,
                 'private' => $private
             );
+        } else {
+            $link['linkdate'] = $link['created']->format('Ymd_His');
         }
 
         $data = array(
@@ -1635,18 +1659,16 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
         $link['description'] = format_description($link['description'], $conf->get('redirector.url'));
         $classLi =  ($i % 2) != 0 ? '' : 'publicLinkHightLight';
         $link['class'] = $link['private'] == 0 ? $classLi : 'private';
-        $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
-        $link['timestamp'] = $date->getTimestamp();
+        $link['timestamp'] = $link['created']->getTimestamp();
         if (! empty($link['updated'])) {
-            $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['updated']);
-            $link['updated_timestamp'] = $date->getTimestamp();
+            $link['updated_timestamp'] = $link['updated']->getTimestamp();
         } else {
             $link['updated_timestamp'] = '';
         }
         $taglist = explode(' ', $link['tags']);
         uasort($taglist, 'strcasecmp');
         $link['taglist'] = $taglist;
-        $link['shorturl'] = smallHash($link['linkdate']);
+        $link['shorturl'] = smallHash($link['created']->format('Ymd_His'));
         // Check for both signs of a note: starting with ? and 7 chars long.
         if ($link['url'][0] === '?' &&
             strlen($link['url']) === 7) {

@@ -41,9 +41,11 @@ function hook_isso_render_linklist($data, $conf)
     // Only display comments for permalinks.
     if (count($data['links']) == 1 && empty($data['search_tags']) && empty($data['search_term'])) {
         $link = reset($data['links']);
-        $isso_html = file_get_contents(PluginManager::$PLUGINS_PATH . '/isso/isso.html');
+        $issoHtml = file_get_contents(PluginManager::$PLUGINS_PATH . '/isso/isso.html');
 
-        $isso = sprintf($isso_html, $issoUrl, $issoUrl, $link['linkdate'], $link['linkdate']);
+        // FIXME! KO thread unique si même date
+        $linkDate = $link['created']->format('Ymd_His');
+        $isso = sprintf($issoHtml, $issoUrl, $issoUrl, $linkDate, $linkDate);
         $data['plugin_end_zone'][] = $isso;
 
         // Hackish way to include this CSS file only when necessary.

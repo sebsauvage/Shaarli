@@ -38,7 +38,7 @@ class NetscapeBookmarkUtils
             if ($link['private'] == 0 && $selection == 'private') {
                 continue;
             }
-            $date = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $link['linkdate']);
+            $date = $link['created'];
             $link['timestamp'] = $date->getTimestamp();
             $link['taglist'] = str_replace(' ', ',', $link['tags']);
 
@@ -147,7 +147,6 @@ class NetscapeBookmarkUtils
                 'url' => $bkm['uri'],
                 'description' => $bkm['note'],
                 'private' => $private,
-                'linkdate'=> '',
                 'tags' => $bkm['tags']
             );
 
@@ -161,25 +160,21 @@ class NetscapeBookmarkUtils
                 }
 
                 // Overwrite an existing link, keep its date
-                $newLink['linkdate'] = $existingLink['linkdate'];
-                $linkDb[$existingLink['linkdate']] = $newLink;
+                $newLink['id'] = $existingLink['id'];
+                $newLink['created'] = $existingLink['created'];
+                $newLink['updated'] = new DateTime();
+                $linkDb[$existingLink['id']] = $newLink;
                 $importCount++;
                 $overwriteCount++;
                 continue;
             }
 
-            // Add a new link
+            // Add a new link - @ used for UNIX timestamps
             $newLinkDate = new DateTime('@'.strval($bkm['time']));
-            while (!empty($linkDb[$newLinkDate->format(LinkDB::LINK_DATE_FORMAT)])) {
-                // Ensure the date/time is not already used
-                // - this hack is necessary as the date/time acts as a primary key
-                // - apply 1 second increments until an unused index is found
-                // See https://github.com/shaarli/Shaarli/issues/351
-                $newLinkDate->add(new DateInterval('PT1S'));
-            }
-            $linkDbDate = $newLinkDate->format(LinkDB::LINK_DATE_FORMAT);
-            $newLink['linkdate'] = $linkDbDate;
-            $linkDb[$linkDbDate] = $newLink;
+            $newLinkDate->setTimezone(new DateTimeZone(date_default_timezone_get()));
+            $newLink['created'] = $newLinkDate;
+            $newLink['id'] = $linkDb->getNextId();
+            $linkDb[$newLink['id']] = $newLink;
             $importCount++;
         }
 

@@ -218,7 +218,7 @@ class Updater
 
     /**
      * Update the database to use the new ID system, which replaces linkdate primary keys.
-     * Also, creation and update dates are now DateTime objects.
+     * Also, creation and update dates are now DateTime objects (done by LinkDB).
      *
      * Since this update is very sensitve (changing the whole database), the datastore will be
      * automatically backed up into the file datastore.<datetime>.php.
@@ -243,10 +243,6 @@ class Updater
         $links = array_reverse($links);
         $cpt = 0;
         foreach ($links as $l) {
-            $l['created'] = DateTime::createFromFormat('Ymd_His', $l['linkdate']);
-            if (! empty($l['updated'])) {
-                $l['updated'] = DateTime::createFromFormat('Ymd_His', $l['updated']);
-            }
             unset($l['linkdate']);
             $l['id'] = $cpt;
             $this->linkDB[$cpt++] = $l;

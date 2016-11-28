@@ -33,12 +33,12 @@ class LinkFilter
     public static $HASHTAG_CHARS = '\p{Pc}\p{N}\p{L}\p{Mn}';
 
     /**
-     * @var array all available links.
+     * @var LinkDB all available links.
      */
     private $links;
 
     /**
-     * @param array $links initialization.
+     * @param LinkDB $links initialization.
      */
     public function __construct($links)
     {
@@ -94,18 +94,16 @@ class LinkFilter
     private function noFilter($privateonly = false)
     {
         if (! $privateonly) {
-            krsort($this->links);
             return $this->links;
         }
 
         $out = array();
-        foreach ($this->links as $value) {
+        foreach ($this->links as $key => $value) {
             if ($value['private']) {
-                $out[$value['linkdate']] = $value;
+                $out[$key] = $value;
             }
         }
 
-        krsort($out);
         return $out;
     }
 
@@ -121,10 +119,10 @@ class LinkFilter
     private function filterSmallHash($smallHash)
     {
         $filtered = array();
-        foreach ($this->links as $l) {
-            if ($smallHash == smallHash($l['linkdate'])) {
+        foreach ($this->links as $key => $l) {
+            if ($smallHash == smallHash($l['created']->format('Ymd_His'))) {
                 // Yes, this is ugly and slow
-                $filtered[$l['linkdate']] = $l;
+                $filtered[$key] = $l;
                 return $filtered;
             }
         }
@@ -188,7 +186,7 @@ class LinkFilter
         $keys = array('title', 'description', 'url', 'tags');
 
         // Iterate over every stored link.
-        foreach ($this->links as $link) {
+        foreach ($this->links as $id => $link) {
 
             // ignore non private links when 'privatonly' is on.
             if (! $link['private'] && $privateonly === true) {
@@ -222,11 +220,10 @@ class LinkFilter
             }
 
             if ($found) {
-                $filtered[$link['linkdate']] = $link;
+                $filtered[$id] = $link;
             }
         }
 
-        krsort($filtered);
         return $filtered;
     }
 
@@ -256,7 +253,7 @@ class LinkFilter
             return $filtered;
         }
 
-        foreach ($this->links as $link) {
+        foreach ($this->links as $key => $link) {
             // ignore non private links when 'privatonly' is on.
             if (! $link['private'] && $privateonly === true) {
                 continue;
@@ -278,10 +275,9 @@ class LinkFilter
             }
 
             if ($found) {
-                $filtered[$link['linkdate']] = $link;
+                $filtered[$key] = $link;
             }
         }
-        krsort($filtered);
         return $filtered;
     }
 
@@ -304,13 +300,14 @@ class LinkFilter
         }
 
         $filtered = array();
-        foreach ($this->links as $l) {
-            if (startsWith($l['linkdate'], $day)) {
-                $filtered[$l['linkdate']] = $l;
+        foreach ($this->links as $key => $l) {
+            if ($l['created']->format('Ymd') == $day) {
+                $filtered[$key] = $l;
             }
         }
-        ksort($filtered);
-        return $filtered;
+
+        // sort by date ASC
+        return array_reverse($filtered, true);
     }
 
     /**

@@ -16,6 +16,9 @@
     <div id="editlinkform">
         <form method="post" name="linkform">
             <input type="hidden" name="lf_linkdate" value="{$link.linkdate}">
+          {if="isset($link.id)"}
+	          <input type="hidden" name="lf_id" value="{$link.id}">
+          {/if}
             <label for="lf_url"><i>URL</i></label><br><input type="text" name="lf_url" id="lf_url" value="{$link.url}" class="lf_input"><br>
             <label for="lf_title"><i>Title</i></label><br><input type="text" name="lf_title" id="lf_title" value="{$link.title}" class="lf_input"><br>
             <label for="lf_description"><i>Description</i></label><br><textarea name="lf_description" id="lf_description" rows="4" cols="25">{$link.description}</textarea><br>
