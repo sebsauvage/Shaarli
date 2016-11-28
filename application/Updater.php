@@ -138,10 +138,10 @@ class Updater
     public function updateMethodRenameDashTags()
     {
         $linklist = $this->linkDB->filterSearch();
-        foreach ($linklist as $link) {
+        foreach ($linklist as $key => $link) {
             $link['tags'] = preg_replace('/(^| )\-/', '$1', $link['tags']);
             $link['tags'] = implode(' ', array_unique(LinkFilter::tagsStrToArray($link['tags'], true)));
-            $this->linkDB[$link['linkdate']] = $link;
+            $this->linkDB[$key] = $link;
         }
         $this->linkDB->save($this->conf->get('resource.page_cache'));
         return true;
@@ -213,6 +213,48 @@ class Updater
             error_log($e->getMessage());
             return false;
         }
+        return true;
+    }
+
+    /**
+     * Update the database to use the new ID system, which replaces linkdate primary keys.
+     * Also, creation and update dates are now DateTime objects.
+     *
+     * Since this update is very sensitve (changing the whole database), the datastore will be
+     * automatically backed up into the file datastore.<datetime>.php.
+     *
+     * @return bool true if the update is successful, false otherwise.
+     */
+    public function updateMethodDatastoreIds()
+    {
+        // up to date database
+        if (isset($this->linkDB[0])) {
+            return true;
+        }
+
+        $save = $this->conf->get('resource.data_dir') .'/datastore.'. date('YmdHis') .'.php';
+        copy($this->conf->get('resource.datastore'), $save);
+
+        $links = array();
+        foreach ($this->linkDB as $offset => $value) {
+            $links[] = $value;
+            unset($this->linkDB[$offset]);
+        }
+        $links = array_reverse($links);
+        $cpt = 0;
+        foreach ($links as $l) {
+            $l['created'] = DateTime::createFromFormat('Ymd_His', $l['linkdate']);
+            if (! empty($l['updated'])) {
+                $l['updated'] = DateTime::createFromFormat('Ymd_His', $l['updated']);
+            }
+            unset($l['linkdate']);
+            $l['id'] = $cpt;
+            $this->linkDB[$cpt++] = $l;
+        }
+
+        $this->linkDB->save($this->conf->get('resource.page_cache'));
+        $this->linkDB->reorder();
+
         return true;
     }
 }
