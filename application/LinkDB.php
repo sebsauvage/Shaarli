@@ -6,15 +6,15 @@
  *
  * Example:
  *    $myLinks = new LinkDB();
- *    echo $myLinks['20110826_161819']['title'];
+ *    echo $myLinks[350]['title'];
  *    foreach ($myLinks as $link)
  *       echo $link['title'].' at url '.$link['url'].'; description:'.$link['description'];
  *
  * Available keys:
+ *  - id:       primary key, incremental integer identifier (persistent)
  *  - description: description of the entry
- *  - linkdate: creation date of this entry, format: YYYYMMDD_HHMMSS
- *              (e.g.'20110914_192317')
- *  - updated:  last modification date of this entry, format: YYYYMMDD_HHMMSS
+ *  - created:  creation date of this entry, DateTime object.
+ *  - updated:  last modification date of this entry, DateTime object.
  *  - private:  Is this link private? 0=no, other value=yes
  *  - tags:     tags attached to this entry (separated by spaces)
  *  - title     Title of the link
@@ -27,6 +27,19 @@
  *  - ArrayAccess: behaves like an associative array;
  *  - Countable:   there is a count() method;
  *  - Iterator:    usable in foreach () loops.
+ *
+ * ID mechanism:
+ *   ArrayAccess is implemented in a way that will allow to access a link
+ *   with the unique identifier ID directly with $link[ID].
+ *   Note that it's not the real key of the link array attribute.
+ *   This mechanism is in place to have persistent link IDs,
+ *   even though the internal array is reordered by date.
+ *   Example:
+ *     - DB: link #1 (2010-01-01) link #2 (2016-01-01)
+ *     - Order: #2 #1
+ *     - Import links containing: link #3 (2013-01-01)
+ *     - New DB: link #1 (2010-01-01) link #2 (2016-01-01) link #3 (2013-01-01)
+ *     - Real order: #2 #3 #1
  */
 class LinkDB implements Iterator, Countable, ArrayAccess
 {
@@ -47,11 +60,17 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     //  - value: associative array (keys: title, description...)
     private $links;
 
-    // List of all recorded URLs (key=url, value=linkdate)
-    // for fast reserve search (url-->linkdate)
+    // List of all recorded URLs (key=url, value=link offset)
+    // for fast reserve search (url-->link offset)
     private $urls;
 
-    // List of linkdate keys (for the Iterator interface implementation)
+    /**
+     * @var array List of all links IDS mapped with their array offset.
+     *            Map: id->offset.
+     */
+    protected $ids;
+
+    // List of offset keys (for the Iterator interface implementation)
     private $keys;
 
     // Position in the $this->keys array (for the Iterator interface)
@@ -121,14 +140,26 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         if (!$this->loggedIn) {
             die('You are not authorized to add a link.');
         }
-        if (empty($value['linkdate']) || empty($value['url'])) {
-            die('Internal Error: A link should always have a linkdate and URL.');
+        if (!isset($value['id']) || empty($value['url'])) {
+            die('Internal Error: A link should always have an id and URL.');
         }
-        if (empty($offset)) {
-            die('You must specify a key.');
+        if ((! empty($offset) && ! is_int($offset)) || ! is_int($value['id'])) {
+            die('You must specify an integer as a key.');
+        }
+        if (! empty($offset) && $offset !== $value['id']) {
+            die('Array offset and link ID must be equal.');
+        }
+
+        // If the link exists, we reuse the real offset, otherwise new entry
+        $existing = $this->getLinkOffset($offset);
+        if ($existing !== null) {
+            $offset = $existing;
+        } else {
+            $offset = count($this->links);
         }
         $this->links[$offset] = $value;
-        $this->urls[$value['url']]=$offset;
+        $this->urls[$value['url']] = $offset;
+        $this->ids[$value['id']] = $offset;
     }
 
     /**
@@ -136,7 +167,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return array_key_exists($offset, $this->links);
+        return array_key_exists($this->getLinkOffset($offset), $this->links);
     }
 
     /**
@@ -148,9 +179,11 @@ class LinkDB implements Iterator, Countable, ArrayAccess
             // TODO: raise an exception
             die('You are not authorized to delete a link.');
         }
-        $url = $this->links[$offset]['url'];
+        $realOffset = $this->getLinkOffset($offset);
+        $url = $this->links[$realOffset]['url'];
         unset($this->urls[$url]);
-        unset($this->links[$offset]);
+        unset($this->ids[$realOffset]);
+        unset($this->links[$realOffset]);
     }
 
     /**
@@ -158,7 +191,8 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      */
     public function offsetGet($offset)
     {
-        return isset($this->links[$offset]) ? $this->links[$offset] : null;
+        $realOffset = $this->getLinkOffset($offset);
+        return isset($this->links[$realOffset]) ? $this->links[$realOffset] : null;
     }
 
     /**
@@ -166,7 +200,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      */
     public function current()
     {
-        return $this->links[$this->keys[$this->position]];
+        return $this[$this->keys[$this->position]];
     }
 
     /**
@@ -192,8 +226,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      */
     public function rewind()
     {
-        $this->keys = array_keys($this->links);
-        rsort($this->keys);
+        $this->keys = array_keys($this->ids);
         $this->position = 0;
     }
 
@@ -219,6 +252,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         // Create a dummy database for example
         $this->links = array();
         $link = array(
+            'id' => 1,
             'title'=>' Shaarli: the personal, minimalist, super-fast, no-database delicious clone',
             'url'=>'https://github.com/shaarli/Shaarli/wiki',
             'description'=>'Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.
@@ -227,20 +261,21 @@ To learn how to use Shaarli, consult the link "Help/documentation" at the bottom
 
 You use the community supported version of the original Shaarli project, by Sebastien Sauvage.',
             'private'=>0,
-            'linkdate'=> date('Ymd_His'),
+            'created'=> new DateTime(),
             'tags'=>'opensource software'
         );
-        $this->links[$link['linkdate']] = $link;
+        $this->links[1] = $link;
 
         $link = array(
+            'id' => 0,
             'title'=>'My secret stuff... - Pastebin.com',
             'url'=>'http://sebsauvage.net/paste/?8434b27936c09649#bR7XsXhoTiLcqCpQbmOpBi3rq2zzQUC5hBI7ZT1O3x8=',
             'description'=>'Shhhh! I\'m a private link only YOU can see. You can delete me too.',
             'private'=>1,
-            'linkdate'=> date('Ymd_His', strtotime('-1 minute')),
+            'created'=> new DateTime('1 minute ago'),
             'tags'=>'secretstuff'
         );
-        $this->links[$link['linkdate']] = $link;
+        $this->links[0] = $link;
 
         // Write database to disk
         $this->write();
@@ -251,7 +286,6 @@ You use the community supported version of the original Shaarli project, by Seba
      */
     private function read()
     {
-
         // Public links are hidden and user not logged in => nothing to show
         if ($this->hidePublicLinks && !$this->loggedIn) {
             $this->links = array();
@@ -269,23 +303,13 @@ You use the community supported version of the original Shaarli project, by Seba
                        strlen(self::$phpPrefix), -strlen(self::$phpSuffix)))));
         }
 
-        // If user is not logged in, filter private links.
-        if (!$this->loggedIn) {
-            $toremove = array();
-            foreach ($this->links as $link) {
-                if ($link['private'] != 0) {
-                    $toremove[] = $link['linkdate'];
-                }
+        $toremove = array();
+        foreach ($this->links as $key => &$link) {
+            if (! $this->loggedIn && $link['private'] != 0) {
+                // Transition for not upgraded databases.
+                $toremove[] = $key;
+                continue;
             }
-            foreach ($toremove as $linkdate) {
-                unset($this->links[$linkdate]);
-            }
-        }
-
-        $this->urls = array();
-        foreach ($this->links as &$link) {
-            // Keep the list of the mapping URLs-->linkdate up-to-date.
-            $this->urls[$link['url']] = $link['linkdate'];
 
             // Sanitize data fields.
             sanitizeLink($link);
@@ -307,7 +331,23 @@ You use the community supported version of the original Shaarli project, by Seba
             else {
                 $link['real_url'] = $link['url'];
             }
+
+            // To be able to load links before running the update, and prepare the update
+            if (! isset($link['created'])) {
+                $link['id'] = $link['linkdate'];
+                $link['created'] = DateTime::createFromFormat('Ymd_His', $link['linkdate']);
+                if (! empty($link['updated'])) {
+                    $link['updated'] = DateTime::createFromFormat('Ymd_His', $link['updated']);
+                }
+            }
         }
+
+        // If user is not logged in, filter private links.
+        foreach ($toremove as $offset) {
+            unset($this->links[$offset]);
+        }
+
+        $this->reorder();
     }
 
     /**
@@ -430,7 +470,7 @@ You use the community supported version of the original Shaarli project, by Seba
             $request = '';
         }
 
-        $linkFilter = new LinkFilter($this->links);
+        $linkFilter = new LinkFilter($this);
         return $linkFilter->filter($type, $request, $casesensitive, $privateonly);
     }
 
@@ -467,12 +507,64 @@ You use the community supported version of the original Shaarli project, by Seba
     public function days()
     {
         $linkDays = array();
-        foreach (array_keys($this->links) as $day) {
-            $linkDays[substr($day, 0, 8)] = 0;
+        foreach ($this->links as $link) {
+            $linkDays[$link['created']->format('Ymd')] = 0;
         }
         $linkDays = array_keys($linkDays);
         sort($linkDays);
 
         return $linkDays;
+    }
+
+    /**
+     * Reorder links by creation date (newest first).
+     *
+     * Also update the urls and ids mapping arrays.
+     *
+     * @param string $order ASC|DESC
+     */
+    public function reorder($order = 'DESC')
+    {
+        $order = $order === 'ASC' ? -1 : 1;
+        // Reorder array by dates.
+        usort($this->links, function($a, $b) use ($order) {
+            return $a['created'] < $b['created'] ? 1 * $order : -1 * $order;
+        });
+
+        $this->urls = array();
+        $this->ids = array();
+        foreach ($this->links as $key => $link) {
+            $this->urls[$link['url']] = $key;
+            $this->ids[$link['id']] = $key;
+        }
+    }
+
+    /**
+     * Return the next key for link creation.
+     * E.g. If the last ID is 597, the next will be 598.
+     *
+     * @return int next ID.
+     */
+    public function getNextId()
+    {
+        if (!empty($this->ids)) {
+            return max(array_keys($this->ids)) + 1;
+        }
+        return 0;
+    }
+
+    /**
+     * Returns a link offset in links array from its unique ID.
+     *
+     * @param int $id Persistent ID of a link.
+     *
+     * @return int Real offset in local array, or null if doesn't exists.
+     */
+    protected function getLinkOffset($id)
+    {
+        if (isset($this->ids[$id])) {
+            return $this->ids[$id];
+        }
+        return null;
     }
 }
