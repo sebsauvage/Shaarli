@@ -191,7 +191,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
             'url'=>'http://dum.my',
             'description'=>'One more',
             'private'=>0,
-            'created'=> DateTime::createFromFormat('Ymd_His', '20150518_190000'),
+            'created'=> DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20150518_190000'),
             'tags'=>'unit test'
         );
         $testDB[$link['id']] = $link;
@@ -447,17 +447,17 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     public function testReorderLinksDesc()
     {
-        self::$publicLinkDB->reorder('ASC');
-        $linkIdToTest = 42;
-        foreach (self::$publicLinkDB as $key => $value) {
-            $this->assertEquals($linkIdToTest, $key);
-            break;
+        self::$privateLinkDB->reorder('ASC');
+        $linkIds = array(42, 4, 1, 0, 7, 6, 8, 41);
+        $cpt = 0;
+        foreach (self::$privateLinkDB as $key => $value) {
+            $this->assertEquals($linkIds[$cpt++], $key);
         }
-        self::$publicLinkDB->reorder('DESC');
-        $linkIdToTest = 41;
-        foreach (self::$publicLinkDB as $key => $value) {
-            $this->assertEquals($linkIdToTest, $key);
-            break;
+        self::$privateLinkDB->reorder('DESC');
+        $linkIds = array_reverse($linkIds);
+        $cpt = 0;
+        foreach (self::$privateLinkDB as $key => $value) {
+            $this->assertEquals($linkIds[$cpt++], $key);
         }
     }
 }

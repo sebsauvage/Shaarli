@@ -116,7 +116,7 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             array(
                 'id' => 0,
-                'created' => DateTime::createFromFormat('Ymd_His', '20160618_203944'),
+                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160618_203944'),
                 'title' => 'Hg Init a Mercurial tutorial by Joel Spolsky',
                 'url' => 'http://hginit.com/',
                 'description' => '',
@@ -145,7 +145,7 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             array(
                 'id' => 0,
-                'created' => DateTime::createFromFormat('Ymd_His', '20160225_235541'),
+                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160225_235541'),
                 'title' => 'Nested 1',
                 'url' => 'http://nest.ed/1',
                 'description' => '',
@@ -158,7 +158,7 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             array(
                 'id' => 1,
-                'created' => DateTime::createFromFormat('Ymd_His', '20160225_235542'),
+                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160225_235542'),
                 'title' => 'Nested 1-1',
                 'url' => 'http://nest.ed/1-1',
                 'description' => '',
@@ -171,7 +171,7 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             array(
                 'id' => 2,
-                'created' => DateTime::createFromFormat('Ymd_His', '20160225_235547'),
+                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160225_235547'),
                 'title' => 'Nested 1-2',
                 'url' => 'http://nest.ed/1-2',
                 'description' => '',
@@ -184,7 +184,7 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             array(
                 'id' => 3,
-                'created' => DateTime::createFromFormat('Ymd_His', '20160202_202222'),
+                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160202_202222'),
                 'title' => 'Nested 2-1',
                 'url' => 'http://nest.ed/2-1',
                 'description' => 'First link of the second section',
@@ -197,7 +197,7 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             array(
                 'id' => 4,
-                'created' => DateTime::createFromFormat('Ymd_His', '20160119_230227'),
+                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160119_230227'),
                 'title' => 'Nested 2-2',
                 'url' => 'http://nest.ed/2-2',
                 'description' => 'Second link of the second section',
@@ -210,7 +210,7 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             array(
                 'id' => 5,
-                'created' => DateTime::createFromFormat('Ymd_His', '20160202_202222'),
+                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160202_202222'),
                 'title' => 'Nested 3-1',
                 'url' => 'http://nest.ed/3-1',
                 'description' => '',
@@ -223,7 +223,7 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             array(
                 'id' => 6,
-                'created' => DateTime::createFromFormat('Ymd_His', '20160119_230227'),
+                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160119_230227'),
                 'title' => 'Nested 3-2',
                 'url' => 'http://nest.ed/3-2',
                 'description' => '',
@@ -236,7 +236,7 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             array(
                 'id' => 7,
-                'created' => DateTime::createFromFormat('Ymd_His', '20160229_111541'),
+                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160229_111541'),
                 'title' => 'Nested 2',
                 'url' => 'http://nest.ed/2',
                 'description' => '',
@@ -269,7 +269,7 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
             array(
                 'id' => 0,
                 // Old link - UTC+4 (note that TZ in the import file is ignored).
-                'created' => DateTime::createFromFormat('Ymd_His', '20001010_135536'),
+                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20001010_135536'),
                 'title' => 'Secret stuff',
                 'url' => 'https://private.tld',
                 'description' => "Super-secret stuff you're not supposed to know about",
@@ -282,7 +282,7 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             array(
                 'id' => 1,
-                'created' => DateTime::createFromFormat('Ymd_His', '20160225_235548'),
+                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160225_235548'),
                 'title' => 'Public stuff',
                 'url' => 'http://public.tld',
                 'description' => '',
@@ -313,7 +313,7 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
             array(
                 'id' => 0,
                 // Note that TZ in the import file is ignored.
-                'created' => DateTime::createFromFormat('Ymd_His', '20001010_135536'),
+                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20001010_135536'),
                 'title' => 'Secret stuff',
                 'url' => 'https://private.tld',
                 'description' => "Super-secret stuff you're not supposed to know about",
@@ -326,7 +326,7 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             array(
                 'id' => 1,
-                'created' => DateTime::createFromFormat('Ymd_His', '20160225_235548'),
+                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160225_235548'),
                 'title' => 'Public stuff',
                 'url' => 'http://public.tld',
                 'description' => '',

@@ -566,21 +566,17 @@ function showDailyRSS($conf) {
     /* Some Shaarlies may have very few links, so we need to look
        back in time until we have enough days ($nb_of_days).
     */
-    $ids = array();
-    foreach ($LINKSDB as $id => $value) {
-        $ids[] = $id;
-    }
     $nb_of_days = 7; // We take 7 days.
     $today = date('Ymd');
     $days = array();
 
-    foreach ($ids as $id) {
-        $day = $LINKSDB[$id]['created']->format('Ymd'); // Extract day (without time)
+    foreach ($LINKSDB as $link) {
+        $day = $link['created']->format('Ymd'); // Extract day (without time)
         if (strcmp($day, $today) < 0) {
             if (empty($days[$day])) {
                 $days[$day] = array();
             }
-            $days[$day][] = $id;
+            $days[$day][] = $link;
         }
 
         if (count($days) > $nb_of_days) {
@@ -600,23 +596,18 @@ function showDailyRSS($conf) {
     echo '<copyright>'. $pageaddr .'</copyright>'. PHP_EOL;
 
     // For each day.
-    foreach ($days as $day => $ids) {
+    foreach ($days as $day => $links) {
         $dayDate = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $day.'_000000');
         $absurl = escape(index_url($_SERVER).'?do=daily&day='.$day);  // Absolute URL of the corresponding "Daily" page.
 
-        // Build the HTML body of this RSS entry.
-        $links = array();
-
         // We pre-format some fields for proper output.
-        foreach ($ids as $id) {
-            $l = $LINKSDB[$id];
-            $l['formatedDescription'] = format_description($l['description'], $conf->get('redirector.url'));
-            $l['thumbnail'] = thumbnail($conf, $l['url']);
-            $l['timestamp'] = $l['created']->getTimestamp();
-            if (startsWith($l['url'], '?')) {
-                $l['url'] = index_url($_SERVER) . $l['url'];  // make permalink URL absolute
+        foreach ($links as &$link) {
+            $link['formatedDescription'] = format_description($link['description'], $conf->get('redirector.url'));
+            $link['thumbnail'] = thumbnail($conf, $link['url']);
+            $link['timestamp'] = $link['created']->getTimestamp();
+            if (startsWith($link['url'], '?')) {
+                $link['url'] = index_url($_SERVER) . $link['url'];  // make permalink URL absolute
             }
-            $links[$id] = $l;
         }
 
         // Then build the HTML for this day:
@@ -675,7 +666,6 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager)
 
         $taglist = explode(' ',$link['tags']);
         uasort($taglist, 'strcasecmp');
-        $linksToDisplay[$key]['shorturl'] = smallHash($link['created']->format('Ymd_His'));
         $linksToDisplay[$key]['taglist']=$taglist;
         $linksToDisplay[$key]['formatedDescription'] = format_description($link['description'], $conf->get('redirector.url'));
         $linksToDisplay[$key]['thumbnail'] = thumbnail($conf, $link['url']);
@@ -829,7 +819,7 @@ function renderPage($conf, $pluginManager)
         // Get only links which have a thumbnail.
         foreach($links as $link)
         {
-            $permalink='?'.escape(smallHash($link['created']->format('Ymd_His')));
+            $permalink='?'.$link['shorturl'];
             $thumb=lazyThumbnail($conf, $link['url'],$permalink);
             if ($thumb!='') // Only output links which have a thumbnail.
             {
@@ -1249,7 +1239,7 @@ function renderPage($conf, $pluginManager)
         }
 
         // lf_id should only be present if the link exists.
-        $id = !empty($_POST['lf_id']) ? (int) escape($_POST['lf_id']) : $LINKSDB->getNextId();
+        $id = !empty($_POST['lf_id']) ? intval(escape($_POST['lf_id'])) : $LINKSDB->getNextId();
         // Linkdate is kept here to:
         //   - use the same permalink for notes as they're displayed when creating them
         //   - let users hack creation date of their posts
@@ -1257,11 +1247,11 @@ function renderPage($conf, $pluginManager)
         $linkdate = escape($_POST['lf_linkdate']);
         if (isset($LINKSDB[$id])) {
             // Edit
-            $created = DateTime::createFromFormat('Ymd_His', $linkdate);
+            $created = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $linkdate);
             $updated = new DateTime();
         } else {
             // New link
-            $created = DateTime::createFromFormat('Ymd_His', $linkdate);
+            $created = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $linkdate);
             $updated = null;
         }
 
@@ -1288,7 +1278,8 @@ function renderPage($conf, $pluginManager)
             'private' => (isset($_POST['lf_private']) ? 1 : 0),
             'created' => $created,
             'updated' => $updated,
-            'tags' => str_replace(',', ' ', $tags)
+            'tags' => str_replace(',', ' ', $tags),
+            'shorturl' => link_small_hash($created, $id),
         );
 
         // If title is empty, use the URL as title.
@@ -1311,7 +1302,7 @@ function renderPage($conf, $pluginManager)
         $returnurl = !empty($_POST['returnurl']) ? $_POST['returnurl'] : '?';
         $location = generateLocation($returnurl, $_SERVER['HTTP_HOST'], array('addlink', 'post', 'edit_link'));
         // Scroll to the link which has been edited.
-        $location .= '#' . smallHash($created->format('Ymd_His'));
+        $location .= '#' . $link['shorturl'];
         // After saving the link, redirect to the page the user was on.
         header('Location: '. $location);
         exit;
@@ -1325,7 +1316,7 @@ function renderPage($conf, $pluginManager)
         $link = $LINKSDB[(int) escape($_POST['lf_id'])];
         $returnurl = ( isset($_POST['returnurl']) ? $_POST['returnurl'] : '?' );
         // Scroll to the link which has been edited.
-        $returnurl .= '#'.smallHash($link['created']->format('Ymd_His'));
+        $returnurl .= '#'. $link['shorturl'];
         $returnurl = generateLocation($returnurl, $_SERVER['HTTP_HOST'], array('addlink', 'post', 'edit_link'));
         header('Location: '.$returnurl); // After canceling, redirect to the page the user was on.
         exit;
@@ -1341,7 +1332,7 @@ function renderPage($conf, $pluginManager)
         // - we are protected from XSRF by the token.
 
         // FIXME! We keep `lf_linkdate` for consistency before a proper API. To be removed.
-        $id = isset($_POST['lf_id']) ? (int) escape($_POST['lf_id']) : (int) escape($_POST['lf_linkdate']);
+        $id = isset($_POST['lf_id']) ? intval(escape($_POST['lf_id'])) : intval(escape($_POST['lf_linkdate']));
 
         $pluginManager->executeHooks('delete_link', $LINKSDB[$id]);
 
@@ -1387,7 +1378,7 @@ function renderPage($conf, $pluginManager)
         $id = (int) escape($_GET['edit_link']);
         $link = $LINKSDB[$id];  // Read database
         if (!$link) { header('Location: ?'); exit; } // Link not found in database.
-        $link['linkdate'] = $link['created']->format('Ymd_His');
+        $link['linkdate'] = $link['created']->format(LinkDB::LINK_DATE_FORMAT);
         $data = array(
             'link' => $link,
             'link_is_new' => false,
@@ -1414,7 +1405,7 @@ function renderPage($conf, $pluginManager)
         if (! $link)
         {
             $link_is_new = true;
-            $linkdate = strval(date('Ymd_His'));
+            $linkdate = strval(date(LinkDB::LINK_DATE_FORMAT));
             // Get title if it was provided in URL (by the bookmarklet).
             $title = empty($_GET['title']) ? '' : escape($_GET['title']);
             // Get description if it was provided in URL (by the bookmarklet). [Bronco added that]
@@ -1438,7 +1429,7 @@ function renderPage($conf, $pluginManager)
             }
 
             if ($url == '') {
-                $url = '?' . smallHash($linkdate);
+                $url = '?' . smallHash($linkdate . $LINKSDB->getNextId());
                 $title = 'Note: ';
             }
             $url = escape($url);
@@ -1453,7 +1444,7 @@ function renderPage($conf, $pluginManager)
                 'private' => $private
             );
         } else {
-            $link['linkdate'] = $link['created']->format('Ymd_His');
+            $link['linkdate'] = $link['created']->format(LinkDB::LINK_DATE_FORMAT);
         }
 
         $data = array(
@@ -1668,7 +1659,6 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
         $taglist = explode(' ', $link['tags']);
         uasort($taglist, 'strcasecmp');
         $link['taglist'] = $taglist;
-        $link['shorturl'] = smallHash($link['created']->format('Ymd_His'));
         // Check for both signs of a note: starting with ? and 7 chars long.
         if ($link['url'][0] === '?' &&
             strlen($link['url']) === 7) {

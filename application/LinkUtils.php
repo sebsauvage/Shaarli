@@ -169,3 +169,16 @@ function space2nbsp($text)
 function format_description($description, $redirector = '', $indexUrl = '') {
     return nl2br(space2nbsp(hashtag_autolink(text2clickable($description, $redirector), $indexUrl)));
 }
+
+/**
+ * Generate a small hash for a link.
+ *
+ * @param DateTime $date Link creation date.
+ * @param int      $id   Link ID.
+ *
+ * @return string the small hash generated from link data.
+ */
+function link_small_hash($date, $id)
+{
+    return smallHash($date->format(LinkDB::LINK_DATE_FORMAT) . $id);
+}

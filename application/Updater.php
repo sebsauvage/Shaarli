@@ -223,6 +223,9 @@ class Updater
      * Since this update is very sensitve (changing the whole database), the datastore will be
      * automatically backed up into the file datastore.<datetime>.php.
      *
+     * LinkDB also adds the field 'shorturl' with the precedent format (linkdate smallhash),
+     * which will be saved by this method.
+     *
      * @return bool true if the update is successful, false otherwise.
      */
     public function updateMethodDatastoreIds()

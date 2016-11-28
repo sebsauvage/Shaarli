@@ -22,6 +22,7 @@
  *              Can be absolute or relative.
  *              Relative URLs are permalinks (e.g.'?m-ukcw')
  *  - real_url  Absolute processed URL.
+ *  - shorturl  Permalink smallhash
  *
  * Implements 3 interfaces:
  *  - ArrayAccess: behaves like an associative array;
@@ -264,6 +265,7 @@ You use the community supported version of the original Shaarli project, by Seba
             'created'=> new DateTime(),
             'tags'=>'opensource software'
         );
+        $link['shorturl'] = link_small_hash($link['created'], $link['id']);
         $this->links[1] = $link;
 
         $link = array(
@@ -273,8 +275,9 @@ You use the community supported version of the original Shaarli project, by Seba
             'description'=>'Shhhh! I\'m a private link only YOU can see. You can delete me too.',
             'private'=>1,
             'created'=> new DateTime('1 minute ago'),
-            'tags'=>'secretstuff'
+            'tags'=>'secretstuff',
         );
+        $link['shorturl'] = link_small_hash($link['created'], $link['id']);
         $this->links[0] = $link;
 
         // Write database to disk
@@ -335,10 +338,11 @@ You use the community supported version of the original Shaarli project, by Seba
             // To be able to load links before running the update, and prepare the update
             if (! isset($link['created'])) {
                 $link['id'] = $link['linkdate'];
-                $link['created'] = DateTime::createFromFormat('Ymd_His', $link['linkdate']);
+                $link['created'] = DateTime::createFromFormat(self::LINK_DATE_FORMAT, $link['linkdate']);
                 if (! empty($link['updated'])) {
-                    $link['updated'] = DateTime::createFromFormat('Ymd_His', $link['updated']);
+                    $link['updated'] = DateTime::createFromFormat(self::LINK_DATE_FORMAT, $link['updated']);
                 }
+                $link['shorturl'] = smallHash($link['linkdate']);
             }
         }
 
@@ -558,7 +562,7 @@ You use the community supported version of the original Shaarli project, by Seba
      *
      * @param int $id Persistent ID of a link.
      *
-     * @return int Real offset in local array, or null if doesn't exists.
+     * @return int Real offset in local array, or null if doesn't exist.
      */
     protected function getLinkOffset($id)
     {

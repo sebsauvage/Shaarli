@@ -174,6 +174,7 @@ class NetscapeBookmarkUtils
             $newLinkDate->setTimezone(new DateTimeZone(date_default_timezone_get()));
             $newLink['created'] = $newLinkDate;
             $newLink['id'] = $linkDb->getNextId();
+            $newLink['shorturl'] = link_small_hash($newLink['created'], $newLink['id']);
             $linkDb[$newLink['id']] = $newLink;
             $importCount++;
         }

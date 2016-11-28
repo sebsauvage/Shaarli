@@ -43,9 +43,7 @@ function hook_isso_render_linklist($data, $conf)
         $link = reset($data['links']);
         $issoHtml = file_get_contents(PluginManager::$PLUGINS_PATH . '/isso/isso.html');
 
-        // FIXME! KO thread unique si même date
-        $linkDate = $link['created']->format('Ymd_His');
-        $isso = sprintf($issoHtml, $issoUrl, $issoUrl, $linkDate, $linkDate);
+        $isso = sprintf($issoHtml, $issoUrl, $issoUrl, $link['id'], $link['id']);
         $data['plugin_end_zone'][] = $isso;
 
         // Hackish way to include this CSS file only when necessary.

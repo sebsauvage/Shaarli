@@ -21,7 +21,7 @@ class ReferenceLinkDB
             '?WDWyig',
             'Stallman has a beard and is part of the Free Software Foundation (or not). Seriously, read this. #hashtag',
             0,
-            DateTime::createFromFormat('Ymd_His', '20150310_114651'),
+            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20150310_114651'),
             'sTuff',
             null,
             'WDWyig'
@@ -33,7 +33,7 @@ class ReferenceLinkDB
             '?WDWyig',
             'Used to test links reordering.',
             0,
-            DateTime::createFromFormat('Ymd_His', '20100310_101010'),
+            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20100310_101010'),
             'ut'
         );
 
@@ -43,9 +43,9 @@ class ReferenceLinkDB
             'https://static.fsf.org/nosvn/faif-2.0.pdf',
             'Richard Stallman and the Free Software Revolution. Read this. #hashtag',
             0,
-            DateTime::createFromFormat('Ymd_His', '20150310_114633'),
+            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20150310_114633'),
             'free gnu software stallman -exclude stuff hashtag',
-            DateTime::createFromFormat('Ymd_His', '20160803_093033')
+            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160803_093033')
         );
 
         $this->addLink(
@@ -54,7 +54,7 @@ class ReferenceLinkDB
             'http://mediagoblin.org/',
             'A free software media publishing platform #hashtagOther',
             0,
-            DateTime::createFromFormat('Ymd_His', '20130614_184135'),
+            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20130614_184135'),
             'gnu media web .hidden hashtag',
             null,
             'IuWvgA'
@@ -66,7 +66,7 @@ class ReferenceLinkDB
             'https://dvcs.w3.org/hg/markup-validator/summary',
             'Mercurial repository for the W3C Validator #private',
             1,
-            DateTime::createFromFormat('Ymd_His', '20141125_084734'),
+            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20141125_084734'),
             'css html w3c web Mercurial'
         );
 
@@ -76,7 +76,7 @@ class ReferenceLinkDB
             'http://ars.userfriendly.org/cartoons/?id=20121206',
             'Naming conventions... #private',
             0,
-            DateTime::createFromFormat('Ymd_His', '20121206_142300'),
+            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_142300'),
             'dev cartoon web'
         );
 
@@ -86,7 +86,7 @@ class ReferenceLinkDB
             'http://ars.userfriendly.org/cartoons/?id=20010306',
             'Tropical printing',
             0,
-            DateTime::createFromFormat('Ymd_His', '20121206_172539'),
+            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_172539'),
             'samba cartoon web'
         );
 
@@ -96,7 +96,7 @@ class ReferenceLinkDB
             'http://geek-and-poke.com/',
             '',
             1,
-            DateTime::createFromFormat('Ymd_His', '20121206_182539'),
+            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_182539'),
             'dev cartoon tag1  tag2   tag3  tag4   '
         );
     }
@@ -115,7 +115,7 @@ class ReferenceLinkDB
             'tags' => $tags,
             'created' => $date,
             'updated' => $updated,
-            'shorturl' => $shorturl ? $shorturl : smallHash($date->format('Ymd_His') . $id),
+            'shorturl' => $shorturl ? $shorturl : smallHash($date->format(LinkDB::LINK_DATE_FORMAT) . $id),
         );
         $this->_links[$id] = $link;
 
