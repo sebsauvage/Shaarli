@@ -50,12 +50,15 @@
 				&nbsp;&nbsp;&nbsp;&nbsp;Then click "✚Add Note" button anytime to start composing a private Note (text post) to your Shaarli.
 			</span>
 		</a><br><br>
+
+		{if="$sslenabled"}
 		<a class="smallbutton" onclick="activateFirefoxSocial(this)">
 			<b>✚Add to Firefox social</b>
 		</a>
 		<a href="#">
 			<span>&#x21D0; Click on this button to add Shaarli to the "Share this page" button in Firefox.</span>
 		</a><br><br>
+		{/if}
 
 		{loop="$tools_plugin"}
             {$value}
@@ -64,6 +67,7 @@
 		<div class="clear"></div>
 
 		<script>
+			{if="$sslenabled"}
 			function activateFirefoxSocial(node) {
 				var loc = location.href;
 				var baseURL = loc.substring(0, loc.lastIndexOf("/"));
@@ -87,7 +91,7 @@
 				var activate = new CustomEvent("ActivateSocialFeature");
 				node.dispatchEvent(activate);
 			}
-
+			{/if}
 			function alertBookmarklet() {
 				alert('Drag this link to your bookmarks toolbar, or right-click it and choose Bookmark This Link...');
 				return false;
