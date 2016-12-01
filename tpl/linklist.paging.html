@@ -13,7 +13,14 @@
     </div>
 {/if}
     {loop="$action_plugin"}
-        {$value}
+      <div class="paging_privatelinks">
+        <a
+          {loop="$value.attr"}
+            {$key}="{$value}"
+          {/loop}>
+          {$value.html}
+        </a>
+      </div>
     {/loop}
     <div class="paging_linksperpage">
         Links per page: <a href="?linksperpage=20">20</a> <a href="?linksperpage=50">50</a> <a href="?linksperpage=100">100</a>
