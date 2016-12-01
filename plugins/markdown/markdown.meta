@@ -1,1 +1,4 @@
-description="Render shaare description with Markdown syntax."
+description="Render shaare description with Markdown syntax.<br><strong>Warning</strong>:
+If your shaared descriptions containing HTML tags before enabling the markdown plugin,
+enabling it might break your page.
+See the <a href=\"https://github.com/shaarli/Shaarli/tree/master/plugins/markdown#html-rendering\">README</a>."
