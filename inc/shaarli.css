@@ -37,6 +37,10 @@ em {
     font-style: italic;
 }
 
+strong {
+    font-weight: bold;
+}
+
 /* Buttons */
 .bigbutton {
     background-color: #c0c0c0;
@@ -1168,8 +1172,13 @@ ul.errors {
 }
 
 #pluginsadmin a {
+    color: #486D08;
+}
+
+#pluginsadmin a.arrow {
     color: black;
 }
+
 /* 404 page */
 .error-container {
 

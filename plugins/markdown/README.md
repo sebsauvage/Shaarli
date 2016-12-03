@@ -50,6 +50,23 @@ If the tag `nomarkdown` is set for a shaare, it won't be converted to Markdown s
  
 > Note: this is a special tag, so it won't be displayed in link list.
 
+### HTML rendering
+
+Markdown support HTML tags. For example:
+
+    > <strong>strong</strong><strike>strike</strike>
+   
+Will render as:
+
+> <strong>strong</strong><strike>strike</strike>
+
+If you want to shaare HTML code, it is necessary to use inline code or code blocks.
+  
+**If your shaared descriptions containing HTML tags before enabling the markdown plugin, 
+enabling it might break your page.**
+
+> Note: HTML tags such as script, iframe, etc. are disabled for security reasons.
+
 ### Known issue
 
 #### Redirector
