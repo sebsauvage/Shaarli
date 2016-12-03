@@ -13,20 +13,31 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Plugins:
     - Add an [Isso](https://posativ.org/isso/) plugin to enable user comments on permalinks
     - Allow defining init functions, e.g. for performing checks and error processing
+    - Add a Piwik plugin for analytics.
+    - Markdown: add warning notice regarding HTML rendering
+- Meta tag to *not* send the referrer to external resources.
 
 ### Changed
 - Cleanup `{loop}` declarations in templates
 - Release archives now have the same structure as GitHub-generated archives:
     - archives contain a `Shaarli` directory, itself containing sources + dependencies
     - the tarball is now gzipped
+- Plugins:
+    - Markdown: Parsedown library is now imported through Composer
 - Minor code cleanup: PHPDoc, spelling, unused variables, etc.
 - Docker: explicitly set the maximum file upload size to 10 MiB
+- Tools: hide Firefox Social button when not in HTTPS
+- Firefox Social: show Shaarli's title when shaaring using Firefox Social 
 
 ### Fixed
 - Fix the server `<self>` value in Atom/RSS feeds
 - Plugins:
     - Tools: only display parameter description when it exists
     - archive.org: do not propose archival of private notes
+    - Markdown: 
+        - render links properly in code blocks
+        - bug regarding the `nomarkdown` tag
+    - W3C compliance
 - Use absolute URL for hashtags in RSS and ATOM feeds
 - Docker: specify the location of the favicon
 
