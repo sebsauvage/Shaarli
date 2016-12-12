@@ -5,7 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [v0.8.1](https://github.com/shaarli/Shaarli/releases/tag/v0.8.1)
+## [v0.9.0](https://github.com/shaarli/Shaarli/releases/tag/v0.9.0) - UNPUBLISHED
+
+### Added
+
+### Changed
+
+### Fixed
+
+
+## [v0.8.1](https://github.com/shaarli/Shaarli/releases/tag/v0.8.1) - 2016-12-12
 
 > Note: this version will create an automatic backup of your database if anything goes wrong. 
 
