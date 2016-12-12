@@ -47,12 +47,14 @@ class PluginIssoTest extends PHPUnit_Framework_TestCase
         $conf->set('plugins.ISSO_SERVER', 'value');
 
         $str = 'http://randomstr.com/test';
+        $date = '20161118_100001';
         $data = array(
             'title' => $str,
             'links' => array(
                 array(
+                    'id' => 12,
                     'url' => $str,
-                    'linkdate' => 'abc',
+                    'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $date),
                 )
             )
         );
@@ -65,7 +67,14 @@ class PluginIssoTest extends PHPUnit_Framework_TestCase
 
         // plugin data
         $this->assertEquals(1, count($data['plugin_end_zone']));
-        $this->assertNotFalse(strpos($data['plugin_end_zone'][0], 'abc'));
+        $this->assertNotFalse(strpos(
+            $data['plugin_end_zone'][0],
+            'data-isso-id="'. $data['links'][0]['id'] .'"'
+        ));
+        $this->assertNotFalse(strpos(
+            $data['plugin_end_zone'][0],
+            'data-title="'. $data['links'][0]['id'] .'"'
+        ));
         $this->assertNotFalse(strpos($data['plugin_end_zone'][0], 'embed.min.js'));
     }
 
@@ -78,16 +87,20 @@ class PluginIssoTest extends PHPUnit_Framework_TestCase
         $conf->set('plugins.ISSO_SERVER', 'value');
 
         $str = 'http://randomstr.com/test';
+        $date1 = '20161118_100001';
+        $date2 = '20161118_100002';
         $data = array(
             'title' => $str,
             'links' => array(
                 array(
+                    'id' => 12,
                     'url' => $str,
-                    'linkdate' => 'abc',
+                    'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $date1),
                 ),
                 array(
+                    'id' => 13,
                     'url' => $str . '2',
-                    'linkdate' => 'abc2',
+                    'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $date2),
                 ),
             )
         );
@@ -106,12 +119,14 @@ class PluginIssoTest extends PHPUnit_Framework_TestCase
         $conf->set('plugins.ISSO_SERVER', 'value');
 
         $str = 'http://randomstr.com/test';
+        $date = '20161118_100001';
         $data = array(
             'title' => $str,
             'links' => array(
                 array(
+                    'id' => 12,
                     'url' => $str,
-                    'linkdate' => 'abc',
+                    'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $date),
                 )
             ),
             'search_term' => $str

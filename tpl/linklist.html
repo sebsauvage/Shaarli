@@ -81,11 +81,11 @@
                 {if="isLoggedIn()"}
                     <div class="linkeditbuttons">
                         <form method="GET" class="buttoneditform">
-                            <input type="hidden" name="edit_link" value="{$value.linkdate}">
+                            <input type="hidden" name="edit_link" value="{$value.id}">
                             <input type="image" alt="Edit" src="images/edit_icon.png#" title="Edit" class="button_edit">
                         </form><br>
                         <form method="POST" class="buttoneditform">
-                            <input type="hidden" name="lf_linkdate" value="{$value.linkdate}">
+                            <input type="hidden" name="lf_linkdate" value="{$value.id}">
                             <input type="hidden" name="token" value="{$token}">
                             <input type="hidden" name="delete_link">
                             <input type="image" alt="Delete" src="images/delete_icon.png#" title="Delete"
@@ -101,7 +101,7 @@
                 {if="!$hide_timestamps || isLoggedIn()"}
                     {$updated=$value.updated_timestamp ? 'Edited: '. strftime('%c', $value.updated_timestamp) : 'Permalink'}
                     <span class="linkdate" title="Permalink">
-                        <a href="?{$value.linkdate|smallHash}">
+                        <a href="?{$value.shorturl}">
                             <span title="{$updated}">
                                 {function="strftime('%c', $value.timestamp)"}
                                 {if="$value.updated_timestamp"}*{/if}
