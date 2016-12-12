@@ -35,7 +35,12 @@
     <li><a href="?do=picwall{$searchcrits}">Picture wall</a></li>
     <li><a href="?do=daily">Daily</a></li>
     {loop="$plugins_header.buttons_toolbar"}
-        {$value}
+        <li><a
+            {loop="$value.attr"}
+                {$key}="{$value}"
+            {/loop}>
+            {$value.html}
+        </a></li>
     {/loop}
 {/if}
   </ul>

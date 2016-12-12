@@ -50,15 +50,68 @@ function hook_demo_plugin_render_header($data)
 
         // If loggedin
         if ($data['_LOGGEDIN_'] === true) {
-            // Buttons in toolbar
-            $data['buttons_toolbar'][] = '<li><a href="#">DEMO_buttons_toolbar</a></li>';
+            /*
+             * Links in toolbar:
+             * A link is an array of its attributes (key="value"),
+             * and a mandatory `html` key, which contains its value.
+             */
+            $button = array(
+                'attr' => array (
+                    'href' => '#',
+                    'class' => 'mybutton',
+                    'title' => 'hover me',
+                ),
+                'html' => 'DEMO buttons toolbar',
+            );
+            $data['buttons_toolbar'][] = $button;
         }
 
-        // Fields in toolbar
-        $data['fields_toolbar'][] = 'DEMO_fields_toolbar';
+        /*
+         * Add additional input fields in the tools.
+         * A field is an array containing:
+         *  [
+         *      'form-attribute-1' => 'form attribute 1 value',
+         *      'form-attribute-2' => 'form attribute 2 value',
+         *      'inputs' => [
+         *          [
+         *              'input-1-attribute-1 => 'input 1 attribute 1 value',
+         *              'input-1-attribute-2 => 'input 1 attribute 2 value',
+         *          ],
+         *          [
+         *              'input-2-attribute-1 => 'input 2 attribute 1 value',
+         *          ],
+         *      ],
+         *  ]
+         * This example renders as:
+         *      <form form-attribute-1="form attribute 1 value" form-attribute-2="form attribute 2 value">
+         *          <input input-1-attribute-1="input 1 attribute 1 value" input-1-attribute-2="input 1 attribute 2 value">
+         *          <input input-2-attribute-1="input 2 attribute 1 value">
+         *      </form>
+         */
+        $form = array(
+            'attr' => array(
+                'method' => 'GET',
+                'action' => '?',
+                'class' => 'addform',
+            ),
+            'inputs' => array(
+                array(
+                    'type' => 'text',
+                    'name' => 'demo',
+                    'placeholder' => 'demo',
+                )
+            )
+        );
+        $data['fields_toolbar'][] = $form;
     }
     // Another button always displayed
-    $data['buttons_toolbar'][] = '<li><a href="#">DEMO</a></li>';
+    $button = array(
+        'attr' => array(
+            'href' => '#',
+        ),
+        'html' => 'Demo',
+    );
+    $data['buttons_toolbar'][] = $button;
 
     return $data;
 }
@@ -143,8 +196,19 @@ function hook_demo_plugin_render_footer($data)
  */
 function hook_demo_plugin_render_linklist($data)
 {
-    // action_plugin
-    $data['action_plugin'][] = '<div class="upper_plugin_demo"><a href="?up" title="Uppercase!">←</a></div>';
+    /*
+     * Action links (action_plugin):
+     * A link is an array of its attributes (key="value"),
+     * and a mandatory `html` key, which contains its value.
+     * It's also recommended to add key 'on' or 'off' for theme rendering.
+     */
+    $action = array(
+        'attr' => array(
+            'href' => '?up',
+            'title' => 'Uppercase!',
+        ),
+        'html' => '←',
+    );
 
     if (isset($_GET['up'])) {
         // Manipulate link data
@@ -152,7 +216,11 @@ function hook_demo_plugin_render_linklist($data)
             $value['description'] = strtoupper($value['description']);
             $value['title'] = strtoupper($value['title']);
         }
+        $action['on'] = true;
+    } else {
+        $action['off'] = true;
     }
+    $data['action_plugin'][] = $action;
 
     // link_plugin (for each link)
     foreach ($data['links'] as &$value) {
