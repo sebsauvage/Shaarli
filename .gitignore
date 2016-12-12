@@ -17,7 +17,7 @@ composer.lock
 vendor/
 
 # Release archives
-*.tar
+*.tar.gz
 *.zip
 
 # Development and test resources
