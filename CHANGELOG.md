@@ -5,7 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [v0.8.1](https://github.com/shaarli/Shaarli/releases/tag/v0.8.1) - UNPUBLISHED
+## [v0.8.1](https://github.com/shaarli/Shaarli/releases/tag/v0.8.1)
+
+> Note: this version will create an automatic backup of your database if anything goes wrong. 
+
 ### Added
 - Add CHANGELOG.md to track the whole project's history
 - Enable Composer cache for Travis builds
@@ -18,7 +21,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Meta tag to *not* send the referrer to external resources.
 
 ### Changed
-- Cleanup `{loop}` declarations in templates
+- Link ID complete refactoring:
+    - Links now have a numeric ID instead of dates
+    - Short URLs are now created once and can't change over time (previous URL are kept)
+- Templates: 
+    - Changed placeholder behaviour for: `buttons_toolbar`, `fields_toolbar` and `action_plugin`
+    - Cleanup `{loop}` declarations in templates
+    - Tools: hide Firefox Social button when not in HTTPS
+    - Firefox Social: show Shaarli's title when shaaring using Firefox Social
 - Release archives now have the same structure as GitHub-generated archives:
     - archives contain a `Shaarli` directory, itself containing sources + dependencies
     - the tarball is now gzipped
@@ -26,8 +36,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     - Markdown: Parsedown library is now imported through Composer
 - Minor code cleanup: PHPDoc, spelling, unused variables, etc.
 - Docker: explicitly set the maximum file upload size to 10 MiB
-- Tools: hide Firefox Social button when not in HTTPS
-- Firefox Social: show Shaarli's title when shaaring using Firefox Social 
 
 ### Fixed
 - Fix the server `<self>` value in Atom/RSS feeds
@@ -40,6 +48,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     - W3C compliance
 - Use absolute URL for hashtags in RSS and ATOM feeds
 - Docker: specify the location of the favicon
+- ATOM feed: remove new line between content tag and data
 
 ### Security
 - Allow whitelisting trusted IPs, else continue banning clients upon login failure
