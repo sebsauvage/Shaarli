@@ -20,10 +20,11 @@ _TODO: contact repos owners to see if they'd like to standardize their work with
 
   * [autosave](https://github.com/kalvn/shaarli-plugin-autosave) by [@kalvn](https://github.com/kalvn): Automatically saves data when editing a link to avoid any loss in case of crash or unexpected shutdown.[](.html)
   * [Code Coloration](https://github.com/ArthurHoaro/code-coloration) by [@ArthurHoaro](https://github.com/ArthurHoaro): client side code syntax highlighter.[](.html)
-  * [social](https://github.com/alexisju/social) by [@alexisju](https://github.com/alexisju): share links to social networks.[](.html)
+  * [Disqus](https://github.com/kalvn/shaarli-plugin-disqus) by [@kalvn](https://github.com/kalvn): Adds Disqus comment system to your Shaarli.[](.html)
   * [emojione](https://github.com/NerosTie/emojione) by [@NerosTie](https://github.com/NerosTie): Add colorful emojis to your Shaarli.[](.html)
   * [launch](https://github.com/ArthurHoaro/launch-plugin) - Launch Plugin is a plugin designed to enhance and customize Launch Theme for Shaarli.[](.html)
-  * [Disqus](https://github.com/kalvn/shaarli-plugin-disqus) by [@kalvn](https://github.com/kalvn): Adds Disqus comment system to your Shaarli.[](.html)
+  * [social](https://github.com/alexisju/social) by [@alexisju](https://github.com/alexisju): share links to social networks.[](.html)
+  * [shaarli2twitter](https://github.com/ArthurHoaro/shaarli2twitter) by [@ArthurHoaro](https://github.com/ArthurHoaro) - Automatically tweet your shared links from Shaarli[](.html)
 
 
 ### Themes
@@ -35,7 +36,7 @@ See [Theming](Theming.html) for the list of community-contributed themes, and an
 - [Shaarlo](https://github.com/DMeloni/shaarlo) - An aggregator for shaarlis with many features (a very popular running instance among french shaarliers: [shaarli.fr](http://shaarli.fr/))[](.html)
 - [Shaarlimages](https://github.com/BoboTiG/shaarlimages) - An image-oriented aggregator for Shaarlis[](.html)
 - [mknexen/shaarli-api](https://github.com/mknexen/shaarli-api) - A REST API for Shaarli[](.html)
-- [Self dead link](https://github.com/qwertygc/shaarli-dev-code/blob/master/self-dead-link.php) - Detect dead links on shaarli. This version use the database of shaarli. An [another version](https://github.com/qwertygc/shaarli-dev-code/blob/master/dead-link.php), can be used for others shaarli (but use most ressources).[](.html)
+- [Self dead link](https://github.com/qwertygc/shaarli-dev-code/blob/master/self-dead-link.php) - Detect dead links on shaarli. This version use the database of shaarli. [Another version](https://github.com/qwertygc/shaarli-dev-code/blob/master/dead-link.php), can be used for other shaarli instances (but is more resource consuming).[](.html)
 
 ### Mobile Apps
 - [Shaarli💫](http://app.mro.name/Shaarli💫) iOS share extension - see [#308](https://github.com/shaarli/Shaarli/issues/308#issuecomment-184592070) for some promo codes,[](.html)
@@ -45,6 +46,7 @@ See [Theming](Theming.html) for the list of community-contributed themes, and an
 ## Integration with other platforms 
 - [tt-rss-shaarli](https://github.com/jcsaaddupuy/tt-rss-shaarli) - [TinyTiny RSS](http://tt-rss.org/) plugin that adds support for sharing articles with Shaarli[](.html)
 - [octopress-shaarli](https://github.com/ahmet2mir/octopress-shaarli) - Octopress plugin to retrieve Shaarli links on the sidebar[](.html)
+- [Scuttle to Shaarli](https://github.com/q2apro/scuttle-to-shaarli) - Import bookmarks from Scuttle[](.html)
 
 ## Alternatives to Shaarli
 - [Shaarli alternatives](http://alternativeto.net/software/shaarli/) (alternativeto.net)[](.html)

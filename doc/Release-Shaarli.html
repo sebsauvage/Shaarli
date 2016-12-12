@@ -115,9 +115,35 @@ releases</a>.</p>
 <li><code>origin</code> pointing to your GitHub fork</li>
 <li><code>upstream</code> pointing to the main Shaarli repository</li>
 </ul></li>
-<li>maintainer permissions on the main Shaarli repository (to push the signed tag)</li>
+<li>maintainer permissions on the main Shaarli repository, to:
+<ul>
+<li>push the signed tag</li>
+<li>create a new release</li>
+</ul></li>
 <li><a href="https://getcomposer.org/">Composer</a> and <a href="http://pandoc.org/">Pandoc</a> need to be installed<a href=".html"></a></li>
 </ul>
+<h2 id="github-release-draft-and-changelog.md">GitHub release draft and <code>CHANGELOG.md</code></h2>
+<p>See <a href="http://keepachangelog.com/en/0.3.0/" class="uri">http://keepachangelog.com/en/0.3.0/</a> for changelog formatting.</p>
+<h3 id="github-release-draft">GitHub release draft</h3>
+<p>GitHub allows drafting the release note for the upcoming release, from the <a href="https://github.com/shaarli/Shaarli/releases">Releases</a> page. This way, the release note can be drafted while contributions are merged to <code>master</code>.<a href=".html"></a></p>
+<h3 id="changelog.md"><code>CHANGELOG.md</code></h3>
+<p>This file should contain the same information as the release note draft for the upcoming version.</p>
+<p>Update it to:</p>
+<ul>
+<li>add new entries (additions, fixes, etc.)</li>
+<li>mark the current version as released by setting its date and link</li>
+<li>add a new section for the future unreleased version</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="bu">cd</span> /path/to/shaarli
+
+$ <span class="fu">nano</span> CHANGELOG.md
+
+[<span class="ex">...</span>][](.html)
+<span class="co">## vA.B.C - UNRELEASED</span>
+<span class="ex">TBA</span>
+
+<span class="co">## [vX.Y.Z](https://github.com/shaarli/Shaarli/releases/tag/vX.Y.Z) - YYYY-MM-DD[](.html)</span>
+[<span class="ex">...</span>][](.html)</code></pre></div>
 <h2 id="increment-the-version-code-create-and-push-a-signed-tag">Increment the version code, create and push a signed tag</h2>
 <h3 id="bump-shaarlis-version">Bump Shaarli's version</h3>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="bu">cd</span> /path/to/shaarli
@@ -165,7 +191,16 @@ $ <span class="fu">git</span> show-ref tags/v0.5.0
 $ <span class="fu">git</span> verify-tag f7762cf803f03f5caf4b8078359a63783d0090c1
 <span class="ex">gpg</span>: Signature made Thu 30 Jul 2015 11:46:34 CEST using RSA key ID 4100DF6F
 <span class="ex">gpg</span>: Good signature from <span class="st">&quot;VirtualTam &lt;virtualtam@flibidi.net&gt;&quot;</span> [ultimate][](.html)</code></pre></div>
-<h2 id="generate-and-upload-all-in-one-release-archives">Generate and upload all-in-one release archives</h2>
+<h2 id="publish-the-github-release">Publish the GitHub release</h2>
+<h3 id="create-a-github-release-from-a-git-tag">Create a GitHub release from a Git tag</h3>
+<p>From the previously drafted release:</p>
+<ul>
+<li>edit the release notes (if needed)</li>
+<li>specify the appropriate Git tag</li>
+<li>publish the release</li>
+<li>profit!</li>
+</ul>
+<h3 id="generate-and-upload-all-in-one-release-archives">Generate and upload all-in-one release archives</h3>
 <p>Users with a shared hosting may have:</p>
 <ul>
 <li>no SSH access</li>
