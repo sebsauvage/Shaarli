@@ -10,8 +10,38 @@ This guide assumes that you have:
 - a local clone of your Shaarli fork, with the following remotes:
     - `origin` pointing to your GitHub fork
     - `upstream` pointing to the main Shaarli repository
-- maintainer permissions on the main Shaarli repository (to push the signed tag)
+- maintainer permissions on the main Shaarli repository, to:
+    - push the signed tag
+    - create a new release
 - [Composer](https://getcomposer.org/) and [Pandoc](http://pandoc.org/) need to be installed[](.html)
+
+## GitHub release draft and `CHANGELOG.md`
+See http://keepachangelog.com/en/0.3.0/ for changelog formatting.
+
+### GitHub release draft
+GitHub allows drafting the release note for the upcoming release, from the [Releases](https://github.com/shaarli/Shaarli/releases) page. This way, the release note can be drafted while contributions are merged to `master`.[](.html)
+
+### `CHANGELOG.md`
+This file should contain the same information as the release note draft for the upcoming version.
+
+Update it to:
+- add new entries (additions, fixes, etc.)
+- mark the current version as released by setting its date and link
+- add a new section for the future unreleased version
+
+```bash
+$ cd /path/to/shaarli
+
+$ nano CHANGELOG.md
+
+[...][](.html)
+## vA.B.C - UNRELEASED
+TBA
+
+## [vX.Y.Z](https://github.com/shaarli/Shaarli/releases/tag/vX.Y.Z) - YYYY-MM-DD[](.html)
+[...][](.html)
+```
+
 
 ## Increment the version code, create and push a signed tag
 ### Bump Shaarli's version
@@ -72,7 +102,15 @@ gpg: Signature made Thu 30 Jul 2015 11:46:34 CEST using RSA key ID 4100DF6F
 gpg: Good signature from "VirtualTam <virtualtam@flibidi.net>" [ultimate][](.html)
 ```
 
-## Generate and upload all-in-one release archives
+## Publish the GitHub release
+### Create a GitHub release from a Git tag
+From the previously drafted release:
+- edit the release notes (if needed)
+- specify the appropriate Git tag
+- publish the release
+- profit!
+
+### Generate and upload all-in-one release archives
 Users with a shared hosting may have:
 - no SSH access
 - no possibility to install PHP packages or server extensions
