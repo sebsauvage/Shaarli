@@ -1249,10 +1249,12 @@ function renderPage($conf, $pluginManager)
             // Edit
             $created = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $linkdate);
             $updated = new DateTime();
+            $shortUrl = $LINKSDB[$id]['shorturl'];
         } else {
             // New link
             $created = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $linkdate);
             $updated = null;
+            $shortUrl = link_small_hash($created, $id);
         }
 
         // Remove multiple spaces.
@@ -1279,7 +1281,7 @@ function renderPage($conf, $pluginManager)
             'created' => $created,
             'updated' => $updated,
             'tags' => str_replace(',', ' ', $tags),
-            'shorturl' => link_small_hash($created, $id),
+            'shorturl' => $shortUrl,
         );
 
         // If title is empty, use the URL as title.
