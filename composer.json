@@ -10,7 +10,7 @@
     },
     "keywords": ["bookmark", "link", "share", "web"],
     "require": {
-        "php": ">=5.3.4",
+        "php": ">=5.5",
         "shaarli/netscape-bookmark-parser": "1.*",
         "erusev/parsedown": "1.6"
     },
