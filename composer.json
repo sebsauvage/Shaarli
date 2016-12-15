@@ -12,12 +12,20 @@
     "require": {
         "php": ">=5.5",
         "shaarli/netscape-bookmark-parser": "1.*",
-        "erusev/parsedown": "1.6"
+        "erusev/parsedown": "1.6",
+        "slim/slim": "^3.0"
     },
     "require-dev": {
         "phpmd/phpmd" : "@stable",
         "phpunit/phpunit": "4.8.*",
         "sebastian/phpcpd": "*",
         "squizlabs/php_codesniffer": "2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Shaarli\\Api\\": "application/api/",
+            "Shaarli\\Api\\Controllers\\": "application/api/controllers",
+            "Shaarli\\Api\\Exceptions\\": "application/api/exceptions"
+        }
     }
 }
