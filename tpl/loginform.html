@@ -2,7 +2,7 @@
 <html>
 <head>{include="includes"}</head>
 <body
-{if="ban_canLogin()"}
+{if="ban_canLogin($conf)"}
   {if="empty($username)"}
     onload="document.loginform.login.focus();"
   {else}
@@ -13,7 +13,7 @@
   {include="page.header"}
 
   <div id="headerform">
-    {if="!ban_canLogin()"}
+    {if="!ban_canLogin($conf)"}
       You have been banned from login after too many failed attempts. Try later.
     {else}
       <form method="post" name="loginform">
