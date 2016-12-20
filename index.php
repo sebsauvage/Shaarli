@@ -175,7 +175,6 @@ define('STAY_SIGNED_IN_TOKEN', sha1($conf->get('credentials.hash') . $_SERVER['R
 if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
     autoLocale($_SERVER['HTTP_ACCEPT_LANGUAGE']);
 }
-header('Content-Type: text/html; charset=utf-8'); // We use UTF-8 for proper international characters handling.
 
 /**
  * Checking session state (i.e. is the user still logged in)
@@ -731,17 +730,10 @@ function showLinkList($PAGE, $LINKSDB, $conf, $pluginManager) {
  *
  * @param ConfigManager $conf          Configuration Manager instance.
  * @param PluginManager $pluginManager Plugin Manager instance,
+ * @param LinkDB        $LINKSDB
  */
-function renderPage($conf, $pluginManager)
+function renderPage($conf, $pluginManager, $LINKSDB)
 {
-    $LINKSDB = new LinkDB(
-        $conf->get('resource.datastore'),
-        isLoggedIn(),
-        $conf->get('privacy.hide_public_links'),
-        $conf->get('redirector.url'),
-        $conf->get('redirector.encode_url')
-    );
-
     $updater = new Updater(
         read_updates_file($conf->get('resource.updates')),
         $LINKSDB,
@@ -938,7 +930,7 @@ function renderPage($conf, $pluginManager)
         exit;
     }
 
-    // Display openseach plugin (XML)
+    // Display opensearch plugin (XML)
     if ($targetPage == Router::$PAGE_OPENSEARCH) {
         header('Content-Type: application/xml; charset=utf-8');
         $PAGE->assign('serverurl', index_url($_SERVER));
@@ -1142,6 +1134,8 @@ function renderPage($conf, $pluginManager)
             $conf->set('feed.rss_permalinks', !empty($_POST['enableRssPermalinks']));
             $conf->set('updates.check_updates', !empty($_POST['updateCheck']));
             $conf->set('privacy.hide_public_links', !empty($_POST['hidePublicLinks']));
+            $conf->set('api.enabled', !empty($_POST['apiEnabled']));
+            $conf->set('api.secret', escape($_POST['apiSecret']));
             try {
                 $conf->write(isLoggedIn());
             }
@@ -1170,6 +1164,8 @@ function renderPage($conf, $pluginManager)
             $PAGE->assign('enable_rss_permalinks', $conf->get('feed.rss_permalinks', false));
             $PAGE->assign('enable_update_check', $conf->get('updates.check_updates', true));
             $PAGE->assign('hide_public_links', $conf->get('privacy.hide_public_links', false));
+            $PAGE->assign('api_enabled', $conf->get('api.enabled', true));
+            $PAGE->assign('api_secret', $conf->get('api.secret'));
             $PAGE->renderPage('configure');
             exit;
         }
@@ -1954,6 +1950,14 @@ function install($conf)
             $conf->set('general.title', 'Shared links on '.escape(index_url($_SERVER)));
         }
         $conf->set('updates.check_updates', !empty($_POST['updateCheck']));
+        $conf->set('api.enabled', !empty($_POST['enableApi']));
+        $conf->set(
+            'api.secret',
+            generate_api_secret(
+                $this->conf->get('credentials.login'),
+                $this->conf->get('credentials.salt')
+            )
+        );
         try {
             // Everything is ok, let's create config file.
             $conf->write(isLoggedIn());
@@ -2216,4 +2220,32 @@ if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=
 if (!isset($_SESSION['LINKS_PER_PAGE'])) {
     $_SESSION['LINKS_PER_PAGE'] = $conf->get('general.links_per_page', 20);
 }
-renderPage($conf, $pluginManager);
+
+$linkDb = new LinkDB(
+    $conf->get('resource.datastore'),
+    isLoggedIn(),
+    $conf->get('privacy.hide_public_links'),
+    $conf->get('redirector.url'),
+    $conf->get('redirector.encode_url')
+);
+
+$container = new \Slim\Container();
+$container['conf'] = $conf;
+$container['plugins'] = $pluginManager;
+$app = new \Slim\App($container);
+
+// REST API routes
+$app->group('/api/v1', function() {
+    $this->get('/info', '\Api\Controllers\Info:getInfo');
+})->add('\Api\ApiMiddleware');
+
+$response = $app->run(true);
+// Hack to make Slim and Shaarli router work together:
+// If a Slim route isn't found, we call renderPage().
+if ($response->getStatusCode() == 404) {
+    // We use UTF-8 for proper international characters handling.
+    header('Content-Type: text/html; charset=utf-8');
+    renderPage($conf, $pluginManager, $linkDb);
+} else {
+    $app->respond($response);
+}
