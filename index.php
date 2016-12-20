@@ -1601,8 +1601,8 @@ function renderPage($conf, $pluginManager, $LINKSDB)
 function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
 {
     // Used in templates
-    $searchtags = !empty($_GET['searchtags']) ? escape($_GET['searchtags']) : '';
-    $searchterm = !empty($_GET['searchterm']) ? escape($_GET['searchterm']) : '';
+    $searchtags = !empty($_GET['searchtags']) ? escape(normalize_spaces($_GET['searchtags'])) : '';
+    $searchterm = !empty($_GET['searchterm']) ? escape(normalize_spaces($_GET['searchterm'])) : '';
 
     // Smallhash filter
     if (! empty($_SERVER['QUERY_STRING'])
@@ -1649,7 +1649,7 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
         } else {
             $link['updated_timestamp'] = '';
         }
-        $taglist = explode(' ', $link['tags']);
+        $taglist = preg_split('/\s+/', $link['tags'], -1, PREG_SPLIT_NO_EMPTY);
         uasort($taglist, 'strcasecmp');
         $link['taglist'] = $taglist;
         // Check for both signs of a note: starting with ? and 7 chars long.

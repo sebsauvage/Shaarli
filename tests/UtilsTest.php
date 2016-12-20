@@ -253,7 +253,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
             is_session_id_valid('c0ZqcWF3VFE2NmJBdm1HMVQ0ZHJ3UmZPbTFsNGhkNHI=')
         );
     }
-
+    
     /**
      * Test generateSecretApi.
      */
@@ -269,5 +269,17 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     {
         $this->assertFalse(generate_api_secret('', ''));
         $this->assertFalse(generate_api_secret(false, false));
+    }
+
+    /**
+     * Test normalize_spaces.
+     */
+    public function testNormalizeSpace()
+    {
+        $str = ' foo   bar is   important ';
+        $this->assertEquals('foo bar is important', normalize_spaces($str));
+        $this->assertEquals('foo', normalize_spaces('foo'));
+        $this->assertEquals('', normalize_spaces(''));
+        $this->assertEquals(null, normalize_spaces(null));
     }
 }
