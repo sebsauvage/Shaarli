@@ -63,11 +63,6 @@ class FeedBuilder
     protected $hideDates;
 
     /**
-     * @var string PubSub hub URL.
-     */
-    protected $pubsubhubUrl;
-
-    /**
      * @var string server locale.
      */
     protected $locale;
@@ -120,7 +115,6 @@ class FeedBuilder
         }
 
         $data['language'] = $this->getTypeLanguage();
-        $data['pubsubhub_url'] = $this->pubsubhubUrl;
         $data['last_update'] = $this->getLatestDateFormatted();
         $data['show_dates'] = !$this->hideDates || $this->isLoggedIn;
         // Remove leading slash from REQUEST_URI.
@@ -180,16 +174,6 @@ class FeedBuilder
         $link['taglist'] = $taglist;
 
         return $link;
-    }
-
-    /**
-     * Assign PubSub hub URL.
-     *
-     * @param string $pubsubhubUrl PubSub hub url.
-     */
-    public function setPubsubhubUrl($pubsubhubUrl)
-    {
-        $this->pubsubhubUrl = $pubsubhubUrl;
     }
 
     /**

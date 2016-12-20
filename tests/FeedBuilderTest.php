@@ -75,7 +75,6 @@ class FeedBuilderTest extends PHPUnit_Framework_TestCase
         $data = $feedBuilder->buildData();
         // Test headers (RSS)
         $this->assertEquals(self::$RSS_LANGUAGE, $data['language']);
-        $this->assertEmpty($data['pubsubhub_url']);
         $this->assertRegExp('/Wed, 03 Aug 2016 09:30:33 \+\d{4}/', $data['last_update']);
         $this->assertEquals(true, $data['show_dates']);
         $this->assertEquals('http://host.tld/index.php?do=feed', $data['self_link']);
@@ -208,19 +207,6 @@ class FeedBuilderTest extends PHPUnit_Framework_TestCase
         $data = $feedBuilder->buildData();
         $this->assertEquals(ReferenceLinkDB::$NB_LINKS_TOTAL, count($data['links']));
         $this->assertTrue($data['show_dates']);
-    }
-
-    /**
-     * Test buildData with hide dates settings.
-     */
-    public function testBuildDataPubsubhub()
-    {
-        $feedBuilder = new FeedBuilder(self::$linkDB, FeedBuilder::$FEED_ATOM, self::$serverInfo, null, false);
-        $feedBuilder->setLocale(self::$LOCALE);
-        $feedBuilder->setPubsubhubUrl('http://pubsubhub.io');
-        $data = $feedBuilder->buildData();
-        $this->assertEquals(ReferenceLinkDB::$NB_LINKS_TOTAL, count($data['links']));
-        $this->assertEquals('http://pubsubhub.io', $data['pubsubhub_url']);
     }
 
     /**
