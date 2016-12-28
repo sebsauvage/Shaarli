@@ -445,6 +445,12 @@ if (isset($_POST['login']))
 // ------------------------------------------------------------------------------------------
 // Misc utility functions:
 
+// Try to get just domain for @via
+function getJustDomain($url){
+    $parts = parse_url($url);
+    return trim($parts['host']);
+    }
+
 // Returns the server URL (including port and http/https), without path.
 // eg. "http://myserver.com:8080"
 // You can append $_SERVER['SCRIPT_NAME'] to get the current script URL.
@@ -807,7 +813,8 @@ class linkdb implements Iterator, Countable, ArrayAccess
             $found=   (strpos(strtolower($l['title']),$s)!==false)
                    || (strpos(strtolower($l['description']),$s)!==false)
                    || (strpos(strtolower($l['url']),$s)!==false)
-                   || (strpos(strtolower($l['tags']),$s)!==false);
+                   || (strpos(strtolower($l['tags']),$s)!==false)
+                   || (!empty($l['via']) && (strpos(strtolower($l['via']),$s)!==false));
             if ($found) $filtered[$l['linkdate']] = $l;
         }
         krsort($filtered);
@@ -913,7 +920,7 @@ function showRSS()
     else $linksToDisplay = $LINKSDB;
     $nblinksToDisplay = 50;  // Number of links to display.
     if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
-    { 
+    {
         $nblinksToDisplay = $_GET['nb']=='all' ? count($linksToDisplay) : max($_GET['nb']+0,1) ;
     }
 
@@ -952,7 +959,12 @@ function showRSS()
         // If user wants permalinks first, put the final link in description
         if ($usepermalinks===true) $descriptionlink = '(<a href="'.$absurl.'">Link</a>)';
         if (strlen($link['description'])>0) $descriptionlink = '<br>'.$descriptionlink;
-        echo '<description><![CDATA['.nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description'])))).$descriptionlink.']]></description>'."\n</item>\n";
+        if(!empty($link['via'])){
+          $via = '<br>Origine => <a href="'.htmlspecialchars($link['via']).'">'.htmlspecialchars(getJustDomain($link['via'])).'</a>';
+        } else {
+         $via = '';
+        }
+        echo '<description><![CDATA['.nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description'])))).$via.$descriptionlink.']]></description>'."\n</item>\n";
         $i++;
     }
     echo '</channel></rss><!-- Cached version of '.htmlspecialchars(pageUrl()).' -->';
@@ -988,7 +1000,7 @@ function showATOM()
     else $linksToDisplay = $LINKSDB;
     $nblinksToDisplay = 50;  // Number of links to display.
     if (!empty($_GET['nb']))  // In URL, you can specificy the number of links. Example: nb=200 or nb=all for all links.
-    { 
+    {
         $nblinksToDisplay = $_GET['nb']=='all' ? count($linksToDisplay) : max($_GET['nb']+0,1) ;
     }
 
@@ -1014,11 +1026,16 @@ function showATOM()
 
         // Add permalink in description
         $descriptionlink = htmlspecialchars('(<a href="'.$guid.'">Permalink</a>)');
+        if(isset($link['via']) && !empty($link['via'])){
+          $via = htmlspecialchars('</br> Origine => <a href="'.$link['via'].'">'.getJustDomain($link['via']).'</a>');
+        } else {
+          $via = '';
+        }
         // If user wants permalinks first, put the final link in description
         if ($usepermalinks===true) $descriptionlink = htmlspecialchars('(<a href="'.$absurl.'">Link</a>)');
         if (strlen($link['description'])>0) $descriptionlink = '&lt;br&gt;'.$descriptionlink;
 
-        $entries.='<content type="html">'.htmlspecialchars(nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))))).$descriptionlink."</content>\n";
+        $entries.='<content type="html">'.htmlspecialchars(nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))))).$descriptionlink.$via."</content>\n";
         if ($link['tags']!='') // Adding tags to each ATOM entry (as mentioned in ATOM specification)
         {
             foreach(explode(' ',$link['tags']) as $tag)
@@ -1485,7 +1502,7 @@ function renderPage()
         if (!startsWith($url,'http:') && !startsWith($url,'https:') && !startsWith($url,'ftp:') && !startsWith($url,'magnet:') && !startsWith($url,'?'))
             $url = 'http://'.$url;
         $link = array('title'=>trim($_POST['lf_title']),'url'=>$url,'description'=>trim($_POST['lf_description']),'private'=>(isset($_POST['lf_private']) ? 1 : 0),
-                      'linkdate'=>$linkdate,'tags'=>str_replace(',',' ',$tags));
+                      'linkdate'=>$linkdate,'tags'=>str_replace(',',' ',$tags), 'via'=>trim($_POST['lf_via']));
         if ($link['title']=='') $link['title']=$link['url']; // If title is empty, use the URL as title.
         $LINKSDB[$linkdate] = $link;
         $LINKSDB->savedb(); // save to disk
@@ -1563,7 +1580,8 @@ function renderPage()
             $title = (empty($_GET['title']) ? '' : $_GET['title'] ); // Get title if it was provided in URL (by the bookmarklet).
             $description = (empty($_GET['description']) ? '' : $_GET['description']); // Get description if it was provided in URL (by the bookmarklet). [Bronco added that]
             $tags = (empty($_GET['tags']) ? '' : $_GET['tags'] ); // Get tags if it was provided in URL
-            $private = (!empty($_GET['private']) && $_GET['private'] === "1" ? 1 : 0); // Get private if it was provided in URL 
+            $via = (empty($_GET['via']) ? '' : $_GET['via'] );
+            $private = (!empty($_GET['private']) && $_GET['private'] === "1" ? 1 : 0); // Get private if it was provided in URL
             if (($url!='') && parse_url($url,PHP_URL_SCHEME)=='') $url = 'http://'.$url;
             // If this is an HTTP link, we try go get the page to extact the title (otherwise we will to straight to the edit form.)
             if (empty($title) && parse_url($url,PHP_URL_SCHEME)=='http')
@@ -1574,7 +1592,7 @@ function renderPage()
  					 {
                         // Look for charset in html header.
  						preg_match('#<meta .*charset=.*>#Usi', $data, $meta);
- 
+
  						// If found, extract encoding.
  						if (!empty($meta[0]))
  						{
@@ -1584,7 +1602,7 @@ function renderPage()
 							$html_charset = (!empty($enc[1])) ? strtolower($enc[1]) : 'utf-8';
  						}
  						else { $html_charset = 'utf-8'; }
- 
+
  						// Extract title
  						$title = html_extract_title($data);
  						if (!empty($title))
@@ -1595,7 +1613,7 @@ function renderPage()
  					}
             }
             if ($url=='') $url='?'.smallHash($linkdate); // In case of empty URL, this is just a text (with a link that point to itself)
-            $link = array('linkdate'=>$linkdate,'title'=>$title,'url'=>$url,'description'=>$description,'tags'=>$tags,'private'=>$private);
+            $link = array('linkdate'=>$linkdate,'title'=>$title,'url'=>$url,'description'=>$description,'tags'=>$tags,'via' => $via,'private'=>$private);
         }
 
         $PAGE = new pageBuilder;
@@ -1845,6 +1863,9 @@ function buildLinkList($PAGE,$LINKSDB)
         $taglist = explode(' ',$link['tags']);
         uasort($taglist, 'strcasecmp');
         $link['taglist']=$taglist;
+        if(!empty($link['via'])){
+          $link['via']=htmlspecialchars($link['via']);
+        }
         $linkDisp[$keys[$i]] = $link;
         $i++;
     }
