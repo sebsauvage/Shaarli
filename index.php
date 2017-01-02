@@ -2231,8 +2231,8 @@ $app = new \Slim\App($container);
 
 // REST API routes
 $app->group('/api/v1', function() {
-    $this->get('/info', '\Api\Controllers\Info:getInfo');
-})->add('\Api\ApiMiddleware');
+    $this->get('/info', '\Shaarli\Api\Controllers\Info:getInfo');
+})->add('\Shaarli\Api\ApiMiddleware');
 
 $response = $app->run(true);
 // Hack to make Slim and Shaarli router work together:
