@@ -1949,8 +1949,8 @@ function install($conf)
         $conf->set(
             'api.secret',
             generate_api_secret(
-                $this->conf->get('credentials.login'),
-                $this->conf->get('credentials.salt')
+                $conf->get('credentials.login'),
+                $conf->get('credentials.salt')
             )
         );
         try {
