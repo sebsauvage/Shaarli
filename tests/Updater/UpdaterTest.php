@@ -422,4 +422,48 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
         $this->assertTrue($updater->updateMethodDatastoreIds());
         $this->assertEquals($checksum, hash_file('sha1', self::$testDatastore));
     }
+
+    /**
+     * Test defaultTheme update with default settings: nothing to do.
+     */
+    public function testDefaultThemeWithDefaultSettings()
+    {
+        $sandbox = 'sandbox/config';
+        copy(self::$configFile . '.json.php', $sandbox . '.json.php');
+        $this->conf = new ConfigManager($sandbox);
+        $updater = new Updater([], [], $this->conf, true);
+        $this->assertTrue($updater->updateMethodDefaultTheme());
+
+        $this->assertEquals('tpl/', $this->conf->get('resource.raintpl_tpl'));
+        $this->assertEquals('default', $this->conf->get('resource.theme'));
+        $this->conf = new ConfigManager($sandbox);
+        $this->assertEquals('tpl/', $this->conf->get('resource.raintpl_tpl'));
+        $this->assertEquals('default', $this->conf->get('resource.theme'));
+        unlink($sandbox . '.json.php');
+    }
+
+    /**
+     * Test defaultTheme update with a custom theme in a subfolder
+     */
+    public function testDefaultThemeWithCustomTheme()
+    {
+        $theme = 'iamanartist';
+        $sandbox = 'sandbox/config';
+        copy(self::$configFile . '.json.php', $sandbox . '.json.php');
+        $this->conf = new ConfigManager($sandbox);
+        mkdir('sandbox/'. $theme);
+        touch('sandbox/'. $theme .'/linklist.html');
+        $this->conf->set('resource.raintpl_tpl', 'sandbox/'. $theme .'/');
+        $updater = new Updater([], [], $this->conf, true);
+        $this->assertTrue($updater->updateMethodDefaultTheme());
+
+        $this->assertEquals('sandbox', $this->conf->get('resource.raintpl_tpl'));
+        $this->assertEquals($theme, $this->conf->get('resource.theme'));
+        $this->conf = new ConfigManager($sandbox);
+        $this->assertEquals('sandbox', $this->conf->get('resource.raintpl_tpl'));
+        $this->assertEquals($theme, $this->conf->get('resource.theme'));
+        unlink($sandbox . '.json.php');
+        unlink('sandbox/'. $theme .'/linklist.html');
+        rmdir('sandbox/'. $theme);
+    }
 }

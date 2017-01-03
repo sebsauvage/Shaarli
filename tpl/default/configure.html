@@ -25,11 +25,7 @@
         <td>
           <select name="theme" id="theme">
             {loop="$theme_available"}
-              <option value="{$value}"
-                {if="$value===$theme"}
-                  selected="selected"
-                {/if}
-              >
+              <option value="{$value}" {if="$value===$theme"}selected{/if}>
                 {$value|ucfirst}
               </option>
             {/loop}

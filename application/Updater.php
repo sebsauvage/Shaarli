@@ -279,6 +279,35 @@ class Updater
         $this->conf->write($this->isLoggedIn);
         return true;
     }
+
+    /**
+     * New setting: theme name. If the default theme is used, nothing to do.
+     *
+     * If the user uses a custom theme, raintpl_tpl dir is updated to the parent directory,
+     * and the current theme is set as default in the theme setting.
+     *
+     * @return bool true if the update is successful, false otherwise.
+     */
+    public function updateMethodDefaultTheme()
+    {
+        // raintpl_tpl isn't the root template directory anymore.
+        // We run the update only if this folder still contains the template files.
+        $tplDir = $this->conf->get('resource.raintpl_tpl');
+        $tplFile = $tplDir . '/linklist.html';
+        if (! file_exists($tplFile)) {
+            return true;
+        }
+
+        $parent = dirname($tplDir);
+        $this->conf->set('resource.raintpl_tpl', $parent);
+        $this->conf->set('resource.theme', trim(str_replace($parent, '', $tplDir), '/'));
+        $this->conf->write($this->isLoggedIn);
+
+        // Dependency injection gore
+        RainTPL::$tpl_dir = $tplDir;
+
+        return true;
+    }
 }
 
 /**
