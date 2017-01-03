@@ -270,13 +270,3 @@ function normalize_spaces($string)
 {
     return preg_replace('/\s{2,}/', ' ', trim($string));
 }
-
-function getAllTheme($raintpl_tpl)
-{
-    $allTheme = glob($raintpl_tpl.'/*', GLOB_ONLYDIR);
-    foreach ($allTheme as $value) {
-        $themes[] = str_replace($raintpl_tpl.'/', '', $value);
-    }
-
-    return $themes;
-}

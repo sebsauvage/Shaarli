@@ -79,6 +79,7 @@ require_once 'application/Utils.php';
 require_once 'application/PluginManager.php';
 require_once 'application/Router.php';
 require_once 'application/Updater.php';
+use \Shaarli\ThemeUtils;
 
 // Ensure the PHP version is supported
 try {
@@ -122,7 +123,6 @@ if (isset($_COOKIE['shaarli']) && !is_session_id_valid($_COOKIE['shaarli'])) {
 $conf = new ConfigManager();
 $conf->setEmpty('general.timezone', date_default_timezone_get());
 $conf->setEmpty('general.title', 'Shared links on '. escape(index_url($_SERVER)));
-$conf->setEmpty('resource.theme', 'default');
 RainTPL::$tpl_dir = $conf->get('resource.raintpl_tpl').'/'.$conf->get('resource.theme').'/'; // template directory
 RainTPL::$cache_dir = $conf->get('resource.raintpl_tmp'); // cache directory
 
@@ -1155,7 +1155,7 @@ function renderPage($conf, $pluginManager, $LINKSDB)
         {
             $PAGE->assign('title', $conf->get('general.title'));
             $PAGE->assign('theme', $conf->get('resource.theme'));
-            $PAGE->assign('theme_available', getAllTheme($conf->get('resource.raintpl_tpl')));
+            $PAGE->assign('theme_available', ThemeUtils::getThemes($conf->get('resource.raintpl_tpl')));
             $PAGE->assign('redirector', $conf->get('redirector.url'));
             list($timezone_form, $timezone_js) = generateTimeZoneForm($conf->get('general.timezone'));
             $PAGE->assign('timezone_form', $timezone_form);
