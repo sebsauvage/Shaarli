@@ -8,7 +8,13 @@ require_once 'application/Url.php';
 class CleanupUrlTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Clean empty UrlThanks for building nothing
+     * @var string reference URL
+     */
+    protected $ref = 'http://domain.tld:3000';
+
+
+    /**
+     * Clean empty URL
      */
     public function testCleanupUrlEmpty()
     {
@@ -16,59 +22,87 @@ class CleanupUrlTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Clean an already cleaned Url
+     * Clean an already cleaned URL
      */
     public function testCleanupUrlAlreadyClean()
     {
-        $ref = 'http://domain.tld:3000';
-        $this->assertEquals($ref, cleanup_url($ref));
-        $ref = $ref.'/path/to/dir/';
-        $this->assertEquals($ref, cleanup_url($ref));
+        $this->assertEquals($this->ref, cleanup_url($this->ref));
+        $this->ref2 = $this->ref.'/path/to/dir/';
+        $this->assertEquals($this->ref2, cleanup_url($this->ref2));
     }
 
     /**
-     * Clean Url needing cleaning
+     * Clean URL fragments
      */
-    public function testCleanupUrlNeedClean()
+    public function testCleanupUrlFragment()
     {
-        $ref = 'http://domain.tld:3000';
-        $this->assertEquals($ref, cleanup_url($ref.'#tk.rss_all'));
-        $this->assertEquals($ref, cleanup_url($ref.'#xtor=RSS-'));
-        $this->assertEquals($ref, cleanup_url($ref.'#xtor=RSS-U3ht0tkc4b'));
-        $this->assertEquals($ref, cleanup_url($ref.'?action_object_map=junk'));
-        $this->assertEquals($ref, cleanup_url($ref.'?action_ref_map=Cr4p!'));
-        $this->assertEquals($ref, cleanup_url($ref.'?action_type_map=g4R84g3'));
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'#tk.rss_all'));
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'#xtor=RSS-'));
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'#xtor=RSS-U3ht0tkc4b'));
+    }
 
-        $this->assertEquals($ref, cleanup_url($ref.'?fb_stuff=v41u3'));
-        $this->assertEquals($ref, cleanup_url($ref.'?fb=71m3w4573'));
+    /**
+     * Clean URL query - single annoying parameter
+     */
+    public function testCleanupUrlQuerySingle()
+    {
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'?action_object_map=junk'));
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'?action_ref_map=Cr4p!'));
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'?action_type_map=g4R84g3'));
 
-        $this->assertEquals($ref, cleanup_url($ref.'?utm_campaign=zomg'));
-        $this->assertEquals($ref, cleanup_url($ref.'?utm_medium=numnum'));
-        $this->assertEquals($ref, cleanup_url($ref.'?utm_source=c0d3'));
-        $this->assertEquals($ref, cleanup_url($ref.'?utm_term=1n4l'));
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'?fb_stuff=v41u3'));
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'?fb=71m3w4573'));
 
-        $this->assertEquals($ref, cleanup_url($ref.'?xtor=some-url'));
-        $this->assertEquals($ref, cleanup_url($ref.'?xtor=some-url&fb=som3th1ng'));
-        $this->assertEquals($ref, cleanup_url(
-            $ref.'?fb=stuff&utm_campaign=zomg&utm_medium=numnum&utm_source=c0d3'
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'?utm_campaign=zomg'));
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'?utm_medium=numnum'));
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'?utm_source=c0d3'));
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'?utm_term=1n4l'));
+
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'?xtor=some-url'));
+
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'?campaign_name=junk'));
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'?campaign_start=junk'));
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'?campaign_item_index=junk'));
+    }
+
+    /**
+     * Clean URL query - multiple annoying parameters
+     */
+    public function testCleanupUrlQueryMultiple()
+    {
+        $this->assertEquals($this->ref, cleanup_url($this->ref.'?xtor=some-url&fb=som3th1ng'));
+
+        $this->assertEquals($this->ref, cleanup_url(
+            $this->ref.'?fb=stuff&utm_campaign=zomg&utm_medium=numnum&utm_source=c0d3'
         ));
-        $this->assertEquals($ref, cleanup_url(
-            $ref.'?xtor=some-url&fb=som3th1ng#tk.rss_all'
+
+        $this->assertEquals($this->ref, cleanup_url(
+            $this->ref.'?campaign_start=zomg&campaign_name=numnum'
+        ));
+    }
+
+    /**
+     * Clean URL query - multiple annoying parameters and fragment
+     */
+    public function testCleanupUrlQueryFragment()
+    {
+        $this->assertEquals($this->ref, cleanup_url(
+            $this->ref.'?xtor=some-url&fb=som3th1ng#tk.rss_all'
         ));
 
         // ditch annoying query params and fragment, keep useful params
         $this->assertEquals(
-            $ref.'?my=stuff&is=kept',
+            $this->ref.'?my=stuff&is=kept',
             cleanup_url(
-                $ref.'?fb=zomg&my=stuff&utm_medium=numnum&is=kept#tk.rss_all'
+                $this->ref.'?fb=zomg&my=stuff&utm_medium=numnum&is=kept#tk.rss_all'
             )
         );
 
         // ditch annoying query params, keep useful params and fragment
         $this->assertEquals(
-            $ref.'?my=stuff&is=kept#again',
+            $this->ref.'?my=stuff&is=kept#again',
             cleanup_url(
-                $ref.'?fb=zomg&my=stuff&utm_medium=numnum&is=kept#again'
+                $this->ref.'?fb=zomg&my=stuff&utm_medium=numnum&is=kept#again'
             )
         );
     }
