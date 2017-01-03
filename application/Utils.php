@@ -257,3 +257,16 @@ function generate_api_secret($username, $salt)
 
     return str_shuffle(substr(hash_hmac('sha512', uniqid($salt), $username), 10, 12));
 }
+
+/**
+ * Trim string, replace sequences of whitespaces by a single space.
+ * PHP equivalent to `normalize-space` XSLT function.
+ *
+ * @param string $string Input string.
+ *
+ * @return mixed Normalized string.
+ */
+function normalize_spaces($string)
+{
+    return preg_replace('/\s{2,}/', ' ', trim($string));
+}
