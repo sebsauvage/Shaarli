@@ -24,6 +24,7 @@
     },
     "autoload": {
         "psr-4": {
+            "Shaarli\\": "application",
             "Shaarli\\Api\\": "application/api/",
             "Shaarli\\Api\\Controllers\\": "application/api/controllers",
             "Shaarli\\Api\\Exceptions\\": "application/api/exceptions"
