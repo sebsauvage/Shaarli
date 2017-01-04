@@ -31,6 +31,8 @@ class Router
 
     public static $PAGE_EDITLINK = 'edit_link';
 
+    public static $PAGE_DELETELINK = 'delete_link';
+
     public static $PAGE_EXPORT = 'export';
 
     public static $PAGE_IMPORT = 'import';
@@ -118,6 +120,10 @@ class Router
 
         if (isset($get['edit_link']) || isset($get['post'])) {
             return self::$PAGE_EDITLINK;
+        }
+
+        if (isset($get['delete_link'])) {
+            return self::$PAGE_DELETELINK;
         }
 
         if (startsWith($query, 'do='. self::$PAGE_EXPORT)) {
