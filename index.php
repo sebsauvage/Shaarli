@@ -2240,9 +2240,10 @@ $app = new \Slim\App($container);
 
 // REST API routes
 $app->group('/api/v1', function() {
-    $this->get('/info', '\Shaarli\Api\Controllers\Info:getInfo');
-    $this->get('/links', '\Shaarli\Api\Controllers\Links:getLinks');
-    $this->get('/links/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:getLink');
+    $this->get('/info', '\Shaarli\Api\Controllers\Info:getInfo')->setName('getInfo');
+    $this->get('/links', '\Shaarli\Api\Controllers\Links:getLinks')->setName('getLinks');
+    $this->get('/links/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:getLink')->setName('getLink');
+    $this->post('/links', '\Shaarli\Api\Controllers\Links:postLink')->setName('postLink');
 })->add('\Shaarli\Api\ApiMiddleware');
 
 $response = $app->run(true);

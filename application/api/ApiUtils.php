@@ -12,7 +12,7 @@ class ApiUtils
     /**
      * Validates a JWT token authenticity.
      *
-     * @param string $token  JWT token extracted from the headers.
+     * @param string $token JWT token extracted from the headers.
      * @param string $secret API secret set in the settings.
      *
      * @throws ApiAuthorizationException the token is not valid.
@@ -50,7 +50,7 @@ class ApiUtils
     /**
      * Format a Link for the REST API.
      *
-     * @param array  $link     Link data read from the datastore.
+     * @param array $link Link data read from the datastore.
      * @param string $indexUrl Shaarli's index URL (used for relative URL).
      *
      * @return array Link data formatted for the REST API.
@@ -76,5 +76,36 @@ class ApiUtils
             $out['updated'] = '';
         }
         return $out;
+    }
+
+    /**
+     * Convert a link given through a request, to a valid link for LinkDB.
+     *
+     * If no URL is provided, it will generate a local note URL.
+     * If no title is provided, it will use the URL as title.
+     *
+     * @param array  $input          Request Link.
+     * @param bool   $defaultPrivate Request Link.
+     *
+     * @return array Formatted link.
+     */
+    public static function buildLinkFromRequest($input, $defaultPrivate)
+    {
+        $input['url'] = ! empty($input['url']) ? cleanup_url($input['url']) : '';
+        if (isset($input['private'])) {
+            $private = filter_var($input['private'], FILTER_VALIDATE_BOOLEAN);
+        } else {
+            $private = $defaultPrivate;
+        }
+
+        $link = [
+            'title'         => ! empty($input['title']) ? $input['title'] : $input['url'],
+            'url'           => $input['url'],
+            'description'   => ! empty($input['description']) ? $input['description'] : '',
+            'tags'          => ! empty($input['tags']) ? implode(' ', $input['tags']) : '',
+            'private'       => $private,
+            'created'       => new \DateTime(),
+        ];
+        return $link;
     }
 }

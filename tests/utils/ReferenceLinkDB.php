@@ -56,7 +56,7 @@ class ReferenceLinkDB
             0,
             DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20130614_184135'),
             'gnu media web .hidden hashtag',
-            null,
+            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20130615_184230'),
             'IuWvgA'
         );
 
