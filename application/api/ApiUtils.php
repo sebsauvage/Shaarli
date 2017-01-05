@@ -1,13 +1,11 @@
 <?php
-
 namespace Shaarli\Api;
 
+use Shaarli\Base64Url;
 use Shaarli\Api\Exceptions\ApiAuthorizationException;
 
 /**
- * Class ApiUtils
- *
- * Utility functions for the API.
+ * REST API utilities
  */
 class ApiUtils
 {
@@ -26,17 +24,17 @@ class ApiUtils
             throw new ApiAuthorizationException('Malformed JWT token');
         }
 
-        $genSign = hash_hmac('sha512', $parts[0] .'.'. $parts[1], $secret);
+        $genSign = Base64Url::encode(hash_hmac('sha512', $parts[0] .'.'. $parts[1], $secret, true));
         if ($parts[2] != $genSign) {
             throw new ApiAuthorizationException('Invalid JWT signature');
         }
 
-        $header = json_decode(base64_decode($parts[0]));
+        $header = json_decode(Base64Url::decode($parts[0]));
         if ($header === null) {
             throw new ApiAuthorizationException('Invalid JWT header');
         }
 
-        $payload = json_decode(base64_decode($parts[1]));
+        $payload = json_decode(Base64Url::decode($parts[1]));
         if ($payload === null) {
             throw new ApiAuthorizationException('Invalid JWT payload');
         }
