@@ -803,6 +803,10 @@ div.dailyAbout img {
     height: 14px;
 }
 
+div.dailyEntryPermalink {
+    float: right;
+}
+
 div.dailyTitle {
     font-weight: bold;
     font-size: 44pt;
