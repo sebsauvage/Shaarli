@@ -103,7 +103,7 @@ strong {
 }
 
 #pageheader #logo {
-    background-image: url('../images/logo.png');
+    background-image: url('../../../images/logo.png');
     background-repeat: no-repeat;
     float: left;
     margin: 0 10px 0 10px;
@@ -801,6 +801,10 @@ div.dailyAbout img {
     margin-right: 4px;
     width: 14px;
     height: 14px;
+}
+
+div.dailyEntryPermalink {
+    float: right;
 }
 
 div.dailyTitle {

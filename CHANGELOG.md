@@ -7,13 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v0.9.0](https://github.com/shaarli/Shaarli/releases/tag/v0.9.0) - UNPUBLISHED
 
-**WARNING**: Shaarli now requires PHP 5.5+. 
+**WARNING**: Shaarli now requires PHP 5.5+.
 
 ### Added
 
 - REST API: see [Shaarli API documentation](http://shaarli.github.io/api-documentation/)
+- The theme can now be selected in the administration page.
 
 ### Changed
+
+- Default template files are moved to a subfolder (`default`).
 
 ### Fixed
 
