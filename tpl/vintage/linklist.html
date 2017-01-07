@@ -99,11 +99,11 @@
                 <br>
                 {if="$value.description"}<div class="linkdescription">{$value.description}</div>{/if}
                 {if="!$hide_timestamps || isLoggedIn()"}
-                    {$updated=$value.updated_timestamp ? 'Edited: '. strftime('%c', $value.updated_timestamp) : 'Permalink'}
+                    {$updated=$value.updated_timestamp ? 'Edited: '. format_date($value.updated) : 'Permalink'}
                     <span class="linkdate" title="Permalink">
                         <a href="?{$value.shorturl}">
                             <span title="{$updated}">
-                                {function="strftime('%c', $value.timestamp)"}
+                                {$value.created|format_date}
                                 {if="$value.updated_timestamp"}*{/if}
                             </span>
                             - permalink
