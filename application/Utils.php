@@ -216,20 +216,53 @@ function is_session_id_valid($sessionId)
 function autoLocale($headerLocale)
 {
     // Default if browser does not send HTTP_ACCEPT_LANGUAGE
-    $attempts = array('en_US');
+    $attempts = array('en_US', 'en_US.utf8', 'en_US.UTF-8');
     if (isset($headerLocale)) {
         // (It's a bit crude, but it works very well. Preferred language is always presented first.)
-        if (preg_match('/([a-z]{2})-?([a-z]{2})?/i', $headerLocale, $matches)) {
-            $loc = $matches[1] . (!empty($matches[2]) ? '_' . strtoupper($matches[2]) : '');
-            $attempts = array(
-                $loc.'.UTF-8', $loc, str_replace('_', '-', $loc).'.UTF-8', str_replace('_', '-', $loc),
-                $loc . '_' . strtoupper($loc).'.UTF-8', $loc . '_' . strtoupper($loc),
-                $loc . '_' . $loc.'.UTF-8', $loc . '_' . $loc, $loc . '-' . strtoupper($loc).'.UTF-8',
-                $loc . '-' . strtoupper($loc), $loc . '-' . $loc.'.UTF-8', $loc . '-' . $loc
-            );
+        if (preg_match('/([a-z]{2,3})[-_]?([a-z]{2})?/i', $headerLocale, $matches)) {
+            $first = [strtolower($matches[1]), strtoupper($matches[1])];
+            $separators = ['_', '-'];
+            $encodings = ['utf8', 'UTF-8'];
+            if (!empty($matches[2])) {
+                $second = [strtoupper($matches[2]), strtolower($matches[2])];
+                $attempts = arrays_combination([$first, $separators, $second, ['.'], $encodings]);
+            } else {
+                $attempts = arrays_combination([$first, $separators, $first, ['.'], $encodings]);
+            }
         }
     }
     setlocale(LC_ALL, $attempts);
+}
+
+/**
+ * Combine multiple arrays of string to get all possible strings.
+ * The order is important because this doesn't shuffle the entries.
+ *
+ * Example:
+ *   [['a'], ['b', 'c']]
+ * will generate:
+ *   - ab
+ *   - ac
+ *
+ * TODO PHP 5.6: use the `...` operator instead of an array of array.
+ *
+ * @param array $items array of array of string
+ *
+ * @return array Combined string from the input array.
+ */
+function arrays_combination($items)
+{
+    $out = [''];
+    foreach ($items as $item) {
+        $add = [];
+        foreach ($item as $element) {
+            foreach ($out as $key => $existingEntry) {
+                $add[] = $existingEntry . $element;
+            }
+        }
+        $out = $add;
+    }
+    return $out;
 }
 
 /**

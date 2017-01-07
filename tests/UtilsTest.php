@@ -282,4 +282,24 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('', normalize_spaces(''));
         $this->assertEquals(null, normalize_spaces(null));
     }
+
+    /**
+     * Test arrays_combine
+     */
+    public function testArraysCombination()
+    {
+        $arr = [['ab', 'cd'], ['ef', 'gh'], ['ij', 'kl'], ['m']];
+        $expected = [
+            'abefijm',
+            'cdefijm',
+            'abghijm',
+            'cdghijm',
+            'abefklm',
+            'cdefklm',
+            'abghklm',
+            'cdghklm',
+        ];
+        $this->assertEquals($expected, arrays_combination($arr));
+    }
+
 }
