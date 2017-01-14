@@ -1,0 +1,174 @@
+<div class="shaarli-menu pure-g" id="shaarli-menu">
+  <div class="pure-u-lg-0 pure-u-1">
+    <div class="pure-menu">
+      <a href="{$titleLink}" class="pure-menu-link">
+        <i class="fa fa-home"></i>
+        {$shaarlititle}
+      </a>
+      <a href="#" class="menu-toggle" id="menu-toggle"><s class="bar"></s><s class="bar"></s></a>
+    </div>
+  </div>
+  <div class="pure-u-1">
+    <div class="pure-menu menu-transform pure-menu-horizontal pure-g">
+      <ul class="pure-menu-list pure-u-lg-5-6 pure-u-1">
+        <li class="pure-menu-item pure-u-0 pure-u-lg-visible">
+          <a href="{$titleLink}" class="pure-menu-link">
+            <img src="img/icon.png" width="16" height="16" class="head-logo" alt="logo" />
+            {$shaarlititle}
+          </a>
+        </li>
+        {if="isLoggedIn() || $openshaarli"}
+          <li class="pure-menu-item">
+            <a href="?do=addlink" class="pure-menu-link">
+              <i class="fa fa-plus" ></i> {'Shaare'|t}
+            </a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="?do=tools" class="pure-menu-link">{'Tools'|t}</a>
+          </li>
+        {/if}
+        <li class="pure-menu-item">
+          <a href="?do=tagcloud" class="pure-menu-link">{'Tag cloud'|t}</a>
+        </li>
+        <li class="pure-menu-item">
+          <a href="?do=picwall{$searchcrits}" class="pure-menu-link">{'Picture wall'|t}</a>
+        </li>
+        <li class="pure-menu-item">
+          <a href="?do=daily" class="pure-menu-link">{'Daily'|t}</a>
+        </li>
+        {loop="$plugins_header.buttons_toolbar"}
+          <li class="pure-menu-item">
+            <a
+              {$value.attr.class=isset($value.class) ? $value.attr.class . ' pure-menu-link' : 'pure-menu-link'}
+              {loop="$value.attr"}
+                {$key}="{$value}"
+              {/loop}>
+              {$value.html}
+            </a>
+          </li>
+        {/loop}
+        <li class="pure-menu-item pure-u-lg-0">
+          <a href="?do=atom{$searchcrits}" class="pure-menu-link">{'RSS Feed'|t}</a>
+        </li>
+        {if="isLoggedIn()"}
+          <li class="pure-menu-item pure-u-lg-0">
+            <a href="?do=logout" class="pure-menu-link">{'Logout'|t}</a>
+          </li>
+        {else}
+          <li class="pure-menu-item pure-u-lg-0">
+            <a href="?do=login" class="pure-menu-link">{'Login'|t}</a>
+          </li>
+        {/if}
+      </ul>
+      <div class="header-buttons pure-u-lg-1-6 pure-u-0 pure-u-lg-visible">
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item">
+            <a href="#" class="pure-menu-link subheader-opener"
+               data-open-id="search"
+               id="search-button" title="{'Search'|t}">
+              <i class="fa fa-search"></i>
+            </a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="?do=atom{$searchcrits}" class="pure-menu-link" title="{'RSS Feed'|t}">
+              <i class="fa fa-rss"></i>
+            </a>
+          </li>
+          {if="!isLoggedIn()"}
+          <li class="pure-menu-item">
+            <a href="?do=login" class="pure-menu-link subheader-opener"
+               data-open-id="header-login-form"
+               id="login-button" title="{'Login'|t}">
+              <i class="fa fa-user"></i>
+            </a>
+          </li>
+          {else}
+          <li class="pure-menu-item">
+            <a href="?do=logout" class="pure-menu-link" title="{'Logout'|t}">
+              <i class="fa fa-sign-out"></i>
+            </a>
+          </li>
+          {/if}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="content">
+  <div id="search" class="subheader-form">
+    <div class="pure-g">
+      <div class="pure-u-1 pure-u-lg-1-2">
+        <form method="GET" class="searchform" name="searchform">
+          <input type="text" tabindex="1" id="searchform_value" name="searchterm" placeholder="{'Search text'|t}"
+                 {if="!empty($search_term)"}
+                 value="{$search_term}"
+                 {/if}
+          >
+          <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+        </form>
+      </div>
+      <div class="pure-u-1 pure-u-lg-1-2">
+        <form method="GET" class="tagfilter" name="tagfilter">
+          <input type="text" tabindex="2" name="searchtags" id="tagfilter_value" placeholder="{'Filter by tag'|t}"
+                 {if="!empty($search_tags)"}
+                 value="{$search_tags}"
+                 {/if}
+          autocomplete="off" data-multiple data-minChars="1"
+          data-list="{loop="$tags"}{$key}, {/loop}"
+          >
+          <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {if="!isLoggedIn()"}
+    <form method="post" name="loginform">
+      <div class="subheader-form" id="header-login-form">
+        <input type="text" name="login" placeholder="{'Username'|t}" tabindex="3">
+        <input type="password" name="password" placeholder="{'Password'|t}" tabindex="5">
+        <div class="remember-me">
+          <input type="checkbox" name="longlastingsession" id="longlastingsession" tabindex="6" checked>
+          <label for="longlastingsession">{'Remember me'|t}</label>
+        </div>
+        <input type="hidden" name="token" value="{$token}">
+        <input type="hidden" name="returnurl">
+        <input type="submit" value="Login" tabindex="7">
+      </div>
+    </form>
+  {/if}
+{if="!empty($newVersion) || !empty($versionError)"}
+  <div class="pure-g new-version-message pure-alert pure-alert-warning pure-alert-closable">
+    <div class="pure-u-2-24"></div>
+    {if="$newVersion"}
+      <div class="pure-u-20-24">
+        Shaarli {$newVersion}
+        <a href="https://github.com/shaarli/Shaarli/releases">{'is available'|t}</a>.
+      </div>
+    {/if}
+    {if="$versionError"}
+      <div class="pure-u-20-24">
+        {'Error'|t}: {$versionError}
+      </div>
+    {/if}
+    <div class="pure-u-2-24">
+      <i id="new-version-dismiss" class="fa fa-times pure-alert-close"></i>
+    </div>
+  </div>
+{/if}
+
+{if="!empty($plugin_errors) && isLoggedIn()"}
+  <div class="pure-g new-version-message pure-alert pure-alert-error pure-alert-closable">
+    <div class="pure-u-2-24"></div>
+    <div class="pure-u-20-24">
+        {loop="plugin_errors"}
+            <p>{$value}</p>
+        {/loop}
+    </div>
+    <div class="pure-u-2-24">
+      <i class="fa fa-times pure-alert-close"></i>
+    </div>
+  </div>
+{/if}
+
+  <div class="clear"></div>

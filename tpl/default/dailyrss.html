@@ -1,0 +1,16 @@
+<item>
+    <title>{$title} - {function="strftime('%A %e %B %Y', $daydate)"}</title>
+    <guid>{$absurl}</guid>
+    <link>{$absurl}</link>
+    <pubDate>{$rssdate}</pubDate>
+    <description><![CDATA[
+        {loop="links"}
+        	<h3><a href="{$value.url}">{$value.title}</a></h3>
+        	<small>{if="!$hide_timestamps"}{function="strftime('%c', $value.timestamp)"} - {/if}{if="$value.tags"}{$value.tags}{/if}<br>
+        	{$value.url}</small><br>
+        	{if="$value.thumbnail"}{$value.thumbnail}{/if}<br>
+        	{if="$value.description"}{$value.formatedDescription}{/if}
+        	<br><br><hr>
+        {/loop}
+    ]]></description>
+</item>

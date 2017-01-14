@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  {include="includes"}
+</head>
+<body>
+{include="page.header"}
+
+<form method="GET" action="#" name="exportform" id="exportform">
+  <div class="pure-g">
+    <div class="pure-u-lg-1-4 pure-u-1-24"></div>
+    <div class="pure-u-lg-1-2 pure-u-22-24 page-form page-form-complete">
+      <div>
+        <h2 class="window-title">{"Export Database"|t}</h2>
+      </div>
+      <input type="hidden" name="do" value="export">
+      <input type="hidden" name="token" value="{$token}">
+
+      <div class="pure-g">
+        <div class="pure-u-lg-1-2 pure-u-1">
+          <div class="form-label">
+            <label><span class="label-name">{'Selection'|t}</span></label>
+          </div>
+        </div>
+        <div class="pure-u-lg-1-2 pure-u-1">
+          <div class="radio-buttons">
+            <div>
+              <input type="radio" name="selection" value="all" checked="checked">
+              {'All'|t}
+            </div>
+            <div>
+              <input type="radio" name="selection" value="private">
+              {'Private'|t}
+            </div>
+            <div>
+              <input type="radio" name="selection" value="public">
+              {'Public'|t}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pure-g">
+        <div class="pure-u-lg-1-2 pure-u-7-8">
+          <div class="form-label">
+            <label for="prepend_note_url">
+              <span class="label-name">{'Prepend note permalinks with this Shaarli instance\'s URL'|t}</span><br>
+              <span class="label-desc">{'Useful to import bookmarks in a web browser'|t}</span>
+            </label>
+          </div>
+        </div>
+        <div class="pure-u-lg-1-2 pure-u-1-8">
+          <div class="form-input">
+            <input type="checkbox" name="prepend_note_url" id="prepend_note_url">
+          </div>
+        </div>
+      </div>
+
+      <div class="center">
+        <input type="submit" value="{'Export'|t}">
+      </div>
+    </div>
+  </div>
+</form>
+
+{include="page.footer"}
+</body>
+</html>

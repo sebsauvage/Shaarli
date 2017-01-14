@@ -1,0 +1,25 @@
+</div>
+
+<div class="pure-g">
+  <div class="pure-u-2-24"></div>
+  <div id="footer" class="pure-u-20-24">
+    <strong><a href="https://github.com/shaarli/Shaarli">Shaarli</a></strong> &middot;
+    The personal, minimalist, super-fast, database free, bookmarking service by the Shaarli community &middot;
+    <a href="doc/Home.html" rel="nofollow">Documentation</a>
+      {loop="$plugins_footer.text"}
+          {$value}
+      {/loop}
+  </div>
+  <div class="pure-u-2-24"></div>
+</div>
+{loop="$plugins_footer.endofpage"}
+    {$value}
+{/loop}
+
+{loop="$plugins_footer.js_files"}
+	<script src="{$value}#"></script>
+{/loop}
+
+<script src="js/shaarli.js"></script>
+<script src="inc/awesomplete.js#"></script>
+<script src="inc/awesomplete-multiple-tags.js#"></script>

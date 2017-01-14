@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  {include="includes"}
+</head>
+<body>
+{include="page.header"}
+
+<div class="pure-g">
+  <div class="pure-u-lg-1-6 pure-u-1-24"></div>
+  <div class="pure-u-lg-2-3 pure-u-22-24 page-form page-visitor">
+    {$countTags=count($tags)}
+    <h2 class="window-title">{'Tag cloud'|t} - {$countTags} {'tags'|t}</h2>
+
+    <div id="plugin_zone_start_tagcloud" class="plugin_zone">
+      {loop="$plugin_start_zone"}
+        {$value}
+      {/loop}
+    </div>
+
+    <div id="cloudtag">
+      {loop="tags"}
+        <a href="?searchtags={$key|urlencode}" style="font-size:{$value.size}em;">{$key}</a
+        ><span class="count">{$value.count}</span>
+        {loop="$value.tag_plugin"}
+          {$value}
+        {/loop}
+      {/loop}
+    </div>
+
+    <div id="plugin_zone_end_tagcloud" class="plugin_zone">
+      {loop="$plugin_end_zone"}
+        {$value}
+      {/loop}
+    </div>
+  </div>
+</div>
+
+{include="page.footer"}
+</body>
+</html>
+
