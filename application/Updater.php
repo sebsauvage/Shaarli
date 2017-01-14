@@ -308,6 +308,22 @@ class Updater
 
         return true;
     }
+
+    /**
+     * Move the file to inc/user.css to data/user.css.
+     *
+     * Note: Due to hardcoded paths, it's not unit testable. But one line of code should be fine.
+     *
+     * @return bool true if the update is successful, false otherwise.
+     */
+    public function updateMethodMoveUserCss()
+    {
+        if (! is_file('inc/user.css')) {
+            return true;
+        }
+
+        return rename('inc/user.css', 'data/user.css');
+    }
 }
 
 /**
