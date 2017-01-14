@@ -1,13 +1,16 @@
 var awp = Awesomplete.$;
-awesomplete = new Awesomplete(awp('input[data-multiple]'), {
-    filter: function(text, input) {
-        return Awesomplete.FILTER_CONTAINS(text, input.match(/[^ ]*$/)[0]);
-    },
-    replace: function(text) {
-        var before = this.input.value.match(/^.+ \s*|/)[0];
-        this.input.value = before + text + " ";
-    },
-    minChars: 1
+var autocompleteFields = document.querySelectorAll('input[data-multiple]');
+[].forEach.call(autocompleteFields, function(autocompleteField) {
+    awesomplete = new Awesomplete(awp(autocompleteField), {
+        filter: function (text, input) {
+            return Awesomplete.FILTER_CONTAINS(text, input.match(/[^ ]*$/)[0]);
+        },
+        replace: function (text) {
+            var before = this.input.value.match(/^.+ \s*|/)[0];
+            this.input.value = before + text + " ";
+        },
+        minChars: 1
+    })
 });
 
 /**
