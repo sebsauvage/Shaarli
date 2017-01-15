@@ -46,4 +46,35 @@ class ApiUtils
             throw new ApiAuthorizationException('Invalid JWT issued time');
         }
     }
+
+    /**
+     * Format a Link for the REST API.
+     *
+     * @param array  $link     Link data read from the datastore.
+     * @param string $indexUrl Shaarli's index URL (used for relative URL).
+     *
+     * @return array Link data formatted for the REST API.
+     */
+    public static function formatLink($link, $indexUrl)
+    {
+        $out['id'] = $link['id'];
+        // Not an internal link
+        if ($link['url'][0] != '?') {
+            $out['url'] = $link['url'];
+        } else {
+            $out['url'] = $indexUrl . $link['url'];
+        }
+        $out['shorturl'] = $link['shorturl'];
+        $out['title'] = $link['title'];
+        $out['description'] = $link['description'];
+        $out['tags'] = preg_split('/\s+/', $link['tags'], -1, PREG_SPLIT_NO_EMPTY);
+        $out['private'] = $link['private'] == true;
+        $out['created'] = $link['created']->format(\DateTime::ATOM);
+        if (! empty($link['updated'])) {
+            $out['updated'] = $link['updated']->format(\DateTime::ATOM);
+        } else {
+            $out['updated'] = '';
+        }
+        return $out;
+    }
 }

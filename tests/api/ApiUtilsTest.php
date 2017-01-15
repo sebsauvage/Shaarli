@@ -206,4 +206,69 @@ class ApiUtilsTest extends \PHPUnit_Framework_TestCase
         $token = $this->generateCustomJwtToken('{"JSON":1}', '{"iat":' . (time() + 60) . '}', 'secret');
         ApiUtils::validateJwtToken($token, 'secret');
     }
+
+    /**
+     * Test formatLink() with a link using all useful fields.
+     */
+    public function testFormatLinkComplete()
+    {
+        $indexUrl = 'https://domain.tld/sub/';
+        $link = [
+            'id' => 12,
+            'url' => 'http://lol.lol',
+            'shorturl' => 'abc',
+            'title' => 'Important Title',
+            'description' => 'It is very lol<tag>' . PHP_EOL . 'new line',
+            'tags' => 'blip   .blop ',
+            'private' => '1',
+            'created' => \DateTime::createFromFormat('Ymd_His', '20170107_160102'),
+            'updated' => \DateTime::createFromFormat('Ymd_His', '20170107_160612'),
+        ];
+
+        $expected = [
+            'id' => 12,
+            'url' => 'http://lol.lol',
+            'shorturl' => 'abc',
+            'title' => 'Important Title',
+            'description' => 'It is very lol<tag>' . PHP_EOL . 'new line',
+            'tags' => ['blip', '.blop'],
+            'private' => true,
+            'created' => '2017-01-07T16:01:02+00:00',
+            'updated' => '2017-01-07T16:06:12+00:00',
+        ];
+
+        $this->assertEquals($expected, ApiUtils::formatLink($link, $indexUrl));
+    }
+
+    /**
+     * Test formatLink() with only minimal fields filled, and internal link.
+     */
+    public function testFormatLinkMinimalNote()
+    {
+        $indexUrl = 'https://domain.tld/sub/';
+        $link = [
+            'id' => 12,
+            'url' => '?abc',
+            'shorturl' => 'abc',
+            'title' => 'Note',
+            'description' => '',
+            'tags' => '',
+            'private' => '',
+            'created' => \DateTime::createFromFormat('Ymd_His', '20170107_160102'),
+        ];
+
+        $expected = [
+            'id' => 12,
+            'url' => 'https://domain.tld/sub/?abc',
+            'shorturl' => 'abc',
+            'title' => 'Note',
+            'description' => '',
+            'tags' => [],
+            'private' => false,
+            'created' => '2017-01-07T16:01:02+00:00',
+            'updated' => '',
+        ];
+
+        $this->assertEquals($expected, ApiUtils::formatLink($link, $indexUrl));
+    }
 }
