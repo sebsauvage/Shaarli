@@ -40,19 +40,3 @@ function hook_addlink_toolbar_render_header($data)
 
     return $data;
 }
-
-/**
- * When link list is displayed, include markdown CSS.
- *
- * @param array $data - includes data.
- *
- * @return mixed - includes data with markdown CSS file added.
- */
-function hook_addlink_toolbar_render_includes($data)
-{
-    if ($data['_PAGE_'] == Router::$PAGE_LINKLIST && $data['_LOGGEDIN_'] === true) {
-        $data['css_files'][] = PluginManager::$PLUGINS_PATH . '/addlink_toolbar/addlink_toolbar.css';
-    }
-
-    return $data;
-}
