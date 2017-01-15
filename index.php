@@ -1207,15 +1207,15 @@ function renderPage($conf, $pluginManager, $LINKSDB)
             $needle = trim($_POST['fromtag']);
             // True for case-sensitive tag search.
             $linksToAlter = $LINKSDB->filterSearch(array('searchtags' => $needle), true);
-            foreach($linksToAlter as $key=>$value)
-            {
-                $tags = explode(' ',trim($value['tags']));
-                $tags[array_search($needle,$tags)] = trim($_POST['totag']); // Replace tags value.
-                $value['tags']=trim(implode(' ',$tags));
-                $LINKSDB[$key]=$value;
+            foreach($linksToAlter as $key=>$value) {
+                $tags = preg_split('/\s+/', trim($value['tags']));
+                // Replace tags value.
+                $tags[array_search($needle, $tags)] = trim($_POST['totag']);
+                $value['tags'] = implode(' ', array_unique($tags));
+                $LINKSDB[$key] = $value;
             }
             $LINKSDB->save($conf->get('resource.page_cache')); // Save to disk.
-            echo '<script>alert("Tag was renamed in '.count($linksToAlter).' links.");document.location=\'?searchtags='.urlencode($_POST['totag']).'\';</script>';
+            echo '<script>alert("Tag was renamed in '.count($linksToAlter).' links.");document.location=\'?searchtags='.urlencode(escape($_POST['totag'])).'\';</script>';
             exit;
         }
     }
