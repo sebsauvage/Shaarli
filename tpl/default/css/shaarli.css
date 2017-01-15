@@ -42,7 +42,7 @@ strong {
 }
 
 /* Buttons */
-.bigbutton {
+.bigbutton, #pageheader a.bigbutton  {
     background-color: #c0c0c0;
     background: -moz-linear-gradient(#c0c0c0, #ffffff) repeat scroll 0 0 transparent;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#c0c0c0), to(#ffffff));
@@ -54,11 +54,17 @@ strong {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     height: 24px;
-    margin-left: 5px;
     padding: 0 5px;
+    margin: 5px 5px 0 0;
     color: #606060;
     border-style: outset;
     border-width: 1px;
+    display: inline-block;
+}
+
+a.bigbutton, #pageheader a.bigbutton {
+    height: 22px;
+    line-height: 22px;
 }
 
 .smallbutton {
@@ -1009,7 +1015,7 @@ div.dailyNoEntry {
 	display: inline !important;
     }
 
-    .tagfilter input.bigbutton, .searchform input.bigbutton, .addform input.bigbutton {
+    .tagfilter input.bigbutton, .searchform input.bigbutton, .addform input.bigbutton, a.bigbutton {
 	width: 30%;
 	font-size: smaller;
     }
