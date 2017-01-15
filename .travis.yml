@@ -1,5 +1,11 @@
 sudo: false
 language: php
+addons:
+  apt:
+    packages:
+      - locales
+      - language-pack-de
+      - language-pack-fr
 cache:
   directories:
     - $HOME/.composer/cache
