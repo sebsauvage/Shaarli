@@ -1012,7 +1012,12 @@ function renderPage($conf, $pluginManager, $LINKSDB)
             $_SESSION['LINKS_PER_PAGE']=abs(intval($_GET['linksperpage']));
         }
 
-        header('Location: '. generateLocation($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST'], array('linksperpage')));
+        if (! empty($_SERVER['HTTP_REFERER'])) {
+            $location = generateLocation($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST'], array('linksperpage'));
+        } else {
+            $location = '?';
+        }
+        header('Location: '. $location);
         exit;
     }
 
@@ -1024,7 +1029,12 @@ function renderPage($conf, $pluginManager, $LINKSDB)
             unset($_SESSION['privateonly']); // See all links
         }
 
-        header('Location: '. generateLocation($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST'], array('privateonly')));
+        if (! empty($_SERVER['HTTP_REFERER'])) {
+            $location = generateLocation($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST'], array('privateonly'));
+        } else {
+            $location = '?';
+        }
+        header('Location: '. $location);
         exit;
     }
 
@@ -1361,7 +1371,7 @@ function renderPage($conf, $pluginManager, $LINKSDB)
         ) {
             if (isset($_POST['returnurl'])) {
                 $location = $_POST['returnurl']; // Handle redirects given by the form
-            } else {
+            } else if (isset($_SERVER['HTTP_REFERER'])) {
                 $location = generateLocation($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST'], array('delete_link'));
             }
         }
