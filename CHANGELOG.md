@@ -52,6 +52,11 @@ configuration to enable URL rewriting, see:
 - Fix permalink image alignment in daily page
 - Fix the delete button in `editlink`
 
+## [v0.8.2](https://github.com/shaarli/Shaarli/releases/tag/v0.8.2) - 2016-12-15
+
+### Fixed
+
+- Editing a link created before the new ID system would change its permalink.
 
 ## [v0.8.1](https://github.com/shaarli/Shaarli/releases/tag/v0.8.1) - 2016-12-12
 
