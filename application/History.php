@@ -70,6 +70,15 @@ class History
         if ($retentionTime !== null) {
             $this->retentionTime = $retentionTime;
         }
+    }
+
+    /**
+     * Initialize: read history file.
+     *
+     * Allow lazy loading (don't read the file if it isn't necessary).
+     */
+    protected function initialize()
+    {
         $this->check();
         $this->read();
     }
@@ -120,6 +129,10 @@ class History
      */
     protected function addEvent($status, $id = null)
     {
+        if ($this->history === null) {
+            $this->initialize();
+        }
+
         $item = [
             'event' => $status,
             'datetime' => (new DateTime())->format(DateTime::ATOM),
@@ -178,6 +191,10 @@ class History
      */
     public function getHistory()
     {
+        if ($this->history === null) {
+            $this->initialize();
+        }
+
         return $this->history;
     }
 }

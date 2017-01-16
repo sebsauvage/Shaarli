@@ -21,9 +21,19 @@ class HistoryTest extends PHPUnit_Framework_TestCase
     /**
      * Test that the history file is created if it doesn't exist.
      */
-    public function testConstructFileCreated()
+    public function testConstructLazyLoading()
     {
         new History(self::$historyFilePath);
+        $this->assertFileNotExists(self::$historyFilePath);
+    }
+
+    /**
+     * Test that the history file is created if it doesn't exist.
+     */
+    public function testAddEventCreateFile()
+    {
+        $history = new History(self::$historyFilePath);
+        $history->updateSettings();
         $this->assertFileExists(self::$historyFilePath);
     }
 
@@ -37,7 +47,8 @@ class HistoryTest extends PHPUnit_Framework_TestCase
     {
         touch(self::$historyFilePath);
         chmod(self::$historyFilePath, 0440);
-        new History(self::$historyFilePath);
+        $history = new History(self::$historyFilePath);
+        $history->updateSettings();
     }
 
     /**
@@ -49,8 +60,9 @@ class HistoryTest extends PHPUnit_Framework_TestCase
     public function testConstructNotParsable()
     {
         file_put_contents(self::$historyFilePath, 'not parsable');
+        $history = new History(self::$historyFilePath);
         // gzinflate generates a warning
-        @new History(self::$historyFilePath);
+        @$history->updateSettings();
     }
 
     /**
