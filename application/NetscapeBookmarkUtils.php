@@ -95,10 +95,11 @@ class NetscapeBookmarkUtils
      * @param array         $files     Server $_FILES parameters
      * @param LinkDB        $linkDb    Loaded LinkDB instance
      * @param ConfigManager $conf      instance
+     * @param History       $history   History instance
      *
      * @return string Summary of the bookmark import status
      */
-    public static function import($post, $files, $linkDb, $conf)
+    public static function import($post, $files, $linkDb, $conf, $history)
     {
         $filename = $files['filetoupload']['name'];
         $filesize = $files['filetoupload']['size'];
@@ -182,6 +183,7 @@ class NetscapeBookmarkUtils
                 $linkDb[$existingLink['id']] = $newLink;
                 $importCount++;
                 $overwriteCount++;
+                $history->updateLink($newLink);
                 continue;
             }
 
@@ -193,6 +195,7 @@ class NetscapeBookmarkUtils
             $newLink['shorturl'] = link_small_hash($newLink['created'], $newLink['id']);
             $linkDb[$newLink['id']] = $newLink;
             $importCount++;
+            $history->addLink($newLink);
         }
 
         $linkDb->save($conf->get('resource.page_cache'));
