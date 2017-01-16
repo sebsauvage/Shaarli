@@ -1349,31 +1349,15 @@ function renderPage($conf, $pluginManager, $LINKSDB)
 
         // If we are called from the bookmarklet, we must close the popup:
         if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) { echo '<script>self.close();</script>'; exit; }
-        // Pick where we're going to redirect
-        // =============================================================
-        // Basically, we can't redirect to where we were previously if it was a permalink
-        // or an edit_link, because it would 404.
-        // Cases:
-        //    - /             : nothing in $_GET, redirect to self
-        //    - /?page        : redirect to self
-        //    - /?searchterm  : redirect to self (there might be other links)
-        //    - /?searchtags  : redirect to self
-        //    - /permalink    : redirect to / (the link does not exist anymore)
-        //    - /?edit_link   : redirect to / (the link does not exist anymore)
-        // PHP treats the permalink as a $_GET variable, so we need to check if every condition for self
-        // redirect is not satisfied, and only then redirect to /
-        $location = "?";
-        // Self redirection
-        if (count($_GET) == 0
-            || isset($_GET['page'])
-            || isset($_GET['searchterm'])
-            || isset($_GET['searchtags'])
-        ) {
-            if (isset($_POST['returnurl'])) {
-                $location = $_POST['returnurl']; // Handle redirects given by the form
-            } else if (isset($_SERVER['HTTP_REFERER'])) {
-                $location = generateLocation($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST'], array('delete_link'));
-            }
+
+        $location = '?';
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            // Don't redirect to where we were previously if it was a permalink or an edit_link, because it would 404.
+            $location = generateLocation(
+                    $_SERVER['HTTP_REFERER'],
+                    $_SERVER['HTTP_HOST'],
+                    ['delete_link', 'edit_link', $link['shorturl']]
+            );
         }
 
         header('Location: ' . $location); // After deleting the link, redirect to appropriate location
