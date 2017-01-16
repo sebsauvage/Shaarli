@@ -41,7 +41,8 @@ class Links extends ApiController
                 'searchterm' => $request->getParam('searchterm', ''),
             ],
             false,
-            $private === 'true' || $private === '1'
+            // to updated in another PR depending on the API doc
+            ($private === 'true' || $private === '1') ? 'private' : 'all'
         );
 
         // Return links from the {offset}th link, starting from 0.
