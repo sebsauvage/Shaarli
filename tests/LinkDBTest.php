@@ -101,7 +101,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      * Attempt to instantiate a LinkDB whereas the datastore is not writable
      *
      * @expectedException              IOException
-     * @expectedExceptionMessageRegExp /Error accessing\nnull/
+     * @expectedExceptionMessageRegExp /Error accessing "null"/
      */
     public function testConstructDatastoreNotWriteable()
     {

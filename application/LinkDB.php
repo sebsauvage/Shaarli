@@ -50,12 +50,6 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     // Link date storage format
     const LINK_DATE_FORMAT = 'Ymd_His';
 
-    // Datastore PHP prefix
-    protected static $phpPrefix = '<?php /* ';
-
-    // Datastore PHP suffix
-    protected static $phpSuffix = ' */ ?>';
-
     // List of links (associative array)
     //  - key:   link date (e.g. "20110823_124546"),
     //  - value: associative array (keys: title, description...)
@@ -295,16 +289,7 @@ You use the community supported version of the original Shaarli project, by Seba
             return;
         }
 
-        // Read data
-        // Note that gzinflate is faster than gzuncompress.
-        // See: http://www.php.net/manual/en/function.gzdeflate.php#96439
-        $this->links = array();
-
-        if (file_exists($this->datastore)) {
-            $this->links = unserialize(gzinflate(base64_decode(
-                substr(file_get_contents($this->datastore),
-                       strlen(self::$phpPrefix), -strlen(self::$phpSuffix)))));
-        }
+        $this->links = FileUtils::readFlatDB($this->datastore, []);
 
         $toremove = array();
         foreach ($this->links as $key => &$link) {
@@ -361,19 +346,7 @@ You use the community supported version of the original Shaarli project, by Seba
      */
     private function write()
     {
-        if (is_file($this->datastore) && !is_writeable($this->datastore)) {
-            // The datastore exists but is not writeable
-            throw new IOException($this->datastore);
-        } else if (!is_file($this->datastore) && !is_writeable(dirname($this->datastore))) {
-            // The datastore does not exist and its parent directory is not writeable
-            throw new IOException(dirname($this->datastore));
-        }
-
-        file_put_contents(
-            $this->datastore,
-            self::$phpPrefix.base64_encode(gzdeflate(serialize($this->links))).self::$phpSuffix
-        );
-
+        FileUtils::writeFlatDB($this->datastore, $this->links);
     }
 
     /**
