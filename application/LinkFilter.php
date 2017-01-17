@@ -51,12 +51,16 @@ class LinkFilter
      * @param string $type          Type of filter (eg. tags, permalink, etc.).
      * @param mixed  $request       Filter content.
      * @param bool   $casesensitive Optional: Perform case sensitive filter if true.
-     * @param bool   $privateonly   Optional: Only returns private links if true.
+     * @param string $visibility    Optional: return only all/private/public links
      *
      * @return array filtered link list.
      */
-    public function filter($type, $request, $casesensitive = false, $privateonly = false)
+    public function filter($type, $request, $casesensitive = false, $visibility = 'all')
     {
+        if (! in_array($visibility, ['all', 'public', 'private'])) {
+            $visibility = 'all';
+        }
+
         switch($type) {
             case self::$FILTER_HASH:
                 return $this->filterSmallHash($request);
@@ -64,42 +68,44 @@ class LinkFilter
                 if (!empty($request)) {
                     $filtered = $this->links;
                     if (isset($request[0])) {
-                        $filtered = $this->filterTags($request[0], $casesensitive, $privateonly);
+                        $filtered = $this->filterTags($request[0], $casesensitive, $visibility);
                     }
                     if (isset($request[1])) {
                         $lf = new LinkFilter($filtered);
-                        $filtered = $lf->filterFulltext($request[1], $privateonly);
+                        $filtered = $lf->filterFulltext($request[1], $visibility);
                     }
                     return $filtered;
                 }
-                return $this->noFilter($privateonly);
+                return $this->noFilter($visibility);
             case self::$FILTER_TEXT:
-                return $this->filterFulltext($request, $privateonly);
+                return $this->filterFulltext($request, $visibility);
             case self::$FILTER_TAG:
-                return $this->filterTags($request, $casesensitive, $privateonly);
+                return $this->filterTags($request, $casesensitive, $visibility);
             case self::$FILTER_DAY:
                 return $this->filterDay($request);
             default:
-                return $this->noFilter($privateonly);
+                return $this->noFilter($visibility);
         }
     }
 
     /**
      * Unknown filter, but handle private only.
      *
-     * @param bool $privateonly returns private link only if true.
+     * @param string $visibility Optional: return only all/private/public links
      *
      * @return array filtered links.
      */
-    private function noFilter($privateonly = false)
+    private function noFilter($visibility = 'all')
     {
-        if (! $privateonly) {
+        if ($visibility === 'all') {
             return $this->links;
         }
 
         $out = array();
         foreach ($this->links as $key => $value) {
-            if ($value['private']) {
+            if ($value['private'] && $visibility === 'private') {
+                $out[$key] = $value;
+            } else if (! $value['private'] && $visibility === 'public') {
                 $out[$key] = $value;
             }
         }
@@ -151,14 +157,14 @@ class LinkFilter
      *  - see https://github.com/shaarli/Shaarli/issues/75 for examples
      *
      * @param string $searchterms search query.
-     * @param bool   $privateonly return only private links if true.
+     * @param string $visibility Optional: return only all/private/public links.
      *
      * @return array search results.
      */
-    private function filterFulltext($searchterms, $privateonly = false)
+    private function filterFulltext($searchterms, $visibility = 'all')
     {
         if (empty($searchterms)) {
-            return $this->links;
+            return $this->noFilter($visibility);
         }
 
         $filtered = array();
@@ -189,8 +195,12 @@ class LinkFilter
         foreach ($this->links as $id => $link) {
 
             // ignore non private links when 'privatonly' is on.
-            if (! $link['private'] && $privateonly === true) {
-                continue;
+            if ($visibility !== 'all') {
+                if (! $link['private'] && $visibility === 'private') {
+                    continue;
+                } else if ($link['private'] && $visibility === 'public') {
+                    continue;
+                }
             }
 
             // Concatenate link fields to search across fields.
@@ -235,16 +245,16 @@ class LinkFilter
      *
      * @param string $tags          list of tags separated by commas or blank spaces.
      * @param bool   $casesensitive ignore case if false.
-     * @param bool   $privateonly   returns private links only.
+     * @param string $visibility    Optional: return only all/private/public links.
      *
      * @return array filtered links.
      */
-    public function filterTags($tags, $casesensitive = false, $privateonly = false)
+    public function filterTags($tags, $casesensitive = false, $visibility = 'all')
     {
         // Implode if array for clean up.
         $tags = is_array($tags) ? trim(implode(' ', $tags)) : $tags;
         if (empty($tags)) {
-            return $this->links;
+            return $this->noFilter($visibility);
         }
 
         $searchtags = self::tagsStrToArray($tags, $casesensitive);
@@ -255,8 +265,12 @@ class LinkFilter
 
         foreach ($this->links as $key => $link) {
             // ignore non private links when 'privatonly' is on.
-            if (! $link['private'] && $privateonly === true) {
-                continue;
+            if ($visibility !== 'all') {
+                if (! $link['private'] && $visibility === 'private') {
+                    continue;
+                } else if ($link['private'] && $visibility === 'public') {
+                    continue;
+                }
             }
 
             $linktags = self::tagsStrToArray($link['tags'], $casesensitive);
@@ -341,7 +355,7 @@ class LinkFilter
      * @param bool   $casesensitive will convert everything to lowercase if false.
      *
      * @return array filtered tags string.
-    */
+     */
     public static function tagsStrToArray($tags, $casesensitive)
     {
         // We use UTF-8 conversion to handle various graphemes (i.e. cyrillic, or greek)

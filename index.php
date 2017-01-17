@@ -1614,8 +1614,8 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
         }
     } else {
         // Filter links according search parameters.
-        $privateonly = !empty($_SESSION['privateonly']);
-        $linksToDisplay = $LINKSDB->filterSearch($_GET, false, $privateonly);
+        $visibility = ! empty($_SESSION['privateonly']) ? 'private' : 'all';
+        $linksToDisplay = $LINKSDB->filterSearch($_GET, false, $visibility);
     }
 
     // ---- Handle paging.

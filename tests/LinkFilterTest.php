@@ -13,12 +13,17 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
     protected static $linkFilter;
 
     /**
+     * @var ReferenceLinkDB instance
+     */
+    protected static $refDB;
+
+    /**
      * Instanciate linkFilter with ReferenceLinkDB data.
      */
     public static function setUpBeforeClass()
     {
-        $refDB = new ReferenceLinkDB();
-        self::$linkFilter = new LinkFilter($refDB->getLinks());
+        self::$refDB = new ReferenceLinkDB();
+        self::$linkFilter = new LinkFilter(self::$refDB->getLinks());
     }
 
     /**
@@ -27,14 +32,30 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
     public function testFilter()
     {
         $this->assertEquals(
-            ReferenceLinkDB::$NB_LINKS_TOTAL,
+            self::$refDB->countLinks(),
             count(self::$linkFilter->filter('', ''))
+        );
+
+        $this->assertEquals(
+            self::$refDB->countLinks(),
+            count(self::$linkFilter->filter('', '', 'all'))
+        );
+
+        $this->assertEquals(
+            self::$refDB->countLinks(),
+            count(self::$linkFilter->filter('', '', 'randomstr'))
         );
 
         // Private only.
         $this->assertEquals(
-            2,
-            count(self::$linkFilter->filter('', '', false, true))
+            self::$refDB->countPrivateLinks(),
+            count(self::$linkFilter->filter('', '', false, 'private'))
+        );
+
+        // Public only.
+        $this->assertEquals(
+            self::$refDB->countPublicLinks(),
+            count(self::$linkFilter->filter('', '', false, 'public'))
         );
 
         $this->assertEquals(
@@ -58,10 +79,26 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
             count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'web', false))
         );
 
+        $this->assertEquals(
+            4,
+            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'web', false, 'all'))
+        );
+
+        $this->assertEquals(
+            4,
+            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'web', false, 'default-blabla'))
+        );
+
         // Private only.
         $this->assertEquals(
             1,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'web', false, true))
+            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'web', false, 'private'))
+        );
+
+        // Public only.
+        $this->assertEquals(
+            3,
+            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'web', false, 'public'))
         );
     }
 
@@ -253,14 +290,30 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
     public function testFilterFullTextTags()
     {
         $this->assertEquals(
-            2,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'gnu'))
+            6,
+            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'web'))
+        );
+
+        $this->assertEquals(
+            6,
+            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'web', 'all'))
+        );
+
+        $this->assertEquals(
+            6,
+            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'web', 'bla'))
         );
 
         // Private only.
         $this->assertEquals(
             1,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'web', false, true))
+            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'web', false, 'private'))
+        );
+
+        // Public only.
+        $this->assertEquals(
+            5,
+            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'web', false, 'public'))
         );
     }
 
@@ -409,7 +462,7 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
                 LinkFilter::$FILTER_TAG,
                 $hashtag,
                 false,
-                true
+                'private'
             ))
         );
     }
