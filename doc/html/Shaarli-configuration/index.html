@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Shaarli configuration - Shaarli Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../github-markdown.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Shaarli configuration";
+    var mkdocs_page_input_path = "Shaarli-configuration.md";
+    var mkdocs_page_url = "/Shaarli-configuration/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Shaarli Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Setup</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Download-and-Installation/">Download and Installation</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Upgrade-and-migration/">Upgrade and migration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Server-requirements/">Server requirements</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Server-configuration/">Server configuration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Server-security/">Server security</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Shaarli configuration</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#foreword">Foreword</a></li>
+    
+
+    <li class="toctree-l3"><a href="#file-and-directory-permissions">File and directory permissions</a></li>
+    
+
+    <li class="toctree-l3"><a href="#configuration">Configuration</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#credentials">Credentials</a></li>
+        
+            <li><a class="toctree-l4" href="#general">General</a></li>
+        
+            <li><a class="toctree-l4" href="#security">Security</a></li>
+        
+            <li><a class="toctree-l4" href="#resources">Resources</a></li>
+        
+            <li><a class="toctree-l4" href="#updates">Updates</a></li>
+        
+            <li><a class="toctree-l4" href="#privacy">Privacy</a></li>
+        
+            <li><a class="toctree-l4" href="#feed">Feed</a></li>
+        
+            <li><a class="toctree-l4" href="#thumbnail">Thumbnail</a></li>
+        
+            <li><a class="toctree-l4" href="#redirector">Redirector</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#configuration-file-example">Configuration file example</a></li>
+    
+
+    <li class="toctree-l3"><a href="#additional-configuration">Additional configuration</a></li>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Plugins/">Plugins</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Docker</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Docker-101/">Docker 101</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Shaarli-images/">Shaarli images</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Reverse-proxy-configuration/">Reverse proxy configuration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Docker-resources/">Docker resources</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Usage</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Features/">Features</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Bookmarklet/">Bookmarklet</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Browsing-and-searching/">Browsing and searching</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Firefox-share/">Firefox share</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../RSS-feeds/">RSS feeds</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../REST-API/">REST API</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">How To</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Backup,-restore,-import-and-export/">Backup, restore, import and export</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Copy-an-existing-installation-over-SSH-and-serve-it-locally/">Copy an existing installation over SSH and serve it locally</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Create-and-serve-multiple-Shaarlis-(farm)/">Create and serve multiple Shaarlis (farm)</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Download-CSS-styles-from-an-OPML-list/">Download CSS styles from an OPML list</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Datastore-hacks/">Datastore hacks</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../Troubleshooting/">Troubleshooting</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Development</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Development-guidelines/">Development guidelines</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Continuous-integration-tools/">Continuous integration tools</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../GnuPG-signature/">GnuPG signature</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Coding-guidelines/">Coding guidelines</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Directory-structure/">Directory structure</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../3rd-party-libraries/">3rd party libraries</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Plugin-System/">Plugin System</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Release-Shaarli/">Release Shaarli</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Versioning-and-Branches/">Versioning and Branches</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Security/">Security</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Static-analysis/">Static analysis</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Theming/">Theming</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Unit-tests/">Unit tests</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">About</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../FAQ/">FAQ</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Community-&-Related-software/">Community & Related software</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Shaarli Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Setup &raquo;</li>
+        
+      
+    
+    <li>Shaarli configuration</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/shaarli/Shaarli/edit/master/docs/Shaarli-configuration.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="foreword">Foreword</h2>
+<p><strong>Do not edit configuration options in index.php! Your changes would be lost.</strong> </p>
+<p>Once your Shaarli instance is installed, the file <code>data/config.json.php</code> is generated:
+<em> it contains all settings in JSON format, and can be edited to customize values
+</em> it defines which <a href="../Plugin-System">plugins</a> are enabled<a href="../.html"></a>
+<em> its values override those defined in <code>index.php</code>
+</em> it is wrap in a PHP comment to prevent anyone accessing it, regardless of server configuration</p>
+<h2 id="file-and-directory-permissions">File and directory permissions</h2>
+<p>The server process running Shaarli must have:
+- <code>read</code> access to the following resources:
+    - PHP scripts: <code>index.php</code>, <code>application/*.php</code>, <code>plugins/*.php</code>
+    - 3rd party PHP and Javascript libraries: <code>inc/*.php</code>, <code>inc/*.js</code>
+    - static assets:
+        - CSS stylesheets: <code>inc/*.css</code>
+        - <code>images/*</code>
+    - RainTPL templates: <code>tpl/*.html</code>
+- <code>read</code>, <code>write</code> and <code>execution</code> access to the following directories:
+    - <code>cache</code> - thumbnail cache
+    - <code>data</code> - link data store, configuration options
+    - <code>pagecache</code> - Atom/RSS feed cache
+    - <code>tmp</code> - RainTPL page cache</p>
+<p>On a Linux distribution:
+- the web server user will likely be <code>www</code> or <code>http</code> (for Apache2)
+- it will be a member of a group of the same name: <code>www:www</code>, <code>http:http</code>
+- to give it access to Shaarli, either:
+    - unzip Shaarli in the default web server location (usually <code>/var/www/</code>) and set the web server user as the owner
+    - put users in the same group as the web server, and set the appropriate access rights
+- if you have a domain / subdomain to serve Shaarli, <a href="../Server-configuration">configure the server</a> accordingly<a href="../.html"></a></p>
+<h2 id="configuration">Configuration</h2>
+<p>In <code>data/config.json.php</code>.</p>
+<p>See also <a href="../Plugin-System.html">Plugin System</a>.</p>
+<h3 id="credentials">Credentials</h3>
+<blockquote>
+<p>You shouldn't edit those.</p>
+</blockquote>
+<p><strong>login</strong>: Login username.<br />
+<strong>hash</strong>: Generated password hash.<br />
+<strong>salt</strong>: Password salt.</p>
+<h3 id="general">General</h3>
+<p><strong>title</strong>: Shaarli's instance title.<br />
+<strong>header_link</strong>: Link to the homepage.<br />
+<strong>links_per_page</strong>: Number of shaares displayed per page.<br />
+<strong>timezone</strong>: See <a href="http://php.net/manual/en/timezones.php">the list of supported timezones</a>.<br />
+<strong>enabled_plugins</strong>: List of enabled plugins.</p>
+<h3 id="security">Security</h3>
+<p><strong>session_protection_disabled</strong>: Disable session cookie hijacking protection (not recommended). 
+It might be useful if your IP adress often changes.<br />
+<strong>ban_after</strong>: Failed login attempts before being IP banned.<br />
+<strong>ban_duration</strong>: IP ban duration in seconds.<br />
+<strong>open_shaarli</strong>: Anyone can add a new link while logged out if enabled.<br />
+<strong>trusted_proxies</strong>: List of trusted IP which won't be banned after failed login attemps. Useful if Shaarli is behind a reverse proxy.<br />
+<strong>allowed_protocols</strong>: List of allowed protocols in shaare URLs or markdown-rendered descriptions. Useful if you want to store <code>javascript:</code> links (bookmarklets) in Shaarli (default: <code>["ftp", "ftps", "magnet"]</code>).</p>
+<h3 id="resources">Resources</h3>
+<p><strong>data_dir</strong>: Data directory.<br />
+<strong>datastore</strong>: Shaarli's links database file path.<br />
+<strong>history</strong>: Shaarli's operation history file path.
+<strong>updates</strong>: File path for the ran updates file.<br />
+<strong>log</strong>: Log file path.<br />
+<strong>update_check</strong>: Last update check file path.<br />
+<strong>raintpl_tpl</strong>: Templates directory.<br />
+<strong>raintpl_tmp</strong>: Template engine cache directory.<br />
+<strong>thumbnails_cache</strong>: Thumbnails cache directory.<br />
+<strong>page_cache</strong>: Shaarli's internal cache directory.<br />
+<strong>ban_file</strong>: Banned IP file path.</p>
+<h3 id="updates">Updates</h3>
+<p><strong>check_updates</strong>: Enable or disable update check to the git repository.<br />
+<strong>check_updates_branch</strong>: Git branch used to check updates (e.g. <code>stable</code> or <code>master</code>).<br />
+<strong>check_updates_interval</strong>: Look for new version every N seconds (default: every day).</p>
+<h3 id="privacy">Privacy</h3>
+<p><strong>default_private_links</strong>: Check the private checkbox by default for every new link.<br />
+<strong>hide_public_links</strong>: All links are hidden while logged out.<br />
+<strong>hide_timestamps</strong>: Timestamps are hidden.</p>
+<h3 id="feed">Feed</h3>
+<p><strong>rss_permalinks</strong>: Enable this to redirect RSS links to Shaarli's permalinks instead of shaared URL.<br />
+<strong>show_atom</strong>: Display ATOM feed button.</p>
+<h3 id="thumbnail">Thumbnail</h3>
+<p><strong>enable_thumbnails</strong>: Enable or disable thumbnail display.<br />
+<strong>enable_localcache</strong>: Enable or disable local cache.</p>
+<h3 id="redirector">Redirector</h3>
+<p><strong>url</strong>: Redirector URL, such as <code>anonym.to</code>.<br />
+<strong>encode_url</strong>: Enable this if the redirector needs encoded URL to work properly.</p>
+<h2 id="configuration-file-example">Configuration file example</h2>
+<pre><code class="json">&lt;?php /*
+{
+    &quot;credentials&quot;: {
+        &quot;login&quot;: &quot;&lt;login&gt;&quot;,
+        &quot;hash&quot;: &quot;&lt;password hash&gt;&quot;,
+        &quot;salt&quot;: &quot;&lt;password salt&gt;&quot;
+    },
+    &quot;security&quot;: {
+        &quot;ban_after&quot;: 4,
+        &quot;session_protection_disabled&quot;: false,
+        &quot;ban_duration&quot;: 1800,
+        &quot;trusted_proxies&quot;: [
+            &quot;1.2.3.4&quot;,
+            &quot;5.6.7.8&quot;
+        ],
+        &quot;allowed_protocols&quot;: [
+            &quot;ftp&quot;,
+            &quot;ftps&quot;,
+            &quot;magnet&quot;
+        ]
+    },
+    &quot;resources&quot;: {
+        &quot;data_dir&quot;: &quot;data&quot;,
+        &quot;config&quot;: &quot;data\/config.php&quot;,
+        &quot;datastore&quot;: &quot;data\/datastore.php&quot;,
+        &quot;ban_file&quot;: &quot;data\/ipbans.php&quot;,
+        &quot;updates&quot;: &quot;data\/updates.txt&quot;,
+        &quot;log&quot;: &quot;data\/log.txt&quot;,
+        &quot;update_check&quot;: &quot;data\/lastupdatecheck.txt&quot;,
+        &quot;raintpl_tmp&quot;: &quot;tmp\/&quot;,
+        &quot;raintpl_tpl&quot;: &quot;tpl\/&quot;,
+        &quot;thumbnails_cache&quot;: &quot;cache&quot;,
+        &quot;page_cache&quot;: &quot;pagecache&quot;
+    },
+    &quot;general&quot;: {
+        &quot;check_updates&quot;: true,
+        &quot;rss_permalinks&quot;: true,
+        &quot;links_per_page&quot;: 20,
+        &quot;default_private_links&quot;: true,
+        &quot;enable_thumbnails&quot;: true,
+        &quot;enable_localcache&quot;: true,
+        &quot;check_updates_branch&quot;: &quot;stable&quot;,
+        &quot;check_updates_interval&quot;: 86400,
+        &quot;enabled_plugins&quot;: [
+            &quot;markdown&quot;,
+            &quot;wallabag&quot;,
+            &quot;archiveorg&quot;
+        ],
+        &quot;timezone&quot;: &quot;Europe\/Paris&quot;,
+        &quot;title&quot;: &quot;My Shaarli&quot;,
+        &quot;header_link&quot;: &quot;?&quot;
+    },
+    &quot;extras&quot;: {
+        &quot;show_atom&quot;: false,
+        &quot;hide_public_links&quot;: false,
+        &quot;hide_timestamps&quot;: false,
+        &quot;open_shaarli&quot;: false,
+        &quot;redirector&quot;: &quot;http://anonym.to/?&quot;,
+        &quot;redirector_encode_url&quot;: false
+    },
+    &quot;general&quot;: {
+        &quot;header_link&quot;: &quot;?&quot;,
+        &quot;links_per_page&quot;: 20,
+        &quot;enabled_plugins&quot;: [
+            &quot;markdown&quot;,
+            &quot;wallabag&quot;
+        ],
+        &quot;timezone&quot;: &quot;Europe\/Paris&quot;,
+        &quot;title&quot;: &quot;My Shaarli&quot;
+    },
+    &quot;updates&quot;: {
+        &quot;check_updates&quot;: true,
+        &quot;check_updates_branch&quot;: &quot;stable&quot;,
+        &quot;check_updates_interval&quot;: 86400
+    },
+    &quot;feed&quot;: {
+        &quot;rss_permalinks&quot;: true,
+        &quot;show_atom&quot;: false
+    },
+    &quot;privacy&quot;: {
+        &quot;default_private_links&quot;: true,
+        &quot;hide_public_links&quot;: false,
+        &quot;hide_timestamps&quot;: false
+    },
+    &quot;thumbnail&quot;: {
+        &quot;enable_thumbnails&quot;: true,
+        &quot;enable_localcache&quot;: true
+    },
+    &quot;redirector&quot;: {
+        &quot;url&quot;: &quot;http://anonym.to/?&quot;,
+        &quot;encode_url&quot;: false
+    },
+    &quot;plugins&quot;: {
+        &quot;WALLABAG_URL&quot;: &quot;http://demo.wallabag.org&quot;,
+        &quot;WALLABAG_VERSION&quot;: &quot;1&quot;
+    }
+} ?&gt;
+</code></pre>
+
+<h2 id="additional-configuration">Additional configuration</h2>
+<p>The playvideos plugin may require that you adapt your server's 
+<a href="https://github.com/shaarli/Shaarli/blob/master/plugins/playvideos/README.md#troubleshooting">Content Security Policy</a> 
+configuration to work properly.<a href="../.html"></a></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Plugins/" class="btn btn-neutral float-right" title="Plugins">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../Server-security/" class="btn btn-neutral" title="Server security"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/shaarli/Shaarli" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../Server-security/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../Plugins/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+
+</body>
+</html>

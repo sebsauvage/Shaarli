@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Backup, restore, import and export - Shaarli Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../github-markdown.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Backup, restore, import and export";
+    var mkdocs_page_input_path = "Backup,-restore,-import-and-export.md";
+    var mkdocs_page_url = "/Backup,-restore,-import-and-export/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Shaarli Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Setup</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Download-and-Installation/">Download and Installation</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Upgrade-and-migration/">Upgrade and migration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Server-requirements/">Server requirements</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Server-configuration/">Server configuration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Server-security/">Server security</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Shaarli-configuration/">Shaarli configuration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Plugins/">Plugins</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Docker</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Docker-101/">Docker 101</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Shaarli-images/">Shaarli images</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Reverse-proxy-configuration/">Reverse proxy configuration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Docker-resources/">Docker resources</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Usage</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Features/">Features</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Bookmarklet/">Bookmarklet</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Browsing-and-searching/">Browsing and searching</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Firefox-share/">Firefox share</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../RSS-feeds/">RSS feeds</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../REST-API/">REST API</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">How To</span>
+    <ul class="subnav">
+                <li class=" current">
+                    
+    <a class="current" href="./">Backup, restore, import and export</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#backup-and-restore-the-datastore-file">Backup and restore the datastore file</a></li>
+    
+
+    <li class="toctree-l3"><a href="#export-links-as">Export links as...</a></li>
+    
+
+    <li class="toctree-l3"><a href="#import-links-from">Import links from...</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#diigo">Diigo</a></li>
+        
+            <li><a class="toctree-l4" href="#mister-wong">Mister Wong</a></li>
+        
+            <li><a class="toctree-l4" href="#semanticscuttle">SemanticScuttle</a></li>
+        
+            <li><a class="toctree-l4" href="#scuttle">Scuttle</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#import-shaarli-links-to-firefox">Import Shaarli links to Firefox</a></li>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Copy-an-existing-installation-over-SSH-and-serve-it-locally/">Copy an existing installation over SSH and serve it locally</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Create-and-serve-multiple-Shaarlis-(farm)/">Create and serve multiple Shaarlis (farm)</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Download-CSS-styles-from-an-OPML-list/">Download CSS styles from an OPML list</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Datastore-hacks/">Datastore hacks</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../Troubleshooting/">Troubleshooting</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Development</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Development-guidelines/">Development guidelines</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Continuous-integration-tools/">Continuous integration tools</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../GnuPG-signature/">GnuPG signature</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Coding-guidelines/">Coding guidelines</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Directory-structure/">Directory structure</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../3rd-party-libraries/">3rd party libraries</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Plugin-System/">Plugin System</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Release-Shaarli/">Release Shaarli</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Versioning-and-Branches/">Versioning and Branches</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Security/">Security</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Static-analysis/">Static analysis</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Theming/">Theming</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Unit-tests/">Unit tests</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">About</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../FAQ/">FAQ</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Community-&-Related-software/">Community & Related software</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Shaarli Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>How To &raquo;</li>
+        
+      
+    
+    <li>Backup, restore, import and export</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/shaarli/Shaarli/edit/master/docs/Backup,-restore,-import-and-export.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <ul>
+<li><a href="#backup-and-restore-the-datastore-file">Backup and restore the datastore file</a></li>
+<li><a href="#export-links-as">Export links as...</a></li>
+<li><a href="#import-links-from">Import links from...</a></li>
+<li><a href="#import-shaarli-links-to-firefox">Import Shaarli links to Firefox</a></li>
+</ul>
+<hr />
+<h2 id="backup-and-restore-the-datastore-file">Backup and restore the datastore file</h2>
+<p>Backup the file <code>data/datastore.php</code> (by FTP or SSH). Restore by putting the file back in place.</p>
+<p>Example command:</p>
+<pre><code class="bash">rsync -avzP my.server.com:/var/www/shaarli/data/datastore.php datastore-$(date +%Y-%m-%d_%H%M).php
+</code></pre>
+
+<h2 id="export-links-as">Export links as...</h2>
+<p>To export links as an HTML file, under <em>Tools &gt; Export</em>, choose:
+- <em>Export all</em> to export both public and private links
+- <em>Export public</em> to export public links only
+- <em>Export private</em> to export private links only</p>
+<p>Restore by using the <code>Import</code> feature.
+* This can be done using the <a href="https://github.com/nodiscc/shaarchiver">shaarchiver</a> tool.</p>
+<p>Example command: </p>
+<pre><code class="bash">./export-bookmarks.py --url=https://my.server.com/shaarli --username=myusername --password=mysupersecretpassword --download-dir=./ --type=all
+</code></pre>
+
+<h2 id="import-links-from">Import links from...</h2>
+<h3 id="diigo">Diigo</h3>
+<p>If you export your bookmark from Diigo, make sure you use the Delicious export, not the Netscape export. (Their Netscape export is broken, and they don't seem to be interested in fixing it.)</p>
+<h3 id="mister-wong">Mister Wong</h3>
+<p>See <a href="https://github.com/sebsauvage/Shaarli/issues/146">this issue</a> for import tweaks.</p>
+<h3 id="semanticscuttle">SemanticScuttle</h3>
+<p>To correctly import the tags from a <a href="http://semanticscuttle.sourceforge.net/">SemanticScuttle</a> HTML export, edit the HTML file before importing and replace all occurences of <code>tags=</code> (lowercase) to <code>TAGS=</code> (uppercase).</p>
+<h3 id="scuttle">Scuttle</h3>
+<p>Shaarli cannot import data directly from <a href="https://github.com/scronide/scuttle">Scuttle</a>. However, you can use this third party tool: https://github.com/q2apro/scuttle-to-shaarli to export the Scuttle database to the Netscape HTML format compatible with the Shaarli importer.</p>
+<h2 id="import-shaarli-links-to-firefox">Import Shaarli links to Firefox</h2>
+<ul>
+<li>Export your Shaarli links as described above.</li>
+<li>For compatibility reasons, check <code>Prepend note permalinks with this Shaarli instance's URL (useful to import bookmarks in a web browser)</code></li>
+<li>In Firefox, open the bookmark manager (not the sidebar! <code>Bookmarks menu &gt; Show all bookmarks</code> or <code>Ctrl+Shift+B</code>)</li>
+<li>Select <code>Import and Backup &gt; Import bookmarks in HTML format</code></li>
+</ul>
+<p>Your bookmarks will be imported in Firefox, ready to use, with tags and descriptions retained. "Self" (notes) shaares will still point to the Shaarli instance you exported them from, but the note text can be viewed directly in the bookmark properties inside your browser. Depending on the number of bookmarks, the import can take some time.</p>
+<p>You may be interested in these Firefox addons to manage links imported from Shaarli</p>
+<ul>
+<li><a href="https://addons.mozilla.org/en-US/firefox/addon/bookmark-deduplicator/">Bookmark Deduplicator</a> - provides an easy way to deduplicate your bookmarks</li>
+<li><a href="https://addons.mozilla.org/en-US/firefox/addon/tagsieve/">TagSieve</a> - browse your bookmarks by their tags</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Copy-an-existing-installation-over-SSH-and-serve-it-locally/" class="btn btn-neutral float-right" title="Copy an existing installation over SSH and serve it locally">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../REST-API/" class="btn btn-neutral" title="REST API"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/shaarli/Shaarli" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../REST-API/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../Copy-an-existing-installation-over-SSH-and-serve-it-locally/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+
+</body>
+</html>

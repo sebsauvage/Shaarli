@@ -1,0 +1,53 @@
+site_name: Shaarli Documentation
+repo_url: https://github.com/shaarli/Shaarli
+site_description: The personal, minimalist, super-fast, database free, bookmarking service
+theme: readthedocs
+docs_dir: doc/md
+site_dir: doc/html
+
+pages:
+- Home: index.md
+- Setup:
+    - Download and Installation: Download-and-Installation.md
+    - Upgrade and migration: Upgrade-and-migration.md
+    - Server requirements: Server-requirements.md
+    - Server configuration: Server-configuration.md
+    - Server security: Server-security.md
+    - Shaarli configuration: Shaarli-configuration.md
+    - Plugins: Plugins.md
+- Docker:
+    - Docker 101: Docker-101.md
+    - Shaarli images: Shaarli-images.md
+    - Reverse proxy configuration: Reverse-proxy-configuration.md
+    - Docker resources: Docker-resources.md
+- Usage:
+    - Features: Features.md
+    - Bookmarklet: Bookmarklet.md
+    - Browsing and searching: Browsing-and-searching.md
+    - Firefox share: Firefox-share.md
+    - RSS feeds: RSS-feeds.md 
+    - REST API: REST-API.md
+- How To:
+    - Backup, restore, import and export: Backup,-restore,-import-and-export.md
+    - Copy an existing installation over SSH and serve it locally: Copy-an-existing-installation-over-SSH-and-serve-it-locally.md
+    - Create and serve multiple Shaarlis (farm): Create-and-serve-multiple-Shaarlis-(farm).md
+    - Download CSS styles from an OPML list: Download-CSS-styles-from-an-OPML-list.md
+    - Datastore hacks: Datastore-hacks.md
+- Troubleshooting: Troubleshooting.md
+- Development:
+    - Development guidelines: Development-guidelines.md
+    - Continuous integration tools: Continuous-integration-tools.md
+    - GnuPG signature: GnuPG-signature.md
+    - Coding guidelines: Coding-guidelines.md
+    - Directory structure: Directory-structure.md
+    - 3rd party libraries: 3rd-party-libraries.md
+    - Plugin System: Plugin-System.md
+    - Release Shaarli: Release-Shaarli.md
+    - Versioning and Branches: Versioning-and-Branches.md
+    - Security: Security.md
+    - Static analysis: Static-analysis.md
+    - Theming: Theming.md
+    - Unit tests: Unit-tests.md
+- About:
+    - FAQ: FAQ.md
+    - Community & Related software: Community-&-Related-software.md

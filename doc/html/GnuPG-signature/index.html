@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>GnuPG signature - Shaarli Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../github-markdown.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "GnuPG signature";
+    var mkdocs_page_input_path = "GnuPG-signature.md";
+    var mkdocs_page_url = "/GnuPG-signature/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Shaarli Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Setup</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Download-and-Installation/">Download and Installation</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Upgrade-and-migration/">Upgrade and migration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Server-requirements/">Server requirements</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Server-configuration/">Server configuration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Server-security/">Server security</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Shaarli-configuration/">Shaarli configuration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Plugins/">Plugins</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Docker</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Docker-101/">Docker 101</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Shaarli-images/">Shaarli images</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Reverse-proxy-configuration/">Reverse proxy configuration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Docker-resources/">Docker resources</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Usage</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Features/">Features</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Bookmarklet/">Bookmarklet</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Browsing-and-searching/">Browsing and searching</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Firefox-share/">Firefox share</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../RSS-feeds/">RSS feeds</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../REST-API/">REST API</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">How To</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Backup,-restore,-import-and-export/">Backup, restore, import and export</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Copy-an-existing-installation-over-SSH-and-serve-it-locally/">Copy an existing installation over SSH and serve it locally</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Create-and-serve-multiple-Shaarlis-(farm)/">Create and serve multiple Shaarlis (farm)</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Download-CSS-styles-from-an-OPML-list/">Download CSS styles from an OPML list</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Datastore-hacks/">Datastore hacks</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../Troubleshooting/">Troubleshooting</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Development</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Development-guidelines/">Development guidelines</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Continuous-integration-tools/">Continuous integration tools</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">GnuPG signature</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#introduction">Introduction</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#pgp-and-gpg">PGP and GPG</a></li>
+        
+            <li><a class="toctree-l4" href="#trust">Trust</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#generate-a-gpg-key">Generate a GPG key</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#gpg-provide-identity-information">gpg - provide identity information</a></li>
+        
+            <li><a class="toctree-l4" href="#gpg-entropy-interlude">gpg - entropy interlude</a></li>
+        
+            <li><a class="toctree-l4" href="#gpg-key-creation-confirmation">gpg - key creation confirmation</a></li>
+        
+            <li><a class="toctree-l4" href="#gpg-submit-your-public-key-to-a-pgp-server-optional">gpg - submit your public key to a PGP server (Optional)</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#create-and-push-a-gpg-signed-tag">Create and push a GPG-signed tag</a></li>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Coding-guidelines/">Coding guidelines</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Directory-structure/">Directory structure</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../3rd-party-libraries/">3rd party libraries</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Plugin-System/">Plugin System</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Release-Shaarli/">Release Shaarli</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Versioning-and-Branches/">Versioning and Branches</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Security/">Security</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Static-analysis/">Static analysis</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Theming/">Theming</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Unit-tests/">Unit tests</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">About</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../FAQ/">FAQ</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Community-&-Related-software/">Community & Related software</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Shaarli Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Development &raquo;</li>
+        
+      
+    
+    <li>GnuPG signature</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/shaarli/Shaarli/edit/master/docs/GnuPG-signature.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="introduction">Introduction</h2>
+<h3 id="pgp-and-gpg">PGP and GPG</h3>
+<p><a href="https://gnupg.org/">Gnu Privacy Guard</a> (GnuPG) is an Open Source implementation of the <a href="https://en.wikipedia.org/wiki/Pretty_Good_Privacy#OpenPGP">Pretty Good 
+Privacy</a> (OpenPGP) specification. Its main purposes are digital authentication, 
+signature and encryption.</p>
+<p>It is often used by the <a href="https://en.wikipedia.org/wiki/Free_and_open-source_software">FLOSS</a> community to verify:
+- Linux package signatures: Debian <a href="https://wiki.debian.org/SecureApt">SecureApt</a>, ArchLinux <a href="https://www.archlinux.org/master-keys/">Master 
+Keys</a>
+- <a href="https://en.wikipedia.org/wiki/Revision_control">SCM</a> releases &amp; maintainer identity</p>
+<h3 id="trust">Trust</h3>
+<p>To quote Phil Pennock (the author of the <a href="https://bitbucket.org/skskeyserver/sks-keyserver/wiki/Home">SKS</a> key server - http://sks.spodhuis.org/):</p>
+<blockquote>
+<p>You MUST understand that presence of data in the keyserver (pools) in no way connotes trust. Anyone can generate a key, with any name or email address, and upload it. All security and trust comes from evaluating security at the “object level”, via PGP Web-Of-Trust signatures. This keyserver makes it possible to retrieve keys, looking them up via various indices, but the collection of keys in this public pool is KNOWN to contain malicious and fraudulent keys. It is the common expectation of server operators that users understand this and use software which, like all known common OpenPGP implementations, evaluates trust accordingly. This expectation is so common that it is not normally explicitly stated.</p>
+</blockquote>
+<p>Trust can be gained by having your key signed by other people (and signing their key back, too :) ), for instance during <a href="https://en.wikipedia.org/wiki/Key_signing_party">key signing parties</a>, see:
+- <a href="http://www.cryptnet.net/fdp/crypto/keysigning_party/en/keysigning_party.html">The Keysigning party HOWTO</a>
+- <a href="https://en.wikipedia.org/wiki/Web_of_trust">Web of trust</a></p>
+<h2 id="generate-a-gpg-key">Generate a GPG key</h2>
+<ul>
+<li><a href="http://stackoverflow.com/a/16725717">Generating a GPG key for Git tagging</a> (StackOverflow)</li>
+<li><a href="https://help.github.com/articles/generating-a-gpg-key/">Generating a GPG key</a> (GitHub)</li>
+</ul>
+<h3 id="gpg-provide-identity-information">gpg - provide identity information</h3>
+<pre><code class="bash">$ gpg --gen-key
+
+gpg (GnuPG) 2.1.6; Copyright (C) 2015 Free Software Foundation, Inc.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Note: Use &quot;gpg2 --full-gen-key&quot; for a full featured key generation dialog.
+
+GnuPG needs to construct a user ID to identify your key.
+
+Real name: Marvin the Paranoid Android
+Email address: marvin@h2g2.net
+You selected this USER-ID:
+    &quot;Marvin the Paranoid Android &lt;marvin@h2g2.net&gt;&quot;
+
+Change (N)ame, (E)mail, or (O)kay/(Q)uit? o
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+</code></pre>
+
+<h3 id="gpg-entropy-interlude">gpg - entropy interlude</h3>
+<p>At this point, you will:
+- be prompted for a secure password to protect your key (the input method will depend on your Desktop Environment and configuration)
+- be asked to use your machine's input devices (mouse, keyboard, etc.) to generate random entropy; this step <em>may take some time</em> </p>
+<h3 id="gpg-key-creation-confirmation">gpg - key creation confirmation</h3>
+<pre><code class="bash">gpg: key A9D53A3E marked as ultimately trusted
+public and secret key created and signed.
+
+gpg: checking the trustdb
+gpg: 3 marginal(s) needed, 1 complete(s) needed, PGP trust model
+gpg: depth: 0  valid:   2  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 2u
+pub   rsa2048/A9D53A3E 2015-07-31
+      Key fingerprint = AF2A 5381 E54B 2FD2 14C4  A9A3 0E35 ACA4 A9D5 3A3E
+uid       [ultimate] Marvin the Paranoid Android &lt;marvin@h2g2.net&gt;
+sub   rsa2048/8C0EACF1 2015-07-31
+</code></pre>
+
+<h3 id="gpg-submit-your-public-key-to-a-pgp-server-optional">gpg - submit your public key to a PGP server (Optional)</h3>
+<pre><code class="bash">$ gpg --keyserver pgp.mit.edu --send-keys A9D53A3E
+gpg: sending key A9D53A3E to hkp server pgp.mit.edu
+</code></pre>
+
+<h2 id="create-and-push-a-gpg-signed-tag">Create and push a GPG-signed tag</h2>
+<p>See <a href="../Release Shaarli">Release Shaarli</a>.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Coding-guidelines/" class="btn btn-neutral float-right" title="Coding guidelines">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../Continuous-integration-tools/" class="btn btn-neutral" title="Continuous integration tools"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/shaarli/Shaarli" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../Continuous-integration-tools/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../Coding-guidelines/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+
+</body>
+</html>

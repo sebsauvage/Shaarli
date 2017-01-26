@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Upgrade and migration - Shaarli Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../github-markdown.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Upgrade and migration";
+    var mkdocs_page_input_path = "Upgrade-and-migration.md";
+    var mkdocs_page_url = "/Upgrade-and-migration/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Shaarli Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Setup</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Download-and-Installation/">Download and Installation</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Upgrade and migration</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#preparation">Preparation</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#note-your-current-version">Note your current version</a></li>
+        
+            <li><a class="toctree-l4" href="#backup-your-data">Backup your data</a></li>
+        
+            <li><a class="toctree-l4" href="#migrating-data-from-a-previous-installation">Migrating data from a previous installation</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#recommended-upgrading-from-release-archives">Recommended : Upgrading from release archives</a></li>
+    
+
+    <li class="toctree-l3"><a href="#upgrading-with-git">Upgrading with Git</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#updating-a-community-shaarli">Updating a community Shaarli</a></li>
+        
+            <li><a class="toctree-l4" href="#migrating-and-upgrading-from-sebsauvages-repository">Migrating and upgrading from Sebsauvage's repository</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#troubleshooting">Troubleshooting</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#you-must-specify-an-integer-as-a-key">You must specify an integer as a key</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Server-requirements/">Server requirements</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Server-configuration/">Server configuration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Server-security/">Server security</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Shaarli-configuration/">Shaarli configuration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Plugins/">Plugins</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Docker</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Docker-101/">Docker 101</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Shaarli-images/">Shaarli images</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Reverse-proxy-configuration/">Reverse proxy configuration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Docker-resources/">Docker resources</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Usage</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Features/">Features</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Bookmarklet/">Bookmarklet</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Browsing-and-searching/">Browsing and searching</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Firefox-share/">Firefox share</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../RSS-feeds/">RSS feeds</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../REST-API/">REST API</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">How To</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Backup,-restore,-import-and-export/">Backup, restore, import and export</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Copy-an-existing-installation-over-SSH-and-serve-it-locally/">Copy an existing installation over SSH and serve it locally</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Create-and-serve-multiple-Shaarlis-(farm)/">Create and serve multiple Shaarlis (farm)</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Download-CSS-styles-from-an-OPML-list/">Download CSS styles from an OPML list</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Datastore-hacks/">Datastore hacks</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../Troubleshooting/">Troubleshooting</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Development</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Development-guidelines/">Development guidelines</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Continuous-integration-tools/">Continuous integration tools</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../GnuPG-signature/">GnuPG signature</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Coding-guidelines/">Coding guidelines</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Directory-structure/">Directory structure</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../3rd-party-libraries/">3rd party libraries</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Plugin-System/">Plugin System</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Release-Shaarli/">Release Shaarli</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Versioning-and-Branches/">Versioning and Branches</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Security/">Security</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Static-analysis/">Static analysis</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Theming/">Theming</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Unit-tests/">Unit tests</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">About</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../FAQ/">FAQ</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Community-&-Related-software/">Community & Related software</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Shaarli Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Setup &raquo;</li>
+        
+      
+    
+    <li>Upgrade and migration</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/shaarli/Shaarli/edit/master/docs/Upgrade-and-migration.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="preparation">Preparation</h2>
+<h3 id="note-your-current-version">Note your current version</h3>
+<p>If anything goes wrong, it's important for us to know which version you're upgrading from.<br />
+The current version is present in the <code>version.php</code> file.</p>
+<h3 id="backup-your-data">Backup your data</h3>
+<p>Shaarli stores all user data under the <code>data</code> directory:
+- <code>data/config.php</code> - main configuration file
+- <code>data/datastore.php</code> - bookmarked links
+- <code>data/ipbans.php</code> - banned IP addresses
+- <code>data/updates.txt</code> - contains all automatic update to the configuration and datastore files already run</p>
+<p>See <a href="../Shaarli configuration">Shaarli configuration</a> for more information about Shaarli resources.</p>
+<p>It is recommended to backup this repository <em>before</em> starting updating/upgrading Shaarli:
+- users with SSH access: copy or archive the directory to a temporary location
+- users with FTP access: download a local copy of your Shaarli installation using your favourite client</p>
+<h3 id="migrating-data-from-a-previous-installation">Migrating data from a previous installation</h3>
+<p>As all user data is kept under <code>data</code>, this is the only directory you need to worry about when migrating to a new installation, which corresponds to the following steps:</p>
+<ul>
+<li>backup the <code>data</code> directory</li>
+<li>install or update Shaarli:<ul>
+<li>fresh installation - see <a href="../Download and installation">Download and installation</a></li>
+<li>update - see the following sections</li>
+</ul>
+</li>
+<li>check or restore the <code>data</code> directory</li>
+</ul>
+<h2 id="recommended-upgrading-from-release-archives">Recommended : Upgrading from release archives</h2>
+<p>All tagged revisions can be downloaded as tarballs or ZIP archives from the <a href="https://github.com/shaarli/Shaarli/releases">releases</a> page.</p>
+<p>We recommend that you use the latest release tarball with the <code>-full</code> suffix. It contains the dependencies, please read <a href="../Download and installation">Download and installation</a> for <code>git</code> complete instructions.</p>
+<p>Once downloaded, extract the archive locally and update your remote installation (e.g. via FTP) -be sure you keep the content of the <code>data</code> directory!</p>
+<p>After upgrading, access your fresh Shaarli installation from a web browser; the configuration and data store will then be automatically updated, and new settings added to <code>data/config.json.php</code> (see <a href="../Shaarli configuration">Shaarli configuration</a> for more details).</p>
+<h2 id="upgrading-with-git">Upgrading with Git</h2>
+<h3 id="updating-a-community-shaarli">Updating a community Shaarli</h3>
+<p>If you have installed Shaarli from the <a href="../Download#clone-with-git-recommended">community Git repository</a>, simply <a href="https://www.git-scm.com/docs/git-pull">pull new changes</a> from your local clone:</p>
+<pre><code class="bash">$ cd /path/to/shaarli
+$ git pull
+
+From github.com:shaarli/Shaarli
+ * branch            master     -&gt; FETCH_HEAD
+Updating ebd67c6..521f0e6
+Fast-forward
+ application/Url.php   | 1 +
+ shaarli_version.php   | 2 +-
+ tests/Url/UrlTest.php | 1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
+</code></pre>
+
+<p>Shaarli &gt;= <code>v0.8.x</code>: install/update third-party PHP dependencies using <a href="https://getcomposer.org/">Composer</a>:</p>
+<pre><code class="bash">$ composer install --no-dev
+
+Loading composer repositories with package information
+Updating dependencies
+  - Installing shaarli/netscape-bookmark-parser (v1.0.1)
+    Downloading: 100%
+</code></pre>
+
+<h3 id="migrating-and-upgrading-from-sebsauvages-repository">Migrating and upgrading from Sebsauvage's repository</h3>
+<p>If you have installed Shaarli from <a href="https://github.com/sebsauvage/Shaarli">Sebsauvage's original Git repository</a>, you can use <a href="https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes">Git remotes</a> to update your working copy.</p>
+<p>The following guide assumes that:
+- you have a basic knowledge of Git <a href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell">branching</a> and <a href="https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes">remote repositories</a>
+- the default remote is named <code>origin</code> and points to Sebsauvage's repository
+- the current branch is <code>master</code>
+    - if you have personal branches containing customizations, you will need to <a href="https://git-scm.com/book/en/v2/Git-Branching-Rebasing">rebase them</a> after the upgrade; beware though, a lot of changes have been made since the community fork has been created, so things are very likely to break!
+- the working copy is clean:
+    - no versioned file has been locally modified
+    - no untracked files are present</p>
+<h4 id="step-0-show-repository-information">Step 0: show repository information</h4>
+<pre><code class="bash">$ cd /path/to/shaarli
+
+$ git remote -v
+origin  https://github.com/sebsauvage/Shaarli (fetch)
+origin  https://github.com/sebsauvage/Shaarli (push)
+
+$ git branch -vv
+* master 029f75f [origin/master] Update README.md
+
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+nothing to commit, working directory clean
+</code></pre>
+
+<h4 id="step-1-update-git-remotes">Step 1: update Git remotes</h4>
+<pre><code>$ git remote rename origin sebsauvage
+$ git remote -v
+sebsauvage  https://github.com/sebsauvage/Shaarli (fetch)
+sebsauvage  https://github.com/sebsauvage/Shaarli (push)
+
+$ git remote add origin https://github.com/shaarli/Shaarli
+$ git fetch origin
+
+remote: Counting objects: 3015, done.
+remote: Compressing objects: 100% (19/19), done.
+remote: Total 3015 (delta 446), reused 457 (delta 446), pack-reused 2550
+Receiving objects: 100% (3015/3015), 2.59 MiB | 918.00 KiB/s, done.
+Resolving deltas: 100% (1899/1899), completed with 48 local objects.
+From https://github.com/shaarli/Shaarli
+ * [new branch]      master     -&gt; origin/master
+ * [new branch]      stable     -&gt; origin/stable
+[...]
+ * [new tag]         v0.6.4     -&gt; v0.6.4
+ * [new tag]         v0.7.0     -&gt; v0.7.0
+</code></pre>
+
+<h4 id="step-2-use-the-stable-community-branch">Step 2: use the stable community branch</h4>
+<pre><code class="bash">$ git checkout origin/stable -b stable
+Branch stable set up to track remote branch stable from origin.
+Switched to a new branch 'stable'
+
+$ git branch -vv
+  master 029f75f [sebsauvage/master] Update README.md
+* stable 890afc3 [origin/stable] Merge pull request #509 from ArthurHoaro/v0.6.5
+</code></pre>
+
+<p>Shaarli &gt;= <code>v0.8.x</code>: install/update third-party PHP dependencies using <a href="https://getcomposer.org/">Composer</a>:</p>
+<pre><code class="bash">$ composer install --no-dev
+
+Loading composer repositories with package information
+Updating dependencies
+  - Installing shaarli/netscape-bookmark-parser (v1.0.1)
+    Downloading: 100%
+</code></pre>
+
+<p>Optionally, you can delete information related to the legacy version:</p>
+<pre><code class="bash">$ git branch -D master
+Deleted branch master (was 029f75f).
+
+$ git remote remove sebsauvage
+
+$ git remote -v
+origin  https://github.com/shaarli/Shaarli (fetch)
+origin  https://github.com/shaarli/Shaarli (push)
+
+$ git gc
+Counting objects: 3317, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (1237/1237), done.
+Writing objects: 100% (3317/3317), done.
+Total 3317 (delta 2050), reused 3301 (delta 2034)to
+</code></pre>
+
+<h4 id="step-3-configuration">Step 3: configuration</h4>
+<p>After migrating, access your fresh Shaarli installation from a web browser; the configuration will then be automatically updated, and new settings added to <code>data/config.php</code> (see <a href="../Shaarli configuration">Shaarli configuration</a> for more details).</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>If the solutions provided here doesn't work, please open an issue specifying which version you're upgrading from and to.</p>
+<h3 id="you-must-specify-an-integer-as-a-key">You must specify an integer as a key</h3>
+<p>In <code>v0.8.1</code> we changed how link keys are handled (from timestamps to incremental integers).
+Take a look at <code>data/updates.txt</code> content.</p>
+<h4 id="updatestxt-contains-updatemethoddatastoreids"><code>updates.txt</code> contains <code>updateMethodDatastoreIds</code></h4>
+<p>Try to delete it and refresh your page while being logged in.</p>
+<h4 id="updatestxt-doesnt-exists-or-doesnt-contain-updatemethoddatastoreids"><code>updates.txt</code> doesn't exists or doesn't contain <code>updateMethodDatastoreIds</code></h4>
+<ol>
+<li>Create <code>data/updates.txt</code> if it doesn't exist.</li>
+<li>Paste this string in the update file <code>;updateMethodRenameDashTags;</code></li>
+<li>Login to Shaarli.</li>
+<li>Delete the update file.</li>
+<li>Refresh.</li>
+</ol>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Server-requirements/" class="btn btn-neutral float-right" title="Server requirements">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../Download-and-Installation/" class="btn btn-neutral" title="Download and Installation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/shaarli/Shaarli" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../Download-and-Installation/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../Server-requirements/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+
+</body>
+</html>

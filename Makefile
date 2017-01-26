@@ -194,42 +194,28 @@ doxygen: clean
 
 ### update the local copy of the documentation
 doc: clean
-	@rm -rf doc
-	@git clone https://github.com/shaarli/Shaarli.wiki.git doc
-	@rm -rf doc/.git
-
-### Generate a custom sidebar
-#
-# Sidebar content:
-#  - convert GitHub-flavoured relative links to standard Markdown
-#  - trim HTML, only keep the list (<ul>[...]</ul>) part
-htmlsidebar:
-	@echo '<div id="local-sidebar">' > doc/sidebar.html
-	@awk 'BEGIN { FS = "[\\[\\]]{2}" }'\
-	'm = /\[/ { t=$$2; gsub(/ /, "-", $$2); print $$1"["t"]("$$2".html)"$$3 }'\
-	'!m { print $$0 }' doc/_Sidebar.md > doc/tmp.md
-	@pandoc -f markdown -t html5 -s doc/tmp.md | awk '/(ul>|li>)/' >> doc/sidebar.html
-	@echo '</div>' >> doc/sidebar.html
-	@rm doc/tmp.md
+	@rm -rf doc/md/
+	@git clone https://github.com/shaarli/Shaarli.wiki.git doc/md
+	mv doc/md/Home.md doc/md/index.md
+	@rm -rf doc/md/.git
 
 ### Convert local markdown documentation to HTML
 #
 # For all pages:
-#  - infer title from the file name
 #  - convert GitHub-flavoured relative links to standard Markdown
-#  - insert the sidebar menu
+#  - generate html documentation with mkdocs
 htmlpages:
-	@for file in `find doc/ -maxdepth 1 -name "*.md"`; do \
-		base=`basename $$file .md`; \
-		sed -i "1i #$${base//-/ }" $$file; \
-		awk 'BEGIN { FS = "[\\[\\]]{2}" }'\
-	'm = /\[/ { t=$$2; gsub(/ /, "-", $$2); print $$1"["t"]("$$2".html)"$$3 }'\
-	'!m { print $$0 }' $$file > doc/tmp.md; \
-		mv doc/tmp.md $$file; \
-		pandoc -f markdown_github -t html5 -s \
-			-c "github-markdown.css" \
-			-T Shaarli -M pagetitle:"$${base//-/ }" -B doc/sidebar.html \
-			-o doc/$$base.html $$file; \
-	done;
+	# Rename local [[links]] to regular links.
+	@for file in `find doc/md/ -maxdepth 1 -name "*.md"`; do \
+		sed -e "s/\[\[\(.*\)\]\]/[\1](\1)/g" "$$file" > doc/md/tmp.md; \
+		mv doc/md/tmp.md $$file; \
+	done
 
-htmldoc: authors doc htmlsidebar htmlpages
+	python3 -m venv venv/
+	bash -c 'source venv/bin/activate; \
+	pip install mkdocs; \
+	mkdocs build'
+	find doc/html/ -type f -exec chmod a-x '{}' \;
+	rm -r venv
+
+doc_html: authors doc htmlpages

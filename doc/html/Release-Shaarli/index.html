@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Release Shaarli - Shaarli Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../github-markdown.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Release Shaarli";
+    var mkdocs_page_input_path = "Release-Shaarli.md";
+    var mkdocs_page_url = "/Release-Shaarli/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Shaarli Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Setup</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Download-and-Installation/">Download and Installation</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Upgrade-and-migration/">Upgrade and migration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Server-requirements/">Server requirements</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Server-configuration/">Server configuration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Server-security/">Server security</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Shaarli-configuration/">Shaarli configuration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Plugins/">Plugins</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Docker</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Docker-101/">Docker 101</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Shaarli-images/">Shaarli images</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Reverse-proxy-configuration/">Reverse proxy configuration</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Docker-resources/">Docker resources</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Usage</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Features/">Features</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Bookmarklet/">Bookmarklet</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Browsing-and-searching/">Browsing and searching</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Firefox-share/">Firefox share</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../RSS-feeds/">RSS feeds</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../REST-API/">REST API</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">How To</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Backup,-restore,-import-and-export/">Backup, restore, import and export</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Copy-an-existing-installation-over-SSH-and-serve-it-locally/">Copy an existing installation over SSH and serve it locally</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Create-and-serve-multiple-Shaarlis-(farm)/">Create and serve multiple Shaarlis (farm)</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Download-CSS-styles-from-an-OPML-list/">Download CSS styles from an OPML list</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Datastore-hacks/">Datastore hacks</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../Troubleshooting/">Troubleshooting</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Development</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Development-guidelines/">Development guidelines</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Continuous-integration-tools/">Continuous integration tools</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../GnuPG-signature/">GnuPG signature</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Coding-guidelines/">Coding guidelines</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Directory-structure/">Directory structure</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../3rd-party-libraries/">3rd party libraries</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Plugin-System/">Plugin System</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Release Shaarli</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#prerequisites">Prerequisites</a></li>
+    
+
+    <li class="toctree-l3"><a href="#github-release-draft-and-changelogmd">GitHub release draft and CHANGELOG.md</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#github-release-draft">GitHub release draft</a></li>
+        
+            <li><a class="toctree-l4" href="#changelogmd">CHANGELOG.md</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#increment-the-version-code-updated-docs-create-and-push-a-signed-tag">Increment the version code, updated docs, create and push a signed tag</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#generate-documentation">Generate documentation</a></li>
+        
+            <li><a class="toctree-l4" href="#create-and-merge-a-pull-request">Create and merge a Pull Request</a></li>
+        
+            <li><a class="toctree-l4" href="#bump-shaarli-version-to-v0x-branch">Bump Shaarli version to v0.x branch</a></li>
+        
+            <li><a class="toctree-l4" href="#create-and-push-a-signed-tag">Create and push a signed tag</a></li>
+        
+            <li><a class="toctree-l4" href="#verify-a-signed-tag">Verify a signed tag</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#publish-the-github-release">Publish the GitHub release</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#update-release-badges">Update release badges</a></li>
+        
+            <li><a class="toctree-l4" href="#create-a-github-release-from-a-git-tag">Create a GitHub release from a Git tag</a></li>
+        
+            <li><a class="toctree-l4" href="#generate-and-upload-all-in-one-release-archives">Generate and upload all-in-one release archives</a></li>
+        
+            <li><a class="toctree-l4" href="#update-stable-and-latest-branches">Update stable and latest branches</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Versioning-and-Branches/">Versioning and Branches</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Security/">Security</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Static-analysis/">Static analysis</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Theming/">Theming</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Unit-tests/">Unit tests</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">About</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../FAQ/">FAQ</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Community-&-Related-software/">Community & Related software</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Shaarli Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Development &raquo;</li>
+        
+      
+    
+    <li>Release Shaarli</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/shaarli/Shaarli/edit/master/docs/Release-Shaarli.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p>See  <a href="http://git-scm.com/book/en/v2/Distributed-Git-Maintaining-a-Project#Tagging-Your-Releases">Git - Maintaining a project - Tagging your 
+releases</a>.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>This guide assumes that you have:
+- a GPG key matching your GitHub authentication credentials
+    - i.e., the email address identified by the GPG key is the same as the one in your <code>~/.gitconfig</code> 
+- a GitHub fork of Shaarli
+- a local clone of your Shaarli fork, with the following remotes:
+    - <code>origin</code> pointing to your GitHub fork
+    - <code>upstream</code> pointing to the main Shaarli repository
+- maintainer permissions on the main Shaarli repository, to:
+    - push the signed tag
+    - create a new release
+- <a href="https://getcomposer.org/">Composer</a> and <a href="http://pandoc.org/">Pandoc</a> need to be installed</p>
+<h2 id="github-release-draft-and-changelogmd">GitHub release draft and <code>CHANGELOG.md</code></h2>
+<p>See http://keepachangelog.com/en/0.3.0/ for changelog formatting.</p>
+<h3 id="github-release-draft">GitHub release draft</h3>
+<p>GitHub allows drafting the release note for the upcoming release, from the <a href="https://github.com/shaarli/Shaarli/releases">Releases</a> page. This way, the release note can be drafted while contributions are merged to <code>master</code>.</p>
+<h3 id="changelogmd"><code>CHANGELOG.md</code></h3>
+<p>This file should contain the same information as the release note draft for the upcoming version.</p>
+<p>Update it to:
+- add new entries (additions, fixes, etc.)
+- mark the current version as released by setting its date and link
+- add a new section for the future unreleased version</p>
+<pre><code class="bash">$ cd /path/to/shaarli
+
+$ nano CHANGELOG.md
+
+[...]
+## vA.B.C - UNRELEASED
+TBA
+
+## [vX.Y.Z](https://github.com/shaarli/Shaarli/releases/tag/vX.Y.Z) - YYYY-MM-DD
+[...]
+</code></pre>
+
+<h2 id="increment-the-version-code-updated-docs-create-and-push-a-signed-tag">Increment the version code, updated docs, create and push a signed tag</h2>
+<h3 id="generate-documentation">Generate documentation</h3>
+<pre><code class="bash">$ cd /path/to/shaarli
+
+# create a new branch
+$ git fetch upstream
+$ git checkout upstream/master -b v0.5.0
+
+# rebuild the documentation from the wiki
+$ make htmldoc
+
+# commit the changes
+$ git add doc
+$ git commit -s -m &quot;Generate documentation for v0.5.0&quot;
+
+# push the commit on your GitHub fork
+$ git push origin v0.5.0
+</code></pre>
+
+<h3 id="create-and-merge-a-pull-request">Create and merge a Pull Request</h3>
+<p>This one is pretty straightforward ;-)</p>
+<h3 id="bump-shaarli-version-to-v0x-branch">Bump Shaarli version to v0.x branch</h3>
+<pre><code>$ git checkout master
+$ git fetch upstream
+$ git pull upstream master
+
+# IF the branch doesn't exists
+$ git checkout -b v0.5
+# OR if the branch already exists
+$ git checkout v0.5
+$ git rebase upstream/master
+
+# Bump shaarli version from dev to 0.5.0, **without the `v`**
+$ vim shaarli_version.php
+$ git add shaarli_version
+$ git commit -s -m &quot;Bump Shaarli version to v0.5.0&quot;
+$ git push upstream v0.5
+</code></pre>
+
+<h3 id="create-and-push-a-signed-tag">Create and push a signed tag</h3>
+<pre><code class="bash"># update your local copy
+$ git checkout v0.5
+$ git fetch upstream
+$ git pull upstream v0.5
+
+# create a signed tag
+$ git tag -s -m &quot;Release v0.5.0&quot; v0.5.0
+
+# push it to &quot;upstream&quot;
+$ git push --tags upstream
+</code></pre>
+
+<h3 id="verify-a-signed-tag">Verify a signed tag</h3>
+<p><a href="https://github.com/shaarli/Shaarli/releases/tag/v0.5.0"><code>v0.5.0</code></a> is the first GPG-signed tag pushed on the Community Shaarli.</p>
+<p>Let's have a look at its signature!</p>
+<pre><code class="bash">$ cd /path/to/shaarli
+$ git fetch upstream
+
+# get the SHA1 reference of the tag
+$ git show-ref tags/v0.5.0
+f7762cf803f03f5caf4b8078359a63783d0090c1 refs/tags/v0.5.0
+
+# verify the tag signature information
+$ git verify-tag f7762cf803f03f5caf4b8078359a63783d0090c1
+gpg: Signature made Thu 30 Jul 2015 11:46:34 CEST using RSA key ID 4100DF6F
+gpg: Good signature from &quot;VirtualTam &lt;virtualtam@flibidi.net&gt;&quot; [ultimate]
+</code></pre>
+
+<h2 id="publish-the-github-release">Publish the GitHub release</h2>
+<h3 id="update-release-badges">Update release badges</h3>
+<p>Update <code>README.md</code> so version badges display and point to the newly released Shaarli version(s), in the <code>master</code> branch.</p>
+<h3 id="create-a-github-release-from-a-git-tag">Create a GitHub release from a Git tag</h3>
+<p>From the previously drafted release:
+- edit the release notes (if needed)
+- specify the appropriate Git tag
+- publish the release
+- profit!</p>
+<h3 id="generate-and-upload-all-in-one-release-archives">Generate and upload all-in-one release archives</h3>
+<p>Users with a shared hosting may have:
+- no SSH access
+- no possibility to install PHP packages or server extensions
+- no possibility to run scripts</p>
+<p>To ease Shaarli installations, it is possible to generate and upload additional release archives,
+that will contain Shaarli code plus all required third-party libraries.</p>
+<p><strong>From the <code>v0.5</code> branch:</strong></p>
+<pre><code class="bash">$ make release_archive
+</code></pre>
+
+<p>This will create the following archives:
+- <code>shaarli-vX.Y.Z-full.tar</code>
+- <code>shaarli-vX.Y.Z-full.zip</code></p>
+<p>The archives need to be manually uploaded on the previously created GitHub release.</p>
+<h3 id="update-stable-and-latest-branches">Update <code>stable</code> and <code>latest</code> branches</h3>
+<pre><code>$ git checkout latest
+# latest release
+$ git merge v0.5.0
+# fix eventual conflicts
+$ make test
+$ git push upstream latest
+$ git checkout stable
+# latest previous major
+$ git merge v0.4.5 
+# fix eventual conflicts
+$ make test
+$ git push upstream stable
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Versioning-and-Branches/" class="btn btn-neutral float-right" title="Versioning and Branches">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../Plugin-System/" class="btn btn-neutral" title="Plugin System"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/shaarli/Shaarli" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../Plugin-System/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../Versioning-and-Branches/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+
+</body>
+</html>
