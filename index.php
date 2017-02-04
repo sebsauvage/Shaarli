@@ -1104,7 +1104,7 @@ function showDailyRSS()
         {
             $l = $LINKSDB[$linkdate];
             $l['formatedDescription']=nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($l['description']))));
-            $l['thumbnail'] = thumbnail($l['url']);
+            $l['thumbnail'] = thumbnail($l['url'], isset($l['thumb']) ? $l['thumb'] : False);
             $l['localdate']=linkdate2locale($l['linkdate']);
             if (startsWith($l['url'],'?')) $l['url']=indexUrl().$l['url'];  // make permalink URL absolute
             $links[$linkdate]=$l;
@@ -1152,7 +1152,7 @@ function showDaily()
         uasort($taglist, 'strcasecmp');
         $linksToDisplay[$key]['taglist']=$taglist;
         $linksToDisplay[$key]['formatedDescription']=nl2br(keepMultipleSpaces(text2clickable(htmlspecialchars($link['description']))));
-        $linksToDisplay[$key]['thumbnail'] = thumbnail($link['url']);
+        $linksToDisplay[$key]['thumbnail'] = thumbnail($link['url'], isset($link['thumb']) ? $link['thumb'] : False);
     }
 
     /* We need to spread the articles on 3 columns.
@@ -1232,7 +1232,7 @@ function renderPage()
         foreach($links as $link)
         {
             $permalink='?'.htmlspecialchars(smallhash($link['linkdate']),ENT_QUOTES);
-            $thumb=lazyThumbnail($link['url'],$permalink);
+            $thumb=lazyThumbnail($link['url'], isset($link['thumb']) ? $link['thumb'] : False);
             if ($thumb!='') // Only output links which have a thumbnail.
             {
                 $link['thumbnail']=$thumb; // Thumbnail HTML code.
@@ -1482,10 +1482,11 @@ function renderPage()
         $tags = trim(preg_replace('/\s\s+/',' ', $_POST['lf_tags'])); // Remove multiple spaces.
         $linkdate=$_POST['lf_linkdate'];
         $url = trim($_POST['lf_url']);
+        $thumb = trim($_POST['lf_thumb']);        
         if (!startsWith($url,'http:') && !startsWith($url,'https:') && !startsWith($url,'ftp:') && !startsWith($url,'magnet:') && !startsWith($url,'?'))
             $url = 'http://'.$url;
         $link = array('title'=>trim($_POST['lf_title']),'url'=>$url,'description'=>trim($_POST['lf_description']),'private'=>(isset($_POST['lf_private']) ? 1 : 0),
-                      'linkdate'=>$linkdate,'tags'=>str_replace(',',' ',$tags));
+                      'linkdate'=>$linkdate,'tags'=>str_replace(',',' ',$tags),'thumb'=>$thumb);
         if ($link['title']=='') $link['title']=$link['url']; // If title is empty, use the URL as title.
         $LINKSDB[$linkdate] = $link;
         $LINKSDB->savedb(); // save to disk
@@ -1885,7 +1886,8 @@ function buildLinkList($PAGE,$LINKSDB)
 function computeThumbnail($url,$href=false)
 {
     if (!$GLOBALS['config']['ENABLE_THUMBNAILS']) return array();
-    if ($href==false) $href=$url;
+    if ($href!=false and !empty($href)) $url=$href;
+    
 
     // For most hosts, the URL of the thumbnail can be easily deduced from the URL of the link.
     // (eg. http://www.youtube.com/watch?v=spVypYk4kto --->  http://img.youtube.com/vi/spVypYk4kto/default.jpg )

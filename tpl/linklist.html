@@ -31,7 +31,7 @@
         {loop="links"}
         <li{if="$value.class"} class="{$value.class}"{/if}>
             <a name="{$value.linkdate|smallHash}" id="{$value.linkdate|smallHash}"></a>
-            <div class="thumbnail">{$value.url|thumbnail}</div>
+            <div class="thumbnail">{function="thumbnail($value['url'], isset($value['thumb']) ? $value['thumb'] : False)"}</div>
             <div class="linkcontainer">
                 {if="isLoggedIn()"}
                     <div class="linkeditbuttons">

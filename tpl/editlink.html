@@ -16,6 +16,7 @@
 	        <i>Title</i><br><input type="text" name="lf_title" value="{$link.title|htmlspecialchars}" style="width:100%"><br>
 	        <i>Description</i><br><textarea name="lf_description" rows="4" cols="25" style="width:100%">{$link.description|htmlspecialchars}</textarea><br>
 	        <i>Tags</i><br><input type="text" id="lf_tags" name="lf_tags" value="{$link.tags|htmlspecialchars}" style="width:100%"><br>
+		<i>Thumbnail</i><br><input type="text" name="lf_thumb" value="{function="isset($link['thumb']) ? htmlspecialchars($link['thumb']) : """}" style="width:100%"><br>
 	        {if condition="($link_is_new && $GLOBALS['privateLinkByDefault']==true) || $link.private == true"}
             <input type="checkbox" checked="checked" name="lf_private" id="lf_private">
             &nbsp;<label for="lf_private"><i>Private</i></label><br>
