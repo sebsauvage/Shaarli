@@ -133,21 +133,6 @@ class Updater
     }
 
     /**
-     * Rename tags starting with a '-' to work with tag exclusion search.
-     */
-    public function updateMethodRenameDashTags()
-    {
-        $linklist = $this->linkDB->filterSearch();
-        foreach ($linklist as $key => $link) {
-            $link['tags'] = preg_replace('/(^| )\-/', '$1', $link['tags']);
-            $link['tags'] = implode(' ', array_unique(LinkFilter::tagsStrToArray($link['tags'], true)));
-            $this->linkDB[$key] = $link;
-        }
-        $this->linkDB->save($this->conf->get('resource.page_cache'));
-        return true;
-    }
-
-    /**
      * Move old configuration in PHP to the new config system in JSON format.
      *
      * Will rename 'config.php' into 'config.save.php' and create 'config.json.php'.
@@ -254,6 +239,21 @@ class Updater
         $this->linkDB->save($this->conf->get('resource.page_cache'));
         $this->linkDB->reorder();
 
+        return true;
+    }
+
+    /**
+     * Rename tags starting with a '-' to work with tag exclusion search.
+     */
+    public function updateMethodRenameDashTags()
+    {
+        $linklist = $this->linkDB->filterSearch();
+        foreach ($linklist as $key => $link) {
+            $link['tags'] = preg_replace('/(^| )\-/', '$1', $link['tags']);
+            $link['tags'] = implode(' ', array_unique(LinkFilter::tagsStrToArray($link['tags'], true)));
+            $this->linkDB[$key] = $link;
+        }
+        $this->linkDB->save($this->conf->get('resource.page_cache'));
         return true;
     }
 
