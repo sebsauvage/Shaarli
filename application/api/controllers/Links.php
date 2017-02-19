@@ -4,6 +4,7 @@ namespace Shaarli\Api\Controllers;
 
 use Shaarli\Api\ApiUtils;
 use Shaarli\Api\Exceptions\ApiBadParametersException;
+use Shaarli\Api\Exceptions\ApiLinkNotFoundException;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -58,8 +59,7 @@ class Links extends ApiController
         $limit = $request->getParam('limit');
         if (empty($limit)) {
             $limit = self::$DEFAULT_LIMIT;
-        }
-        else if (ctype_digit($limit)) {
+        } else if (ctype_digit($limit)) {
             $limit = intval($limit);
         } else if ($limit === 'all') {
             $limit = count($links);
@@ -81,6 +81,27 @@ class Links extends ApiController
             }
         }
 
+        return $response->withJson($out, 200, $this->jsonStyle);
+    }
+
+    /**
+     * Return a single formatted link by its ID.
+     *
+     * @param Request  $request  Slim request.
+     * @param Response $response Slim response.
+     * @param array    $args     Path parameters. including the ID.
+     *
+     * @return Response containing the link array.
+     *
+     * @throws ApiLinkNotFoundException generating a 404 error.
+     */
+    public function getLink($request, $response, $args)
+    {
+        if (! isset($this->linkDb[$args['id']])) {
+            throw new ApiLinkNotFoundException();
+        }
+        $index = index_url($this->ci['environment']);
+        $out = ApiUtils::formatLink($this->linkDb[$args['id']], $index);
         return $response->withJson($out, 200, $this->jsonStyle);
     }
 }

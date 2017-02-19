@@ -2232,12 +2232,13 @@ $app = new \Slim\App($container);
 $app->group('/api/v1', function() {
     $this->get('/info', '\Shaarli\Api\Controllers\Info:getInfo');
     $this->get('/links', '\Shaarli\Api\Controllers\Links:getLinks');
+    $this->get('/links/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:getLink');
 })->add('\Shaarli\Api\ApiMiddleware');
 
 $response = $app->run(true);
 // Hack to make Slim and Shaarli router work together:
-// If a Slim route isn't found, we call renderPage().
-if ($response->getStatusCode() == 404) {
+// If a Slim route isn't found and NOT API call, we call renderPage().
+if ($response->getStatusCode() == 404 && strpos($_SERVER['REQUEST_URI'], '/api/v1') === false) {
     // We use UTF-8 for proper international characters handling.
     header('Content-Type: text/html; charset=utf-8');
     renderPage($conf, $pluginManager, $linkDb);
