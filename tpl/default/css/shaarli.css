@@ -2,7 +2,7 @@
  * General
  */
 body {
-    background: #c5c5c5;
+    background: #d0d0d0;
 }
 
 .strong {
@@ -268,6 +268,12 @@ pre {
     width: 200px;
 }
 
+/* because chrome */
+#header-login-form input[type="text"]::-webkit-input-placeholder,
+#header-login-form input[type="password"]::-webkit-input-placeholder {
+    color: #777777;
+}
+
 .subheader-form {
     visibility: hidden;
     position: fixed;
@@ -384,6 +390,10 @@ pre {
     color: #252525;
 }
 
+.toolbar-plugin input[type="submit"]:hover {
+    background: #fff;
+}
+
 @media screen and (max-width: 64em) {
     .toolbar-plugin input[type="text"] {
         width: 70%;
@@ -484,19 +494,6 @@ pre {
     background: #f5f5f5;
 }
 
-.linklist-item.private .linklist-item-title::before {
-    position: absolute;
-    left: 3px;
-    top: 0;
-    display: block;
-    content:"";
-    background: #F89406;
-    height: 95%;
-    width: 2px;
-    margin-top: 3px;
-    z-index: 1;
-}
-
 .linklist-item-title h2 {
     padding: 3px 10px 0 10px;
     line-height: 30px;
@@ -563,14 +560,13 @@ pre {
 .linklist-item-description {
     position: relative;
     padding: 10px;
-    background: #f5f5f5;
     font-family: Roboto Slab, Arial, sans-serif;
     word-wrap: break-word;
     color: #252525;
     line-height: 1.3em;
 }
 
-.linklist-item.private .linklist-item-description::before {
+ {
     position: absolute;
     left: 3px;
     top: 0;
@@ -596,9 +592,29 @@ pre {
 }
 
 .linklist-item-thumbnail {
+    position: relative;
     margin-top: 10px;
     padding: 10px;
     float: left;
+    z-index: 50;
+}
+
+.linklist-item.private .linklist-item-title::before,
+.linklist-item.private .linklist-item-description::before,
+.linklist-item.private .linklist-item-thumbnail::before {
+    position: absolute;
+    left: 3px;
+    top: 0;
+    display: block;
+    content:"";
+    background: #F89406;
+    height: 95%;
+    width: 2px;
+    z-index: 1;
+}
+
+.linklist-item.private .linklist-item-title::before {
+    margin-top: 3px;
 }
 
 .linklist-item-infos {
@@ -702,15 +718,6 @@ pre {
     text-align: center;
 }
 
-.page-form .window-title:after {
-    display: block;
-    content:"";
-    background: linear-gradient(to right, #f5f5f5, #1b926c, #f5f5f5);
-    height: 1px;
-    width: 80%;
-    margin: auto;
-}
-
 .page-form .window-subtitle {
     text-align: center;
 }
@@ -740,7 +747,7 @@ pre {
 }
 
 .page-form textarea {
-    height: 240px;
+    min-height: 240px;
     padding: 15px 5px 3px 15px;
     resize: vertical;
     overflow-y: auto;
@@ -1163,7 +1170,7 @@ div.awesomplete > ul {
 
 .daily-entry-thumbnail {
     float: left;
-    margin: 15px 5px 5px 5px;
+    margin: 15px 5px 5px 15px;
 }
 
 .daily-entry-description a {
@@ -1177,4 +1184,11 @@ div.awesomplete > ul {
 
 .daily-entry-description a:visited {
     color: #20b988;
+}
+
+/*
+ * Fix empty bookmarklet name in Firefox
+ */
+.pure-button {
+    -moz-user-select: auto;
 }

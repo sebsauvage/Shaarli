@@ -174,7 +174,7 @@
                     {$updated=$value.updated_timestamp ? 'Edited: '. strftime('%c', $value.updated_timestamp) : 'Permalink'}
                     <span class="linkdate" title="{$updated}">
                       <i class="fa fa-clock-o"></i>
-                      {function="strftime('%d %B %Y %H:%M', $value.timestamp)"}{if="$value.updated_timestamp"}*{/if}
+                      {function="strftime('%c', $value.timestamp)"}{if="$value.updated_timestamp"}*{/if}
                       &middot;
                     </span>
                   {/if}

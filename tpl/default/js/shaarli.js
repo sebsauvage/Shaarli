@@ -84,7 +84,13 @@ window.onload = function () {
         [].forEach.call(foldAllButtons, function (foldAllButton) {
             foldAllButton.addEventListener('click', function (event) {
                 event.preventDefault();
+                var state = foldAllButton.firstElementChild.getAttribute('class').indexOf('down') != -1 ? 'down' : 'up';
                 [].forEach.call(foldButtons, function (foldButton) {
+                    if (foldButton.firstElementChild.classList.contains('fa-chevron-up') && state == 'down'
+                        || foldButton.firstElementChild.classList.contains('fa-chevron-down') && state == 'up'
+                    ) {
+                        return;
+                    }
                     // Retrieve description
                     var description = null;
                     var thumbnail = null;
@@ -224,5 +230,33 @@ window.onload = function () {
             this.window.scroll(0, this.window.scrollY - padsize);
             anchor.style.paddingTop = 0;
         }
+    }
+
+    /**
+     * Text area resizer
+     */
+    var description = document.getElementById('lf_description');
+    var observe = function (element, event, handler) {
+        element.addEventListener(event, handler, false);
+    };
+    function init () {
+        function resize () {
+            description.style.height = 'auto';
+            description.style.height = description.scrollHeight+10+'px';
+        }
+        /* 0-timeout to get the already changed text */
+        function delayedResize () {
+            window.setTimeout(resize, 0);
+        }
+        observe(description, 'change',  resize);
+        observe(description, 'cut',     delayedResize);
+        observe(description, 'paste',   delayedResize);
+        observe(description, 'drop',    delayedResize);
+        observe(description, 'keydown', delayedResize);
+
+        resize();
+    }
+    if (description != null) {
+        init();
     }
 };
