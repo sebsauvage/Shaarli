@@ -336,6 +336,29 @@ class Updater
         }
         $this->conf->set('resource.theme', 'vintage');
         $this->conf->write($this->isLoggedIn);
+
+        return true;
+    }
+
+    /**
+     * * `markdown_escape` is a new setting, set to true as default.
+     *
+     * If the markdown plugin was already enabled, escaping is disabled to avoid
+     * breaking existing entries.
+     */
+    public function updateMethodEscapeMarkdown()
+    {
+        if ($this->conf->exists('security.markdown_escape')) {
+            return true;
+        }
+
+        if (in_array('markdown', $this->conf->get('general.enabled_plugins'))) {
+            $this->conf->set('security.markdown_escape', false);
+        } else {
+            $this->conf->set('security.markdown_escape', true);
+        }
+        $this->conf->write($this->isLoggedIn);
+
         return true;
     }
 }
