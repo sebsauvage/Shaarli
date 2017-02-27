@@ -1,32 +1,58 @@
-<div class="paging">
-{if="isLoggedIn()"}
-    <div class="paging_privatelinks">
-        <a href="?privateonly">
-		{if="$privateonly"}
-		<img src="images/private_16x16_active.png#" width="16" height="16" title="Click to see all links" alt="Click to see all links">
-		{else}
-		<img src="images/private_16x16.png#" width="16" height="16" title="Click to see only private links" alt="Click to see only private links">
-		{/if}
-		</a>
-
-
-    </div>
-{/if}
-    {loop="$action_plugin"}
-      <div class="paging_privatelinks">
-        <a
-          {loop="$value.attr"}
-            {$key}="{$value}"
-          {/loop}>
-          {$value.html}
+<div class="linklist-paging">
+  <div class="paging pure-g">
+    <div class="linklist-filters pure-u-1-3">
+      {if="isLoggedIn() or !empty($action_plugin)"}
+        <span class="linklist-filters-text pure-u-0 pure-u-lg-visible">
+          {'Filters'|t}
+        </span>
+        {if="isLoggedIn()"}
+          <a href="?privateonly" title="{'Filter private links'|t}"
+             class={if="$privateonly"}"filter-on"{else}"filter-off"{/if}
+          ><i class="fa fa-key"></i></a>
+        {/if}
+        <a href="#" class="filter-off fold-all pure-u-lg-0" title="Fold all">
+          <i class="fa fa-chevron-up"></i>
         </a>
-      </div>
-    {/loop}
-    <div class="paging_linksperpage">
-        Links per page: <a href="?linksperpage=20">20</a> <a href="?linksperpage=50">50</a> <a href="?linksperpage=100">100</a>
-        <form method="GET" class="linksperpage"><input type="text" name="linksperpage" size="2"></form>
+        {loop="$action_plugin"}
+          {$value.attr.class=isset($value.attr.class) ? $value.attr.class : ''}
+          {$value.attr.class=!empty($value.on) ? $value.attr.class .' filter-on' : $value.attr.class .' filter-off'}
+          <a
+            {loop="$value.attr"}
+              {$key}="{$value}"
+            {/loop}>
+            {$value.html}
+          </a>
+        {/loop}
+      {/if}
     </div>
-    {if="$previous_page_url"} <a href="{$previous_page_url}" class="paging_older">&#x25C4;Older</a> {/if}
-    <div class="paging_current">page {$page_current} / {$page_max} </div>
-    {if="$next_page_url"} <a href="{$next_page_url}" class="paging_newer">Newer&#x25BA;</a> {/if}
+
+
+    <div class="linklist-pages pure-u-1-3">
+      {if="$next_page_url"}
+        <a href="{$next_page_url}" class="paging_newer">
+          <i class="fa fa-arrow-circle-left"></i>
+        </a>
+      {/if}
+      {if="$page_max>1"}<span class="strong">{$page_current} / {$page_max}</span>{/if}
+      {if="$previous_page_url"}
+        <a href="{$previous_page_url}" class="paging_older">
+          <i class="fa fa-arrow-circle-right"></i>
+        </a>
+      {/if}
+
+    </div>
+
+    <div class="linksperpage pure-u-1-3">
+      <div class="pure-u-0 pure-u-lg-visible">{'Links per page'|t}</div>
+      <a href="?linksperpage=20">20</a>
+      <a href="?linksperpage=50">50</a>
+      <a href="?linksperpage=100">100</a>
+      <form method="GET" class="pure-u-0 pure-u-lg-visible">
+        <input type="text" name="linksperpage" placeholder="133">
+      </form>
+      <a href="#" class="filter-off fold-all pure-u-0 pure-u-lg-visible" title="Fold all">
+        <i class="fa fa-chevron-up"></i>
+      </a>
+    </div>
+  </div>
 </div>

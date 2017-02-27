@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>{include="includes"}</head>
+<body onload="document.configform.title.focus();">
+<div id="pageheader">
+  {include="page.header"}
+  {$timezone_js}
+  <form method="POST" action="#" name="configform" id="configform">
+    <input type="hidden" name="token" value="{$token}">
+    <table id="configuration_table">
+
+      <tr>
+        <td><b>Page title:</b></td>
+        <td><input type="text" name="title" id="title" size="50" value="{$title}"></td>
+      </tr>
+
+      <tr>
+        <td><b>Title link:</b></td>
+        <td><input type="text" name="titleLink" id="titleLink" size="50" value="{$titleLink}"><br/><label
+            for="titleLink">(default value is: ?)</label></td>
+      </tr>
+
+      <tr>
+        <td><b>Theme:</b></td>
+        <td>
+          <select name="theme" id="theme">
+            {loop="$theme_available"}
+              <option value="{$value}" {if="$value===$theme"}selected{/if}>
+                {$value|ucfirst}
+              </option>
+            {/loop}
+          </select>
+        </td>
+      </tr>
+
+      <tr>
+        <td><b>Timezone:</b></td>
+        <td>{$timezone_form}</td>
+      </tr>
+
+      <tr>
+        <td><b>Redirector</b></td>
+        <td>
+          <input type="text" name="redirector" id="redirector" size="50" value="{$redirector}"><br>
+          (e.g. <i>http://anonym.to/?</i> will mask the HTTP_REFERER)
+        </td>
+      </tr>
+
+      <tr>
+        <td><b>Security:</b></td>
+        <td>
+          <input type="checkbox" name="disablesessionprotection" id="disablesessionprotection"
+                   {if="$session_protection_disabled"}checked{/if}>
+          <label
+            for="disablesessionprotection">&nbsp;Disable session cookie hijacking protection (Check this if you get
+            disconnected often or if your IP address changes often.)</label>
+        </td>
+      </tr>
+
+      <tr>
+        <td valign="top"><b>New link:</b></td>
+        <td>
+          <input type="checkbox" name="privateLinkByDefault" id="privateLinkByDefault"
+                 {if="$private_links_default"}checked{/if}/>
+          <label for="privateLinkByDefault">
+            &nbsp;All new links are private by default
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><b>RSS direct links</b></td>
+        <td>
+          <input type="checkbox" name="enableRssPermalinks" id="enableRssPermalinks"
+                 {if="$enable_rss_permalinks"}checked{/if}/>
+          <label for="enableRssPermalinks">
+            &nbsp;Disable it to use permalinks in RSS feed instead of direct links to your shaared links. Currently <b>
+            {if="$enable_rss_permalinks"}enabled{else}disabled{/if}.</b>
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><b>Hide public links</b></td>
+        <td>
+          <input type="checkbox" name="hidePublicLinks" id="hidePublicLinks"
+                 {if="$hide_public_links"}checked{/if}/>
+          <label for="hidePublicLinks">&nbsp;Do not show any links if the user is not logged in.</label>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><b>Update:</b></td>
+        <td>
+          <input type="checkbox" name="updateCheck" id="updateCheck"
+                 {if="$enable_update_check"}checked{/if}/>
+          <label for="updateCheck">&nbsp;Notify me when a new release is ready</label>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><b>Enable REST API</b></td>
+        <td>
+          <input type="checkbox" name="apiEnabled" id="apiEnabled"
+                 {if="$api_enabled"}checked{/if}/>
+          <label for="apiEnabled">&nbsp;Allow third party software to use Shaarli such as mobile application.</label>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><b>API secret</b></td>
+        <td>
+          <input type="text" name="apiSecret" id="apiSecret" size="50" value="{$api_secret}" />
+        </td>
+      </tr>
+
+      <tr>
+        <td></td>
+        <td class="right"><input type="submit" name="Save" value="Save config" class="bigbutton"></td>
+      </tr>
+    </table>
+  </form>
+</div>
+{include="page.footer"}
+</body>
+</html>

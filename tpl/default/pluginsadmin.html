@@ -1,134 +1,182 @@
 <!DOCTYPE html>
 <html>
-<head>{include="includes"}</head>
+<head>
+  {include="includes"}
+</head>
 <body>
-<div id="pageheader">
-  {include="page.header"}
-</div>
+{include="page.header"}
 
 <noscript>
-  <div>
-    <ul class="errors">
-      <li>You need to enable Javascript to change plugin loading order.</li>
-    </ul>
+  <div class="pure-g new-version-message pure-alert pure-alert-warning">
+    <div class="pure-u-2-24"></div>
+    <div class="pure-u-20-24">
+      {'You need to enable Javascript to change plugin loading order.'|t}
+    </div>
   </div>
   <div class="clear"></div>
 </noscript>
 
-<div id="pluginsadmin">
-  <form action="?do=save_pluginadmin" method="POST">
-    <section id="enabled_plugins">
-      <h1>Enabled Plugins</h1>
+<form method="POST" action="?do=save_pluginadmin" name="pluginform" id="pluginform">
+  <div class="pure-g">
+    <div class="pure-u-lg-1-8 pure-u-1-24"></div>
+    <div class="pure-u-lg-3-4 pure-u-22-24 page-form page-form-complete">
+      <h2 class="window-title">{'Plugin administration'|t}</h2>
 
-      <div>
-        {if="count($enabledPlugins)==0"}
-          <p>No plugin enabled.</p>
-        {else}
+      <section id="enabled_plugins">
+        <h3 class="window-subtitle">{'Enabled Plugins'|t}</h3>
+
+        <div>
+          {if="count($enabledPlugins)==0"}
+          <p>{'No plugin enabled.'|t}</p>
+          {else}
           <table id="plugin_table">
             <thead>
-            <tr>
-              <th class="center">Disable</th>
-              <th class="center">Order</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
+              <tr>
+                <th class="center">{'Disable'|t}</th>
+                <th>{'Name'|t}</th>
+                <th><div class="pure-u-0 pure-u-lg-visible">{'Description'|t}</div></th>
+                <th class="center">{'Order'|t}</th>
+              </tr>
             </thead>
             <tbody>
-            {loop="$enabledPlugins"}
-              <tr data-line="{$key}" data-order="{$counter}">
-                <td class="center"><input type="checkbox" name="{$key}" id="{$key}" checked="checked"></td>
-                <td class="center">
-                  <a href="#" class="arrow"
-                     onclick="return orderUp(this.parentNode.parentNode.getAttribute('data-order'));">
-                    ▲
-                  </a>
-                  <a href="#" class="arrow"
-                     onclick="return orderDown(this.parentNode.parentNode.getAttribute('data-order'));">
-                    ▼
-                  </a>
-                  <input type="hidden" name="order_{$key}" value="{$counter}">
-                </td>
-                <td><label for="{$key}">{function="str_replace('_', ' ', $key)"}</label></td>
-                <td><label for="{$key}">{$value.description}</label></td>
-              </tr>
-            {/loop}
+              {loop="$enabledPlugins"}
+                <tr data-line="{$key}" data-order="{$counter}" class="main-row">
+                  <td class="center"><input type="checkbox" name="{$key}" id="{$key}" checked="checked"></td>
+                  <td class="center">
+                    <label for="{$key}"><strong>{function="str_replace('_', ' ', $key)"}</strong></label>
+                  </td>
+                  <td><div class="pure-u-0 pure-u-lg-visible"><label for="{$key}">{$value.description}</label></div></td>
+                  <td class="center">
+                    {if="count($enabledPlugins)>1"}
+                    <a href="#" class="order"
+                       onclick="return orderUp(this.parentNode.parentNode.getAttribute('data-order'));">
+                      ▲
+                    </a>
+                    <a href="#" class="order"
+                       onclick="return orderDown(this.parentNode.parentNode.getAttribute('data-order'));">
+                      ▼
+                    </a>
+                    {/if}
+                    <input type="hidden" name="order_{$key}" value="{$counter}">
+                  </td>
+                </tr>
+                <tr data-line="{$key}" data-order="{$counter}" class="pure-u-lg-0 mobile-row">
+                  <td colspan="4"><label for="{$key}">{$value.description}</label></td>
+                </tr>
+              {/loop}
             </tbody>
-          </table>
-        {/if}
-      </div>
-    </section>
-
-    <section id="disabled_plugins">
-      <h1>Disabled Plugins</h1>
-
-      <div>
-        {if="count($disabledPlugins)==0"}
-          <p>No plugin disabled.</p>
-        {else}
-          <table>
-            <tr>
-              <th class="center">Enable</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            {loop="$disabledPlugins"}
+            <tfoot>
               <tr>
-                <td class="center"><input type="checkbox" name="{$key}" id="{$key}"></td>
-                <td><label for="{$key}">{function="str_replace('_', ' ', $key)"}</label></td>
-                <td><label for="{$key}">{$value.description}</label></td>
+                <th class="center">{'Disable'|t}</th>
+                <th>{'Name'|t}</th>
+                <th><div class="pure-u-0 pure-u-lg-visible">{'Description'|t}</div></th>
+                <th class="center">{'Order'|t}</th>
               </tr>
-            {/loop}
+            </tfoot>
           </table>
-        {/if}
-      </div>
+          {/if}
+        </div>
+      </section>
 
+      <section id="disabled_plugins">
+        <h3 class="window-subtitle">{'Disabled Plugins'|t}</h3>
+
+        <div>
+          {if="count($disabledPlugins)==0"}
+          <p>{'No plugin disabled.'|t}</p>
+          {else}
+          <table>
+            <thead>
+              <tr>
+                <th class="center">{'Enable'|t}</th>
+                <th>{'Name'|t}</th>
+                <th><div class="pure-u-0 pure-u-lg-visible">{'Description'|t}</div></th>
+              </tr>
+            </thead>
+            <tbody>
+              {loop="$disabledPlugins"}
+                <tr class="main-row">
+                  <td class="center"><input type="checkbox" name="{$key}" id="{$key}"></td>
+                  <td class="center">
+                    <label for="{$key}"><strong>{function="str_replace('_', ' ', $key)"}</strong></label>
+                  </td>
+                  <td><div class="pure-u-0 pure-u-lg-visible">
+                    <label for="{$key}">{$value.description}</label>
+                  </div></td>
+                </tr>
+                <tr class="pure-u-lg-0 mobile-row">
+                  <td colspan="3"><label for="{$key}">{$value.description}</label></td>
+                </tr>
+              {/loop}
+            </tbody>
+            <tfoot>
+              <tr>
+                <th class="center">{'Enable'|t}</th>
+                <th>{'Name'|t}</th>
+                <th><div class="pure-u-0 pure-u-lg-visible">{'Description'|t}</div></th>
+              </tr>
+            </tfoot>
+          </table>
+          {/if}
+        </div>
+      </section>
+
+      <div class="center more">
+        More plugins available
+        <a href="doc/Community-&-Related-software.html#third-party-plugins">in the documentation</a>.
+      </div>
       <div class="center">
-        <input type="submit" value="Save"/>
+        <input type="submit" value="{'Save'|t}" name="save">
       </div>
-    </section>
-  </form>
+    </div>
+  </div>
+  <input type="hidden" name="token" value="{$token}">
+</form>
 
-  <form action="?do=save_pluginadmin" method="POST">
-    <section id="plugin_parameters">
-      <h1>Enabled Plugin Parameters</h1>
-
-      <div>
-        {if="count($enabledPlugins)==0"}
-          <p>No plugin enabled.</p>
-        {else}
-          {loop="$enabledPlugins"}
-            {if="count($value.parameters) > 0"}
-              <div class="plugin_parameters">
-                <h2>{function="str_replace('_', ' ', $key)"}</h2>
-                {loop="$value.parameters"}
+<form action="?do=save_pluginadmin" method="POST">
+  <div class="pure-g">
+    <div class="pure-u-lg-1-8 pure-u-1-24"></div>
+    <div class="pure-u-lg-3-4 pure-u-22-24 page-form page-form-light">
+      <h2 class="window-title">{'Plugin configuration'|t}</h2>
+      <section id="plugin_parameters">
+        <div>
+          {if="count($enabledPlugins)==0"}
+            <p>{'No plugin enabled.'|t}</p>
+          {else}
+            {loop="$enabledPlugins"}
+              {if="count($value.parameters) > 0"}
+                <div class="plugin_parameters">
+                  <h3 class="window-subtitle">{function="str_replace('_', ' ', $key)"}</h3>
+                  {loop="$value.parameters"}
                   <div class="plugin_parameter">
-                    <div class="float_label">
+                    <p class="float_label">
                       <label for="{$key}">
-                        <code>{$key}</code><br>
+                        <code>{$key}</code>
                         {if="isset($value.desc)"}
-                          {$value.desc}
+                          &middot; {$value.desc}
                         {/if}
                       </label>
-                    </div>
+                    </p>
                     <div class="float_input">
-                      <input name="{$key}" value="{$value.value}" id="{$key}"/>
+                      <input name="{$key}" value="{$value.value}" id="{$key}" type="text" />
                     </div>
                   </div>
-                {/loop}
-              </div>
-            {/if}
-          {/loop}
-        {/if}
-        <div class="center">
-          <input type="submit" name="parameters_form" value="Save"/>
+                  {/loop}
+                </div>
+              {/if}
+            {/loop}
+          {/if}
+          <div class="center">
+            <input type="submit" name="parameters_form" value="{'Save'|t}"/>
+          </div>
         </div>
-      </div>
-    </section>
-  </form>
+      </section>
+    </div>
+  </div>
+</form>
 
-</div>
 {include="page.footer"}
-
 <script src="inc/plugin_admin.js#"></script>
+
 </body>
 </html>

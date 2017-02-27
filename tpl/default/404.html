@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    {include="includes"}
+  {include="includes"}
 </head>
 <body>
 <div id="pageheader">
-    {include="page.header"}
-</div>
-<div class="error-container">
-    <h1>404 Not found <small>Oh crap!</small></h1>
-    <p>{$error_message}</p>
-    <p>Would you mind <a href="?">clicking here</a>?</p>
+  {include="page.header"}
+<div class="center" id="page404">
+  <h2>{'Sorry, nothing to see here.'|t}</h2>
+  <img src="img/sad_star.png">
+  <p>{$error_message}</p>
 </div>
 {include="page.footer"}
 </body>

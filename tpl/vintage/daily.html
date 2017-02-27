@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>{include="includes"}</head>
+<body>
+<div id="pageheader">
+    {include="page.header"}
+</div>
+<div class="daily">
+    <div id="plugin_zone_start_picwall" class="plugin_zone">
+        {loop="$plugin_start_zone"}
+            {$value}
+        {/loop}
+    </div>
+
+    <div class="dailyAbout">
+        All links of one day<br>in a single page.<br>
+        {if="$previousday"} <a href="?do=daily&amp;day={$previousday}"><b>&lt;</b>Previous day</a>{else}<b>&lt;</b>Previous day{/if}
+        -
+        {if="$nextday"}<a href="?do=daily&amp;day={$nextday}">Next day<b>&gt;</b></a>{else}Next day<b>&gt;</b>{/if}
+        <br>
+
+        {loop="$daily_about_plugin"}
+            {$value}
+        {/loop}
+
+        <br>
+        <a href="?do=dailyrss" title="1 RSS entry per day"><img src="images/feed-icon-14x14.png#" alt="rss_feed">Daily RSS Feed</a>
+    </div>
+
+    <div class="dailyTitle">
+        <img src="images/floral_left.png" width="51" height="50" class="nomobile" alt="floral_left">
+        The Daily Shaarli
+        <img src="images/floral_right.png" width="51" height="50" class="nomobile" alt="floral_right">
+    </div>
+
+    <div class="dailyDate">
+        <span class="nomobile">&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</span>
+        {function="strftime('%A %d, %B %Y', $day)"}
+        <span class="nomobile">&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</span>
+    </div>
+
+    <div class="clear"></div>
+
+    {if="$linksToDisplay"}
+        {loop="$cols"}
+            {if="isset($value[0])"}
+            <div id="daily_col{$counter+1}">
+                {loop="$value"}
+                    {$link=$value}
+                    <div class="dailyEntry">
+                        <div class="dailyEntryPermalink">
+                            <a href="?{$value.shorturl}">
+                                <img src="images/squiggle.png" width="25" height="26" title="permalink" alt="permalink">
+                            </a>
+                        </div>
+                        {if="!$hide_timestamps || isLoggedIn()"}
+                            <div class="dailyEntryLinkdate">
+                                <a href="?{$value.shorturl}">{function="strftime('%c', $link.timestamp)"}</a>
+                            </div>
+                        {/if}
+                        {if="$link.tags"}
+                            <div class="dailyEntryTags">
+                                {loop="$link.taglist"}
+                                    {$value} -
+                                {/loop}
+                            </div>
+                        {/if}
+                        <div class="dailyEntryTitle">
+                            <a href="{$link.real_url}">{$link.title}</a>
+                        </div>
+                        {if="$link.thumbnail"}
+                            <div class="dailyEntryThumbnail">{$link.thumbnail}</div>
+                        {/if}
+                        <div class="dailyEntryDescription">{$link.formatedDescription}</div>
+
+                        <div class="dailyEntryFooter">
+                            {loop="$link.link_plugin"}
+                                {$value}
+                            {/loop}
+                        </div>
+                    </div>
+                {/loop}
+            </div>
+            {/if}
+        {/loop}
+    {else}
+         <div class="dailyNoEntry">No articles on this day.</div>
+    {/if}
+
+    <div class="clear"></div>
+
+    <div id="plugin_zone_end_picwall" class="plugin_zone">
+        {loop="$plugin_end_zone"}
+            {$value}
+        {/loop}
+    </div>
+    <div id="closing"><img src="images/squiggle_closing.png" width="66" height="61" alt="-"></div>
+</div>
+{include="page.footer"}
+</body>
+</html>
