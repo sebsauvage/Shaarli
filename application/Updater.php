@@ -324,6 +324,20 @@ class Updater
 
         return rename('inc/user.css', 'data/user.css');
     }
+
+    /**
+     * While the new default theme is in an unstable state
+     * continue to use the vintage theme
+     */
+    public function updateMethodDefaultThemeVintage()
+    {
+        if ($this->conf->get('resource.theme') !== 'default') {
+            return true;
+        }
+        $this->conf->set('resource.theme', 'vintage');
+        $this->conf->write($this->isLoggedIn);
+        return true;
+    }
 }
 
 /**
