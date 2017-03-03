@@ -62,8 +62,6 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once 'application/ApplicationUtils.php';
 require_once 'application/Cache.php';
 require_once 'application/CachedPage.php';
-require_once 'application/config/ConfigManager.php';
-require_once 'application/config/ConfigPlugin.php';
 require_once 'application/FeedBuilder.php';
 require_once 'application/FileUtils.php';
 require_once 'application/HttpUtils.php';
@@ -80,6 +78,7 @@ require_once 'application/PluginManager.php';
 require_once 'application/Router.php';
 require_once 'application/Updater.php';
 use \Shaarli\ThemeUtils;
+use \Shaarli\Config\ConfigManager;
 
 // Ensure the PHP version is supported
 try {

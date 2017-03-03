@@ -1,4 +1,5 @@
 <?php
+use Shaarli\Config\ConfigManager;
 
 require_once 'plugins/pubsubhubbub/pubsubhubbub.php';
 require_once 'application/Router.php';

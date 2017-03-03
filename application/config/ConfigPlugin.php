@@ -1,4 +1,6 @@
 <?php
+namespace Shaarli\Config;
+
 /**
  * Plugin configuration helper functions.
  *
@@ -112,7 +114,7 @@ function load_plugin_parameter_values($plugins, $conf)
 /**
  * Exception used if an error occur while saving plugin configuration.
  */
-class PluginConfigOrderException extends Exception
+class PluginConfigOrderException extends \Exception
 {
     /**
      * Construct exception.
