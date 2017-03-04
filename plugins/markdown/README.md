@@ -50,9 +50,20 @@ If the tag `nomarkdown` is set for a shaare, it won't be converted to Markdown s
  
 > Note: this is a special tag, so it won't be displayed in link list.
 
-### HTML rendering
+### HTML escape
 
-Markdown support HTML tags. For example:
+By default, HTML tags are escaped. You can enable HTML tags rendering
+by setting `security.markdwon_escape` to `false` in `data/config.json.php`:
+
+```json
+{
+  "security": {
+    "markdown_escape": false
+  }
+}
+```
+
+With this setting, Markdown support HTML tags. For example:
 
     > <strong>strong</strong><strike>strike</strike>
    
@@ -60,12 +71,14 @@ Will render as:
 
 > <strong>strong</strong><strike>strike</strike>
 
-If you want to shaare HTML code, it is necessary to use inline code or code blocks.
-  
-**If your shaared descriptions containing HTML tags before enabling the markdown plugin, 
-enabling it might break your page.**
 
-> Note: HTML tags such as script, iframe, etc. are disabled for security reasons.
+**Warning:**
+
+  * This setting might present **security risks** (XSS) on shared instances, even though tags 
+  such as script, iframe, etc should be disabled.
+  * If you want to shaare HTML code, it is necessary to use inline code or code blocks.
+  * If your shaared descriptions contained HTML tags before enabling the markdown plugin, 
+enabling it might break your page.
 
 ### Known issue
 

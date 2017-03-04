@@ -506,4 +506,70 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
         $this->conf = new ConfigManager($sandboxConf);
         $this->assertEquals($theme, $this->conf->get('resource.theme'));
     }
+
+    /**
+     * Test updateMethodEscapeMarkdown with markdown plugin enabled
+     * => setting markdown_escape set to false.
+     */
+    public function testEscapeMarkdownSettingToFalse()
+    {
+        $sandboxConf = 'sandbox/config';
+        copy(self::$configFile . '.json.php', $sandboxConf . '.json.php');
+        $this->conf = new ConfigManager($sandboxConf);
+
+        $this->conf->set('general.enabled_plugins', ['markdown']);
+        $updater = new Updater([], [], $this->conf, true);
+        $this->assertTrue($updater->updateMethodEscapeMarkdown());
+        $this->assertFalse($this->conf->get('security.markdown_escape'));
+
+        // reload from file
+        $this->conf = new ConfigManager($sandboxConf);
+        $this->assertFalse($this->conf->get('security.markdown_escape'));
+    }
+
+
+    /**
+     * Test updateMethodEscapeMarkdown with markdown plugin disabled
+     * => setting markdown_escape set to true.
+     */
+    public function testEscapeMarkdownSettingToTrue()
+    {
+        $sandboxConf = 'sandbox/config';
+        copy(self::$configFile . '.json.php', $sandboxConf . '.json.php');
+        $this->conf = new ConfigManager($sandboxConf);
+
+        $this->conf->set('general.enabled_plugins', []);
+        $updater = new Updater([], [], $this->conf, true);
+        $this->assertTrue($updater->updateMethodEscapeMarkdown());
+        $this->assertTrue($this->conf->get('security.markdown_escape'));
+
+        // reload from file
+        $this->conf = new ConfigManager($sandboxConf);
+        $this->assertTrue($this->conf->get('security.markdown_escape'));
+    }
+
+    /**
+     * Test updateMethodEscapeMarkdown with nothing to do (setting already enabled)
+     */
+    public function testEscapeMarkdownSettingNothingToDoEnabled()
+    {
+        $sandboxConf = 'sandbox/config';
+        copy(self::$configFile . '.json.php', $sandboxConf . '.json.php');
+        $this->conf = new ConfigManager($sandboxConf);
+        $this->conf->set('security.markdown_escape', true);
+        $updater = new Updater([], [], $this->conf, true);
+        $this->assertTrue($updater->updateMethodEscapeMarkdown());
+        $this->assertTrue($this->conf->get('security.markdown_escape'));
+    }
+
+    /**
+     * Test updateMethodEscapeMarkdown with nothing to do (setting already disabled)
+     */
+    public function testEscapeMarkdownSettingNothingToDoDisabled()
+    {
+        $this->conf->set('security.markdown_escape', false);
+        $updater = new Updater([], [], $this->conf, true);
+        $this->assertTrue($updater->updateMethodEscapeMarkdown());
+        $this->assertFalse($this->conf->get('security.markdown_escape'));
+    }
 }

@@ -14,11 +14,17 @@ require_once 'plugins/markdown/markdown.php';
 class PluginMarkdownTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var ConfigManager instance.
+     */
+    protected $conf;
+
+    /**
      * Reset plugin path
      */
     public function setUp()
     {
         PluginManager::$PLUGINS_PATH = 'plugins';
+        $this->conf = new ConfigManager('tests/utils/config/configJson');
     }
 
     /**
@@ -36,7 +42,7 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
             ),
         );
 
-        $data = hook_markdown_render_linklist($data);
+        $data = hook_markdown_render_linklist($data, $this->conf);
         $this->assertNotFalse(strpos($data['links'][0]['description'], '<h1>'));
         $this->assertNotFalse(strpos($data['links'][0]['description'], '<p>'));
     }
@@ -61,7 +67,7 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
             ),
         );
 
-        $data = hook_markdown_render_daily($data);
+        $data = hook_markdown_render_daily($data, $this->conf);
         $this->assertNotFalse(strpos($data['cols'][0][0]['formatedDescription'], '<h1>'));
         $this->assertNotFalse(strpos($data['cols'][0][0]['formatedDescription'], '<p>'));
     }
@@ -110,6 +116,8 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
         $output = escape($input);
         $input .= '<a href="#" onmouseHover="alert(\'xss\');" attr="tt">link</a>';
         $output .= '<a href="#"  attr="tt">link</a>';
+        $input .= '<a href="#" onmouseHover=alert(\'xss\'); attr="tt">link</a>';
+        $output .= '<a href="#"  attr="tt">link</a>';
         $this->assertEquals($output, sanitize_html($input));
         // Do not touch escaped HTML.
         $input = escape($input);
@@ -130,10 +138,10 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
             ))
         );
 
-        $processed = hook_markdown_render_linklist($data);
+        $processed = hook_markdown_render_linklist($data, $this->conf);
         $this->assertEquals($str, $processed['links'][0]['description']);
 
-        $processed = hook_markdown_render_feed($data);
+        $processed = hook_markdown_render_feed($data, $this->conf);
         $this->assertEquals($str, $processed['links'][0]['description']);
 
         $data = array(
@@ -151,7 +159,7 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
             ),
         );
 
-        $data = hook_markdown_render_daily($data);
+        $data = hook_markdown_render_daily($data, $this->conf);
         $this->assertEquals($str, $data['cols'][0][0]['formatedDescription']);
     }
 
@@ -169,7 +177,7 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
             ))
         );
 
-        $data = hook_markdown_render_feed($data);
+        $data = hook_markdown_render_feed($data, $this->conf);
         $this->assertContains('<em>', $data['links'][0]['description']);
     }
 
@@ -184,5 +192,42 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
 
         $data = process_markdown($md);
         $this->assertEquals($html, $data);
+    }
+
+    /**
+     * Make sure that the HTML tags are escaped.
+     */
+    public function testMarkdownWithHtmlEscape()
+    {
+        $md = '**strong** <strong>strong</strong>';
+        $html = '<div class="markdown"><p><strong>strong</strong> &lt;strong&gt;strong&lt;/strong&gt;</p></div>';
+        $data = array(
+            'links' => array(
+                0 => array(
+                    'description' => $md,
+                ),
+            ),
+        );
+        $data = hook_markdown_render_linklist($data, $this->conf);
+        $this->assertEquals($html, $data['links'][0]['description']);
+    }
+
+    /**
+     * Make sure that the HTML tags aren't escaped with the setting set to false.
+     */
+    public function testMarkdownWithHtmlNoEscape()
+    {
+        $this->conf->set('security.markdown_escape', false);
+        $md = '**strong** <strong>strong</strong>';
+        $html = '<div class="markdown"><p><strong>strong</strong> <strong>strong</strong></p></div>';
+        $data = array(
+            'links' => array(
+                0 => array(
+                    'description' => $md,
+                ),
+            ),
+        );
+        $data = hook_markdown_render_linklist($data, $this->conf);
+        $this->assertEquals($html, $data['links'][0]['description']);
     }
 }
