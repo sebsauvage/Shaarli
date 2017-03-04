@@ -21,7 +21,9 @@ configuration to enable URL rewriting, see:
     - versioned API endpoints:
         - `/api/v1/info`: get general information on the Shaarli instance
         - `/api/v1/links`: get a list of shaared links
-- Allow selecting themes/templates from the configuration page
+Theming:
+    - Introduce a new theme
+    - Allow selecting themes/templates from the configuration page
 - Add plugin placeholders to Atom/RSS feed templates
 - Add OpenSearch to feed templates
 - Add `campaign_` to the URL cleanup pattern list
@@ -29,8 +31,10 @@ configuration to enable URL rewriting, see:
 
 ### Changed
 - Docker: enable nginx URL rewriting for the REST API
-- Move `user.css` to the `data` folder
-- Move default template files to a subfolder (`default`)
+- Theming:
+    - Move `user.css` to the `data` folder
+    - Move default template files to a subfolder (`default`)
+    - Rename the legacy theme to `vintage`
 - Move PubSubHub to a dedicated plugin
 - Coding style:
     - explicit method visibility
@@ -38,7 +42,6 @@ configuration to enable URL rewriting, see:
     - remove unused variables
 - The updater now keeps custom theme preferences
 - Simplify the COPYING information
-
 
 ### Removed
 - PHP < 5.5 compatibility
@@ -51,15 +54,23 @@ configuration to enable URL rewriting, see:
 - Fix a fatal error during the install
 - Fix permalink image alignment in daily page
 - Fix the delete button in `editlink`
+- Fix redirection after link deletion
+- Do not access LinkDB links by ID before the Updater applies migrations
+- Remove extra spaces in the bookmarklet's name
+
+### Security
+- Markdown plugin: escape HTML entities by default
+
+
+## [v0.8.4](https://github.com/shaarli/Shaarli/releases/tag/v0.8.4) - 2017-03-04
+### Security
+- Markdown plugin: escape HTML entities by default
 
 ## [v0.8.3](https://github.com/shaarli/Shaarli/releases/tag/v0.8.3) - 2017-01-20
-
 ### Fixed
-
 - PHP 7.1 compatibility: add ConfigManager parameter to anti-bruteforce function call in login template.
 
 ## [v0.8.2](https://github.com/shaarli/Shaarli/releases/tag/v0.8.2) - 2016-12-15
-
 ### Fixed
 
 - Editing a link created before the new ID system would change its permalink.
