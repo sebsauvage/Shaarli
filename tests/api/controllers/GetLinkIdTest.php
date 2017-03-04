@@ -2,6 +2,7 @@
 
 namespace Shaarli\Api\Controllers;
 
+use Shaarli\Config\ConfigManager;
 
 use Slim\Container;
 use Slim\Http\Environment;
@@ -25,7 +26,7 @@ class GetLinkIdTest extends \PHPUnit_Framework_TestCase
     protected static $testDatastore = 'sandbox/datastore.php';
 
     /**
-     * @var \ConfigManager instance
+     * @var ConfigManager instance
      */
     protected $conf;
 
@@ -54,7 +55,7 @@ class GetLinkIdTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->conf = new \ConfigManager('tests/utils/config/configJson');
+        $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
 
