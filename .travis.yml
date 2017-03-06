@@ -20,4 +20,4 @@ install:
 script:
   - make clean
   - make check_permissions
-  - make test
+  - make all_tests
