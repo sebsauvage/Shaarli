@@ -20,7 +20,8 @@
         "phpmd/phpmd" : "@stable",
         "phpunit/phpunit": "4.8.*",
         "sebastian/phpcpd": "*",
-        "squizlabs/php_codesniffer": "2.*"
+        "squizlabs/php_codesniffer": "2.*",
+        "phpunit/phpcov": "*"
     },
     "autoload": {
         "psr-4": {
