@@ -216,22 +216,30 @@ function is_session_id_valid($sessionId)
 function autoLocale($headerLocale)
 {
     // Default if browser does not send HTTP_ACCEPT_LANGUAGE
-    $attempts = array('en_US', 'en_US.utf8', 'en_US.UTF-8');
-    if (isset($headerLocale)) {
-        // (It's a bit crude, but it works very well. Preferred language is always presented first.)
-        if (preg_match('/([a-z]{2,3})[-_]?([a-z]{2})?/i', $headerLocale, $matches)) {
-            $first = [strtolower($matches[1]), strtoupper($matches[1])];
-            $separators = ['_', '-'];
-            $encodings = ['utf8', 'UTF-8'];
-            if (!empty($matches[2])) {
-                $second = [strtoupper($matches[2]), strtolower($matches[2])];
-                $attempts = cartesian_product_generator([$first, $separators, $second, ['.'], $encodings]);
-            } else {
-                $attempts = cartesian_product_generator([$first, $separators, $first, ['.'], $encodings]);
+    $locales = array('en_US', 'en_US.utf8', 'en_US.UTF-8');
+    if (! empty($headerLocale)) {
+        if (preg_match_all('/([a-z]{2,3})[-_]?([a-z]{2})?,?/i', $headerLocale, $matches, PREG_SET_ORDER)) {
+            $attempts = [];
+            foreach ($matches as $match) {
+                $first = [strtolower($match[1]), strtoupper($match[1])];
+                $separators = ['_', '-'];
+                $encodings = ['utf8', 'UTF-8'];
+                if (!empty($match[2])) {
+                    $second = [strtoupper($match[2]), strtolower($match[2])];
+                    $items = [$first, $separators, $second, ['.'], $encodings];
+                } else {
+                    $items = [$first, $separators, $first, ['.'], $encodings];
+                }
+                $attempts = array_merge($attempts, iterator_to_array(cartesian_product_generator($items)));
+            }
+
+            if (! empty($attempts)) {
+                $locales = array_merge(array_map('implode', $attempts), $locales);
             }
         }
     }
-    setlocale(LC_ALL, implode('implode', iterator_to_array($attempts)));
+
+    setlocale(LC_ALL, $locales);
 }
 
 /**

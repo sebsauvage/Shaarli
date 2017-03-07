@@ -22,4 +22,80 @@ class UtilsFrTest extends UtilsTest
         $date = DateTime::createFromFormat('Ymd_His', '20170101_101112');
         $this->assertEquals('dim. 01 janv. 2017 10:11:12 EAT', format_date($date, false));
     }
+
+    /**
+     * Test autoLocale with a simple value
+     */
+    public function testAutoLocaleValid()
+    {
+        $current = setlocale(LC_ALL, 0);
+        $header = 'de-de';
+        autoLocale($header);
+        $this->assertEquals('de_DE.utf8', setlocale(LC_ALL, 0));
+
+        setlocale(LC_ALL, $current);
+    }
+
+    /**
+     * Test autoLocale with an alternative locale value
+     */
+    public function testAutoLocaleValidAlternative()
+    {
+        $current = setlocale(LC_ALL, 0);
+        $header = 'de_de.UTF8';
+        autoLocale($header);
+        $this->assertEquals('de_DE.utf8', setlocale(LC_ALL, 0));
+
+        setlocale(LC_ALL, $current);
+    }
+
+    /**
+     * Test autoLocale with multiples value, the first one is valid
+     */
+    public function testAutoLocaleMultipleFirstValid()
+    {
+        $current = setlocale(LC_ALL, 0);
+        $header = 'de-de;en-us';
+        autoLocale($header);
+        $this->assertEquals('de_DE.utf8', setlocale(LC_ALL, 0));
+
+        setlocale(LC_ALL, $current);
+    }
+
+    /**
+     * Test autoLocale with multiples value, the second one is valid
+     */
+    public function testAutoLocaleMultipleSecondValid()
+    {
+        $current = setlocale(LC_ALL, 0);
+        $header = 'pt_BR,de-de';
+        autoLocale($header);
+        $this->assertEquals('de_DE.utf8', setlocale(LC_ALL, 0));
+
+        setlocale(LC_ALL, $current);
+    }
+
+    /**
+     * Test autoLocale without value: defaults to en_US.
+     */
+    public function testAutoLocaleBlank()
+    {
+        $current = setlocale(LC_ALL, 0);
+        autoLocale('');
+        $this->assertEquals('en_US.utf8', setlocale(LC_ALL, 0));
+
+        setlocale(LC_ALL, $current);
+    }
+
+    /**
+     * Test autoLocale with an invalid value: defaults to en_US.
+     */
+    public function testAutoLocaleInvalid()
+    {
+        $current = setlocale(LC_ALL, 0);
+        autoLocale('pt_BR');
+        $this->assertEquals('en_US.utf8', setlocale(LC_ALL, 0));
+
+        setlocale(LC_ALL, $current);
+    }
 }
