@@ -160,6 +160,10 @@ Please use our release archives, or follow the
 - XSRF token now generated each time a page is rendered
 
 
+## [v0.7.1](https://github.com/shaarli/Shaarli/releases/tag/v0.7.1) - 2017-03-08
+### Security
+- Markdown plugin: escape HTML entities by default
+
 ## [v0.7.0](https://github.com/shaarli/Shaarli/releases/tag/v0.7.0) - 2016-05-14
 ### Added
 - Adds an option to encode redirector URL parameter
