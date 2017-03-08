@@ -1,5 +1,6 @@
 <?php
-namespace Shaarli\Config;
+
+use Shaarli\Config\Exception\PluginConfigOrderException;
 
 /**
  * Plugin configuration helper functions.
@@ -109,18 +110,4 @@ function load_plugin_parameter_values($plugins, $conf)
     }
 
     return $out;
-}
-
-/**
- * Exception used if an error occur while saving plugin configuration.
- */
-class PluginConfigOrderException extends \Exception
-{
-    /**
-     * Construct exception.
-     */
-    public function __construct()
-    {
-        $this->message = 'An error occurred while trying to save plugins loading order.';
-    }
 }
