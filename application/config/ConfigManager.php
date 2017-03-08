@@ -1,6 +1,9 @@
 <?php
 namespace Shaarli\Config;
 
+use Shaarli\Config\Exception\MissingFieldConfigException;
+use Shaarli\Config\Exception\UnauthorizedConfigException;
+
 /**
  * Class ConfigManager
  *
@@ -356,38 +359,5 @@ class ConfigManager
     public function setConfigIO($configIO)
     {
         $this->configIO = $configIO;
-    }
-}
-
-/**
- * Exception used if a mandatory field is missing in given configuration.
- */
-class MissingFieldConfigException extends \Exception
-{
-    public $field;
-
-    /**
-     * Construct exception.
-     *
-     * @param string $field field name missing.
-     */
-    public function __construct($field)
-    {
-        $this->field = $field;
-        $this->message = 'Configuration value is required for '. $this->field;
-    }
-}
-
-/**
- * Exception used if an unauthorized attempt to edit configuration has been made.
- */
-class UnauthorizedConfigException extends \Exception
-{
-    /**
-     * Construct exception.
-     */
-    public function __construct()
-    {
-        $this->message = 'You are not authorized to alter config.';
     }
 }
