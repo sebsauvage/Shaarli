@@ -1681,6 +1681,7 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
         'result_count' => count($linksToDisplay),
         'search_term' => $searchterm,
         'search_tags' => $searchtags,
+        'visibility' => ! empty($_SESSION['privateonly']) ? 'private' : '',
         'redirector' => $conf->get('redirector.url'),  // Optional redirector URL.
         'links' => $linkDisp,
         'tags' => $LINKSDB->allTags(),
