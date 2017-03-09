@@ -106,7 +106,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Try to write the config without mandatory parameter (e.g. 'login').
      *
-     * @expectedException Shaarli\Config\MissingFieldConfigException
+     * @expectedException Shaarli\Config\Exception\MissingFieldConfigException
      */
     public function testWriteMissingParameter()
     {
