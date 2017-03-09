@@ -10,10 +10,16 @@
 *.php   text diff=php
 Dockerfile      text
 
-# Do not alter images nor minified scripts
+# Do not alter images nor minified scripts nor fonts
 *.ico           binary
 *.jpg           binary
 *.png           binary
+*.svg           binary
+*.otf           binary
+*.eot           binary
+*.woff          binary
+*.woff2         binary
+*.ttf           binary
 *.min.css       binary
 *.min.js        binary
 
