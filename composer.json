@@ -11,7 +11,7 @@
     "keywords": ["bookmark", "link", "share", "web"],
     "require": {
         "php": ">=5.5",
-        "shaarli/netscape-bookmark-parser": "1.*",
+        "shaarli/netscape-bookmark-parser": "^2.0",
         "erusev/parsedown": "1.6",
         "slim/slim": "^3.0",
         "pubsubhubbub/publisher": "dev-master"
