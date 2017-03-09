@@ -256,7 +256,14 @@ window.onload = function () {
 
         resize();
     }
+
     if (description != null) {
         init();
+        // Submit editlink form with CTRL + Enter in the text area.
+        description.addEventListener('keydown', function (event) {
+            if (event.ctrlKey && event.keyCode === 13) {
+                document.getElementById('button-save-edit').click();
+            }
+        });
     }
 };
