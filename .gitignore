@@ -13,7 +13,6 @@ pagecache
 *.rtpl.php
 
 # 3rd-party dependencies
-composer.lock
 vendor/
 
 # Release archives
