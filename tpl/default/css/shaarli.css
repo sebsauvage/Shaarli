@@ -985,6 +985,10 @@ div.awesomplete > ul {
     margin: 0 0 0 5px;
 }
 
+.search-result .label-private {
+    border: 1px solid white;
+}
+
 /**
  * TOOLS
  */

@@ -62,6 +62,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once 'application/ApplicationUtils.php';
 require_once 'application/Cache.php';
 require_once 'application/CachedPage.php';
+require_once 'application/config/ConfigPlugin.php';
 require_once 'application/FeedBuilder.php';
 require_once 'application/FileUtils.php';
 require_once 'application/HttpUtils.php';
@@ -1681,6 +1682,7 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
         'result_count' => count($linksToDisplay),
         'search_term' => $searchterm,
         'search_tags' => $searchtags,
+        'visibility' => ! empty($_SESSION['privateonly']) ? 'private' : '',
         'redirector' => $conf->get('redirector.url'),  // Optional redirector URL.
         'links' => $linkDisp,
         'tags' => $LINKSDB->allTags(),
