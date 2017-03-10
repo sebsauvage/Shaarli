@@ -4,6 +4,7 @@
  */
 
 require_once 'application/Utils.php';
+require_once 'application/Languages.php';
 require_once 'tests/utils/ReferenceSessionIdHashes.php';
 
 // Initialize reference data before PHPUnit starts a session
@@ -325,5 +326,84 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     {
         $this->assertFalse(format_date([]));
         $this->assertFalse(format_date(null));
+    }
+
+    /**
+     * Test is_integer_mixed with valid values
+     */
+    public function testIsIntegerMixedValid()
+    {
+        $this->assertTrue(is_integer_mixed(12));
+        $this->assertTrue(is_integer_mixed('12'));
+        $this->assertTrue(is_integer_mixed(-12));
+        $this->assertTrue(is_integer_mixed('-12'));
+        $this->assertTrue(is_integer_mixed(0));
+        $this->assertTrue(is_integer_mixed('0'));
+        $this->assertTrue(is_integer_mixed(0x0a));
+    }
+
+    /**
+     * Test is_integer_mixed with invalid values
+     */
+    public function testIsIntegerMixedInvalid()
+    {
+        $this->assertFalse(is_integer_mixed(true));
+        $this->assertFalse(is_integer_mixed(false));
+        $this->assertFalse(is_integer_mixed([]));
+        $this->assertFalse(is_integer_mixed(['test']));
+        $this->assertFalse(is_integer_mixed([12]));
+        $this->assertFalse(is_integer_mixed(new DateTime()));
+        $this->assertFalse(is_integer_mixed('0x0a'));
+        $this->assertFalse(is_integer_mixed('12k'));
+        $this->assertFalse(is_integer_mixed('k12'));
+        $this->assertFalse(is_integer_mixed(''));
+    }
+
+    /**
+     * Test return_bytes
+     */
+    public function testReturnBytes()
+    {
+        $this->assertEquals(2 * 1024, return_bytes('2k'));
+        $this->assertEquals(2 * 1024, return_bytes('2K'));
+        $this->assertEquals(2 * (1024 ** 2), return_bytes('2m'));
+        $this->assertEquals(2 * (1024 ** 2), return_bytes('2M'));
+        $this->assertEquals(2 * (1024 ** 3), return_bytes('2g'));
+        $this->assertEquals(2 * (1024 ** 3), return_bytes('2G'));
+        $this->assertEquals(374, return_bytes('374'));
+        $this->assertEquals(374, return_bytes(374));
+        $this->assertEquals(0, return_bytes('0'));
+        $this->assertEquals(0, return_bytes(0));
+        $this->assertEquals(-1, return_bytes('-1'));
+        $this->assertEquals(-1, return_bytes(-1));
+        $this->assertEquals('', return_bytes(''));
+    }
+
+    /**
+     * Test human_bytes
+     */
+    public function testHumanBytes()
+    {
+        $this->assertEquals('2kiB', human_bytes(2 * 1024));
+        $this->assertEquals('2kiB', human_bytes(strval(2 * 1024)));
+        $this->assertEquals('2MiB', human_bytes(2 * (1024 ** 2)));
+        $this->assertEquals('2MiB', human_bytes(strval(2 * (1024 ** 2))));
+        $this->assertEquals('2GiB', human_bytes(2 * (1024 ** 3)));
+        $this->assertEquals('2GiB', human_bytes(strval(2 * (1024 ** 3))));
+        $this->assertEquals('374B', human_bytes(374));
+        $this->assertEquals('374B', human_bytes('374'));
+        $this->assertEquals('Unlimited', human_bytes('0'));
+        $this->assertEquals('Unlimited', human_bytes(0));
+        $this->assertEquals('Setting not set', human_bytes(''));
+    }
+
+    /**
+     * Test get_max_upload_size
+     */
+    public function testGetMaxUploadSize()
+    {
+        $this->assertEquals('1MiB', get_max_upload_size(2097152, '1024k'));
+        $this->assertEquals('1MiB', get_max_upload_size('1m', '2m'));
+        $this->assertEquals('100B', get_max_upload_size(100, 100));
     }
 }
