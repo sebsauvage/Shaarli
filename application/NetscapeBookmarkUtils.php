@@ -1,6 +1,7 @@
 <?php
 
 use Psr\Log\LogLevel;
+use Shaarli\Config\ConfigManager;
 use Shaarli\NetscapeBookmarkParser\NetscapeBookmarkParser;
 use Katzgrau\KLogger\Logger;
 
