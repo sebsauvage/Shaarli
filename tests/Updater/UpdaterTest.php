@@ -574,4 +574,45 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
         $this->assertTrue($updater->updateMethodEscapeMarkdown());
         $this->assertFalse($this->conf->get('security.markdown_escape'));
     }
+
+    /**
+     * Test updateMethodPiwikUrl with valid data
+     */
+    public function testUpdatePiwikUrlValid()
+    {
+        $sandboxConf = 'sandbox/config';
+        copy(self::$configFile . '.json.php', $sandboxConf . '.json.php');
+        $this->conf = new ConfigManager($sandboxConf);
+        $url = 'mypiwik.tld';
+        $this->conf->set('plugins.PIWIK_URL', $url);
+        $updater = new Updater([], [], $this->conf, true);
+        $this->assertTrue($updater->updateMethodPiwikUrl());
+        $this->assertEquals('http://'. $url, $this->conf->get('plugins.PIWIK_URL'));
+
+        // reload from file
+        $this->conf = new ConfigManager($sandboxConf);
+        $this->assertEquals('http://'. $url, $this->conf->get('plugins.PIWIK_URL'));
+    }
+
+    /**
+     * Test updateMethodPiwikUrl without setting
+     */
+    public function testUpdatePiwikUrlEmpty()
+    {
+        $updater = new Updater([], [], $this->conf, true);
+        $this->assertTrue($updater->updateMethodPiwikUrl());
+        $this->assertEmpty($this->conf->get('plugins.PIWIK_URL'));
+    }
+
+    /**
+     * Test updateMethodPiwikUrl: valid URL, nothing to do
+     */
+    public function testUpdatePiwikUrlNothingToDo()
+    {
+        $url = 'https://mypiwik.tld';
+        $this->conf->set('plugins.PIWIK_URL', $url);
+        $updater = new Updater([], [], $this->conf, true);
+        $this->assertTrue($updater->updateMethodPiwikUrl());
+        $this->assertEquals($url, $this->conf->get('plugins.PIWIK_URL'));
+    }
 }
