@@ -378,6 +378,22 @@ class Updater
 
         $this->conf->set('plugins.PIWIK_URL', 'http://'. $this->conf->get('plugins.PIWIK_URL'));
         $this->conf->write($this->isLoggedIn);
+
+        return true;
+    }
+
+    /**
+     * Use ATOM feed as default.
+     */
+    public function updateMethodAtomDefault()
+    {
+        if (!$this->conf->exists('feed.show_atom') || $this->conf->get('feed.show_atom') === true) {
+            return true;
+        }
+
+        $this->conf->set('feed.show_atom', true);
+        $this->conf->write($this->isLoggedIn);
+
         return true;
     }
 }

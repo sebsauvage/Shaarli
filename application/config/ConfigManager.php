@@ -317,7 +317,7 @@ class ConfigManager
         $this->setEmpty('updates.check_updates_interval', 86400);
 
         $this->setEmpty('feed.rss_permalinks', true);
-        $this->setEmpty('feed.show_atom', false);
+        $this->setEmpty('feed.show_atom', true);
 
         $this->setEmpty('privacy.default_private_links', false);
         $this->setEmpty('privacy.hide_public_links', false);
