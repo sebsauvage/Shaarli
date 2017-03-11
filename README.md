@@ -20,7 +20,7 @@ _It is designed to be personal (single-user), fast and handy._
 - [Bugs/Feature requests/Discussion](https://github.com/shaarli/Shaarli/issues/)
 
 ### Demo
-You can use this [public demo instance of Shaarli](http://shaarlidemo.tuxfamily.org/Shaarli).
+You can use this [public demo instance of Shaarli](https://demo.shaarli.org).
 It runs the latest development version of Shaarli and is updated/reset daily.
 
 Login: `demo`; Password: `demo`
