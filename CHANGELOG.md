@@ -28,6 +28,7 @@ Theming:
 - Add OpenSearch to feed templates
 - Add `campaign_` to the URL cleanup pattern list
 - Add an AUTHORS file and Makefile target to list authors from Git commit data
+- Link imports are now logged in `data/` folder, and can be debug using `dev.debug=true` setting.
 
 ### Changed
 - Docker: enable nginx URL rewriting for the REST API

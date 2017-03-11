@@ -24,7 +24,7 @@
     },
     "resource": {
         "datastore": "tests\/utils\/config\/datastore.php",
-        "data_dir": "tests\/utils\/config",
+        "data_dir": "sandbox/",
         "raintpl_tpl": "tpl/"
     },
     "plugins": {
