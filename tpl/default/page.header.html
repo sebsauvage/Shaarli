@@ -114,7 +114,7 @@
                  {if="!empty($search_tags)"}
                  value="{$search_tags}"
                  {/if}
-          autocomplete="off" data-multiple data-minChars="1"
+          autocomplete="off" data-multiple data-autofirst data-minChars="1"
           data-list="{loop="$tags"}{$key}, {/loop}"
           >
           <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
