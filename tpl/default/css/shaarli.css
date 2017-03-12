@@ -908,6 +908,10 @@ div.awesomplete > ul {
     color: black;
 }
 
+form[name="linkform"].page-form {
+    overflow: visible;
+}
+
 @media screen and (max-width: 64em) {
     .page-form-complete .form-label {
         height: inherit;
