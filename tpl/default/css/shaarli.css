@@ -832,6 +832,7 @@ pre {
 
 .page-form-complete .form-label label,
 .page-form-complete .form-input input,
+.page-form-complete .form-input select.align,
 .page-form-complete .timezone {
     position: absolute;
     top: 50%;
