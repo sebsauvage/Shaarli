@@ -357,10 +357,63 @@ window.onload = function () {
     var continent = document.getElementById('continent');
     var city = document.getElementById('city');
     if (continent != null && city != null) {
-        continent.addEventListener('change', function(event) {
+        continent.addEventListener('change', function (event) {
             hideTimezoneCities(city, continent.options[continent.selectedIndex].value, true);
         });
         hideTimezoneCities(city, continent.options[continent.selectedIndex].value, false);
+    }
+
+    /**
+     * Bulk actions
+     *
+     * Note: Requires a modern browser.
+     */
+    if (testEs6Compatibility()) {
+        let linkCheckboxes = document.querySelectorAll('.delete-checkbox');
+        for(let checkbox of linkCheckboxes) {
+            checkbox.style.display = 'block';
+            checkbox.addEventListener('click', function(event) {
+                let count = 0;
+                for(let checkbox of linkCheckboxes) {
+                    count = checkbox.checked ? count + 1 : count;
+                }
+                let bar = document.getElementById('actions');
+                if (count == 0 && bar.classList.contains('open')) {
+                    bar.classList.toggle('open');
+                } else if (count > 0 && ! bar.classList.contains('open')) {
+                    bar.classList.toggle('open');
+                }
+            });
+        }
+
+        let deleteButton = document.getElementById('actions-delete');
+        let token = document.querySelector('input[type="hidden"][name="token"]');
+        if (deleteButton != null && token != null) {
+            deleteButton.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                let links = [];
+                for(let checkbox of linkCheckboxes) {
+                    if (checkbox.checked) {
+                        links.push({
+                            'id': checkbox.value,
+                            'title': document.querySelector('.linklist-item[data-id="'+ checkbox.value +'"] .linklist-link').innerHTML
+                        });
+                    }
+                }
+
+                let message = 'Are you sure you want to delete '+ links.length +' links?\n';
+                message += 'This action is IRREVERSIBLE!\n\nTitles:\n';
+                let ids = '';
+                for (let item of links) {
+                    message += '  - '+ item['title'] +'\n';
+                    ids += item['id'] +'+';
+                }
+                if (window.confirm(message)) {
+                    window.location = '?delete_link&lf_linkdate='+ ids +'&token='+ token.value;
+                }
+            });
+        }
     }
 };
 
@@ -397,7 +450,7 @@ function activateFirefoxSocial(node) {
  */
 function hideTimezoneCities(cities, currentContinent, reset = false) {
     var first = true;
-    [].forEach.call(cities, function(option) {
+    [].forEach.call(cities, function (option) {
         if (option.getAttribute('data-continent') != currentContinent) {
             option.className = 'hidden';
         } else {
@@ -408,4 +461,20 @@ function hideTimezoneCities(cities, currentContinent, reset = false) {
             }
         }
     });
+}
+
+/**
+ * Check if the browser is compatible with ECMAScript 6 syntax
+ *
+ * Source: http://stackoverflow.com/a/29046739/1484919
+ *
+ * @returns {boolean}
+ */
+function testEs6Compatibility()
+{
+    "use strict";
+
+    try { eval("var foo = (x)=>x+1"); }
+    catch (e) { return false; }
+    return true;
 }

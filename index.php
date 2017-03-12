@@ -1329,18 +1329,21 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
     // -------- User clicked the "Delete" button when editing a link: Delete link from database.
     if ($targetPage == Router::$PAGE_DELETELINK)
     {
-        // We do not need to ask for confirmation:
-        // - confirmation is handled by JavaScript
-        // - we are protected from XSRF by the token.
-
         if (! tokenOk($_GET['token'])) {
             die('Wrong token.');
         }
 
-        $id = intval(escape($_GET['lf_linkdate']));
-        $link = $LINKSDB[$id];
-        $pluginManager->executeHooks('delete_link', $link);
-        unset($LINKSDB[$id]);
+        if (strpos($_GET['lf_linkdate'], ' ') !== false) {
+            $ids = array_values(array_filter(preg_split('/\s+/', escape($_GET['lf_linkdate']))));
+        } else {
+            $ids = [$_GET['lf_linkdate']];
+        }
+        foreach ($ids as $id) {
+            $id = (int) escape($id);
+            $link = $LINKSDB[$id];
+            $pluginManager->executeHooks('delete_link', $link);
+            unset($LINKSDB[$id]);
+        }
         $LINKSDB->save($conf->get('resource.page_cache')); // save to disk
         $history->deleteLink($link);
 

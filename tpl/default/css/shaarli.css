@@ -275,6 +275,19 @@ body, .pure-g [class*="pure-u"] {
     }
 }
 
+.subheader-form a.button {
+    color: #f5f5f5;
+    font-weight: bold;
+    text-decoration: none;
+    border: 2px solid #f5f5f5;
+    border-radius: 5px;
+    padding: 3px 10px;
+}
+
+.linklist-item-editbuttons .delete-checkbox {
+    display: none;
+}
+
 #header-login-form input[type="text"], #header-login-form input[type="password"] {
     width: 200px;
 }
