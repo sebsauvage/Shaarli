@@ -25,6 +25,7 @@ Theming:
     - Introduce a new theme
     - Allow selecting themes/templates from the configuration page
     - New/Edit link form can be submitted using CTRL+Enter in the textarea
+    - Shaarli version is displayed in the footer when logged in 
 - Add plugin placeholders to Atom/RSS feed templates
 - Add OpenSearch to feed templates
 - Add `campaign_` to the URL cleanup pattern list
