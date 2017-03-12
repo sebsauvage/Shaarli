@@ -26,7 +26,7 @@
              {if="!empty($username)"}value="{$username}"{/if} class="autofocus" tabindex="20">
         </div>
         <div>
-          <input type="password" name="password" placeholder="{'Password'|t}" tabindex="21">
+          <input type="password" name="password" placeholder="{'Password'|t}" class="autofocus" tabindex="21">
         </div>
         <div class="remember-me">
           <input type="checkbox" name="longlastingsession" id="longlastingsessionform"
@@ -45,15 +45,6 @@
 {/if}
 
 {include="page.footer"}
-<script>
-  {if="ban_canLogin($conf) && ! empty($username)"}
-    // Focus password on load if the username is set.
-    var passwords = document.getElementsByName('password');
-    if (passwords.length == 2) {
-        passwords[1].focus();
-    }
-  {/if}
-</script>
 </body>
 </html>
 

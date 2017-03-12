@@ -46,6 +46,10 @@ Files: plugins/wallabag/wallabag.png
 License: MIT License (http://opensource.org/licenses/MIT)
 Copyright: (C) 2015 Nicolas Lœuillet - https://github.com/wallabag/wallabag
 
+Files: tpl/default/sad_star.png
+License: MIT License (http://opensource.org/licenses/MIT)
+Copyright: (C) 2015 kalvn - https://github.com/kalvn/Shaarli-Material
+
 ----------------------------------------------------
 ZLIB/LIBPNG LICENSE
 

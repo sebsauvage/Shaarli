@@ -1,3 +1,31 @@
+/** @licstart  The following is the entire license notice for the
+ *  JavaScript code in this page.
+ *
+ *   Copyright: (c) 2011-2015 Sébastien SAUVAGE <sebsauvage@sebsauvage.net>
+ *              (c) 2011-2017 The Shaarli Community, see AUTHORS
+ *
+ *   This software is provided 'as-is', without any express or implied warranty.
+ *   In no event will the authors be held liable for any damages arising from
+ *   the use of this software.
+ *
+ *   Permission is granted to anyone to use this software for any purpose,
+ *   including commercial applications, and to alter it and redistribute it
+ *   freely, subject to the following restrictions:
+ *
+ *   1. The origin of this software must not be misrepresented; you must not
+ *   claim that you wrote the original software. If you use this software
+ *   in a product, an acknowledgment in the product documentation would
+ *   be appreciated but is not required.
+ *
+ *   2. Altered source versions must be plainly marked as such, and must
+ *   not be misrepresented as being the original software.
+ *
+ *   3. This notice may not be removed or altered from any source distribution.
+ *
+ *  @licend  The above is the entire license notice
+ *  for the JavaScript code in this page.
+ */
+
 window.onload = function () {
 
     /**
@@ -185,9 +213,13 @@ window.onload = function () {
     /**
      * Autofocus text fields
      */
-    var autofocusElements = document.querySelector('.autofocus');
-    if (autofocusElements != null) {
-        autofocusElements.focus();
+    // ES6 syntax
+    let autofocusElements = document.querySelectorAll('.autofocus');
+    for (let autofocusElement of autofocusElements) {
+        if (autofocusElement.value == '') {
+            autofocusElement.focus();
+            break;
+        }
     }
 
     /**
@@ -266,4 +298,96 @@ window.onload = function () {
             }
         });
     }
+
+    /**
+     * TimeZome select
+     * FIXME! way too hackish
+     */
+    var toRemove = document.getElementById('timezone-remove');
+    if (toRemove != null) {
+        var firstSelect = toRemove.getElementsByTagName('select')[0];
+        var secondSelect = toRemove.getElementsByTagName('select')[1];
+        toRemove.parentNode.removeChild(toRemove);
+        var toAdd = document.getElementById('timezone-add');
+        var newTimezone = '<span class="timezone-continent">Continent ' + firstSelect.outerHTML + '</span>';
+        newTimezone += ' <span class="timezone-country">Country ' + secondSelect.outerHTML + '</span>';
+        toAdd.innerHTML = newTimezone;
+    }
+
+    /**
+     * Awesomplete trigger.
+     */
+    var tags = document.getElementById('lf_tags');
+    if (tags != null) {
+        awesompleteUniqueTag('#lf_tags');
+    }
+
+    /**
+     * bLazy trigger
+     */
+    var picwall = document.getElementById('picwall_container');
+    if (picwall != null) {
+        var bLazy = new Blazy();
+    }
+
+    /**
+     * Bookmarklet alert
+     */
+    var bookmarkletLinks = document.querySelectorAll('.bookmarklet-link');
+    var bkmMessage = document.getElementById('bookmarklet-alert');
+    [].forEach.call(bookmarkletLinks, function(link) {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            alert(bkmMessage.value);
+        });
+    });
+
+    /**
+     * Firefox Social
+     */
+    var ffButton = document.getElementById('ff-social-button');
+    if (ffButton != null) {
+        ffButton.addEventListener('click', function(event) {
+            activateFirefoxSocial(event.target);
+        });
+    }
+
+    /**
+     * Plugin admin order
+     */
+    var orderPA = document.querySelectorAll('.order');
+    [].forEach.call(orderPA, function(link) {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (event.target.classList.contains('order-up')) {
+                return orderUp(event.target.parentNode.parentNode.getAttribute('data-order'));
+            } else if (event.target.classList.contains('order-down')) {
+                return orderDown(event.target.parentNode.parentNode.getAttribute('data-order'));
+            }
+        });
+    });
 };
+
+function activateFirefoxSocial(node) {
+    var loc = location.href;
+    var baseURL = loc.substring(0, loc.lastIndexOf("/"));
+
+    // Keeping the data separated (ie. not in the DOM) so that it's maintainable and diffable.
+    var data = {
+        name: "{$shaarlititle}",
+        description: "The personal, minimalist, super-fast, database free, bookmarking service by the Shaarli community.",
+        author: "Shaarli",
+        version: "1.0.0",
+
+        iconURL: baseURL + "/images/favicon.ico",
+        icon32URL: baseURL + "/images/favicon.ico",
+        icon64URL: baseURL + "/images/favicon.ico",
+
+        shareURL: baseURL + "{noparse}?post=%{url}&title=%{title}&description=%{text}&source=firefoxsocialapi{/noparse}",
+        homepageURL: baseURL
+    };
+    node.setAttribute("data-service", JSON.stringify(data));
+
+    var activate = new CustomEvent("ActivateSocialFeature");
+    node.dispatchEvent(activate);
+}
