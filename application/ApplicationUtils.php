@@ -5,7 +5,7 @@
 class ApplicationUtils
 {
     private static $GIT_URL = 'https://raw.githubusercontent.com/shaarli/Shaarli';
-    private static $GIT_BRANCHES = array('master', 'stable');
+    private static $GIT_BRANCHES = array('latest', 'stable');
     private static $VERSION_FILE = 'shaarli_version.php';
     private static $VERSION_START_TAG = '<?php /* ';
     private static $VERSION_END_TAG = ' */ ?>';
@@ -65,13 +65,10 @@ class ApplicationUtils
                                        $isLoggedIn,
                                        $branch='stable')
     {
-        if (! $isLoggedIn) {
-            // Do not check versions for visitors
-            return false;
-        }
-
-        if (empty($enableCheck)) {
-            // Do not check if the user doesn't want to
+        // Do not check versions for visitors
+        // Do not check if the user doesn't want to
+        // Do not check with dev version
+        if (! $isLoggedIn || empty($enableCheck) || $currentVersion === 'dev') {
             return false;
         }
 

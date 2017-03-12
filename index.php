@@ -1,6 +1,6 @@
 <?php
 /**
- * Shaarli v0.8.3 - Shaare your links...
+ * Shaarli dev - Shaare your links...
  *
  * The personal, minimalist, super-fast, database free, bookmarking service.
  *
@@ -25,7 +25,7 @@ if (date_default_timezone_get() == '') {
 /*
  * PHP configuration
  */
-define('shaarli_version', '0.8.2');
+define('shaarli_version', 'dev');
 
 // http://server.com/x/shaarli --> /shaarli/
 define('WEB_PATH', substr($_SERVER['REQUEST_URI'], 0, 1+strrpos($_SERVER['REQUEST_URI'], '/', 0)));

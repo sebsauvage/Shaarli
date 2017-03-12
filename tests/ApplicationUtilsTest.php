@@ -332,4 +332,15 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
             ApplicationUtils::checkResourcePermissions($conf)
         );
     }
+
+    /**
+     * Check update with 'dev' as curent version (master branch).
+     * It should always return false.
+     */
+    public function testCheckUpdateDev()
+    {
+        $this->assertFalse(
+            ApplicationUtils::checkUpdate('dev', self::$testUpdateFile, 100, true, true)
+        );
+    }
 }
