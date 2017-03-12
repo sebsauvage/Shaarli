@@ -24,6 +24,7 @@ configuration to enable URL rewriting, see:
 Theming:
     - Introduce a new theme
     - Allow selecting themes/templates from the configuration page
+    - New/Edit link form can be submitted using CTRL+Enter in the textarea
 - Add plugin placeholders to Atom/RSS feed templates
 - Add OpenSearch to feed templates
 - Add `campaign_` to the URL cleanup pattern list
@@ -36,6 +37,8 @@ Theming:
     - Move `user.css` to the `data` folder
     - Move default template files to a subfolder (`default`)
     - Rename the legacy theme to `vintage`
+    - Private only filter is now displayed as a search parameter
+    - Autocomplete: pre-select the first element
 - Move PubSubHub to a dedicated plugin
 - Coding style:
     - explicit method visibility
@@ -43,6 +46,9 @@ Theming:
     - remove unused variables
 - The updater now keeps custom theme preferences
 - Simplify the COPYING information
+- Improved client locale detection
+- Improved date time display depending on the locale
+- Partial namespace support for Shaarli classes
 
 ### Removed
 - PHP < 5.5 compatibility
@@ -58,6 +64,8 @@ Theming:
 - Fix redirection after link deletion
 - Do not access LinkDB links by ID before the Updater applies migrations
 - Remove extra spaces in the bookmarklet's name
+- Piwik plugin: Piwik URL protocol can now be set (http or https)
+- All inline JS has been moved to dedicated JS files
 
 ### Security
 - Markdown plugin: escape HTML entities by default
