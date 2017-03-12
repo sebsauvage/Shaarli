@@ -48,14 +48,8 @@
                   <td><div class="pure-u-0 pure-u-lg-visible"><label for="{$key}">{$value.description}</label></div></td>
                   <td class="center">
                     {if="count($enabledPlugins)>1"}
-                    <a href="#" class="order"
-                       onclick="return orderUp(this.parentNode.parentNode.getAttribute('data-order'));">
-                      ▲
-                    </a>
-                    <a href="#" class="order"
-                       onclick="return orderDown(this.parentNode.parentNode.getAttribute('data-order'));">
-                      ▼
-                    </a>
+                    <a href="#" class="order order-up">▲</a>
+                    <a href="#" class="order order-down">▼</a>
                     {/if}
                     <input type="hidden" name="order_{$key}" value="{$counter}">
                   </td>

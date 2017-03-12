@@ -105,18 +105,5 @@
 </div>
 </form>
 {include="page.footer"}
-<script>
-  // FIXME!
-  (function (window, document) {
-    var toRemove = document.getElementById('timezone-remove');
-    var firstSelect = toRemove.getElementsByTagName('select')[0];
-    var secondSelect = toRemove.getElementsByTagName('select')[1];
-    toRemove.parentNode.removeChild(toRemove);
-    var toAdd = document.getElementById('timezone-add');
-    var newTimezone = '<span class="timezone-continent">Continent ' + firstSelect.outerHTML + '</span>';
-    newTimezone += ' <span class="timezone-country">Country ' + secondSelect.outerHTML + '</span>';
-    toAdd.innerHTML = newTimezone;
-  })(this, this.document);
-</script>
 </body>
 </html>
