@@ -75,7 +75,8 @@ class PageBuilder
         }
         $this->tpl->assign('shaarlititle', $this->conf->get('general.title', 'Shaarli'));
         $this->tpl->assign('openshaarli', $this->conf->get('security.open_shaarli', false));
-        $this->tpl->assign('showatom', $this->conf->get('feed.show_atom', false));
+        $this->tpl->assign('showatom', $this->conf->get('feed.show_atom', true));
+        $this->tpl->assign('feed_type', $this->conf->get('feed.show_atom', true) !== false ? 'atom' : 'rss');
         $this->tpl->assign('hide_timestamps', $this->conf->get('privacy.hide_timestamps', false));
         $this->tpl->assign('token', getToken($this->conf));
         // To be removed with a proper theme configuration.

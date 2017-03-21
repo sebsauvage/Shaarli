@@ -48,7 +48,7 @@
           </li>
         {/loop}
         <li class="pure-menu-item pure-u-lg-0">
-          <a href="?do=atom{$searchcrits}" class="pure-menu-link">{'RSS Feed'|t}</a>
+            <a href="?do={$feed_type}{$searchcrits}" class="pure-menu-link">{'RSS Feed'|t}</a>
         </li>
         {if="isLoggedIn()"}
           <li class="pure-menu-item pure-u-lg-0">
@@ -70,7 +70,7 @@
             </a>
           </li>
           <li class="pure-menu-item">
-            <a href="?do=atom{$searchcrits}" class="pure-menu-link" title="{'RSS Feed'|t}">
+            <a href="?do={$feed_type}{$searchcrits}" class="pure-menu-link" title="{'RSS Feed'|t}">
               <i class="fa fa-rss"></i>
             </a>
           </li>

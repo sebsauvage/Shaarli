@@ -615,4 +615,49 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
         $this->assertTrue($updater->updateMethodPiwikUrl());
         $this->assertEquals($url, $this->conf->get('plugins.PIWIK_URL'));
     }
+
+    /**
+     * Test updateMethodAtomDefault with show_atom set to false
+     * => update to true.
+     */
+    public function testUpdateMethodAtomDefault()
+    {
+        $sandboxConf = 'sandbox/config';
+        copy(self::$configFile . '.json.php', $sandboxConf . '.json.php');
+        $this->conf = new ConfigManager($sandboxConf);
+        $this->conf->set('feed.show_atom', false);
+        $updater = new Updater([], [], $this->conf, true);
+        $this->assertTrue($updater->updateMethodAtomDefault());
+        $this->assertTrue($this->conf->get('feed.show_atom'));
+        // reload from file
+        $this->conf = new ConfigManager($sandboxConf);
+        $this->assertTrue($this->conf->get('feed.show_atom'));
+    }
+    /**
+     * Test updateMethodAtomDefault with show_atom not set.
+     * => nothing to do
+     */
+    public function testUpdateMethodAtomDefaultNoExist()
+    {
+        $sandboxConf = 'sandbox/config';
+        copy(self::$configFile . '.json.php', $sandboxConf . '.json.php');
+        $this->conf = new ConfigManager($sandboxConf);
+        $updater = new Updater([], [], $this->conf, true);
+        $this->assertTrue($updater->updateMethodAtomDefault());
+        $this->assertTrue($this->conf->get('feed.show_atom'));
+    }
+    /**
+     * Test updateMethodAtomDefault with show_atom set to true.
+     * => nothing to do
+     */
+    public function testUpdateMethodAtomDefaultAlreadyTrue()
+    {
+        $sandboxConf = 'sandbox/config';
+        copy(self::$configFile . '.json.php', $sandboxConf . '.json.php');
+        $this->conf = new ConfigManager($sandboxConf);
+        $this->conf->set('feed.show_atom', true);
+        $updater = new Updater([], [], $this->conf, true);
+        $this->assertTrue($updater->updateMethodAtomDefault());
+        $this->assertTrue($this->conf->get('feed.show_atom'));
+    }
 }
