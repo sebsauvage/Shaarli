@@ -17,7 +17,7 @@ class FakeApplicationUtils extends ApplicationUtils
     /**
      * Toggle HTTP requests, allow overriding the version code
      */
-    public static function getLatestGitVersionCode($url, $timeout=0)
+    public static function getVersion($url, $timeout=0)
     {
         return self::$VERSION_CODE;
     }
@@ -45,17 +45,27 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Remove test version file if it exists
+     */
+    public function tearDown()
+    {
+        if (is_file('sandbox/version.php')) {
+            unlink('sandbox/version.php');
+        }
+    }
+
+    /**
      * Retrieve the latest version code available on Git
      *
      * Expected format: Semantic Versioning - major.minor.patch
      */
-    public function testGetLatestGitVersionCode()
+    public function testGetVersionCode()
     {
         $testTimeout = 10;
 
         $this->assertEquals(
             '0.5.4',
-            ApplicationUtils::getLatestGitVersionCode(
+            ApplicationUtils::getVersion(
                 'https://raw.githubusercontent.com/shaarli/Shaarli/'
                .'v0.5.4/shaarli_version.php',
                 $testTimeout
@@ -63,7 +73,7 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
         );
         $this->assertRegExp(
             self::$versionPattern,
-            ApplicationUtils::getLatestGitVersionCode(
+            ApplicationUtils::getVersion(
                 'https://raw.githubusercontent.com/shaarli/Shaarli/'
                .'master/shaarli_version.php',
                 $testTimeout
@@ -72,14 +82,26 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Attempt to retrieve the latest version from an invalid URL
+     * Attempt to retrieve the latest version from an invalid File
      */
-    public function testGetLatestGitVersionCodeInvalidUrl()
+    public function testGetVersionCodeFromFile()
+    {
+        file_put_contents('sandbox/version.php', '<?php /* 1.2.3 */ ?>'. PHP_EOL);
+        $this->assertEquals(
+            '1.2.3',
+            ApplicationUtils::getVersion('sandbox/version.php', 1)
+        );
+    }
+
+    /**
+     * Attempt to retrieve the latest version from an invalid File
+     */
+    public function testGetVersionCodeInvalidFile()
     {
         $oldlog = ini_get('error_log');
         ini_set('error_log', '/dev/null');
         $this->assertFalse(
-            ApplicationUtils::getLatestGitVersionCode('htttp://null.io', 1)
+            ApplicationUtils::getVersion('idontexist', 1)
         );
         ini_set('error_log', $oldlog);
     }

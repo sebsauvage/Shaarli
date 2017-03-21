@@ -4,9 +4,13 @@
  */
 class ApplicationUtils
 {
+    /**
+     * @var string File containing the current version
+     */
+    public static $VERSION_FILE = 'shaarli_version.php';
+
     private static $GIT_URL = 'https://raw.githubusercontent.com/shaarli/Shaarli';
     private static $GIT_BRANCHES = array('latest', 'stable');
-    private static $VERSION_FILE = 'shaarli_version.php';
     private static $VERSION_START_TAG = '<?php /* ';
     private static $VERSION_END_TAG = ' */ ?>';
 
@@ -27,6 +31,30 @@ class ApplicationUtils
         if (strpos($headers[0], '200 OK') === false) {
             error_log('Failed to retrieve ' . $url);
             return false;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Retrieve the version from a remote URL or a file.
+     *
+     * @param string $remote  URL or file to fetch.
+     * @param int    $timeout For URLs fetching.
+     *
+     * @return bool|string The version or false if it couldn't be retrieved.
+     */
+    public static function getVersion($remote, $timeout = 2)
+    {
+        if (startsWith($remote, 'http')) {
+            if (($data = static::getLatestGitVersionCode($remote, $timeout)) === false) {
+                return false;
+            }
+        } else {
+            if (! is_file($remote)) {
+                return false;
+            }
+            $data = file_get_contents($remote);
         }
 
         return str_replace(
@@ -90,7 +118,7 @@ class ApplicationUtils
 
         // Late Static Binding allows overriding within tests
         // See http://php.net/manual/en/language.oop5.late-static-bindings.php
-        $latestVersion = static::getLatestGitVersionCode(
+        $latestVersion = static::getVersion(
             self::$GIT_URL . '/' . $branch . '/' . self::$VERSION_FILE
         );
 

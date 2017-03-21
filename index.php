@@ -1,8 +1,6 @@
 <?php
 /**
- * Shaarli dev - Shaare your links...
- *
- * The personal, minimalist, super-fast, database free, bookmarking service.
+ * Shaarli - The personal, minimalist, super-fast, database free, bookmarking service.
  *
  * Friendly fork by the Shaarli community:
  *  - https://github.com/shaarli/Shaarli
@@ -25,7 +23,6 @@ if (date_default_timezone_get() == '') {
 /*
  * PHP configuration
  */
-define('shaarli_version', 'dev');
 
 // http://server.com/x/shaarli --> /shaarli/
 define('WEB_PATH', substr($_SERVER['REQUEST_URI'], 0, 1+strrpos($_SERVER['REQUEST_URI'], '/', 0)));
@@ -89,6 +86,8 @@ try {
     echo $exc->getMessage();
     exit;
 }
+
+define('shaarli_version', ApplicationUtils::getVersion(__DIR__ .'/'. ApplicationUtils::$VERSION_FILE));
 
 // Force cookie path (but do not change lifetime)
 $cookie = session_get_cookie_params();
