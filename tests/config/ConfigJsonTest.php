@@ -40,7 +40,7 @@ class ConfigJsonTest extends \PHPUnit_Framework_TestCase
      * Read a non existent config file -> empty array.
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage An error occurred while parsing JSON file: error code #4
+     * @expectedExceptionMessageRegExp  /An error occurred while parsing JSON configuration file \([\w\/\.]+\): error code #4/
      */
     public function testReadInvalidJson()
     {

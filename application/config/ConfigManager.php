@@ -81,7 +81,11 @@ class ConfigManager
      */
     protected function load()
     {
-        $this->loadedConfig = $this->configIO->read($this->getConfigFileExt());
+        try {
+            $this->loadedConfig = $this->configIO->read($this->getConfigFileExt());
+        } catch (\Exception $e) {
+            die($e->getMessage());
+        }
         $this->setDefaultValues();
     }
 

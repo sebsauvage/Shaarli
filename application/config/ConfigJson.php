@@ -21,8 +21,14 @@ class ConfigJson implements ConfigIO
         $data = str_replace(self::getPhpSuffix(), '', $data);
         $data = json_decode($data, true);
         if ($data === null) {
-            $error = json_last_error();
-            throw new \Exception('An error occurred while parsing JSON file: error code #'. $error);
+            $errorCode = json_last_error();
+            $error  = 'An error occurred while parsing JSON configuration file ('. $filepath .'): error code #';
+            $error .= $errorCode. '<br>➜ <code>' . json_last_error_msg() .'</code>';
+            if ($errorCode === JSON_ERROR_SYNTAX) {
+                $error .= '<br>Please check your JSON syntax (without PHP comment tags) using a JSON lint tool such as ';
+                $error .= '<a href="http://jsonlint.com/">jsonlint.com</a>.';
+            }
+            throw new \Exception($error);
         }
         return $data;
     }
