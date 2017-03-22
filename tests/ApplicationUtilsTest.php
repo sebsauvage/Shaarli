@@ -75,7 +75,7 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
             self::$versionPattern,
             ApplicationUtils::getVersion(
                 'https://raw.githubusercontent.com/shaarli/Shaarli/'
-               .'master/shaarli_version.php',
+               .'latest/shaarli_version.php',
                 $testTimeout
             )
         );
