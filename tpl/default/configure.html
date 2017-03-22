@@ -73,15 +73,35 @@
         <div class="pure-u-lg-{$ratioLabel} pure-u-1 ">
           <div class="form-label">
             <label>
-              <span class="label-name">{'Timezone'|t}</span>
+              <span class="label-name">{'Timezone'|t}</span><br>
+              <span class="label-desc">{'Continent'|t} &middot; {'City'|t}</span>
             </label>
           </div>
         </div>
         <div class="pure-u-lg-{$ratioInput} pure-u-1 ">
           <div class="form-input">
-            {ignore}FIXME! too hackish, needs to be fixed upstream{/ignore}
-            <div class="timezone" id="timezone-remove">{$timezone_form}</div>
-            <div class="timezone" id="timezone-add"></div>
+            <div class="timezone">
+              <select id="continent" name="continent">
+                {loop="$continents"}
+                  {if="$key !== 'selected'"}
+                    <option value="{$value}" {if="$continents.selected === $value"}selected{/if}>
+                      {$value}
+                    </option>
+                  {/if}
+                {/loop}
+              </select>
+              <select id="city" name="city">
+                {loop="$cities"}
+                  {if="$key !== 'selected'"}
+                    <option value="{$value.city}"
+                            {if="$cities.selected === $value.city"}selected{/if}
+                            data-continent="{$value.continent}">
+                      {$value.city}
+                    </option>
+                  {/if}
+                {/loop}
+              </select>
+            </div>
           </div>
         </div>
       </div>
