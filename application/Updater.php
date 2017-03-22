@@ -396,6 +396,50 @@ class Updater
 
         return true;
     }
+
+    /**
+     * Update updates.check_updates_branch setting.
+     *
+     * If the current major version digit matches the latest branch
+     * major version digit, we set the branch to `latest`,
+     * otherwise we'll check updates on the `stable` branch.
+     *
+     * No update required for the dev version.
+     *
+     * Note: due to hardcoded URL and lack of dependency injection, this is not unit testable.
+     *
+     * FIXME! This needs to be removed when we switch to first digit major version
+     *        instead of the second one since the versionning process will change.
+     */
+    public function updateMethodCheckUpdateRemoteBranch()
+    {
+        if (shaarli_version === 'dev' || $this->conf->get('updates.check_updates_branch') === 'latest') {
+            return true;
+        }
+
+        // Get latest branch major version digit
+        $latestVersion = ApplicationUtils::getLatestGitVersionCode(
+            'https://raw.githubusercontent.com/shaarli/Shaarli/latest/shaarli_version.php',
+            5
+        );
+        if (preg_match('/(\d+)\.\d+$/', $latestVersion, $matches) === false) {
+            return false;
+        }
+        $latestMajor = $matches[1];
+
+        // Get current major version digit
+        preg_match('/(\d+)\.\d+$/', shaarli_version, $matches);
+        $currentMajor = $matches[1];
+
+        if ($currentMajor === $latestMajor) {
+            $branch = 'latest';
+        } else {
+            $branch = 'stable';
+        }
+        $this->conf->set('updates.check_updates_branch', $branch);
+        $this->conf->write($this->isLoggedIn);
+        return true;
+    }
 }
 
 /**
