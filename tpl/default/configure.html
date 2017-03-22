@@ -186,7 +186,7 @@
       <div class="pure-g">
         <div class="pure-u-lg-{$ratioLabel} pure-u-{$ratioLabelMobile}">
           <div class="form-label">
-            <label for="apiEnabled">
+            <label for="enableApi">
               <span class="label-name">{'Enable REST API'|t}</span><br>
               <span class="label-desc">{'Allow third party software to use Shaarli such as mobile application'|t}</span>
             </label>
@@ -194,7 +194,7 @@
         </div>
         <div class="pure-u-lg-{$ratioInput} pure-u-{$ratioInputMobile}">
           <div class="form-input">
-            <input type="checkbox" name="apiEnabled" id="apiEnabled"
+            <input type="checkbox" name="enableApi" id="enableApi"
                  {if="$api_enabled"}checked{/if}/>
           </div>
         </div>

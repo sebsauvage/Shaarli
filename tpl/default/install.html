@@ -7,6 +7,8 @@
 
 {$ratioLabel='1-4'}
 {$ratioInput='3-4'}
+{$ratioLabelMobile='7-8'}
+{$ratioInputMobile='1-8'}
 
 <form method="POST" action="#" name="installform" id="installform">
 <div class="pure-g">
@@ -94,6 +96,22 @@
       <div class="pure-u-lg-{$ratioInput} pure-u-1-8">
         <div class="form-input">
           <input type="checkbox" name="updateCheck" id="update" checked="checked">
+        </div>
+      </div>
+    </div>
+
+    <div class="pure-g">
+      <div class="pure-u-lg-{$ratioLabel} pure-u-{$ratioLabelMobile}">
+        <div class="form-label">
+          <label for="enableApi">
+            <span class="label-name">{'Enable REST API'|t}</span><br>
+            <span class="label-desc">{'Allow third party software to use Shaarli such as mobile application'|t}</span>
+          </label>
+        </div>
+      </div>
+      <div class="pure-u-lg-{$ratioInput} pure-u-{$ratioInputMobile}">
+        <div class="form-input">
+          <input type="checkbox" name="enableApi" id="enableApi" checked />
         </div>
       </div>
     </div>
