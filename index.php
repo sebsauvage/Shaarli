@@ -1245,7 +1245,7 @@ function renderPage($conf, $pluginManager, $LINKSDB)
         }
 
         // lf_id should only be present if the link exists.
-        $id = !empty($_POST['lf_id']) ? intval(escape($_POST['lf_id'])) : $LINKSDB->getNextId();
+        $id = isset($_POST['lf_id']) ? intval(escape($_POST['lf_id'])) : $LINKSDB->getNextId();
         // Linkdate is kept here to:
         //   - use the same permalink for notes as they're displayed when creating them
         //   - let users hack creation date of their posts
@@ -1318,9 +1318,13 @@ function renderPage($conf, $pluginManager, $LINKSDB)
     // -------- User clicked the "Cancel" button when editing a link.
     if (isset($_POST['cancel_edit']))
     {
+        $id = isset($_POST['lf_id']) ? (int) escape($_POST['lf_id']) : false;
+        if (! isset($LINKSDB[$id])) {
+            header('Location: ?');
+        }
         // If we are called from the bookmarklet, we must close the popup:
         if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) { echo '<script>self.close();</script>'; exit; }
-        $link = $LINKSDB[(int) escape($_POST['lf_id'])];
+        $link = $LINKSDB[$id];
         $returnurl = ( isset($_POST['returnurl']) ? $_POST['returnurl'] : '?' );
         // Scroll to the link which has been edited.
         $returnurl .= '#'. $link['shorturl'];
