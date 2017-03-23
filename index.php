@@ -1141,7 +1141,7 @@ function renderPage($conf, $pluginManager, $LINKSDB)
             $conf->set('feed.rss_permalinks', !empty($_POST['enableRssPermalinks']));
             $conf->set('updates.check_updates', !empty($_POST['updateCheck']));
             $conf->set('privacy.hide_public_links', !empty($_POST['hidePublicLinks']));
-            $conf->set('api.enabled', !empty($_POST['apiEnabled']));
+            $conf->set('api.enabled', !empty($_POST['enableApi']));
             $conf->set('api.secret', escape($_POST['apiSecret']));
             try {
                 $conf->write(isLoggedIn());
