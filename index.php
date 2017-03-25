@@ -432,7 +432,7 @@ if (isset($_POST['login']))
         // Optional redirect after login:
         if (isset($_GET['post'])) {
             $uri = '?post='. urlencode($_GET['post']);
-            foreach (array('description', 'source', 'title') as $param) {
+            foreach (array('description', 'source', 'title', 'tags') as $param) {
                 if (!empty($_GET[$param])) {
                     $uri .= '&'.$param.'='.urlencode($_GET[$param]);
                 }
@@ -461,7 +461,7 @@ if (isset($_POST['login']))
         $redir = '&username='. $_POST['login'];
         if (isset($_GET['post'])) {
             $redir .= '&post=' . urlencode($_GET['post']);
-            foreach (array('description', 'source', 'title') as $param) {
+            foreach (array('description', 'source', 'title', 'tags') as $param) {
                 if (!empty($_GET[$param])) {
                     $redir .= '&' . $param . '=' . urlencode($_GET[$param]);
                 }
@@ -1044,7 +1044,13 @@ function renderPage($conf, $pluginManager, $LINKSDB)
         // Show login screen, then redirect to ?post=...
         if (isset($_GET['post']))
         {
-            header('Location: ?do=login&post='.urlencode($_GET['post']).(!empty($_GET['title'])?'&title='.urlencode($_GET['title']):'').(!empty($_GET['description'])?'&description='.urlencode($_GET['description']):'').(!empty($_GET['source'])?'&source='.urlencode($_GET['source']):'')); // Redirect to login page, then back to post link.
+            header( // Redirect to login page, then back to post link.
+                'Location: ?do=login&post='.urlencode($_GET['post']).
+                (!empty($_GET['title'])?'&title='.urlencode($_GET['title']):'').
+                (!empty($_GET['description'])?'&description='.urlencode($_GET['description']):'').
+                (!empty($_GET['tags'])?'&tags='.urlencode($_GET['tags']):'').
+                (!empty($_GET['source'])?'&source='.urlencode($_GET['source']):'')
+            );
             exit;
         }
 
