@@ -791,7 +791,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
     if ($targetPage == Router::$PAGE_TAGCLOUD)
     {
         $visibility = ! empty($_SESSION['privateonly']) ? 'private' : 'all';
-        $filteringTags = isset($_GET['searchtags']) ? explode(' ', $_GET['searchtags']) : array();
+        $filteringTags = isset($_GET['searchtags']) ? explode(' ', $_GET['searchtags']) : [];
         $tags = $LINKSDB->linksCountPerTag($filteringTags, $visibility);
 
         // We sort tags alphabetically, then choose a font size according to count.
@@ -801,17 +801,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
             $maxcount = max($maxcount, $value);
         }
 
-        // Sort tags alphabetically: case insensitive, support locale if available.
-        uksort($tags, function($a, $b) {
-            // Collator is part of PHP intl.
-            if (class_exists('Collator')) {
-                $c = new Collator(setlocale(LC_COLLATE, 0));
-                if (!intl_is_failure(intl_get_error_code())) {
-                    return $c->compare($a, $b);
-                }
-            }
-            return strcasecmp($a, $b);
-        });
+        alphabetical_sort($tags, true, true);
 
         $tagList = array();
         foreach($tags as $key => $value) {
@@ -836,6 +826,31 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
         }
 
         $PAGE->renderPage('tag.cloud');
+        exit;
+    }
+
+    // -------- Tag cloud
+    if ($targetPage == Router::$PAGE_TAGLIST)
+    {
+        $visibility = ! empty($_SESSION['privateonly']) ? 'private' : 'all';
+        $filteringTags = isset($_GET['searchtags']) ? explode(' ', $_GET['searchtags']) : [];
+        $tags = $LINKSDB->linksCountPerTag($filteringTags, $visibility);
+
+        if (! empty($_GET['sort']) && $_GET['sort'] === 'alpha') {
+            alphabetical_sort($tags, false, true);
+        }
+
+        $data = [
+            'search_tags' => implode(' ', $filteringTags),
+            'tags' => $tags,
+        ];
+        $pluginManager->executeHooks('render_taglist', $data, ['loggedin' => isLoggedIn()]);
+
+        foreach ($data as $key => $value) {
+            $PAGE->assign($key, $value);
+        }
+
+        $PAGE->renderPage('tag.list');
         exit;
     }
 
@@ -1152,6 +1167,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
     if ($targetPage == Router::$PAGE_CHANGETAG)
     {
         if (empty($_POST['fromtag']) || (empty($_POST['totag']) && isset($_POST['renametag']))) {
+            $PAGE->assign('fromtag', ! empty($_GET['fromtag']) ? escape($_GET['fromtag']) : '');
             $PAGE->renderPage('changetag');
             exit;
         }

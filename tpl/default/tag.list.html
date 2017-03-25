@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  {include="includes"}
+</head>
+<body>
+{include="page.header"}
+
+{include="tag.sort"}
+
+<div class="pure-g">
+  <div class="pure-u-lg-1-6 pure-u-1-24"></div>
+  <div class="pure-u-lg-2-3 pure-u-22-24 page-form page-visitor">
+    {$countTags=count($tags)}
+    <h2 class="window-title">{'Tag list'|t} - {$countTags} {'tags'|t}</h2>
+
+    <div id="search-tagcloud" class="pure-g">
+      <div class="pure-u-lg-1-4"></div>
+      <div class="pure-u-1 pure-u-lg-1-2">
+        <form method="GET">
+          <input type="hidden" name="do" value="taglist">
+          <input type="text" name="searchtags" placeholder="{'Filter by tag'|t}"
+                 {if="!empty($search_tags)"}
+                 value="{$search_tags}"
+                 {/if}
+          autocomplete="off" data-multiple data-autofirst data-minChars="1"
+          data-list="{loop="$tags"}{$key}, {/loop}"
+          >
+          <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+        </form>
+      </div>
+      <div class="pure-u-lg-1-4"></div>
+    </div>
+
+    <div id="plugin_zone_start_tagcloud" class="plugin_zone">
+      {loop="$plugin_start_zone"}
+        {$value}
+      {/loop}
+    </div>
+
+    <div id="taglist">
+      {loop="tags"}
+        <div class="tag-list-item pure-g" data-tag="{$key}">
+          <div class="pure-u-1">
+            {if="isLoggedIn()===true"}
+              <a href="#" class="delete-tag"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;
+              <a href="?do=changetag&fromtag={$key|urlencode}" class="rename-tag">
+                <i class="fa fa-pencil-square-o {$key}"></i>
+              </a>
+            {/if}
+
+            <a href="?addtag={$key|urlencode}" title="{'Filter by tag'|t}" class="count">{$value}</a>
+            <a href="?searchtags={$key|urlencode}" class="tag-link">{$key}</a>
+
+            {loop="$value.tag_plugin"}
+              {$value}
+            {/loop}
+          </div>
+          {if="isLoggedIn()===true"}
+            <div class="rename-tag-form pure-u-1" style="display:none;">
+              <input type="text" name="{$key}" value="{$key}" class="rename-tag-input" />
+              <a href="#" class="validate-rename-tag"><i class="fa fa-check"></i></a>
+            </div>
+          {/if}
+        </div>
+      {/loop}
+    </div>
+
+    <div id="plugin_zone_end_tagcloud" class="plugin_zone">
+      {loop="$plugin_end_zone"}
+      {$value}
+      {/loop}
+    </div>
+  </div>
+</div>
+
+{include="tag.sort"}
+
+{include="page.footer"}
+</body>
+</html>
+

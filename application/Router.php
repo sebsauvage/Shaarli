@@ -13,6 +13,8 @@ class Router
 
     public static $PAGE_TAGCLOUD = 'tagcloud';
 
+    public static $PAGE_TAGLIST = 'taglist';
+
     public static $PAGE_DAILY = 'daily';
 
     public static $PAGE_FEED_ATOM = 'atom';
@@ -77,6 +79,10 @@ class Router
 
         if (startsWith($query, 'do='. self::$PAGE_TAGCLOUD)) {
             return self::$PAGE_TAGCLOUD;
+        }
+
+        if (startsWith($query, 'do='. self::$PAGE_TAGLIST)) {
+            return self::$PAGE_TAGLIST;
         }
 
         if (startsWith($query, 'do='. self::$PAGE_OPENSEARCH)) {

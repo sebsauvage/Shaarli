@@ -751,10 +751,11 @@ body, .pure-g [class*="pure-u"] {
 .page-form a {
     color: #1b926c;
     font-weight: bold;
+    text-decoration: none;
 }
 
 .page-form p {
-    padding: 0 10px;
+    padding: 5px 10px;
     margin: 0;
 }
 
@@ -1070,12 +1071,44 @@ form[name="linkform"].page-form {
 }
 
 #cloudtag, #cloudtag a {
-    color: #000;
+    color: #252525;
     text-decoration: none;
 }
 
 #cloudtag .count {
     color: #7f7f7f;
+}
+
+/**
+ * TAG LIST
+ */
+#taglist {
+    padding: 0 10px;
+}
+
+#taglist a {
+    color: #252525;
+    text-decoration: none;
+}
+
+#taglist .count {
+    display: inline-block;
+    width: 35px;
+    text-align: right;
+    color: #7f7f7f;
+}
+
+#taglist .delete-tag {
+    color: #ac2925;
+    display: none;
+}
+
+#taglist .rename-tag {
+    color: #0b5ea6;
+}
+
+#taglist .validate-rename-tag {
+    color: #1b926c;
 }
 
 /**
@@ -1226,4 +1259,17 @@ form[name="linkform"].page-form {
  */
 .pure-button {
     -moz-user-select: auto;
+}
+
+.tag-sort {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.tag-sort a {
+    display: inline-block;
+    margin: 0 15px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
 }

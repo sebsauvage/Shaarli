@@ -412,7 +412,138 @@ window.onload = function () {
             }
         });
     }
+
+    /**
+     * Tag list operations
+     *
+     * TODO: support error code in the backend for AJAX requests
+     */
+    // Display/Hide rename form
+    var renameTagButtons = document.querySelectorAll('.rename-tag');
+    [].forEach.call(renameTagButtons, function(rename) {
+        rename.addEventListener('click', function(event) {
+            event.preventDefault();
+            var block = findParent(event.target, 'div', {'class': 'tag-list-item'});
+            var form = block.querySelector('.rename-tag-form');
+            form.style.display = form.style.display == 'none' ? 'block' : 'none';
+        });
+    });
+
+    // Rename a tag with an AJAX request
+    var renameTagSubmits = document.querySelectorAll('.validate-rename-tag');
+    [].forEach.call(renameTagSubmits, function(rename) {
+        rename.addEventListener('click', function(event) {
+            event.preventDefault();
+            var block = findParent(event.target, 'div', {'class': 'tag-list-item'});
+            var input = block.querySelector('.rename-tag-input');
+            var totag = input.value.replace('/"/g', '\\"');
+            if (totag.trim() == '') {
+                return;
+            }
+            var fromtag = block.getAttribute('data-tag');
+            var token = document.getElementById('token').value;
+
+            xhr = new XMLHttpRequest();
+            xhr.open('POST', '?do=changetag');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status !== 200) {
+                    alert('An error occurred. Return code: '+ xhr.status);
+                    location.reload();
+                } else {
+                    block.setAttribute('data-tag', totag);
+                    input.setAttribute('name', totag);
+                    input.setAttribute('value', totag);
+                    input.parentNode.style.display = 'none';
+                    block.querySelector('a.tag-link').innerHTML = htmlEntities(totag);
+                    block.querySelector('a.tag-link').setAttribute('href', '?searchtags='+ encodeURIComponent(totag));
+                    block.querySelector('a.rename-tag').setAttribute('href', '?do=changetag&fromtag='+ encodeURIComponent(totag));
+                }
+            };
+            xhr.send('renametag=1&fromtag='+ encodeURIComponent(fromtag) +'&totag='+ encodeURIComponent(totag) +'&token='+ token);
+            refreshToken();
+        });
+    });
+
+    // Validate input with enter key
+    var renameTagInputs = document.querySelectorAll('.rename-tag-input');
+    [].forEach.call(renameTagInputs, function(rename) {
+        rename.addEventListener('keypress', function(event) {
+            if (event.keyCode === 13) { // enter
+                findParent(event.target, 'div', {'class': 'tag-list-item'}).querySelector('.validate-rename-tag').click();
+            }
+        });
+    });
+
+    // Delete a tag with an AJAX query (alert popup confirmation)
+    var deleteTagButtons = document.querySelectorAll('.delete-tag');
+    [].forEach.call(deleteTagButtons, function(rename) {
+        rename.style.display = 'inline';
+        rename.addEventListener('click', function(event) {
+            event.preventDefault();
+            var block = findParent(event.target, 'div', {'class': 'tag-list-item'});
+            var tag = block.getAttribute('data-tag');
+            var token = document.getElementById('token').value;
+
+            if (confirm('Are you sure you want to delete the tag "'+ tag +'"?')) {
+                xhr = new XMLHttpRequest();
+                xhr.open('POST', '?do=changetag');
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function() {
+                    block.remove();
+                };
+                xhr.send(encodeURI('deletetag=1&fromtag='+ tag +'&token='+ token));
+                refreshToken();
+            }
+        });
+    });
 };
+
+function findParent(element, tagName, attributes)
+{
+    while (element) {
+        if (element.tagName.toLowerCase() == tagName) {
+            var match = true;
+            for (var key in attributes) {
+                if (! element.hasAttribute(key)
+                    || (attributes[key] != '' && element.getAttribute(key).indexOf(attributes[key]) == -1)
+                ) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match) {
+                return element;
+            }
+        }
+        element = element.parentElement;
+    }
+    return null;
+}
+
+function refreshToken()
+{
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '?do=token');
+    xhr.onload = function() {
+        var token = document.getElementById('token');
+        token.setAttribute('value', xhr.responseText);
+    };
+    xhr.send();
+}
+
+/**
+ * html_entities in JS
+ *
+ * @see http://stackoverflow.com/questions/18749591/encode-html-entities-in-javascript
+ */
+function htmlEntities(str)
+{
+    return str.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+        return '&#'+i.charCodeAt(0)+';';
+    });
+}
 
 function activateFirefoxSocial(node) {
     var loc = location.href;
@@ -445,8 +576,11 @@ function activateFirefoxSocial(node) {
  * @param currentContinent Current selected continent
  * @param reset            Set to true to reset the selected value
  */
-function hideTimezoneCities(cities, currentContinent, reset = false) {
+function hideTimezoneCities(cities, currentContinent) {
     var first = true;
+    if (reset == null) {
+        reset = false;
+    }
     [].forEach.call(cities, function (option) {
         if (option.getAttribute('data-continent') != currentContinent) {
             option.className = 'hidden';
