@@ -1582,6 +1582,13 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
         exit;
     }
 
+    // Get a fresh token
+    if ($targetPage == Router::$GET_TOKEN) {
+        header('Content-Type:text/plain');
+        echo getToken($conf);
+        exit;
+    }
+
     // -------- Otherwise, simply display search form and links:
     showLinkList($PAGE, $LINKSDB, $conf, $pluginManager);
     exit;

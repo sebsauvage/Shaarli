@@ -45,6 +45,8 @@ class Router
 
     public static $PAGE_SAVE_PLUGINSADMIN = 'save_pluginadmin';
 
+    public static $GET_TOKEN = 'token';
+
     /**
      * Reproducing renderPage() if hell, to avoid regression.
      *
@@ -140,6 +142,10 @@ class Router
 
         if (startsWith($query, 'do='. self::$PAGE_SAVE_PLUGINSADMIN)) {
             return self::$PAGE_SAVE_PLUGINSADMIN;
+        }
+
+        if (startsWith($query, 'do='. self::$GET_TOKEN)) {
+            return self::$GET_TOKEN;
         }
 
         return self::$PAGE_LINKLIST;
