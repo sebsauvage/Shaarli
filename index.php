@@ -835,7 +835,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
             $PAGE->assign($key, $value);
         }
 
-        $PAGE->renderPage('tagcloud');
+        $PAGE->renderPage('tag.cloud');
         exit;
     }
 
