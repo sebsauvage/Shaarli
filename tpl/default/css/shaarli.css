@@ -35,14 +35,29 @@ pre {
 }
 
 @font-face {
-    font-family: 'Roboto Slab';
+    font-family: 'Roboto';
     font-weight: 400;
     font-style: normal;
     src:
-    local('Fira Sans'),
-    local('Fira-Sans-regular'),
-    url('../fonts/Fira-Sans-regular.woff2') format('woff2'),
-    url('../fonts/Fira-Sans-regular.woff') format('woff');
+    local('Roboto'),
+    local('Roboto-Regular'),
+    url('../fonts/Roboto-Regular.woff2') format('woff2'),
+    url('../fonts/Roboto-Regular.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-weight: 700;
+    font-style: normal;
+    src:
+    local('Roboto'),
+    local('Roboto-Bold'),
+    url('../fonts/Roboto-Bold.woff2') format('woff2'),
+    url('../fonts/Roboto-Bold.woff') format('woff');
+}
+
+body, .pure-g [class*="pure-u"] {
+    font-family: Roboto, Arial, sans-serif;
 }
 
 /**
@@ -66,10 +81,6 @@ pre {
 @media screen and (min-width: 80em) {
     .pure-u-xl-0 { display: none !important; }
     .pure-u-xl-visible { display: inline-block !important; }
-}
-
-.pure-g [class*="pure-u"]{
-    font-family: Roboto Slab, Arial, sans-serif;
 }
 
 /**
@@ -504,7 +515,6 @@ pre {
     color: #252525;
     text-decoration: none;
     vertical-align: middle;
-    font-family: Roboto Slab, Arial, sans-serif;
 }
 
 .linklist-item-title .linklist-link {
@@ -560,7 +570,6 @@ pre {
 .linklist-item-description {
     position: relative;
     padding: 10px;
-    font-family: Roboto Slab, Arial, sans-serif;
     word-wrap: break-word;
     color: #252525;
     line-height: 1.3em;
