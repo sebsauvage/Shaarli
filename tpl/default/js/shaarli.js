@@ -255,10 +255,9 @@ window.onload = function () {
      * Remove CSS target padding (for fixed bar)
      */
     if (location.hash != '') {
-        var anchor = document.querySelector(location.hash);
+        var anchor = document.getElementById(location.hash.substr(1));
         if (anchor != null) {
             var padsize = anchor.clientHeight;
-            console.log(document.querySelector(location.hash).clientHeight);
             this.window.scroll(0, this.window.scrollY - padsize);
             anchor.style.paddingTop = 0;
         }
