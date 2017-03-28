@@ -1098,6 +1098,10 @@ form[name="linkform"].page-form {
     color: #7f7f7f;
 }
 
+#taglist .rename-tag-form {
+    display: none;
+}
+
 #taglist .delete-tag {
     color: #ac2925;
     display: none;

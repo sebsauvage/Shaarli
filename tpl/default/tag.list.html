@@ -57,7 +57,7 @@
             {/loop}
           </div>
           {if="isLoggedIn()===true"}
-            <div class="rename-tag-form pure-u-1" style="display:none;">
+            <div class="rename-tag-form pure-u-1">
               <input type="text" name="{$key}" value="{$key}" class="rename-tag-input" />
               <a href="#" class="validate-rename-tag"><i class="fa fa-check"></i></a>
             </div>
@@ -73,6 +73,10 @@
     </div>
   </div>
 </div>
+
+{if="isLoggedIn()===true"}
+  <input type="hidden" name="taglist" value="{loop="$tags"}{$key} {/loop}"
+{/if}
 
 {include="tag.sort"}
 
