@@ -15,12 +15,30 @@ class UtilsFrTest extends UtilsTest
     }
 
     /**
+     * Test date_format() without time.
+     */
+    public function testDateFormatNoTime()
+    {
+        $date = DateTime::createFromFormat('Ymd_His', '20170101_101112');
+        $this->assertRegExp('/1 janvier 2017/', format_date($date, false, true));
+    }
+
+    /**
      * Test date_format() using builtin PHP function strftime.
      */
     public function testDateFormatDefault()
     {
         $date = DateTime::createFromFormat('Ymd_His', '20170101_101112');
-        $this->assertEquals('dim. 01 janv. 2017 10:11:12 EAT', format_date($date, false));
+        $this->assertEquals('dim. 01 janv. 2017 10:11:12 EAT', format_date($date, true, false));
+    }
+
+    /**
+     * Test date_format() using builtin PHP function strftime without time.
+     */
+    public function testDateFormatDefaultNoTime()
+    {
+        $date = DateTime::createFromFormat('Ymd_His', '20170201_101112');
+        $this->assertEquals('01/02/2017', format_date($date, false, false));
     }
 
     /**
