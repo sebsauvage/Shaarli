@@ -695,6 +695,7 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager)
 
     $dayDate = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $day.'_000000');
     $data = array(
+        'pagetitle' => $conf->get('general.title') .' - '. format_date($dayDate, false),
         'linksToDisplay' => $linksToDisplay,
         'cols' => $columns,
         'day' => $dayDate->getTimestamp(),
