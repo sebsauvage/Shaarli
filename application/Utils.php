@@ -321,24 +321,26 @@ function normalize_spaces($string)
  * otherwise default format '%c' will be returned.
  *
  * @param DateTime $date to format.
+ * @param bool     $time Displays time if true.
  * @param bool     $intl Use international format if true.
  *
  * @return bool|string Formatted date, or false if the input is invalid.
  */
-function format_date($date, $intl = true)
+function format_date($date, $time = true, $intl = true)
 {
     if (! $date instanceof DateTime) {
         return false;
     }
 
     if (! $intl || ! class_exists('IntlDateFormatter')) {
-        return strftime('%c', $date->getTimestamp());
+        $format = $time ? '%c' : '%x';
+        return strftime($format, $date->getTimestamp());
     }
 
     $formatter = new IntlDateFormatter(
         setlocale(LC_TIME, 0),
         IntlDateFormatter::LONG,
-        IntlDateFormatter::LONG
+        $time ? IntlDateFormatter::LONG : IntlDateFormatter::NONE
     );
 
     return $formatter->format($date);
