@@ -4,7 +4,7 @@
  */
 class ReferenceLinkDB
 {
-    public static $NB_LINKS_TOTAL = 8;
+    public static $NB_LINKS_TOTAL = 9;
 
     private $_links = array();
     private $_publicCount = 0;
@@ -35,6 +35,16 @@ class ReferenceLinkDB
             0,
             DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20100310_101010'),
             'ut'
+        );
+
+        $this->addLink(
+            9,
+            'PSR-2: Coding Style Guide',
+            'http://www.php-fig.org/psr/psr-2/',
+            'This guide extends and expands on PSR-1, the basic coding standard.',
+            0,
+            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_152312'),
+            ''
         );
 
         $this->addLink(
@@ -159,6 +169,20 @@ class ReferenceLinkDB
     public function countPrivateLinks()
     {
         return $this->_privateCount;
+    }
+
+    /**
+     * Returns the number of links without tag
+     */
+    public function countUntaggedLinks()
+    {
+        $cpt = 0;
+        foreach ($this->_links as $link) {
+            if (empty($link['tags'])) {
+                ++$cpt;
+            }
+        }
+        return $cpt;
     }
 
     public function getLinks()

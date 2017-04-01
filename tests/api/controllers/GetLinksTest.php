@@ -94,7 +94,7 @@ class GetLinksTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->refDB->countLinks(), count($data));
 
         // Check order
-        $order = [41, 8, 6, 7, 0, 1, 4, 42];
+        $order = [41, 8, 6, 7, 0, 1, 9, 4, 42];
         $cpt = 0;
         foreach ($data as $link) {
             $this->assertEquals(self::NB_FIELDS_LINK, count($link));
@@ -163,7 +163,7 @@ class GetLinksTest extends \PHPUnit_Framework_TestCase
         $data = json_decode((string) $response->getBody(), true);
         $this->assertEquals($this->refDB->countLinks(), count($data));
         // Check order
-        $order = [41, 8, 6, 7, 0, 1, 4, 42];
+        $order = [41, 8, 6, 7, 0, 1, 9, 4, 42];
         $cpt = 0;
         foreach ($data as $link) {
             $this->assertEquals(self::NB_FIELDS_LINK, count($link));

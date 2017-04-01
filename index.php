@@ -1609,7 +1609,15 @@ function renderPage($conf, $pluginManager, $LINKSDB)
 function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
 {
     // Used in templates
-    $searchtags = !empty($_GET['searchtags']) ? escape(normalize_spaces($_GET['searchtags'])) : '';
+    if (isset($_GET['searchtags'])) {
+        if (! empty($_GET['searchtags'])) {
+            $searchtags = escape(normalize_spaces($_GET['searchtags']));
+        } else {
+            $searchtags = false;
+        }
+    } else {
+        $searchtags = '';
+    }
     $searchterm = !empty($_GET['searchterm']) ? escape(normalize_spaces($_GET['searchterm'])) : '';
 
     // Smallhash filter
@@ -1624,7 +1632,11 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
     } else {
         // Filter links according search parameters.
         $visibility = ! empty($_SESSION['privateonly']) ? 'private' : 'all';
-        $linksToDisplay = $LINKSDB->filterSearch($_GET, false, $visibility);
+        $request = [
+            'searchtags' => $searchtags,
+            'searchterm' => $searchterm,
+        ];
+        $linksToDisplay = $LINKSDB->filterSearch($request, false, $visibility);
     }
 
     // ---- Handle paging.
@@ -1671,7 +1683,7 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
     }
 
     // Compute paging navigation
-    $searchtagsUrl = empty($searchtags) ? '' : '&searchtags=' . urlencode($searchtags);
+    $searchtagsUrl = $searchtags === '' ? '' : '&searchtags=' . urlencode($searchtags);
     $searchtermUrl = empty($searchterm) ? '' : '&searchterm=' . urlencode($searchterm);
     $previous_page_url = '';
     if ($i != count($keys)) {

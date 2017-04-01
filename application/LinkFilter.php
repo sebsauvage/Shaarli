@@ -253,6 +253,9 @@ class LinkFilter
     {
         // Implode if array for clean up.
         $tags = is_array($tags) ? trim(implode(' ', $tags)) : $tags;
+        if ($tags === false) {
+            return $this->filterUntagged($visibility);
+        }
         if (empty($tags)) {
             return $this->noFilter($visibility);
         }
@@ -292,6 +295,33 @@ class LinkFilter
                 $filtered[$key] = $link;
             }
         }
+        return $filtered;
+    }
+
+    /**
+     * Return only links without any tag.
+     *
+     * @param string $visibility return only all/private/public links.
+     *
+     * @return array filtered links.
+     */
+    public function filterUntagged($visibility)
+    {
+        $filtered = [];
+        foreach ($this->links as $key => $link) {
+            if ($visibility !== 'all') {
+                if (! $link['private'] && $visibility === 'private') {
+                    continue;
+                } else if ($link['private'] && $visibility === 'public') {
+                    continue;
+                }
+            }
+
+            if (empty(trim($link['tags']))) {
+                $filtered[$key] = $link;
+            }
+        }
+
         return $filtered;
     }
 
