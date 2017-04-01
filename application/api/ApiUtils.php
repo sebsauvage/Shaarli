@@ -108,4 +108,30 @@ class ApiUtils
         ];
         return $link;
     }
+
+    /**
+     * Update link fields using an updated link object.
+     *
+     * @param array $oldLink data
+     * @param array $newLink data
+     *
+     * @return array $oldLink updated with $newLink values
+     */
+    public static function updateLink($oldLink, $newLink)
+    {
+        foreach (['title', 'url', 'description', 'tags', 'private'] as $field) {
+            $oldLink[$field] = $newLink[$field];
+        }
+        $oldLink['updated'] = new \DateTime();
+
+        if (empty($oldLink['url'])) {
+            $oldLink['url'] = '?' . $oldLink['shorturl'];
+        }
+
+        if (empty($oldLink['title'])) {
+            $oldLink['title'] = $oldLink['url'];
+        }
+
+        return $oldLink;
+    }
 }
