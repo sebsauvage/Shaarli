@@ -97,11 +97,53 @@ class Links extends ApiController
      */
     public function getLink($request, $response, $args)
     {
-        if (! isset($this->linkDb[$args['id']])) {
+        if (!isset($this->linkDb[$args['id']])) {
             throw new ApiLinkNotFoundException();
         }
         $index = index_url($this->ci['environment']);
         $out = ApiUtils::formatLink($this->linkDb[$args['id']], $index);
+
         return $response->withJson($out, 200, $this->jsonStyle);
+    }
+
+    /**
+     * Creates a new link from posted request body.
+     *
+     * @param Request  $request  Slim request.
+     * @param Response $response Slim response.
+     *
+     * @return Response response.
+     */
+    public function postLink($request, $response)
+    {
+        $data = $request->getParsedBody();
+        $link = ApiUtils::buildLinkFromRequest($data, $this->conf->get('privacy.default_private_links'));
+        // duplicate by URL, return 409 Conflict
+        if (! empty($link['url']) && ! empty($dup = $this->linkDb->getLinkFromUrl($link['url']))) {
+            return $response->withJson(
+                ApiUtils::formatLink($dup, index_url($this->ci['environment'])),
+                409,
+                $this->jsonStyle
+            );
+        }
+
+        $link['id'] = $this->linkDb->getNextId();
+        $link['shorturl'] = link_small_hash($link['created'], $link['id']);
+
+        // note: general relative URL
+        if (empty($link['url'])) {
+            $link['url'] = '?' . $link['shorturl'];
+        }
+
+        if (empty($link['title'])) {
+            $link['title'] = $link['url'];
+        }
+
+        $this->linkDb[$link['id']] = $link;
+        $this->linkDb->save($this->conf->get('resource.page_cache'));
+        $out = ApiUtils::formatLink($link, index_url($this->ci['environment']));
+        $redirect = $this->ci->router->relativePathFor('getLink', ['id' => $link['id']]);
+        return $response->withAddedHeader('Location', $redirect)
+                        ->withJson($out, 201, $this->jsonStyle);
     }
 }

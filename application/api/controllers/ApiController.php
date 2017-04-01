@@ -51,4 +51,14 @@ abstract class ApiController
             $this->jsonStyle = null;
         }
     }
+
+    /**
+     * Get the container.
+     *
+     * @return Container
+     */
+    public function getCi()
+    {
+        return $this->ci;
+    }
 }
