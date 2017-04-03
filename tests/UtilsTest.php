@@ -366,10 +366,10 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(2 * 1024, return_bytes('2k'));
         $this->assertEquals(2 * 1024, return_bytes('2K'));
-        $this->assertEquals(2 * (1024 ** 2), return_bytes('2m'));
-        $this->assertEquals(2 * (1024 ** 2), return_bytes('2M'));
-        $this->assertEquals(2 * (1024 ** 3), return_bytes('2g'));
-        $this->assertEquals(2 * (1024 ** 3), return_bytes('2G'));
+        $this->assertEquals(2 * (pow(1024, 2)), return_bytes('2m'));
+        $this->assertEquals(2 * (pow(1024, 2)), return_bytes('2M'));
+        $this->assertEquals(2 * (pow(1024, 3)), return_bytes('2g'));
+        $this->assertEquals(2 * (pow(1024, 3)), return_bytes('2G'));
         $this->assertEquals(374, return_bytes('374'));
         $this->assertEquals(374, return_bytes(374));
         $this->assertEquals(0, return_bytes('0'));
@@ -386,10 +386,10 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('2kiB', human_bytes(2 * 1024));
         $this->assertEquals('2kiB', human_bytes(strval(2 * 1024)));
-        $this->assertEquals('2MiB', human_bytes(2 * (1024 ** 2)));
-        $this->assertEquals('2MiB', human_bytes(strval(2 * (1024 ** 2))));
-        $this->assertEquals('2GiB', human_bytes(2 * (1024 ** 3)));
-        $this->assertEquals('2GiB', human_bytes(strval(2 * (1024 ** 3))));
+        $this->assertEquals('2MiB', human_bytes(2 * (pow(1024, 2))));
+        $this->assertEquals('2MiB', human_bytes(strval(2 * (pow(1024, 2)))));
+        $this->assertEquals('2GiB', human_bytes(2 * (pow(1024, 3))));
+        $this->assertEquals('2GiB', human_bytes(strval(2 * (pow(1024, 3)))));
         $this->assertEquals('374B', human_bytes(374));
         $this->assertEquals('374B', human_bytes('374'));
         $this->assertEquals('Unlimited', human_bytes('0'));
