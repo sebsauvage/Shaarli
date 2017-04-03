@@ -473,34 +473,6 @@ if (isset($_POST['login']))
 }
 
 // ------------------------------------------------------------------------------------------
-// Misc utility functions:
-
-// Convert post_max_size/upload_max_filesize (e.g. '16M') parameters to bytes.
-function return_bytes($val)
-{
-    $val = trim($val); $last=strtolower($val[strlen($val)-1]);
-    switch($last)
-    {
-        case 'g': $val *= 1024;
-        case 'm': $val *= 1024;
-        case 'k': $val *= 1024;
-    }
-    return $val;
-}
-
-// Try to determine max file size for uploads (POST).
-// Returns an integer (in bytes)
-function getMaxFileSize()
-{
-    $size1 = return_bytes(ini_get('post_max_size'));
-    $size2 = return_bytes(ini_get('upload_max_filesize'));
-    // Return the smaller of two:
-    $maxsize = min($size1,$size2);
-    // FIXME: Then convert back to readable notations ? (e.g. 2M instead of 2000000)
-    return $maxsize;
-}
-
-// ------------------------------------------------------------------------------------------
 // Token management for XSRF protection
 // Token should be used in any form which acts on data (create,update,delete,import...).
 if (!isset($_SESSION['tokens'])) $_SESSION['tokens']=array();  // Token are attached to the session.
@@ -1517,7 +1489,7 @@ function renderPage($conf, $pluginManager, $LINKSDB)
 
         if (! isset($_POST['token']) || ! isset($_FILES['filetoupload'])) {
             // Show import dialog
-            $PAGE->assign('maxfilesize', getMaxFileSize());
+            $PAGE->assign('maxfilesize', get_max_upload_size(ini_get('post_max_size'), ini_get('upload_max_filesize')));
             $PAGE->renderPage('import');
             exit;
         }
@@ -1527,7 +1499,7 @@ function renderPage($conf, $pluginManager, $LINKSDB)
             // The file is too big or some form field may be missing.
             echo '<script>alert("The file you are trying to upload is probably'
                 .' bigger than what this webserver can accept ('
-                .getMaxFileSize().' bytes).'
+                .get_max_upload_size(ini_get('post_max_size'), ini_get('upload_max_filesize')).').'
                 .' Please upload in smaller chunks.");document.location=\'?do='
                 .Router::$PAGE_IMPORT .'\';</script>';
             exit;

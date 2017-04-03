@@ -345,3 +345,92 @@ function format_date($date, $time = true, $intl = true)
 
     return $formatter->format($date);
 }
+
+/**
+ * Check if the input is an integer, no matter its real type.
+ *
+ * PHP is a bit messy regarding this:
+ *   - is_int returns false if the input is a string
+ *   - ctype_digit returns false if the input is an integer or negative
+ *
+ * @param mixed $input value
+ *
+ * @return bool true if the input is an integer, false otherwise
+ */
+function is_integer_mixed($input)
+{
+    if (is_array($input) || is_bool($input) || is_object($input)) {
+        return false;
+    }
+    $input = strval($input);
+    return ctype_digit($input) || (startsWith($input, '-') && ctype_digit(substr($input, 1)));
+}
+
+/**
+ * Convert post_max_size/upload_max_filesize (e.g. '16M') parameters to bytes.
+ *
+ * @param string $val Size expressed in string.
+ *
+ * @return int Size expressed in bytes.
+ */
+function return_bytes($val)
+{
+    if (is_integer_mixed($val) || $val === '0' || empty($val)) {
+        return $val;
+    }
+    $val = trim($val);
+    $last = strtolower($val[strlen($val)-1]);
+    $val = intval(substr($val, 0, -1));
+    switch($last) {
+        case 'g': $val *= 1024;
+        case 'm': $val *= 1024;
+        case 'k': $val *= 1024;
+    }
+    return $val;
+}
+
+/**
+ * Return a human readable size from bytes.
+ *
+ * @param int $bytes value
+ *
+ * @return string Human readable size
+ */
+function human_bytes($bytes)
+{
+    if ($bytes === '') {
+        return t('Setting not set');
+    }
+    if (! is_integer_mixed($bytes)) {
+        return $bytes;
+    }
+    $bytes = intval($bytes);
+    if ($bytes === 0) {
+        return t('Unlimited');
+    }
+
+    $units = [t('B'), t('kiB'), t('MiB'), t('GiB')];
+    for ($i = 0; $i < count($units) && $bytes >= 1024; ++$i) {
+        $bytes /= 1024;
+    }
+
+    return $bytes . $units[$i];
+}
+
+/**
+ * Try to determine max file size for uploads (POST).
+ * Returns an integer (in bytes)
+ *
+ * @param mixed $limitPost   post_max_size PHP setting
+ * @param mixed $limitUpload upload_max_filesize PHP setting
+ *
+ * @return int max upload file size in bytes.
+ */
+function get_max_upload_size($limitPost, $limitUpload)
+{
+    $size1 = return_bytes($limitPost);
+    $size2 = return_bytes($limitUpload);
+    // Return the smaller of two:
+    $maxsize = min($size1, $size2);
+    return human_bytes($maxsize);
+}
