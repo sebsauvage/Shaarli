@@ -41,6 +41,10 @@ strong {
     font-weight: bold;
 }
 
+.hidden {
+    display: none;
+}
+
 /* Buttons */
 .bigbutton, #pageheader a.bigbutton  {
     background-color: #c0c0c0;
