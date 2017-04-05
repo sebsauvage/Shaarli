@@ -144,10 +144,10 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         if (!isset($value['id']) || empty($value['url'])) {
             die('Internal Error: A link should always have an id and URL.');
         }
-        if ((! empty($offset) && ! is_int($offset)) || ! is_int($value['id'])) {
+        if (($offset !== null && ! is_int($offset)) || ! is_int($value['id'])) {
             die('You must specify an integer as a key.');
         }
-        if (! empty($offset) && $offset !== $value['id']) {
+        if ($offset !== null && $offset !== $value['id']) {
             die('Array offset and link ID must be equal.');
         }
 
