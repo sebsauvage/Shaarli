@@ -115,7 +115,7 @@ check_permissions:
 	@echo "----------------------"
 	@echo "Check file permissions"
 	@echo "----------------------"
-	@for file in `git ls-files`; do \
+	@for file in `git ls-files | grep -v docker`; do \
 		if [ -x $$file ]; then \
 			errors=true; \
 			echo "$${file} is executable"; \
