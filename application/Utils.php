@@ -414,23 +414,24 @@ function human_bytes($bytes)
         $bytes /= 1024;
     }
 
-    return $bytes . $units[$i];
+    return round($bytes) . $units[$i];
 }
 
 /**
  * Try to determine max file size for uploads (POST).
- * Returns an integer (in bytes)
+ * Returns an integer (in bytes) or formatted depending on $format.
  *
  * @param mixed $limitPost   post_max_size PHP setting
  * @param mixed $limitUpload upload_max_filesize PHP setting
+ * @param bool  $format      Format max upload size to human readable size
  *
- * @return int max upload file size in bytes.
+ * @return int|string max upload file size
  */
-function get_max_upload_size($limitPost, $limitUpload)
+function get_max_upload_size($limitPost, $limitUpload, $format = true)
 {
     $size1 = return_bytes($limitPost);
     $size2 = return_bytes($limitUpload);
     // Return the smaller of two:
     $maxsize = min($size1, $size2);
-    return human_bytes($maxsize);
+    return $format ? human_bytes($maxsize) : $maxsize;
 }

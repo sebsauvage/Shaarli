@@ -392,18 +392,29 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('2GiB', human_bytes(strval(2 * (pow(1024, 3)))));
         $this->assertEquals('374B', human_bytes(374));
         $this->assertEquals('374B', human_bytes('374'));
+        $this->assertEquals('232kiB', human_bytes(237481));
         $this->assertEquals('Unlimited', human_bytes('0'));
         $this->assertEquals('Unlimited', human_bytes(0));
         $this->assertEquals('Setting not set', human_bytes(''));
     }
 
     /**
-     * Test get_max_upload_size
+     * Test get_max_upload_size with formatting
      */
     public function testGetMaxUploadSize()
     {
         $this->assertEquals('1MiB', get_max_upload_size(2097152, '1024k'));
         $this->assertEquals('1MiB', get_max_upload_size('1m', '2m'));
         $this->assertEquals('100B', get_max_upload_size(100, 100));
+    }
+
+    /**
+     * Test get_max_upload_size without formatting
+     */
+    public function testGetMaxUploadSizeRaw()
+    {
+        $this->assertEquals('1048576', get_max_upload_size(2097152, '1024k', false));
+        $this->assertEquals('1048576', get_max_upload_size('1m', '2m', false));
+        $this->assertEquals('100', get_max_upload_size(100, 100, false));
     }
 }
