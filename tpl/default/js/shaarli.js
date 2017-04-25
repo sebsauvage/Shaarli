@@ -76,9 +76,12 @@ window.onload = function () {
             }
         }
 
-        document.getElementById('menu-toggle').addEventListener('click', function (e) {
-            toggleMenu();
-        });
+        var menuToggle = document.getElementById('menu-toggle');
+        if (menuToggle != null) {
+            menuToggle.addEventListener('click', function (e) {
+                toggleMenu();
+            });
+        }
 
         window.addEventListener(WINDOW_CHANGE_EVENT, closeMenu);
     })(this, this.document);
@@ -299,21 +302,6 @@ window.onload = function () {
     }
 
     /**
-     * TimeZome select
-     * FIXME! way too hackish
-     */
-    var toRemove = document.getElementById('timezone-remove');
-    if (toRemove != null) {
-        var firstSelect = toRemove.getElementsByTagName('select')[0];
-        var secondSelect = toRemove.getElementsByTagName('select')[1];
-        toRemove.parentNode.removeChild(toRemove);
-        var toAdd = document.getElementById('timezone-add');
-        var newTimezone = '<span class="timezone-continent">Continent ' + firstSelect.outerHTML + '</span>';
-        newTimezone += ' <span class="timezone-country">Country ' + secondSelect.outerHTML + '</span>';
-        toAdd.innerHTML = newTimezone;
-    }
-
-    /**
      * Awesomplete trigger.
      */
     var tags = document.getElementById('lf_tags');
@@ -365,6 +353,15 @@ window.onload = function () {
             }
         });
     });
+
+    var continent = document.getElementById('continent');
+    var city = document.getElementById('city');
+    if (continent != null && city != null) {
+        continent.addEventListener('change', function(event) {
+            hideTimezoneCities(city, continent.options[continent.selectedIndex].value, true);
+        });
+        hideTimezoneCities(city, continent.options[continent.selectedIndex].value, false);
+    }
 };
 
 function activateFirefoxSocial(node) {
@@ -389,4 +386,26 @@ function activateFirefoxSocial(node) {
 
     var activate = new CustomEvent("ActivateSocialFeature");
     node.dispatchEvent(activate);
+}
+
+/**
+ * Add the class 'hidden' to city options not attached to the current selected continent.
+ *
+ * @param cities           List of <option> elements
+ * @param currentContinent Current selected continent
+ * @param reset            Set to true to reset the selected value
+ */
+function hideTimezoneCities(cities, currentContinent, reset = false) {
+    var first = true;
+    [].forEach.call(cities, function(option) {
+        if (option.getAttribute('data-continent') != currentContinent) {
+            option.className = 'hidden';
+        } else {
+            option.className = '';
+            if (reset === true && first === true) {
+                option.setAttribute('selected', 'selected');
+                first = false;
+            }
+        }
+    });
 }

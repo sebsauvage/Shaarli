@@ -1,23 +1,42 @@
 <?php
 /**
- * Generates the timezone selection form and JavaScript.
+ * Generates a list of available timezone continents and cities.
  *
- * Note: 'UTC/UTC' is mapped to 'UTC' to form a valid option
+ * Two distinct array based on available timezones
+ * and the one selected in the settings:
+ *   - (0) continents:
+ *     + list of available continents
+ *     + special key 'selected' containing the value of the selected timezone's continent
+ *   - (1) cities:
+ *     + list of available cities associated with their continent
+ *     + special key 'selected' containing the value of the selected timezone's city (without the continent)
  *
- * Example: preselect Europe/Paris
- *  list($htmlform, $js) = generateTimeZoneForm('Europe/Paris');
+ * Example:
+ *   [
+ *     [
+ *       'America',
+ *       'Europe',
+ *       'selected' => 'Europe',
+ *     ],
+ *     [
+ *       ['continent' => 'America', 'city' => 'Toronto'],
+ *       ['continent' => 'Europe', 'city' => 'Paris'],
+ *       'selected' => 'Paris',
+ *     ],
+ *   ];
  *
+ * Notes:
+ *   - 'UTC/UTC' is mapped to 'UTC' to form a valid option
+ *   - a few timezone cities includes the country/state, such as Argentina/Buenos_Aires
+ *   - these arrays are designed to build timezone selects in template files with any HTML structure
+ *
+ * @param array  $installedTimeZones  List of installed timezones as string
  * @param string $preselectedTimezone preselected timezone (optional)
  *
- * @return array containing the generated HTML form and Javascript code
+ * @return array[] continents and cities
  **/
-function generateTimeZoneForm($preselectedTimezone='')
+function generateTimeZoneData($installedTimeZones, $preselectedTimezone = '')
 {
-    // Select the server timezone
-    if ($preselectedTimezone == '') {
-        $preselectedTimezone = date_default_timezone_get();
-    }
-
     if ($preselectedTimezone == 'UTC') {
         $pcity = $pcontinent = 'UTC';
     } else {
@@ -27,62 +46,30 @@ function generateTimeZoneForm($preselectedTimezone='')
         $pcity = substr($preselectedTimezone, $spos+1);
     }
 
-    // The list is in the form 'Europe/Paris', 'America/Argentina/Buenos_Aires'
-    // We split the list in continents/cities.
-    $continents = array();
-    $cities = array();
-
-    // TODO: use a template to generate the HTML/Javascript form
-
-    foreach (timezone_identifiers_list() as $tz) {
+    $continents = [];
+    $cities = [];
+    foreach ($installedTimeZones as $tz) {
         if ($tz == 'UTC') {
             $tz = 'UTC/UTC';
         }
         $spos = strpos($tz, '/');
 
-        if ($spos !== false) {
-            $continent = substr($tz, 0, $spos);
-            $city = substr($tz, $spos+1);
-            $continents[$continent] = 1;
-
-            if (!isset($cities[$continent])) {
-                $cities[$continent] = '';
-            }
-            $cities[$continent] .= '<option value="'.$city.'"';
-            if ($pcity == $city) {
-                $cities[$continent] .= ' selected="selected"';
-            }
-            $cities[$continent] .= '>'.$city.'</option>';
+        // Ignore invalid timezones
+        if ($spos === false) {
+            continue;
         }
+
+        $continent = substr($tz, 0, $spos);
+        $city = substr($tz, $spos+1);
+        $cities[] = ['continent' => $continent, 'city' => $city];
+        $continents[$continent] = true;
     }
 
-    $continentsHtml = '';
     $continents = array_keys($continents);
+    $continents['selected'] = $pcontinent;
+    $cities['selected'] = $pcity;
 
-    foreach ($continents as $continent) {
-        $continentsHtml .= '<option  value="'.$continent.'"';
-        if ($pcontinent == $continent) {
-            $continentsHtml .= ' selected="selected"';
-        }
-        $continentsHtml .= '>'.$continent.'</option>';
-    }
-
-    // Timezone selection form
-    $timezoneForm = 'Continent:';
-    $timezoneForm .= '<select name="continent" id="continent" onChange="onChangecontinent();">';
-    $timezoneForm .= $continentsHtml.'</select>';
-    $timezoneForm .= '&nbsp;&nbsp;&nbsp;&nbsp;City:';
-    $timezoneForm .= '<select name="city" id="city">'.$cities[$pcontinent].'</select><br />';
-
-    // Javascript handler - updates the city list when the user selects a continent
-    $timezoneJs = '<script>';
-    $timezoneJs .= 'function onChangecontinent() {';
-    $timezoneJs .= 'document.getElementById("city").innerHTML =';
-    $timezoneJs .= ' citiescontinent[document.getElementById("continent").value]; }';
-    $timezoneJs .= 'var citiescontinent = '.json_encode($cities).';';
-    $timezoneJs .= '</script>';
-
-    return array($timezoneForm, $timezoneJs);
+    return [$continents, $cities];
 }
 
 /**

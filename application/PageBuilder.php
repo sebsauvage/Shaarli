@@ -1,5 +1,7 @@
 <?php
 
+use Shaarli\Config\ConfigManager;
+
 /**
  * This class is in charge of building the final page.
  * (This is basically a wrapper around RainTPL which pre-fills some fields.)

@@ -1146,9 +1146,12 @@ function renderPage($conf, $pluginManager, $LINKSDB)
             $PAGE->assign('theme', $conf->get('resource.theme'));
             $PAGE->assign('theme_available', ThemeUtils::getThemes($conf->get('resource.raintpl_tpl')));
             $PAGE->assign('redirector', $conf->get('redirector.url'));
-            list($timezone_form, $timezone_js) = generateTimeZoneForm($conf->get('general.timezone'));
-            $PAGE->assign('timezone_form', $timezone_form);
-            $PAGE->assign('timezone_js',$timezone_js);
+            list($continents, $cities) = generateTimeZoneData(
+                timezone_identifiers_list(),
+                $conf->get('general.timezone')
+            );
+            $PAGE->assign('continents', $continents);
+            $PAGE->assign('cities', $cities);
             $PAGE->assign('private_links_default', $conf->get('privacy.default_private_links', false));
             $PAGE->assign('session_protection_disabled', $conf->get('security.session_protection_disabled', false));
             $PAGE->assign('enable_rss_permalinks', $conf->get('feed.rss_permalinks', false));
@@ -1969,16 +1972,10 @@ function install($conf)
         exit;
     }
 
-    // Display config form:
-    list($timezone_form, $timezone_js) = generateTimeZoneForm();
-    $timezone_html = '';
-    if ($timezone_form != '') {
-        $timezone_html = '<tr><td><b>Timezone:</b></td><td>'.$timezone_form.'</td></tr>';
-    }
-
     $PAGE = new PageBuilder($conf);
-    $PAGE->assign('timezone_html',$timezone_html);
-    $PAGE->assign('timezone_js',$timezone_js);
+    list($continents, $cities) = generateTimeZoneData(timezone_identifiers_list(), date_default_timezone_get());
+    $PAGE->assign('continents', $continents);
+    $PAGE->assign('cities', $cities);
     $PAGE->renderPage('install');
     exit;
 }

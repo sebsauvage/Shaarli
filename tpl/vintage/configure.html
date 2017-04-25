@@ -4,7 +4,6 @@
 <body onload="document.configform.title.focus();">
 <div id="pageheader">
   {include="page.header"}
-  {$timezone_js}
   <form method="POST" action="#" name="configform" id="configform">
     <input type="hidden" name="token" value="{$token}">
     <table id="configuration_table">
@@ -35,7 +34,28 @@
 
       <tr>
         <td><b>Timezone:</b></td>
-        <td>{$timezone_form}</td>
+        <td>
+          <select id="continent" name="continent">
+            {loop="$continents"}
+              {if="$key !== 'selected'"}
+                <option value="{$value}" {if="$continents.selected === $value"}selected{/if}>
+                  {$value}
+                </option>
+              {/if}
+            {/loop}
+          </select>
+          <select id="city" name="city">
+            {loop="$cities"}
+              {if="$key !== 'selected'"}
+                <option value="{$value.city}"
+                        {if="$cities.selected === $value.city"}selected{/if}
+                        data-continent="{$value.continent}">
+                  {$value.city}
+                </option>
+              {/if}
+            {/loop}
+          </select>
+        </td>
       </tr>
 
       <tr>
