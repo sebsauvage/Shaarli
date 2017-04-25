@@ -1489,7 +1489,22 @@ function renderPage($conf, $pluginManager, $LINKSDB)
 
         if (! isset($_POST['token']) || ! isset($_FILES['filetoupload'])) {
             // Show import dialog
-            $PAGE->assign('maxfilesize', get_max_upload_size(ini_get('post_max_size'), ini_get('upload_max_filesize')));
+            $PAGE->assign(
+                'maxfilesize',
+                get_max_upload_size(
+                    ini_get('post_max_size'),
+                    ini_get('upload_max_filesize'),
+                    false
+                )
+            );
+            $PAGE->assign(
+                'maxfilesizeHuman',
+                get_max_upload_size(
+                    ini_get('post_max_size'),
+                    ini_get('upload_max_filesize'),
+                    true
+                )
+            );
             $PAGE->renderPage('import');
             exit;
         }
