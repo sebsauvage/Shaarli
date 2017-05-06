@@ -301,6 +301,7 @@ class ConfigManager
         $this->setEmpty('resource.updates', 'data/updates.txt');
         $this->setEmpty('resource.log', 'data/log.txt');
         $this->setEmpty('resource.update_check', 'data/lastupdatecheck.txt');
+        $this->setEmpty('resource.history', 'data/history.php');
         $this->setEmpty('resource.raintpl_tpl', 'tpl/');
         $this->setEmpty('resource.theme', 'default');
         $this->setEmpty('resource.raintpl_tmp', 'tmp/');
