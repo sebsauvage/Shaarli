@@ -188,4 +188,27 @@ class Links extends ApiController
         $out = ApiUtils::formatLink($responseLink, $index);
         return $response->withJson($out, 200, $this->jsonStyle);
     }
+
+    /**
+     * Delete an existing link by its ID.
+     *
+     * @param Request  $request  Slim request.
+     * @param Response $response Slim response.
+     * @param array    $args     Path parameters. including the ID.
+     *
+     * @return Response response.
+     *
+     * @throws ApiLinkNotFoundException generating a 404 error.
+     */
+    public function deleteLink($request, $response, $args)
+    {
+        if (! isset($this->linkDb[$args['id']])) {
+            throw new ApiLinkNotFoundException();
+        }
+
+        unset($this->linkDb[(int) $args['id']]);
+        $this->linkDb->save($this->conf->get('resource.page_cache'));
+
+        return $response->withStatus(204);
+    }
 }
