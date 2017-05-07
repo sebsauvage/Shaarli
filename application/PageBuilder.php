@@ -22,15 +22,22 @@ class PageBuilder
     protected $conf;
 
     /**
+     * @var LinkDB $linkDB instance.
+     */
+    protected $linkDB;
+
+    /**
      * PageBuilder constructor.
      * $tpl is initialized at false for lazy loading.
      *
-     * @param ConfigManager $conf Configuration Manager instance (reference).
+     * @param ConfigManager $conf   Configuration Manager instance (reference).
+     * @param LinkDB        $linkDB instance.
      */
-    public function __construct(&$conf)
+    public function __construct(&$conf, $linkDB = null)
     {
         $this->tpl = false;
         $this->conf = $conf;
+        $this->linkDB = $linkDB;
     }
 
     /**
@@ -81,6 +88,9 @@ class PageBuilder
         $this->tpl->assign('feed_type', $this->conf->get('feed.show_atom', true) !== false ? 'atom' : 'rss');
         $this->tpl->assign('hide_timestamps', $this->conf->get('privacy.hide_timestamps', false));
         $this->tpl->assign('token', getToken($this->conf));
+        if ($this->linkDB !== null) {
+            $this->tpl->assign('tags', $this->linkDB->allTags());
+        }
         // To be removed with a proper theme configuration.
         $this->tpl->assign('conf', $this->conf);
     }
