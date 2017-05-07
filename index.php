@@ -2251,6 +2251,7 @@ $app->group('/api/v1', function() {
     $this->get('/links', '\Shaarli\Api\Controllers\Links:getLinks')->setName('getLinks');
     $this->get('/links/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:getLink')->setName('getLink');
     $this->post('/links', '\Shaarli\Api\Controllers\Links:postLink')->setName('postLink');
+    $this->put('/links/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:putLink')->setName('putLink');
 })->add('\Shaarli\Api\ApiMiddleware');
 
 $response = $app->run(true);

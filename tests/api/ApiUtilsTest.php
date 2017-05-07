@@ -271,4 +271,82 @@ class ApiUtilsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, ApiUtils::formatLink($link, $indexUrl));
     }
+
+    /**
+     * Test updateLink with valid data, and also unnecessary fields.
+     */
+    public function testUpdateLink()
+    {
+        $created = \DateTime::createFromFormat('Ymd_His', '20170107_160102');
+        $old = [
+            'id' => 12,
+            'url' => '?abc',
+            'shorturl' => 'abc',
+            'title' => 'Note',
+            'description' => '',
+            'tags' => '',
+            'private' => '',
+            'created' => $created,
+        ];
+
+        $new = [
+            'id' => 13,
+            'shorturl' => 'nope',
+            'url' => 'http://somewhere.else',
+            'title' => 'Le Cid',
+            'description' => 'Percé jusques au fond du cœur [...]',
+            'tags' => 'corneille rodrigue',
+            'private' => true,
+            'created' => 'creation',
+            'updated' => 'updation',
+        ];
+
+        $result = ApiUtils::updateLink($old, $new);
+        $this->assertEquals(12, $result['id']);
+        $this->assertEquals('http://somewhere.else', $result['url']);
+        $this->assertEquals('abc', $result['shorturl']);
+        $this->assertEquals('Le Cid', $result['title']);
+        $this->assertEquals('Percé jusques au fond du cœur [...]', $result['description']);
+        $this->assertEquals('corneille rodrigue', $result['tags']);
+        $this->assertEquals(true, $result['private']);
+        $this->assertEquals($created, $result['created']);
+        $this->assertTrue(new \DateTime('5 seconds ago') < $result['updated']);
+    }
+
+    /**
+     * Test updateLink with minimal data.
+     */
+    public function testUpdateLinkMinimal()
+    {
+        $created = \DateTime::createFromFormat('Ymd_His', '20170107_160102');
+        $old = [
+            'id' => 12,
+            'url' => '?abc',
+            'shorturl' => 'abc',
+            'title' => 'Note',
+            'description' => 'Interesting description!',
+            'tags' => 'doggo',
+            'private' => true,
+            'created' => $created,
+        ];
+
+        $new = [
+            'url' => '',
+            'title' => '',
+            'description' => '',
+            'tags' => '',
+            'private' => false,
+        ];
+
+        $result = ApiUtils::updateLink($old, $new);
+        $this->assertEquals(12, $result['id']);
+        $this->assertEquals('?abc', $result['url']);
+        $this->assertEquals('abc', $result['shorturl']);
+        $this->assertEquals('?abc', $result['title']);
+        $this->assertEquals('', $result['description']);
+        $this->assertEquals('', $result['tags']);
+        $this->assertEquals(false, $result['private']);
+        $this->assertEquals($created, $result['created']);
+        $this->assertTrue(new \DateTime('5 seconds ago') < $result['updated']);
+    }
 }

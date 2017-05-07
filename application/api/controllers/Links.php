@@ -146,4 +146,46 @@ class Links extends ApiController
         return $response->withAddedHeader('Location', $redirect)
                         ->withJson($out, 201, $this->jsonStyle);
     }
+
+    /**
+     * Updates an existing link from posted request body.
+     *
+     * @param Request  $request  Slim request.
+     * @param Response $response Slim response.
+     * @param array    $args     Path parameters. including the ID.
+     *
+     * @return Response response.
+     *
+     * @throws ApiLinkNotFoundException generating a 404 error.
+     */
+    public function putLink($request, $response, $args)
+    {
+        if (! isset($this->linkDb[$args['id']])) {
+            throw new ApiLinkNotFoundException();
+        }
+
+        $index = index_url($this->ci['environment']);
+        $data = $request->getParsedBody();
+
+        $requestLink = ApiUtils::buildLinkFromRequest($data, $this->conf->get('privacy.default_private_links'));
+        // duplicate URL on a different link, return 409 Conflict
+        if (! empty($requestLink['url'])
+            && ! empty($dup = $this->linkDb->getLinkFromUrl($requestLink['url']))
+            && $dup['id'] != $args['id']
+        ) {
+            return $response->withJson(
+                ApiUtils::formatLink($dup, $index),
+                409,
+                $this->jsonStyle
+            );
+        }
+
+        $responseLink = $this->linkDb[$args['id']];
+        $responseLink = ApiUtils::updateLink($responseLink, $requestLink);
+        $this->linkDb[$responseLink['id']] = $responseLink;
+        $this->linkDb->save($this->conf->get('resource.page_cache'));
+
+        $out = ApiUtils::formatLink($responseLink, $index);
+        return $response->withJson($out, 200, $this->jsonStyle);
+    }
 }
