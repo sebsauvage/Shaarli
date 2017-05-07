@@ -10,6 +10,7 @@
 ### Supported versions
 Version | Status | Shaarli compatibility
 :---:|:---:|:---:
+7.1 | Supported (v0.9.x) | :white_check_mark:
 7.0 | Supported | :white_check_mark:
 5.6 | Supported | :white_check_mark:
 5.5 | EOL: 2016-07-10 | :white_check_mark:
@@ -26,6 +27,8 @@ download and install third-party PHP dependencies.
 Library | Required? | Usage
 ---|:---:|---
 [`shaarli/netscape-bookmark-parser`](https://packagist.org/packages/shaarli/netscape-bookmark-parser) | All | Import bookmarks from Netscape files[](.html)
+[`erusev/parsedown`](https://packagist.org/packages/erusev/parsedown) | All | Parse MarkDown syntax for the MarkDown plugin[](.html)
+[`slim/slim`](https://packagist.org/packages/slim/slim) | All | Handle routes and middleware for the REST API[](.html)
 
 ### Extensions
 Extension | Required? | Usage

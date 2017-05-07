@@ -141,6 +141,7 @@ CONTAINER ID  IMAGE            COMMAND               CREATED         STATUS     
 
 ## Resources
 ### Docker
+- [Interactive Docker training portal](https://www.katacoda.com/courses/docker/) on [Katakoda](https://www.katacoda.com/)[](.html)
 - [Where are Docker images stored?](http://blog.thoward37.me/articles/where-are-docker-images-stored/)[](.html)
 - [Dockerfile reference](https://docs.docker.com/reference/builder/)[](.html)
 - [Dockerfile best practices](https://docs.docker.com/articles/dockerfile_best-practices/)[](.html)

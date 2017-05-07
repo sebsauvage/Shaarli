@@ -70,6 +70,7 @@ It might be useful if your IP adress often changes.
 
 **data_dir**: Data directory.  
 **datastore**: Shaarli's links database file path.  
+**history**: Shaarli's operation history file path.
 **updates**: File path for the ran updates file.  
 **log**: Log file path.  
 **update_check**: Last update check file path.  

@@ -103,6 +103,9 @@ gpg: Good signature from "VirtualTam <virtualtam@flibidi.net>" [ultimate][](.htm
 ```
 
 ## Publish the GitHub release
+### Update release badges
+Update `README.md` so version badges display and point to the newly released Shaarli version(s).
+
 ### Create a GitHub release from a Git tag
 From the previously drafted release:
 - edit the release notes (if needed)

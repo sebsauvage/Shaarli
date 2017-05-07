@@ -1,11 +1,17 @@
 #Upgrade and migration
 ## Preparation
+### Note your current version
+
+If anything goes wrong, it's important for us to know which version you're upgrading from.  
+The current version is present in the `version.php` file.
+
 ### Backup your data
 
 Shaarli stores all user data under the `data` directory:
 - `data/config.php` - main configuration file
 - `data/datastore.php` - bookmarked links
 - `data/ipbans.php` - banned IP addresses
+- `data/updates.txt` - contains all automatic update to the configuration and datastore files already run
 
 See [Shaarli configuration](Shaarli-configuration.html) for more information about Shaarli resources.
 
@@ -22,16 +28,14 @@ As all user data is kept under `data`, this is the only directory you need to wo
     - update - see the following sections
 - check or restore the `data` directory
 
-## Upgrading from release archives
+## Recommended : Upgrading from release archives
 All tagged revisions can be downloaded as tarballs or ZIP archives from the [releases](https://github.com/shaarli/Shaarli/releases) page.[](.html)
 
-We _recommend_ using the releases from the `stable` branch, which are available as:
-- gzipped tarball - https://github.com/shaarli/Shaarli/archive/stable.tar.gz
-- ZIP archive - https://github.com/shaarli/Shaarli/archive/stable.zip
+We recommend that you use the latest release tarball with the `-full` suffix. It contains the dependencies, please read [Download and installation](Download-and-installation.html) for `git` complete instructions.
 
-Once downloaded, extract the archive locally and update your remote installation (e.g. via FTP) -be sure you keep the contents of the `data` directory!
+Once downloaded, extract the archive locally and update your remote installation (e.g. via FTP) -be sure you keep the content of the `data` directory!
 
-After upgrading, access your fresh Shaarli installation from a web browser; the configuration will then be automatically updated, and new settings added to `data/config.php` (see [Shaarli configuration](Shaarli-configuration.html) for more details).
+After upgrading, access your fresh Shaarli installation from a web browser; the configuration and data store will then be automatically updated, and new settings added to `data/config.json.php` (see [Shaarli configuration](Shaarli-configuration.html) for more details).
 
 ## Upgrading with Git
 ### Updating a community Shaarli
@@ -54,7 +58,7 @@ Fast-forward
 Shaarli >= `v0.8.x`: install/update third-party PHP dependencies using [Composer](https://getcomposer.org/):[](.html)
 
 ```bash
-$ composer update --no-dev
+$ composer install --no-dev
 
 Loading composer repositories with package information
 Updating dependencies
@@ -129,7 +133,7 @@ $ git branch -vv
 Shaarli >= `v0.8.x`: install/update third-party PHP dependencies using [Composer](https://getcomposer.org/):[](.html)
 
 ```bash
-$ composer update --no-dev
+$ composer install --no-dev
 
 Loading composer repositories with package information
 Updating dependencies
@@ -159,3 +163,24 @@ Total 3317 (delta 2050), reused 3301 (delta 2034)to
 
 #### Step 3: configuration
 After migrating, access your fresh Shaarli installation from a web browser; the configuration will then be automatically updated, and new settings added to `data/config.php` (see [Shaarli configuration](Shaarli-configuration.html) for more details).
+
+## Troubleshooting
+
+If the solutions provided here doesn't work, please open an issue specifying which version you're upgrading from and to.
+
+### You must specify an integer as a key
+
+In `v0.8.1` we changed how link keys are handled (from timestamps to incremental integers).
+Take a look at `data/updates.txt` content.
+
+#### `updates.txt` contains `updateMethodDatastoreIds`
+
+Try to delete it and refresh your page while being logged in.
+
+#### `updates.txt` doesn't exists or doesn't contain `updateMethodDatastoreIds`
+
+  1. Create `data/updates.txt` if it doesn't exist.
+  2. Paste this string in the update file `;updateMethodRenameDashTags;`
+  3. Login to Shaarli.
+  4. Delete the update file.
+  5. Refresh.

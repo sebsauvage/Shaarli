@@ -69,6 +69,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="Browsing-and-Searching.html">Browsing and Searching</a></li>
 <li><a href="Firefox-share.html">Firefox share</a></li>
 <li><a href="RSS-feeds.html">RSS feeds</a></li>
+<li><a href="REST-API.html">REST API</a></li>
 </ul></li>
 <li>How To
 <ul>
@@ -87,6 +88,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
 <li><a href="Plugin-System.html">Plugin System</a></li>
 <li><a href="Release-Shaarli.html">Release Shaarli</a></li>
+<li><a href="Versioning-and-Branches.html">Versioning and Branches</a></li>
 <li><a href="Security.html">Security</a></li>
 <li><a href="Static-analysis.html">Static analysis</a></li>
 <li><a href="Theming.html">Theming</a></li>
@@ -155,7 +157,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">function</span> copyUserStyleFrom<span class="ot">(</span><span class="kw">$url</span><span class="ot">,</span> <span class="kw">$name</span><span class="ot">,</span> <span class="kw">$knownStyles</span><span class="ot">)</span> {
     <span class="kw">$userStyle</span> = <span class="kw">$url</span>.<span class="st">&quot;inc/user.css&quot;</span><span class="ot">;</span>
     <span class="kw">if</span><span class="ot">(</span><span class="fu">in_array</span><span class="ot">(</span><span class="kw">$url</span><span class="ot">,</span> <span class="kw">$knownStyles</span><span class="ot">))</span> {
-        <span class="co">// TODO add log message</span>
+        <span class="co">// </span><span class="al">TODO</span><span class="co"> add log message</span>
     } <span class="kw">else</span> {
         <span class="kw">$statusCode</span> = get_http_response_code<span class="ot">(</span><span class="kw">$userStyle</span><span class="ot">);</span>
         <span class="kw">if</span><span class="ot">(</span><span class="fu">intval</span><span class="ot">(</span><span class="kw">$statusCode</span><span class="ot">)</span>&lt;<span class="dv">300</span><span class="ot">)</span> {

@@ -14,6 +14,11 @@ _TODO: contact repos owners to see if they'd like to standardize their work with
 - [Original revisions history](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)[](.html)
 - [Shaarli.fr/my](https://www.shaarli.fr/my.php) - Unofficial, unsupported (old fork) hosted Shaarlis provider, courtesy of [DMeloni](https://github.com/DMeloni)[](.html)
 
+### Articles and social media discussions
+- 2016-09-22 - Hacker News - https://news.ycombinator.com/item?id=12552176
+- 2015-08-15 - Reddit - [Question about migrating from WordPress to Shaarli.](https://www.reddit.com/r/selfhosted/comments/3h3zwh/question_about_migrating_from_wordpress_to_shaarli/)[](.html)
+- 2015-06-22 - Hacker News - https://news.ycombinator.com/item?id=9755366
+- 2015-05-12 - Reddit - [shaarli - Self hosted Bookmarking / Delicious (PHP, MySQL)](https://www.reddit.com/r/selfhosted/comments/35pkkc/shaarli_self_hosted_bookmarking_delicious_php/)[](.html)
 
 ### Third party plugins
 
@@ -22,6 +27,7 @@ _TODO: contact repos owners to see if they'd like to standardize their work with
   * [Code Coloration](https://github.com/ArthurHoaro/code-coloration) by [@ArthurHoaro](https://github.com/ArthurHoaro): client side code syntax highlighter.[](.html)
   * [Disqus](https://github.com/kalvn/shaarli-plugin-disqus) by [@kalvn](https://github.com/kalvn): Adds Disqus comment system to your Shaarli.[](.html)
   * [emojione](https://github.com/NerosTie/emojione) by [@NerosTie](https://github.com/NerosTie): Add colorful emojis to your Shaarli.[](.html)
+  * [google analytics](https://github.com/ericjuden/Shaarli-Google-Analytics-Plugin) by [@ericjuden](http://github.com/ericjuden): Adds Google Analytics tracking support[](.html)
   * [launch](https://github.com/ArthurHoaro/launch-plugin) - Launch Plugin is a plugin designed to enhance and customize Launch Theme for Shaarli.[](.html)
   * [social](https://github.com/alexisju/social) by [@alexisju](https://github.com/alexisju): share links to social networks.[](.html)
   * [shaarli2twitter](https://github.com/ArthurHoaro/shaarli2twitter) by [@ArthurHoaro](https://github.com/ArthurHoaro) - Automatically tweet your shared links from Shaarli[](.html)

@@ -1,8 +1,6 @@
 #Browsing and searching
 # Browsing and Searching
 
-Status: DRAFT
-
 ![(http://pix.toile-libre.org/upload/original/1455571378.png)]((http://pix.toile-libre.org/upload/original/1455571378.png).html)
 
 ## Plain text search
@@ -22,6 +20,8 @@ Use the `Filter by tags` field to restrict displayed links to entries tagged wit
 **Hidden tags:** Tags starting with a dot `.` (example `.secret`) are private. They can only be seen and searched when logged in.
 
 Alternatively you can use the `Tag cloud` to discover all tags and click on any of them to display related links.
+
+To search for links that are not tagged, enter `""` in the tag search field.
 
 ## Filtering RSS feeds/Picture wall
 

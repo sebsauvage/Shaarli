@@ -126,3 +126,22 @@ If Xdebug has been installed and activated, two coverage reports will be generat
 * a summary in the console
 * a detailed HTML report with metrics for tested code
  * to open it in a web browser: `firefox coverage/index.html &`
+
+### Executing specific tests
+Add a [`@group`](https://phpunit.de/manual/current/en/appendixes.annotations.html#appendixes.annotations.group) annotation in a test class or method comment:[](.html)
+
+```php
+/**
+ * Netscape bookmark import
+ * @group WIP
+ */
+class BookmarkImportTest extends PHPUnit_Framework_TestCase
+{
+   [...][](.html)
+}
+```
+
+To run all tests annotated with `@group WIP`:
+```bash
+$ vendor/bin/phpunit --group WIP tests/
+```

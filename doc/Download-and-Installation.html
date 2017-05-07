@@ -69,6 +69,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="Browsing-and-Searching.html">Browsing and Searching</a></li>
 <li><a href="Firefox-share.html">Firefox share</a></li>
 <li><a href="RSS-feeds.html">RSS feeds</a></li>
+<li><a href="REST-API.html">REST API</a></li>
 </ul></li>
 <li>How To
 <ul>
@@ -87,6 +88,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
 <li><a href="Plugin-System.html">Plugin System</a></li>
 <li><a href="Release-Shaarli.html">Release Shaarli</a></li>
+<li><a href="Versioning-and-Branches.html">Versioning and Branches</a></li>
 <li><a href="Security.html">Security</a></li>
 <li><a href="Static-analysis.html">Static analysis</a></li>
 <li><a href="Theming.html">Theming</a></li>
@@ -108,10 +110,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h3 id="download-as-an-archive">Download as an archive</h3>
 <p>Get the latest released version from the <a href="https://github.com/shaarli/Shaarli/releases">releases</a> page.<a href=".html"></a></p>
 <p><strong>Download our <em>shaarli-full</em> archive</strong> to include dependencies.</p>
-<p>The current latest released version is <code>v0.8.0</code></p>
+<p>The current latest released version is <code>v0.8.4</code></p>
 <p>Or in command lines:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">wget</span> https://github.com/shaarli/Shaarli/releases/download/v0.8.0/shaarli-v0.8.0-full.zip
-$ <span class="fu">unzip</span> shaarli-v0.8.0-full.zip
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">wget</span> https://github.com/shaarli/Shaarli/releases/download/v0.8.4/shaarli-v0.8.4-full.zip
+$ <span class="fu">unzip</span> shaarli-v0.8.4-full.zip
 $ <span class="fu">mv</span> Shaarli /path/to/shaarli/</code></pre></div>
 <table style="width:46%;">
 <colgroup>
@@ -129,8 +131,8 @@ $ <span class="fu">mv</span> Shaarli /path/to/shaarli/</code></pre></div>
 </table>
 <h3 id="using-git">Using git</h3>
 <pre><code>mkdir -p /path/to/shaarli &amp;&amp; cd /path/to/shaarli/
-git clone -b v0.8.0 https://github.com/shaarli/Shaarli.git .
-composer update --no-dev</code></pre>
+git clone -b v0.8 https://github.com/shaarli/Shaarli.git .
+composer install --no-dev</code></pre>
 <hr />
 <h2 id="stable-version">Stable version</h2>
 <p>The stable version has been experienced by Shaarli users, and will receive security updates.</p>
@@ -148,16 +150,16 @@ $ <span class="fu">mv</span> Shaarli-stable /path/to/shaarli/</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">git</span> clone https://github.com/shaarli/Shaarli.git -b stable /path/to/shaarli/
 <span class="co"># install/update third-party dependencies</span>
 $ <span class="bu">cd</span> /path/to/shaarli/
-$ <span class="ex">composer</span> update --no-dev</code></pre></div>
+$ <span class="ex">composer</span> install --no-dev</code></pre></div>
 <hr />
 <h2 id="development-version-mainline">Development version (mainline)</h2>
 <p><em>Use at your own risk!</em></p>
 <p>To get the latest changes from the <code>master</code> branch:</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># clone the repository  </span>
-$ <span class="fu">git</span> clone https://github.com/shaarli/Shaarli.git master /path/to/shaarli/
+$ <span class="fu">git</span> clone https://github.com/shaarli/Shaarli.git -b master /path/to/shaarli/
 <span class="co"># install/update third-party dependencies</span>
 $ <span class="bu">cd</span> /path/to/shaarli
-$ <span class="ex">composer</span> update --no-dev</code></pre></div>
+$ <span class="ex">composer</span> install --no-dev</code></pre></div>
 <hr />
 <h2 id="finish-installation">Finish Installation</h2>
 <p>Once Shaarli is downloaded and files have been placed at the correct location, open it this location your favorite browser.</p>
