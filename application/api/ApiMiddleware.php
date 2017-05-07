@@ -4,6 +4,7 @@ namespace Shaarli\Api;
 use Shaarli\Api\Exceptions\ApiException;
 use Shaarli\Api\Exceptions\ApiAuthorizationException;
 
+use Shaarli\Config\ConfigManager;
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -31,7 +32,7 @@ class ApiMiddleware
     protected $container;
 
     /**
-     * @var \ConfigManager instance.
+     * @var ConfigManager instance.
      */
     protected $conf;
 
@@ -121,7 +122,7 @@ class ApiMiddleware
      *
      * FIXME! LinkDB could use a refactoring to avoid this trick.
      *
-     * @param \ConfigManager $conf instance.
+     * @param ConfigManager $conf instance.
      */
     protected function setLinkDb($conf)
     {

@@ -707,7 +707,7 @@ function showLinkList($PAGE, $LINKSDB, $conf, $pluginManager) {
  * @param PluginManager $pluginManager Plugin Manager instance,
  * @param LinkDB        $LINKSDB
  */
-function renderPage($conf, $pluginManager, $LINKSDB)
+function renderPage($conf, $pluginManager, $LINKSDB, $history)
 {
     $updater = new Updater(
         read_updates_file($conf->get('resource.updates')),
@@ -725,12 +725,6 @@ function renderPage($conf, $pluginManager, $LINKSDB)
         }
     }
     catch(Exception $e) {
-        die($e->getMessage());
-    }
-
-    try {
-        $history = new History($conf->get('resource.history'));
-    } catch(Exception $e) {
         die($e->getMessage());
     }
 
@@ -1167,7 +1161,6 @@ function renderPage($conf, $pluginManager, $LINKSDB)
             $PAGE->assign('hide_public_links', $conf->get('privacy.hide_public_links', false));
             $PAGE->assign('api_enabled', $conf->get('api.enabled', true));
             $PAGE->assign('api_secret', $conf->get('api.secret'));
-            $history->updateSettings();
             $PAGE->renderPage('configure');
             exit;
         }
@@ -1578,7 +1571,6 @@ function renderPage($conf, $pluginManager, $LINKSDB)
 
     // Plugin administration form action
     if ($targetPage == Router::$PAGE_SAVE_PLUGINSADMIN) {
-        $history->updateSettings();
         try {
             if (isset($_POST['parameters_form'])) {
                 unset($_POST['parameters_form']);
@@ -1590,6 +1582,7 @@ function renderPage($conf, $pluginManager, $LINKSDB)
                 $conf->set('general.enabled_plugins', save_plugin_config($_POST));
             }
             $conf->write(isLoggedIn());
+            $history->updateSettings();
         }
         catch (Exception $e) {
             error_log(
@@ -2240,9 +2233,16 @@ $linkDb = new LinkDB(
     $conf->get('redirector.encode_url')
 );
 
+try {
+    $history = new History($conf->get('resource.history'));
+} catch(Exception $e) {
+    die($e->getMessage());
+}
+
 $container = new \Slim\Container();
 $container['conf'] = $conf;
 $container['plugins'] = $pluginManager;
+$container['history'] = $history;
 $app = new \Slim\App($container);
 
 // REST API routes
@@ -2262,7 +2262,7 @@ $response = $app->run(true);
 if ($response->getStatusCode() == 404 && strpos($_SERVER['REQUEST_URI'], '/api/v1') === false) {
     // We use UTF-8 for proper international characters handling.
     header('Content-Type: text/html; charset=utf-8');
-    renderPage($conf, $pluginManager, $linkDb);
+    renderPage($conf, $pluginManager, $linkDb, $history);
 } else {
     $app->respond($response);
 }

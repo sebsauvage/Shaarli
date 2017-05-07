@@ -2,6 +2,7 @@
 
 namespace Shaarli\Api\Controllers;
 
+use Shaarli\Config\ConfigManager;
 use \Slim\Container;
 
 /**
@@ -19,7 +20,7 @@ abstract class ApiController
     protected $ci;
 
     /**
-     * @var \ConfigManager
+     * @var ConfigManager
      */
     protected $conf;
 
@@ -27,6 +28,11 @@ abstract class ApiController
      * @var \LinkDB
      */
     protected $linkDb;
+
+    /**
+     * @var \History
+     */
+    protected $history;
 
     /**
      * @var int|null JSON style option.
@@ -45,6 +51,7 @@ abstract class ApiController
         $this->ci = $ci;
         $this->conf = $ci->get('conf');
         $this->linkDb = $ci->get('db');
+        $this->history = $ci->get('history');
         if ($this->conf->get('dev.debug', false)) {
             $this->jsonStyle = JSON_PRETTY_PRINT;
         } else {

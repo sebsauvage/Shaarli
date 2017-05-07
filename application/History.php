@@ -135,7 +135,7 @@ class History
 
         $item = [
             'event' => $status,
-            'datetime' => (new DateTime())->format(DateTime::ATOM),
+            'datetime' => new DateTime(),
             'id' => $id !== null ? $id : '',
         ];
         $this->history = array_merge([$item], $this->history);
@@ -177,7 +177,7 @@ class History
     {
         $comparaison = new DateTime('-'. $this->retentionTime . ' seconds');
         foreach ($this->history as $key => $value) {
-            if (DateTime::createFromFormat(DateTime::ATOM, $value['datetime']) < $comparaison) {
+            if ($value['datetime'] < $comparaison) {
                 unset($this->history[$key]);
             }
         }

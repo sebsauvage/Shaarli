@@ -141,6 +141,7 @@ class Links extends ApiController
 
         $this->linkDb[$link['id']] = $link;
         $this->linkDb->save($this->conf->get('resource.page_cache'));
+        $this->history->addLink($link);
         $out = ApiUtils::formatLink($link, index_url($this->ci['environment']));
         $redirect = $this->ci->router->relativePathFor('getLink', ['id' => $link['id']]);
         return $response->withAddedHeader('Location', $redirect)
@@ -184,6 +185,7 @@ class Links extends ApiController
         $responseLink = ApiUtils::updateLink($responseLink, $requestLink);
         $this->linkDb[$responseLink['id']] = $responseLink;
         $this->linkDb->save($this->conf->get('resource.page_cache'));
+        $this->history->updateLink($responseLink);
 
         $out = ApiUtils::formatLink($responseLink, $index);
         return $response->withJson($out, 200, $this->jsonStyle);
@@ -205,9 +207,10 @@ class Links extends ApiController
         if (! isset($this->linkDb[$args['id']])) {
             throw new ApiLinkNotFoundException();
         }
-
+        $link = $this->linkDb[$args['id']];
         unset($this->linkDb[(int) $args['id']]);
         $this->linkDb->save($this->conf->get('resource.page_cache'));
+        $this->history->deleteLink($link);
 
         return $response->withStatus(204);
     }

@@ -30,11 +30,6 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
     protected $refHistory = null;
 
     /**
-     * @var \History instance.
-     */
-    protected $history;
-
-    /**
      * @var Container instance.
      */
     protected $container;
@@ -52,10 +47,10 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
         $this->conf = new ConfigManager('tests/utils/config/configJson.json.php');
         $this->refHistory = new \ReferenceHistory();
         $this->refHistory->write(self::$testHistory);
-        $this->conf->set('resource.history', self::$testHistory);
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
         $this->container['db'] = true;
+        $this->container['history'] = new \History(self::$testHistory);
 
         $this->controller = new History($this->container);
     }

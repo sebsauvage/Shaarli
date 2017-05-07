@@ -62,6 +62,7 @@ class GetLinkIdTest extends \PHPUnit_Framework_TestCase
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
         $this->container['db'] = new \LinkDB(self::$testDatastore, true, false);
+        $this->container['history'] = null;
 
         $this->controller = new Links($this->container);
     }

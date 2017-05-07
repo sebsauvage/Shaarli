@@ -15,8 +15,19 @@ class ReferenceHistory
     public function __construct()
     {
         $this->addEntry(
-            History::CREATED,
-            DateTime::createFromFormat('Ymd_His', '20170101_121212'),
+            History::DELETED,
+            DateTime::createFromFormat('Ymd_His', '20170303_121216'),
+            124
+        );
+
+        $this->addEntry(
+            History::SETTINGS,
+            DateTime::createFromFormat('Ymd_His', '20170302_121215')
+        );
+
+        $this->addEntry(
+            History::UPDATED,
+            DateTime::createFromFormat('Ymd_His', '20170301_121214'),
             123
         );
 
@@ -27,20 +38,9 @@ class ReferenceHistory
         );
 
         $this->addEntry(
-            History::UPDATED,
-            DateTime::createFromFormat('Ymd_His', '20170301_121214'),
+            History::CREATED,
+            DateTime::createFromFormat('Ymd_His', '20170101_121212'),
             123
-        );
-
-        $this->addEntry(
-            History::SETTINGS,
-            DateTime::createFromFormat('Ymd_His', '20170302_121215')
-        );
-
-        $this->addEntry(
-            History::DELETED,
-            DateTime::createFromFormat('Ymd_His', '20170303_121216'),
-            124
         );
     }
 
