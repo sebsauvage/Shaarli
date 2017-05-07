@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Shaarli – REST API</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="github-markdown.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div id="local-sidebar">
+<ul>
+<li><a href="Home.html">Home</a></li>
+<li>Setup
+<ul>
+<li><a href="Download-and-Installation.html">Download and Installation</a></li>
+<li><a href="Upgrade-and-migration.html">Upgrade and migration</a></li>
+<li><a href="Server-requirements.html">Server requirements</a></li>
+<li><a href="Server-configuration.html">Server configuration</a></li>
+<li><a href="Server-security.html">Server security</a></li>
+<li><a href="Shaarli-configuration.html">Shaarli configuration</a></li>
+<li><a href="Plugins.html">Plugins</a></li>
+</ul></li>
+<li><a href="Docker.html">Docker</a></li>
+<li><a href="Usage.html">Usage</a>
+<ul>
+<li><a href="Sharing-button.html">Sharing button</a> (bookmarklet)</li>
+<li><a href="Browsing-and-Searching.html">Browsing and Searching</a></li>
+<li><a href="Firefox-share.html">Firefox share</a></li>
+<li><a href="RSS-feeds.html">RSS feeds</a></li>
+<li><a href="REST-API.html">REST API</a></li>
+</ul></li>
+<li>How To
+<ul>
+<li><a href="Backup,-restore,-import-and-export.html">Backup, restore, import and export</a></li>
+<li><a href="Copy-an-existing-installation-over-SSH-and-serve-it-locally.html">Copy an existing installation over SSH and serve it locally</a></li>
+<li><a href="Create-and-serve-multiple-Shaarlis-(farm).html">Create and serve multiple Shaarlis (farm)</a></li>
+<li><a href="Download-CSS-styles-from-an-OPML-list.html">Download CSS styles from an OPML list</a></li>
+<li><a href="Datastore-hacks.html">Datastore hacks</a></li>
+</ul></li>
+<li><a href="Troubleshooting.html">Troubleshooting</a></li>
+<li><a href="Development.html">Development</a>
+<ul>
+<li><a href="GnuPG-signature.html">GnuPG signature</a></li>
+<li><a href="Coding-guidelines.html">Coding guidelines</a></li>
+<li><a href="Directory-structure.html">Directory structure</a></li>
+<li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
+<li><a href="Plugin-System.html">Plugin System</a></li>
+<li><a href="Release-Shaarli.html">Release Shaarli</a></li>
+<li><a href="Versioning-and-Branches.html">Versioning and Branches</a></li>
+<li><a href="Security.html">Security</a></li>
+<li><a href="Static-analysis.html">Static analysis</a></li>
+<li><a href="Theming.html">Theming</a></li>
+<li><a href="Unit-tests.html">Unit tests</a></li>
+</ul></li>
+<li>About
+<ul>
+<li><a href="FAQ.html">FAQ</a></li>
+<li><a href="Community-&amp;-Related-software.html">Community &amp; Related software</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="rest-api">REST API</h1>
+<h2 id="usage">Usage</h2>
+<p>See the <a href="http://shaarli.github.io/api-documentation/">REST API documentation</a>.<a href=".html"></a></p>
+<h2 id="authentication">Authentication</h2>
+<p>All requests to Shaarli's API must include a JWT token to verify their authenticity.</p>
+<p>This token has to be included as an HTTP header called <code>Authentication: Bearer &lt;jwt token&gt;</code>.</p>
+<p>JWT resources :</p>
+<ul>
+<li><a href="https://jwt.io">jwt.io</a> (including a list of client per language).<a href=".html"></a></li>
+<li>RFC : <a href="https://tools.ietf.org/html/rfc7519" class="uri">https://tools.ietf.org/html/rfc7519</a></li>
+<li><a href="https://float-middle.com/json-web-tokens-jwt-vs-sessions/" class="uri">https://float-middle.com/json-web-tokens-jwt-vs-sessions/</a></li>
+<li>HackerNews thread: <a href="https://news.ycombinator.com/item?id=11929267" class="uri">https://news.ycombinator.com/item?id=11929267</a></li>
+</ul>
+<h3 id="shaarli-jwt-token">Shaarli JWT Token</h3>
+<p>JWT tokens are composed by three parts, separated by a dot <code>.</code> and encoded in base64:</p>
+<pre><code>[header].[payload].[signature][](.html)</code></pre>
+<h4 id="header">Header</h4>
+<p>Shaarli only allow one hash algorithm, so the header will always be the same:</p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+    <span class="dt">&quot;typ&quot;</span><span class="fu">:</span> <span class="st">&quot;JWT&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;alg&quot;</span><span class="fu">:</span> <span class="st">&quot;HS512&quot;</span>
+<span class="fu">}</span></code></pre></div>
+<p>Encoded in base64, it gives:</p>
+<pre><code>ewogICAgICAgICJ0eXAiOiAiSldUIiwKICAgICAgICAiYWxnIjogIkhTNTEyIgogICAgfQ==</code></pre>
+<h4 id="payload">Payload</h4>
+<p><strong>Validity duration</strong></p>
+<p>To avoid infinite token validity, JWT tokens must include their creation date in UNIX timestamp format (timezone independant - UTC) under the key <code>iat</code> (issued at). This token will be accepted during 9 minutes.</p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+    <span class="dt">&quot;iat&quot;</span><span class="fu">:</span> <span class="dv">1468663519</span>
+<span class="fu">}</span></code></pre></div>
+<p>See <a href="https://tools.ietf.org/html/rfc7519#section-4.1.6">RFC reference</a>.<a href=".html"></a></p>
+<h4 id="signature">Signature</h4>
+<p>The signature authenticate the token validity. It contains the base64 of the header and the body, separated by a dot <code>.</code>, hashed in SHA512 with the API secret available in Shaarli administration page.</p>
+<p>Signature example with PHP:</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$content</span> = <span class="fu">base64_encode</span><span class="ot">(</span><span class="kw">$header</span><span class="ot">)</span> . <span class="st">&#39;.&#39;</span> . <span class="fu">base64_encode</span><span class="ot">(</span><span class="kw">$payload</span><span class="ot">);</span>
+<span class="kw">$signature</span> = <span class="fu">hash_hmac</span><span class="ot">(</span><span class="st">&#39;sha512&#39;</span><span class="ot">,</span> <span class="kw">$content</span><span class="ot">,</span> <span class="kw">$secret</span><span class="ot">);</span></code></pre></div>
+<h3 id="complete-example">Complete example</h3>
+<h4 id="php">PHP</h4>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">function</span> generateToken<span class="ot">(</span><span class="kw">$secret</span><span class="ot">)</span> {
+    <span class="kw">$header</span> = <span class="fu">base64_encode</span><span class="ot">(</span><span class="st">&#39;{</span>
+<span class="st">        &quot;typ&quot;: &quot;JWT&quot;,</span>
+<span class="st">        &quot;alg&quot;: &quot;HS512&quot;</span>
+<span class="st">    }&#39;</span><span class="ot">);</span>
+    <span class="kw">$payload</span> = <span class="fu">base64_encode</span><span class="ot">(</span><span class="st">&#39;{</span>
+<span class="st">        &quot;iat&quot;: &#39;</span>. <span class="fu">time</span><span class="ot">()</span> .<span class="st">&#39;</span>
+<span class="st">    }&#39;</span><span class="ot">);</span>
+    <span class="kw">$signature</span> = <span class="fu">hash_hmac</span><span class="ot">(</span><span class="st">&#39;sha512&#39;</span><span class="ot">,</span> <span class="kw">$header</span> .<span class="st">&#39;.&#39;</span>. <span class="kw">$payload</span> <span class="ot">,</span> <span class="kw">$secret</span><span class="ot">);</span>
+    <span class="kw">return</span> <span class="kw">$header</span> .<span class="st">&#39;.&#39;</span>. <span class="kw">$payload</span> .<span class="st">&#39;.&#39;</span>. <span class="kw">$signature</span><span class="ot">;</span>
+}
+
+<span class="kw">$secret</span> = <span class="st">&#39;mysecret&#39;</span><span class="ot">;</span>
+<span class="kw">$token</span> = generateToken<span class="ot">(</span><span class="kw">$secret</span><span class="ot">);</span>
+<span class="fu">echo</span> <span class="kw">$token</span><span class="ot">;</span></code></pre></div>
+<blockquote>
+<p><code>ewogICAgICAgICJ0eXAiOiAiSldUIiwKICAgICAgICAiYWxnIjogIkhTNTEyIgogICAgfQ==.ewogICAgICAgICJpYXQiOiAxNDY4NjY3MDQ3CiAgICB9.1d2c54fa947daf594fdbf7591796195652c8bc63bffad7f6a6db2a41c313f495a542cbfb595acade79e83f3810d709b4251d7b940bbc10b531a6e6134af63a68</code></p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$options</span> = <span class="ot">[[](</span>.html<span class="ot">)</span>
+    <span class="st">&#39;http&#39;</span> =&gt; <span class="ot">[[](</span>.html<span class="ot">)</span>
+        <span class="st">&#39;method&#39;</span> =&gt; <span class="st">&#39;GET&#39;</span><span class="ot">,</span>
+        <span class="st">&#39;jwt&#39;</span> =&gt; <span class="kw">$token</span><span class="ot">,</span>
+    <span class="ot">],</span>
+<span class="ot">];</span>
+<span class="kw">$context</span> = <span class="fu">stream_context_create</span><span class="ot">(</span><span class="kw">$options</span><span class="ot">);</span>
+<span class="fu">file_get_contents</span><span class="ot">(</span><span class="kw">$apiEndpoint</span><span class="ot">,</span> <span class="kw">false</span><span class="ot">,</span> <span class="kw">$context</span><span class="ot">);</span></code></pre></div>
+</body>
+</html>

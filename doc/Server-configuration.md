@@ -107,6 +107,8 @@ See [Server-side TLS](https://wiki.mozilla.org/Security/Server_Side_TLS#Apache) 
 Shaarli use `.htaccess` Apache files to deny access to files that shouldn't be directly accessed (datastore, config, etc.). You need the directive `AllowOverride All` in your virtual host configuration for them to work.
 
 **Warning**: If you use Apache 2.2 or lower, you need [mod_version](https://httpd.apache.org/docs/current/mod/mod_version.html) to be installed and enabled.[](.html)
+ 
+Apache module `mod_rewrite` **must** be enabled to use the REST API. URL rewriting rules for the Slim microframework are stated in the root `.htaccess` file.
 
 ## LightHttpd
 
@@ -218,11 +220,14 @@ http {
         error_log   /var/log/nginx/error.log;
 
         location /shaarli/ {
+            try_files $uri /shaarli/index.php$is_args$args;
             access_log  /var/log/nginx/shaarli.access.log;
             error_log   /var/log/nginx/shaarli.error.log;
         }
 
         location ~ (index)\.php$ {
+            try_files $uri =404;
+            fastcgi_split_path_info ^(.+\.php)(/.+)$;
             fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
             fastcgi_index  index.php;
             include        fastcgi.conf;
@@ -261,6 +266,10 @@ location ~ ~$ {
 ```nginx
 # /etc/nginx/php.conf
 location ~ (index)\.php$ {
+    # Slim - split URL path into (script_filename, path_info)
+    try_files $uri =404;
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+
     # filter and proxy PHP requests to PHP-FPM
     fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
     fastcgi_index  index.php;
@@ -299,6 +308,9 @@ http {
         server_name  my.first.domain.org;
 
         location /shaarli/ {
+            # Slim - rewrite URLs
+            try_files $uri /shaarli/index.php$is_args$args;
+
             access_log  /var/log/nginx/shaarli.access.log;
             error_log   /var/log/nginx/shaarli.error.log;
         }
@@ -361,6 +373,9 @@ http {
         ssl_certificate_key  /home/john/ssl/localhost.key;
 
         location /shaarli/ {
+            # Slim - rewrite URLs
+            try_files $uri /index.php$is_args$args;
+
             access_log  /var/log/nginx/shaarli.access.log;
             error_log   /var/log/nginx/shaarli.error.log;
         }

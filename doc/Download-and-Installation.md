@@ -13,13 +13,13 @@ Get the latest released version from the [releases](https://github.com/shaarli/S
 
 **Download our *shaarli-full* archive** to include dependencies.
 
-The current latest released version is `v0.8.0`
+The current latest released version is `v0.8.4`
 
 Or in command lines:
 
 ```bash
-$ wget https://github.com/shaarli/Shaarli/releases/download/v0.8.0/shaarli-v0.8.0-full.zip
-$ unzip shaarli-v0.8.0-full.zip
+$ wget https://github.com/shaarli/Shaarli/releases/download/v0.8.4/shaarli-v0.8.4-full.zip
+$ unzip shaarli-v0.8.4-full.zip
 $ mv Shaarli /path/to/shaarli/
 ```
 
@@ -30,8 +30,8 @@ $ mv Shaarli /path/to/shaarli/
 
 ```
 mkdir -p /path/to/shaarli && cd /path/to/shaarli/
-git clone -b v0.8.0 https://github.com/shaarli/Shaarli.git .
-composer update --no-dev
+git clone -b v0.8 https://github.com/shaarli/Shaarli.git .
+composer install --no-dev
 ```
 
 --------------------------------------------------------
@@ -66,7 +66,7 @@ $ mv Shaarli-stable /path/to/shaarli/
 $ git clone https://github.com/shaarli/Shaarli.git -b stable /path/to/shaarli/
 # install/update third-party dependencies
 $ cd /path/to/shaarli/
-$ composer update --no-dev
+$ composer install --no-dev
 ```
 
 --------------------------------------------------------
@@ -79,10 +79,10 @@ To get the latest changes from the `master` branch:
 
 ```bash
 # clone the repository  
-$ git clone https://github.com/shaarli/Shaarli.git master /path/to/shaarli/
+$ git clone https://github.com/shaarli/Shaarli.git -b master /path/to/shaarli/
 # install/update third-party dependencies
 $ cd /path/to/shaarli
-$ composer update --no-dev
+$ composer install --no-dev
 ```
 
 --------------------------------------------------------

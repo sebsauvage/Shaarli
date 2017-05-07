@@ -69,6 +69,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="Browsing-and-Searching.html">Browsing and Searching</a></li>
 <li><a href="Firefox-share.html">Firefox share</a></li>
 <li><a href="RSS-feeds.html">RSS feeds</a></li>
+<li><a href="REST-API.html">REST API</a></li>
 </ul></li>
 <li>How To
 <ul>
@@ -87,6 +88,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
 <li><a href="Plugin-System.html">Plugin System</a></li>
 <li><a href="Release-Shaarli.html">Release Shaarli</a></li>
+<li><a href="Versioning-and-Branches.html">Versioning and Branches</a></li>
 <li><a href="Security.html">Security</a></li>
 <li><a href="Static-analysis.html">Static analysis</a></li>
 <li><a href="Theming.html">Theming</a></li>
@@ -101,12 +103,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <h1 id="upgrade-and-migration">Upgrade and migration</h1>
 <h2 id="preparation">Preparation</h2>
+<h3 id="note-your-current-version">Note your current version</h3>
+<p>If anything goes wrong, it's important for us to know which version you're upgrading from.<br />
+The current version is present in the <code>version.php</code> file.</p>
 <h3 id="backup-your-data">Backup your data</h3>
 <p>Shaarli stores all user data under the <code>data</code> directory:</p>
 <ul>
 <li><code>data/config.php</code> - main configuration file</li>
 <li><code>data/datastore.php</code> - bookmarked links</li>
 <li><code>data/ipbans.php</code> - banned IP addresses</li>
+<li><code>data/updates.txt</code> - contains all automatic update to the configuration and datastore files already run</li>
 </ul>
 <p>See <a href="Shaarli-configuration.html">Shaarli configuration</a> for more information about Shaarli resources.</p>
 <p>It is recommended to backup this repository <em>before</em> starting updating/upgrading Shaarli:</p>
@@ -125,15 +131,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li>check or restore the <code>data</code> directory</li>
 </ul>
-<h2 id="upgrading-from-release-archives">Upgrading from release archives</h2>
+<h2 id="recommended-upgrading-from-release-archives">Recommended : Upgrading from release archives</h2>
 <p>All tagged revisions can be downloaded as tarballs or ZIP archives from the <a href="https://github.com/shaarli/Shaarli/releases">releases</a> page.<a href=".html"></a></p>
-<p>We <em>recommend</em> using the releases from the <code>stable</code> branch, which are available as:</p>
-<ul>
-<li>gzipped tarball - <a href="https://github.com/shaarli/Shaarli/archive/stable.tar.gz" class="uri">https://github.com/shaarli/Shaarli/archive/stable.tar.gz</a></li>
-<li>ZIP archive - <a href="https://github.com/shaarli/Shaarli/archive/stable.zip" class="uri">https://github.com/shaarli/Shaarli/archive/stable.zip</a></li>
-</ul>
-<p>Once downloaded, extract the archive locally and update your remote installation (e.g. via FTP) -be sure you keep the contents of the <code>data</code> directory!</p>
-<p>After upgrading, access your fresh Shaarli installation from a web browser; the configuration will then be automatically updated, and new settings added to <code>data/config.php</code> (see <a href="Shaarli-configuration.html">Shaarli configuration</a> for more details).</p>
+<p>We recommend that you use the latest release tarball with the <code>-full</code> suffix. It contains the dependencies, please read <a href="Download-and-installation.html">Download and installation</a> for <code>git</code> complete instructions.</p>
+<p>Once downloaded, extract the archive locally and update your remote installation (e.g. via FTP) -be sure you keep the content of the <code>data</code> directory!</p>
+<p>After upgrading, access your fresh Shaarli installation from a web browser; the configuration and data store will then be automatically updated, and new settings added to <code>data/config.json.php</code> (see <a href="Shaarli-configuration.html">Shaarli configuration</a> for more details).</p>
 <h2 id="upgrading-with-git">Upgrading with Git</h2>
 <h3 id="updating-a-community-shaarli">Updating a community Shaarli</h3>
 <p>If you have installed Shaarli from the <a href="Download#clone-with-git-recommended">community Git repository</a>, simply <a href="https://www.git-scm.com/docs/git-pull">pull new changes</a> from your local clone:<a href=".html"></a></p>
@@ -149,7 +151,7 @@ $ <span class="fu">git</span> pull
  <span class="ex">tests/Url/UrlTest.php</span> <span class="kw">|</span> <span class="ex">1</span> +
  <span class="ex">3</span> files changed, 3 insertions(+), <span class="ex">1</span> deletion(-)</code></pre></div>
 <p>Shaarli &gt;= <code>v0.8.x</code>: install/update third-party PHP dependencies using <a href="https://getcomposer.org/">Composer</a>:<a href=".html"></a></p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">composer</span> update --no-dev
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">composer</span> install --no-dev
 
 <span class="ex">Loading</span> composer repositories with package information
 <span class="ex">Updating</span> dependencies
@@ -214,7 +216,7 @@ $ <span class="fu">git</span> branch -vv
   <span class="ex">master</span> 029f75f [sebsauvage/master] Update README.md[](.html)
 <span class="ex">*</span> stable 890afc3 [origin/stable] Merge pull request <span class="co">#509 from ArthurHoaro/v0.6.5[](.html)</span></code></pre></div>
 <p>Shaarli &gt;= <code>v0.8.x</code>: install/update third-party PHP dependencies using <a href="https://getcomposer.org/">Composer</a>:<a href=".html"></a></p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">composer</span> update --no-dev
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">composer</span> install --no-dev
 
 <span class="ex">Loading</span> composer repositories with package information
 <span class="ex">Updating</span> dependencies
@@ -238,5 +240,20 @@ $ <span class="fu">git</span> gc
 <span class="ex">Total</span> 3317 (delta 2050), <span class="ex">reused</span> 3301 (delta 2034)<span class="ex">to</span></code></pre></div>
 <h4 id="step-3-configuration">Step 3: configuration</h4>
 <p>After migrating, access your fresh Shaarli installation from a web browser; the configuration will then be automatically updated, and new settings added to <code>data/config.php</code> (see <a href="Shaarli-configuration.html">Shaarli configuration</a> for more details).</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>If the solutions provided here doesn't work, please open an issue specifying which version you're upgrading from and to.</p>
+<h3 id="you-must-specify-an-integer-as-a-key">You must specify an integer as a key</h3>
+<p>In <code>v0.8.1</code> we changed how link keys are handled (from timestamps to incremental integers).<br />
+Take a look at <code>data/updates.txt</code> content.</p>
+<h4 id="updates.txt-contains-updatemethoddatastoreids"><code>updates.txt</code> contains <code>updateMethodDatastoreIds</code></h4>
+<p>Try to delete it and refresh your page while being logged in.</p>
+<h4 id="updates.txt-doesnt-exists-or-doesnt-contain-updatemethoddatastoreids"><code>updates.txt</code> doesn't exists or doesn't contain <code>updateMethodDatastoreIds</code></h4>
+<ol>
+<li>Create <code>data/updates.txt</code> if it doesn't exist.</li>
+<li>Paste this string in the update file <code>;updateMethodRenameDashTags;</code></li>
+<li>Login to Shaarli.</li>
+<li>Delete the update file.</li>
+<li>Refresh.</li>
+</ol>
 </body>
 </html>

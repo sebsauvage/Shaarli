@@ -1,6 +1,4 @@
 #Plugin System
-> Note: Plugin current status - in development (not merged into master).
-
 [**I am a developer.** Developer API.](#developer-api)[](.html)
 
 [**I am a template designer.** Guide for template designer.](#guide-for-template-designer)[](.html)
@@ -30,6 +28,14 @@ You should have the following tree view:
 |   |---| demo_plugin.php
 ```
 
+### Plugin initialization
+
+At the beginning of Shaarli execution, all enabled plugins are loaded. At this point, the plugin system looks for an `init()` function to execute and run it if it exists. This function must be named this way, and takes the `ConfigManager` as parameter.
+
+    <plugin_name>_init($conf)
+
+This function can be used to create initial data, load default settings, etc. But also to set *plugin errors*. If the initialization function returns an array of strings, they will be understand as errors, and displayed in the header to logged in users.
+
 ### Understanding hooks
 
 A plugin is a set of functions. Each function will be triggered by the plugin system at certain point in Shaarli execution.
@@ -37,12 +43,17 @@ A plugin is a set of functions. Each function will be triggered by the plugin sy
 These functions need to be named with this pattern:
 
 ```
-hook_<plugin_name>_<hook_name>
+hook_<plugin_name>_<hook_name>($data, $conf)
 ```
+
+Parameters:
+
+  - data: see [$data section](https://github.com/shaarli/Shaarli/wiki/Plugin-System#plugins-data)[](.html)
+  - conf: the `ConfigManager` instance.
 
 For exemple, if my plugin want to add data to the header, this function is needed:
 
-    hook_demo_plugin_render_header()
+    hook_demo_plugin_render_header
 
 If this function is declared, and the plugin enabled, it will be called every time Shaarli is rendering the header.
 
@@ -98,6 +109,7 @@ Each file contain two keys:
 
   * `description`: plugin description
   * `parameters`: user parameter names, separated by a `;`.
+  * `parameter.<PARAMETER_NAME>`: add a text description the specified parameter.
 
 > Note: In PHP, `parse_ini_file()` seems to want strings to be between by quotes `"` in the ini file.
 
@@ -118,9 +130,13 @@ If it's still not working, please [open an issue](https://github.com/shaarli/Sha
 | [render_editlink](#render_editlink) |  Allow to add fields in the form, or display elements. |[](.html)
 | [render_tools](#render_tools) |  Allow to add content at the end of the page. |[](.html)
 | [render_picwall](#render_picwall) |  Allow to add content at the top and bottom of the page. |[](.html)
-| [render_tagcloud](#render_tagcloud) |  Allow to add content at the top and bottom of the page. |[](.html)
+| [render_tagcloud](#render_tagcloud) |  Allow to add content at the top and bottom of the page, and after all tags. |[](.html)
+| [render_taglist](#render_taglist) |  Allow to add content at the top and bottom of the page, and after all tags. |[](.html)
 | [render_daily](#render_daily) |  Allow to add content at the top and bottom of the page, the bottom of each link and to alter data. |[](.html)
-| [savelink](#savelink) | Allow to alter the link being saved in the datastore. |[](.html)
+| [render_feed](#render_feed) | Allow to do add tags in RSS and ATOM feeds. |[](.html)
+| [save_link](#save_link) | Allow to alter the link being saved in the datastore. |[](.html)
+| [delete_link](#delete_link) | Allow to do an action before a link is deleted from the datastore. |[](.html)
+
 
 
 #### render_header
@@ -330,7 +346,39 @@ List of placeholders:
 
   * `plugin_end_zone`: after displaying the template content.
 
+For each tag, the following placeholder can be used:
+
+  * `tag_plugin`: after each tag
+
 ![plugin_start_end_zone_example](http://i.imgur.com/vHmyT3a.png)[](.html)
+
+
+#### render_taglist
+
+Triggered when taglist is displayed.
+
+Allow to add content at the top and bottom of the page.
+
+##### Data
+
+`$data` is an array containing:
+
+  * `_LOGGEDIN_`: true if user is logged in, false otherwise.
+  * All templates data.
+
+##### Template placeholders
+
+Items can be displayed in templates by adding an entry in `$data['<placeholder>']` array.[](.html)
+
+List of placeholders:
+
+  * `plugin_start_zone`: before displaying the template content.
+
+  * `plugin_end_zone`: after displaying the template content.
+
+For each tag, the following placeholder can be used:
+
+  * `tag_plugin`: after each tag
 
 #### render_daily
 
@@ -359,7 +407,33 @@ List of placeholders:
 
   * `plugin_end_zone`: after displaying the template content.
 
-#### savelink
+#### render_feed
+
+Triggered when the ATOM or RSS feed is displayed.
+
+Allow to add tags in the feed, either in the header or for each items. Items (links) can also be altered before being rendered.
+
+##### Data
+
+`$data` is an array containing:
+
+  * `_LOGGEDIN_`: true if user is logged in, false otherwise.
+  * `_PAGE_`: containing either `rss` or `atom`.
+  * All templates data, including links.
+
+##### Template placeholders
+
+Tags can be added in feeds by adding an entry in `$data['<placeholder>']` array.[](.html)
+
+List of placeholders:
+
+  * `feed_plugins_header`: used as a header tag in the feed.
+
+For each links:
+
+  * `feed_plugins`: additional tag for every link entry.
+
+#### save_link
 
 Triggered when a link is save (new link or edit).
 
@@ -369,12 +443,36 @@ Allow to alter the link being saved in the datastore.
 
 `$data` is an array containing the link being saved:
 
+  * id
   * title
   * url
+  * shorturl
   * description
-  * linkdate
   * private
   * tags
+  * created
+  * updated
+
+
+#### delete_link
+
+Triggered when a link is deleted.
+
+Allow to execute any action before the link is actually removed from the datastore
+
+##### Data
+
+`$data` is an array containing the link being saved:
+
+  * id
+  * title
+  * url
+  * shorturl
+  * description
+  * private
+  * tags
+  * created
+  * updated
 
 ## Guide for template designer
 
@@ -594,4 +692,20 @@ Bottom:
         {$value}
     {/loop}
 </div>
+```
+
+**feed.atom.xml** and **feed.rss.xml**:
+
+In headers tags section:
+```xml
+{loop="$feed_plugins_header"}
+  {$value}
+{/loop}
+```
+
+After each entry:
+```xml
+{loop="$value.feed_plugins"}
+  {$value}
+{/loop}
 ```

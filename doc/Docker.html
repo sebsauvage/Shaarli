@@ -69,6 +69,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="Browsing-and-Searching.html">Browsing and Searching</a></li>
 <li><a href="Firefox-share.html">Firefox share</a></li>
 <li><a href="RSS-feeds.html">RSS feeds</a></li>
+<li><a href="REST-API.html">REST API</a></li>
 </ul></li>
 <li>How To
 <ul>
@@ -87,6 +88,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
 <li><a href="Plugin-System.html">Plugin System</a></li>
 <li><a href="Release-Shaarli.html">Release Shaarli</a></li>
+<li><a href="Versioning-and-Branches.html">Versioning and Branches</a></li>
 <li><a href="Security.html">Security</a></li>
 <li><a href="Static-analysis.html">Static analysis</a></li>
 <li><a href="Theming.html">Theming</a></li>
@@ -200,7 +202,7 @@ $ <span class="ex">docker</span> ps
 <span class="ex">CONTAINER</span> ID  IMAGE            COMMAND               CREATED         STATUS        PORTS                 NAMES
 <span class="ex">d40b7af693d6</span>  shaarli/shaarli  /usr/bin/supervisor  15 seconds ago  Up 4 seconds  0.0.0.0:8000-<span class="op">&gt;</span>80/tcp  backstabbing_galileo</code></pre></div>
 <h3 id="stop-and-destroy-a-container">Stop and destroy a container</h3>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">docker</span> stop backstabbing_galileo  <span class="co"># those docker guys are really rude to physicists!</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">docker</span> stop backstabbing_galileo  # those docker guys are really rude to physicists!
 <span class="ex">backstabbing_galileo</span>
 
 <span class="co"># check the container is stopped</span>
@@ -213,14 +215,15 @@ $ <span class="ex">docker</span> ps -a
 <span class="ex">d40b7af693d6</span>        shaarli/shaarli     /usr/bin/supervisor   5 minutes ago       Exited (0) <span class="ex">48</span> seconds ago                       backstabbing_galileo
 
 <span class="co"># destroy the container</span>
-$ <span class="ex">docker</span> rm backstabbing_galileo  <span class="co"># let&#39;s put an end to these barbarian practices</span>
-<span class="ex">backstabbing_galileo</span>
+$ <span class="ex">docker</span> rm backstabbing_galileo  # let<span class="st">&#39;s put an end to these barbarian practices</span>
+<span class="st">backstabbing_galileo</span>
 
-$ <span class="ex">docker</span> ps -a
-<span class="ex">CONTAINER</span> ID  IMAGE            COMMAND               CREATED         STATUS        PORTS                 NAMES</code></pre></div>
+<span class="st">$ docker ps -a</span>
+<span class="st">CONTAINER ID  IMAGE            COMMAND               CREATED         STATUS        PORTS                 NAMES</span></code></pre></div>
 <h2 id="resources">Resources</h2>
 <h3 id="docker-1">Docker</h3>
 <ul>
+<li><a href="https://www.katacoda.com/courses/docker/">Interactive Docker training portal</a> on <a href="https://www.katacoda.com/">Katakoda</a><a href=".html"></a></li>
 <li><a href="http://blog.thoward37.me/articles/where-are-docker-images-stored/">Where are Docker images stored?</a><a href=".html"></a></li>
 <li><a href="https://docs.docker.com/reference/builder/">Dockerfile reference</a><a href=".html"></a></li>
 <li><a href="https://docs.docker.com/articles/dockerfile_best-practices/">Dockerfile best practices</a><a href=".html"></a></li>

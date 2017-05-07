@@ -69,6 +69,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="Browsing-and-Searching.html">Browsing and Searching</a></li>
 <li><a href="Firefox-share.html">Firefox share</a></li>
 <li><a href="RSS-feeds.html">RSS feeds</a></li>
+<li><a href="REST-API.html">REST API</a></li>
 </ul></li>
 <li>How To
 <ul>
@@ -87,6 +88,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
 <li><a href="Plugin-System.html">Plugin System</a></li>
 <li><a href="Release-Shaarli.html">Release Shaarli</a></li>
+<li><a href="Versioning-and-Branches.html">Versioning and Branches</a></li>
 <li><a href="Security.html">Security</a></li>
 <li><a href="Static-analysis.html">Static analysis</a></li>
 <li><a href="Theming.html">Theming</a></li>
@@ -172,7 +174,7 @@ Search for <code>failed</code> in this file to look for unauthorized login attem
 <li>If you have the error <code>Warning: file_get_contents() [function.file-get-contents]: URL file-access is disabled in the server configuration in /…/index.php on line xxx</code>, it means that your host has disabled the ability to fetch a file by HTTP in the php config (Typically in 1and1 hosting). Bad host. Change host. Or comment the following lines:<a href=".html"></a></li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="co">//list($status,$headers,$data) = getHTTP($url,4); // Short timeout to keep the application responsive.</span>
-<span class="co">// FIXME: Decode charset according to charset specified in either 1) HTTP response headers or 2) &lt;head&gt; in html </span>
+<span class="co">// </span><span class="al">FIXME</span><span class="co">: Decode charset according to charset specified in either 1) HTTP response headers or 2) &lt;head&gt; in html </span>
 <span class="co">//if (strpos($status,&#39;200 OK&#39;)) $title=html_extract_title($data);</span></code></pre></div>
 <ul>
 <li>On hosts which forbid outgoing HTTP requests (such as free.fr), some thumbnails will not work.</li>

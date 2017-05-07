@@ -69,6 +69,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="Browsing-and-Searching.html">Browsing and Searching</a></li>
 <li><a href="Firefox-share.html">Firefox share</a></li>
 <li><a href="RSS-feeds.html">RSS feeds</a></li>
+<li><a href="REST-API.html">REST API</a></li>
 </ul></li>
 <li>How To
 <ul>
@@ -87,6 +88,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
 <li><a href="Plugin-System.html">Plugin System</a></li>
 <li><a href="Release-Shaarli.html">Release Shaarli</a></li>
+<li><a href="Versioning-and-Branches.html">Versioning and Branches</a></li>
 <li><a href="Security.html">Security</a></li>
 <li><a href="Static-analysis.html">Static analysis</a></li>
 <li><a href="Theming.html">Theming</a></li>
@@ -208,5 +210,17 @@ DBTest.php on line 79 and defined
 <li>a detailed HTML report with metrics for tested code</li>
 <li>to open it in a web browser: <code>firefox coverage/index.html &amp;</code></li>
 </ul>
+<h3 id="executing-specific-tests">Executing specific tests</h3>
+<p>Add a <a href="https://phpunit.de/manual/current/en/appendixes.annotations.html#appendixes.annotations.group"><code>@group</code></a> annotation in a test class or method comment:<a href=".html"></a></p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="co">/**</span>
+<span class="co"> * Netscape bookmark import</span>
+<span class="co"> * </span><span class="an">@group</span><span class="co"> WIP</span>
+<span class="co"> */</span>
+<span class="kw">class</span> BookmarkImportTest <span class="kw">extends</span> PHPUnit_Framework_TestCase
+{
+   <span class="ot">[</span><span class="st">...</span><span class="ot">][](</span>.html<span class="ot">)</span>
+}</code></pre></div>
+<p>To run all tests annotated with <code>@group WIP</code>:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">vendor/bin/phpunit</span> --group WIP tests/</code></pre></div>
 </body>
 </html>

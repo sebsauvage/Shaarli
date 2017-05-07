@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Shaarli – Plugins</title>
+  <title>Shaarli – Versioning and Branches</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 div.sourceCode { overflow-x: auto; }
@@ -101,55 +101,56 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul>
 </div>
-<h1 id="plugins">Plugins</h1>
-<h2 id="plugin-installation">Plugin installation</h2>
-<p>There is a bunch of plugins shipped with Shaarli, where there is nothing to do to install them.</p>
-<p>If you want to install a third party plugin:</p>
+<h1 id="versioning-and-branches">Versioning and Branches</h1>
+<p>[<strong>WORK IN PROGRESS</strong>][](.html)</p>
+<p>It's important to understand how Shaarli branches work, especially if you're maintaining a 3rd party tools for Shaarli (theme, plugin, etc.), to be sure stay compatible.</p>
+<h2 id="master-branch"><code>master</code> branch</h2>
+<p>The <code>master</code> branch is the development branch. Any new change MUST go through this branch using Pull Requests.</p>
+<p>Remarks:</p>
 <ul>
-<li>Download it.</li>
-<li>Put it in the <code>plugins</code> directory in Shaarli's installation folder.</li>
-<li>Make sure you put it correctly:</li>
+<li>This branch shouldn't be used for production as it isn't necessary stable.</li>
+<li>3rd party aren't required to be compatible with the latest changes.</li>
+<li>Official plugins, themes and libraries (contained within Shaarli organization repos) must be compatible with the master branch.</li>
+<li>The version in this branch is always <code>dev</code>.</li>
 </ul>
-<pre><code>| index.php
-| plugins/
-|---| custom_plugin/
-|   |---| custom_plugin.php
-|   |---| ...
-</code></pre>
+<h2 id="v0.x-branch"><code>v0.x</code> branch</h2>
+<p>This <code>v0.x</code> branch, points to the latest <code>v0.x.y</code> release.</p>
+<p>Explanation:</p>
+<p>When a new version is released, it might contains a major bug which isn't detected right away. For example, a new PHP version is released, containing backward compatibility issue which doesn't work with Shaarli.</p>
+<p>In this case, the issue is fixed in the <code>master</code> branch, and the fix is backported the to the <code>v0.x</code> branch. Then a new release is made from the <code>v0.x</code> branch.</p>
+<p>This workflow allow us to fix any major bug detected, without having to release bleeding edge feature too soon.</p>
+<h2 id="latest-branch"><code>latest</code> branch</h2>
+<p>This branch point the latest release. It recommended to use it to get the latest tested changes.</p>
+<h2 id="stable-branch"><code>stable</code> branch</h2>
+<p>The <code>stable</code> branch doesn't contain any major bug, and is one major digit version behind the latest release.</p>
+<p>For example, the current latest release is <code>v0.8.3</code>, the stable branch is an alias to the latest <code>v0.7.x</code> release. When the <code>v0.9.0</code> version will be released, the stable will move to the latest <code>v0.8.x</code> release.</p>
+<p>Remarks:</p>
 <ul>
-<li>Make sure your webserver can read and write the files in your plugin folder.</li>
+<li>Shaarli release pace isn't fast, and the stable branch might be a few months behind the latest release.</li>
 </ul>
-<h2 id="plugin-configuration">Plugin configuration</h2>
-<p>In Shaarli's administration page (<code>Tools</code> link), go to <code>Plugin administration</code>.</p>
-<p>Here you can enable and disable all plugins available, and configure them.</p>
-<p><img src="https://camo.githubusercontent.com/5da68e191969007492ca0fbeb25f3b2357b748cc/687474703a2f2f692e696d6775722e636f6d2f766837544643712e706e67" alt="administration screenshot" /><a href=".html"></a></p>
-<h2 id="plugin-order">Plugin order</h2>
-<p>In the plugin administration page, you can move enabled plugins to the top or bottom of the list. The first plugins in the list will be processed first.</p>
-<p>This is important in case plugins are depending on each other. Read plugins README details for more information.</p>
-<p><strong>Use case</strong>: The (non existent) plugin <code>shaares_footer</code> adds a footer to every shaare in Markdown syntax. It needs to be processed <em>before</em> (higher in the list) the Markdown plugin. Otherwise its syntax won't be translated in HTML.</p>
-<h2 id="file-mode">File mode</h2>
-<p>Enabled plugin are stored in your <code>config.php</code> parameters file, under the <code>array</code>:</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]](</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]</span>.html<span class="ot">)</span></code></pre></div>
-<p>You can edit them manually here.<br />
-Example:</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$GLOBALS</span><span class="ot">[</span><span class="st">&#39;config&#39;</span><span class="ot">[</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]</span> = <span class="fu">array</span><span class="ot">(](</span><span class="st">&#39;ENABLED_PLUGINS&#39;</span><span class="ot">]</span>-=-<span class="fu">array</span><span class="ot">(</span>.html<span class="ot">)</span>
-    <span class="st">&#39;qrcode&#39;</span><span class="ot">,</span> 
-    <span class="st">&#39;archiveorg&#39;</span><span class="ot">,</span>
-    <span class="st">&#39;wallabag&#39;</span><span class="ot">,</span>
-    <span class="st">&#39;markdown&#39;</span><span class="ot">,</span>
-<span class="ot">);</span></code></pre></div>
-<h3 id="plugin-usage">Plugin usage</h3>
-<h4 id="official-plugins">Official plugins</h4>
-<p>Usage of each plugin is documented in it's README file:</p>
+<h2 id="releases">Releases</h2>
+<p>Releases are always made from the latest <code>v0.x</code> branch.</p>
+<p>Note that for every release, we manually generate a tarball which contains all Shaarli dependencies, making Shaarli's installation only one step.</p>
+<h2 id="advices-on-3rd-party-git-repos-workflow">Advices on 3rd party git repos workflow</h2>
+<h3 id="versioning">Versioning</h3>
+<p>Any time a new Shaarli release is published, you should publish a new release of your repo if the changes affected you since the latest release (take a look at the <a href="https://github.com/shaarli/Shaarli/releases">changelog</a> (<em>Draft</em> means not released yet) and the commit log (like <a href="https://github.com/shaarli/Shaarli/commits/master/tpl/default"><code>tpl</code> folder</a> for themes)). You can either:<a href=".html"></a></p>
 <ul>
-<li><code>addlink-toolbar</code>: Adds the addlink input on the linklist page</li>
-<li><code>archiveorg</code>: For each link, add an Archive.org icon</li>
-<li><a href="https://github.com/shaarli/Shaarli/blob/master/plugins/markdown/README.md"><code>markdown</code></a>: Render shaare description with Markdown syntax.<a href=".html"></a></li>
-<li><a href="https://github.com/shaarli/Shaarli/blob/master/plugins/playvideos/README.md"><code>playvideos</code></a>: Add a button in the toolbar allowing to watch all videos.<a href=".html"></a></li>
-<li><code>qrcode</code>: For each link, add a QRCode icon.</li>
-<li><a href="https://github.com/shaarli/Shaarli/blob/master/plugins/wallabag/README.md"><code>wallabag</code></a>: For each link, add a Wallabag icon to save it in your instance.<a href=".html"></a></li>
+<li>use the Shaarli version number, with your repo version. For example, if Shaarli <code>v0.8.3</code> is released, publish a <code>v0.8.3-1</code> release, where <code>v0.8.3</code> states Shaarli compatibility and <code>-1</code> is your own version digit for the current Shaarli version.</li>
+<li>use your own versioning scheme, and state Shaarli compatibility in the release description.</li>
 </ul>
-<h4 id="third-party-plugins">Third party plugins</h4>
-<p>See <a href="https://github.com/shaarli/Shaarli/wiki/Community-%26-Related-software#third-party-plugins">Community &amp; related software</a><a href=".html"></a></p>
+<p>Using this, any user will be able to pick the release matching his own Shaarli version.</p>
+<h3 id="major-bugfix-backport-releases">Major bugfix backport releases</h3>
+<p>To be able to support backported fixes, it recommended to use our workflow:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># In master, fix the major bug</span>
+<span class="fu">git</span> commit -m <span class="st">&quot;Katastrophe&quot;</span>
+<span class="fu">git</span> push origin master
+<span class="co"># Get your commit hash</span>
+<span class="fu">git</span> log --format=<span class="st">&quot;%H&quot;</span> -n 1
+<span class="co"># Create a new branch from your latest release, let&#39;s say v0.8.2-1 (the tag name)</span>
+<span class="fu">git</span> checkout -b katastrophe v0.8.2-1
+<span class="co"># Backport the fix commit to your brand new branch</span>
+<span class="fu">git</span> cherry-pick <span class="op">&lt;</span>fix commit hash<span class="op">&gt;</span>
+<span class="fu">git</span> push origin katastrophe
+<span class="co"># Then you just have to make a new release from the `katastrophe` branch tagged `v0.8.3-1`</span></code></pre></div>
 </body>
 </html>

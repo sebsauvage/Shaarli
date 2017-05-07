@@ -14,6 +14,7 @@
     - [Browsing and Searching](Browsing-and-Searching.html)
     - [Firefox share](Firefox-share.html)
     - [RSS feeds](RSS-feeds.html)
+    - [REST API](REST-API.html)
 - How To
     - [Backup, restore, import and export](Backup,-restore,-import-and-export.html)
     - [Copy an existing installation over SSH and serve it locally](Copy-an-existing-installation-over-SSH-and-serve-it-locally.html)
@@ -28,6 +29,7 @@
     - [3rd party libraries](3rd-party-libraries.html)
     - [Plugin System](Plugin-System.html)
     - [Release Shaarli](Release-Shaarli.html)
+    - [Versioning and Branches](Versioning-and-Branches.html)
     - [Security](Security.html)
     - [Static analysis](Static-analysis.html)
     - [Theming](Theming.html)

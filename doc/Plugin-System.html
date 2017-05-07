@@ -69,6 +69,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="Browsing-and-Searching.html">Browsing and Searching</a></li>
 <li><a href="Firefox-share.html">Firefox share</a></li>
 <li><a href="RSS-feeds.html">RSS feeds</a></li>
+<li><a href="REST-API.html">REST API</a></li>
 </ul></li>
 <li>How To
 <ul>
@@ -87,6 +88,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="3rd-party-libraries.html">3rd party libraries</a></li>
 <li><a href="Plugin-System.html">Plugin System</a></li>
 <li><a href="Release-Shaarli.html">Release Shaarli</a></li>
+<li><a href="Versioning-and-Branches.html">Versioning and Branches</a></li>
 <li><a href="Security.html">Security</a></li>
 <li><a href="Static-analysis.html">Static analysis</a></li>
 <li><a href="Theming.html">Theming</a></li>
@@ -100,9 +102,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 </div>
 <h1 id="plugin-system">Plugin System</h1>
-<blockquote>
-<p>Note: Plugin current status - in development (not merged into master).</p>
-</blockquote>
 <p><a href="#developer-api"><strong>I am a developer.</strong> Developer API.</a><a href=".html"></a></p>
 <p><a href="#guide-for-template-designer"><strong>I am a template designer.</strong> Guide for template designer.</a><a href=".html"></a></p>
 <h2 id="developer-api">Developer API</h2>
@@ -121,12 +120,21 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 | plugins/
 |---| demo_plugin/
 |   |---| demo_plugin.php</code></pre>
+<h3 id="plugin-initialization">Plugin initialization</h3>
+<p>At the beginning of Shaarli execution, all enabled plugins are loaded. At this point, the plugin system looks for an <code>init()</code> function to execute and run it if it exists. This function must be named this way, and takes the <code>ConfigManager</code> as parameter.</p>
+<pre><code>&lt;plugin_name&gt;_init($conf)</code></pre>
+<p>This function can be used to create initial data, load default settings, etc. But also to set <em>plugin errors</em>. If the initialization function returns an array of strings, they will be understand as errors, and displayed in the header to logged in users.</p>
 <h3 id="understanding-hooks">Understanding hooks</h3>
 <p>A plugin is a set of functions. Each function will be triggered by the plugin system at certain point in Shaarli execution.</p>
 <p>These functions need to be named with this pattern:</p>
-<pre><code>hook_&lt;plugin_name&gt;_&lt;hook_name&gt;</code></pre>
+<pre><code>hook_&lt;plugin_name&gt;_&lt;hook_name&gt;($data, $conf)</code></pre>
+<p>Parameters:</p>
+<ul>
+<li>data: see <a href="https://github.com/shaarli/Shaarli/wiki/Plugin-System#plugins-data">$data section</a><a href=".html"></a></li>
+<li>conf: the <code>ConfigManager</code> instance.</li>
+</ul>
 <p>For exemple, if my plugin want to add data to the header, this function is needed:</p>
-<pre><code>hook_demo_plugin_render_header()</code></pre>
+<pre><code>hook_demo_plugin_render_header</code></pre>
 <p>If this function is declared, and the plugin enabled, it will be called every time Shaarli is rendering the header.</p>
 <h3 id="plugins-data">Plugin's data</h3>
 <h4 id="parameters">Parameters</h4>
@@ -159,6 +167,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><code>description</code>: plugin description</li>
 <li><code>parameters</code>: user parameter names, separated by a <code>;</code>.</li>
+<li><code>parameter.&lt;PARAMETER_NAME&gt;</code>: add a text description the specified parameter.</li>
 </ul>
 <blockquote>
 <p>Note: In PHP, <code>parse_ini_file()</code> seems to want strings to be between by quotes <code>&quot;</code> in the ini file.</p>
@@ -209,15 +218,27 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </tr>
 <tr class="even">
 <td><a href="#render_tagcloud">render_tagcloud</a></td>
-<td style="text-align: center;">Allow to add content at the top and bottom of the page.</td>
+<td style="text-align: center;">Allow to add content at the top and bottom of the page, and after all tags.</td>
 </tr>
 <tr class="odd">
+<td><a href="#render_taglist">render_taglist</a></td>
+<td style="text-align: center;">Allow to add content at the top and bottom of the page, and after all tags.</td>
+</tr>
+<tr class="even">
 <td><a href="#render_daily">render_daily</a></td>
 <td style="text-align: center;">Allow to add content at the top and bottom of the page, the bottom of each link and to alter data.</td>
 </tr>
+<tr class="odd">
+<td><a href="#render_feed">render_feed</a></td>
+<td style="text-align: center;">Allow to do add tags in RSS and ATOM feeds.</td>
+</tr>
 <tr class="even">
-<td><a href="#savelink">savelink</a></td>
+<td><a href="#save_link">save_link</a></td>
 <td style="text-align: center;">Allow to alter the link being saved in the datastore.</td>
+</tr>
+<tr class="odd">
+<td><a href="#delete_link">delete_link</a></td>
+<td style="text-align: center;">Allow to do an action before a link is deleted from the datastore.</td>
 </tr>
 </tbody>
 </table>
@@ -376,17 +397,41 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><p><code>plugin_start_zone</code>: before displaying the template content.</p></li>
 <li><p><code>plugin_end_zone</code>: after displaying the template content.</p></li>
 </ul>
+<p>For each tag, the following placeholder can be used:</p>
+<ul>
+<li><code>tag_plugin</code>: after each tag</li>
+</ul>
 <p><img src="http://i.imgur.com/vHmyT3a.png" alt="plugin_start_end_zone_example" /><a href=".html"></a></p>
+<h4 id="render_taglist">render_taglist</h4>
+<p>Triggered when taglist is displayed.</p>
+<p>Allow to add content at the top and bottom of the page.</p>
+<h5 id="data-8">Data</h5>
+<p><code>$data</code> is an array containing:</p>
+<ul>
+<li><code>_LOGGEDIN_</code>: true if user is logged in, false otherwise.</li>
+<li>All templates data.</li>
+</ul>
+<h5 id="template-placeholders-8">Template placeholders</h5>
+<p>Items can be displayed in templates by adding an entry in <code>$data['&lt;placeholder&gt;']</code> array.<a href=".html"></a></p>
+<p>List of placeholders:</p>
+<ul>
+<li><p><code>plugin_start_zone</code>: before displaying the template content.</p></li>
+<li><p><code>plugin_end_zone</code>: after displaying the template content.</p></li>
+</ul>
+<p>For each tag, the following placeholder can be used:</p>
+<ul>
+<li><code>tag_plugin</code>: after each tag</li>
+</ul>
 <h4 id="render_daily">render_daily</h4>
 <p>Triggered when tagcloud is displayed.</p>
 <p>Allow to add content at the top and bottom of the page, the bottom of each link and to alter data.</p>
-<h5 id="data-8">Data</h5>
+<h5 id="data-9">Data</h5>
 <p><code>$data</code> is an array containing:</p>
 <ul>
 <li><code>_LOGGEDIN_</code>: true if user is logged in, false otherwise.</li>
 <li>All templates data, including links.</li>
 </ul>
-<h5 id="template-placeholders-8">Template placeholders</h5>
+<h5 id="template-placeholders-9">Template placeholders</h5>
 <p>Items can be displayed in templates by adding an entry in <code>$data['&lt;placeholder&gt;']</code> array.<a href=".html"></a></p>
 <p>List of placeholders:</p>
 <ul>
@@ -397,18 +442,57 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><p><code>plugin_start_zone</code>: before displaying the template content.</p></li>
 <li><p><code>plugin_end_zone</code>: after displaying the template content.</p></li>
 </ul>
-<h4 id="savelink">savelink</h4>
+<h4 id="render_feed">render_feed</h4>
+<p>Triggered when the ATOM or RSS feed is displayed.</p>
+<p>Allow to add tags in the feed, either in the header or for each items. Items (links) can also be altered before being rendered.</p>
+<h5 id="data-10">Data</h5>
+<p><code>$data</code> is an array containing:</p>
+<ul>
+<li><code>_LOGGEDIN_</code>: true if user is logged in, false otherwise.</li>
+<li><code>_PAGE_</code>: containing either <code>rss</code> or <code>atom</code>.</li>
+<li>All templates data, including links.</li>
+</ul>
+<h5 id="template-placeholders-10">Template placeholders</h5>
+<p>Tags can be added in feeds by adding an entry in <code>$data['&lt;placeholder&gt;']</code> array.<a href=".html"></a></p>
+<p>List of placeholders:</p>
+<ul>
+<li><code>feed_plugins_header</code>: used as a header tag in the feed.</li>
+</ul>
+<p>For each links:</p>
+<ul>
+<li><code>feed_plugins</code>: additional tag for every link entry.</li>
+</ul>
+<h4 id="save_link">save_link</h4>
 <p>Triggered when a link is save (new link or edit).</p>
 <p>Allow to alter the link being saved in the datastore.</p>
-<h5 id="data-9">Data</h5>
+<h5 id="data-11">Data</h5>
 <p><code>$data</code> is an array containing the link being saved:</p>
 <ul>
+<li>id</li>
 <li>title</li>
 <li>url</li>
+<li>shorturl</li>
 <li>description</li>
-<li>linkdate</li>
 <li>private</li>
 <li>tags</li>
+<li>created</li>
+<li>updated</li>
+</ul>
+<h4 id="delete_link">delete_link</h4>
+<p>Triggered when a link is deleted.</p>
+<p>Allow to execute any action before the link is actually removed from the datastore</p>
+<h5 id="data-12">Data</h5>
+<p><code>$data</code> is an array containing the link being saved:</p>
+<ul>
+<li>id</li>
+<li>title</li>
+<li>url</li>
+<li>shorturl</li>
+<li>description</li>
+<li>private</li>
+<li>tags</li>
+<li>created</li>
+<li>updated</li>
 </ul>
 <h2 id="guide-for-template-designer">Guide for template designer</h2>
 <h3 id="plugin-administration">Plugin administration</h3>
@@ -537,5 +621,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
         {$value}
     {/loop}
 <span class="kw">&lt;/div&gt;</span></code></pre></div>
+<p><strong>feed.atom.xml</strong> and <strong>feed.rss.xml</strong>:</p>
+<p>In headers tags section:</p>
+<div class="sourceCode"><pre class="sourceCode xml"><code class="sourceCode xml">{loop=&quot;$feed_plugins_header&quot;}
+  {$value}
+{/loop}</code></pre></div>
+<p>After each entry:</p>
+<div class="sourceCode"><pre class="sourceCode xml"><code class="sourceCode xml">{loop=&quot;$value.feed_plugins&quot;}
+  {$value}
+{/loop}</code></pre></div>
 </body>
 </html>
