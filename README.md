@@ -85,6 +85,12 @@ dailymotion, flickr, imageshack, imgur, vimeo, xkcd, youtube...
 - URL cleanup: automatic removal of `?utm_source=...`, `fb=...`
 - discreet pop-up notification when a new release is available
 
+### REST API
+
+Easily extensible by any client using the REST API exposed by Shaarli.
+
+See the [API documentation](http://shaarli.github.io/api-documentation/).
+
 ### Other usages
 Though Shaarli is primarily a bookmarking application, it can serve other purposes
 (see [usage examples](https://github.com/shaarli/Shaarli/wiki#usage-examples)):
