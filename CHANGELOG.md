@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [v0.9.0](https://github.com/shaarli/Shaarli/releases/tag/v0.9.0) - UNPUBLISHED
+## [v0.9.0](https://github.com/shaarli/Shaarli/releases/tag/v0.9.0) - 2017-05-07
 
 This release introduces the REST API, and requires updating HTTP server
 configuration to enable URL rewriting, see:
@@ -21,6 +21,7 @@ configuration to enable URL rewriting, see:
     - versioned API endpoints:
         - `/api/v1/info`: get general information on the Shaarli instance
         - `/api/v1/links`: get a list of shaared links
+        - `/api/v1/history`: get a list of latest actions
 Theming:
     - Introduce a new theme
     - Allow selecting themes/templates from the configuration page
@@ -31,6 +32,8 @@ Theming:
 - Add `campaign_` to the URL cleanup pattern list
 - Add an AUTHORS file and Makefile target to list authors from Git commit data
 - Link imports are now logged in `data/` folder, and can be debug using `dev.debug=true` setting.
+- `composer.lock` is now included in git file to allow proper `composer install`
+- History mechanism which logs link addition/modification/deletion
 
 ### Changed
 - Docker: enable nginx URL rewriting for the REST API
@@ -40,6 +43,8 @@ Theming:
     - Rename the legacy theme to `vintage`
     - Private only filter is now displayed as a search parameter
     - Autocomplete: pre-select the first element
+    - Display daily date in the page title (browser title)
+    - Timezone lists are now passed as an array instead of raw HTML
 - Move PubSubHub to a dedicated plugin
 - Coding style:
     - explicit method visibility
@@ -50,9 +55,13 @@ Theming:
 - Improved client locale detection
 - Improved date time display depending on the locale
 - Partial namespace support for Shaarli classes
+- Shaarli version is now only present in `shaarli_version.php`
+- Human readable maximum file size upload 
+
 
 ### Removed
 - PHP < 5.5 compatibility
+- ReadItYourself plugin
 
 ### Fixed
 - Ignore generated release tarballs
@@ -67,6 +76,7 @@ Theming:
 - Remove extra spaces in the bookmarklet's name
 - Piwik plugin: Piwik URL protocol can now be set (http or https)
 - All inline JS has been moved to dedicated JS files
+- Keep tags after login redirection
 
 ### Security
 - Markdown plugin: escape HTML entities by default
