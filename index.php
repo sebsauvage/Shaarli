@@ -728,7 +728,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
         die($e->getMessage());
     }
 
-    $PAGE = new PageBuilder($conf);
+    $PAGE = new PageBuilder($conf, $LINKSDB);
     $PAGE->assign('linkcount', count($LINKSDB));
     $PAGE->assign('privateLinkcount', count_private($LINKSDB));
     $PAGE->assign('plugin_errors', $pluginManager->getErrors());
@@ -1170,7 +1170,6 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
     if ($targetPage == Router::$PAGE_CHANGETAG)
     {
         if (empty($_POST['fromtag']) || (empty($_POST['totag']) && isset($_POST['renametag']))) {
-            $PAGE->assign('tags', $LINKSDB->allTags());
             $PAGE->renderPage('changetag');
             exit;
         }
@@ -1700,7 +1699,6 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
         'visibility' => ! empty($_SESSION['privateonly']) ? 'private' : '',
         'redirector' => $conf->get('redirector.url'),  // Optional redirector URL.
         'links' => $linkDisp,
-        'tags' => $LINKSDB->allTags(),
     );
 
     // If there is only a single link, we change on-the-fly the title of the page.
