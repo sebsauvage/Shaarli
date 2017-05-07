@@ -440,6 +440,17 @@ class Updater
         $this->conf->write($this->isLoggedIn);
         return true;
     }
+
+    /**
+     * Reset history store file due to date format change.
+     */
+    public function updateMethodResetHistoryFile()
+    {
+        if (is_file($this->conf->get('resource.history'))) {
+            unlink($this->conf->get('resource.history'));
+        }
+        return true;
+    }
 }
 
 /**
