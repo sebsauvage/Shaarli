@@ -628,7 +628,7 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($nbLinks, count($history));
         foreach ($history as $value) {
             $this->assertEquals(History::CREATED, $value['event']);
-            $this->assertTrue(new DateTime('-5 seconds') < DateTime::createFromFormat(DateTime::ATOM, $value['datetime']));
+            $this->assertTrue(new DateTime('-5 seconds') < $value['datetime']);
             $this->assertTrue(is_int($value['id']));
         }
 
@@ -638,7 +638,7 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($nbLinks * 2, count($history));
         for ($i = 0 ; $i < $nbLinks ; $i++) {
             $this->assertEquals(History::UPDATED, $history[$i]['event']);
-            $this->assertTrue(new DateTime('-5 seconds') < DateTime::createFromFormat(DateTime::ATOM, $history[$i]['datetime']));
+            $this->assertTrue(new DateTime('-5 seconds') < $history[$i]['datetime']);
             $this->assertTrue(is_int($history[$i]['id']));
         }
     }

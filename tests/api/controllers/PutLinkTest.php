@@ -18,6 +18,11 @@ class PutLinkTest extends \PHPUnit_Framework_TestCase
     protected static $testDatastore = 'sandbox/datastore.php';
 
     /**
+     * @var string datastore to test write operations
+     */
+    protected static $testHistory = 'sandbox/history.php';
+
+    /**
      * @var ConfigManager instance
      */
     protected $conf;
@@ -26,6 +31,11 @@ class PutLinkTest extends \PHPUnit_Framework_TestCase
      * @var \ReferenceLinkDB instance.
      */
     protected $refDB = null;
+
+    /**
+     * @var \History instance.
+     */
+    protected $history;
 
     /**
      * @var Container instance.
@@ -51,9 +61,14 @@ class PutLinkTest extends \PHPUnit_Framework_TestCase
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
 
+        $refHistory = new \ReferenceHistory();
+        $refHistory->write(self::$testHistory);
+        $this->history = new \History(self::$testHistory);
+
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
         $this->container['db'] = new \LinkDB(self::$testDatastore, true, false);
+        $this->container['history'] = new \History(self::$testHistory);
 
         $this->controller = new Links($this->container);
 
@@ -71,6 +86,7 @@ class PutLinkTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         @unlink(self::$testDatastore);
+        @unlink(self::$testHistory);
     }
 
     /**
@@ -100,6 +116,13 @@ class PutLinkTest extends \PHPUnit_Framework_TestCase
             \DateTime::createFromFormat(\DateTime::ATOM, $data['created'])
         );
         $this->assertTrue(new \DateTime('5 seconds ago') < \DateTime::createFromFormat(\DateTime::ATOM, $data['updated']));
+
+        $historyEntry = $this->history->getHistory()[0];
+        $this->assertEquals(\History::UPDATED, $historyEntry['event']);
+        $this->assertTrue(
+            (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
+        );
+        $this->assertEquals($id, $historyEntry['id']);
     }
 
     /**

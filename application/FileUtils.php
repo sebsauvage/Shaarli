@@ -26,7 +26,7 @@ class FileUtils
      * The file will be created if it doesn't exist.
      *
      * @param string $file    File path.
-     * @param string $content Content to write.
+     * @param mixed  $content Content to write.
      *
      * @return int|bool Number of bytes written or false if it fails.
      *

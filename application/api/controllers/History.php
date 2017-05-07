@@ -28,7 +28,7 @@ class History extends ApiController
      */
     public function getHistory($request, $response)
     {
-        $history = (new \History($this->conf->get('resource.history')))->getHistory();
+        $history = $this->history->getHistory();
         $history = array_reverse($history);
 
         // Return history operations from the {offset}th, starting from {since}.
