@@ -1161,7 +1161,6 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
             $PAGE->assign('hide_public_links', $conf->get('privacy.hide_public_links', false));
             $PAGE->assign('api_enabled', $conf->get('api.enabled', true));
             $PAGE->assign('api_secret', $conf->get('api.secret'));
-            $history->updateSettings();
             $PAGE->renderPage('configure');
             exit;
         }
@@ -1572,7 +1571,6 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
 
     // Plugin administration form action
     if ($targetPage == Router::$PAGE_SAVE_PLUGINSADMIN) {
-        $history->updateSettings();
         try {
             if (isset($_POST['parameters_form'])) {
                 unset($_POST['parameters_form']);
@@ -1584,6 +1582,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
                 $conf->set('general.enabled_plugins', save_plugin_config($_POST));
             }
             $conf->write(isLoggedIn());
+            $history->updateSettings();
         }
         catch (Exception $e) {
             error_log(
