@@ -29,7 +29,6 @@ class History extends ApiController
     public function getHistory($request, $response)
     {
         $history = $this->history->getHistory();
-        $history = array_reverse($history);
 
         // Return history operations from the {offset}th, starting from {since}.
         $since = \DateTime::createFromFormat(\DateTime::ATOM, $request->getParam('since'));
