@@ -180,6 +180,7 @@ class NetscapeBookmarkUtils
                 $newLink['id'] = $existingLink['id'];
                 $newLink['created'] = $existingLink['created'];
                 $newLink['updated'] = new DateTime();
+                $newLink['shorturl'] = $existingLink['shorturl'];
                 $linkDb[$existingLink['id']] = $newLink;
                 $importCount++;
                 $overwriteCount++;
