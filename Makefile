@@ -135,7 +135,7 @@ test:
 	@echo "PHPUNIT"
 	@echo "-------"
 	@mkdir -p sandbox coverage
-	@$(BIN)/phpunit --coverage-php coverage/main.cov --testsuite unit-tests
+	@$(BIN)/phpunit --coverage-php coverage/main.cov --bootstrap tests/bootstrap.php --testsuite unit-tests
 
 locale_test_%:
 	@UT_LOCALE=$*.utf8 \

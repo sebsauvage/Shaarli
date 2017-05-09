@@ -13,6 +13,6 @@ class UnauthorizedConfigException extends \Exception
      */
     public function __construct()
     {
-        $this->message = 'You are not authorized to alter config.';
+        $this->message = t('You are not authorized to alter config.');
     }
 }

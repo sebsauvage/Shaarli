@@ -86,7 +86,7 @@
     <div class="pure-g pure-alert pure-alert-success search-result">
       <div class="pure-u-2-24"></div>
       <div class="pure-u-20-24">
-        {function="t('%s result', '%s results', $result_count)"}
+        {function="sprintf(t('%s result', '%s results', $result_count), $result_count)"}
         {if="!empty($search_term)"}
           {'for'|t} <em><strong>{$search_term}</strong></em>
         {/if}
@@ -117,6 +117,16 @@
   <div class="pure-g">
     <div class="pure-u-lg-2-24 pure-u-1-24"></div>
     <div class="pure-u-lg-20-24 pure-u-22-24">
+      {ignore}Set translation here, for performances{/ignore}
+      {$strPrivate=t('Private')}
+      {$strEdit=t('Edit')}
+      {$strDelete=t('Delete')}
+      {$strFold=t('Fold')}
+      {$strEdited=t('Edited: ')}
+      {$strPermalink=t('Permalink')}
+      {$strPermalinkLc=t('permalink')}
+      {$strAddTag=t('Add tag')}
+      {ignore}End of translations{/ignore}
       {loop="links"}
         <div class="anchor" id="{$value.shorturl}"></div>
         <div class="linklist-item linklist-item{if="$value.class"} {$value.class}{/if}" data-id="{$value.id}">
@@ -125,12 +135,12 @@
             {if="isLoggedIn()"}
               <div class="linklist-item-editbuttons">
                 {if="$value.private"}
-                  <span class="label label-private">{'Private'|t}</span>
+                  <span class="label label-private">{$strPrivate}</span>
                 {/if}
                 <input type="checkbox" class="delete-checkbox" value="{$value.id}">
                 <!-- FIXME! JS translation -->
-                <a href="?edit_link={$value.id}" title="{'Edit'|t}"><i class="fa fa-pencil-square-o edit-link"></i></a>
-                <a href="#" title="{'Fold'|t}" class="fold-button"><i class="fa fa-chevron-up"></i></a>
+                <a href="?edit_link={$value.id}" title="{$strEdit}"><i class="fa fa-pencil-square-o edit-link"></i></a>
+                <a href="#" title="{$strFold}" class="fold-button"><i class="fa fa-chevron-up"></i></a>
               </div>
             {/if}
 
@@ -164,7 +174,7 @@
                 <i class="fa fa-tags"></i>
                 {$tag_counter=count($value.taglist)}
                 {loop="value.taglist"}
-                  <span class="label label-tag" title="Add tag">
+                  <span class="label label-tag" title="{$strAddTag}">
                     <a href="?addtag={$value|urlencode}">{$value}</a>
                   </span>
                   {if="$tag_counter - 1 != $counter"}&middot;{/if}
@@ -174,9 +184,9 @@
 
             <div class="pure-g">
               <div class="linklist-item-infos-dateblock pure-u-lg-3-8 pure-u-1">
-                <a href="?{$value.shorturl}" title="{'Permalink'|t}">
+                <a href="?{$value.shorturl}" title="{$strPermalink}">
                   {if="!$hide_timestamps || isLoggedIn()"}
-                    {$updated=$value.updated_timestamp ? 'Edited: '. format_date($value.updated) : 'Permalink'}
+                    {$updated=$value.updated_timestamp ? $strEdited. format_date($value.updated) : $strPermalink}
                     <span class="linkdate" title="{$updated}">
                       <i class="fa fa-clock-o"></i>
                       {$value.created|format_date}
@@ -184,7 +194,7 @@
                       &middot;
                     </span>
                   {/if}
-                  {'permalink'|t}
+                  {$strPermalinkLc}
                 </a>
 
                 <div class="pure-u-0 pure-u-lg-visible">
@@ -205,7 +215,7 @@
                 </a>
                 {if="isLoggedIn()"}
                   <a href="?delete_link&amp;lf_linkdate={$value.id}&amp;token={$token}"
-                     title="{'Delete'|t}" class="delete-link pure-u-0 pure-u-lg-visible confirm-delete">
+                     title="{$strDelete}" class="delete-link pure-u-0 pure-u-lg-visible confirm-delete">
                     <i class="fa fa-trash"></i>
                   </a>
                 {/if}
@@ -221,7 +231,7 @@
                 {if="isLoggedIn()"}
                   &middot;
                   <a href="?delete_link&amp;lf_linkdate={$value.id}&amp;token={$token}"
-                     title="{'Delete'|t}" class="delete-link confirm-delete">
+                     title="{$strDelete}" class="delete-link confirm-delete">
                     <i class="fa fa-trash"></i>
                   </a>
                 {/if}

@@ -1,13 +1,19 @@
 <?php
 
+
 namespace Shaarli;
+
 
 use Shaarli\Config\ConfigManager;
 
 /**
- * Class LanguagesTest.
+ * Class LanguagesFrTest
+ *
+ * Test the translation system in PHP and gettext mode with French language.
+ *
+ * @package Shaarli
  */
-class LanguagesTest extends \PHPUnit_Framework_TestCase
+class LanguagesFrTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var string Config file path (without extension).
@@ -20,11 +26,22 @@ class LanguagesTest extends \PHPUnit_Framework_TestCase
     protected $conf;
 
     /**
-     *
+     * Init: force French
      */
     public function setUp()
     {
         $this->conf = new ConfigManager(self::$configFile);
+        $this->conf->set('translation.language', 'fr');
+    }
+
+    /**
+     * Reset the locale since gettext seems to mess with it, making it too long
+     */
+    public static function tearDownAfterClass()
+    {
+        if (! empty(getenv('UT_LOCALE'))) {
+            setlocale(LC_ALL, getenv('UT_LOCALE'));
+        }
     }
 
     /**
@@ -46,7 +63,7 @@ class LanguagesTest extends \PHPUnit_Framework_TestCase
         $this->conf->set('translation.mode', 'gettext');
         new Languages('en', $this->conf);
         $text = 'permalink';
-        $this->assertEquals($text, t($text));
+        $this->assertEquals('permalien', t($text));
     }
 
     /**
@@ -58,6 +75,7 @@ class LanguagesTest extends \PHPUnit_Framework_TestCase
         new Languages('en', $this->conf);
         $text = 'sandwich';
         $nText = 'sandwiches';
+        // Not ID, so English fallback, and in english, plural 0
         $this->assertEquals('sandwiches', t($text, $nText, 0));
         $this->assertEquals('sandwich', t($text, $nText, 1));
         $this->assertEquals('sandwiches', t($text, $nText, 2));
@@ -72,8 +90,7 @@ class LanguagesTest extends \PHPUnit_Framework_TestCase
         new Languages('en', $this->conf);
         $text = 'shaare';
         $nText = 'shaares';
-        // In english, zero is followed by plural form
-        $this->assertEquals('shaares', t($text, $nText, 0));
+        $this->assertEquals('shaare', t($text, $nText, 0));
         $this->assertEquals('shaare', t($text, $nText, 1));
         $this->assertEquals('shaares', t($text, $nText, 2));
     }
@@ -97,7 +114,7 @@ class LanguagesTest extends \PHPUnit_Framework_TestCase
         $this->conf->set('translation.mode', 'php');
         new Languages('en', $this->conf);
         $text = 'permalink';
-        $this->assertEquals($text, t($text));
+        $this->assertEquals('permalien', t($text));
     }
 
     /**
@@ -109,6 +126,7 @@ class LanguagesTest extends \PHPUnit_Framework_TestCase
         new Languages('en', $this->conf);
         $text = 'sandwich';
         $nText = 'sandwiches';
+        // Not ID, so English fallback, and in english, plural 0
         $this->assertEquals('sandwiches', t($text, $nText, 0));
         $this->assertEquals('sandwich', t($text, $nText, 1));
         $this->assertEquals('sandwiches', t($text, $nText, 2));
@@ -124,55 +142,9 @@ class LanguagesTest extends \PHPUnit_Framework_TestCase
         $text = 'shaare';
         $nText = 'shaares';
         // In english, zero is followed by plural form
-        $this->assertEquals('shaares', t($text, $nText, 0));
+        $this->assertEquals('shaare', t($text, $nText, 0));
         $this->assertEquals('shaare', t($text, $nText, 1));
         $this->assertEquals('shaares', t($text, $nText, 2));
-    }
-
-    /**
-     * Test t() with an invalid language set in the configuration in gettext mode.
-     */
-    public function testTranslateWithInvalidConfLanguageGettext()
-    {
-        $this->conf->set('translation.mode', 'gettext');
-        $this->conf->set('translation.language', 'nope');
-        new Languages('fr', $this->conf);
-        $text = 'grumble';
-        $this->assertEquals($text, t($text));
-    }
-
-    /**
-     * Test t() with an invalid language set in the configuration in PHP mode.
-     */
-    public function testTranslateWithInvalidConfLanguagePhp()
-    {
-        $this->conf->set('translation.mode', 'php');
-        $this->conf->set('translation.language', 'nope');
-        new Languages('fr', $this->conf);
-        $text = 'grumble';
-        $this->assertEquals($text, t($text));
-    }
-
-    /**
-     * Test t() with an invalid language set with auto language in gettext mode.
-     */
-    public function testTranslateWithInvalidAutoLanguageGettext()
-    {
-        $this->conf->set('translation.mode', 'gettext');
-        new Languages('nope', $this->conf);
-        $text = 'grumble';
-        $this->assertEquals($text, t($text));
-    }
-
-    /**
-     * Test t() with an invalid language set with auto language in PHP mode.
-     */
-    public function testTranslateWithInvalidAutoLanguagePhp()
-    {
-        $this->conf->set('translation.mode', 'php');
-        new Languages('nope', $this->conf);
-        $text = 'grumble';
-        $this->assertEquals($text, t($text));
     }
 
     /**
@@ -183,8 +155,8 @@ class LanguagesTest extends \PHPUnit_Framework_TestCase
         $this->conf->set('translation.mode', 'gettext');
         $this->conf->set('translation.extensions.test', 'tests/utils/languages/');
         new Languages('en', $this->conf);
-        $this->assertEquals('car', t('car', 'car', 1, 'test'));
-        $this->assertEquals('Search', t('Search', 'Search', 1, 'test'));
+        $this->assertEquals('voiture', t('car', 'car', 1, 'test'));
+        $this->assertEquals('Fouille', t('Search', 'Search', 1, 'test'));
     }
 
     /**
@@ -195,7 +167,7 @@ class LanguagesTest extends \PHPUnit_Framework_TestCase
         $this->conf->set('translation.mode', 'php');
         $this->conf->set('translation.extensions.test', 'tests/utils/languages/');
         new Languages('en', $this->conf);
-        $this->assertEquals('car', t('car', 'car', 1, 'test'));
-        $this->assertEquals('Search', t('Search', 'Search', 1, 'test'));
+        $this->assertEquals('voiture', t('car', 'car', 1, 'test'));
+        $this->assertEquals('Fouille', t('Search', 'Search', 1, 'test'));
     }
 }

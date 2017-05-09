@@ -32,11 +32,11 @@ class NetscapeBookmarkUtils
     {
         // see tpl/export.html for possible values
         if (! in_array($selection, array('all', 'public', 'private'))) {
-            throw new Exception('Invalid export selection: "'.$selection.'"');
+            throw new Exception(t('Invalid export selection:') .' "'.$selection.'"');
         }
 
         $bookmarkLinks = array();
-
+7
         foreach ($linkDb as $link) {
             if ($link['private'] != 0 && $selection == 'public') {
                 continue;
@@ -79,14 +79,14 @@ class NetscapeBookmarkUtils
         $duration=0
     )
     {
-        $status = 'File '.$filename.' ('.$filesize.' bytes) ';
+        $status = sprintf(t('File %s (%d bytes) '), $filename, $filesize);
         if ($importCount == 0 && $overwriteCount == 0 && $skipCount == 0) {
-            $status .= 'has an unknown file format. Nothing was imported.';
+            $status .= t('has an unknown file format. Nothing was imported.');
         } else {
-            $status .= 'was successfully processed in '. $duration .' seconds: ';
-            $status .= $importCount.' links imported, ';
-            $status .= $overwriteCount.' links overwritten, ';
-            $status .= $skipCount.' links skipped.';
+            $status .= vsprintf(
+                t('was successfully processed in %d seconds: %d links imported, %d links overwritten, %d links skipped.'),
+                [$duration, $importCount, $overwriteCount, $skipCount]
+            );
         }
         return $status;
     }

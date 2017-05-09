@@ -10,6 +10,7 @@
  */
 
 use pubsubhubbub\publisher\Publisher;
+use Shaarli\Config\ConfigManager;
 
 /**
  * Plugin init function - set the hub to the default appspot one.
@@ -65,7 +66,7 @@ function hook_pubsubhubbub_save_link($data, $conf)
         $p = new Publisher($conf->get('plugins.PUBSUBHUB_URL'));
         $p->publish_update($feeds, $httpPost);
     } catch (Exception $e) {
-        error_log('Could not publish to PubSubHubbub: ' . $e->getMessage());
+        error_log(sprintf(t('Could not publish to PubSubHubbub: %s'), $e->getMessage()));
     }
 
     return $data;
@@ -91,11 +92,20 @@ function nocurl_http_post($url, $postString) {
     $context = stream_context_create($params);
     $fp = @fopen($url, 'rb', false, $context);
     if (!$fp) {
-        throw new Exception('Could not post to '. $url);
+        throw new Exception(sprintf(t('Could not post to %s'), $url));
     }
     $response = @stream_get_contents($fp);
     if ($response === false) {
-        throw new Exception('Bad response from the hub '. $url);
+        throw new Exception(sprintf(t('Bad response from the hub %s'), $url));
     }
     return $response;
+}
+
+/**
+ * This function is never called, but contains translation calls for GNU gettext extraction.
+ */
+function pubsubhubbub_dummy_translation()
+{
+    // meta
+    t('Enable PubSubHubbub feed publishing.');
 }

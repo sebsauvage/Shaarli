@@ -154,8 +154,13 @@ function hook_markdown_render_includes($data)
 function hook_markdown_render_editlink($data)
 {
     // Load help HTML into a string
-    $data['edit_link_plugin'][] = file_get_contents(PluginManager::$PLUGINS_PATH .'/markdown/help.html');
-
+    $txt = file_get_contents(PluginManager::$PLUGINS_PATH .'/markdown/help.html');
+    $translations = [
+        t('Description will be rendered with'),
+        t('Markdown syntax documentation'),
+        t('Markdown syntax'),
+    ];
+    $data['edit_link_plugin'][] = vsprintf($txt, $translations);
     // Add no markdown 'meta-tag' in tag list if it was never used, for autocompletion.
     if (! in_array(NO_MD_TAG, $data['tags'])) {
         $data['tags'][NO_MD_TAG] = 0;
@@ -324,4 +329,16 @@ function process_markdown($description, $escape = true, $allowedProtocols = [])
     }
 
     return $processedDescription;
+}
+
+/**
+ * This function is never called, but contains translation calls for GNU gettext extraction.
+ */
+function markdown_dummy_translation()
+{
+    // meta
+    t('Render shaare description with Markdown syntax.<br><strong>Warning</strong>:
+If your shaared descriptions contained HTML tags before enabling the markdown plugin,
+enabling it might break your page.
+See the <a href="https://github.com/shaarli/Shaarli/tree/master/plugins/markdown#html-rendering">README</a>.');
 }

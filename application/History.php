@@ -171,7 +171,7 @@ class History
         }
 
         if (! is_writable($this->historyFilePath)) {
-            throw new Exception('History file isn\'t readable or writable');
+            throw new Exception(t('History file isn\'t readable or writable'));
         }
     }
 
@@ -182,7 +182,7 @@ class History
     {
         $this->history = FileUtils::readFlatDB($this->historyFilePath, []);
         if ($this->history === false) {
-            throw new Exception('Could not parse history file');
+            throw new Exception(t('Could not parse history file'));
         }
     }
 

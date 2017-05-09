@@ -19,7 +19,8 @@
         "shaarli/netscape-bookmark-parser": "^2.0",
         "erusev/parsedown": "1.6",
         "slim/slim": "^3.0",
-        "pubsubhubbub/publisher": "dev-master"
+        "pubsubhubbub/publisher": "dev-master",
+        "gettext/gettext": "^4.4"
     },
     "require-dev": {
         "phpmd/phpmd" : "@stable",

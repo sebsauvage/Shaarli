@@ -118,8 +118,8 @@ class ConfigPhp implements ConfigIO
         ) {
             throw new \IOException(
                 $filepath,
-                'Shaarli could not create the config file.
-                Please make sure Shaarli has the right to write in the folder is it installed in.'
+                t('Shaarli could not create the config file. '.
+                  'Please make sure Shaarli has the right to write in the folder is it installed in.')
             );
         }
     }

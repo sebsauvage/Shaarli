@@ -444,5 +444,11 @@ class LinkFilter
 
 class LinkNotFoundException extends Exception
 {
-    protected $message = 'The link you are trying to reach does not exist or has been deleted.';
+    /**
+     * LinkNotFoundException constructor.
+     */
+    public function __construct()
+    {
+        $this->message =  t('The link you are trying to reach does not exist or has been deleted.');
+    }
 }

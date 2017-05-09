@@ -433,3 +433,12 @@ function hook_demo_plugin_render_feed($data)
     }
     return $data;
 }
+
+/**
+ * This function is never called, but contains translation calls for GNU gettext extraction.
+ */
+function demo_dummy_translation()
+{
+    // meta
+    t('A demo plugin covering all use cases for template designers and plugin developers.');
+}

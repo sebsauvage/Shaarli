@@ -12,6 +12,6 @@ class PluginConfigOrderException extends \Exception
      */
     public function __construct()
     {
-        $this->message = 'An error occurred while trying to save plugins loading order.';
+        $this->message = t('An error occurred while trying to save plugins loading order.');
     }
 }

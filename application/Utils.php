@@ -452,7 +452,7 @@ function get_max_upload_size($limitPost, $limitUpload, $format = true)
  */
 function alphabetical_sort(&$data, $reverse = false, $byKeys = false)
 {
-    $callback = function($a, $b) use ($reverse) {
+    $callback = function ($a, $b) use ($reverse) {
         // Collator is part of PHP intl.
         if (class_exists('Collator')) {
             $collator = new Collator(setlocale(LC_COLLATE, 0));
@@ -469,4 +469,19 @@ function alphabetical_sort(&$data, $reverse = false, $byKeys = false)
     } else {
         usort($data, $callback);
     }
+}
+
+/**
+ * Wrapper function for translation which match the API
+ * of gettext()/_() and ngettext().
+ *
+ * @param string $text   Text to translate.
+ * @param string $nText  The plural message ID.
+ * @param int    $nb     The number of items for plural forms.
+ * @param string $domain The domain where the translation is stored (default: shaarli).
+ *
+ * @return String Text translated.
+ */
+function t($text, $nText = '', $nb = 1, $domain = 'shaarli') {
+    return dn__($domain, $text, $nText, $nb);
 }

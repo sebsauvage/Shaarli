@@ -59,3 +59,12 @@ function hook_qrcode_render_includes($data)
 
     return $data;
 }
+
+/**
+ * This function is never called, but contains translation calls for GNU gettext extraction.
+ */
+function qrcode_dummy_translation()
+{
+    // meta
+    t('For each link, add a QRCode icon.');
+}
