@@ -470,46 +470,6 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
     }
 
     /**
-     * Test updateMethodDefaultThemeVintage with the default theme enabled.
-     */
-    public function testSetDefaultThemeToVintage()
-    {
-        $sandboxConf = 'sandbox/config';
-        copy(self::$configFile . '.json.php', $sandboxConf . '.json.php');
-        $this->conf = new ConfigManager($sandboxConf);
-
-        $this->conf->set('resource.theme', 'default');
-        $updater = new Updater([], [], $this->conf, true);
-        $this->assertTrue($updater->updateMethodDefaultThemeVintage());
-        $this->assertEquals('vintage', $this->conf->get('resource.theme'));
-
-        // reload from file
-        $this->conf = new ConfigManager($sandboxConf);
-        $this->assertEquals('vintage', $this->conf->get('resource.theme'));
-    }
-
-    /**
-     * Test updateMethodDefaultThemeVintage with custom theme enabled => nothing to do.
-     */
-    public function testSetDefaultThemeNothingToDo()
-    {
-        $sandboxConf = 'sandbox/config';
-        copy(self::$configFile . '.json.php', $sandboxConf . '.json.php');
-        $this->conf = new ConfigManager($sandboxConf);
-
-        $theme = 'myawesometheme';
-        $this->conf->set('resource.theme', $theme);
-        $this->conf->write(true);
-        $updater = new Updater([], [], $this->conf, true);
-        $this->assertTrue($updater->updateMethodDefaultThemeVintage());
-        $this->assertEquals($theme, $this->conf->get('resource.theme'));
-
-        // reload from file
-        $this->conf = new ConfigManager($sandboxConf);
-        $this->assertEquals($theme, $this->conf->get('resource.theme'));
-    }
-
-    /**
      * Test updateMethodEscapeMarkdown with markdown plugin enabled
      * => setting markdown_escape set to false.
      */
