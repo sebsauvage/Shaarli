@@ -329,21 +329,6 @@ class Updater
     }
 
     /**
-     * While the new default theme is in an unstable state
-     * continue to use the vintage theme
-     */
-    public function updateMethodDefaultThemeVintage()
-    {
-        if ($this->conf->get('resource.theme') !== 'default') {
-            return true;
-        }
-        $this->conf->set('resource.theme', 'vintage');
-        $this->conf->write($this->isLoggedIn);
-
-        return true;
-    }
-
-    /**
      * * `markdown_escape` is a new setting, set to true as default.
      *
      * If the markdown plugin was already enabled, escaping is disabled to avoid
