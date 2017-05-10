@@ -225,27 +225,6 @@ function setup_login_state($conf)
 }
 $userIsLoggedIn = setup_login_state($conf);
 
-/**
- * PubSubHubbub protocol support (if enabled)  [UNTESTED]
- * (Source: http://aldarone.fr/les-flux-rss-shaarli-et-pubsubhubbub/ )
- *
- * @param ConfigManager $conf Configuration Manager instance.
- */
-function pubsubhub($conf)
-{
-    $pshUrl = $conf->get('config.PUBSUBHUB_URL');
-    if (!empty($pshUrl))
-    {
-        include_once './publisher.php';
-        $p = new Publisher($pshUrl);
-        $topic_url = array (
-            index_url($_SERVER).'?do=atom',
-            index_url($_SERVER).'?do=rss'
-        );
-        $p->publish_update($topic_url);
-    }
-}
-
 // ------------------------------------------------------------------------------------------
 // Session management
 
