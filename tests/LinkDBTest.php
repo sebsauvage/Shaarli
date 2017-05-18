@@ -297,7 +297,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
                 'sTuff' => 2,
                 'ut' => 1,
             ),
-            self::$publicLinkDB->allTags()
+            self::$publicLinkDB->linksCountPerTag()
         );
 
         $this->assertEquals(
@@ -325,7 +325,34 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
                 'tag4' => 1,
                 'ut' => 1,
             ),
-            self::$privateLinkDB->allTags()
+            self::$privateLinkDB->linksCountPerTag()
+        );
+        $this->assertEquals(
+            array(
+                'web' => 4,
+                'cartoon' => 2,
+                'gnu' => 1,
+                'dev' => 1,
+                'samba' => 1,
+                'media' => 1,
+                'html' => 1,
+                'w3c' => 1,
+                'css' => 1,
+                'Mercurial' => 1,
+                '.hidden' => 1,
+                'hashtag' => 1,
+            ),
+            self::$privateLinkDB->linksCountPerTag(['web'])
+        );
+        $this->assertEquals(
+            array(
+                'web' => 1,
+                'html' => 1,
+                'w3c' => 1,
+                'css' => 1,
+                'Mercurial' => 1,
+            ),
+            self::$privateLinkDB->linksCountPerTag(['web'], 'private')
         );
     }
 
