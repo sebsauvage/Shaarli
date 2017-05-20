@@ -138,6 +138,9 @@ window.onload = function () {
                 });
                 foldAllButton.firstElementChild.classList.toggle('fa-chevron-down');
                 foldAllButton.firstElementChild.classList.toggle('fa-chevron-up');
+                foldAllButton.title = state === 'down'
+                    ? document.getElementById('translation-fold-all').innerHTML
+                    : document.getElementById('translation-expand-all').innerHTML
             });
         });
     }
@@ -146,7 +149,7 @@ window.onload = function () {
     {
         // Switch fold/expand - up = fold
         if (button.classList.contains('fa-chevron-up')) {
-            button.title = 'Expand';
+            button.title = document.getElementById('translation-expand').innerHTML;
             if (description != null) {
                 description.style.display = 'none';
             }
@@ -155,7 +158,7 @@ window.onload = function () {
             }
         }
         else {
-            button.title = 'Fold';
+            button.title = document.getElementById('translation-fold').innerHTML;
             if (description != null) {
                 description.style.display = 'block';
             }
@@ -173,7 +176,7 @@ window.onload = function () {
     var deleteLinks = document.querySelectorAll('.confirm-delete');
     [].forEach.call(deleteLinks, function(deleteLink) {
         deleteLink.addEventListener('click', function(event) {
-            if(! confirm('Are you sure you want to delete this link ?')) {
+            if(! confirm(document.getElementById('translation-delete-link').innerHTML)) {
                 event.preventDefault();
             }
         });
@@ -618,7 +621,7 @@ function activateFirefoxSocial(node) {
     // Keeping the data separated (ie. not in the DOM) so that it's maintainable and diffable.
     var data = {
         name: title,
-        description: "The personal, minimalist, super-fast, database free, bookmarking service by the Shaarli community.",
+        description: document.getElementById('translation-delete-link').innerHTML,
         author: "Shaarli",
         version: "1.0.0",
 
