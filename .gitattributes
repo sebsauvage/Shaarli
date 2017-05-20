@@ -22,6 +22,7 @@ Dockerfile      text
 *.ttf           binary
 *.min.css       binary
 *.min.js        binary
+*.mo            binary
 
 # Exclude from Git archives
 .editorconfig   export-ignore

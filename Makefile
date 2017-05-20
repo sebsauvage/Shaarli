@@ -130,7 +130,7 @@ check_permissions:
 # See phpunit.xml for configuration
 # https://phpunit.de/manual/current/en/appendixes.configuration.html
 ##
-test:
+test: translate
 	@echo "-------"
 	@echo "PHPUNIT"
 	@echo "-------"
@@ -168,15 +168,15 @@ composer_dependencies: clean
 	composer install --no-dev --prefer-dist
 	find vendor/ -name ".git" -type d -exec rm -rf {} +
 
-### generate a release tarball and include 3rd-party dependencies
-release_tar: composer_dependencies htmldoc
+### generate a release tarball and include 3rd-party dependencies and translations
+release_tar: composer_dependencies htmldoc translate
 	git archive --prefix=$(ARCHIVE_PREFIX) -o $(ARCHIVE_VERSION).tar HEAD
 	tar rvf $(ARCHIVE_VERSION).tar --transform "s|^vendor|$(ARCHIVE_PREFIX)vendor|" vendor/
 	tar rvf $(ARCHIVE_VERSION).tar --transform "s|^doc/html|$(ARCHIVE_PREFIX)doc/html|" doc/html/
 	gzip $(ARCHIVE_VERSION).tar
 
-### generate a release zip and include 3rd-party dependencies
-release_zip: composer_dependencies htmldoc
+### generate a release zip and include 3rd-party dependencies and translations
+release_zip: composer_dependencies htmldoc translate
 	git archive --prefix=$(ARCHIVE_PREFIX) -o $(ARCHIVE_VERSION).zip -9 HEAD
 	mkdir -p $(ARCHIVE_PREFIX)/{doc,vendor}
 	rsync -a doc/html/ $(ARCHIVE_PREFIX)doc/html/
@@ -213,3 +213,8 @@ htmldoc:
 	mkdocs build'
 	find doc/html/ -type f -exec chmod a-x '{}' \;
 	rm -r venv
+
+
+### Generate Shaarli's translation compiled file (.mo)
+translate:
+	@find inc/languages/ -name shaarli.po -execdir msgfmt shaarli.po -o shaarli.mo \;

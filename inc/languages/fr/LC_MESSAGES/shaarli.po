@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2017-05-20 13:54+0200\n"
-"PO-Revision-Date: 2017-05-20 14:11+0200\n"
+"POT-Creation-Date: 2017-05-20 15:36+0200\n"
+"PO-Revision-Date: 2017-05-20 15:40+0200\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -15,17 +15,6 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: t:1,2;t\n"
 "X-Poedit-SearchPath-0: .\n"
-
-#: application/ApplicationUtils.php:152
-#, php-format
-msgid ""
-"Your PHP version is obsolete! Shaarli requires at least PHP %s, and thus "
-"cannot run. Your PHP version has known security vulnerabilities and should "
-"be updated as soon as possible."
-msgstr ""
-"Votre version de PHP est obsolète ! Shaarli nécessite au moins PHP %s, et ne "
-"peut donc pas fonctionner. Votre version de PHP a des failles de sécurités "
-"connues et devrait être mise à jour au plus tôt."
 
 #: application/ApplicationUtils.php:180 application/ApplicationUtils.php:192
 msgid "directory is not readable"
@@ -54,8 +43,7 @@ msgstr "Liens directs"
 
 #: application/FeedBuilder.php:148
 #: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:88
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:242
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:245
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:177
 #: tmp/paper.b91ef64efc3688266305ea9b42e5017e.rtpl.php:88
 msgid "Permalink"
 msgstr "Permalien"
@@ -86,6 +74,7 @@ msgstr "La clé du tableau et l'ID du lien doivent être égaux."
 
 #: application/LinkDB.php:251
 #: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:14
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:45
 msgid ""
 "The personal, minimalist, super-fast, database free, bookmarking service"
 msgstr ""
@@ -153,8 +142,6 @@ msgid "The page you are trying to reach does not exist or has been deleted."
 msgstr "La page que vous essayez de consulter n'existe pas ou a été supprimée."
 
 #: application/PageBuilder.php:161
-#, fuzzy
-#| msgid " 404 Not Found"
 msgid "404 Not Found"
 msgstr "404 Introuvable"
 
@@ -208,22 +195,6 @@ msgstr "Mo"
 msgid "GiB"
 msgstr "Go"
 
-#: application/config/ConfigJson.php:26
-#, php-format
-msgid ""
-"An error occurred while parsing JSON configuration file (%s): error code #%d"
-msgstr ""
-"Une erreur s'est produite lors de la lecture du fichier de configuration "
-"JSON (%s) : code d'erreur #%d"
-
-#: application/config/ConfigJson.php:33
-msgid ""
-"Please check your JSON syntax (without PHP comment tags) using a JSON lint "
-"tool such as "
-msgstr ""
-"Merci de vérifier la syntaxe JSON (sans les balises de commentaires PHP) en "
-"utilisant un validateur de JSON tel que "
-
 #: application/config/ConfigJson.php:52 application/config/ConfigPhp.php:121
 msgid ""
 "Shaarli could not create the config file. Please make sure Shaarli has the "
@@ -253,22 +224,6 @@ msgstr "Vous n'êtes pas autorisé à modifier la configuration."
 #: application/exceptions/IOException.php:19
 msgid "Error accessing"
 msgstr "Une erreur s'est produite en accédant à"
-
-#: index.php:48
-msgid ""
-"Error: missing Composer dependencies\n"
-"\n"
-"If you installed Shaarli through Git or using the development branch,\n"
-"please refer to the installation documentation to install PHP dependencies "
-"using Composer:\n"
-msgstr ""
-"Erreur : les dépendances Composer sont manquantes\n"
-"\n"
-"Si vous avez installé Shaarli avec Git ou depuis la branche de "
-"développement\n"
-"merci de consulter la documentation d'installation pour installer les "
-"dépendances Composer :\n"
-"\n"
 
 #: index.php:137
 msgid "Shared links on "
@@ -506,6 +461,23 @@ msgstr "URL de l'API Wallabag "
 msgid "Wallabag API version (1 or 2)"
 msgstr "Version de l'API Wallabag (1 ou 2)"
 
+#: tests/LanguagesTest.php:186 tests/LanguagesTest.php:198
+#: tests/languages/fr/LanguagesFrTest.php:148
+#: tests/languages/fr/LanguagesFrTest.php:160
+msgid "car"
+msgid_plural "car"
+msgstr[0] ""
+msgstr[1] ""
+
+#: tests/LanguagesTest.php:187 tests/LanguagesTest.php:199
+#: tests/languages/fr/LanguagesFrTest.php:149
+#: tests/languages/fr/LanguagesFrTest.php:161
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:81
+msgid "Search"
+msgid_plural "Search"
+msgstr[0] "Rechercher"
+msgstr[1] "Rechercher"
+
 #: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
 msgid "Shaare a new link"
 msgstr "Partager un nouveau lien"
@@ -556,8 +528,7 @@ msgstr "Renommer"
 #: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
 #: tmp/editlink.90100d2eaf5d3705e14b9b4f78ecddc9.rtpl.php:60
 #: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:71
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:288
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:313
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:171
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -727,7 +698,7 @@ msgstr "Tags"
 
 #: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:52
 #: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:177
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:167
 msgid "Private"
 msgstr "Privé"
 
@@ -885,21 +856,26 @@ msgstr "Retirer le tag"
 msgid "with status"
 msgstr "avec le statut"
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:181
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
 msgid "Edit"
 msgstr "Modifier"
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:182
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:173
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:39
 msgid "Fold"
 msgstr "Replier"
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:245
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:175
 msgid "Edited: "
 msgstr "Modifié :"
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:257
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:179
 msgid "permalink"
 msgstr "permalien"
+
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:181
+msgid "Add tag"
+msgstr "Ajouter un tag"
 
 #: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:7
 msgid "Filters"
@@ -908,6 +884,11 @@ msgstr "Filtres"
 #: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:12
 msgid "Filter private links"
 msgstr "Filtrer par liens privés"
+
+#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:18
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:40
+msgid "Fold all"
+msgstr "Replier tout"
 
 #: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:63
 msgid "Links per page"
@@ -933,12 +914,25 @@ msgid "Remember me"
 msgstr "Rester connecté"
 
 #: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:14
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:45
 msgid "by the Shaarli community"
 msgstr "par la communauté Shaarli"
 
 #: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:15
 msgid "Documentation"
 msgstr "Documentation"
+
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:41
+msgid "Expand"
+msgstr "Déplier"
+
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:42
+msgid "Expand all"
+msgstr "Déplier tout"
+
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:43
+msgid "Are you sure you want to delete this link?"
+msgstr "Êtes-vous sûr de vouloir supprimer ce lien ?"
 
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:31
 msgid "Tools"
@@ -967,10 +961,6 @@ msgstr "Flux RSS"
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:102
 msgid "Logout"
 msgstr "Déconnexion"
-
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:81
-msgid "Search"
-msgstr "Rechercher"
 
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:171
 msgid "is available"
@@ -1197,6 +1187,44 @@ msgid ""
 msgstr ""
 "Glisser ce lien dans votre barre de favoris ou cliquer droit dessus et « "
 "Ajouter aux favoris »"
+
+#~ msgid ""
+#~ "Your PHP version is obsolete! Shaarli requires at least PHP %s, and thus "
+#~ "cannot run. Your PHP version has known security vulnerabilities and "
+#~ "should be updated as soon as possible."
+#~ msgstr ""
+#~ "Votre version de PHP est obsolète ! Shaarli nécessite au moins PHP %s, et "
+#~ "ne peut donc pas fonctionner. Votre version de PHP a des failles de "
+#~ "sécurités connues et devrait être mise à jour au plus tôt."
+
+#~ msgid ""
+#~ "An error occurred while parsing JSON configuration file (%s): error code #"
+#~ "%d"
+#~ msgstr ""
+#~ "Une erreur s'est produite lors de la lecture du fichier de configuration "
+#~ "JSON (%s) : code d'erreur #%d"
+
+#~ msgid ""
+#~ "Please check your JSON syntax (without PHP comment tags) using a JSON "
+#~ "lint tool such as "
+#~ msgstr ""
+#~ "Merci de vérifier la syntaxe JSON (sans les balises de commentaires PHP) "
+#~ "en utilisant un validateur de JSON tel que "
+
+#~ msgid ""
+#~ "Error: missing Composer dependencies\n"
+#~ "\n"
+#~ "If you installed Shaarli through Git or using the development branch,\n"
+#~ "please refer to the installation documentation to install PHP "
+#~ "dependencies using Composer:\n"
+#~ msgstr ""
+#~ "Erreur : les dépendances Composer sont manquantes\n"
+#~ "\n"
+#~ "Si vous avez installé Shaarli avec Git ou depuis la branche de "
+#~ "développement\n"
+#~ "merci de consulter la documentation d'installation pour installer les "
+#~ "dépendances Composer :\n"
+#~ "\n"
 
 #~ msgid "Sessions do not seem to work correctly on your server."
 #~ msgstr "Les sessions ne semblent "
