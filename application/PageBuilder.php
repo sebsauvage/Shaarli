@@ -89,7 +89,7 @@ class PageBuilder
         $this->tpl->assign('hide_timestamps', $this->conf->get('privacy.hide_timestamps', false));
         $this->tpl->assign('token', getToken($this->conf));
         if ($this->linkDB !== null) {
-            $this->tpl->assign('tags', $this->linkDB->allTags());
+            $this->tpl->assign('tags', $this->linkDB->linksCountPerTag());
         }
         // To be removed with a proper theme configuration.
         $this->tpl->assign('conf', $this->conf);

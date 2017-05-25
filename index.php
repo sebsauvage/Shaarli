@@ -790,7 +790,9 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
     // -------- Tag cloud
     if ($targetPage == Router::$PAGE_TAGCLOUD)
     {
-        $tags= $LINKSDB->allTags();
+        $visibility = ! empty($_SESSION['privateonly']) ? 'private' : 'all';
+        $filteringTags = isset($_GET['searchtags']) ? explode(' ', $_GET['searchtags']) : array();
+        $tags = $LINKSDB->linksCountPerTag($filteringTags, $visibility);
 
         // We sort tags alphabetically, then choose a font size according to count.
         // First, find max value.
@@ -824,6 +826,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
         }
 
         $data = array(
+            'search_tags' => implode(' ', $filteringTags),
             'tags' => $tagList,
         );
         $pluginManager->executeHooks('render_tagcloud', $data, array('loggedin' => isLoggedIn()));
@@ -1351,7 +1354,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
             'link' => $link,
             'link_is_new' => false,
             'http_referer' => (isset($_SERVER['HTTP_REFERER']) ? escape($_SERVER['HTTP_REFERER']) : ''),
-            'tags' => $LINKSDB->allTags(),
+            'tags' => $LINKSDB->linksCountPerTag(),
         );
         $pluginManager->executeHooks('render_editlink', $data);
 
@@ -1420,7 +1423,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
             'link_is_new' => $link_is_new,
             'http_referer' => (isset($_SERVER['HTTP_REFERER']) ? escape($_SERVER['HTTP_REFERER']) : ''),
             'source' => (isset($_GET['source']) ? $_GET['source'] : ''),
-            'tags' => $LINKSDB->allTags(),
+            'tags' => $LINKSDB->linksCountPerTag(),
             'default_private_links' => $conf->get('privacy.default_private_links', false),
         );
         $pluginManager->executeHooks('render_editlink', $data);

@@ -452,14 +452,17 @@ You use the community supported version of the original Shaarli project, by Seba
     }
 
     /**
-     * Returns the list of all tags
-     * Output: associative array key=tags, value=0
+     * Returns the list tags appearing in the links with the given tags
+     * @param $filteringTags: tags selecting the links to consider
+     * @param $visibility: process only all/private/public links
+     * @return: a tag=>linksCount array
      */
-    public function allTags()
+    public function linksCountPerTag($filteringTags = [], $visibility = 'all')
     {
+        $links = empty($filteringTags) ? $this->links : $this->filterSearch(['searchtags' => $filteringTags], false, $visibility);
         $tags = array();
         $caseMapping = array();
-        foreach ($this->links as $link) {
+        foreach ($links as $link) {
             foreach (preg_split('/\s+/', $link['tags'], 0, PREG_SPLIT_NO_EMPTY) as $tag) {
                 if (empty($tag)) {
                     continue;

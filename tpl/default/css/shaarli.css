@@ -211,7 +211,7 @@ body, .pure-g [class*="pure-u"] {
     }
 }
 
-#search, #search-linklist {
+#search, #search-linklist, #search-tagcloud {
     text-align: center;
     width: 100%;
 }
@@ -234,6 +234,7 @@ body, .pure-g [class*="pure-u"] {
 }
 
 #search button,
+#search-tagcloud button,
 #search-linklist button {
     background: transparent;
     border: none;
@@ -250,6 +251,9 @@ body, .pure-g [class*="pure-u"] {
 #search button:hover,
 #search-linklist button:hover {
     color: #fff;
+}
+#search-tagcloud button:hover {
+    color: #d0d0d0;
 }
 
 #search-linklist {
