@@ -15,6 +15,8 @@
   {/if}
 </div>
 
+<input type="hidden" name="token" value="{$token}">
+
 <div id="search-linklist">
 
   <div class="pure-g">
@@ -121,7 +123,7 @@
     <div class="pure-u-lg-20-24 pure-u-22-24">
       {loop="links"}
         <div class="anchor" id="{$value.shorturl}"></div>
-        <div class="linklist-item{if="$value.class"} {$value.class}{/if}">
+        <div class="linklist-item linklist-item{if="$value.class"} {$value.class}{/if}" data-id="{$value.id}">
 
           <div class="linklist-item-title">
             {if="isLoggedIn()"}
@@ -129,6 +131,7 @@
                 {if="$value.private"}
                   <span class="label label-private">{'Private'|t}</span>
                 {/if}
+                <input type="checkbox" class="delete-checkbox" value="{$value.id}">
                 <!-- FIXME! JS translation -->
                 <a href="?edit_link={$value.id}" title="{'Edit'|t}"><i class="fa fa-pencil-square-o edit-link"></i></a>
                 <a href="#" title="{'Fold'|t}" class="fold-button"><i class="fa fa-chevron-up"></i></a>
