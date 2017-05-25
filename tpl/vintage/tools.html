@@ -39,7 +39,15 @@
 		</a><br><br>
 		<a class="smallbutton"
 		   	onclick="return alertBookmarklet();"
-		   	href="?private=1&amp;post="><b>✚Add Note</b></a>
+        href="javascript:(
+          function(){
+            window.open(
+              '{$pageabsaddr}?private=1&amp;post='+
+              '&amp;description='%20+%20encodeURIComponent(document.getSelection())+
+              '&amp;source=bookmarklet','_blank','menubar=no,height=800,width=600,toolbar=no,scrollbars=yes,status=no,dialog=1'
+            );
+          }
+        )();"><b>✚Add Note</b></a>
 		<a href="#" onclick="return alertBookmarklet();">
 			<span>
 				&#x21D0; Drag this link to your bookmarks toolbar (or right-click it and choose Bookmark This Link....).<br>
