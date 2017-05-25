@@ -539,8 +539,8 @@ body, .pure-g [class*="pure-u"] {
     color: #1b926c;
 }
 
-.linklist-item-title .linklist-link:visited {
-    color: #1b926c;
+.linklist-item-title a:visited .linklist-link {
+    color: #555555;
 }
 
 .linklist-item-title a:hover, .linklist-item-title .linklist-link:hover{
