@@ -11,7 +11,7 @@
     <h2 class="window-title">{"Manage tags"|t}</h2>
     <form method="POST" action="#" name="changetag" id="changetag">
       <div>
-        <input type="text" name="fromtag" placeholder="{'Tag'|t}"
+        <input type="text" name="fromtag" placeholder="{'Tag'|t}" value="{$fromtag}"
                list="tagsList" autocomplete="off" class="awesomplete autofocus" data-minChars="1">
         <datalist id="tagsList">
           {loop="$tags"}<option>{$key}</option>{/loop}
@@ -31,6 +31,8 @@
         <input type="submit" value="{'Delete'|t}" name="deletetag" class="button button-red confirm-delete">
       </div>
     </form>
+
+    <p>You can also edit tags in the <a href="?do=taglist&sort=usage">tag list</a>.</p>
   </div>
 </div>
 {include="page.footer"}

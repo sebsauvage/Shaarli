@@ -412,7 +412,196 @@ window.onload = function () {
             }
         });
     }
+
+    /**
+     * Tag list operations
+     *
+     * TODO: support error code in the backend for AJAX requests
+     */
+    var existingTags = document.querySelector('input[name="taglist"]').value.split(' ');
+    var awesomepletes = [];
+
+    // Display/Hide rename form
+    var renameTagButtons = document.querySelectorAll('.rename-tag');
+    [].forEach.call(renameTagButtons, function(rename) {
+        rename.addEventListener('click', function(event) {
+            event.preventDefault();
+            var block = findParent(event.target, 'div', {'class': 'tag-list-item'});
+            var form = block.querySelector('.rename-tag-form');
+            if (form.style.display == 'none' || form.style.display == '') {
+                form.style.display = 'block';
+            } else {
+                form.style.display = 'none';
+            }
+            block.querySelector('input').focus();
+        });
+    });
+
+    // Rename a tag with an AJAX request
+    var renameTagSubmits = document.querySelectorAll('.validate-rename-tag');
+    [].forEach.call(renameTagSubmits, function(rename) {
+        rename.addEventListener('click', function(event) {
+            event.preventDefault();
+            var block = findParent(event.target, 'div', {'class': 'tag-list-item'});
+            var input = block.querySelector('.rename-tag-input');
+            var totag = input.value.replace('/"/g', '\\"');
+            if (totag.trim() == '') {
+                return;
+            }
+            var fromtag = block.getAttribute('data-tag');
+            var token = document.getElementById('token').value;
+
+            xhr = new XMLHttpRequest();
+            xhr.open('POST', '?do=changetag');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status !== 200) {
+                    alert('An error occurred. Return code: '+ xhr.status);
+                    location.reload();
+                } else {
+                    block.setAttribute('data-tag', totag);
+                    input.setAttribute('name', totag);
+                    input.setAttribute('value', totag);
+                    findParent(input, 'div', {'class': 'rename-tag-form'}).style.display = 'none';
+                    block.querySelector('a.tag-link').innerHTML = htmlEntities(totag);
+                    block.querySelector('a.tag-link').setAttribute('href', '?searchtags='+ encodeURIComponent(totag));
+                    block.querySelector('a.rename-tag').setAttribute('href', '?do=changetag&fromtag='+ encodeURIComponent(totag));
+
+                    // Refresh awesomplete values
+                    for (var key in existingTags) {
+                        if (existingTags[key] == fromtag) {
+                            existingTags[key] = totag;
+                        }
+                    }
+                    awesomepletes = updateAwesompleteList('.rename-tag-input', existingTags, awesomepletes);
+                }
+            };
+            xhr.send('renametag=1&fromtag='+ encodeURIComponent(fromtag) +'&totag='+ encodeURIComponent(totag) +'&token='+ token);
+            refreshToken();
+        });
+    });
+
+    // Validate input with enter key
+    var renameTagInputs = document.querySelectorAll('.rename-tag-input');
+    [].forEach.call(renameTagInputs, function(rename) {
+
+        rename.addEventListener('keypress', function(event) {
+            if (event.keyCode === 13) { // enter
+                findParent(event.target, 'div', {'class': 'tag-list-item'}).querySelector('.validate-rename-tag').click();
+            }
+        });
+    });
+
+    // Delete a tag with an AJAX query (alert popup confirmation)
+    var deleteTagButtons = document.querySelectorAll('.delete-tag');
+    [].forEach.call(deleteTagButtons, function(rename) {
+        rename.style.display = 'inline';
+        rename.addEventListener('click', function(event) {
+            event.preventDefault();
+            var block = findParent(event.target, 'div', {'class': 'tag-list-item'});
+            var tag = block.getAttribute('data-tag');
+            var token = document.getElementById('token').value;
+
+            if (confirm('Are you sure you want to delete the tag "'+ tag +'"?')) {
+                xhr = new XMLHttpRequest();
+                xhr.open('POST', '?do=changetag');
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function() {
+                    block.remove();
+                };
+                xhr.send(encodeURI('deletetag=1&fromtag='+ tag +'&token='+ token));
+                refreshToken();
+            }
+        });
+    });
+
+    updateAwesompleteList('.rename-tag-input', document.querySelector('input[name="taglist"]').value.split(' '), awesomepletes);
 };
+
+/**
+ * Find a parent element according to its tag and its attributes
+ *
+ * @param element    Element where to start the search
+ * @param tagName    Expected parent tag name
+ * @param attributes Associative array of expected attributes (name=>value).
+ *
+ * @returns Found element or null.
+ */
+function findParent(element, tagName, attributes)
+{
+    while (element) {
+        if (element.tagName.toLowerCase() == tagName) {
+            var match = true;
+            for (var key in attributes) {
+                if (! element.hasAttribute(key)
+                    || (attributes[key] != '' && element.getAttribute(key).indexOf(attributes[key]) == -1)
+                ) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match) {
+                return element;
+            }
+        }
+        element = element.parentElement;
+    }
+    return null;
+}
+
+/**
+ * Ajax request to refresh the CSRF token.
+ */
+function refreshToken()
+{
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '?do=token');
+    xhr.onload = function() {
+        var token = document.getElementById('token');
+        token.setAttribute('value', xhr.responseText);
+    };
+    xhr.send();
+}
+
+/**
+ * Update awesomplete list of tag for all elements matching the given selector
+ *
+ * @param selector  CSS selector
+ * @param tags      Array of tags
+ * @param instances List of existing awesomplete instances
+ */
+function updateAwesompleteList(selector, tags, instances)
+{
+    // First load: create Awesomplete instances
+    if (instances.length == 0) {
+        var elements = document.querySelectorAll(selector);
+        [].forEach.call(elements, function (element) {
+            instances.push(new Awesomplete(
+                element,
+                {'list': tags}
+            ));
+        });
+    } else {
+        // Update awesomplete tag list
+        for (var key in instances) {
+            instances[key].list = tags;
+        }
+    }
+    return instances;
+}
+
+/**
+ * html_entities in JS
+ *
+ * @see http://stackoverflow.com/questions/18749591/encode-html-entities-in-javascript
+ */
+function htmlEntities(str)
+{
+    return str.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+        return '&#'+i.charCodeAt(0)+';';
+    });
+}
 
 function activateFirefoxSocial(node) {
     var loc = location.href;
@@ -445,8 +634,11 @@ function activateFirefoxSocial(node) {
  * @param currentContinent Current selected continent
  * @param reset            Set to true to reset the selected value
  */
-function hideTimezoneCities(cities, currentContinent, reset = false) {
+function hideTimezoneCities(cities, currentContinent) {
     var first = true;
+    if (reset == null) {
+        reset = false;
+    }
     [].forEach.call(cities, function (option) {
         if (option.getAttribute('data-continent') != currentContinent) {
             option.className = 'hidden';

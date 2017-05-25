@@ -13,6 +13,8 @@ class Router
 
     public static $PAGE_TAGCLOUD = 'tagcloud';
 
+    public static $PAGE_TAGLIST = 'taglist';
+
     public static $PAGE_DAILY = 'daily';
 
     public static $PAGE_FEED_ATOM = 'atom';
@@ -45,6 +47,8 @@ class Router
 
     public static $PAGE_SAVE_PLUGINSADMIN = 'save_pluginadmin';
 
+    public static $GET_TOKEN = 'token';
+
     /**
      * Reproducing renderPage() if hell, to avoid regression.
      *
@@ -75,6 +79,10 @@ class Router
 
         if (startsWith($query, 'do='. self::$PAGE_TAGCLOUD)) {
             return self::$PAGE_TAGCLOUD;
+        }
+
+        if (startsWith($query, 'do='. self::$PAGE_TAGLIST)) {
+            return self::$PAGE_TAGLIST;
         }
 
         if (startsWith($query, 'do='. self::$PAGE_OPENSEARCH)) {
@@ -140,6 +148,10 @@ class Router
 
         if (startsWith($query, 'do='. self::$PAGE_SAVE_PLUGINSADMIN)) {
             return self::$PAGE_SAVE_PLUGINSADMIN;
+        }
+
+        if (startsWith($query, 'do='. self::$GET_TOKEN)) {
+            return self::$GET_TOKEN;
         }
 
         return self::$PAGE_LINKLIST;

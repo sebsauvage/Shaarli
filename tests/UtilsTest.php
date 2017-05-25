@@ -417,4 +417,116 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('1048576', get_max_upload_size('1m', '2m', false));
         $this->assertEquals('100', get_max_upload_size(100, 100, false));
     }
+
+    /**
+     * Test alphabetical_sort by value, not reversed, with php-intl.
+     */
+    public function testAlphabeticalSortByValue()
+    {
+        $arr = [
+            'zZz',
+            'éee',
+            'éae',
+            'eee',
+            'A',
+            'a',
+            'zzz',
+        ];
+        $expected = [
+            'a',
+            'A',
+            'éae',
+            'eee',
+            'éee',
+            'zzz',
+            'zZz',
+        ];
+
+        alphabetical_sort($arr);
+        $this->assertEquals($expected, $arr);
+    }
+
+    /**
+     * Test alphabetical_sort by value, reversed, with php-intl.
+     */
+    public function testAlphabeticalSortByValueReversed()
+    {
+        $arr = [
+            'zZz',
+            'éee',
+            'éae',
+            'eee',
+            'A',
+            'a',
+            'zzz',
+        ];
+        $expected = [
+            'zZz',
+            'zzz',
+            'éee',
+            'eee',
+            'éae',
+            'A',
+            'a',
+        ];
+
+        alphabetical_sort($arr, true);
+        $this->assertEquals($expected, $arr);
+    }
+
+    /**
+     * Test alphabetical_sort by keys, not reversed, with php-intl.
+     */
+    public function testAlphabeticalSortByKeys()
+    {
+        $arr = [
+            'zZz' => true,
+            'éee' => true,
+            'éae' => true,
+            'eee' => true,
+            'A' => true,
+            'a' => true,
+            'zzz' => true,
+        ];
+        $expected = [
+            'a' => true,
+            'A' => true,
+            'éae' => true,
+            'eee' => true,
+            'éee' => true,
+            'zzz' => true,
+            'zZz' => true,
+        ];
+
+        alphabetical_sort($arr, true, true);
+        $this->assertEquals($expected, $arr);
+    }
+
+    /**
+     * Test alphabetical_sort by keys, reversed, with php-intl.
+     */
+    public function testAlphabeticalSortByKeysReversed()
+    {
+        $arr = [
+            'zZz' => true,
+            'éee' => true,
+            'éae' => true,
+            'eee' => true,
+            'A' => true,
+            'a' => true,
+            'zzz' => true,
+        ];
+        $expected = [
+            'zZz' => true,
+            'zzz' => true,
+            'éee' => true,
+            'eee' => true,
+            'éae' => true,
+            'A' => true,
+            'a' => true,
+        ];
+
+        alphabetical_sort($arr, true, true);
+        $this->assertEquals($expected, $arr);
+    }
 }

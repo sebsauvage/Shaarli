@@ -435,3 +435,34 @@ function get_max_upload_size($limitPost, $limitUpload, $format = true)
     $maxsize = min($size1, $size2);
     return $format ? human_bytes($maxsize) : $maxsize;
 }
+
+/**
+ * Sort the given array alphabetically using php-intl if available.
+ * Case sensitive.
+ *
+ * Note: doesn't support multidimensional arrays
+ *
+ * @param array $data    Input array, passed by reference
+ * @param bool  $reverse Reverse sort if set to true
+ * @param bool  $byKeys  Sort the array by keys if set to true, by value otherwise.
+ */
+function alphabetical_sort(&$data, $reverse = false, $byKeys = false)
+{
+    $callback = function($a, $b) use ($reverse) {
+        // Collator is part of PHP intl.
+        if (class_exists('Collator')) {
+            $collator = new Collator(setlocale(LC_COLLATE, 0));
+            if (!intl_is_failure(intl_get_error_code())) {
+                return $collator->compare($a, $b) * ($reverse ? -1 : 1);
+            }
+        }
+
+        return strcasecmp($a, $b) * ($reverse ? -1 : 1);
+    };
+
+    if ($byKeys) {
+        uksort($data, $callback);
+    } else {
+        usort($data, $callback);
+    }
+}
