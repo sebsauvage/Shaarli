@@ -36,7 +36,6 @@ class NetscapeBookmarkUtils
         }
 
         $bookmarkLinks = array();
-7
         foreach ($linkDb as $link) {
             if ($link['private'] != 0 && $selection == 'public') {
                 continue;

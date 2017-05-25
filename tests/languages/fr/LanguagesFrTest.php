@@ -155,7 +155,8 @@ class LanguagesFrTest extends \PHPUnit_Framework_TestCase
         $this->conf->set('translation.mode', 'gettext');
         $this->conf->set('translation.extensions.test', 'tests/utils/languages/');
         new Languages('en', $this->conf);
-        $this->assertEquals('voiture', t('car', 'car', 1, 'test'));
+        $txt = 'car'; // ignore me poedit
+        $this->assertEquals('voiture', t($txt, $txt, 1, 'test'));
         $this->assertEquals('Fouille', t('Search', 'Search', 1, 'test'));
     }
 
@@ -167,7 +168,8 @@ class LanguagesFrTest extends \PHPUnit_Framework_TestCase
         $this->conf->set('translation.mode', 'php');
         $this->conf->set('translation.extensions.test', 'tests/utils/languages/');
         new Languages('en', $this->conf);
-        $this->assertEquals('voiture', t('car', 'car', 1, 'test'));
+        $txt = 'car'; // ignore me poedit
+        $this->assertEquals('voiture', t($txt, $txt, 1, 'test'));
         $this->assertEquals('Fouille', t('Search', 'Search', 1, 'test'));
     }
 }

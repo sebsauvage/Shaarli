@@ -70,6 +70,30 @@
         </div>
       </div>
       <div class="pure-g">
+        <div class="pure-u-lg-{$ratioLabel} pure-u-1">
+          <div class="form-label">
+            <label for="language">
+              <span class="label-name">{'Language'|t}</span>
+            </label>
+          </div>
+        </div>
+        <div class="pure-u-lg-{$ratioInput} pure-u-1">
+          <div class="form-input">
+            <select name="language" id="language" class="align">
+              {loop="$languages"}
+                <option value="{$key}"
+                      {if="$key===$language"}
+                      selected="selected"
+                      {/if}
+                >
+                  {$value}
+                </option>
+              {/loop}
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="pure-g">
         <div class="pure-u-lg-{$ratioLabel} pure-u-1 ">
           <div class="form-label">
             <label>

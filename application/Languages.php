@@ -62,7 +62,7 @@ class Languages
     /**
      * Languages constructor.
      *
-     * @param string        $language lang determined by autoLocale(), can be override.
+     * @param string        $language lang determined by autoLocale(), can be overridden.
      * @param ConfigManager $conf     instance.
      */
     public function __construct($language, $conf)
@@ -146,5 +146,19 @@ class Languages
     protected function isValidLanguage($language)
     {
         return preg_match('/^[a-z]{2}(_[A-Z]{2})?/', $language) === 1;
+    }
+
+    /**
+     * Get the list of available languages for Shaarli.
+     *
+     * @return array List of available languages, with their label.
+     */
+    public static function getAvailableLanguages()
+    {
+        return [
+            'auto' => t('Automatic'),
+            'en' => t('English'),
+            'fr' => t('French'),
+        ];
     }
 }
