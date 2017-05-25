@@ -75,7 +75,7 @@
             window.open(
               '{$pageabsaddr}?post='%20+%20encodeURIComponent(url)+
               '&amp;title='%20+%20encodeURIComponent(title)+
-              '&amp;description='%20+%20encodeURIComponent(document.getSelection())+
+              '&amp;description='%20+%20encodeURIComponent(document.getSelection().toString().substr(0, 2000))+
               '&amp;source=bookmarklet','_blank','menubar=no,height=800,width=600,toolbar=no,scrollbars=yes,status=no,dialog=1'
             );
           }
@@ -91,7 +91,7 @@
           function(){
             window.open(
               '{$pageabsaddr}?private=1&amp;post='+
-              '&amp;description='%20+%20encodeURIComponent(document.getSelection())+
+              '&amp;description='%20+%20encodeURIComponent(document.getSelection().toString().substr(0, 2000))+
               '&amp;source=bookmarklet','_blank','menubar=no,height=800,width=600,toolbar=no,scrollbars=yes,status=no,dialog=1'
             );
           }
