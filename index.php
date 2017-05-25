@@ -1237,13 +1237,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
         // Remove duplicates.
         $tags = implode(' ', array_unique(explode(' ', $tags)));
 
-        $url = trim($_POST['lf_url']);
-        if (! startsWith($url, 'http:') && ! startsWith($url, 'https:')
-            && ! startsWith($url, 'ftp:') && ! startsWith($url, 'magnet:')
-            && ! startsWith($url, '?') && ! startsWith($url, 'javascript:')
-        ) {
-            $url = 'http://' . $url;
-        }
+        $url = whitelist_protocols(trim($_POST['lf_url']), $conf->get('security.allowed_protocols'));
 
         $link = array(
             'id' => $id,

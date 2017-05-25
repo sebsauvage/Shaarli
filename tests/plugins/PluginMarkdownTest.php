@@ -26,6 +26,7 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
     {
         PluginManager::$PLUGINS_PATH = 'plugins';
         $this->conf = new ConfigManager('tests/utils/config/configJson');
+        $this->conf->set('security.allowed_protocols', ['ftp', 'magnet']);
     }
 
     /**
@@ -183,15 +184,19 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test hashtag links processed with markdown.
+     * Make sure that the generated HTML match the reference HTML file.
      */
-    public function testMarkdownHashtagLinks()
+    public function testMarkdownGlobalProcessDescription()
     {
         $md = file_get_contents('tests/plugins/resources/markdown.md');
         $md = format_description($md);
         $html = file_get_contents('tests/plugins/resources/markdown.html');
 
-        $data = process_markdown($md);
+        $data = process_markdown(
+            $md,
+            $this->conf->get('security.markdown_escape', true),
+            $this->conf->get('security.allowed_protocols')
+        );
         $this->assertEquals($html, $data);
     }
 

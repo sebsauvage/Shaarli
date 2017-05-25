@@ -22,3 +22,13 @@ Block:
 lorem ipsum #foobar http://link.tld
 #foobar http://link.tld
 ```
+
+[link](?123456)
+![link](/img/train.png)
+[link](test.tld/path/?query=value#hash)
+[link](http://test.tld/path/?query=value#hash)
+[link](https://test.tld/path/?query=value#hash)
+[link](ftp://test.tld/path/?query=value#hash)
+[link](magnet:test.tld/path/?query=value#hash)
+[link](javascript:alert('xss'))
+[link](other://test.tld/path/?query=value#hash)
