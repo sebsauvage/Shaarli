@@ -97,6 +97,11 @@ class FeedBuilder
      */
     public function buildData()
     {
+        // Search for untagged links
+        if (isset($this->userInput['searchtags']) && empty($this->userInput['searchtags'])) {
+            $this->userInput['searchtags'] = false;
+        }
+
         // Optionally filter the results:
         $linksToDisplay = $this->linkDB->filterSearch($this->userInput);
 

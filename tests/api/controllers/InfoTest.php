@@ -81,7 +81,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $data = json_decode((string) $response->getBody(), true);
 
-        $this->assertEquals(8, $data['global_counter']);
+        $this->assertEquals(\ReferenceLinkDB::$NB_LINKS_TOTAL, $data['global_counter']);
         $this->assertEquals(2, $data['private_counter']);
         $this->assertEquals('Shaarli', $data['settings']['title']);
         $this->assertEquals('?', $data['settings']['header_link']);
@@ -104,7 +104,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $data = json_decode((string) $response->getBody(), true);
 
-        $this->assertEquals(8, $data['global_counter']);
+        $this->assertEquals(\ReferenceLinkDB::$NB_LINKS_TOTAL, $data['global_counter']);
         $this->assertEquals(2, $data['private_counter']);
         $this->assertEquals($title, $data['settings']['title']);
         $this->assertEquals($headerLink, $data['settings']['header_link']);

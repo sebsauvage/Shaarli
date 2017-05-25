@@ -55,7 +55,7 @@
 
     {if="count($links)==0"}
         <div id="searchcriteria">Nothing found.</div>
-    {elseif="!empty($search_term) or !empty($search_tags)"}
+    {elseif="!empty($search_term) or $search_tags !== ''"}
         <div id="searchcriteria">
             {$result_count} results
             {if="!empty($search_term)"}
@@ -69,6 +69,10 @@
                         <a href="?removetag={function="urlencode($value)"}">{$value} <span class="remove">x</span></a>
                     </span>
                 {/loop}
+            {elseif="$search_tags === false"}
+                <span class="linktag" title="Remove tag">
+                    <a href="?">untagged <span class="remove">x</span></a>
+                </span>
             {/if}
         </div>
     {/if}

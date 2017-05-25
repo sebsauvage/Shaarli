@@ -475,7 +475,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     public function testReorderLinksDesc()
     {
         self::$privateLinkDB->reorder('ASC');
-        $linkIds = array(42, 4, 1, 0, 7, 6, 8, 41);
+        $linkIds = array(42, 4, 9, 1, 0, 7, 6, 8, 41);
         $cpt = 0;
         foreach (self::$privateLinkDB as $key => $value) {
             $this->assertEquals($linkIds[$cpt++], $key);

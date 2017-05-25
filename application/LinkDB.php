@@ -423,29 +423,12 @@ You use the community supported version of the original Shaarli project, by Seba
     public function filterSearch($filterRequest = array(), $casesensitive = false, $visibility = 'all')
     {
         // Filter link database according to parameters.
-        $searchtags = !empty($filterRequest['searchtags']) ? escape($filterRequest['searchtags']) : '';
-        $searchterm = !empty($filterRequest['searchterm']) ? escape($filterRequest['searchterm']) : '';
+        $searchtags = isset($filterRequest['searchtags']) ? escape($filterRequest['searchtags']) : '';
+        $searchterm = isset($filterRequest['searchterm']) ? escape($filterRequest['searchterm']) : '';
 
-        // Search tags + fullsearch.
-        if (! empty($searchtags) && ! empty($searchterm)) {
-            $type = LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT;
-            $request = array($searchtags, $searchterm);
-        }
-        // Search by tags.
-        elseif (! empty($searchtags)) {
-            $type = LinkFilter::$FILTER_TAG;
-            $request = $searchtags;
-        }
-        // Fulltext search.
-        elseif (! empty($searchterm)) {
-            $type = LinkFilter::$FILTER_TEXT;
-            $request = $searchterm;
-        }
-        // Otherwise, display without filtering.
-        else {
-            $type = '';
-            $request = '';
-        }
+        // Search tags + fullsearch - blank string parameter will return all links.
+        $type = LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT;
+        $request = [$searchtags, $searchterm];
 
         $linkFilter = new LinkFilter($this);
         return $linkFilter->filter($type, $request, $casesensitive, $visibility);

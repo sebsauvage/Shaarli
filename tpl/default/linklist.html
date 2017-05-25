@@ -91,7 +91,7 @@
         <div id="searchcriteria">{'Nothing found.'|t}</div>
       </div>
     </div>
-  {elseif="!empty($search_term) or !empty($search_tags) or !empty($visibility)"}
+  {elseif="!empty($search_term) or $search_tags !== '' or !empty($visibility)"}
     <div class="pure-g pure-alert pure-alert-success search-result">
       <div class="pure-u-2-24"></div>
       <div class="pure-u-20-24">
@@ -107,6 +107,10 @@
                 <a href="?removetag={function="urlencode($value)"}">{$value}<span class="remove"><i class="fa fa-times"></i></span></a>
               </span>
           {/loop}
+        {elseif="$search_tags === false"}
+          <span class="label label-tag" title="{'Remove tag'|t}">
+            <a href="?">{'untagged'|t}<span class="remove"><i class="fa fa-times"></i></span></a>
+          </span>
         {/if}
         {if="!empty($visibility)"}
           {'with status'|t}
