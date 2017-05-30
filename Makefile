@@ -19,6 +19,16 @@ PHP_COMMA_SOURCE = index.php,application,tests,plugins
 all: static_analysis_summary check_permissions test
 
 ##
+# Docker test adapter
+#
+# Shaarli sources and vendored libraries are copied from a shared volume
+# to a user-owned directory to enable running tests as a non-root user.
+##
+docker_%:
+	rsync -az /shaarli/ ~/shaarli/
+	cd ~/shaarli && make $*
+
+##
 # Concise status of the project
 # These targets are non-blocking: || exit 0
 ##
