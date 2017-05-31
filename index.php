@@ -1176,6 +1176,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
             die('Wrong token.');
         }
 
+        $count = 0;
         // Delete a tag:
         if (isset($_POST['deletetag']) && !empty($_POST['fromtag'])) {
             $needle = trim($_POST['fromtag']);
@@ -1184,13 +1185,16 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
             foreach($linksToAlter as $key=>$value)
             {
                 $tags = explode(' ',trim($value['tags']));
-                unset($tags[array_search($needle,$tags)]); // Remove tag.
-                $value['tags']=trim(implode(' ',$tags));
-                $LINKSDB[$key]=$value;
-                $history->updateLink($LINKSDB[$key]);
+                if (($pos = array_search($needle,$tags)) !== false) {
+                    unset($tags[$pos]); // Remove tag.
+                    $value['tags']=trim(implode(' ',$tags));
+                    $LINKSDB[$key]=$value;
+                    $history->updateLink($LINKSDB[$key]);
+                    ++$count;
+                }
             }
             $LINKSDB->save($conf->get('resource.page_cache'));
-            echo '<script>alert("Tag was removed from '.count($linksToAlter).' links.");document.location=\'?do=changetag\';</script>';
+            echo '<script>alert("Tag was removed from '.$count.' links.");document.location=\'?do=changetag\';</script>';
             exit;
         }
 
@@ -1202,13 +1206,16 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
             foreach($linksToAlter as $key=>$value) {
                 $tags = preg_split('/\s+/', trim($value['tags']));
                 // Replace tags value.
-                $tags[array_search($needle, $tags)] = trim($_POST['totag']);
-                $value['tags'] = implode(' ', array_unique($tags));
-                $LINKSDB[$key] = $value;
-                $history->updateLink($LINKSDB[$key]);
+                if (($pos = array_search($needle,$tags)) !== false) {
+                    $tags[$pos] = trim($_POST['totag']);
+                    $value['tags'] = implode(' ', array_unique($tags));
+                    $LINKSDB[$key] = $value;
+                    $history->updateLink($LINKSDB[$key]);
+                    ++$count;
+                }
             }
             $LINKSDB->save($conf->get('resource.page_cache')); // Save to disk.
-            echo '<script>alert("Tag was renamed in '.count($linksToAlter).' links.");document.location=\'?searchtags='.urlencode(escape($_POST['totag'])).'\';</script>';
+            echo '<script>alert("Tag was renamed in '.$count.' links.");document.location=\'?searchtags='.urlencode(escape($_POST['totag'])).'\';</script>';
             exit;
         }
     }
