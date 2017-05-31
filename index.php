@@ -1176,48 +1176,41 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
             die('Wrong token.');
         }
 
-        $count = 0;
-        // Delete a tag:
         if (isset($_POST['deletetag']) && !empty($_POST['fromtag'])) {
-            $needle = trim($_POST['fromtag']);
-            // True for case-sensitive tag search.
-            $linksToAlter = $LINKSDB->filterSearch(array('searchtags' => $needle), true);
-            foreach($linksToAlter as $key=>$value)
-            {
-                $tags = explode(' ',trim($value['tags']));
-                if (($pos = array_search($needle,$tags)) !== false) {
-                    unset($tags[$pos]); // Remove tag.
-                    $value['tags']=trim(implode(' ',$tags));
-                    $LINKSDB[$key]=$value;
-                    $history->updateLink($LINKSDB[$key]);
-                    ++$count;
-                }
-            }
-            $LINKSDB->save($conf->get('resource.page_cache'));
-            echo '<script>alert("Tag was removed from '.$count.' links.");document.location=\'?do=changetag\';</script>';
+            $delete = true;
+        } else if (isset($_POST['renametag']) && !empty($_POST['fromtag']) && !empty($_POST['totag'])) {
+            $delete = false;
+        } else {
+            $PAGE->renderPage('changetag');
             exit;
         }
 
-        // Rename a tag:
-        if (isset($_POST['renametag']) && !empty($_POST['fromtag']) && !empty($_POST['totag'])) {
-            $needle = trim($_POST['fromtag']);
-            // True for case-sensitive tag search.
-            $linksToAlter = $LINKSDB->filterSearch(array('searchtags' => $needle), true);
-            foreach($linksToAlter as $key=>$value) {
-                $tags = preg_split('/\s+/', trim($value['tags']));
-                // Replace tags value.
-                if (($pos = array_search($needle,$tags)) !== false) {
+        $count = 0;
+        $needle = trim($_POST['fromtag']);
+        // True for case-sensitive tag search.
+        $linksToAlter = $LINKSDB->filterSearch(array('searchtags' => $needle), true);
+        foreach($linksToAlter as $key => $value)
+        {
+            $tags = explode(' ',trim($value['tags']));
+            if (($pos = array_search($needle,$tags)) !== false) {
+                if ($delete) {
+                    unset($tags[$pos]); // Remove tag.
+                } else {
                     $tags[$pos] = trim($_POST['totag']);
-                    $value['tags'] = implode(' ', array_unique($tags));
-                    $LINKSDB[$key] = $value;
-                    $history->updateLink($LINKSDB[$key]);
-                    ++$count;
                 }
+                $value['tags'] = trim(implode(' ', array_unique($tags)));
+                $LINKSDB[$key]=$value;
+                $history->updateLink($LINKSDB[$key]);
+                ++$count;
             }
-            $LINKSDB->save($conf->get('resource.page_cache')); // Save to disk.
-            echo '<script>alert("Tag was renamed in '.$count.' links.");document.location=\'?searchtags='.urlencode(escape($_POST['totag'])).'\';</script>';
-            exit;
         }
+        $LINKSDB->save($conf->get('resource.page_cache'));
+        $redirect = $delete ? 'do=changetag' : 'searchtags='. urlencode(escape($_POST['totag']));
+        $alert = $delete
+            ? sprintf(t('The tag was removed from %d links.'), $count)
+            : sprintf(t('The tag was renamed in %d links.'), $count);
+        echo '<script>alert("'. $alert .'");document.location=\'?'. $redirect .'\';</script>';
+        exit;
     }
 
     // -------- User wants to add a link without using the bookmarklet: Show form.
