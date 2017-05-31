@@ -64,6 +64,30 @@ function add_trailing_slash($url)
 }
 
 /**
+ * Replace not whitelisted protocols by 'http://' from given URL.
+ *
+ * @param string $url       URL to clean
+ * @param array  $protocols List of allowed protocols (aside from http(s)).
+ *
+ * @return string URL with allowed protocol
+ */
+function whitelist_protocols($url, $protocols)
+{
+    if (startsWith($url, '?') || startsWith($url, '/')) {
+        return $url;
+    }
+    $protocols = array_merge(['http', 'https'], $protocols);
+    $protocol = preg_match('#^(\w+):/?/?#', $url, $match);
+    // Protocol not allowed: we remove it and replace it with http
+    if ($protocol === 1 && ! in_array($match[1], $protocols)) {
+        $url = str_replace($match[0], 'http://', $url);
+    } else if ($protocol !== 1) {
+        $url = 'http://' . $url;
+    }
+    return $url;
+}
+
+/**
  * URL representation and cleanup utilities
  *
  * Form

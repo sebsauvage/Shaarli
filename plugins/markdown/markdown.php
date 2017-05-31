@@ -26,7 +26,11 @@ function hook_markdown_render_linklist($data, $conf)
             $value = stripNoMarkdownTag($value);
             continue;
         }
-        $value['description'] = process_markdown($value['description'], $conf->get('security.markdown_escape', true));
+        $value['description'] = process_markdown(
+            $value['description'],
+            $conf->get('security.markdown_escape', true),
+            $conf->get('security.allowed_protocols')
+        );
     }
     return $data;
 }
@@ -46,7 +50,11 @@ function hook_markdown_render_feed($data, $conf)
             $value = stripNoMarkdownTag($value);
             continue;
         }
-        $value['description'] = process_markdown($value['description'], $conf->get('security.markdown_escape', true));
+        $value['description'] = process_markdown(
+            $value['description'],
+            $conf->get('security.markdown_escape', true),
+            $conf->get('security.allowed_protocols')
+        );
     }
 
     return $data;
@@ -71,7 +79,8 @@ function hook_markdown_render_daily($data, $conf)
             }
             $value2['formatedDescription'] = process_markdown(
                 $value2['formatedDescription'],
-                $conf->get('security.markdown_escape', true)
+                $conf->get('security.markdown_escape', true),
+                $conf->get('security.allowed_protocols')
             );
         }
     }
@@ -232,6 +241,25 @@ function reverse_space2nbsp($description)
 }
 
 /**
+ * Replace not whitelisted protocols with http:// in given description.
+ *
+ * @param string $description      input description text.
+ * @param array  $allowedProtocols list of allowed protocols.
+ *
+ * @return string $description without malicious link.
+ */
+function filter_protocols($description, $allowedProtocols)
+{
+    return preg_replace_callback(
+        '#]\((.*?)\)#is',
+        function ($match) use ($allowedProtocols) {
+            return ']('. whitelist_protocols($match[1], $allowedProtocols) .')';
+        },
+        $description
+    );
+}
+
+/**
  * Remove dangerous HTML tags (tags, iframe, etc.).
  * Doesn't affect <code> content (already escaped by Parsedown).
  *
@@ -275,7 +303,7 @@ function sanitize_html($description)
  *
  * @return string HTML processed $description.
  */
-function process_markdown($description, $escape = true)
+function process_markdown($description, $escape = true, $allowedProtocols = [])
 {
     $parsedown = new Parsedown();
 
@@ -283,6 +311,7 @@ function process_markdown($description, $escape = true)
     $processedDescription = reverse_nl2br($processedDescription);
     $processedDescription = reverse_space2nbsp($processedDescription);
     $processedDescription = reverse_text2clickable($processedDescription);
+    $processedDescription = filter_protocols($processedDescription, $allowedProtocols);
     $processedDescription = unescape($processedDescription);
     $processedDescription = $parsedown
         ->setMarkupEscaped($escape)

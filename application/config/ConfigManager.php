@@ -312,6 +312,7 @@ class ConfigManager
         $this->setEmpty('security.ban_duration', 1800);
         $this->setEmpty('security.session_protection_disabled', false);
         $this->setEmpty('security.open_shaarli', false);
+        $this->setEmpty('security.allowed_protocols', ['ftp', 'ftps', 'magnet']);
 
         $this->setEmpty('general.header_link', '?');
         $this->setEmpty('general.links_per_page', 20);
