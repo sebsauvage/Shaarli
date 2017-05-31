@@ -993,6 +993,14 @@ form[name="linkform"].page-form {
 }
 
 /**
+ * EDIT LINK
+ */
+#editlinkform .created-date {
+    color: #767676;
+    margin-bottom: 10px;
+}
+
+/**
  * LOGIN
  */
 #login-form .remember-me {
