@@ -1431,7 +1431,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
                 'url' => $url,
                 'description' => $description,
                 'tags' => $tags,
-                'private' => $private
+                'private' => $private,
             );
         } else {
             $link['linkdate'] = $link['created']->format(LinkDB::LINK_DATE_FORMAT);

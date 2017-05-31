@@ -8,11 +8,15 @@
   <div id="editlinkform" class="pure-g">
     <div class="pure-u-lg-1-5 pure-u-1-24"></div>
     <form method="post" name="linkform" class="page-form pure-u-lg-3-5 pure-u-22-24 page-form page-form-light">
-      <h2 class="window-title">{'Shaare'|t}</h2>
+      <h2 class="window-title">
+        {if="!$link_is_new"}{'Edit'|t}{/if}
+        {'Shaare'|t}
+      </h2>
       <input type="hidden" name="lf_linkdate" value="{$link.linkdate}">
       {if="isset($link.id)"}
         <input type="hidden" name="lf_id" value="{$link.id}">
       {/if}
+      {if="!$link_is_new"}<div class="created-date">{'Created:'|t} {$link.created|format_date}</div>{/if}
       <div>
         <label for="lf_url">{'URL'|t}</label>
       </div>
@@ -55,7 +59,8 @@
 
 
       <div class="submit-buttons center">
-        <input type="submit" value="{'Save'|t}" name="save_edit" class="" id="button-save-edit">
+        <input type="submit" name="save_edit" class="" id="button-save-edit"
+               value="{if="$link_is_new"}{'Save'|t}{else}{'Apply Changes'|t}{/if}">
         {if="!$link_is_new"}
         <a href="?delete_link&amp;lf_linkdate={$link.id}&amp;token={$token}"
            title="" name="delete_link" class="button button-red confirm-delete">
