@@ -97,30 +97,21 @@
 
 <div id="content">
   <div id="search" class="subheader-form">
-    <div class="pure-g">
-      <div class="pure-u-1 pure-u-lg-1-2">
-        <form method="GET" class="searchform" name="searchform">
-          <input type="text" tabindex="1" id="searchform_value" name="searchterm" placeholder="{'Search text'|t}"
-                 {if="!empty($search_term)"}
-                 value="{$search_term}"
-                 {/if}
-          >
-          <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
-        </form>
-      </div>
-      <div class="pure-u-1 pure-u-lg-1-2">
-        <form method="GET" class="tagfilter" name="tagfilter">
-          <input type="text" tabindex="2" name="searchtags" id="tagfilter_value" placeholder="{'Filter by tag'|t}"
-                 {if="!empty($search_tags)"}
-                 value="{$search_tags}"
-                 {/if}
-          autocomplete="off" data-multiple data-autofirst data-minChars="1"
-          data-list="{loop="$tags"}{$key}, {/loop}"
-          >
-          <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
-        </form>
-      </div>
-    </div>
+    <form method="GET" class="pure-form searchform" name="searchform">
+      <input type="text" tabindex="1" id="searchform_value" name="searchterm" placeholder="{'Search text'|t}"
+             {if="!empty($search_term)"}
+             value="{$search_term}"
+             {/if}
+      >
+      <input type="text" tabindex="2" name="searchtags" id="tagfilter_value" placeholder="{'Filter by tag'|t}"
+             {if="!empty($search_tags)"}
+             value="{$search_tags}"
+             {/if}
+      autocomplete="off" data-multiple data-autofirst data-minChars="1"
+      data-list="{loop="$tags"}{$key}, {/loop}"
+      >
+      <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+    </form>
   </div>
   <div id="actions" class="subheader-form">
     <div class="pure-g">

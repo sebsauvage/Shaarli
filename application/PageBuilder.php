@@ -78,6 +78,7 @@ class PageBuilder
         $this->tpl->assign('version', shaarli_version);
         $this->tpl->assign('scripturl', index_url($_SERVER));
         $this->tpl->assign('privateonly', !empty($_SESSION['privateonly'])); // Show only private links?
+        $this->tpl->assign('untaggedonly', !empty($_SESSION['untaggedonly']));
         $this->tpl->assign('pagetitle', $this->conf->get('general.title', 'Shaarli'));
         if ($this->conf->exists('general.header_link')) {
             $this->tpl->assign('titleLink', $this->conf->get('general.header_link'));

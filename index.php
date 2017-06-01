@@ -287,6 +287,7 @@ function logout() {
         unset($_SESSION['ip']);
         unset($_SESSION['username']);
         unset($_SESSION['privateonly']);
+        unset($_SESSION['untaggedonly']);
     }
     setcookie('shaarli_staySignedIn', FALSE, 0, WEB_PATH);
 }
@@ -1017,6 +1018,19 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
         exit;
     }
 
+    // -------- User wants to see only untagged links (toggle)
+    if (isset($_GET['untaggedonly'])) {
+        $_SESSION['untaggedonly'] = !$_SESSION['untaggedonly'];
+
+        if (! empty($_SERVER['HTTP_REFERER'])) {
+            $location = generateLocation($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST'], array('untaggedonly'));
+        } else {
+            $location = '?';
+        }
+        header('Location: '. $location);
+        exit;
+    }
+
     // -------- Handle other actions allowed for non-logged in users:
     if (!isLoggedIn())
     {
@@ -1651,7 +1665,7 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
             'searchtags' => $searchtags,
             'searchterm' => $searchterm,
         ];
-        $linksToDisplay = $LINKSDB->filterSearch($request, false, $visibility);
+        $linksToDisplay = $LINKSDB->filterSearch($request, false, $visibility, !empty($_SESSION['untaggedonly']));
     }
 
     // ---- Handle paging.
