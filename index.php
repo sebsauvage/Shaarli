@@ -805,6 +805,9 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
 
         $tagList = array();
         foreach($tags as $key => $value) {
+            if (in_array($key, $filteringTags)) {
+                continue;
+            }
             // Tag font size scaling:
             //   default 15 and 30 logarithm bases affect scaling,
             //   22 and 6 are arbitrary font sizes for max and min sizes.
@@ -829,12 +832,17 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
         exit;
     }
 
-    // -------- Tag cloud
+    // -------- Tag list
     if ($targetPage == Router::$PAGE_TAGLIST)
     {
         $visibility = ! empty($_SESSION['privateonly']) ? 'private' : 'all';
         $filteringTags = isset($_GET['searchtags']) ? explode(' ', $_GET['searchtags']) : [];
         $tags = $LINKSDB->linksCountPerTag($filteringTags, $visibility);
+        foreach ($filteringTags as $tag) {
+            if (array_key_exists($tag, $tags)) {
+                unset($tags[$tag]);
+            }
+        }
 
         if (! empty($_GET['sort']) && $_GET['sort'] === 'alpha') {
             alphabetical_sort($tags, false, true);
