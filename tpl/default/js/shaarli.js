@@ -418,7 +418,8 @@ window.onload = function () {
      *
      * TODO: support error code in the backend for AJAX requests
      */
-    var existingTags = document.querySelector('input[name="taglist"]').value.split(' ');
+    var tagList = document.querySelector('input[name="taglist"]');
+    var existingTags = tagList ? tagList.value.split(' ') : [];
     var awesomepletes = [];
 
     // Display/Hide rename form
@@ -515,7 +516,7 @@ window.onload = function () {
         });
     });
 
-    updateAwesompleteList('.rename-tag-input', document.querySelector('input[name="taglist"]').value.split(' '), awesomepletes);
+    updateAwesompleteList('.rename-tag-input', existingTags, awesomepletes);
 };
 
 /**
