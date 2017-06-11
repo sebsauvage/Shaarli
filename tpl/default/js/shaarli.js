@@ -606,7 +606,7 @@ function htmlEntities(str)
 
 function activateFirefoxSocial(node) {
     var loc = location.href;
-    var baseURL = loc.substring(0, loc.lastIndexOf("/"));
+    var baseURL = loc.substring(0, loc.lastIndexOf("/") + 1);
 
     // Keeping the data separated (ie. not in the DOM) so that it's maintainable and diffable.
     var data = {
@@ -619,7 +619,7 @@ function activateFirefoxSocial(node) {
         icon32URL: baseURL + "/images/favicon.ico",
         icon64URL: baseURL + "/images/favicon.ico",
 
-        shareURL: baseURL + "{noparse}?post=%{url}&title=%{title}&description=%{text}&source=firefoxsocialapi{/noparse}",
+        shareURL: baseURL + "?post=%{url}&title=%{title}&description=%{text}&source=firefoxsocialapi",
         homepageURL: baseURL
     };
     node.setAttribute("data-service", JSON.stringify(data));
