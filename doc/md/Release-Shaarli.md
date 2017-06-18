@@ -12,7 +12,8 @@ This guide assumes that you have:
 - maintainer permissions on the main Shaarli repository, to:
     - push the signed tag
     - create a new release
-- [Composer](https://getcomposer.org/) and [Pandoc](http://pandoc.org/) need to be installed
+- [Composer](https://getcomposer.org/) needs to be installed
+- The [venv](https://docs.python.org/3/library/venv.html) Python 3 module needs to be installed for HTML documentation generation.
 
 ## GitHub release draft and `CHANGELOG.md`
 See http://keepachangelog.com/en/0.3.0/ for changelog formatting.
