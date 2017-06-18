@@ -29,10 +29,7 @@ pages:
     - REST API: REST-API.md
 - How To:
     - Backup, restore, import and export: Backup,-restore,-import-and-export.md
-    - Copy an existing installation over SSH and serve it locally: Copy-an-existing-installation-over-SSH-and-serve-it-locally.md
-    - Create and serve multiple Shaarlis (farm): Create-and-serve-multiple-Shaarlis-(farm).md
-    - Download CSS styles from an OPML list: Download-CSS-styles-from-an-OPML-list.md
-    - Datastore hacks: Datastore-hacks.md
+    - Various hacks: Various-hacks.md
 - Troubleshooting: Troubleshooting.md
 - Development:
     - Development guidelines: Development-guidelines.md
