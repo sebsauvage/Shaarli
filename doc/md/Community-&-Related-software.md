@@ -34,7 +34,7 @@ _TODO: contact repos owners to see if they'd like to standardize their work with
 
 
 ### Themes
-See [[Theming]] for the list of community-contributed themes, and an installation guide.
+See [Theming](Theming) for the list of community-contributed themes, and an installation guide.
 
 ### Server apps
 - [shaarchiver](https://github.com/nodiscc/shaarchiver) - Archive your Shaarli bookmarks and their content

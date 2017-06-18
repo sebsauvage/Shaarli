@@ -20,4 +20,4 @@ To search for links that are not tagged, enter `""` in the tag search field.
 
 ## Filtering RSS feeds/Picture wall
 
-RSS feeds can also be restricted to only return items matching a text/tag search: see [[RSS feeds]].
+RSS feeds can also be restricted to only return items matching a text/tag search: see [RSS feeds](RSS feeds).

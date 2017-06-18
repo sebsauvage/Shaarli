@@ -132,25 +132,7 @@
     </url>
         
     <url>
-     <loc>/Copy-an-existing-installation-over-SSH-and-serve-it-locally/</loc>
-     <lastmod>2017-06-18</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>/Create-and-serve-multiple-Shaarlis-(farm)/</loc>
-     <lastmod>2017-06-18</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>/Download-CSS-styles-from-an-OPML-list/</loc>
-     <lastmod>2017-06-18</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>/Datastore-hacks/</loc>
+     <loc>/Various-hacks/</loc>
      <lastmod>2017-06-18</lastmod>
      <changefreq>daily</changefreq>
     </url>

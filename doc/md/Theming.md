@@ -15,7 +15,7 @@ This file allows overriding rules defined in the template CSS files (only add ch
 
 **Note**: Do not edit `tpl/default/css/shaarli.css`! Your changes would be overridden when updating Shaarli.
 
-See also [[Download CSS styles from an OPML list]]
+See also [Download CSS styles from an OPML list](Download CSS styles from an OPML list)
 
 ## Themes
 
@@ -77,7 +77,7 @@ Get config written:
 - fill the install form
 - log in to Shaarli
 
-Edit Shaarli's [[configuration|Shaarli configuration]]:
+Edit Shaarli's [configuration|Shaarli configuration](configuration|Shaarli configuration):
 ```bash
 # the file should be owned by Apache, thus not writeable => sudo
 $ sudo sed -i s=tpl=tpl/albinomouse-template=g shaarli/data/config.php

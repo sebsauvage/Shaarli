@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Copy an existing installation over SSH and serve it locally - Shaarli Documentation</title>
+  <title>Various hacks - Shaarli Documentation</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -18,9 +18,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Copy an existing installation over SSH and serve it locally";
-    var mkdocs_page_input_path = "Copy-an-existing-installation-over-SSH-and-serve-it-locally.md";
-    var mkdocs_page_url = "/Copy-an-existing-installation-over-SSH-and-serve-it-locally/";
+    var mkdocs_page_name = "Various hacks";
+    var mkdocs_page_input_path = "Various-hacks.md";
+    var mkdocs_page_url = "/Various-hacks/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js"></script>
@@ -152,22 +152,19 @@
                 </li>
                 <li class=" current">
                     
-    <a class="current" href="./">Copy an existing installation over SSH and serve it locally</a>
+    <a class="current" href="./">Various hacks</a>
     <ul class="subnav">
             
+    <li class="toctree-l3"><a href="#decode-datastore-content">Decode datastore content</a></li>
+    
+
+    <li class="toctree-l3"><a href="#changing-the-timestamp-for-a-shaare">Changing the timestamp for a shaare</a></li>
+    
+
+    <li class="toctree-l3"><a href="#see-also">See also</a></li>
+    
+
     </ul>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../Create-and-serve-multiple-Shaarlis-(farm)/">Create and serve multiple Shaarlis (farm)</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../Download-CSS-styles-from-an-OPML-list/">Download CSS styles from an OPML list</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../Datastore-hacks/">Datastore hacks</a>
                 </li>
     </ul>
 	    </li>
@@ -277,10 +274,10 @@
         
       
     
-    <li>Copy an existing installation over SSH and serve it locally</li>
+    <li>Various hacks</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/shaarli/Shaarli/edit/master/docs/Copy-an-existing-installation-over-SSH-and-serve-it-locally.md"
+        <a href="https://github.com/shaarli/Shaarli/edit/master/docs/Various-hacks.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -290,68 +287,35 @@
           <div role="main">
             <div class="section">
               
-                <p>Example bash script:</p>
-<pre><code class="bash">#!/bin/bash
-#Description: Copy a Shaarli installation over SSH/SCP, serve it locally with php-cli
-#Will create a local-shaarli/ directory when you run it, backup your Shaarli there, and serve it locally.
-#Will NOT download linked pages. It's just a directly usable backup/copy/mirror of your Shaarli
-#Requires: ssh, scp and a working SSH access to the server where your Shaarli is installed
-#Usage: ./local-shaarli.sh
-#Author: nodiscc (nodiscc@gmail.com)
-#License: MIT (http://opensource.org/licenses/MIT)
-set -o errexit
-set -o nounset
-
-##### CONFIG #################
-#The port used by php's local server
-php_local_port=7431
-
-#Name of the SSH server and path where Shaarli is installed
-#TODO: pass these as command-line arguments
-remotehost=&quot;my.ssh.server&quot;
-remote_shaarli_dir=&quot;/var/www/shaarli&quot;
-
-
-###### FUNCTIONS #############
-_main() {
-    _CBSyncShaarli
-    _CBServeShaarli
-}
-
-_CBSyncShaarli() {
-    remote_temp_dir=$(ssh $remotehost mktemp -d)
-    remote_ssh_user=$(ssh $remotehost whoami)
-    ssh -t &quot;$remotehost&quot; sudo cp -r &quot;$remote_shaarli_dir&quot; &quot;$remote_temp_dir&quot;
-    ssh -t &quot;$remotehost&quot; sudo chown -R &quot;$remote_ssh_user&quot;:&quot;$remote_ssh_user&quot; &quot;$remote_temp_dir&quot;
-    scp -rq &quot;$remotehost&quot;:&quot;$remote_temp_dir&quot; local-shaarli
-    ssh &quot;$remotehost&quot; rm -r &quot;$remote_temp_dir&quot;
-}
-
-_CBServeShaarli() {
-    #TODO: allow serving a previously downloaded Shaarli
-    #TODO: ask before overwriting local copy, if it exists
-    cd local-shaarli/
-    php -S localhost:${php_local_port}
-    echo &quot;Please go to http://localhost:${php_local_port}&quot;
-}
-
-
-##### MAIN #################
-
-_main
+                <h3 id="decode-datastore-content">Decode datastore content</h3>
+<p>To display the array representing the data saved in <code>data/datastore.php</code>, use the following snippet:</p>
+<pre><code class="php">$data = &quot;tZNdb9MwFIb... &lt;Commented content inside datastore.php&gt;&quot;;
+$out = unserialize(gzinflate(base64_decode($data)));
+echo &quot;&lt;pre&gt;&quot;; // Pretty printing is love, pretty printing is life
+print_r($out);
+echo &quot;&lt;/pre&gt;&quot;;
+exit;
 </code></pre>
 
-<p>This outputs:</p>
-<pre><code class="bash">$ ./local-shaarli.sh
-PHP 5.6.0RC4 Development Server started at Mon Sep  1 21:56:19 2014
-Listening on http://localhost:7431
-Document root is /home/user/local-shaarli/shaarli
-Press Ctrl-C to quit.
-
-[Mon Sep  1 21:56:27 2014] ::1:57868 [200]: /
-[Mon Sep  1 21:56:27 2014] ::1:57869 [200]: /index.html
-[Mon Sep  1 21:56:37 2014] ::1:57881 [200]: /...
+<p>This will output the internal representation of the datastore, "unobfuscated" (if this can really be considered obfuscation).</p>
+<p>Alternatively, you can transform to JSON format (and pretty-print if you have <code>jq</code> installed):</p>
+<pre><code>php -r 'print(json_encode(unserialize(gzinflate(base64_decode(preg_replace(&quot;!.*/\* (.+) \*/.*!&quot;, &quot;$1&quot;, file_get_contents(&quot;data/datastore.php&quot;)))))));' | jq .
 </code></pre>
+
+<h3 id="changing-the-timestamp-for-a-shaare">Changing the timestamp for a shaare</h3>
+<ul>
+<li>Look for <code>&lt;input type="hidden" name="lf_linkdate" value="{$link.linkdate}"&gt;</code> in <code>tpl/editlink.tpl</code> (line 14)</li>
+<li>Replace <code>type="hidden"</code> with <code>type="text"</code> from this line</li>
+<li>A new date/time field becomes available in the edit/new link dialog.</li>
+<li>You can set the timestamp manually by entering it in the format <code>YYYMMDD_HHMMS</code>.</li>
+</ul>
+<h3 id="see-also">See also</h3>
+<ul>
+<li><a href="https://gist.github.com/nodiscc/8b0194921f059d7b9ad89a581ecd482c">Add a new custom field to shaares (example patch)</a></li>
+<li><a href="https://gist.github.com/nodiscc/dede231c92cab22c3ad2cc24d5035012">Download CSS styles for shaarlis listed in an opml file</a></li>
+<li><a href="https://gist.github.com/nodiscc/ed161c66e5b028b5299b0a3733d01c77">Copy an existing Shaarli installation over SSH, and serve it locally</a></li>
+<li><a href="https://gist.github.com/nodiscc/52e711cda3bc47717c16065231cf6b20">Create multiple Shaarli instances, generate an HTML index of them</a></li>
+</ul>
               
             </div>
           </div>
@@ -359,7 +323,7 @@ Press Ctrl-C to quit.
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../Create-and-serve-multiple-Shaarlis-(farm)/" class="btn btn-neutral float-right" title="Create and serve multiple Shaarlis (farm)">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../Troubleshooting/" class="btn btn-neutral float-right" title="Troubleshooting">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../Backup,-restore,-import-and-export/" class="btn btn-neutral" title="Backup, restore, import and export"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -393,7 +357,7 @@ Press Ctrl-C to quit.
         <span><a href="../Backup,-restore,-import-and-export/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../Create-and-serve-multiple-Shaarlis-(farm)/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../Troubleshooting/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
