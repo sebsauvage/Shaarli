@@ -198,12 +198,6 @@ doxygen: clean
 #  - convert GitHub-flavoured relative links to standard Markdown
 #  - generate html documentation with mkdocs
 htmlpages:
-	# Rename local [[links]] to regular links.
-	@for file in `find doc/md/ -maxdepth 1 -name "*.md"`; do \
-		sed -e "s/\[\[\(.*\)\]\]/[\1](\1)/g" "$$file" > doc/md/tmp.md; \
-		mv doc/md/tmp.md $$file; \
-	done
-
 	python3 -m venv venv/
 	bash -c 'source venv/bin/activate; \
 	pip install mkdocs; \
