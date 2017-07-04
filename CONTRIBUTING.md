@@ -18,7 +18,7 @@ Check the [milestones](https://github.com/shaarli/Shaarli/milestones) to see wha
  
 ### Documentation
 
-The [official documentation](http://shaarli.readthedocs.io/en/rtfd/) https://github.com/shaarli/Shaarli/wiki) is generated from [Markdown](https://daringfireball.net/projects/markdown/syntax) documents in the `doc/md/` directory. HTML documentation is generated using [Mkdocs](http://www.mkdocs.org/). [Read the Docs](https://readthedocs.org/) provides hosting for the online documentation. 
+The [official documentation](http://shaarli.readthedocs.io/en/rtfd/) is generated from [Markdown](https://daringfireball.net/projects/markdown/syntax) documents in the `doc/md/` directory. HTML documentation is generated using [Mkdocs](http://www.mkdocs.org/). [Read the Docs](https://readthedocs.org/) provides hosting for the online documentation. 
 
 To edit the documentation, please edit the appropriate `doc/md/*.md` files (and optionally `make htmlpages` to preview changes to HTML files). Then submit your changes as a Pull Request. Have a look at the MkDocs documentation and configuration file `mkdocs.yml` if you need to add/remove/rename/reorder pages.
 
