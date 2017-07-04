@@ -52,8 +52,8 @@ $ cd /path/to/shaarli
 $ git fetch upstream
 $ git checkout upstream/master -b v0.5.0
 
-# rebuild the documentation from the wiki
-$ make htmldoc
+# rebuild the HTML documentation from Markdown
+$ make htmlpages
 
 # commit the changes
 $ git add doc
