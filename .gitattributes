@@ -33,5 +33,6 @@ doc/**/*.md     export-ignore
 docker/         export-ignore
 Doxyfile        export-ignore
 Makefile        export-ignore
+mkdocs.yml      export-ignore
 phpunit.xml     export-ignore
 tests/          export-ignore
