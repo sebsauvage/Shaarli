@@ -337,7 +337,8 @@ releases</a>.</p>
 - maintainer permissions on the main Shaarli repository, to:
     - push the signed tag
     - create a new release
-- <a href="https://getcomposer.org/">Composer</a> and <a href="http://pandoc.org/">Pandoc</a> need to be installed</p>
+- <a href="https://getcomposer.org/">Composer</a> needs to be installed
+- The <a href="https://docs.python.org/3/library/venv.html">venv</a> Python 3 module needs to be installed for HTML documentation generation.</p>
 <h2 id="github-release-draft-and-changelogmd">GitHub release draft and <code>CHANGELOG.md</code></h2>
 <p>See http://keepachangelog.com/en/0.3.0/ for changelog formatting.</p>
 <h3 id="github-release-draft">GitHub release draft</h3>
@@ -368,8 +369,8 @@ TBA
 $ git fetch upstream
 $ git checkout upstream/master -b v0.5.0
 
-# rebuild the documentation from the wiki
-$ make htmldoc
+# rebuild the HTML documentation from Markdown
+$ make htmlpages
 
 # commit the changes
 $ git add doc
