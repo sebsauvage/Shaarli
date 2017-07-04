@@ -192,13 +192,6 @@ doxygen: clean
 	@rm -rf doxygen
 	@( cat Doxyfile ; echo "PROJECT_NUMBER=`git describe`" ) | doxygen -
 
-### update the local copy of the documentation
-doc: clean
-	@rm -rf doc/md/
-	@git clone https://github.com/shaarli/Shaarli.wiki.git doc/md
-	mv doc/md/Home.md doc/md/index.md
-	@rm -rf doc/md/.git
-
 ### Convert local markdown documentation to HTML
 #
 # For all pages:
@@ -218,4 +211,5 @@ htmlpages:
 	find doc/html/ -type f -exec chmod a-x '{}' \;
 	rm -r venv
 
-doc_html: authors doc htmlpages
+doc_html: authors htmlpages
+
