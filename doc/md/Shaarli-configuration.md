@@ -11,6 +11,7 @@ Once your Shaarli instance is installed, the file `data/config.json.php` is gene
 ## File and directory permissions
 
 The server process running Shaarli must have:
+
 - `read` access to the following resources:
     - PHP scripts: `index.php`, `application/*.php`, `plugins/*.php`
     - 3rd party PHP and Javascript libraries: `inc/*.php`, `inc/*.js`
@@ -25,6 +26,7 @@ The server process running Shaarli must have:
     - `tmp` - RainTPL page cache
 
 On a Linux distribution:
+
 - the web server user will likely be `www` or `http` (for Apache2)
 - it will be a member of a group of the same name: `www:www`, `http:http`
 - to give it access to Shaarli, either:
