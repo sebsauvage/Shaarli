@@ -7,7 +7,6 @@ repository.
 ### Available image tags
 - `latest`: master branch (tarball release)
 - `stable`: stable branch (tarball release)
-- `dev`: master branch (Git clone)
 
 All images rely on:
 - [Debian 8 Jessie](https://hub.docker.com/_/debian/)
