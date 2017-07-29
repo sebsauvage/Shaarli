@@ -134,19 +134,19 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../Docker-101/">Docker 101</a>
+    <a class="" href="../docker/docker-101/">Docker 101</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="../Shaarli-images/">Shaarli images</a>
+    <a class="" href="../docker/shaarli-images/">Shaarli images</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="../Reverse-proxy-configuration/">Reverse proxy configuration</a>
+    <a class="" href="../docker/reverse-proxy-configuration/">Reverse proxy configuration</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="../Docker-resources/">Docker resources</a>
+    <a class="" href="../docker/resources/">Docker resources</a>
                 </li>
     </ul>
 	    </li>
@@ -323,26 +323,38 @@
 <em> its values override those defined in <code>index.php</code>
 </em> it is wrap in a PHP comment to prevent anyone accessing it, regardless of server configuration</p>
 <h2 id="file-and-directory-permissions">File and directory permissions</h2>
-<p>The server process running Shaarli must have:
-- <code>read</code> access to the following resources:
-    - PHP scripts: <code>index.php</code>, <code>application/*.php</code>, <code>plugins/*.php</code>
-    - 3rd party PHP and Javascript libraries: <code>inc/*.php</code>, <code>inc/*.js</code>
-    - static assets:
-        - CSS stylesheets: <code>inc/*.css</code>
-        - <code>images/*</code>
-    - RainTPL templates: <code>tpl/*.html</code>
-- <code>read</code>, <code>write</code> and <code>execution</code> access to the following directories:
-    - <code>cache</code> - thumbnail cache
-    - <code>data</code> - link data store, configuration options
-    - <code>pagecache</code> - Atom/RSS feed cache
-    - <code>tmp</code> - RainTPL page cache</p>
-<p>On a Linux distribution:
-- the web server user will likely be <code>www</code> or <code>http</code> (for Apache2)
-- it will be a member of a group of the same name: <code>www:www</code>, <code>http:http</code>
-- to give it access to Shaarli, either:
-    - unzip Shaarli in the default web server location (usually <code>/var/www/</code>) and set the web server user as the owner
-    - put users in the same group as the web server, and set the appropriate access rights
-- if you have a domain / subdomain to serve Shaarli, <a href="../Server-configuration">configure the server</a> accordingly<a href="../.html"></a></p>
+<p>The server process running Shaarli must have:</p>
+<ul>
+<li><code>read</code> access to the following resources:<ul>
+<li>PHP scripts: <code>index.php</code>, <code>application/*.php</code>, <code>plugins/*.php</code></li>
+<li>3rd party PHP and Javascript libraries: <code>inc/*.php</code>, <code>inc/*.js</code></li>
+<li>static assets:<ul>
+<li>CSS stylesheets: <code>inc/*.css</code></li>
+<li><code>images/*</code></li>
+</ul>
+</li>
+<li>RainTPL templates: <code>tpl/*.html</code></li>
+</ul>
+</li>
+<li><code>read</code>, <code>write</code> and <code>execution</code> access to the following directories:<ul>
+<li><code>cache</code> - thumbnail cache</li>
+<li><code>data</code> - link data store, configuration options</li>
+<li><code>pagecache</code> - Atom/RSS feed cache</li>
+<li><code>tmp</code> - RainTPL page cache</li>
+</ul>
+</li>
+</ul>
+<p>On a Linux distribution:</p>
+<ul>
+<li>the web server user will likely be <code>www</code> or <code>http</code> (for Apache2)</li>
+<li>it will be a member of a group of the same name: <code>www:www</code>, <code>http:http</code></li>
+<li>to give it access to Shaarli, either:<ul>
+<li>unzip Shaarli in the default web server location (usually <code>/var/www/</code>) and set the web server user as the owner</li>
+<li>put users in the same group as the web server, and set the appropriate access rights</li>
+</ul>
+</li>
+<li>if you have a domain / subdomain to serve Shaarli, <a href="../Server-configuration">configure the server</a> accordingly<a href="../.html"></a></li>
+</ul>
 <h2 id="configuration">Configuration</h2>
 <p>In <code>data/config.json.php</code>.</p>
 <p>See also <a href="../Plugin-System.html">Plugin System</a>.</p>
