@@ -16,10 +16,10 @@ pages:
     - Shaarli configuration: Shaarli-configuration.md
     - Plugins: Plugins.md
 - Docker:
-    - Docker 101: Docker-101.md
-    - Shaarli images: Shaarli-images.md
-    - Reverse proxy configuration: Reverse-proxy-configuration.md
-    - Docker resources: Docker-resources.md
+    - Docker 101: docker/docker-101.md
+    - Shaarli images: docker/shaarli-images.md
+    - Reverse proxy configuration: docker/reverse-proxy-configuration.md
+    - Docker resources: docker/resources.md
 - Usage:
     - Features: Features.md
     - Bookmarklet: Bookmarklet.md
