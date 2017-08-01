@@ -155,7 +155,7 @@ release_archive: release_tar release_zip
 
 ### download 3rd-party PHP libraries
 composer_dependencies: clean
-	composer update --no-dev
+	composer install --no-dev --prefer-dist
 	find vendor/ -name ".git" -type d -exec rm -rf {} +
 
 ### generate a release tarball and include 3rd-party dependencies
