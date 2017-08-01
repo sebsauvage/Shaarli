@@ -28,6 +28,9 @@ phpmd.html
 # User plugin configuration
 plugins/*/config.php
 
+# HTML documentation
+doc/html/
+
 # 3rd party themes
 tpl/*
 !tpl/default
