@@ -1,5 +1,6 @@
 site_name: Shaarli Documentation
 repo_url: https://github.com/shaarli/Shaarli
+edit_uri: edit/master/doc/md
 site_description: The personal, minimalist, super-fast, database free, bookmarking service
 theme: readthedocs
 docs_dir: doc/md
