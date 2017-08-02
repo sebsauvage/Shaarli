@@ -1,4 +1,4 @@
-![Shaarli logo](doc/images/doc-logo.png)
+![Shaarli logo](doc/md/images/doc-logo.png)
 
 The personal, minimalist, super-fast, database free, bookmarking service.
 
