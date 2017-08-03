@@ -19,30 +19,21 @@
 
 <div id="search-linklist">
 
-  <div class="pure-g">
-    <div class="pure-u-1 pure-u-lg-1-2">
-      <form method="GET" class="searchform" name="searchform">
-        <input type="text" tabindex="1" name="searchterm" placeholder="{'Search text'|t}"
-               {if="!empty($search_term)"}
-               value="{$search_term}"
-               {/if}
-        >
-        <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
-      </form>
-    </div>
-    <div class="pure-u-1 pure-u-lg-1-2">
-      <form method="GET" class="tagfilter" name="tagfilter">
-        <input type="text" tabindex="2" name="searchtags" placeholder="{'Filter by tag'|t}"
-               {if="!empty($search_tags)"}
-               value="{$search_tags}"
-               {/if}
-        autocomplete="off" data-multiple data-autofirst data-minChars="1"
-        data-list="{loop="$tags"}{$key}, {/loop}"
-        >
-        <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
-      </form>
-    </div>
-  </div>
+  <form method="GET" class="pure-form searchform" name="searchform">
+    <input type="text" tabindex="1" name="searchterm" class="searchterm" placeholder="{'Search text'|t}"
+           {if="!empty($search_term)"}
+           value="{$search_term}"
+           {/if}
+    >
+    <input type="text" tabindex="2" name="searchtags" class="searchtags" placeholder="{'Filter by tag'|t}"
+           {if="!empty($search_tags)"}
+           value="{$search_tags}"
+           {/if}
+    autocomplete="off" data-multiple data-autofirst data-minChars="1"
+    data-list="{loop="$tags"}{$key}, {/loop}"
+    >
+    <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+  </form>
 </div>
 
 {loop="$plugins_header.fields_toolbar"}
@@ -91,7 +82,7 @@
         <div id="searchcriteria">{'Nothing found.'|t}</div>
       </div>
     </div>
-  {elseif="!empty($search_term) or $search_tags !== '' or !empty($visibility)"}
+  {elseif="!empty($search_term) or $search_tags !== '' or !empty($visibility) or $untaggedonly"}
     <div class="pure-g pure-alert pure-alert-success search-result">
       <div class="pure-u-2-24"></div>
       <div class="pure-u-20-24">
@@ -107,15 +98,16 @@
                 <a href="?removetag={function="urlencode($value)"}">{$value}<span class="remove"><i class="fa fa-times"></i></span></a>
               </span>
           {/loop}
-        {elseif="$search_tags === false"}
-          <span class="label label-tag" title="{'Remove tag'|t}">
-            <a href="?">{'untagged'|t}<span class="remove"><i class="fa fa-times"></i></span></a>
-          </span>
         {/if}
         {if="!empty($visibility)"}
           {'with status'|t}
           <span class="label label-private">
             {$visibility|t}
+          </span>
+        {/if}
+        {if="$untaggedonly"}
+          <span class="label label-private">
+            {'without any tag'|t}
           </span>
         {/if}
       </div>
