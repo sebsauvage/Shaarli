@@ -464,6 +464,39 @@ You use the community supported version of the original Shaarli project, by Seba
     }
 
     /**
+     * Rename or delete a tag across all links.
+     *
+     * @param string $from Tag to rename
+     * @param string $to   New tag. If none is provided, the from tag will be deleted
+     *
+     * @return array|bool List of altered links or false on error
+     */
+    public function renameTag($from, $to)
+    {
+        if (empty($from)) {
+            return false;
+        }
+        $delete = empty($to);
+        // True for case-sensitive tag search.
+        $linksToAlter = $this->filterSearch(['searchtags' => $from], true);
+        foreach($linksToAlter as $key => &$value)
+        {
+            $tags = preg_split('/\s+/', trim($value['tags']));
+            if (($pos = array_search($from, $tags)) !== false) {
+                if ($delete) {
+                    unset($tags[$pos]); // Remove tag.
+                } else {
+                    $tags[$pos] = trim($to);
+                }
+                $value['tags'] = trim(implode(' ', array_unique($tags)));
+                $this[$value['id']] = $value;
+            }
+        }
+
+        return $linksToAlter;
+    }
+
+    /**
      * Returns the list of days containing articles (oldest first)
      * Output: An array containing days (in format YYYYMMDD).
      */

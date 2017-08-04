@@ -487,4 +487,59 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($linkIds[$cpt++], $key);
         }
     }
+
+    /**
+     * Test rename tag with a valid value present in multiple links
+     */
+    public function testRenameTagMultiple()
+    {
+        self::$refDB->write(self::$testDatastore);
+        $linkDB = new LinkDB(self::$testDatastore, true, false);
+
+        $res = $linkDB->renameTag('cartoon', 'Taz');
+        $this->assertEquals(3, count($res));
+        $this->assertContains(' Taz ', $linkDB[4]['tags']);
+        $this->assertContains(' Taz ', $linkDB[1]['tags']);
+        $this->assertContains(' Taz ', $linkDB[0]['tags']);
+    }
+
+    /**
+     * Test rename tag with a valid value
+     */
+    public function testRenameTagCaseSensitive()
+    {
+        self::$refDB->write(self::$testDatastore);
+        $linkDB = new LinkDB(self::$testDatastore, true, false, '');
+
+        $res = $linkDB->renameTag('sTuff', 'Taz');
+        $this->assertEquals(1, count($res));
+        $this->assertEquals('Taz', $linkDB[41]['tags']);
+    }
+
+    /**
+     * Test rename tag with invalid values
+     */
+    public function testRenameTagInvalid()
+    {
+        $linkDB = new LinkDB(self::$testDatastore, false, false);
+
+        $this->assertFalse($linkDB->renameTag('', 'test'));
+        $this->assertFalse($linkDB->renameTag('', ''));
+        // tag non existent
+        $this->assertEquals([], $linkDB->renameTag('test', ''));
+        $this->assertEquals([], $linkDB->renameTag('test', 'retest'));
+    }
+
+    /**
+     * Test delete tag with a valid value
+     */
+    public function testDeleteTag()
+    {
+        self::$refDB->write(self::$testDatastore);
+        $linkDB = new LinkDB(self::$testDatastore, true, false);
+
+        $res = $linkDB->renameTag('cartoon', null);
+        $this->assertEquals(3, count($res));
+        $this->assertNotContains('cartoon', $linkDB[4]['tags']);
+    }
 }

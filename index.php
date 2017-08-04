@@ -685,6 +685,7 @@ function showLinkList($PAGE, $LINKSDB, $conf, $pluginManager) {
  * @param ConfigManager $conf          Configuration Manager instance.
  * @param PluginManager $pluginManager Plugin Manager instance,
  * @param LinkDB        $LINKSDB
+ * @param History       $history       instance
  */
 function renderPage($conf, $pluginManager, $LINKSDB, $history)
 {
@@ -1176,39 +1177,16 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
             die('Wrong token.');
         }
 
-        if (isset($_POST['deletetag']) && !empty($_POST['fromtag'])) {
-            $delete = true;
-        } else if (isset($_POST['renametag']) && !empty($_POST['fromtag']) && !empty($_POST['totag'])) {
-            $delete = false;
-        } else {
-            $PAGE->renderPage('changetag');
-            exit;
-        }
-
-        $count = 0;
-        $needle = trim($_POST['fromtag']);
-        // True for case-sensitive tag search.
-        $linksToAlter = $LINKSDB->filterSearch(array('searchtags' => $needle), true);
-        foreach($linksToAlter as $key => $value)
-        {
-            $tags = explode(' ',trim($value['tags']));
-            if (($pos = array_search($needle,$tags)) !== false) {
-                if ($delete) {
-                    unset($tags[$pos]); // Remove tag.
-                } else {
-                    $tags[$pos] = trim($_POST['totag']);
-                }
-                $value['tags'] = trim(implode(' ', array_unique($tags)));
-                $LINKSDB[$key]=$value;
-                $history->updateLink($LINKSDB[$key]);
-                ++$count;
-            }
-        }
+        $alteredLinks = $LINKSDB->renameTag(escape($_POST['fromtag']), escape($_POST['totag']));
         $LINKSDB->save($conf->get('resource.page_cache'));
+        foreach ($alteredLinks as $link) {
+            $history->updateLink($link);
+        }
+        $delete = empty($_POST['totag']);
         $redirect = $delete ? 'do=changetag' : 'searchtags='. urlencode(escape($_POST['totag']));
         $alert = $delete
-            ? sprintf(t('The tag was removed from %d links.'), $count)
-            : sprintf(t('The tag was renamed in %d links.'), $count);
+            ? sprintf(t('The tag was removed from %d links.'), count($alteredLinks))
+            : sprintf(t('The tag was renamed in %d links.'), count($alteredLinks));
         echo '<script>alert("'. $alert .'");document.location=\'?'. $redirect .'\';</script>';
         exit;
     }
@@ -2237,6 +2215,12 @@ if (!isset($_SESSION['LINKS_PER_PAGE'])) {
     $_SESSION['LINKS_PER_PAGE'] = $conf->get('general.links_per_page', 20);
 }
 
+try {
+    $history = new History($conf->get('resource.history'));
+} catch(Exception $e) {
+    die($e->getMessage());
+}
+
 $linkDb = new LinkDB(
     $conf->get('resource.datastore'),
     isLoggedIn(),
@@ -2244,12 +2228,6 @@ $linkDb = new LinkDB(
     $conf->get('redirector.url'),
     $conf->get('redirector.encode_url')
 );
-
-try {
-    $history = new History($conf->get('resource.history'));
-} catch(Exception $e) {
-    die($e->getMessage());
-}
 
 $container = new \Slim\Container();
 $container['conf'] = $conf;
