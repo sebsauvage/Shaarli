@@ -686,6 +686,7 @@ function showLinkList($PAGE, $LINKSDB, $conf, $pluginManager) {
  * @param ConfigManager $conf          Configuration Manager instance.
  * @param PluginManager $pluginManager Plugin Manager instance,
  * @param LinkDB        $LINKSDB
+ * @param History       $history       instance
  */
 function renderPage($conf, $pluginManager, $LINKSDB, $history)
 {
@@ -1198,41 +1199,18 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
             die('Wrong token.');
         }
 
-        // Delete a tag:
-        if (isset($_POST['deletetag']) && !empty($_POST['fromtag'])) {
-            $needle = trim($_POST['fromtag']);
-            // True for case-sensitive tag search.
-            $linksToAlter = $LINKSDB->filterSearch(array('searchtags' => $needle), true);
-            foreach($linksToAlter as $key=>$value)
-            {
-                $tags = explode(' ',trim($value['tags']));
-                unset($tags[array_search($needle,$tags)]); // Remove tag.
-                $value['tags']=trim(implode(' ',$tags));
-                $LINKSDB[$key]=$value;
-                $history->updateLink($LINKSDB[$key]);
-            }
-            $LINKSDB->save($conf->get('resource.page_cache'));
-            echo '<script>alert("Tag was removed from '.count($linksToAlter).' links.");document.location=\'?do=changetag\';</script>';
-            exit;
+        $alteredLinks = $LINKSDB->renameTag(escape($_POST['fromtag']), escape($_POST['totag']));
+        $LINKSDB->save($conf->get('resource.page_cache'));
+        foreach ($alteredLinks as $link) {
+            $history->updateLink($link);
         }
-
-        // Rename a tag:
-        if (isset($_POST['renametag']) && !empty($_POST['fromtag']) && !empty($_POST['totag'])) {
-            $needle = trim($_POST['fromtag']);
-            // True for case-sensitive tag search.
-            $linksToAlter = $LINKSDB->filterSearch(array('searchtags' => $needle), true);
-            foreach($linksToAlter as $key=>$value) {
-                $tags = preg_split('/\s+/', trim($value['tags']));
-                // Replace tags value.
-                $tags[array_search($needle, $tags)] = trim($_POST['totag']);
-                $value['tags'] = implode(' ', array_unique($tags));
-                $LINKSDB[$key] = $value;
-                $history->updateLink($LINKSDB[$key]);
-            }
-            $LINKSDB->save($conf->get('resource.page_cache')); // Save to disk.
-            echo '<script>alert("Tag was renamed in '.count($linksToAlter).' links.");document.location=\'?searchtags='.urlencode(escape($_POST['totag'])).'\';</script>';
-            exit;
-        }
+        $delete = empty($_POST['totag']);
+        $redirect = $delete ? 'do=changetag' : 'searchtags='. urlencode(escape($_POST['totag']));
+        $alert = $delete
+            ? sprintf(t('The tag was removed from %d links.'), count($alteredLinks))
+            : sprintf(t('The tag was renamed in %d links.'), count($alteredLinks));
+        echo '<script>alert("'. $alert .'");document.location=\'?'. $redirect .'\';</script>';
+        exit;
     }
 
     // -------- User wants to add a link without using the bookmarklet: Show form.
@@ -2259,6 +2237,12 @@ if (!isset($_SESSION['LINKS_PER_PAGE'])) {
     $_SESSION['LINKS_PER_PAGE'] = $conf->get('general.links_per_page', 20);
 }
 
+try {
+    $history = new History($conf->get('resource.history'));
+} catch(Exception $e) {
+    die($e->getMessage());
+}
+
 $linkDb = new LinkDB(
     $conf->get('resource.datastore'),
     isLoggedIn(),
@@ -2266,12 +2250,6 @@ $linkDb = new LinkDB(
     $conf->get('redirector.url'),
     $conf->get('redirector.encode_url')
 );
-
-try {
-    $history = new History($conf->get('resource.history'));
-} catch(Exception $e) {
-    die($e->getMessage());
-}
 
 $container = new \Slim\Container();
 $container['conf'] = $conf;
