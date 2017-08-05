@@ -45,31 +45,12 @@ TBA
 
 
 ## Increment the version code, update docs, create and push a signed tag
-### Generate documentation
-```bash
-$ cd /path/to/shaarli
-
-# create a new branch
-$ git fetch upstream
-$ git checkout upstream/master -b v0.5.0
-
-# rebuild the HTML documentation from Markdown
-$ make htmlpages
-
-# commit the changes
-$ git add doc
-$ git commit -s -m "Generate documentation for v0.5.0"
-
-# push the commit on your GitHub fork
-$ git push origin v0.5.0
-```
-
 ### Create and merge a Pull Request
 This one is pretty straightforward ;-)
 
 ### Bump Shaarli version to v0.x branch
 
-```
+```bash
 $ git checkout master
 $ git fetch upstream
 $ git pull upstream master
