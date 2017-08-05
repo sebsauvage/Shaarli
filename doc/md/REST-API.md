@@ -1,6 +1,18 @@
-## Usage
+## Usage and Prerequisites
 
-See the [REST API documentation](http://shaarli.github.io/api-documentation/).
+See the [REST API documentation](http://shaarli.github.io/api-documentation/)
+for a list of available endpoints and parameters.
+
+Please ensure that your server meets the [requirements](Server-requirements)
+and is properly [configured](Server-configuration):
+
+- URL rewriting is enabled (see specific Apache and Nginx sections)
+- the server's timezone is properly defined
+- the server's clock is synchronized with
+  [NTP](https://en.wikipedia.org/wiki/Network_Time_Protocol)
+
+The host where the API client is invoked should also be synchronized with NTP,
+see [token expiration](#payload).
 
 ## Authentication
 
@@ -43,9 +55,11 @@ ewogICAgICAgICJ0eXAiOiAiSldUIiwKICAgICAgICAiYWxnIjogIkhTNTEyIgogICAgfQ==
 
 #### Payload
 
-**Validity duration**
+**Token expiration**
 
-To avoid infinite token validity, JWT tokens must include their creation date in UNIX timestamp format (timezone independant - UTC) under the key `iat` (issued at). This token will be accepted during 9 minutes.
+To avoid infinite token validity, JWT tokens must include their creation date
+in UNIX timestamp format (timezone independent - UTC) under the key `iat` (issued at).
+This token will be valid during **9 minutes**.
 
 ```json
 {

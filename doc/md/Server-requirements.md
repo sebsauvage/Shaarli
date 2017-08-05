@@ -18,6 +18,7 @@ Version | Status | Shaarli compatibility
 5.3 | EOL: 2014-08-14 | Yes (up to Shaarli 0.8.x)
 
 See also:
+
 - [Travis configuration](https://github.com/shaarli/Shaarli/blob/master/.travis.yml)
 
 ### Dependency management
