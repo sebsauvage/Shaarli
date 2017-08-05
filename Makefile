@@ -159,15 +159,18 @@ composer_dependencies: clean
 	find vendor/ -name ".git" -type d -exec rm -rf {} +
 
 ### generate a release tarball and include 3rd-party dependencies
-release_tar: composer_dependencies
+release_tar: composer_dependencies doc_html
 	git archive --prefix=$(ARCHIVE_PREFIX) -o $(ARCHIVE_VERSION).tar HEAD
 	tar rvf $(ARCHIVE_VERSION).tar --transform "s|^vendor|$(ARCHIVE_PREFIX)vendor|" vendor/
+	tar rvf $(ARCHIVE_VERSION).tar --transform "s|^doc/html|$(ARCHIVE_PREFIX)doc/html|" doc/html/
 	gzip $(ARCHIVE_VERSION).tar
 
 ### generate a release zip and include 3rd-party dependencies
-release_zip: composer_dependencies
+release_zip: composer_dependencies doc_html
 	git archive --prefix=$(ARCHIVE_PREFIX) -o $(ARCHIVE_VERSION).zip -9 HEAD
-	mkdir $(ARCHIVE_PREFIX)
+	mkdir -p $(ARCHIVE_PREFIX)/{doc,vendor}
+	rsync -a doc/html/ $(ARCHIVE_PREFIX)doc/html/
+	zip -r $(ARCHIVE_VERSION).zip $(ARCHIVE_PREFIX)doc/
 	rsync -a vendor/ $(ARCHIVE_PREFIX)vendor/
 	zip -r $(ARCHIVE_VERSION).zip $(ARCHIVE_PREFIX)vendor/
 	rm -rf $(ARCHIVE_PREFIX)
@@ -206,4 +209,3 @@ htmlpages:
 	rm -r venv
 
 doc_html: authors htmlpages
-
