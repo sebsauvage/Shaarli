@@ -9,6 +9,11 @@
         "wiki": "https://github.com/shaarli/Shaarli/wiki"
     },
     "keywords": ["bookmark", "link", "share", "web"],
+    "config": {
+        "platform": {
+            "php": "5.5.38"
+        }
+    },
     "require": {
         "php": ">=5.5",
         "shaarli/netscape-bookmark-parser": "^2.0",
