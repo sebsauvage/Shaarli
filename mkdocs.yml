@@ -36,7 +36,6 @@ pages:
     - Development guidelines: Development-guidelines.md
     - Continuous integration tools: Continuous-integration-tools.md
     - GnuPG signature: GnuPG-signature.md
-    - Coding guidelines: Coding-guidelines.md
     - Directory structure: Directory-structure.md
     - 3rd party libraries: 3rd-party-libraries.md
     - Plugin System: Plugin-System.md
