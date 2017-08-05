@@ -5,23 +5,26 @@
 
 ## Prerequisites
 ### Shaarli
-* Shaarli is installed in a directory readable/writeable by the user
-* the correct read/write permissions have been granted to the web server _user and/or group_
-* for HTTPS / SSL:
- * a key pair (public, private) and a certificate have been generated
- * the appropriate server SSL extension is installed and active
+- Shaarli is installed in a directory readable/writeable by the user
+- the correct read/write permissions have been granted to the web server _user and/or group_
+- for HTTPS / SSL:
+    - a key pair (public, private) and a certificate have been generated
+    - the appropriate server SSL extension is installed and active
 
 ### HTTPS, TLS and self-signed certificates
 Related guides:
-* [How to Create Self-Signed SSL Certificates with OpenSSL](http://www.xenocafe.com/tutorials/linux/centos/openssl/self_signed_certificates/index.php)
-* [How do I create my own Certificate Authority?](https://workaround.org/certificate-authority)
-* Generate a self-signed certificate (will trigger browser warnings) with apache2: `make-ssl-cert generate-default-snakeoil --force-overwrite` will create `/etc/ssl/certs/ssl-cert-snakeoil.pem` and `/etc/ssl/private/ssl-cert-snakeoil.key`
+
+- [How to Create Self-Signed SSL Certificates with OpenSSL](http://www.xenocafe.com/tutorials/linux/centos/openssl/self_signed_certificates/index.php)
+- [How do I create my own Certificate Authority?](https://workaround.org/certificate-authority)
+- Generate a self-signed certificate (will trigger browser warnings) with apache2:
+  `make-ssl-cert generate-default-snakeoil --force-overwrite` will create `/etc/ssl/certs/ssl-cert-snakeoil.pem` and `/etc/ssl/private/ssl-cert-snakeoil.key`
 
 ### Proxies
 If Shaarli is served behind a proxy (i.e. there is a proxy server between clients and the web server hosting Shaarli), please refer to the proxy server documentation for proper configuration. In particular, you have to ensure that the following server variables are properly set:
-- `X-Forwarded-Proto`;
-- `X-Forwarded-Host`;
-- `X-Forwarded-For`.
+
+- `X-Forwarded-Proto`
+- `X-Forwarded-Host`
+- `X-Forwarded-For`
 
 See also [proxy-related](https://github.com/shaarli/Shaarli/issues?utf8=%E2%9C%93&q=label%3Aproxy+) issues.
 
@@ -37,8 +40,9 @@ See also [proxy-related](https://github.com/shaarli/Shaarli/issues?utf8=%E2%9C%9
 This configuration will log both Apache and PHP errors, which may prove useful to identify server configuration errors.
 
 See:
-* [Apache/PHP - error log per VirtualHost](http://stackoverflow.com/q/176) (StackOverflow)
-* [PHP: php_value vs php_admin_value and the use of php_flag explained](https://ma.ttias.be/php-php_value-vs-php_admin_value-and-the-use-of-php_flag-explained/)
+
+- [Apache/PHP - error log per VirtualHost](http://stackoverflow.com/q/176) (StackOverflow)
+- [PHP: php_value vs php_admin_value and the use of php_flag explained](https://ma.ttias.be/php-php_value-vs-php_admin_value-and-the-use-of-php_flag-explained/)
 
 ```apache
 <VirtualHost *:80>
@@ -116,34 +120,41 @@ Apache module `mod_rewrite` **must** be enabled to use the REST API. URL rewriti
 Nginx does not natively interpret PHP scripts; to this effect, we will run a [FastCGI](https://en.wikipedia.org/wiki/FastCGI) service, to which Nginx's FastCGI module will proxy all requests to PHP resources.
 
 Required packages:
+
 - [nginx](http://nginx.org)
 - [php-fpm](http://php-fpm.org) - PHP FastCGI Process Manager
 
 Official documentation:
+
 - [Beginner's guide](http://nginx.org/en/docs/beginners_guide.html)
 - [ngx_http_fastcgi_module](http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html)
 - [Pitfalls](http://wiki.nginx.org/Pitfalls)
 
 Community resources:
+
 - [Server-side TLS (Nginx)](https://wiki.mozilla.org/Security/Server_Side_TLS#Nginx) (Mozilla)
 - [PHP configuration examples](http://kbeezie.com/nginx-configuration-examples/) (Karl Blessing)
 
 ### Common setup
 Once Nginx and PHP-FPM are installed, we need to ensure:
+
 - Nginx and PHP-FPM are running using the _same user and group_
 - both these user and group have
     - `read` permissions for Shaarli resources
     - `execute` permissions for Shaarli directories _AND_ their parent directories
 
 On a production server:
+
 - `user:group` will likely be `http:http`, `www:www` or `www-data:www-data`
 - files will be located under `/var/www`, `/var/http` or `/usr/share/nginx`
 
 On a development server:
+
 - files may be located in a user's home directory
 - in this case, make sure both Nginx and PHP-FPM are running as the local user/group!
 
 For all following configuration examples, this user/group pair will be used:
+
 - `user:group = john:users`,
 
 which corresponds to the following service configuration:
@@ -237,6 +248,7 @@ http {
 
 ### Modular
 The previous setup is sufficient for development purposes, but has several major caveats:
+
 - every content that does not match the PHP rule will be sent to client browsers:
     - dotfiles - in our case, `.htaccess`
     - temporary files, e.g. Vim or Emacs files: `index.php~`
@@ -342,7 +354,9 @@ http {
 ```
 
 ### Redirect HTTP to HTTPS
-Assuming you have generated a (self-signed) key and certificate, and they are located under `/home/john/ssl/localhost.{key,crt}`, it is pretty straightforward to set an HTTP (:80) to HTTPS (:443) redirection to force SSL/TLS usage.
+Assuming you have generated a (self-signed) key and certificate, and they are
+located under `/home/john/ssl/localhost.{key,crt}`, it is pretty straightforward
+to set an HTTP (:80) to HTTPS (:443) redirection to force SSL/TLS usage.
 
 ```nginx
 # /etc/nginx/nginx.conf

@@ -10,12 +10,12 @@
 ### Supported versions
 Version | Status | Shaarli compatibility
 :---:|:---:|:---:
-7.1 | Supported (v0.9.x) | :white_check_mark:
-7.0 | Supported | :white_check_mark:
-5.6 | Supported | :white_check_mark:
-5.5 | EOL: 2016-07-10 | :white_check_mark:
-5.4 | EOL: 2015-09-14 | :white_check_mark: (up to Shaarli 0.8.x)
-5.3 | EOL: 2014-08-14 | :white_check_mark: (up to Shaarli 0.8.x)
+7.1 | Supported (v0.9.x) | Yes
+7.0 | Supported | Yes
+5.6 | Supported | Yes
+5.5 | EOL: 2016-07-10 | Yes
+5.4 | EOL: 2015-09-14 | Yes (up to Shaarli 0.8.x)
+5.3 | EOL: 2014-08-14 | Yes (up to Shaarli 0.8.x)
 
 See also:
 - [Travis configuration](https://github.com/shaarli/Shaarli/blob/master/.travis.yml)

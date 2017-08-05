@@ -80,7 +80,8 @@ See the [API documentation](http://shaarli.github.io/api-documentation/).
 
 ### Other usages
 Though Shaarli is primarily a bookmarking application, it can serve other purposes
-(see [usage examples](https://github.com/shaarli/Shaarli/wiki#usage-examples)):
+(see [Features](Features)):
+
 - micro-blogging
 - pastebin
 - online notepad

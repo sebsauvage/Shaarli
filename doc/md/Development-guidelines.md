@@ -1,6 +1,7 @@
 ## Development guidelines
 
 Please have a look at the following pages:
+
 - [Contributing to Shaarli](https://github.com/shaarli/Shaarli/tree/master/CONTRIBUTING.md)
 - [Static analysis](Static analysis) - patches should try to stick to the [PHP Standard Recommendations](http://www.php-fig.org/psr/) (PSR), especially:
     - [PSR-1](http://www.php-fig.org/psr/psr-1/) - Basic Coding Standard

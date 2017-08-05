@@ -10,10 +10,10 @@ This token has to be included as an HTTP header called `Authentication: Bearer <
 
 JWT resources :
 
- * [jwt.io](https://jwt.io) (including a list of client per language).
- * RFC : https://tools.ietf.org/html/rfc7519
- * https://float-middle.com/json-web-tokens-jwt-vs-sessions/
- * HackerNews thread: https://news.ycombinator.com/item?id=11929267
+- [jwt.io](https://jwt.io) (including a list of client per language).
+- RFC : https://tools.ietf.org/html/rfc7519
+- https://float-middle.com/json-web-tokens-jwt-vs-sessions/
+- HackerNews thread: https://news.ycombinator.com/item?id=11929267
 
 
 ### Shaarli JWT Token

@@ -1,10 +1,11 @@
 ## Introduction
 ### PGP and GPG
-[Gnu Privacy Guard](https://gnupg.org/) (GnuPG) is an Open Source implementation of the [Pretty Good 
-Privacy](https://en.wikipedia.org/wiki/Pretty_Good_Privacy#OpenPGP) (OpenPGP) specification. Its main purposes are digital authentication, 
-signature and encryption.
+[Gnu Privacy Guard](https://gnupg.org/) (GnuPG) is an Open Source implementation of the
+[Pretty Good Privacy](https://en.wikipedia.org/wiki/Pretty_Good_Privacy#OpenPGP)
+(OpenPGP) specification. Its main purposes are digital authentication, signature and encryption.
 
 It is often used by the [FLOSS](https://en.wikipedia.org/wiki/Free_and_open-source_software) community to verify:
+
 - Linux package signatures: Debian [SecureApt](https://wiki.debian.org/SecureApt), ArchLinux [Master 
 Keys](https://www.archlinux.org/master-keys/)
 - [SCM](https://en.wikipedia.org/wiki/Revision_control) releases & maintainer identity
@@ -15,6 +16,7 @@ To quote Phil Pennock (the author of the [SKS](https://bitbucket.org/skskeyserve
 > You MUST understand that presence of data in the keyserver (pools) in no way connotes trust. Anyone can generate a key, with any name or email address, and upload it. All security and trust comes from evaluating security at the “object level”, via PGP Web-Of-Trust signatures. This keyserver makes it possible to retrieve keys, looking them up via various indices, but the collection of keys in this public pool is KNOWN to contain malicious and fraudulent keys. It is the common expectation of server operators that users understand this and use software which, like all known common OpenPGP implementations, evaluates trust accordingly. This expectation is so common that it is not normally explicitly stated.
 
 Trust can be gained by having your key signed by other people (and signing their key back, too :) ), for instance during [key signing parties](https://en.wikipedia.org/wiki/Key_signing_party), see:
+
 - [The Keysigning party HOWTO](http://www.cryptnet.net/fdp/crypto/keysigning_party/en/keysigning_party.html)
 - [Web of trust](https://en.wikipedia.org/wiki/Web_of_trust)
 

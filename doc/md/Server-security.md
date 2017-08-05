@@ -1,5 +1,6 @@
 ## php.ini
 PHP settings are defined in:
+
 - a main configuration file, usually found under `/etc/php5/php.ini`; some distributions provide different configuration environments, e.g.
     - `/etc/php5/php.ini` - used when running console scripts
     - `/etc/php5/apache2/php.ini` - used when a client requests PHP resources from Apache
@@ -30,6 +31,7 @@ Additional .ini files parsed:      /etc/php/conf.d/xdebug.ini
 
 ## fail2ban
 `fail2ban` is an intrusion prevention framework that reads server (Apache, SSH, etc.) and uses `iptables` profiles to block brute-force attempts:
+
 - [Official website](http://www.fail2ban.org/wiki/index.php/Main_Page)
 - [Source code](https://github.com/fail2ban/fail2ban)
 
@@ -68,6 +70,7 @@ Disallow: /
 ```
 
 See:
-- http://www.robotstxt.org/
+
+- http://www.robotstxt.org
 - http://www.robotstxt.org/robotstxt.html
 - http://www.robotstxt.org/meta.html

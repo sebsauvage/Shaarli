@@ -8,6 +8,7 @@ There are two ways of customizing how Shaarli looks:
 ## Custom CSS
 
 Shaarli's appearance can be modified by adding CSS rules to:
+
 - Shaarli < `v0.9.0`: `inc/user.css`
 - Shaarli >= `v0.9.0`: `data/user.css`
 
@@ -22,6 +23,7 @@ See also [Download CSS styles from an OPML list](Download CSS styles from an OPM
 _WARNING - This feature is currently being worked on and will be improved in the next releases. Experimental._
 
 Installation:
+
 - find a theme you'd like to install
 - copy or clone the theme folder under `tpl/<a_sweet_theme>`
 - enable the theme:
@@ -54,6 +56,7 @@ Installation:
 ## Example installation: AlbinoMouse theme
 
 With the following configuration:
+
 - Apache 2 / PHP 5.6
 - user sites are enabled, e.g. `/home/user/public_html/somedir` is served as `http://localhost/~user/somedir`
 - `http` is the name of the Apache user
@@ -77,7 +80,7 @@ Get config written:
 - fill the install form
 - log in to Shaarli
 
-Edit Shaarli's [configuration|Shaarli configuration](configuration|Shaarli configuration):
+Edit Shaarli's [configuration](Shaarli-configuration):
 ```bash
 # the file should be owned by Apache, thus not writeable => sudo
 $ sudo sed -i s=tpl=tpl/albinomouse-template=g shaarli/data/config.php

@@ -3,8 +3,9 @@
 The framework used is [PHPUnit](https://phpunit.de/); it can be installed with [Composer](https://getcomposer.org/), which is a dependency management tool.
 
 Regarding Composer, you can either use:
-* a system-wide version, e.g. installed through your distro's package manager
-* a local version, downloadable [here](https://getcomposer.org/download/)
+
+- a system-wide version, e.g. installed through your distro's package manager
+- a local version, downloadable [here](https://getcomposer.org/download/)
 
 #### Sample usage
 
@@ -118,18 +119,20 @@ Tests: 36, Assertions: 63, Errors: 1, Failures: 2.
 By default, PHPUnit will run all suitable tests found under the `tests` directory.
 
 Each test has 3 possible outcomes:
-* `.` - success
-* `F` - failure: the test was run but its results are invalid
- * the code does not behave as expected
- * dependencies to external elements: globals, session, cache...
-* `E` - error: something went wrong and the tested code has crashed
- * typos in the code, or in the test code
- * dependencies to missing external elements
+
+- `.` - success
+- `F` - failure: the test was run but its results are invalid
+    - the code does not behave as expected
+    - dependencies to external elements: globals, session, cache...
+- `E` - error: something went wrong and the tested code has crashed
+    - typos in the code, or in the test code
+    - dependencies to missing external elements
 
 If Xdebug has been installed and activated, two coverage reports will be generated:
-* a summary in the console
-* a detailed HTML report with metrics for tested code
- * to open it in a web browser: `firefox coverage/index.html &`
+
+- a summary in the console
+- a detailed HTML report with metrics for tested code
+    - to open it in a web browser: `firefox coverage/index.html &`
 
 ### Executing specific tests
 

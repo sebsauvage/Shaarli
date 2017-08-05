@@ -8,23 +8,24 @@ Enough is enough. Saving simple links should not be a complicated heavy thing. I
 
 With Shaarli:
 
-*     The data is yours: It's hosted on your server.
-*     Never fear of having your data locked-in.
-*     Never fear to have your data sold to third party.
-*     Your private links are not hosted on a third party server.
-*     You are not tracked by browser addons (like Diigo does)
-*     You can change the look and feel of the pages if you want.
-*     You can change the behaviour of the program.
-*     It's magnitude faster than most bookmarking services.
+- The data is yours: It's hosted on your server.
+- Never fear of having your data locked-in.
+- Never fear to have your data sold to third party.
+- Your private links are not hosted on a third party server.
+- You are not tracked by browser addons (like Diigo does)
+- You can change the look and feel of the pages if you want.
+- You can change the behaviour of the program.
+- It's magnitude faster than most bookmarking services.
 
 ### What does Shaarli mean?
 
-Shaarli is for shaaring your links.
+Shaarli stands for _shaaring_ your _links_.
 
 ### My Shaarli is broken!
 First of all, ensure that both the [web server](Server-configuration) and [Shaarli](Shaarli-configuration) are correctly configured, and that your installation is [supported](Server-requirements).
 
 If everything looks right but the issue(s) remain(s), please:
+
 - take a look at the [troubleshooting](Troubleshooting) section
 - come [chat with us](https://gitter.im/shaarli/Shaarli) on Gitter, we'll be happy to help ;-)
 - browse active [issues](https://github.com/shaarli/Shaarli/issues) and [Pull Requests](https://github.com/shaarli/Shaarli/pulls)
