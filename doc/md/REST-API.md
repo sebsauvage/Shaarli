@@ -68,7 +68,12 @@ $signature = hash_hmac('sha512', $content, $secret);
 ```
 
 
-### Complete examples
+## Clients and examples
+### Android, Java, Kotlin
+
+- [Android client example with Kotlin](https://gitlab.com/snippets/1665808)
+  by [Braincoke](https://github.com/Braincoke)
+
 
 ### PHP
 
@@ -119,3 +124,11 @@ function getInfo($baseUrl, $secret) {
 
 var_dump(getInfo($baseUrl, $secret));
 ```
+
+
+### Python
+
+See the reference API client:
+
+- [Documentation](http://python-shaarli-client.readthedocs.io/en/latest/) on ReadTheDocs
+- [python-shaarli-client](https://github.com/shaarli/python-shaarli-client) on Github
