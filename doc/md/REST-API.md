@@ -68,37 +68,54 @@ $signature = hash_hmac('sha512', $content, $secret);
 ```
 
 
-### Complete example
+### Complete examples
 
-#### PHP
+### PHP
+
+This example uses the [PHP cURL](http://php.net/manual/en/book.curl.php) library.
 
 ```php
+<?php
+$baseUrl = 'https://shaarli.mydomain.net';
+$secret = 'thats_my_api_secret';
+
+function base64url_encode($data) {
+  return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
 function generateToken($secret) {
-    $header = base64_encode('{
+    $header = base64url_encode('{
         "typ": "JWT",
         "alg": "HS512"
     }');
-    $payload = base64_encode('{
+    $payload = base64url_encode('{
         "iat": '. time() .'
     }');
-    $signature = hash_hmac('sha512', $header .'.'. $payload , $secret);
-    return $header .'.'. $payload .'.'. $signature;
+    $signature = base64url_encode(hash_hmac('sha512', $header .'.'. $payload , $secret, true));
+    return $header . '.' . $payload . '.' . $signature;
 }
 
-$secret = 'mysecret';
-$token = generateToken($secret);
-echo $token;
-```
 
-> `ewogICAgICAgICJ0eXAiOiAiSldUIiwKICAgICAgICAiYWxnIjogIkhTNTEyIgogICAgfQ==.ewogICAgICAgICJpYXQiOiAxNDY4NjY3MDQ3CiAgICB9.1d2c54fa947daf594fdbf7591796195652c8bc63bffad7f6a6db2a41c313f495a542cbfb595acade79e83f3810d709b4251d7b940bbc10b531a6e6134af63a68`
+function getInfo($baseUrl, $secret) {
+    $token = generateToken($secret);
+    $endpoint = rtrim($baseUrl, '/') . '/api/v1/info';
 
-```php
-$options = [
-    'http' => [
-        'method' => 'GET',
-        'jwt' => $token,
-    ],
-];
-$context = stream_context_create($options);
-file_get_contents($apiEndpoint, false, $context);
+    $headers = [
+        'Content-Type: text/plain; charset=UTF-8',
+        'Authorization: Bearer ' . $token,
+    ];
+
+    $ch = curl_init($endpoint);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
+    curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
+
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    return $result;
+}
+
+var_dump(getInfo($baseUrl, $secret));
 ```
