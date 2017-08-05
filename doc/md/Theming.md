@@ -20,8 +20,6 @@ See also [Download CSS styles from an OPML list](Download CSS styles from an OPM
 
 ## Themes
 
-_WARNING - This feature is currently being worked on and will be improved in the next releases. Experimental._
-
 Installation:
 
 - find a theme you'd like to install

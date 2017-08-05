@@ -18,13 +18,13 @@ Get the latest released version from the [releases](https://github.com/shaarli/S
 
 **Download our *shaarli-full* archive** to include dependencies.
 
-The current latest released version is `v0.8.4`
+The current latest released version is `v0.9.0`
 
 Or in command lines:
 
 ```bash
-$ wget https://github.com/shaarli/Shaarli/releases/download/v0.8.4/shaarli-v0.8.4-full.zip
-$ unzip shaarli-v0.8.4-full.zip
+$ wget https://github.com/shaarli/Shaarli/releases/download/v0.9.0/shaarli-v0.9.0-full.zip
+$ unzip shaarli-v0.9.0-full.zip
 $ mv Shaarli /path/to/shaarli/
 ```
 
@@ -34,7 +34,7 @@ In most cases, download Shaarli from the [releases](https://github.com/shaarli/S
 
 ```
 $ mkdir -p /path/to/shaarli && cd /path/to/shaarli/
-$ git clone -b v0.8 https://github.com/shaarli/Shaarli.git .
+$ git clone -b v0.9 https://github.com/shaarli/Shaarli.git .
 $ composer install --no-dev --prefer-dist
 ```
 
