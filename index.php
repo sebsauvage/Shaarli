@@ -1021,7 +1021,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
 
     // -------- User wants to see only untagged links (toggle)
     if (isset($_GET['untaggedonly'])) {
-        $_SESSION['untaggedonly'] = !$_SESSION['untaggedonly'];
+        $_SESSION['untaggedonly'] = !empty($_SESSION['untaggedonly']);
 
         if (! empty($_SERVER['HTTP_REFERER'])) {
             $location = generateLocation($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST'], array('untaggedonly'));
