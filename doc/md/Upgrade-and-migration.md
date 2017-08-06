@@ -8,6 +8,7 @@ The current version is present in the `version.php` file.
 ### Backup your data
 
 Shaarli stores all user data under the `data` directory:
+
 - `data/config.php` - main configuration file
 - `data/datastore.php` - bookmarked links
 - `data/ipbans.php` - banned IP addresses
@@ -16,6 +17,7 @@ Shaarli stores all user data under the `data` directory:
 See [Shaarli configuration](Shaarli configuration) for more information about Shaarli resources.
 
 It is recommended to backup this repository _before_ starting updating/upgrading Shaarli:
+
 - users with SSH access: copy or archive the directory to a temporary location
 - users with FTP access: download a local copy of your Shaarli installation using your favourite client
 
@@ -75,6 +77,7 @@ Updating dependencies
 If you have installed Shaarli from [Sebsauvage's original Git repository](https://github.com/sebsauvage/Shaarli), you can use [Git remotes](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes) to update your working copy.
 
 The following guide assumes that:
+
 - you have a basic knowledge of Git [branching](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell) and [remote repositories](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes)
 - the default remote is named `origin` and points to Sebsauvage's repository
 - the current branch is `master`
@@ -174,7 +177,7 @@ After migrating, access your fresh Shaarli installation from a web browser; the 
 
 ## Troubleshooting
 
-If the solutions provided here doesn't work, please open an issue specifying which version you're upgrading from and to.
+If the solutions provided here don't work, please open an issue specifying which version you're upgrading from and to.
 
 ### You must specify an integer as a key
 
@@ -185,10 +188,10 @@ Take a look at `data/updates.txt` content.
 
 Try to delete it and refresh your page while being logged in.
 
-#### `updates.txt` doesn't exists or doesn't contain `updateMethodDatastoreIds`
+#### `updates.txt` doesn't exist or doesn't contain `updateMethodDatastoreIds`
 
-  1. Create `data/updates.txt` if it doesn't exist.
-  2. Paste this string in the update file `;updateMethodRenameDashTags;`
-  3. Login to Shaarli.
-  4. Delete the update file.
-  5. Refresh.
+1. Create `data/updates.txt` if it doesn't exist
+2. Paste this string in the update file `;updateMethodRenameDashTags;`
+3. Login to Shaarli
+4. Delete the update file
+5. Refresh

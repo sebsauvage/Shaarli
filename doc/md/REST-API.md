@@ -1,6 +1,18 @@
-## Usage
+## Usage and Prerequisites
 
-See the [REST API documentation](http://shaarli.github.io/api-documentation/).
+See the [REST API documentation](http://shaarli.github.io/api-documentation/)
+for a list of available endpoints and parameters.
+
+Please ensure that your server meets the [requirements](Server-requirements)
+and is properly [configured](Server-configuration):
+
+- URL rewriting is enabled (see specific Apache and Nginx sections)
+- the server's timezone is properly defined
+- the server's clock is synchronized with
+  [NTP](https://en.wikipedia.org/wiki/Network_Time_Protocol)
+
+The host where the API client is invoked should also be synchronized with NTP,
+see [token expiration](#payload).
 
 ## Authentication
 
@@ -10,10 +22,10 @@ This token has to be included as an HTTP header called `Authentication: Bearer <
 
 JWT resources :
 
- * [jwt.io](https://jwt.io) (including a list of client per language).
- * RFC : https://tools.ietf.org/html/rfc7519
- * https://float-middle.com/json-web-tokens-jwt-vs-sessions/
- * HackerNews thread: https://news.ycombinator.com/item?id=11929267
+- [jwt.io](https://jwt.io) (including a list of client per language).
+- RFC : https://tools.ietf.org/html/rfc7519
+- https://float-middle.com/json-web-tokens-jwt-vs-sessions/
+- HackerNews thread: https://news.ycombinator.com/item?id=11929267
 
 
 ### Shaarli JWT Token
@@ -43,9 +55,11 @@ ewogICAgICAgICJ0eXAiOiAiSldUIiwKICAgICAgICAiYWxnIjogIkhTNTEyIgogICAgfQ==
 
 #### Payload
 
-**Validity duration**
+**Token expiration**
 
-To avoid infinite token validity, JWT tokens must include their creation date in UNIX timestamp format (timezone independant - UTC) under the key `iat` (issued at). This token will be accepted during 9 minutes.
+To avoid infinite token validity, JWT tokens must include their creation date
+in UNIX timestamp format (timezone independent - UTC) under the key `iat` (issued at).
+This token will be valid during **9 minutes**.
 
 ```json
 {
@@ -68,37 +82,67 @@ $signature = hash_hmac('sha512', $content, $secret);
 ```
 
 
-### Complete example
+## Clients and examples
+### Android, Java, Kotlin
 
-#### PHP
+- [Android client example with Kotlin](https://gitlab.com/snippets/1665808)
+  by [Braincoke](https://github.com/Braincoke)
+
+
+### PHP
+
+This example uses the [PHP cURL](http://php.net/manual/en/book.curl.php) library.
 
 ```php
+<?php
+$baseUrl = 'https://shaarli.mydomain.net';
+$secret = 'thats_my_api_secret';
+
+function base64url_encode($data) {
+  return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
 function generateToken($secret) {
-    $header = base64_encode('{
+    $header = base64url_encode('{
         "typ": "JWT",
         "alg": "HS512"
     }');
-    $payload = base64_encode('{
+    $payload = base64url_encode('{
         "iat": '. time() .'
     }');
-    $signature = hash_hmac('sha512', $header .'.'. $payload , $secret);
-    return $header .'.'. $payload .'.'. $signature;
+    $signature = base64url_encode(hash_hmac('sha512', $header .'.'. $payload , $secret, true));
+    return $header . '.' . $payload . '.' . $signature;
 }
 
-$secret = 'mysecret';
-$token = generateToken($secret);
-echo $token;
+
+function getInfo($baseUrl, $secret) {
+    $token = generateToken($secret);
+    $endpoint = rtrim($baseUrl, '/') . '/api/v1/info';
+
+    $headers = [
+        'Content-Type: text/plain; charset=UTF-8',
+        'Authorization: Bearer ' . $token,
+    ];
+
+    $ch = curl_init($endpoint);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
+    curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
+
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    return $result;
+}
+
+var_dump(getInfo($baseUrl, $secret));
 ```
 
-> `ewogICAgICAgICJ0eXAiOiAiSldUIiwKICAgICAgICAiYWxnIjogIkhTNTEyIgogICAgfQ==.ewogICAgICAgICJpYXQiOiAxNDY4NjY3MDQ3CiAgICB9.1d2c54fa947daf594fdbf7591796195652c8bc63bffad7f6a6db2a41c313f495a542cbfb595acade79e83f3810d709b4251d7b940bbc10b531a6e6134af63a68`
 
-```php
-$options = [
-    'http' => [
-        'method' => 'GET',
-        'jwt' => $token,
-    ],
-];
-$context = stream_context_create($options);
-file_get_contents($apiEndpoint, false, $context);
-```
+### Python
+
+See the reference API client:
+
+- [Documentation](http://python-shaarli-client.readthedocs.io/en/latest/) on ReadTheDocs
+- [python-shaarli-client](https://github.com/shaarli/python-shaarli-client) on Github

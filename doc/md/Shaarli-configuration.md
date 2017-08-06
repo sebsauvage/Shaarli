@@ -42,70 +42,70 @@ See also [Plugin System](Plugin-System.html).
 
 ### Credentials
  
-> You shouldn't edit those.
+_These settings should not be edited_
 
-**login**: Login username.  
-**hash**: Generated password hash.  
-**salt**: Password salt.
+- **login**: Login username.  
+- **hash**: Generated password hash.  
+- **salt**: Password salt.
 
 ### General
 
-**title**: Shaarli's instance title.  
-**header_link**: Link to the homepage.  
-**links_per_page**: Number of shaares displayed per page.  
-**timezone**: See [the list of supported timezones](http://php.net/manual/en/timezones.php).  
-**enabled_plugins**: List of enabled plugins.
+- **title**: Shaarli's instance title.  
+- **header_link**: Link to the homepage.  
+- **links_per_page**: Number of shaares displayed per page.  
+- **timezone**: See [the list of supported timezones](http://php.net/manual/en/timezones.php).  
+- **enabled_plugins**: List of enabled plugins.
 
 ### Security
 
-**session_protection_disabled**: Disable session cookie hijacking protection (not recommended). 
-It might be useful if your IP adress often changes.  
-**ban_after**: Failed login attempts before being IP banned.  
-**ban_duration**: IP ban duration in seconds.  
-**open_shaarli**: Anyone can add a new link while logged out if enabled.  
-**trusted_proxies**: List of trusted IP which won't be banned after failed login attemps. Useful if Shaarli is behind a reverse proxy.  
-**allowed_protocols**: List of allowed protocols in shaare URLs or markdown-rendered descriptions. Useful if you want to store `javascript:` links (bookmarklets) in Shaarli (default: `["ftp", "ftps", "magnet"]`).
+- **session_protection_disabled**: Disable session cookie hijacking protection (not recommended). 
+  It might be useful if your IP adress often changes.  
+- **ban_after**: Failed login attempts before being IP banned.  
+- **ban_duration**: IP ban duration in seconds.  
+- **open_shaarli**: Anyone can add a new link while logged out if enabled.  
+- **trusted_proxies**: List of trusted IP which won't be banned after failed login attemps. Useful if Shaarli is behind a reverse proxy.  
+- **allowed_protocols**: List of allowed protocols in shaare URLs or markdown-rendered descriptions. Useful if you want to store `javascript:` links (bookmarklets) in Shaarli (default: `["ftp", "ftps", "magnet"]`).
 
 ### Resources
 
-**data_dir**: Data directory.  
-**datastore**: Shaarli's links database file path.  
-**history**: Shaarli's operation history file path.
-**updates**: File path for the ran updates file.  
-**log**: Log file path.  
-**update_check**: Last update check file path.  
-**raintpl_tpl**: Templates directory.  
-**raintpl_tmp**: Template engine cache directory.  
-**thumbnails_cache**: Thumbnails cache directory.  
-**page_cache**: Shaarli's internal cache directory.  
-**ban_file**: Banned IP file path.
+- **data_dir**: Data directory.  
+- **datastore**: Shaarli's links database file path.  
+- **history**: Shaarli's operation history file path.
+- **updates**: File path for the ran updates file.  
+- **log**: Log file path.  
+- **update_check**: Last update check file path.  
+- **raintpl_tpl**: Templates directory.  
+- **raintpl_tmp**: Template engine cache directory.  
+- **thumbnails_cache**: Thumbnails cache directory.  
+- **page_cache**: Shaarli's internal cache directory.  
+- **ban_file**: Banned IP file path.
 
 ### Updates
 
-**check_updates**: Enable or disable update check to the git repository.  
-**check_updates_branch**: Git branch used to check updates (e.g. `stable` or `master`).  
-**check_updates_interval**: Look for new version every N seconds (default: every day).
+- **check_updates**: Enable or disable update check to the git repository.  
+- **check_updates_branch**: Git branch used to check updates (e.g. `stable` or `master`).  
+- **check_updates_interval**: Look for new version every N seconds (default: every day).
 
 ### Privacy
 
-**default_private_links**: Check the private checkbox by default for every new link.  
-**hide_public_links**: All links are hidden while logged out.  
-**hide_timestamps**: Timestamps are hidden.
+- **default_private_links**: Check the private checkbox by default for every new link.  
+- **hide_public_links**: All links are hidden while logged out.  
+- **hide_timestamps**: Timestamps are hidden.
 
 ### Feed
 
-**rss_permalinks**: Enable this to redirect RSS links to Shaarli's permalinks instead of shaared URL.  
-**show_atom**: Display ATOM feed button.
+- **rss_permalinks**: Enable this to redirect RSS links to Shaarli's permalinks instead of shaared URL.  
+- **show_atom**: Display ATOM feed button.
 
 ### Thumbnail
 
-**enable_thumbnails**: Enable or disable thumbnail display.  
-**enable_localcache**: Enable or disable local cache.
+- **enable_thumbnails**: Enable or disable thumbnail display.  
+- **enable_localcache**: Enable or disable local cache.
 
 ### Redirector
 
-**url**: Redirector URL, such as `anonym.to`.  
-**encode_url**: Enable this if the redirector needs encoded URL to work properly.
+- **url**: Redirector URL, such as `anonym.to`.  
+- **encode_url**: Enable this if the redirector needs encoded URL to work properly.
 
 ## Configuration file example
 
@@ -211,7 +211,7 @@ It might be useful if your IP adress often changes.
 
 ## Additional configuration
 
-The playvideos plugin may require that you adapt your server's 
+The `playvideos` plugin may require that you adapt your server's 
 [Content Security Policy](https://github.com/shaarli/Shaarli/blob/master/plugins/playvideos/README.md#troubleshooting) 
-configuration to work properly.[](.html)
+configuration to work properly.
 

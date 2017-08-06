@@ -8,10 +8,10 @@ The `master` branch is the development branch. Any new change MUST go through th
 
 Remarks:
 
-  * This branch shouldn't be used for production as it isn't necessary stable.
-  * 3rd party aren't required to be compatible with the latest changes.
-  * Official plugins, themes and libraries (contained within Shaarli organization repos) must be compatible with the master branch.
-  * The version in this branch is always `dev`.
+- This branch shouldn't be used for production as it isn't necessary stable.
+- 3rd party aren't required to be compatible with the latest changes.
+- Official plugins, themes and libraries (contained within Shaarli organization repos) must be compatible with the master branch.
+- The version in this branch is always `dev`.
 
 ## `v0.x` branch
 
@@ -37,7 +37,7 @@ For example, the current latest release is `v0.8.3`, the stable branch is an ali
 
 Remarks:
 
-  * Shaarli release pace isn't fast, and the stable branch might be a few months behind the latest release.
+- Shaarli release pace isn't fast, and the stable branch might be a few months behind the latest release.
 
 ## Releases
 

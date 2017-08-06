@@ -3,6 +3,7 @@ releases](http://git-scm.com/book/en/v2/Distributed-Git-Maintaining-a-Project#Ta
 
 ## Prerequisites
 This guide assumes that you have:
+
 - a GPG key matching your GitHub authentication credentials
     - i.e., the email address identified by the GPG key is the same as the one in your `~/.gitconfig` 
 - a GitHub fork of Shaarli
@@ -43,32 +44,13 @@ TBA
 ```
 
 
-## Increment the version code, updated docs, create and push a signed tag
-### Generate documentation
-```bash
-$ cd /path/to/shaarli
-
-# create a new branch
-$ git fetch upstream
-$ git checkout upstream/master -b v0.5.0
-
-# rebuild the HTML documentation from Markdown
-$ make htmlpages
-
-# commit the changes
-$ git add doc
-$ git commit -s -m "Generate documentation for v0.5.0"
-
-# push the commit on your GitHub fork
-$ git push origin v0.5.0
-```
-
+## Increment the version code, update docs, create and push a signed tag
 ### Create and merge a Pull Request
 This one is pretty straightforward ;-)
 
 ### Bump Shaarli version to v0.x branch
 
-```
+```bash
 $ git checkout master
 $ git fetch upstream
 $ git pull upstream master
@@ -125,6 +107,7 @@ Update `README.md` so version badges display and point to the newly released Sha
 
 ### Create a GitHub release from a Git tag
 From the previously drafted release:
+
 - edit the release notes (if needed)
 - specify the appropriate Git tag
 - publish the release
@@ -132,6 +115,7 @@ From the previously drafted release:
 
 ### Generate and upload all-in-one release archives
 Users with a shared hosting may have:
+
 - no SSH access
 - no possibility to install PHP packages or server extensions
 - no possibility to run scripts
@@ -146,6 +130,7 @@ $ make release_archive
 ```
 
 This will create the following archives:
+
 - `shaarli-vX.Y.Z-full.tar`
 - `shaarli-vX.Y.Z-full.zip`
 

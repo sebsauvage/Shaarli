@@ -4,9 +4,9 @@ There is a bunch of plugins shipped with Shaarli, where there is nothing to do t
 
 If you want to install a third party plugin:
 
-  * Download it.
-  * Put it in the `plugins` directory in Shaarli's installation folder.
-  * Make sure you put it correctly:
+- Download it.
+- Put it in the `plugins` directory in Shaarli's installation folder.
+- Make sure you put it correctly:
 
 ```
 | index.php

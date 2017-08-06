@@ -1,6 +1,8 @@
-[**I am a developer.** Developer API.](#developer-api)
+[**I am a developer: ** Developer API](#developer-api)
 
-[**I am a template designer.** Guide for template designer.](#guide-for-template-designer)
+[**I am a template designer: ** Guide for template designers](#guide-for-template-designer)
+
+---
 
 ## Developer API
 
@@ -8,9 +10,9 @@
 
 The plugin system let you:
 
-  * insert content into specific places across templates.
-  * alter data before templates rendering.
-  * alter data before saving new links.
+- insert content into specific places across templates.
+- alter data before templates rendering.
+- alter data before saving new links.
 
 ### How can I create a plugin for Shaarli?
 
@@ -47,8 +49,8 @@ hook_<plugin_name>_<hook_name>($data, $conf)
 
 Parameters:
 
-  - data: see [$data section](https://github.com/shaarli/Shaarli/wiki/Plugin-System#plugins-data)
-  - conf: the `ConfigManager` instance.
+- data: see [$data section](https://github.com/shaarli/Shaarli/wiki/Plugin-System#plugins-data)
+- conf: the `ConfigManager` instance.
 
 For exemple, if my plugin want to add data to the header, this function is needed:
 
@@ -106,9 +108,9 @@ Every plugin needs a `<plugin_name>.meta` file, which is in fact an `.ini` file 
 
 Each file contain two keys:
 
-  * `description`: plugin description
-  * `parameters`: user parameter names, separated by a `;`.
-  * `parameter.<PARAMETER_NAME>`: add a text description the specified parameter.
+- `description`: plugin description
+- `parameters`: user parameter names, separated by a `;`.
+- `parameter.<PARAMETER_NAME>`: add a text description the specified parameter.
 
 > Note: In PHP, `parse_ini_file()` seems to want strings to be between by quotes `"` in the ini file.
 
@@ -148,8 +150,8 @@ Allow plugin to add content in page headers.
 
 `$data` is an array containing:
 
-  * `_PAGE_`: current target page (eg: `linklist`, `picwall`, etc.).
-  * `_LOGGEDIN_`: true if user is logged in, false otherwise.
+- `_PAGE_`: current target page (eg: `linklist`, `picwall`, etc.).
+- `_LOGGEDIN_`: true if user is logged in, false otherwise.
 
 ##### Template placeholders
 
@@ -157,11 +159,11 @@ Items can be displayed in templates by adding an entry in `$data['<placeholder>'
 
 List of placeholders:
 
-  * `buttons_toolbar`: after the list of buttons in the header.
+- `buttons_toolbar`: after the list of buttons in the header.
 
 ![buttons_toolbar_example](http://i.imgur.com/ssJUOrt.png)
 
-  * `fields_toolbar`: after search fields in the header.
+- `fields_toolbar`: after search fields in the header.
 
 > Note: This will only be called in linklist.
 
@@ -177,8 +179,8 @@ Allow plugin to include their own CSS files.
 
 `$data` is an array containing:
 
-  * `_PAGE_`: current target page (eg: `linklist`, `picwall`, etc.).
-  * `_LOGGEDIN_`: true if user is logged in, false otherwise.
+- `_PAGE_`: current target page (eg: `linklist`, `picwall`, etc.).
+- `_LOGGEDIN_`: true if user is logged in, false otherwise.
 
 ##### Template placeholders
 
@@ -186,7 +188,7 @@ Items can be displayed in templates by adding an entry in `$data['<placeholder>'
 
 List of placeholders:
 
-  * `css_files`: called after loading default CSS.
+- `css_files`: called after loading default CSS.
 
 > Note: only add the path of the CSS file. E.g: `plugins/demo_plugin/custom_demo.css`.
 
@@ -200,8 +202,8 @@ Allow plugin to add content in page footer and include their own JS files.
 
 `$data` is an array containing:
 
-  * `_PAGE_`: current target page (eg: `linklist`, `picwall`, etc.).
-  * `_LOGGEDIN_`: true if user is logged in, false otherwise.
+- `_PAGE_`: current target page (eg: `linklist`, `picwall`, etc.).
+- `_LOGGEDIN_`: true if user is logged in, false otherwise.
 
 ##### Template placeholders
 
@@ -209,12 +211,12 @@ Items can be displayed in templates by adding an entry in `$data['<placeholder>'
 
 List of placeholders:
 
-  * `text`: called after the end of the footer text.
-  * `endofpage`: called at the end of the page.
+- `text`: called after the end of the footer text.
+- `endofpage`: called at the end of the page.
 
 ![text_example](http://i.imgur.com/L5S2YEH.png)
 
-  * `js_files`: called at the end of the page, to include custom JS scripts.
+- `js_files`: called at the end of the page, to include custom JS scripts.
 
 > Note: only add the path of the JS file. E.g: `plugins/demo_plugin/custom_demo.js`.
 
@@ -228,8 +230,8 @@ It allows to add content at the begining and end of the page, after every link d
 
 `$data` is an array containing:
 
-  * `_LOGGEDIN_`: true if user is logged in, false otherwise.
-  * All templates data, including links.
+- `_LOGGEDIN_`: true if user is logged in, false otherwise.
+- All templates data, including links.
 
 ##### Template placeholders
 
@@ -237,19 +239,19 @@ Items can be displayed in templates by adding an entry in `$data['<placeholder>'
 
 List of placeholders:
 
-  * `action_plugin`: next to the button "private only" at the top and bottom of the page.
+- `action_plugin`: next to the button "private only" at the top and bottom of the page.
 
 ![action_plugin_example](http://i.imgur.com/Q12PWg0.png)
 
-  * `link_plugin`: for every link, between permalink and link URL.
+- `link_plugin`: for every link, between permalink and link URL.
 
 ![link_plugin_example](http://i.imgur.com/3oDPhWx.png)
 
-  * `plugin_start_zone`: before displaying the template content.
+- `plugin_start_zone`: before displaying the template content.
 
 ![plugin_start_zone_example](http://i.imgur.com/OVBkGy3.png)
 
-  * `plugin_end_zone`: after displaying the template content.
+- `plugin_end_zone`: after displaying the template content.
 
 ![plugin_end_zone_example](http://i.imgur.com/6IoRuop.png)
 
@@ -263,7 +265,7 @@ Allow to add fields in the form, or display elements.
 
 `$data` is an array containing:
 
-  * All templates data.
+- All templates data.
 
 ##### Template placeholders
 
@@ -271,7 +273,7 @@ Items can be displayed in templates by adding an entry in `$data['<placeholder>'
 
 List of placeholders:
 
-  * `edit_link_plugin`: after tags field.
+- `edit_link_plugin`: after tags field.
 
 ![edit_link_plugin_example](http://i.imgur.com/5u17Ens.png)
 
@@ -285,7 +287,7 @@ Allow to add content at the end of the page.
 
 `$data` is an array containing:
 
-  * All templates data.
+- All templates data.
 
 ##### Template placeholders
 
@@ -293,7 +295,7 @@ Items can be displayed in templates by adding an entry in `$data['<placeholder>'
 
 List of placeholders:
 
-  * `tools_plugin`: at the end of the page.
+- `tools_plugin`: at the end of the page.
 
 ![tools_plugin_example](http://i.imgur.com/Bqhu9oQ.png)
 
@@ -307,8 +309,8 @@ Allow to add content at the top and bottom of the page.
 
 `$data` is an array containing:
 
-  * `_LOGGEDIN_`: true if user is logged in, false otherwise.
-  * All templates data.
+- `_LOGGEDIN_`: true if user is logged in, false otherwise.
+- All templates data.
 
 ##### Template placeholders
 
@@ -316,9 +318,8 @@ Items can be displayed in templates by adding an entry in `$data['<placeholder>'
 
 List of placeholders:
 
-  * `plugin_start_zone`: before displaying the template content.
-
-  * `plugin_end_zone`: after displaying the template content.
+- `plugin_start_zone`: before displaying the template content.
+- `plugin_end_zone`: after displaying the template content.
 
 ![plugin_start_end_zone_example](http://i.imgur.com/tVTQFER.png)
 
@@ -332,8 +333,8 @@ Allow to add content at the top and bottom of the page.
 
 `$data` is an array containing:
 
-  * `_LOGGEDIN_`: true if user is logged in, false otherwise.
-  * All templates data.
+- `_LOGGEDIN_`: true if user is logged in, false otherwise.
+- All templates data.
 
 ##### Template placeholders
 
@@ -341,13 +342,12 @@ Items can be displayed in templates by adding an entry in `$data['<placeholder>'
 
 List of placeholders:
 
-  * `plugin_start_zone`: before displaying the template content.
-
-  * `plugin_end_zone`: after displaying the template content.
+- `plugin_start_zone`: before displaying the template content.
+- `plugin_end_zone`: after displaying the template content.
 
 For each tag, the following placeholder can be used:
 
-  * `tag_plugin`: after each tag
+- `tag_plugin`: after each tag
 
 ![plugin_start_end_zone_example](http://i.imgur.com/vHmyT3a.png)
 
@@ -362,8 +362,8 @@ Allow to add content at the top and bottom of the page.
 
 `$data` is an array containing:
 
-  * `_LOGGEDIN_`: true if user is logged in, false otherwise.
-  * All templates data.
+- `_LOGGEDIN_`: true if user is logged in, false otherwise.
+- All templates data.
 
 ##### Template placeholders
 
@@ -371,13 +371,12 @@ Items can be displayed in templates by adding an entry in `$data['<placeholder>'
 
 List of placeholders:
 
-  * `plugin_start_zone`: before displaying the template content.
-
-  * `plugin_end_zone`: after displaying the template content.
+- `plugin_start_zone`: before displaying the template content.
+- `plugin_end_zone`: after displaying the template content.
 
 For each tag, the following placeholder can be used:
 
-  * `tag_plugin`: after each tag
+- `tag_plugin`: after each tag
 
 #### render_daily
 
@@ -389,8 +388,8 @@ Allow to add content at the top and bottom of the page, the bottom of each link 
 
 `$data` is an array containing:
 
-  * `_LOGGEDIN_`: true if user is logged in, false otherwise.
-  * All templates data, including links.
+- `_LOGGEDIN_`: true if user is logged in, false otherwise.
+- All templates data, including links.
 
 ##### Template placeholders
 
@@ -398,13 +397,12 @@ Items can be displayed in templates by adding an entry in `$data['<placeholder>'
 
 List of placeholders:
 
-  * `link_plugin`: used at bottom of each link.
+- `link_plugin`: used at bottom of each link.
 
 ![link_plugin_example](http://i.imgur.com/hzhMfSZ.png)
 
-  * `plugin_start_zone`: before displaying the template content.
-
-  * `plugin_end_zone`: after displaying the template content.
+- `plugin_start_zone`: before displaying the template content.
+- `plugin_end_zone`: after displaying the template content.
 
 #### render_feed
 
@@ -416,9 +414,9 @@ Allow to add tags in the feed, either in the header or for each items. Items (li
 
 `$data` is an array containing:
 
-  * `_LOGGEDIN_`: true if user is logged in, false otherwise.
-  * `_PAGE_`: containing either `rss` or `atom`.
-  * All templates data, including links.
+- `_LOGGEDIN_`: true if user is logged in, false otherwise.
+- `_PAGE_`: containing either `rss` or `atom`.
+- All templates data, including links.
 
 ##### Template placeholders
 
@@ -426,11 +424,11 @@ Tags can be added in feeds by adding an entry in `$data['<placeholder>']` array.
 
 List of placeholders:
 
-  * `feed_plugins_header`: used as a header tag in the feed.
+- `feed_plugins_header`: used as a header tag in the feed.
 
 For each links:
 
-  * `feed_plugins`: additional tag for every link entry.
+- `feed_plugins`: additional tag for every link entry.
 
 #### save_link
 
@@ -442,15 +440,15 @@ Allow to alter the link being saved in the datastore.
 
 `$data` is an array containing the link being saved:
 
-  * id
-  * title
-  * url
-  * shorturl
-  * description
-  * private
-  * tags
-  * created
-  * updated
+- id
+- title
+- url
+- shorturl
+- description
+- private
+- tags
+- created
+- updated
 
 
 #### delete_link
@@ -463,15 +461,15 @@ Allow to execute any action before the link is actually removed from the datasto
 
 `$data` is an array containing the link being saved:
 
-  * id
-  * title
-  * url
-  * shorturl
-  * description
-  * private
-  * tags
-  * created
-  * updated
+- id
+- title
+- url
+- shorturl
+- description
+- private
+- tags
+- created
+- updated
 
 ## Guide for template designer
 
@@ -485,9 +483,9 @@ Use the default one as an example.
 
 Aside from classic RainTPL loops, plugins order is handle by JavaScript. You can just include `plugin_admin.js`, only if:
 
-  * you're using a table.
-  * you call orderUp() and orderUp() onclick on arrows.
-  * you add data-line and data-order to your rows.
+- you're using a table.
+- you call orderUp() and orderUp() onclick on arrows.
+- you add data-line and data-order to your rows.
 
 Otherwise, you can use your own JS as long as this field is send by the form:
 
