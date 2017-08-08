@@ -88,6 +88,11 @@ $signature = hash_hmac('sha512', $content, $secret);
 - [Android client example with Kotlin](https://gitlab.com/snippets/1665808)
   by [Braincoke](https://github.com/Braincoke)
 
+### Javascript, NodeJS
+
+- [shaarli-client](https://www.npmjs.com/package/shaarli-client)
+  ([source code](https://github.com/laBecasse/shaarli-client))
+  by [laBecasse](https://github.com/laBecasse)
 
 ### PHP
 
