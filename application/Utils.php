@@ -480,7 +480,7 @@ function alphabetical_sort(&$data, $reverse = false, $byKeys = false)
  * @param int    $nb     The number of items for plural forms.
  * @param string $domain The domain where the translation is stored (default: shaarli).
  *
- * @return String Text translated.
+ * @return string Text translated.
  */
 function t($text, $nText = '', $nb = 1, $domain = 'shaarli') {
     return dn__($domain, $text, $nText, $nb);

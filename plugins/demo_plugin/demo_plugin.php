@@ -14,6 +14,26 @@
  * and check user status with _LOGGEDIN_.
  */
 
+use Shaarli\Config\ConfigManager;
+
+/**
+ * In the footer hook, there is a working example of a translation extension for Shaarli.
+ *
+ * The extension must be attached to a new translation domain (i.e. NOT 'shaarli').
+ * Use case: any custom theme or non official plugin can use the translation system.
+ *
+ * See the documentation for more information.
+ */
+const EXT_TRANSLATION_DOMAIN = 'demo';
+
+/*
+ * This is not necessary, but it's easier if you don't want Poedit to mix up your translations.
+ */
+function demo_plugin_t($text, $nText = '', $nb = 1)
+{
+    return t($text, $nText, $nb, EXT_TRANSLATION_DOMAIN);
+}
+
 /**
  * Initialization function.
  * It will be called when the plugin is loaded.
@@ -26,6 +46,12 @@
 function demo_plugin_init($conf)
 {
     $conf->get('toto', 'nope');
+
+    if (! $conf->exists('translation.extensions.demo')) {
+        // Custom translation with the domain 'demo'
+        $conf->set('translation.extensions.demo', 'plugins/demo_plugin/languages/');
+        $conf->write(true);
+    }
 
     $errors[] = 'This a demo init error.';
     return $errors;
@@ -160,7 +186,7 @@ function hook_demo_plugin_render_includes($data)
 function hook_demo_plugin_render_footer($data)
 {
     // footer text
-    $data['text'][] = 'Shaarli is now enhanced by the awesome demo_plugin.';
+    $data['text'][] = '<br>'. demo_plugin_t('Shaarli is now enhanced by the awesome demo_plugin.');
 
     // Free elements at the end of the page.
     $data['endofpage'][] = '<marquee id="demo_marquee">' .

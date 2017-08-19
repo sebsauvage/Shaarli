@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2017-09-01 19:21+0200\n"
-"PO-Revision-Date: 2017-09-01 19:21+0200\n"
+"POT-Creation-Date: 2017-10-22 13:13+0200\n"
+"PO-Revision-Date: 2017-10-22 13:14+0200\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.4\n"
 "X-Poedit-Basepath: ../../../..\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -27,19 +27,19 @@ msgstr ""
 "peut donc pas fonctionner. Votre version de PHP a des failles de sécurités "
 "connues et devrait être mise à jour au plus tôt."
 
-#: application/ApplicationUtils.php:182 application/ApplicationUtils.php:194
+#: application/ApplicationUtils.php:183 application/ApplicationUtils.php:195
 msgid "directory is not readable"
 msgstr "le répertoire n'est pas accessible en lecture"
 
-#: application/ApplicationUtils.php:197
+#: application/ApplicationUtils.php:198
 msgid "directory is not writable"
 msgstr "le répertoire n'est pas accessible en écriture"
 
-#: application/ApplicationUtils.php:215
+#: application/ApplicationUtils.php:216
 msgid "file is not readable"
 msgstr "le fichier n'est pas accessible en lecture"
 
-#: application/ApplicationUtils.php:218
+#: application/ApplicationUtils.php:219
 msgid "file is not writable"
 msgstr "le fichier n'est pas accessible en écriture"
 
@@ -58,11 +58,11 @@ msgstr "Liens directs"
 msgid "Permalink"
 msgstr "Permalien"
 
-#: application/History.php:158
+#: application/History.php:174
 msgid "History file isn't readable or writable"
 msgstr "Le fichier d'historique n'est pas accessible en lecture ou en écriture"
 
-#: application/History.php:169
+#: application/History.php:185
 msgid "Could not parse history file"
 msgstr "Format incorrect pour le fichier d'historique"
 
@@ -135,7 +135,7 @@ msgstr ""
 "Pssst ! Je suis un lien privé que VOUS êtes le seul à voir. Vous pouvez me "
 "supprimer aussi."
 
-#: application/LinkFilter.php:415
+#: application/LinkFilter.php:452
 msgid "The link you are trying to reach does not exist or has been deleted."
 msgstr "Le lien que vous essayez de consulter n'existe pas ou a été supprimé."
 
@@ -143,29 +143,29 @@ msgstr "Le lien que vous essayez de consulter n'existe pas ou a été supprimé.
 msgid "Invalid export selection:"
 msgstr "Sélection d'export invalide :"
 
-#: application/NetscapeBookmarkUtils.php:80
+#: application/NetscapeBookmarkUtils.php:81
 #, php-format
 msgid "File %s (%d bytes) "
 msgstr "Le fichier %s (%d octets) "
 
-#: application/NetscapeBookmarkUtils.php:82
+#: application/NetscapeBookmarkUtils.php:83
 msgid "has an unknown file format. Nothing was imported."
 msgstr "a un format inconnu. Rien n'a été importé."
 
-#: application/NetscapeBookmarkUtils.php:85
+#: application/NetscapeBookmarkUtils.php:86
 #, php-format
 msgid ""
-"was successfully processed: %d links imported, %d links overwritten, %d "
-"links skipped."
+"was successfully processed in %d seconds: %d links imported, %d links "
+"overwritten, %d links skipped."
 msgstr ""
-"a été importé avec succès : %d liens importés, %d liens écrasés, %d liens "
-"ignorés."
+"a été importé avec succès en %d secondes : %d liens importés, %d liens "
+"écrasés, %d liens ignorés."
 
-#: application/PageBuilder.php:160
+#: application/PageBuilder.php:165
 msgid "The page you are trying to reach does not exist or has been deleted."
 msgstr "La page que vous essayez de consulter n'existe pas ou a été supprimée."
 
-#: application/PageBuilder.php:162
+#: application/PageBuilder.php:167
 msgid "404 Not Found"
 msgstr "404 Introuvable"
 
@@ -249,58 +249,62 @@ msgstr "Vous n'êtes pas autorisé à modifier la configuration."
 msgid "Error accessing"
 msgstr "Une erreur s'est produite en accédant à"
 
-#: index.php:134
+#: index.php:133
 msgid "Shared links on "
 msgstr "Liens partagés sur "
 
-#: index.php:156
+#: index.php:155
 msgid "Insufficient permissions:"
 msgstr "Permissions insuffisantes :"
 
-#: index.php:383
+#: index.php:382
 msgid "I said: NO. You are banned for the moment. Go away."
 msgstr "NON. Vous êtes banni pour le moment. Revenez plus tard."
 
-#: index.php:448
+#: index.php:447
 msgid "Wrong login/password."
 msgstr "Nom d'utilisateur ou mot de passe incorrects."
 
-#: index.php:1091
+#: index.php:1107
 msgid "You are not supposed to change a password on an Open Shaarli."
 msgstr ""
 "Vous n'êtes pas censé modifier le mot de passe d'un Shaarli en mode ouvert."
 
-#: index.php:1096 index.php:1137 index.php:1213 index.php:1243 index.php:1343
+#: index.php:1112 index.php:1153 index.php:1229 index.php:1259 index.php:1359
 msgid "Wrong token."
 msgstr "Jeton invalide."
 
-#: index.php:1101
+#: index.php:1117
 msgid "The old password is not correct."
 msgstr "L'ancien mot de passe est incorrect."
 
-#: index.php:1121
+#: index.php:1137
 msgid "Your password has been changed"
 msgstr "Votre mot de passe a été modifié"
 
-#: index.php:1174
+#: index.php:1190
 msgid "Configuration was saved."
 msgstr "La configuration a été sauvegardé."
 
-#: index.php:1225
+#: index.php:1241
 #, php-format
 msgid "The tag was removed from %d link."
 msgid_plural "The tag was removed from %d links."
 msgstr[0] "Le tag a été supprimé de %d lien."
 msgstr[1] "Le tag a été supprimé de %d liens."
 
-#: index.php:1226
+#: index.php:1242
 #, php-format
 msgid "The tag was renamed in %d link."
 msgid_plural "The tag was renamed in %d links."
 msgstr[0] "Le tag a été renommé dans %d lien."
 msgstr[1] "Le tag a été renommé dans %d liens."
 
-#: index.php:1551
+#: index.php:1458
+msgid "Note: "
+msgstr "Note : "
+
+#: index.php:1567
 #, php-format
 msgid ""
 "The file you are trying to upload is probably bigger than what this "
@@ -310,7 +314,7 @@ msgstr ""
 "le serveur web peut accepter (%s). Merci de l'envoyer en parties plus "
 "légères."
 
-#: index.php:1967
+#: index.php:1983
 #, php-format
 msgid ""
 "<pre>Sessions do not seem to work correctly on your server.<br>Make sure the "
@@ -329,7 +333,7 @@ msgstr ""
 "cookies. Nous vous recommandons d'accéder à votre serveur depuis son adresse "
 "IP ou un <em>Fully Qualified Domain Name</em>.<br>"
 
-#: index.php:1977
+#: index.php:1993
 msgid "Click to try again."
 msgstr "Cliquer ici pour réessayer."
 
