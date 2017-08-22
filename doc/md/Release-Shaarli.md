@@ -26,6 +26,7 @@ GitHub allows drafting the release note for the upcoming release, from the [Rele
 This file should contain the same information as the release note draft for the upcoming version.
 
 Update it to:
+
 - add new entries (additions, fixes, etc.)
 - mark the current version as released by setting its date and link
 - add a new section for the future unreleased version

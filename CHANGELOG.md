@@ -4,6 +4,57 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v0.9.1](https://github.com/shaarli/Shaarli/releases/tag/v0.9.1) - 2017-08-23
+
+The documentation has been migrated to ReadTheDocs:
+- https://shaarli.readthedocs.io/
+- edits are submitted as pull requests
+
+### Added
+- Allow bulk link deletion
+- Display subtags in the tag cloud
+- Add an endpoint to refresh the token
+- Add a token on every page
+- Add a tag list view for management
+- Add Note bookmarklet
+- Add creation date when editing a link
+
+### Changed
+- Documentation:
+    - Generate static HTML documentation with [mkdocs](http://www.mkdocs.org/)
+    - Host documentation on [ReadTheDocs](http://www.mkdocs.org/)
+    - Update documentation structure
+    - Update Makefile targets to:
+        - Build the docs locally
+        - Include the generated docs in the release archives
+- Theme:
+    - Use the new theme as the default
+    - Rename the tag cloud template to `tag.cloud.html`
+    - Display visited links in grey
+    - Use only one search form in `linklist.html`
+    - Hide the "search links with these tags" option when an empty `searchtags` is passed to `tag.list.html`
+- Improve HTTP header handling when hosting Shaarli with Docker behind a reverse proxy
+- Searching for tags with an empty value returns untagged links only
+- Set Travis environment to `precise` until the new `trusty` environment is ready
+
+### Removed
+- Remove dead Pubsubhubbub code
+- Disable the GitHub wiki (see changed/documentation)
+- Remove Docker `dev` image and resources
+- Theme:
+    - Remove the bottom "Sort by" menu in `tag.list.html`
+
+### Fixed
+- Fix file existence check for `user.css`
+- Limit selection to 2k characters when using the bookmarklet
+- Fix JS error `uncaught type error`
+- Fix Firefox Social button
+- Use pinned PHP dependencies when generating release archives
+- Make sure that the tag exists before altering/removing it
+
+### Security
+- Add a whitelist for protocols for URLs
+
 
 ## [v0.9.0](https://github.com/shaarli/Shaarli/releases/tag/v0.9.0) - 2017-05-07
 
