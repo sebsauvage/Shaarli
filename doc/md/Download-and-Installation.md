@@ -18,13 +18,13 @@ Get the latest released version from the [releases](https://github.com/shaarli/S
 
 **Download our *shaarli-full* archive** to include dependencies.
 
-The current latest released version is `v0.9.0`
+The current latest released version is `v0.9.1`
 
 Or in command lines:
 
 ```bash
-$ wget https://github.com/shaarli/Shaarli/releases/download/v0.9.0/shaarli-v0.9.0-full.zip
-$ unzip shaarli-v0.9.0-full.zip
+$ wget https://github.com/shaarli/Shaarli/releases/download/v0.9.1/shaarli-v0.9.1-full.zip
+$ unzip shaarli-v0.9.1-full.zip
 $ mv Shaarli /path/to/shaarli/
 ```
 
