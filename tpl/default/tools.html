@@ -97,7 +97,7 @@
             var%20desc=document.getSelection().toString();
             if(desc.length>4000){
               desc=desc.substr(0,4000)+'...';
-              alert("{function="str_replace(' ', '%20', t('The selected text is too long, it will be truncated.'))"}");
+              alert('{function="str_replace(' ', '%20', t('The selected text is too long, it will be truncated.'))"}');
             }
             window.open(
               '{$pageabsaddr}?private=1&amp;post='+
