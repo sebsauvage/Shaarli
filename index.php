@@ -1063,10 +1063,10 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
     // -------- Display the Tools menu if requested (import/export/bookmarklet...)
     if ($targetPage == Router::$PAGE_TOOLS)
     {
-        $data = array(
+        $data = [
             'pageabsaddr' => index_url($_SERVER),
-            'sslenabled' => !empty($_SERVER['HTTPS'])
-        );
+            'sslenabled' => is_https($_SERVER),
+        ];
         $pluginManager->executeHooks('render_tools', $data);
 
         foreach ($data as $key => $value) {
