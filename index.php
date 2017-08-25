@@ -1256,6 +1256,9 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
         // Remove duplicates.
         $tags = implode(' ', array_unique(explode(' ', $tags)));
 
+        if (empty(trim($_POST['lf_url']))) {
+            $_POST['lf_url'] = '?' . smallHash($linkdate . $id);
+        }
         $url = whitelist_protocols(trim($_POST['lf_url']), $conf->get('security.allowed_protocols'));
 
         $link = array(
