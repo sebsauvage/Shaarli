@@ -328,6 +328,8 @@ class ConfigManager
         $this->setEmpty('privacy.default_private_links', false);
         $this->setEmpty('privacy.hide_public_links', false);
         $this->setEmpty('privacy.hide_timestamps', false);
+        // default state of the 'remember me' checkbox of the login form
+        $this->setEmpty('privacy.remember_user_default', true);
 
         $this->setEmpty('thumbnail.enable_thumbnails', true);
         $this->setEmpty('thumbnail.enable_localcache', true);

@@ -91,6 +91,8 @@ _These settings should not be edited_
 - **default_private_links**: Check the private checkbox by default for every new link.  
 - **hide_public_links**: All links are hidden while logged out.  
 - **hide_timestamps**: Timestamps are hidden.
+- **remember_user_default**: Default state of the login page's *remember me* checkbox
+    - `true`: checked by default, `false`: unchecked by default
 
 ### Feed
 
@@ -192,7 +194,8 @@ _These settings should not be edited_
     "privacy": {
         "default_private_links": true,
         "hide_public_links": false,
-        "hide_timestamps": false
+        "hide_timestamps": false,
+        "remember_user_default": true
     },
     "thumbnail": {
         "enable_thumbnails": true,

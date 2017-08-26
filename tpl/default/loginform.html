@@ -30,7 +30,8 @@
         </div>
         <div class="remember-me">
           <input type="checkbox" name="longlastingsession" id="longlastingsessionform"
-             checked="checked" tabindex="22">
+             {if="$remember_user_default"}checked="checked"{/if}
+             tabindex="22">
           <label for="longlastingsessionform">{'Remember me'|t}</label>
         </div>
         <div>
