@@ -1,9 +1,6 @@
 ## Client browser
 - Shaarli relies on `HTTP_REFERER` for some functions (like redirects and clicking on tags). If you have disabled or masqueraded `HTTP_REFERER` in your browser, some features of Shaarli may not work
 
-## PHP
-- `magic_quotes` is an horrible option of PHP which is often activated on servers. No serious developer should rely on this horror to secure their code against SQL injections. You should disable it (and Shaarli expects this option to be disabled). Nevertheless, I have added code to cope with `magic_quotes` on, so you should not be bothered even on crappy hosts.
-
 ## Server and sessions
 - Directories are protected using `.htaccess` files
 - Forms are protected against XSRF (Cross-site requests forgery):
