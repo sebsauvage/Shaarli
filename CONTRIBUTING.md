@@ -54,7 +54,7 @@ Please report any problem you might find.
  * starting from branch ` master`, switch to a new branch (eg. `git checkout -b my-awesome-feature`)
  * edit the required files (from the Github web interface or your text editor)
  * add and commit your changes with a meaningful commit message (eg `Cool new feature, fixes issue #1001`)
- * run unit tests against your patched version, see [Running unit tests](https://github.com/shaarli/Shaarli/wiki/Running-unit-tests)
+ * run unit tests against your patched version, see [Running unit tests](https://shaarli.readthedocs.io/en/master/Unit-tests/#run-unit-tests)
  * Open your fork in the Github web interface and click the "Compare and Pull Request" button, enter required info and submit your Pull Request.
 
 All changes you will do on the `my-awesome-feature`  in the future will be added to your Pull Request. Don't work directly on the master branch, don't do unrelated work on your  `my-awesome-feature` branch.

@@ -6,7 +6,7 @@
     "homepage": "https://github.com/shaarli/Shaarli",
     "support": {
         "issues": "https://github.com/shaarli/Shaarli/issues",
-        "wiki": "https://github.com/shaarli/Shaarli/wiki"
+        "wiki": "https://shaarli.readthedocs.io"
     },
     "keywords": ["bookmark", "link", "share", "web"],
     "config": {

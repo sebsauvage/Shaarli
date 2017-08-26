@@ -61,7 +61,7 @@ The documentation has been migrated to ReadTheDocs:
 This release introduces the REST API, and requires updating HTTP server
 configuration to enable URL rewriting, see:
 - https://shaarli.github.io/api-documentation/
-- https://github.com/shaarli/Shaarli/wiki/Server-configuration
+- https://shaarli.readthedocs.io/en/master/Server-configuration/
 
 **WARNING**: Shaarli now requires PHP 5.5+.
 

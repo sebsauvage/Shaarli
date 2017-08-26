@@ -9,8 +9,8 @@ use Shaarli\Config\Exception\UnauthorizedConfigException;
  *
  * Manages all Shaarli's settings.
  * See the documentation for more information on settings:
- *   - doc/Shaarli-configuration.html
- *   - https://github.com/shaarli/Shaarli/wiki/Shaarli-configuration
+ *   - doc/md/Shaarli-configuration.md
+ *   - https://shaarli.readthedocs.io/en/master/Shaarli-configuration/#configuration
  */
 class ConfigManager
 {

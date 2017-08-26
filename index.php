@@ -48,8 +48,8 @@ if (! file_exists(__DIR__ . '/vendor/autoload.php')) {
         ."If you installed Shaarli through Git or using the development branch,\n"
         ."please refer to the installation documentation to install PHP"
         ." dependencies using Composer:\n"
-        ."- https://github.com/shaarli/Shaarli/wiki/Server-requirements\n"
-        ."- https://github.com/shaarli/Shaarli/wiki/Download-and-Installation";
+        ."- https://shaarli.readthedocs.io/en/master/Server-requirements/\n"
+        ."- https://shaarli.readthedocs.io/en/master/Download-and-Installation/";
     exit;
 }
 require_once 'inc/rain.tpl.class.php';
@@ -1233,7 +1233,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
         // Linkdate is kept here to:
         //   - use the same permalink for notes as they're displayed when creating them
         //   - let users hack creation date of their posts
-        //     See: https://github.com/shaarli/Shaarli/wiki/Datastore-hacks#changing-the-timestamp-for-a-link
+        //     See: https://shaarli.readthedocs.io/en/master/Various-hacks/#changing-the-timestamp-for-a-shaare
         $linkdate = escape($_POST['lf_linkdate']);
         if (isset($LINKSDB[$id])) {
             // Edit

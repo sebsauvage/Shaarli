@@ -72,4 +72,4 @@ Usage of each plugin is documented in it's README file:
 
 #### Third party plugins
 
-See [Community & related software](https://github.com/shaarli/Shaarli/wiki/Community-%26-Related-software#third-party-plugins)
+See [Community & related software](https://shaarli.readthedocs.io/en/master/Community-&-Related-software/)
