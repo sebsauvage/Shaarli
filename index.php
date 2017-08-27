@@ -583,20 +583,29 @@ function showDailyRSS($conf) {
  */
 function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager)
 {
-    $day=date('Ymd',strtotime('-1 day')); // Yesterday, in format YYYYMMDD.
-    if (isset($_GET['day'])) $day=$_GET['day'];
-
-    $days = $LINKSDB->days();
-    $i = array_search($day,$days);
-    if ($i===false) { $i=count($days)-1; $day=$days[$i]; }
-    $previousday='';
-    $nextday='';
-    if ($i!==false)
-    {
-        if ($i>=1) $previousday=$days[$i-1];
-        if ($i<count($days)-1) $nextday=$days[$i+1];
+    $day = date('Ymd', strtotime('-1 day')); // Yesterday, in format YYYYMMDD.
+    if (isset($_GET['day'])) {
+      $day = $_GET['day'];
     }
 
+    $days = $LINKSDB->days();
+    $i = array_search($day, $days);
+    if ($i === false && count($days)) {
+        // no links for day, but at least one day with links
+        $i = count($days) - 1;
+        $day = $days[$i];
+    }
+    $previousday = '';
+    $nextday = '';
+
+    if ($i !== false) {
+        if ($i >= 1) {
+             $previousday=$days[$i - 1];
+        }
+        if ($i < count($days) - 1) {
+          $nextday = $days[$i + 1];
+        }
+    }
     try {
         $linksToDisplay = $LINKSDB->filterDay($day);
     } catch (Exception $exc) {
@@ -605,9 +614,7 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager)
     }
 
     // We pre-format some fields for proper output.
-    foreach($linksToDisplay as $key=>$link)
-    {
-
+    foreach($linksToDisplay as $key => $link) {
         $taglist = explode(' ',$link['tags']);
         uasort($taglist, 'strcasecmp');
         $linksToDisplay[$key]['taglist']=$taglist;
@@ -621,21 +628,22 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager)
        so I manually spread entries with a simple method: I roughly evaluate the
        height of a div according to title and description length.
     */
-    $columns=array(array(),array(),array()); // Entries to display, for each column.
-    $fill=array(0,0,0);  // Rough estimate of columns fill.
-    foreach($linksToDisplay as $key=>$link)
-    {
+    $columns = array(array(), array(), array()); // Entries to display, for each column.
+    $fill = array(0, 0, 0);  // Rough estimate of columns fill.
+    foreach($linksToDisplay as $key => $link) {
         // Roughly estimate length of entry (by counting characters)
         // Title: 30 chars = 1 line. 1 line is 30 pixels height.
         // Description: 836 characters gives roughly 342 pixel height.
         // This is not perfect, but it's usually OK.
-        $length=strlen($link['title'])+(342*strlen($link['description']))/836;
-        if ($link['thumbnail']) $length +=100; // 1 thumbnails roughly takes 100 pixels height.
+        $length = strlen($link['title']) + (342 * strlen($link['description'])) / 836;
+        if ($link['thumbnail']) {
+          $length += 100; // 1 thumbnails roughly takes 100 pixels height.
+        }
         // Then put in column which is the less filled:
-        $smallest=min($fill); // find smallest value in array.
-        $index=array_search($smallest,$fill); // find index of this smallest value.
-        array_push($columns[$index],$link); // Put entry in this column.
-        $fill[$index]+=$length;
+        $smallest = min($fill); // find smallest value in array.
+        $index = array_search($smallest, $fill); // find index of this smallest value.
+        array_push($columns[$index], $link); // Put entry in this column.
+        $fill[$index] += $length;
     }
 
     $dayDate = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $day.'_000000');
