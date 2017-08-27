@@ -737,6 +737,8 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
             $PAGE->assign('username', escape($_GET['username']));
         }
         $PAGE->assign('returnurl',(isset($_SERVER['HTTP_REFERER']) ? escape($_SERVER['HTTP_REFERER']):''));
+        // add default state of the 'remember me' checkbox
+        $PAGE->assign('remember_user_default', $conf->get('privacy.remember_user_default'));
         $PAGE->renderPage('loginform');
         exit;
     }
