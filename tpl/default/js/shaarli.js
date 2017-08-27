@@ -401,14 +401,14 @@ window.onload = function () {
 
             var message = 'Are you sure you want to delete '+ links.length +' links?\n';
             message += 'This action is IRREVERSIBLE!\n\nTitles:\n';
-            var ids = '';
+            var ids = [];
             links.forEach(function(item) {
                 message += '  - '+ item['title'] +'\n';
-                ids += item['id'] +'+';
+                ids.push(item['id']);
             });
 
             if (window.confirm(message)) {
-                window.location = '?delete_link&lf_linkdate='+ ids +'&token='+ token.value;
+                window.location = '?delete_link&lf_linkdate='+ ids.join('+') +'&token='+ token.value;
             }
         });
     }
