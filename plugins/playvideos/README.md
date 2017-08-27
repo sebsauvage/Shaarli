@@ -8,7 +8,7 @@ This uses code from https://zaius.github.io/youtube_playlist/ and is currently o
 
 #### Installation and setup
 
-This is a default Shaarli plugin, you just have to enable it. See https://github.com/shaarli/Shaarli/wiki/Shaarli-configuration/
+This is a default Shaarli plugin, you just have to enable it. See https://shaarli.readthedocs.io/en/master/Shaarli-configuration/
 
 
 #### Troubleshooting

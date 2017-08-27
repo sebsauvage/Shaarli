@@ -249,7 +249,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         $link = array(
             'id' => 1,
             'title'=>' Shaarli: the personal, minimalist, super-fast, no-database delicious clone',
-            'url'=>'https://github.com/shaarli/Shaarli/wiki',
+            'url'=>'https://shaarli.readthedocs.io',
             'description'=>'Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.
 
 To learn how to use Shaarli, consult the link "Help/documentation" at the bottom of this page.

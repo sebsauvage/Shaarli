@@ -49,10 +49,10 @@ hook_<plugin_name>_<hook_name>($data, $conf)
 
 Parameters:
 
-- data: see [$data section](https://github.com/shaarli/Shaarli/wiki/Plugin-System#plugins-data)
+- data: see [$data section](https://shaarli.readthedocs.io/en/master/Plugin-System/#plugins-data)
 - conf: the `ConfigManager` instance.
 
-For exemple, if my plugin want to add data to the header, this function is needed:
+For example, if my plugin want to add data to the header, this function is needed:
 
     hook_demo_plugin_render_header
 
