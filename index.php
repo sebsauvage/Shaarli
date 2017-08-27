@@ -133,15 +133,6 @@ date_default_timezone_set($conf->get('general.timezone', 'UTC'));
 
 ob_start();  // Output buffering for the page cache.
 
-// In case stupid admin has left magic_quotes enabled in php.ini:
-if (get_magic_quotes_gpc())
-{
-    function stripslashes_deep($value) { $value = is_array($value) ? array_map('stripslashes_deep', $value) : stripslashes($value); return $value; }
-    $_POST = array_map('stripslashes_deep', $_POST);
-    $_GET = array_map('stripslashes_deep', $_GET);
-    $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
-}
-
 // Prevent caching on client side or proxy: (yes, it's ugly)
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -186,42 +177,42 @@ if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
  */
 function setup_login_state($conf)
 {
-	if ($conf->get('security.open_shaarli')) {
-	    return true;
-	}
-	$userIsLoggedIn = false; // By default, we do not consider the user as logged in;
-	$loginFailure = false; // If set to true, every attempt to authenticate the user will fail. This indicates that an important condition isn't met.
-	if (! $conf->exists('credentials.login')) {
-	    $userIsLoggedIn = false;  // Shaarli is not configured yet.
-	    $loginFailure = true;
-	}
-	if (isset($_COOKIE['shaarli_staySignedIn']) &&
-	    $_COOKIE['shaarli_staySignedIn']===STAY_SIGNED_IN_TOKEN &&
-	    !$loginFailure)
-	{
-	    fillSessionInfo($conf);
-	    $userIsLoggedIn = true;
-	}
-	// If session does not exist on server side, or IP address has changed, or session has expired, logout.
-	if (empty($_SESSION['uid'])
+    if ($conf->get('security.open_shaarli')) {
+        return true;
+    }
+    $userIsLoggedIn = false; // By default, we do not consider the user as logged in;
+    $loginFailure = false; // If set to true, every attempt to authenticate the user will fail. This indicates that an important condition isn't met.
+    if (! $conf->exists('credentials.login')) {
+        $userIsLoggedIn = false;  // Shaarli is not configured yet.
+        $loginFailure = true;
+    }
+    if (isset($_COOKIE['shaarli_staySignedIn']) &&
+        $_COOKIE['shaarli_staySignedIn']===STAY_SIGNED_IN_TOKEN &&
+        !$loginFailure)
+    {
+        fillSessionInfo($conf);
+        $userIsLoggedIn = true;
+    }
+    // If session does not exist on server side, or IP address has changed, or session has expired, logout.
+    if (empty($_SESSION['uid'])
         || ($conf->get('security.session_protection_disabled') === false && $_SESSION['ip'] != allIPs())
         || time() >= $_SESSION['expires_on'])
-	{
-	    logout();
-	    $userIsLoggedIn = false;
-	    $loginFailure = true;
-	}
-	if (!empty($_SESSION['longlastingsession'])) {
-	    $_SESSION['expires_on']=time()+$_SESSION['longlastingsession']; // In case of "Stay signed in" checked.
-	}
-	else {
-	    $_SESSION['expires_on']=time()+INACTIVITY_TIMEOUT; // Standard session expiration date.
-	}
-	if (!$loginFailure) {
-	    $userIsLoggedIn = true;
-	}
+    {
+        logout();
+        $userIsLoggedIn = false;
+        $loginFailure = true;
+    }
+    if (!empty($_SESSION['longlastingsession'])) {
+        $_SESSION['expires_on']=time()+$_SESSION['longlastingsession']; // In case of "Stay signed in" checked.
+    }
+    else {
+        $_SESSION['expires_on']=time()+INACTIVITY_TIMEOUT; // Standard session expiration date.
+    }
+    if (!$loginFailure) {
+        $userIsLoggedIn = true;
+    }
 
-	return $userIsLoggedIn;
+    return $userIsLoggedIn;
 }
 $userIsLoggedIn = setup_login_state($conf);
 
@@ -245,10 +236,10 @@ function allIPs()
  */
 function fillSessionInfo($conf)
 {
-	$_SESSION['uid'] = sha1(uniqid('',true).'_'.mt_rand()); // Generate unique random number (different than phpsessionid)
-	$_SESSION['ip']=allIPs();                // We store IP address(es) of the client to make sure session is not hijacked.
-	$_SESSION['username']= $conf->get('credentials.login');
-	$_SESSION['expires_on']=time()+INACTIVITY_TIMEOUT;  // Set session expiration.
+    $_SESSION['uid'] = sha1(uniqid('',true).'_'.mt_rand()); // Generate unique random number (different than phpsessionid)
+    $_SESSION['ip']=allIPs();                // We store IP address(es) of the client to make sure session is not hijacked.
+    $_SESSION['username']= $conf->get('credentials.login');
+    $_SESSION['expires_on']=time()+INACTIVITY_TIMEOUT;  // Set session expiration.
 }
 
 /**
@@ -265,7 +256,7 @@ function check_auth($login, $password, $conf)
     $hash = sha1($password . $login . $conf->get('credentials.salt'));
     if ($login == $conf->get('credentials.login') && $hash == $conf->get('credentials.hash'))
     {   // Login/password is correct.
-		fillSessionInfo($conf);
+        fillSessionInfo($conf);
         logm($conf->get('resource.log'), $_SERVER['REMOTE_ADDR'], 'Login successful');
         return true;
     }
@@ -394,9 +385,10 @@ if (isset($_POST['login']))
         // If user wants to keep the session cookie even after the browser closes:
         if (!empty($_POST['longlastingsession']))
         {
-			setcookie('shaarli_staySignedIn', STAY_SIGNED_IN_TOKEN, time()+31536000, WEB_PATH);
-            $_SESSION['longlastingsession']=31536000;  // (31536000 seconds = 1 year)
-            $_SESSION['expires_on']=time()+$_SESSION['longlastingsession'];  // Set session expiration on server-side.
+            $_SESSION['longlastingsession'] = 31536000; // (31536000 seconds = 1 year)
+            $expiration = time() + $_SESSION['longlastingsession']; // calculate relative cookie expiration (1 year from now)
+            setcookie('shaarli_staySignedIn', STAY_SIGNED_IN_TOKEN, $expiration, WEB_PATH);
+            $_SESSION['expires_on'] = $expiration;  // Set session expiration on server-side.
 
             $cookiedir = ''; if(dirname($_SERVER['SCRIPT_NAME'])!='/') $cookiedir=dirname($_SERVER["SCRIPT_NAME"]).'/';
             session_set_cookie_params($_SESSION['longlastingsession'],$cookiedir,$_SERVER['SERVER_NAME']); // Set session cookie expiration on client side
