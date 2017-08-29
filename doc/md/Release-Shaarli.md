@@ -46,6 +46,12 @@ TBA
 
 
 ## Increment the version code, update docs, create and push a signed tag
+### Update the list of Git contributors
+```bash
+$ make authors
+$ git commit -s -m "Update AUTHORS"
+```
+
 ### Create and merge a Pull Request
 This one is pretty straightforward ;-)
 
