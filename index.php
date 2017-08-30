@@ -718,6 +718,23 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
     $query = (isset($_SERVER['QUERY_STRING'])) ? $_SERVER['QUERY_STRING'] : '';
     $targetPage = Router::findPage($query, $_GET, isLoggedIn());
 
+    if (
+        // if the user isn't logged in
+        !isLoggedIn() &&
+        // and Shaarli doesn't have public content...
+        $conf->get('privacy.hide_public_links') &&
+        // and is configured to enforce the login
+        $conf->get('privacy.force_login') &&
+        // and the current page isn't already the login page
+        $targetPage !== Router::$PAGE_LOGIN &&
+        // and the user is not requesting a feed (which would lead to a different content-type as expected)
+        $targetPage !== Router::$PAGE_FEED_ATOM &&
+        $targetPage !== Router::$PAGE_FEED_RSS
+    ) {
+        // force current page to be the login page
+        $targetPage = Router::$PAGE_LOGIN;
+    }
+
     // Call plugin hooks for header, footer and includes, specifying which page will be rendered.
     // Then assign generated data to RainTPL.
     $common_hooks = array(
