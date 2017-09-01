@@ -39,7 +39,10 @@ We recommend that you use the latest release tarball with the `-full` suffix. It
 
 Once downloaded, extract the archive locally and update your remote installation (e.g. via FTP) -be sure you keep the content of the `data` directory!
 
-After upgrading, access your fresh Shaarli installation from a web browser; the configuration and data store will then be automatically updated, and new settings added to `data/config.json.php` (see [Shaarli configuration](Shaarli-configuration) for more details).
+If you use translations in gettext mode - meaning you manually changed the default mode -, 
+reload your web server.
+
+After upgrading, access your fresh Shaarli installation from a web browser; the configuration and data store will then be automatically updated, and new settings added to `data/config.json.php` (see [Shaarli configuration](Shaarli configuration) for more details).
 
 ## Upgrading with Git
 
@@ -71,6 +74,14 @@ Updating dependencies
   - Installing shaarli/netscape-bookmark-parser (v1.0.1)
     Downloading: 100%
 ```
+
+Shaarli >= `v0.9.2` supports translations:
+
+```bash
+$ make translate
+```
+
+If you use translations in gettext mode, reload your web server.
 
 ### Migrating and upgrading from Sebsauvage's repository
 
@@ -150,6 +161,14 @@ Updating dependencies
   - Installing shaarli/netscape-bookmark-parser (v1.0.1)
     Downloading: 100%
 ```
+
+Shaarli >= `v0.9.2` supports translations:
+
+```bash
+$ make translate
+```
+
+If you use translations in gettext mode, reload your web server.
 
 Optionally, you can delete information related to the legacy version:
 

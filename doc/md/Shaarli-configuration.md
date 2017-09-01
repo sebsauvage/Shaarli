@@ -81,6 +81,20 @@ _These settings should not be edited_
 - **page_cache**: Shaarli's internal cache directory.  
 - **ban_file**: Banned IP file path.
 
+### Translation
+
+- **language**: translation language (also see [Translations](Translations))
+    - **auto** (default): The translation language is chosen from the browser locale. 
+    It means that the language can be different for 2 different visitors depending on their locale.  
+    - **en**: Use the English translation.
+    - **fr**: Use the French translation.
+- **mode**: 
+    - **auto** or **php** (default): Use the PHP implementation of gettext (slower)
+    - **gettext**: Use PHP builtin gettext extension 
+    (faster, but requires `php-gettext` to be installed and to reload the web server on update)
+- **extension**: Translation extensions for custom themes or plugins. 
+Must be an associative array: `translation domain => translation path`.
+
 ### Updates
 
 - **check_updates**: Enable or disable update check to the git repository.  
@@ -211,6 +225,13 @@ _These settings should not be edited_
     "plugins": {
         "WALLABAG_URL": "http://demo.wallabag.org",
         "WALLABAG_VERSION": "1"
+    },
+    "translation": {
+        "language": "fr",
+        "mode": "php",
+        "extensions": {
+            "demo": "plugins/demo_plugin/languages/"
+        }
     }
 } ?>
 ```
