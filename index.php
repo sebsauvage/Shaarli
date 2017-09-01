@@ -1330,10 +1330,17 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
             die('Wrong token.');
         }
 
-        if (strpos($_GET['lf_linkdate'], ' ') !== false) {
-            $ids = array_values(array_filter(preg_split('/\s+/', escape($_GET['lf_linkdate']))));
+        $ids = trim($_GET['lf_linkdate']);
+        if (strpos($ids, ' ') !== false) {
+            // multiple, space-separated ids provided
+            $ids = array_values(array_filter(preg_split('/\s+/', escape($ids))));
         } else {
-            $ids = [$_GET['lf_linkdate']];
+            // only a single id provided
+            $ids = [$ids];
+        }
+        // assert at least one id is given
+        if(!count($ids)){
+            die('no id provided');
         }
         foreach ($ids as $id) {
             $id = (int) escape($id);
