@@ -436,6 +436,14 @@ class Updater
         }
         return true;
     }
+
+    /**
+     * Save the datastore -> the link order is now applied when links are saved.
+     */
+    public function updateMethodReorderDatastore()
+    {
+        $this->linkDB->save($this->conf->get('resource.page_cache'));
+    }
 }
 
 /**

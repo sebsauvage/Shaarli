@@ -289,13 +289,15 @@ You use the community supported version of the original Shaarli project, by Seba
             return;
         }
 
+        $this->urls = [];
+        $this->ids = [];
         $this->links = FileUtils::readFlatDB($this->datastore, []);
 
         $toremove = array();
         foreach ($this->links as $key => &$link) {
             if (! $this->loggedIn && $link['private'] != 0) {
                 // Transition for not upgraded databases.
-                $toremove[] = $key;
+                unset($this->links[$key]);
                 continue;
             }
 
@@ -329,14 +331,10 @@ You use the community supported version of the original Shaarli project, by Seba
                 }
                 $link['shorturl'] = smallHash($link['linkdate']);
             }
-        }
 
-        // If user is not logged in, filter private links.
-        foreach ($toremove as $offset) {
-            unset($this->links[$offset]);
+            $this->urls[$link['url']] = $key;
+            $this->ids[$link['id']] = $key;
         }
-
-        $this->reorder();
     }
 
     /**
@@ -346,6 +344,7 @@ You use the community supported version of the original Shaarli project, by Seba
      */
     private function write()
     {
+        $this->reorder();
         FileUtils::writeFlatDB($this->datastore, $this->links);
     }
 
@@ -528,8 +527,8 @@ You use the community supported version of the original Shaarli project, by Seba
             return $a['created'] < $b['created'] ? 1 * $order : -1 * $order;
         });
 
-        $this->urls = array();
-        $this->ids = array();
+        $this->urls = [];
+        $this->ids = [];
         foreach ($this->links as $key => $link) {
             $this->urls[$link['url']] = $key;
             $this->ids[$link['id']] = $key;
