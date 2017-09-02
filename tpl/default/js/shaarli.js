@@ -607,10 +607,11 @@ function htmlEntities(str)
 function activateFirefoxSocial(node) {
     var loc = location.href;
     var baseURL = loc.substring(0, loc.lastIndexOf("/") + 1);
+    var title = document.title;
 
     // Keeping the data separated (ie. not in the DOM) so that it's maintainable and diffable.
     var data = {
-        name: "{$shaarlititle}",
+        name: title,
         description: "The personal, minimalist, super-fast, database free, bookmarking service by the Shaarli community.",
         author: "Shaarli",
         version: "1.0.0",
