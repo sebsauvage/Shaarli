@@ -401,3 +401,31 @@ function getIpAddressFromProxy($server, $trustedIps)
 
     return array_pop($ips);
 }
+
+/**
+ * Returns true if Shaarli's currently browsed in HTTPS.
+ * Supports reverse proxies (if the headers are correctly set).
+ *
+ * @param array $server $_SERVER.
+ *
+ * @return bool true if HTTPS, false otherwise.
+ */
+function is_https($server)
+{
+
+    if (isset($server['HTTP_X_FORWARDED_PORT'])) {
+        // Keep forwarded port
+        if (strpos($server['HTTP_X_FORWARDED_PORT'], ',') !== false) {
+            $ports = explode(',', $server['HTTP_X_FORWARDED_PORT']);
+            $port = trim($ports[0]);
+        } else {
+            $port = $server['HTTP_X_FORWARDED_PORT'];
+        }
+
+        if ($port == '443') {
+            return true;
+        }
+    }
+
+    return ! empty($server['HTTPS']);
+}
