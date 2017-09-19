@@ -45,6 +45,7 @@ pages:
     - Static analysis: Static-analysis.md
     - Theming: Theming.md
     - Unit tests: Unit-tests.md
+    - Unit tests inside Docker: Unit-tests-Docker.md
 - About:
     - FAQ: FAQ.md
     - Community & Related software: Community-&-Related-software.md
