@@ -168,14 +168,15 @@ class ApplicationUtils
     public static function checkResourcePermissions($conf)
     {
         $errors = array();
+        $rainTplDir = rtrim($conf->get('resource.raintpl_tpl'), '/');
 
         // Check script and template directories are readable
         foreach (array(
             'application',
             'inc',
             'plugins',
-            $conf->get('resource.raintpl_tpl'),
-            $conf->get('resource.raintpl_tpl').'/'.$conf->get('resource.theme'),
+            $rainTplDir,
+            $rainTplDir.'/'.$conf->get('resource.theme'),
         ) as $path) {
             if (! is_readable(realpath($path))) {
                 $errors[] = '"'.$path.'" directory is not readable';
