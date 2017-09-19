@@ -81,12 +81,12 @@ class UtilsDeTest extends UtilsTest
     }
 
     /**
-     * Test autoLocale with multiples value, the second one is valid
+     * Test autoLocale with multiples value, the second one is available
      */
-    public function testAutoLocaleMultipleSecondValid()
+    public function testAutoLocaleMultipleSecondAvailable()
     {
         $current = setlocale(LC_ALL, 0);
-        $header = 'pt_BR,fr-fr';
+        $header = 'mag_IN,fr-fr';
         autoLocale($header);
         $this->assertEquals('fr_FR.utf8', setlocale(LC_ALL, 0));
 
@@ -106,12 +106,12 @@ class UtilsDeTest extends UtilsTest
     }
 
     /**
-     * Test autoLocale with an invalid value: defaults to en_US.
+     * Test autoLocale with an unavailable value: defaults to en_US.
      */
-    public function testAutoLocaleInvalid()
+    public function testAutoLocaleUnavailable()
     {
         $current = setlocale(LC_ALL, 0);
-        autoLocale('pt_BR');
+        autoLocale('mag_IN');
         $this->assertEquals('en_US.utf8', setlocale(LC_ALL, 0));
 
         setlocale(LC_ALL, $current);
