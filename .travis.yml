@@ -1,12 +1,6 @@
 sudo: false
-dist: precise
+dist: trusty
 language: php
-addons:
-  apt:
-    packages:
-      - locales
-      - language-pack-de
-      - language-pack-fr
 cache:
   directories:
     - $HOME/.composer/cache
@@ -18,6 +12,7 @@ php:
 install:
   - composer self-update
   - composer install --prefer-dist
+  - locale -a
 script:
   - make clean
   - make check_permissions
