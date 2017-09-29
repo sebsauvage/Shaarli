@@ -367,6 +367,89 @@ class GetLinksTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($data));
         $this->assertEquals(41, $data[0]['id']);
         $this->assertEquals(self::NB_FIELDS_LINK, count($data[0]));
+
+        // wildcard: placeholder at the start
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'GET',
+            'QUERY_STRING' => 'searchtags=*Tuff',
+        ]);
+        $request = Request::createFromEnvironment($env);
+        $response = $this->controller->getLinks($request, new Response());
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(2, count($data));
+        $this->assertEquals(41, $data[0]['id']);
+
+        // wildcard: placeholder at the end
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'GET',
+            'QUERY_STRING' => 'searchtags=c*',
+        ]);
+        $request = Request::createFromEnvironment($env);
+        $response = $this->controller->getLinks($request, new Response());
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(4, count($data));
+        $this->assertEquals(6, $data[0]['id']);
+
+        // wildcard: placeholder at the middle
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'GET',
+            'QUERY_STRING' => 'searchtags=w*b',
+        ]);
+        $request = Request::createFromEnvironment($env);
+        $response = $this->controller->getLinks($request, new Response());
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(4, count($data));
+        $this->assertEquals(6, $data[0]['id']);
+
+        // wildcard: match all
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'GET',
+            'QUERY_STRING' => 'searchtags=*',
+        ]);
+        $request = Request::createFromEnvironment($env);
+        $response = $this->controller->getLinks($request, new Response());
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(9, count($data));
+        $this->assertEquals(41, $data[0]['id']);
+
+        // wildcard: optional ('*' does not need to expand)
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'GET',
+            'QUERY_STRING' => 'searchtags=*stuff*',
+        ]);
+        $request = Request::createFromEnvironment($env);
+        $response = $this->controller->getLinks($request, new Response());
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(2, count($data));
+        $this->assertEquals(41, $data[0]['id']);
+
+        // wildcard: exclusions
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'GET',
+            'QUERY_STRING' => 'searchtags=*a*+-*e*',
+        ]);
+        $request = Request::createFromEnvironment($env);
+        $response = $this->controller->getLinks($request, new Response());
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(1, count($data));
+        $this->assertEquals(41, $data[0]['id']); // finds '#hashtag' in descr.
+
+        // wildcard: exclude all
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'GET',
+            'QUERY_STRING' => 'searchtags=-*',
+        ]);
+        $request = Request::createFromEnvironment($env);
+        $response = $this->controller->getLinks($request, new Response());
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(0, count($data));
     }
 
     /**
