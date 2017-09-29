@@ -103,6 +103,16 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
         $expectedText = 'stuff <a href="http://hello.there/is=someone#here">http://hello.there/is=someone#here</a> otherstuff';
         $processedText = text2clickable($text, '');
         $this->assertEquals($expectedText, $processedText);
+
+        $text = 'stuff http://hello.there/is=someone#here(please) otherstuff';
+        $expectedText = 'stuff <a href="http://hello.there/is=someone#here(please)">http://hello.there/is=someone#here(please)</a> otherstuff';
+        $processedText = text2clickable($text, '');
+        $this->assertEquals($expectedText, $processedText);
+
+        $text = 'stuff http://hello.there/is=someone#here(please)&no otherstuff';
+        $expectedText = 'stuff <a href="http://hello.there/is=someone#here(please)&no">http://hello.there/is=someone#here(please)&no</a> otherstuff';
+        $processedText = text2clickable($text, '');
+        $this->assertEquals($expectedText, $processedText);
     }
 
     /**
