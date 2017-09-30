@@ -433,7 +433,7 @@ body, .pure-g [class*="pure-u"] {
  * 64em -> lg
  */
 .linklist-filters {
-    margin: 10px 0;
+    margin: 5px 0;
     color: #252525;
     font-size: 0.9em;
 }
@@ -454,7 +454,7 @@ body, .pure-g [class*="pure-u"] {
 }
 
 .linklist-pages {
-    margin: 10px 0;
+    margin: 5px 0;
     color: #252525;
     text-align: center;
 }
@@ -469,7 +469,7 @@ body, .pure-g [class*="pure-u"] {
 }
 
 .linksperpage {
-    margin: 10px 0;
+    margin: 5px 0;
     text-align: right;
     color: #252525;
     font-size: 0.9em;
@@ -506,9 +506,29 @@ body, .pure-g [class*="pure-u"] {
  * CONTENT - LINKLIST ITEMS
  */
 .linklist-item {
-    margin: 0 0 15px 0;
+    margin: 0 0 10px 0;
     background: #f5f5f5;
-    box-shadow: 2px 2px 0.5em #797979;
+    box-shadow: 1px 1px 3px #797979;
+}
+
+.linklist-item-buttons {
+    background: transparent;
+    position: relative;
+    width: 23px;
+    z-index: 99;
+}
+
+.linklist-item-buttons-right {
+    float: right;
+    margin-right: -25px;
+}
+
+.linklist-item-buttons * {
+    display: block;
+    float: left;
+    width:100%;
+    margin: auto;
+    text-align: center;
 }
 
 .linklist-item-title, .linklist-item-title h2  {
@@ -526,7 +546,7 @@ body, .pure-g [class*="pure-u"] {
     line-height: 30px;
 }
 
-.linklist-item-title a {
+.linklist-item-title h2 a {
     font-size: 0.7em;
     color: #252525;
     text-decoration: none;
@@ -538,11 +558,11 @@ body, .pure-g [class*="pure-u"] {
     color: #1b926c;
 }
 
-.linklist-item-title a:visited .linklist-link {
+.linklist-item-title h2 a:visited .linklist-link {
     color: #2a4c41;
 }
 
-.linklist-item-title a:hover, .linklist-item-title .linklist-link:hover{
+.linklist-item-title h2 a:hover, .linklist-item-title .linklist-link:hover{
     color: #252525;
 }
 
@@ -554,8 +574,9 @@ body, .pure-g [class*="pure-u"] {
     color: #F89406;
 }
 
-.linklist-item-title .fold-button {
+.fold-button {
     display: none;
+    color: #252525;
 }
 
 .linklist-item-editbuttons {
@@ -585,22 +606,10 @@ body, .pure-g [class*="pure-u"] {
 
 .linklist-item-description {
     position: relative;
-    padding: 10px;
+    padding: 0 10px;
     word-wrap: break-word;
     color: #252525;
     line-height: 1.3em;
-}
-
- {
-    position: absolute;
-    left: 3px;
-    top: 0;
-    display: block;
-    content:"";
-    background: #F89406;
-    height: 95%;
-    width: 2px;
-    z-index: 1;
 }
 
 .linklist-item-description a {
@@ -618,24 +627,28 @@ body, .pure-g [class*="pure-u"] {
 
 .linklist-item-thumbnail {
     position: relative;
-    margin-top: 10px;
-    padding: 10px;
-    float: left;
+    padding: 0 0 0 5px;
+    margin: 0;
+    float: right;
     z-index: 50;
+    height: 90px;
 }
 
 .linklist-item.private .linklist-item-title::before,
-.linklist-item.private .linklist-item-description::before,
-.linklist-item.private .linklist-item-thumbnail::before {
+.linklist-item.private .linklist-item-description::before {
     position: absolute;
     left: 3px;
     top: 0;
     display: block;
     content:"";
     background: #F89406;
-    height: 95%;
+    height: 96%;
     width: 2px;
     z-index: 1;
+}
+
+.linklist-item.private .linklist-item-description::before {
+    height: 100%;
 }
 
 .linklist-item.private .linklist-item-title::before {
@@ -643,7 +656,7 @@ body, .pure-g [class*="pure-u"] {
 }
 
 .linklist-item-infos {
-    padding: 8px 8px 5px 8px;
+    padding: 4px 8px 4px 8px;
     background: #ddd;
     color: #252525;
 }
@@ -680,6 +693,8 @@ body, .pure-g [class*="pure-u"] {
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 0.8em;
+    height:23px;
+    line-height:23px;
 }
 
 .linklist-item-infos .mobile-buttons {
@@ -691,6 +706,16 @@ body, .pure-g [class*="pure-u"] {
     margin: 0 2px;
     width: 16px;
     height: 16px;
+}
+
+.linklist-item-infos-controls-group {
+    display: inline-block;
+    border-right: 1px solid #5d5d5d;
+    padding-right: 6px;
+}
+
+.ctrl-edit {
+    margin: 0 7px;
 }
 
 /** 64em -> lg **/
@@ -1283,4 +1308,23 @@ form[name="linkform"].page-form {
     color: white;
     text-decoration: none;
     font-weight: bold;
+}
+
+/**
+ * Markdown
+ */
+.markdown p {
+    margin: 0 !important;
+}
+
+.markdown p + p {
+    margin: 0.5em 0 0 0 !important;
+}
+
+.markdown *:first-child {
+    margin-top: 0 !important;
+}
+
+.markdown *:last-child {
+    margin-bottom: 5px !important;
 }
