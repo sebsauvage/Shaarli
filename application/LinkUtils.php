@@ -109,7 +109,7 @@ function count_private($links)
  */
 function text2clickable($text, $redirector = '')
 {
-    $regex = '!(((?:https?|ftp|file)://|apt:|magnet:)\S+[[:alnum:]]/?)!si';
+    $regex = '!(((?:https?|ftp|file)://|apt:|magnet:)\S+[a-z0-9\(\)]/?)!si';
 
     if (empty($redirector)) {
         return preg_replace($regex, '<a href="$1">$1</a>', $text);
