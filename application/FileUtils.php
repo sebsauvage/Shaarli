@@ -50,7 +50,8 @@ class FileUtils
 
     /**
      * Read data from a file containing Shaarli database format content.
-     * If the file isn't readable or doesn't exists, default data will be returned.
+     *
+     * If the file isn't readable or doesn't exist, default data will be returned.
      *
      * @param string $file    File path.
      * @param mixed  $default The default value to return if the file isn't readable.
@@ -61,16 +62,21 @@ class FileUtils
     {
         // Note that gzinflate is faster than gzuncompress.
         // See: http://www.php.net/manual/en/function.gzdeflate.php#96439
-        if (is_readable($file)) {
-            return unserialize(
-                gzinflate(
-                    base64_decode(
-                        substr(file_get_contents($file), strlen(self::$phpPrefix), -strlen(self::$phpSuffix))
-                    )
-                )
-            );
+        if (! is_readable($file)) {
+            return $default;
         }
 
-        return $default;
+        $data = file_get_contents($file);
+        if ($data == '') {
+            return $default;
+        }
+
+        return unserialize(
+            gzinflate(
+                base64_decode(
+                    substr($data, strlen(self::$phpPrefix), -strlen(self::$phpSuffix))
+                )
+            )
+        );
     }
 }

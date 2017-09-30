@@ -22,6 +22,7 @@ class ThemeUtils
      */
     public static function getThemes($tplDir)
     {
+        $tplDir = rtrim($tplDir, '/');
         $allTheme = glob($tplDir.'/*', GLOB_ONLYDIR);
         $themes = [];
         foreach ($allTheme as $value) {
