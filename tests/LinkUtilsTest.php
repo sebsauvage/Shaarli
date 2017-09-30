@@ -29,27 +29,13 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get_charset() with all priorities.
-     */
-    public function testGetCharset()
-    {
-        $headers = array('Content-Type' => 'text/html; charset=Headers');
-        $html = '<html><meta>stuff</meta><meta charset="Html"/></html>';
-        $default = 'default';
-        $this->assertEquals('headers', get_charset($headers, $html, $default));
-        $this->assertEquals('html', get_charset(array(), $html, $default));
-        $this->assertEquals($default, get_charset(array(), '', $default));
-        $this->assertEquals('utf-8', get_charset(array(), ''));
-    }
-
-    /**
      * Test headers_extract_charset() when the charset is found.
      */
     public function testHeadersExtractExistentCharset()
     {
         $charset = 'x-MacCroatian';
-        $headers = array('Content-Type' => 'text/html; charset='. $charset);
-        $this->assertEquals(strtolower($charset), headers_extract_charset($headers));
+        $headers = 'text/html; charset='. $charset;
+        $this->assertEquals(strtolower($charset), header_extract_charset($headers));
     }
 
     /**
@@ -57,11 +43,11 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testHeadersExtractNonExistentCharset()
     {
-        $headers = array();
-        $this->assertFalse(headers_extract_charset($headers));
+        $headers = '';
+        $this->assertFalse(header_extract_charset($headers));
 
-        $headers = array('Content-Type' => 'text/html');
-        $this->assertFalse(headers_extract_charset($headers));
+        $headers = 'text/html';
+        $this->assertFalse(header_extract_charset($headers));
     }
 
     /**
@@ -83,6 +69,131 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(html_extract_charset($html));
         $html = '<html><meta>stuff</meta><meta charset=""/></html>';
         $this->assertFalse(html_extract_charset($html));
+    }
+
+    /**
+     * Test the download callback with valid value
+     */
+    public function testCurlDownloadCallbackOk()
+    {
+        $callback = get_curl_download_callback($charset, $title, 'ut_curl_getinfo_ok');
+        $data = [
+            'HTTP/1.1 200 OK',
+            'Server: GitHub.com',
+            'Date: Sat, 28 Oct 2017 12:01:33 GMT',
+            'Content-Type: text/html; charset=utf-8',
+            'Status: 200 OK',
+            'end' => 'th=device-width"><title>Refactoring · GitHub</title><link rel="search" type="application/opensea',
+            '<title>ignored</title>',
+        ];
+        foreach ($data as $key => $line) {
+            $ignore = null;
+            $expected = $key !== 'end' ? strlen($line) : false;
+            $this->assertEquals($expected, $callback($ignore, $line));
+            if ($expected === false) {
+                break;
+            }
+        }
+        $this->assertEquals('utf-8', $charset);
+        $this->assertEquals('Refactoring · GitHub', $title);
+    }
+
+    /**
+     * Test the download callback with valid values and no charset
+     */
+    public function testCurlDownloadCallbackOkNoCharset()
+    {
+        $callback = get_curl_download_callback($charset, $title, 'ut_curl_getinfo_no_charset');
+        $data = [
+            'HTTP/1.1 200 OK',
+            'end' => 'th=device-width"><title>Refactoring · GitHub</title><link rel="search" type="application/opensea',
+            '<title>ignored</title>',
+        ];
+        foreach ($data as $key => $line) {
+            $ignore = null;
+            $this->assertEquals(strlen($line), $callback($ignore, $line));
+        }
+        $this->assertEmpty($charset);
+        $this->assertEquals('Refactoring · GitHub', $title);
+    }
+
+    /**
+     * Test the download callback with valid values and no charset
+     */
+    public function testCurlDownloadCallbackOkHtmlCharset()
+    {
+        $callback = get_curl_download_callback($charset, $title, 'ut_curl_getinfo_no_charset');
+        $data = [
+            'HTTP/1.1 200 OK',
+            '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
+            'end' => 'th=device-width"><title>Refactoring · GitHub</title><link rel="search" type="application/opensea',
+            '<title>ignored</title>',
+        ];
+        foreach ($data as $key => $line) {
+            $ignore = null;
+            $expected = $key !== 'end' ? strlen($line) : false;
+            $this->assertEquals($expected, $callback($ignore, $line));
+            if ($expected === false) {
+                break;
+            }
+        }
+        $this->assertEquals('utf-8', $charset);
+        $this->assertEquals('Refactoring · GitHub', $title);
+    }
+
+    /**
+     * Test the download callback with valid values and no title
+     */
+    public function testCurlDownloadCallbackOkNoTitle()
+    {
+        $callback = get_curl_download_callback($charset, $title, 'ut_curl_getinfo_ok');
+        $data = [
+            'HTTP/1.1 200 OK',
+            'end' => 'th=device-width">Refactoring · GitHub<link rel="search" type="application/opensea',
+            'ignored',
+        ];
+        foreach ($data as $key => $line) {
+            $ignore = null;
+            $this->assertEquals(strlen($line), $callback($ignore, $line));
+        }
+        $this->assertEquals('utf-8', $charset);
+        $this->assertEmpty($title);
+    }
+
+    /**
+     * Test the download callback with an invalid content type.
+     */
+    public function testCurlDownloadCallbackInvalidContentType()
+    {
+        $callback = get_curl_download_callback($charset, $title, 'ut_curl_getinfo_ct_ko');
+        $ignore = null;
+        $this->assertFalse($callback($ignore, ''));
+        $this->assertEmpty($charset);
+        $this->assertEmpty($title);
+    }
+
+    /**
+     * Test the download callback with an invalid response code.
+     */
+    public function testCurlDownloadCallbackInvalidResponseCode()
+    {
+        $callback = get_curl_download_callback($charset, $title, 'ut_curl_getinfo_rc_ko');
+        $ignore = null;
+        $this->assertFalse($callback($ignore, ''));
+        $this->assertEmpty($charset);
+        $this->assertEmpty($title);
+    }
+
+    /**
+     * Test the download callback with an invalid content type and response code.
+     */
+    public function testCurlDownloadCallbackInvalidContentTypeAndResponseCode()
+    {
+        $callback = get_curl_download_callback($charset, $title, 'ut_curl_getinfo_rs_ct_ko');
+        $ignore = null;
+        $this->assertFalse($callback($ignore, ''));
+        $this->assertEmpty($charset);
+        $this->assertEmpty($title);
     }
 
     /**
@@ -182,3 +293,96 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
         return str_replace('$1', $hashtag, $hashtagLink);
     }
 }
+
+// old style mock: PHPUnit doesn't allow function mock
+
+/**
+ * Returns code 200 or html content type.
+ *
+ * @param resource $ch   cURL resource
+ * @param int      $type cURL info type
+ *
+ * @return int|string 200 or 'text/html'
+ */
+function ut_curl_getinfo_ok($ch, $type)
+{
+    switch ($type) {
+        case CURLINFO_RESPONSE_CODE:
+            return 200;
+        case CURLINFO_CONTENT_TYPE:
+            return 'text/html; charset=utf-8';
+    }
+}
+
+/**
+ * Returns code 200 or html content type without charset.
+ *
+ * @param resource $ch   cURL resource
+ * @param int      $type cURL info type
+ *
+ * @return int|string 200 or 'text/html'
+ */
+function ut_curl_getinfo_no_charset($ch, $type)
+{
+    switch ($type) {
+        case CURLINFO_RESPONSE_CODE:
+            return 200;
+        case CURLINFO_CONTENT_TYPE:
+            return 'text/html';
+    }
+}
+
+/**
+ * Invalid response code.
+ *
+ * @param resource $ch   cURL resource
+ * @param int      $type cURL info type
+ *
+ * @return int|string 404 or 'text/html'
+ */
+function ut_curl_getinfo_rc_ko($ch, $type)
+{
+    switch ($type) {
+        case CURLINFO_RESPONSE_CODE:
+            return 404;
+        case CURLINFO_CONTENT_TYPE:
+            return 'text/html; charset=utf-8';
+    }
+}
+
+/**
+ * Invalid content type.
+ *
+ * @param resource $ch   cURL resource
+ * @param int      $type cURL info type
+ *
+ * @return int|string 200 or 'text/plain'
+ */
+function ut_curl_getinfo_ct_ko($ch, $type)
+{
+    switch ($type) {
+        case CURLINFO_RESPONSE_CODE:
+            return 200;
+        case CURLINFO_CONTENT_TYPE:
+            return 'text/plain';
+    }
+}
+
+/**
+ * Invalid response code and content type.
+ *
+ * @param resource $ch   cURL resource
+ * @param int      $type cURL info type
+ *
+ * @return int|string 404 or 'text/plain'
+ */
+function ut_curl_getinfo_rs_ct_ko($ch, $type)
+{
+    switch ($type) {
+        case CURLINFO_RESPONSE_CODE:
+            return 404;
+        case CURLINFO_CONTENT_TYPE:
+            return 'text/plain';
+    }
+}
+
