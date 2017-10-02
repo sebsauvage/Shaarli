@@ -84,6 +84,11 @@ Note the names and ID's of containers are list in ``docker ps``. You an even typ
 
 Access can also be through one or more network ports, or disk volumes. Both are specified on and fixed on ``docker create`` or ``run``.
 
+You can view the console output of the main container process too:
+```bash
+$ docker logs -f <container-name-or-id>
+```
+
 ### Docker disk use
 Trying out different images can fill some gigabytes of disk quickly. Besides images, the docker volumes usually take up most disk space.
 
@@ -92,4 +97,46 @@ If you care only about trying out docker and not about what is running or saved,
 ```bash
 $ docker rmi -f $(docker images -aq) # remove or mark all images for disposal
 $ docker volume rm $(docker volume ls -q) # remove all volumes
+```
+
+### SystemD config
+Systemd is the process manager of choice on ubuntu. Once you have a ``docker`` service installed, you can add use the following steps to set up Shaarli to run on system start.
+
+```bash
+systemctl enable /etc/systemd/system/docker.shaarli.service
+systemctl start docker.shaarli
+systemctl status docker.*
+journalctl -f # inspect system log if needed
+```
+
+You will need sudo or a root terminal to perform some or all of the steps above. Here are the contents for the service file:
+```
+[Unit]
+Description=Shaarli Bookmark Manager Container
+After=docker.service
+Requires=docker.service
+
+
+[Service]
+Restart=always
+
+# Put any environment you want in here, like $host- or $domainname in this example
+EnvironmentFile=/etc/sysconfig/box-environment
+
+# It's just an example..
+ExecStart=/usr/bin/docker run \
+  -p 28010:80 \
+  --name ${hostname}-shaarli \
+  --hostname shaarli.${domainname} \
+  \
+  -v /srv/docker-volumes-local/shaarli-data:/var/www/shaarli/data:rw \
+  -v /etc/localtime:/etc/localtime:ro \
+  \
+    shaarli/shaarli:latest
+
+ExecStop=/usr/bin/docker rm -f ${hostname}-shaarli
+
+
+[Install]
+WantedBy=multi-user.target
 ```
