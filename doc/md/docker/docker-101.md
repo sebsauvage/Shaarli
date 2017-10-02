@@ -60,3 +60,40 @@ wheezy: Pulling from debian
 Digest: sha256:c584131da2ac1948aa3e66468a4424b6aea2f33acba7cec0b631bdb56254c4fe
 Status: Downloaded newer image for debian:wheezy
 ```
+
+Docker re-uses layers already downloaded. Iow. if you have only images based on some Alpine or Ubuntu version for example, those can share disk space.
+
+### Start a container
+A container is an instance created from an image, that can be run and that keeps running until its main process exits. Or until the user stops the container. 
+
+The simplest way to start a container from image is ``docker run``. It also pulls the image for you if it is not locally available. For more advanced use, refer to ``docker create``.
+
+Note that stopped containers are not destroyed, unless you specify ``--rm``.
+To view all created, running and stopped containers, enter:
+
+```bash
+$ docker ps -a
+```
+
+Some containers may be designed or configured to be restarted, others are not. Note that both network ports and volumes of a container are created on start, and not editable later.
+
+### Access a running container
+A running container is accessible using ``docker exec``, or ``docker copy``.
+You can use ``exec`` to start a root shell in the Shaarli container:
+```bash
+$ docker exec -ti <container-name-or-id> bash
+```
+Note the names and ID's of containers are list in ``docker ps``. You an even type only one or two letters of the ID, given they are unique.
+
+Access can also be through one or more network ports, or disk volumes. Both are specified on and fixed on ``docker create`` or ``run``.
+
+### Docker disk use
+Trying out different images can fill some gigabytes of disk quickly. Besides images, the docker volumes usually take up most disk space.
+
+If you care only about trying out docker and not about what is running or saved,
+the following commands should help you out quickly:
+
+```bash
+$ docker rmi -f $(docker images -aq) # remove or mark all images for disposal
+$ docker volume rm $(docker volume ls -q) # remove all volumes
+```
