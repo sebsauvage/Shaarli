@@ -317,6 +317,7 @@ class ConfigManager
         $this->setEmpty('general.header_link', '?');
         $this->setEmpty('general.links_per_page', 20);
         $this->setEmpty('general.enabled_plugins', self::$DEFAULT_PLUGINS);
+        $this->setEmpty('general.default_note_title', 'Note: ');
 
         $this->setEmpty('updates.check_updates', false);
         $this->setEmpty('updates.check_updates_branch', 'stable');

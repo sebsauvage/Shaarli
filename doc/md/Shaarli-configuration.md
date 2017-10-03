@@ -55,6 +55,7 @@ _These settings should not be edited_
 - **links_per_page**: Number of shaares displayed per page.  
 - **timezone**: See [the list of supported timezones](http://php.net/manual/en/timezones.php).  
 - **enabled_plugins**: List of enabled plugins.
+- **default_note_title**: Default title of a new note.
 
 ### Security
 

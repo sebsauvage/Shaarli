@@ -1443,7 +1443,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
 
             if ($url == '') {
                 $url = '?' . smallHash($linkdate . $LINKSDB->getNextId());
-                $title = 'Note: ';
+                $title = $conf->get('general.default_note_title', 'Note: ');
             }
             $url = escape($url);
             $title = escape($title);
