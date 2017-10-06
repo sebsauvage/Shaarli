@@ -5,16 +5,16 @@
 <link rel="alternate" type="application/atom+xml" href="{$feedurl}?do=atom{$searchcrits}#" title="ATOM Feed" />
 <link rel="alternate" type="application/rss+xml" href="{$feedurl}?do=rss{$searchcrits}#" title="RSS Feed" />
 <link href="img/favicon.png" rel="shortcut icon" type="image/png" />
-<link type="text/css" rel="stylesheet" href="css/pure.min.css" />
-<link type="text/css" rel="stylesheet" href="css/grids-responsive.min.css">
-<link type="text/css" rel="stylesheet" href="css/pure-extras.css">
-<link type="text/css" rel="stylesheet" href="css/font-awesome.min.css" />
-<link type="text/css" rel="stylesheet" href="inc/awesomplete.css#" />
-<link type="text/css" rel="stylesheet" href="css/shaarli.css" />
+<link type="text/css" rel="stylesheet" href="css/pure.min.css?v={$version_hash}" />
+<link type="text/css" rel="stylesheet" href="css/grids-responsive.min.css?v={$version_hash}">
+<link type="text/css" rel="stylesheet" href="css/pure-extras.css?v={$version_hash}">
+<link type="text/css" rel="stylesheet" href="css/font-awesome.min.css?v={$version_hash}" />
+<link type="text/css" rel="stylesheet" href="inc/awesomplete.css?v={$version_hash}#" />
+<link type="text/css" rel="stylesheet" href="css/shaarli.css?v={$version_hash}" />
 {if="is_file('data/user.css')"}
   <link type="text/css" rel="stylesheet" href="data/user.css#" />
 {/if}
 {loop="$plugins_includes.css_files"}
-  <link type="text/css" rel="stylesheet" href="{$value}#"/>
+  <link type="text/css" rel="stylesheet" href="{$value}?v={$version_hash}#"/>
 {/loop}
 <link rel="search" type="application/opensearchdescription+xml" href="?do=opensearch#" title="Shaarli search - {$shaarlititle}"/>

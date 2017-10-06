@@ -49,7 +49,7 @@ class PageBuilder
 
         try {
             $version = ApplicationUtils::checkUpdate(
-                shaarli_version,
+                SHAARLI_VERSION,
                 $this->conf->get('resource.update_check'),
                 $this->conf->get('updates.check_updates_interval'),
                 $this->conf->get('updates.check_updates'),
@@ -75,7 +75,11 @@ class PageBuilder
         }
         $this->tpl->assign('searchcrits', $searchcrits);
         $this->tpl->assign('source', index_url($_SERVER));
-        $this->tpl->assign('version', shaarli_version);
+        $this->tpl->assign('version', SHAARLI_VERSION);
+        $this->tpl->assign(
+            'version_hash',
+            ApplicationUtils::getVersionHash(SHAARLI_VERSION, $this->conf->get('credentials.salt'))
+        );
         $this->tpl->assign('scripturl', index_url($_SERVER));
         $this->tpl->assign('privateonly', !empty($_SESSION['privateonly'])); // Show only private links?
         $this->tpl->assign('untaggedonly', !empty($_SESSION['untaggedonly']));
@@ -89,6 +93,7 @@ class PageBuilder
         $this->tpl->assign('feed_type', $this->conf->get('feed.show_atom', true) !== false ? 'atom' : 'rss');
         $this->tpl->assign('hide_timestamps', $this->conf->get('privacy.hide_timestamps', false));
         $this->tpl->assign('token', getToken($this->conf));
+
         if ($this->linkDB !== null) {
             $this->tpl->assign('tags', $this->linkDB->linksCountPerTag());
         }

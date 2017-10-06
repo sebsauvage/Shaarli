@@ -221,4 +221,19 @@ class ApplicationUtils
 
         return $errors;
     }
+
+    /**
+     * Returns a salted hash representing the current Shaarli version.
+     *
+     * Useful for assets browser cache.
+     *
+     * @param string $currentVersion of Shaarli
+     * @param string $salt           User personal salt, also used for the authentication
+     *
+     * @return string version hash
+     */
+    public static function getVersionHash($currentVersion, $salt)
+    {
+        return hash_hmac('sha256', $currentVersion, $salt);
+    }
 }

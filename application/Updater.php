@@ -398,7 +398,7 @@ class Updater
      */
     public function updateMethodCheckUpdateRemoteBranch()
     {
-        if (shaarli_version === 'dev' || $this->conf->get('updates.check_updates_branch') === 'latest') {
+        if (SHAARLI_VERSION === 'dev' || $this->conf->get('updates.check_updates_branch') === 'latest') {
             return true;
         }
 
@@ -413,7 +413,7 @@ class Updater
         $latestMajor = $matches[1];
 
         // Get current major version digit
-        preg_match('/(\d+)\.\d+$/', shaarli_version, $matches);
+        preg_match('/(\d+)\.\d+$/', SHAARLI_VERSION, $matches);
         $currentMajor = $matches[1];
 
         if ($currentMajor === $latestMajor) {
