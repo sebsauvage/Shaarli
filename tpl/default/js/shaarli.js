@@ -275,8 +275,14 @@ window.onload = function () {
     };
     function init () {
         function resize () {
+            /* Fix jumpy resizing: https://stackoverflow.com/a/18262927/1484919 */
+            var scrollTop  = window.pageYOffset ||
+                (document.documentElement || document.body.parentNode || document.body).scrollTop;
+
             description.style.height = 'auto';
             description.style.height = description.scrollHeight+10+'px';
+
+            window.scrollTo(0, scrollTop);
         }
         /* 0-timeout to get the already changed text */
         function delayedResize () {
