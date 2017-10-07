@@ -26,7 +26,7 @@
           <input type="hidden" name="do" value="tagcloud">
           <input type="text" name="searchtags" placeholder="{'Filter by tag'|t}"
                  {if="!empty($search_tags)"}
-                 value="{$search_tags}"
+                    value="{$search_tags}"
                  {/if}
           autocomplete="off" data-multiple data-autofirst data-minChars="1"
           data-list="{loop="$tags"}{$key}, {/loop}"

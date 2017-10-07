@@ -840,7 +840,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
         }
 
         $data = array(
-            'search_tags' => implode(' ', $filteringTags),
+            'search_tags' => implode(' ', escape($filteringTags)),
             'tags' => $tagList,
         );
         $pluginManager->executeHooks('render_tagcloud', $data, array('loggedin' => isLoggedIn()));
@@ -870,7 +870,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
         }
 
         $data = [
-            'search_tags' => implode(' ', $filteringTags),
+            'search_tags' => implode(' ', escape($filteringTags)),
             'tags' => $tags,
         ];
         $pluginManager->executeHooks('render_taglist', $data, ['loggedin' => isLoggedIn()]);
