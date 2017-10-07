@@ -4,6 +4,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v0.9.2](https://github.com/shaarli/Shaarli/releases/tag/v0.9.2) - 2017-10-07
+
+**Major security issue fixed. Please update.**
+
+### Added
+- Tag search now supports wildcards `*`
+- New setting `privacy.force_login` which can be used with `privacy.hide_public_links` to redirect anonymous users to the login page.
+- New setting `general.default_note_title` used to override default `Note:` title prefix for notes.
+- Add a version hash for asset loading to prevent browser's cache issue
+
+### Changed
+- The "Remember me" checkbox is unchecked by default
+- The default value of the "Remember me" checkbox can be configured under `data/config.json.php`
+
+### Removed
+- Remove obsolete PHP magic quote support
+
+### Fixed
+- Generates a permalink URL if the URL is set to blank
+- Replace links to the old GitHub wiki with ReadTheDocs URIs
+- Use single quotes in the note bookmarklet
+- Daily page if there is no link
+- Bulk link deletion with a single link
+- HTTPS detection behind a reverse proxy
+- Travis tests environment and localization
+- Improve template paths robustness (trailing slash)
+- Robustness: safer gzinflate/zlib usage
+- Description links parsing with parenthesis (without Markdown)
+- Templates:
+    - Sort the tag cloud alphabetically
+    - Firefox social title
+    - Improved visited link color
+    - Fix jumpy textarea with long content in post edit
+
+### Security
+
+- Vulnerability introduced in v0.9.1 fixed.
+
 ## [v0.9.1](https://github.com/shaarli/Shaarli/releases/tag/v0.9.1) - 2017-08-23
 
 The documentation has been migrated to ReadTheDocs:
