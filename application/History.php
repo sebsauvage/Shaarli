@@ -16,6 +16,7 @@
  *   - UPDATED: link updated
  *   - DELETED: link deleted
  *   - SETTINGS: the settings have been updated through the UI.
+ *   - IMPORT: bulk links import
  *
  * Note: new events are put at the beginning of the file and history array.
  */
@@ -40,6 +41,11 @@ class History
      * @var string Action key: settings have been updated.
      */
     const SETTINGS = 'SETTINGS';
+
+    /**
+     * @var string Action key: a bulk import has been processed.
+     */
+    const IMPORT = 'IMPORT';
 
     /**
      * @var string History file path.
@@ -119,6 +125,16 @@ class History
     public function updateSettings()
     {
         $this->addEvent(self::SETTINGS);
+    }
+
+    /**
+     * Add Event: bulk import.
+     *
+     * Note: we don't store links add/update one by one since it can have a huge impact on performances.
+     */
+    public function importLinks()
+    {
+        $this->addEvent(self::IMPORT);
     }
 
     /**
