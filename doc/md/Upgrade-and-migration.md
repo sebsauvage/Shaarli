@@ -14,7 +14,7 @@ Shaarli stores all user data under the `data` directory:
 - `data/ipbans.php` - banned IP addresses
 - `data/updates.txt` - contains all automatic update to the configuration and datastore files already run
 
-See [Shaarli configuration](Shaarli configuration) for more information about Shaarli resources.
+See [Shaarli configuration](Shaarli-configuration) for more information about Shaarli resources.
 
 It is recommended to backup this repository _before_ starting updating/upgrading Shaarli:
 
@@ -27,7 +27,7 @@ As all user data is kept under `data`, this is the only directory you need to wo
 
 - backup the `data` directory
 - install or update Shaarli:
-    - fresh installation - see [Download and installation](Download and installation)
+    - fresh installation - see [Download and installation](Download-and-installation)
     - update - see the following sections
 - check or restore the `data` directory
 
@@ -35,11 +35,11 @@ As all user data is kept under `data`, this is the only directory you need to wo
 
 All tagged revisions can be downloaded as tarballs or ZIP archives from the [releases](https://github.com/shaarli/Shaarli/releases) page.
 
-We recommend that you use the latest release tarball with the `-full` suffix. It contains the dependencies, please read [Download and installation](Download and installation) for `git` complete instructions.
+We recommend that you use the latest release tarball with the `-full` suffix. It contains the dependencies, please read [Download and installation](Download-and-installation) for `git` complete instructions.
 
 Once downloaded, extract the archive locally and update your remote installation (e.g. via FTP) -be sure you keep the content of the `data` directory!
 
-After upgrading, access your fresh Shaarli installation from a web browser; the configuration and data store will then be automatically updated, and new settings added to `data/config.json.php` (see [Shaarli configuration](Shaarli configuration) for more details).
+After upgrading, access your fresh Shaarli installation from a web browser; the configuration and data store will then be automatically updated, and new settings added to `data/config.json.php` (see [Shaarli configuration](Shaarli-configuration) for more details).
 
 ## Upgrading with Git
 
@@ -173,7 +173,7 @@ Total 3317 (delta 2050), reused 3301 (delta 2034)to
 
 #### Step 3: configuration
 
-After migrating, access your fresh Shaarli installation from a web browser; the configuration will then be automatically updated, and new settings added to `data/config.php` (see [Shaarli configuration](Shaarli configuration) for more details).
+After migrating, access your fresh Shaarli installation from a web browser; the configuration will then be automatically updated, and new settings added to `data/config.php` (see [Shaarli configuration](Shaarli-configuration) for more details).
 
 ## Troubleshooting
 
