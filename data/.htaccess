@@ -1,10 +1,16 @@
 <IfModule version_module>
   <IfVersion >= 2.4>
-     Require all denied
+    Require all denied
+    <Files "user.css">
+      Require all granted
+    </Files>
   </IfVersion>
   <IfVersion < 2.4>
-     Allow from none
-     Deny from all
+    Allow from none
+    Deny from all
+    <Files "user.css">
+      Allow from all
+    </Files>
   </IfVersion>
 </IfModule>
 
