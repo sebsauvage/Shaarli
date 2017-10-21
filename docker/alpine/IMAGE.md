@@ -1,5 +1,10 @@
-## shaarli:latest
-- [Debian 8 Jessie](https://hub.docker.com/_/debian/)
-- [PHP5-FPM](http://php-fpm.org/)
+## Alpine images
+- [Alpine Linux](https://www.alpinelinux.org/)
+- [PHP-FPM](http://php-fpm.org/)
 - [Nginx](http://nginx.org/)
-- [Shaarli](https://github.com/shaarli/Shaarli)
+
+### `shaarli/shaarli:latest`
+- [Shaarli](https://github.com/shaarli/Shaarli), `latest` branch
+
+### `shaarli/shaarli:master`
+- [Shaarli](https://github.com/shaarli/Shaarli), `master` branch

@@ -5,13 +5,22 @@ The images can be found in the [`shaarli/shaarli`](https://hub.docker.com/r/shaa
 repository.
 
 ### Available image tags
-- `latest`: master branch (tarball release)
+- `latest`: latest branch (tarball release)
+- `master`: master branch (tarball release)
 - `stable`: stable branch (tarball release)
 
-All images rely on:
+The `latest` and `master` images rely on:
+
+- [Alpine Linux](https://www.alpinelinux.org/)
+- [PHP7-FPM](http://php-fpm.org/)
+- [Nginx](http://nginx.org/)
+
+The `stable` image relies on:
+
 - [Debian 8 Jessie](https://hub.docker.com/_/debian/)
 - [PHP5-FPM](http://php-fpm.org/)
 - [Nginx](http://nginx.org/)
+
 
 ### Download from DockerHub
 ```bash
