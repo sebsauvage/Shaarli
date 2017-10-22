@@ -1,7 +1,11 @@
 <?php
-namespace Shaarli;
+// Initialize reference data _before_ PHPUnit starts a session
+require_once 'tests/utils/ReferenceSessionIdHashes.php';
+ReferenceSessionIdHashes::genAllHashes();
 
+use \Shaarli\SessionManager;
 use \PHPUnit\Framework\TestCase;
+
 
 /**
  * Fake ConfigManager
@@ -20,6 +24,17 @@ class FakeConfigManager
  */
 class SessionManagerTest extends TestCase
 {
+    // Session ID hashes
+    protected static $sidHashes = null;
+
+    /**
+     * Assign reference data
+     */
+    public static function setUpBeforeClass()
+    {
+        self::$sidHashes = ReferenceSessionIdHashes::getHashes();
+    }
+
     /**
      * Generate a session token
      */
@@ -68,5 +83,55 @@ class SessionManagerTest extends TestCase
         $sessionManager = new SessionManager($session, $conf);
 
         $this->assertFalse($sessionManager->checkToken('4dccc3a45ad9d03e5542b90c37d8db6d10f2b38b'));
+    }
+
+    /**
+     * Test SessionManager::checkId with a valid ID - TEST ALL THE HASHES!
+     *
+     * This tests extensively covers all hash algorithms / bit representations
+     */
+    public function testIsAnyHashSessionIdValid()
+    {
+        foreach (self::$sidHashes as $algo => $bpcs) {
+            foreach ($bpcs as $bpc => $hash) {
+                $this->assertTrue(SessionManager::checkId($hash));
+            }
+        }
+    }
+
+    /**
+     * Test checkId with a valid ID - SHA-1 hashes
+     */
+    public function testIsSha1SessionIdValid()
+    {
+        $this->assertTrue(SessionManager::checkId(sha1('shaarli')));
+    }
+
+    /**
+     * Test checkId with a valid ID - SHA-256 hashes
+     */
+    public function testIsSha256SessionIdValid()
+    {
+        $this->assertTrue(SessionManager::checkId(hash('sha256', 'shaarli')));
+    }
+
+    /**
+     * Test checkId with a valid ID - SHA-512 hashes
+     */
+    public function testIsSha512SessionIdValid()
+    {
+        $this->assertTrue(SessionManager::checkId(hash('sha512', 'shaarli')));
+    }
+
+    /**
+     * Test checkId with invalid IDs.
+     */
+    public function testIsSessionIdInvalid()
+    {
+        $this->assertFalse(SessionManager::checkId(''));
+        $this->assertFalse(SessionManager::checkId([]));
+        $this->assertFalse(
+            SessionManager::checkId('c0ZqcWF3VFE2NmJBdm1HMVQ0ZHJ3UmZPbTFsNGhkNHI=')
+        );
     }
 }

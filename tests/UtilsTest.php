@@ -5,10 +5,6 @@
 
 require_once 'application/Utils.php';
 require_once 'application/Languages.php';
-require_once 'tests/utils/ReferenceSessionIdHashes.php';
-
-// Initialize reference data before PHPUnit starts a session
-ReferenceSessionIdHashes::genAllHashes();
 
 
 /**
@@ -16,9 +12,6 @@ ReferenceSessionIdHashes::genAllHashes();
  */
 class UtilsTest extends PHPUnit_Framework_TestCase
 {
-    // Session ID hashes
-    protected static $sidHashes = null;
-
     // Log file
     protected static $testLogFile = 'tests.log';
 
@@ -30,13 +23,11 @@ class UtilsTest extends PHPUnit_Framework_TestCase
      */
     protected static $defaultTimeZone;
 
-
     /**
      * Assign reference data
      */
     public static function setUpBeforeClass()
     {
-        self::$sidHashes = ReferenceSessionIdHashes::getHashes();
         self::$defaultTimeZone = date_default_timezone_get();
         // Timezone without DST for test consistency
         date_default_timezone_set('Africa/Nairobi');
@@ -221,56 +212,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('?', generateLocation($ref, 'localhost'));
     }
 
-    /**
-     * Test is_session_id_valid with a valid ID - TEST ALL THE HASHES!
-     *
-     * This tests extensively covers all hash algorithms / bit representations
-     */
-    public function testIsAnyHashSessionIdValid()
-    {
-        foreach (self::$sidHashes as $algo => $bpcs) {
-            foreach ($bpcs as $bpc => $hash) {
-                $this->assertTrue(is_session_id_valid($hash));
-            }
-        }
-    }
 
-    /**
-     * Test is_session_id_valid with a valid ID - SHA-1 hashes
-     */
-    public function testIsSha1SessionIdValid()
-    {
-        $this->assertTrue(is_session_id_valid(sha1('shaarli')));
-    }
-
-    /**
-     * Test is_session_id_valid with a valid ID - SHA-256 hashes
-     */
-    public function testIsSha256SessionIdValid()
-    {
-        $this->assertTrue(is_session_id_valid(hash('sha256', 'shaarli')));
-    }
-
-    /**
-     * Test is_session_id_valid with a valid ID - SHA-512 hashes
-     */
-    public function testIsSha512SessionIdValid()
-    {
-        $this->assertTrue(is_session_id_valid(hash('sha512', 'shaarli')));
-    }
-
-    /**
-     * Test is_session_id_valid with invalid IDs.
-     */
-    public function testIsSessionIdInvalid()
-    {
-        $this->assertFalse(is_session_id_valid(''));
-        $this->assertFalse(is_session_id_valid(array()));
-        $this->assertFalse(
-            is_session_id_valid('c0ZqcWF3VFE2NmJBdm1HMVQ0ZHJ3UmZPbTFsNGhkNHI=')
-        );
-    }
-    
     /**
      * Test generateSecretApi.
      */

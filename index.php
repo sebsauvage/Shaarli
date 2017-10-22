@@ -116,7 +116,7 @@ if (session_id() == '') {
 }
 
 // Regenerate session ID if invalid or not defined in cookie.
-if (isset($_COOKIE['shaarli']) && !is_session_id_valid($_COOKIE['shaarli'])) {
+if (isset($_COOKIE['shaarli']) && !SessionManager::checkId($_COOKIE['shaarli'])) {
     session_regenerate_id(true);
     $_COOKIE['shaarli'] = session_id();
 }

@@ -50,4 +50,34 @@ class SessionManager
         unset($this->session['tokens'][$token]);
         return true;
     }
+
+    /**
+     * Validate session ID to prevent Full Path Disclosure.
+     *
+     * See #298.
+     * The session ID's format depends on the hash algorithm set in PHP settings
+     *
+     * @param string $sessionId Session ID
+     *
+     * @return true if valid, false otherwise.
+     *
+     * @see http://php.net/manual/en/function.hash-algos.php
+     * @see http://php.net/manual/en/session.configuration.php
+     */
+    public static function checkId($sessionId)
+    {
+        if (empty($sessionId)) {
+            return false;
+        }
+
+        if (!$sessionId) {
+            return false;
+        }
+
+        if (!preg_match('/^[a-zA-Z0-9,-]{2,128}$/', $sessionId)) {
+            return false;
+        }
+
+        return true;
+    }
 }
