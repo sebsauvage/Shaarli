@@ -159,9 +159,12 @@ class PageBuilder
      *
      * @param string $message A messate to display what is not found
      */
-    public function render404($message = 'The page you are trying to reach does not exist or has been deleted.')
+    public function render404($message = '')
     {
-        header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
+        if (empty($message)) {
+            $message = t('The page you are trying to reach does not exist or has been deleted.');
+        }
+        header($_SERVER['SERVER_PROTOCOL'] .' '. t('404 Not Found'));
         $this->tpl->assign('error_message', $message);
         $this->renderPage('404');
     }

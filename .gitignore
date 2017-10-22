@@ -18,6 +18,7 @@ vendor/
 # Release archives
 *.tar.gz
 *.zip
+inc/languages/*/LC_MESSAGES/shaarli.mo
 
 # Development and test resources
 coverage

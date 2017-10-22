@@ -19,10 +19,10 @@ function hook_playvideos_render_header($data)
         $playvideo = array(
             'attr' => array(
                 'href' => '#',
-                'title' => 'Video player',
+                'title' => t('Video player'),
                 'id' => 'playvideos',
             ),
-            'html' => '► Play Videos'
+            'html' => '► '. t('Play Videos')
         );
         $data['buttons_toolbar'][] = $playvideo;
     }
@@ -45,4 +45,13 @@ function hook_playvideos_render_footer($data)
     }
 
     return $data;
+}
+
+/**
+ * This function is never called, but contains translation calls for GNU gettext extraction.
+ */
+function playvideos_dummy_translation()
+{
+    // meta
+    t('Add a button in the toolbar allowing to watch all videos.');
 }

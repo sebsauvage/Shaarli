@@ -18,6 +18,6 @@ class MissingFieldConfigException extends \Exception
     public function __construct($field)
     {
         $this->field = $field;
-        $this->message = 'Configuration value is required for '. $this->field;
+        $this->message = sprintf(t('Configuration value is required for %s'), $this->field);
     }
 }

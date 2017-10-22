@@ -8,8 +8,8 @@
       {$version}
     {/if}
     &middot;
-    The personal, minimalist, super-fast, database free, bookmarking service by the Shaarli community &middot;
-    <a href="doc/html/index.html" rel="nofollow">Documentation</a>
+    {'The personal, minimalist, super-fast, database free, bookmarking service'|t} {'by the Shaarli community'|t} &middot;
+    <a href="doc/html/index.html" rel="nofollow">{'Documentation'|t}</a>
       {loop="$plugins_footer.text"}
           {$value}
       {/loop}
@@ -26,6 +26,17 @@
 {loop="$plugins_footer.js_files"}
 	<script src="{$value}#"></script>
 {/loop}
+
+<div id="js-translations" class="hidden">
+  <span id="translation-fold">{'Fold'|t}</span>
+  <span id="translation-fold-all">{'Fold all'|t}</span>
+  <span id="translation-expand">{'Expand'|t}</span>
+  <span id="translation-expand-all">{'Expand all'|t}</span>
+  <span id="translation-delete-link">{'Are you sure you want to delete this link?'|t}</span>
+  <span id="translation-shaarli-desc">
+    {'The personal, minimalist, super-fast, database free, bookmarking service'|t} {'by the Shaarli community'|t}
+  </span>
+</div>
 
 <script src="js/shaarli.js?v={$version_hash}"></script>
 <script src="inc/awesomplete.js?v={$version_hash}#"></script>

@@ -4,10 +4,11 @@
  * Plugin Isso.
  */
 
+use Shaarli\Config\ConfigManager;
+
 /**
  * Display an error everywhere if the plugin is enabled without configuration.
  *
- * @param $data array         List of links
  * @param $conf ConfigManager instance
  *
  * @return mixed - linklist data with Isso plugin.
@@ -16,8 +17,8 @@ function isso_init($conf)
 {
     $issoUrl = $conf->get('plugins.ISSO_SERVER');
     if (empty($issoUrl)) {
-        $error = 'Isso plugin error: '.
-            'Please define the "ISSO_SERVER" setting in the plugin administration page.';
+        $error = t('Isso plugin error: '.
+            'Please define the "ISSO_SERVER" setting in the plugin administration page.');
         return array($error);
     }
 }
@@ -51,4 +52,14 @@ function hook_isso_render_linklist($data, $conf)
     }
 
     return $data;
+}
+
+/**
+ * This function is never called, but contains translation calls for GNU gettext extraction.
+ */
+function isso_dummy_translation()
+{
+    // meta
+    t('Let visitor comment your shaares on permalinks with Isso.');
+    t('Isso server URL (without \'http://\')');
 }

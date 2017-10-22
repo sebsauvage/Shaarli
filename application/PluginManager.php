@@ -188,6 +188,9 @@ class PluginManager
             $metaData[$plugin] = parse_ini_file($metaFile);
             $metaData[$plugin]['order'] = array_search($plugin, $this->authorizedPlugins);
 
+            if (isset($metaData[$plugin]['description'])) {
+                $metaData[$plugin]['description'] = t($metaData[$plugin]['description']);
+            }
             // Read parameters and format them into an array.
             if (isset($metaData[$plugin]['parameters'])) {
                 $params = explode(';', $metaData[$plugin]['parameters']);
@@ -203,7 +206,7 @@ class PluginManager
                 $metaData[$plugin]['parameters'][$param]['value'] = '';
                 // Optional parameter description in parameter.PARAM_NAME=
                 if (isset($metaData[$plugin]['parameter.'. $param])) {
-                    $metaData[$plugin]['parameters'][$param]['desc'] = $metaData[$plugin]['parameter.'. $param];
+                    $metaData[$plugin]['parameters'][$param]['desc'] = t($metaData[$plugin]['parameter.'. $param]);
                 }
             }
         }
@@ -237,6 +240,6 @@ class PluginFileNotFoundException extends Exception
      */
     public function __construct($pluginName)
     {
-        $this->message = 'Plugin "'. $pluginName .'" files not found.';
+        $this->message = sprintf(t('Plugin "%s" files not found.'), $pluginName);
     }
 }

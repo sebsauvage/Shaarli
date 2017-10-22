@@ -149,12 +149,13 @@ class ApplicationUtils
     public static function checkPHPVersion($minVersion, $curVersion)
     {
         if (version_compare($curVersion, $minVersion) < 0) {
-            throw new Exception(
+            $msg = t(
                 'Your PHP version is obsolete!'
-                .' Shaarli requires at least PHP '.$minVersion.', and thus cannot run.'
-                .' Your PHP version has known security vulnerabilities and should be'
-                .' updated as soon as possible.'
+                 . ' Shaarli requires at least PHP %s, and thus cannot run.'
+                 . ' Your PHP version has known security vulnerabilities and should be'
+                 . ' updated as soon as possible.'
             );
+            throw new Exception(sprintf($msg, $minVersion));
         }
     }
 
@@ -179,7 +180,7 @@ class ApplicationUtils
             $rainTplDir.'/'.$conf->get('resource.theme'),
         ) as $path) {
             if (! is_readable(realpath($path))) {
-                $errors[] = '"'.$path.'" directory is not readable';
+                $errors[] = '"'.$path.'" '. t('directory is not readable');
             }
         }
 
@@ -191,10 +192,10 @@ class ApplicationUtils
             $conf->get('resource.raintpl_tmp'),
         ) as $path) {
             if (! is_readable(realpath($path))) {
-                $errors[] = '"'.$path.'" directory is not readable';
+                $errors[] = '"'.$path.'" '. t('directory is not readable');
             }
             if (! is_writable(realpath($path))) {
-                $errors[] = '"'.$path.'" directory is not writable';
+                $errors[] = '"'.$path.'" '. t('directory is not writable');
             }
         }
 
@@ -212,10 +213,10 @@ class ApplicationUtils
             }
 
             if (! is_readable(realpath($path))) {
-                $errors[] = '"'.$path.'" file is not readable';
+                $errors[] = '"'.$path.'" '. t('file is not readable');
             }
             if (! is_writable(realpath($path))) {
-                $errors[] = '"'.$path.'" file is not writable';
+                $errors[] = '"'.$path.'" '. t('file is not writable');
             }
         }
 

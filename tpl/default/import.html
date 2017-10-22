@@ -18,7 +18,7 @@
       <div class="center" id="import-field">
         <input type="hidden" name="MAX_FILE_SIZE" value="{$maxfilesize}">
         <input type="file" name="filetoupload">
-        <p><br>Maximum size allowed: <strong>{$maxfilesizeHuman}</strong></p>
+        <p><br>{'Maximum size allowed:'|t} <strong>{$maxfilesizeHuman}</strong></p>
       </div>
 
       <div class="pure-g">
@@ -31,15 +31,15 @@
           <div class="radio-buttons">
             <div>
               <input type="radio" name="privacy" value="default" checked="checked">
-              Use values from the imported file, default to public
+              {'Use values from the imported file, default to public'|t}
             </div>
             <div>
               <input type="radio" name="privacy" value="private">
-              Import all bookmarks as private
+              {'Import all bookmarks as private'|t}
             </div>
             <div>
               <input type="radio" name="privacy" value="public">
-              Import all bookmarks as public
+              {'Import all bookmarks as public'|t}
             </div>
           </div>
         </div>

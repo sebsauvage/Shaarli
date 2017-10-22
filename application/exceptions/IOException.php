@@ -16,7 +16,7 @@ class IOException extends Exception
     public function __construct($path, $message = '')
     {
         $this->path = $path;
-        $this->message = empty($message) ? 'Error accessing' : $message;
+        $this->message = empty($message) ? t('Error accessing') : $message;
         $this->message .= ' "' . $this->path .'"';
     }
 }

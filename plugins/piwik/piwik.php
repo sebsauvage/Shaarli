@@ -18,8 +18,8 @@ function piwik_init($conf)
     $piwikUrl = $conf->get('plugins.PIWIK_URL');
     $piwikSiteid = $conf->get('plugins.PIWIK_SITEID');
     if (empty($piwikUrl) || empty($piwikSiteid)) {
-        $error = 'Piwik plugin error: ' .
-            'Please define PIWIK_URL and PIWIK_SITEID in the plugin administration page.';
+        $error = t('Piwik plugin error: ' .
+            'Please define PIWIK_URL and PIWIK_SITEID in the plugin administration page.');
         return array($error);
     }
 }
@@ -59,4 +59,15 @@ function hook_piwik_render_footer($data, $conf)
     );
 
     return $data;
+}
+
+/**
+ * This function is never called, but contains translation calls for GNU gettext extraction.
+ */
+function piwik_dummy_translation()
+{
+    // meta
+    t('A plugin that adds Piwik tracking code to Shaarli pages.');
+    t('Piwik URL');
+    t('Piwik site ID');
 }

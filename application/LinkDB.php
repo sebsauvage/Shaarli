@@ -133,16 +133,16 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     {
         // TODO: use exceptions instead of "die"
         if (!$this->loggedIn) {
-            die('You are not authorized to add a link.');
+            die(t('You are not authorized to add a link.'));
         }
         if (!isset($value['id']) || empty($value['url'])) {
-            die('Internal Error: A link should always have an id and URL.');
+            die(t('Internal Error: A link should always have an id and URL.'));
         }
         if (($offset !== null && ! is_int($offset)) || ! is_int($value['id'])) {
-            die('You must specify an integer as a key.');
+            die(t('You must specify an integer as a key.'));
         }
         if ($offset !== null && $offset !== $value['id']) {
-            die('Array offset and link ID must be equal.');
+            die(t('Array offset and link ID must be equal.'));
         }
 
         // If the link exists, we reuse the real offset, otherwise new entry
@@ -248,13 +248,13 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         $this->links = array();
         $link = array(
             'id' => 1,
-            'title'=>' Shaarli: the personal, minimalist, super-fast, no-database delicious clone',
+            'title'=> t('The personal, minimalist, super-fast, database free, bookmarking service'),
             'url'=>'https://shaarli.readthedocs.io',
-            'description'=>'Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.
+            'description'=>t('Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.
 
-To learn how to use Shaarli, consult the link "Help/documentation" at the bottom of this page.
+To learn how to use Shaarli, consult the link "Documentation" at the bottom of this page.
 
-You use the community supported version of the original Shaarli project, by Sebastien Sauvage.',
+You use the community supported version of the original Shaarli project, by Sebastien Sauvage.'),
             'private'=>0,
             'created'=> new DateTime(),
             'tags'=>'opensource software'
@@ -264,9 +264,9 @@ You use the community supported version of the original Shaarli project, by Seba
 
         $link = array(
             'id' => 0,
-            'title'=>'My secret stuff... - Pastebin.com',
+            'title'=> t('My secret stuff... - Pastebin.com'),
             'url'=>'http://sebsauvage.net/paste/?8434b27936c09649#bR7XsXhoTiLcqCpQbmOpBi3rq2zzQUC5hBI7ZT1O3x8=',
-            'description'=>'Shhhh! I\'m a private link only YOU can see. You can delete me too.',
+            'description'=> t('Shhhh! I\'m a private link only YOU can see. You can delete me too.'),
             'private'=>1,
             'created'=> new DateTime('1 minute ago'),
             'tags'=>'secretstuff',

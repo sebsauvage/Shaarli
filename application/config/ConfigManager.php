@@ -132,7 +132,7 @@ class ConfigManager
     public function set($setting, $value, $write = false, $isLoggedIn = false)
     {
         if (empty($setting) || ! is_string($setting)) {
-            throw new \Exception('Invalid setting key parameter. String expected, got: '. gettype($setting));
+            throw new \Exception(t('Invalid setting key parameter. String expected, got: '). gettype($setting));
         }
 
         // During the ConfigIO transition, map legacy settings to the new ones.
@@ -338,6 +338,10 @@ class ConfigManager
 
         $this->setEmpty('redirector.url', '');
         $this->setEmpty('redirector.encode_url', true);
+
+        $this->setEmpty('translation.language', 'auto');
+        $this->setEmpty('translation.mode', 'php');
+        $this->setEmpty('translation.extensions', []);
 
         $this->setEmpty('plugins', array());
     }

@@ -13,7 +13,7 @@
 function purgeCachedPages($pageCacheDir)
 {
     if (! is_dir($pageCacheDir)) {
-        $error = 'Cannot purge '.$pageCacheDir.': no directory';
+        $error = sprintf(t('Cannot purge %s: no directory'), $pageCacheDir);
         error_log($error);
         return $error;
     }

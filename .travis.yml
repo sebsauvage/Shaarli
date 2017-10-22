@@ -13,6 +13,8 @@ install:
   - composer self-update
   - composer install --prefer-dist
   - locale -a
+before_script:
+  - PATH=${PATH//:\.\/node_modules\/\.bin/}
 script:
   - make clean
   - make check_permissions

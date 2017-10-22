@@ -22,10 +22,15 @@ class ConfigJson implements ConfigIO
         $data = json_decode($data, true);
         if ($data === null) {
             $errorCode = json_last_error();
-            $error  = 'An error occurred while parsing JSON configuration file ('. $filepath .'): error code #';
-            $error .= $errorCode. '<br>➜ <code>' . json_last_error_msg() .'</code>';
+            $error  = sprintf(
+                'An error occurred while parsing JSON configuration file (%s): error code #%d',
+                $filepath,
+                $errorCode
+            );
+            $error .= '<br>➜ <code>' . json_last_error_msg() .'</code>';
             if ($errorCode === JSON_ERROR_SYNTAX) {
-                $error .= '<br>Please check your JSON syntax (without PHP comment tags) using a JSON lint tool such as ';
+                $error .= '<br>';
+                $error .= 'Please check your JSON syntax (without PHP comment tags) using a JSON lint tool such as ';
                 $error .= '<a href="http://jsonlint.com/">jsonlint.com</a>.';
             }
             throw new \Exception($error);
@@ -44,8 +49,8 @@ class ConfigJson implements ConfigIO
         if (!file_put_contents($filepath, $data)) {
             throw new \IOException(
                 $filepath,
-                'Shaarli could not create the config file.
-                Please make sure Shaarli has the right to write in the folder is it installed in.'
+                t('Shaarli could not create the config file. '.
+                  'Please make sure Shaarli has the right to write in the folder is it installed in.')
             );
         }
     }

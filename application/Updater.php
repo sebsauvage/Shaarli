@@ -73,7 +73,7 @@ class Updater
         }
 
         if ($this->methods === null) {
-            throw new UpdaterException('Couldn\'t retrieve Updater class methods.');
+            throw new UpdaterException(t('Couldn\'t retrieve Updater class methods.'));
         }
 
         foreach ($this->methods as $method) {
@@ -482,7 +482,7 @@ class UpdaterException extends Exception
         }
 
         if (! empty($this->method)) {
-            $out .= 'An error occurred while running the update '. $this->method . PHP_EOL;
+            $out .= t('An error occurred while running the update ') . $this->method . PHP_EOL;
         }
 
         if (! empty($this->previous)) {
@@ -522,11 +522,11 @@ function read_updates_file($updatesFilepath)
 function write_updates_file($updatesFilepath, $updates)
 {
     if (empty($updatesFilepath)) {
-        throw new Exception('Updates file path is not set, can\'t write updates.');
+        throw new Exception(t('Updates file path is not set, can\'t write updates.'));
     }
 
     $res = file_put_contents($updatesFilepath, implode(';', $updates));
     if ($res === false) {
-        throw new Exception('Unable to write updates in '. $updatesFilepath . '.');
+        throw new Exception(t('Unable to write updates in '. $updatesFilepath . '.'));
     }
 }
