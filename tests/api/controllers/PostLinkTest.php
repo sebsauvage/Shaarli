@@ -3,11 +3,13 @@
 namespace Shaarli\Api\Controllers;
 
 
+use PHPUnit\Framework\TestCase;
 use Shaarli\Config\ConfigManager;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Slim\Router;
 
 /**
  * Class PostLinkTest
@@ -16,7 +18,7 @@ use Slim\Http\Response;
  *
  * @package Shaarli\Api\Controllers
  */
-class PostLinkTest extends \PHPUnit_Framework_TestCase
+class PostLinkTest extends TestCase
 {
     /**
      * @var string datastore to test write operations
@@ -78,7 +80,7 @@ class PostLinkTest extends \PHPUnit_Framework_TestCase
 
         $this->controller = new Links($this->container);
 
-        $mock = $this->getMock('\Slim\Router', ['relativePathFor']);
+        $mock = $this->createMock(Router::class);
         $mock->expects($this->any())
              ->method('relativePathFor')
              ->willReturn('api/v1/links/1');
