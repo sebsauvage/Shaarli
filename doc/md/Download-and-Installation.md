@@ -4,11 +4,18 @@ Document Root (or directly at the document root).
 Also, please make sure your server meets the [requirements](Server-requirements)
 and is properly [configured](Server-configuration).
 
-Several releases are available:
+Multiple releases branches are available:
+
+- latest (last release)
+- stable (previous major release)
+- master (development)
+
+Using one of the following methods:
 
 - by downloading full release archives including all dependencies
 - by downloading Github archives
 - by cloning the Git repository
+- using Docker: [see the documentation](docker/shaarli-images)
 
 ---
 
@@ -28,13 +35,14 @@ $ unzip shaarli-v0.9.1-full.zip
 $ mv Shaarli /path/to/shaarli/
 ```
 
-In most cases, download Shaarli from the [releases](https://github.com/shaarli/Shaarli/releases) page. Cloning using `git` or downloading Github branches as zip files requires additional steps (see below).|
+In most cases, download Shaarli from the [releases](https://github.com/shaarli/Shaarli/releases) page. 
+Cloning using `git` or downloading Github branches as zip files requires additional steps (see below).
 
 ### Using git
 
 ```
 $ mkdir -p /path/to/shaarli && cd /path/to/shaarli/
-$ git clone -b v0.9 https://github.com/shaarli/Shaarli.git .
+$ git clone -b latest https://github.com/shaarli/Shaarli.git .
 $ composer install --no-dev --prefer-dist
 ```
 
