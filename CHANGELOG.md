@@ -40,7 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Security
 
-- Vulnerability introduced in v0.9.1 fixed.
+- Fixed reflected XSS vulnerability introduced in v0.9.1, discovered by @chb9 ([CVE-2017-15215](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15215)).
 
 ## [v0.9.1](https://github.com/shaarli/Shaarli/releases/tag/v0.9.1) - 2017-08-23
 
