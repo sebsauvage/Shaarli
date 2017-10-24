@@ -51,6 +51,29 @@ class SessionManagerTest extends TestCase
     }
 
     /**
+     * Check a session token
+     */
+    public function testCheckToken()
+    {
+        $token = '4dccc3a45ad9d03e5542b90c37d8db6d10f2b38b';
+        $session = [
+            'tokens' => [
+                $token => 1,
+            ],
+        ];
+        $conf = new FakeConfigManager();
+        $sessionManager = new SessionManager($session, $conf);
+
+
+        // check and destroy the token
+        $this->assertTrue($sessionManager->checkToken($token));
+        $this->assertFalse(isset($session['tokens'][$token]));
+
+        // ensure the token has been destroyed
+        $this->assertFalse($sessionManager->checkToken($token));
+    }
+
+    /**
      * Generate and check a session token
      */
     public function testGenerateAndCheckToken()
