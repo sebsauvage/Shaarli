@@ -32,12 +32,14 @@ class PageBuilder
      *
      * @param ConfigManager $conf   Configuration Manager instance (reference).
      * @param LinkDB        $linkDB instance.
+     * @param string        $token  Session token
      */
-    public function __construct(&$conf, $linkDB = null)
+    public function __construct(&$conf, $linkDB = null, $token = null)
     {
         $this->tpl = false;
         $this->conf = $conf;
         $this->linkDB = $linkDB;
+        $this->token = $token;
     }
 
     /**
@@ -92,7 +94,7 @@ class PageBuilder
         $this->tpl->assign('showatom', $this->conf->get('feed.show_atom', true));
         $this->tpl->assign('feed_type', $this->conf->get('feed.show_atom', true) !== false ? 'atom' : 'rss');
         $this->tpl->assign('hide_timestamps', $this->conf->get('privacy.hide_timestamps', false));
-        $this->tpl->assign('token', getToken($this->conf));
+        $this->tpl->assign('token', $this->token);
 
         if ($this->linkDB !== null) {
             $this->tpl->assign('tags', $this->linkDB->linksCountPerTag());

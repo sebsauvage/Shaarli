@@ -78,6 +78,7 @@ require_once 'application/Updater.php';
 use \Shaarli\Languages;
 use \Shaarli\ThemeUtils;
 use \Shaarli\Config\ConfigManager;
+use \Shaarli\SessionManager;
 
 // Ensure the PHP version is supported
 try {
@@ -115,12 +116,13 @@ if (session_id() == '') {
 }
 
 // Regenerate session ID if invalid or not defined in cookie.
-if (isset($_COOKIE['shaarli']) && !is_session_id_valid($_COOKIE['shaarli'])) {
+if (isset($_COOKIE['shaarli']) && !SessionManager::checkId($_COOKIE['shaarli'])) {
     session_regenerate_id(true);
     $_COOKIE['shaarli'] = session_id();
 }
 
 $conf = new ConfigManager();
+$sessionManager = new SessionManager($_SESSION, $conf);
 
 // Sniff browser language and set date format accordingly.
 if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
@@ -165,7 +167,7 @@ if (! is_file($conf->getConfigFileExt())) {
     }
 
     // Display the installation form if no existing config is found
-    install($conf);
+    install($conf, $sessionManager);
 }
 
 // a token depending of deployment salt, user password, and the current ip
@@ -381,7 +383,7 @@ if (isset($_POST['login']))
 {
     if (!ban_canLogin($conf)) die(t('I said: NO. You are banned for the moment. Go away.'));
     if (isset($_POST['password'])
-        && tokenOk($_POST['token'])
+        && $sessionManager->checkToken($_POST['token'])
         && (check_auth($_POST['login'], $_POST['password'], $conf))
     ) {   // Login/password is OK.
         ban_loginOk($conf);
@@ -453,32 +455,6 @@ if (isset($_POST['login']))
 // Token management for XSRF protection
 // Token should be used in any form which acts on data (create,update,delete,import...).
 if (!isset($_SESSION['tokens'])) $_SESSION['tokens']=array();  // Token are attached to the session.
-
-/**
- * Returns a token.
- *
- * @param ConfigManager $conf Configuration Manager instance.
- *
- * @return string token.
- */
-function getToken($conf)
-{
-    $rnd = sha1(uniqid('', true) .'_'. mt_rand() . $conf->get('credentials.salt'));  // We generate a random string.
-    $_SESSION['tokens'][$rnd]=1;  // Store it on the server side.
-    return $rnd;
-}
-
-// Tells if a token is OK. Using this function will destroy the token.
-// true=token is OK.
-function tokenOk($token)
-{
-    if (isset($_SESSION['tokens'][$token]))
-    {
-        unset($_SESSION['tokens'][$token]); // Token is used: destroy it.
-        return true; // Token is OK.
-    }
-    return false; // Wrong token, or already used.
-}
 
 /**
  * Daily RSS feed: 1 RSS entry per day giving all the links on that day.
@@ -687,12 +663,13 @@ function showLinkList($PAGE, $LINKSDB, $conf, $pluginManager) {
 /**
  * Render HTML page (according to URL parameters and user rights)
  *
- * @param ConfigManager $conf          Configuration Manager instance.
- * @param PluginManager $pluginManager Plugin Manager instance,
- * @param LinkDB        $LINKSDB
- * @param History       $history       instance
+ * @param ConfigManager  $conf           Configuration Manager instance.
+ * @param PluginManager  $pluginManager  Plugin Manager instance,
+ * @param LinkDB         $LINKSDB
+ * @param History        $history        instance
+ * @param SessionManager $sessionManager SessionManager instance
  */
-function renderPage($conf, $pluginManager, $LINKSDB, $history)
+function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager)
 {
     $updater = new Updater(
         read_updates_file($conf->get('resource.updates')),
@@ -713,7 +690,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
         die($e->getMessage());
     }
 
-    $PAGE = new PageBuilder($conf, $LINKSDB);
+    $PAGE = new PageBuilder($conf, $LINKSDB, $sessionManager->generateToken());
     $PAGE->assign('linkcount', count($LINKSDB));
     $PAGE->assign('privateLinkcount', count_private($LINKSDB));
     $PAGE->assign('plugin_errors', $pluginManager->getErrors());
@@ -1109,13 +1086,13 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
 
         if (!empty($_POST['setpassword']) && !empty($_POST['oldpassword']))
         {
-            if (!tokenOk($_POST['token'])) die(t('Wrong token.')); // Go away!
+            if (!$sessionManager->checkToken($_POST['token'])) die(t('Wrong token.')); // Go away!
 
             // Make sure old password is correct.
             $oldhash = sha1($_POST['oldpassword'].$conf->get('credentials.login').$conf->get('credentials.salt'));
             if ($oldhash!= $conf->get('credentials.hash')) {
                 echo '<script>alert("'. t('The old password is not correct.') .'");document.location=\'?do=changepasswd\';</script>';
-                exit; 
+                exit;
             }
             // Save new password
             // Salt renders rainbow-tables attacks useless.
@@ -1149,7 +1126,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
     {
         if (!empty($_POST['title']) )
         {
-            if (!tokenOk($_POST['token'])) {
+            if (!$sessionManager->checkToken($_POST['token'])) {
                 die(t('Wrong token.')); // Go away!
             }
             $tz = 'UTC';
@@ -1225,7 +1202,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
             exit;
         }
 
-        if (!tokenOk($_POST['token'])) {
+        if (!$sessionManager->checkToken($_POST['token'])) {
             die(t('Wrong token.'));
         }
 
@@ -1255,7 +1232,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
     if (isset($_POST['save_edit']))
     {
         // Go away!
-        if (! tokenOk($_POST['token'])) {
+        if (! $sessionManager->checkToken($_POST['token'])) {
             die(t('Wrong token.'));
         }
 
@@ -1355,7 +1332,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
     // -------- User clicked the "Delete" button when editing a link: Delete link from database.
     if ($targetPage == Router::$PAGE_DELETELINK)
     {
-        if (! tokenOk($_GET['token'])) {
+        if (! $sessionManager->checkToken($_GET['token'])) {
             die(t('Wrong token.'));
         }
 
@@ -1572,7 +1549,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
             echo '<script>alert("'. $msg .'");document.location=\'?do='.Router::$PAGE_IMPORT .'\';</script>';
             exit;
         }
-        if (! tokenOk($_POST['token'])) {
+        if (! $sessionManager->checkToken($_POST['token'])) {
             die('Wrong token.');
         }
         $status = NetscapeBookmarkUtils::import(
@@ -1639,7 +1616,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history)
     // Get a fresh token
     if ($targetPage == Router::$GET_TOKEN) {
         header('Content-Type:text/plain');
-        echo getToken($conf);
+        echo $sessionManager->generateToken($conf);
         exit;
     }
 
@@ -1965,10 +1942,10 @@ function lazyThumbnail($conf, $url,$href=false)
  * Installation
  * This function should NEVER be called if the file data/config.php exists.
  *
- * @param ConfigManager $conf Configuration Manager instance.
+ * @param ConfigManager  $conf           Configuration Manager instance.
+ * @param SessionManager $sessionManager SessionManager instance
  */
-function install($conf)
-{
+function install($conf, $sessionManager) {
     // On free.fr host, make sure the /sessions directory exists, otherwise login will not work.
     if (endsWith($_SERVER['HTTP_HOST'],'.free.fr') && !is_dir($_SERVER['DOCUMENT_ROOT'].'/sessions')) mkdir($_SERVER['DOCUMENT_ROOT'].'/sessions',0705);
 
@@ -2051,7 +2028,7 @@ function install($conf)
         exit;
     }
 
-    $PAGE = new PageBuilder($conf);
+    $PAGE = new PageBuilder($conf, null, $sessionManager->generateToken());
     list($continents, $cities) = generateTimeZoneData(timezone_identifiers_list(), date_default_timezone_get());
     $PAGE->assign('continents', $continents);
     $PAGE->assign('cities', $cities);
@@ -2328,7 +2305,7 @@ $response = $app->run(true);
 if ($response->getStatusCode() == 404 && strpos($_SERVER['REQUEST_URI'], '/api/v1') === false) {
     // We use UTF-8 for proper international characters handling.
     header('Content-Type: text/html; charset=utf-8');
-    renderPage($conf, $pluginManager, $linkDb, $history);
+    renderPage($conf, $pluginManager, $linkDb, $history, $sessionManager);
 } else {
     $app->respond($response);
 }

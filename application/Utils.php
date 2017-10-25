@@ -182,36 +182,6 @@ function generateLocation($referer, $host, $loopTerms = array())
 }
 
 /**
- * Validate session ID to prevent Full Path Disclosure.
- *
- * See #298.
- * The session ID's format depends on the hash algorithm set in PHP settings
- *
- * @param string $sessionId Session ID
- *
- * @return true if valid, false otherwise.
- *
- * @see http://php.net/manual/en/function.hash-algos.php
- * @see http://php.net/manual/en/session.configuration.php
- */
-function is_session_id_valid($sessionId)
-{
-    if (empty($sessionId)) {
-        return false;
-    }
-
-    if (!$sessionId) {
-        return false;
-    }
-
-    if (!preg_match('/^[a-zA-Z0-9,-]{2,128}$/', $sessionId)) {
-        return false;
-    }
-
-    return true;
-}
-
-/**
  * Sniff browser language to set the locale automatically.
  * Note that is may not work on your server if the corresponding locale is not installed.
  *
