@@ -8,6 +8,10 @@ require_once 'application/LinkFilter.php';
 class LinkFilterTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var string Test datastore path.
+     */
+    protected static $testDatastore = 'sandbox/datastore.php';
+    /**
      * @var LinkFilter instance.
      */
     protected static $linkFilter;
@@ -18,12 +22,19 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
     protected static $refDB;
 
     /**
+     * @var LinkDB instance
+     */
+    protected static $linkDB;
+
+    /**
      * Instanciate linkFilter with ReferenceLinkDB data.
      */
     public static function setUpBeforeClass()
     {
         self::$refDB = new ReferenceLinkDB();
-        self::$linkFilter = new LinkFilter(self::$refDB->getLinks());
+        self::$refDB->write(self::$testDatastore);
+        self::$linkDB = new LinkDB(self::$testDatastore, true, false);
+        self::$linkFilter = new LinkFilter(self::$linkDB);
     }
 
     /**

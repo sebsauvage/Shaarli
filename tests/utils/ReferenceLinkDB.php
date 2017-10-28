@@ -141,10 +141,32 @@ class ReferenceLinkDB
      */
     public function write($filename)
     {
+        $this->reorder();
         file_put_contents(
             $filename,
             '<?php /* '.base64_encode(gzdeflate(serialize($this->_links))).' */ ?>'
         );
+    }
+
+    /**
+     * Reorder links by creation date (newest first).
+     *
+     * Also update the urls and ids mapping arrays.
+     *
+     * @param string $order ASC|DESC
+     */
+    public function reorder($order = 'DESC')
+    {
+        // backward compatibility: ignore reorder if the the `created` field doesn't exist
+        if (! isset(array_values($this->_links)[0]['created'])) {
+            return;
+        }
+
+        $order = $order === 'ASC' ? -1 : 1;
+        // Reorder array by dates.
+        usort($this->_links, function($a, $b) use ($order) {
+            return $a['created'] < $b['created'] ? 1 * $order : -1 * $order;
+        });
     }
 
     /**
@@ -187,6 +209,7 @@ class ReferenceLinkDB
 
     public function getLinks()
     {
+        $this->reorder();
         return $this->_links;
     }
 
