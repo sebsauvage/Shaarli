@@ -378,7 +378,7 @@ window.onload = function () {
     var linkCheckboxes = document.querySelectorAll('.delete-checkbox');
     var bar = document.getElementById('actions');
     [].forEach.call(linkCheckboxes, function(checkbox) {
-        checkbox.style.display = 'block';
+        checkbox.style.display = 'inline-block';
         checkbox.addEventListener('click', function(event) {
             var count = 0;
             var linkCheckedCheckboxes = document.querySelectorAll('.delete-checkbox:checked');

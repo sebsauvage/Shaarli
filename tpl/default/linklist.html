@@ -53,9 +53,9 @@
 {/loop}
 
 <div id="linklist">
-  <div class="pure-g">
+  <div id="link-count-block" class="pure-g">
     <div class="pure-u-lg-2-24 pure-u-1-24"></div>
-    <div class="pure-u-lg-20-24 pure-u-22-24">
+    <div id="link-count-content" class="pure-u-lg-20-24 pure-u-22-24">
       <div class="linkcount pure-u-lg-0 center">
         {if="!empty($linkcount)"}
         <span class="strong">{$linkcount}</span> {function="t('shaare', 'shaares', $linkcount)"}
@@ -76,16 +76,16 @@
   </div>
 
   {if="count($links)==0"}
-    <div class="pure-g pure-alert pure-alert-error search-result">
+    <div id="search-result-block" class="pure-g pure-alert pure-alert-error search-result">
       <div class="pure-u-2-24"></div>
-      <div class="pure-u-20-24">
+      <div id="search-result-content" class="pure-u-20-24">
         <div id="searchcriteria">{'Nothing found.'|t}</div>
       </div>
     </div>
   {elseif="!empty($search_term) or $search_tags !== '' or !empty($visibility) or $untaggedonly"}
-    <div class="pure-g pure-alert pure-alert-success search-result">
+    <div id="search-result-block" class="pure-g pure-alert pure-alert-success search-result">
       <div class="pure-u-2-24"></div>
-      <div class="pure-u-20-24">
+      <div id="search-result-content" class="pure-u-20-24 search-result-main">
         {function="sprintf(t('%s result', '%s results', $result_count), $result_count)"}
         {if="!empty($search_term)"}
           {'for'|t} <em><strong>{$search_term}</strong></em>
@@ -114,9 +114,9 @@
     </div>
   {/if}
 
-  <div class="pure-g">
+  <div id="linklist-loop-block" class="pure-g">
     <div class="pure-u-lg-2-24 pure-u-1-24"></div>
-    <div class="pure-u-lg-20-24 pure-u-22-24">
+    <div id="linklist-loop-content" class="pure-u-lg-20-24 pure-u-22-24">
       {ignore}Set translation here, for performances{/ignore}
       {$strPrivate=t('Private')}
       {$strEdit=t('Edit')}
@@ -129,18 +129,19 @@
       {ignore}End of translations{/ignore}
       {loop="links"}
         <div class="anchor" id="{$value.shorturl}"></div>
-        <div class="linklist-item linklist-item{if="$value.class"} {$value.class}{/if}" data-id="{$value.id}">
 
+        <div class="linklist-item linklist-item{if="$value.class"} {$value.class}{/if}" data-id="{$value.id}">
           <div class="linklist-item-title">
+            {$thumb=thumbnail($value.url)}
+            {if="$thumb!=false"}
+              <div class="linklist-item-thumbnail">{$thumb}</div>
+            {/if}
+
             {if="isLoggedIn()"}
               <div class="linklist-item-editbuttons">
                 {if="$value.private"}
                   <span class="label label-private">{$strPrivate}</span>
                 {/if}
-                <input type="checkbox" class="delete-checkbox" value="{$value.id}">
-                <!-- FIXME! JS translation -->
-                <a href="?edit_link={$value.id}" title="{$strEdit}"><i class="fa fa-pencil-square-o edit-link"></i></a>
-                <a href="#" title="{$strFold}" class="fold-button"><i class="fa fa-chevron-up"></i></a>
               </div>
             {/if}
 
@@ -156,11 +157,6 @@
               </a>
             </h2>
           </div>
-
-          {$thumb=thumbnail($value.url)}
-          {if="$thumb!=false"}
-            <div class="linklist-item-thumbnail">{$thumb}</div>
-          {/if}
 
           {if="$value.description"}
             <div class="linklist-item-description">
@@ -182,8 +178,24 @@
               </div>
             {/if}
 
-            <div class="pure-g">
-              <div class="linklist-item-infos-dateblock pure-u-lg-3-8 pure-u-1">
+            <div class="linklist-item-infos-date-url-block pure-g">
+              <div class="linklist-item-infos-dateblock pure-u-lg-7-12 pure-u-1">
+                {if="isLoggedIn()"}
+                  <div class="linklist-item-infos-controls-group pure-u-0 pure-u-lg-visible">
+                    <span class="linklist-item-infos-controls-item ctrl-checkbox">
+                      <input type="checkbox" class="delete-checkbox" value="{$value.id}">
+                    </span>
+                    <span class="linklist-item-infos-controls-item ctrl-edit">
+                      <a href="?edit_link={$value.id}" title="{$strEdit}"><i class="fa fa-pencil-square-o edit-link"></i></a>
+                    </span>
+                    <span class="linklist-item-infos-controls-item ctrl-delete">
+                      <a href="?delete_link&amp;lf_linkdate={$value.id}&amp;token={$token}"
+                         title="{$strDelete}" class="delete-link pure-u-0 pure-u-lg-visible confirm-delete">
+                        <i class="fa fa-trash"></i>
+                      </a>
+                    </span>
+                  </div>
+                {/if}
                 <a href="?{$value.shorturl}" title="{$strPermalink}">
                   {if="!$hide_timestamps || isLoggedIn()"}
                     {$updated=$value.updated_timestamp ? $strEdited. format_date($value.updated) : $strPermalink}
@@ -209,16 +221,13 @@
                 </div>
               </div><div
                 {ignore}do not add space or line break between these div - Firefox issue{/ignore}
-                class="linklist-item-infos-url pure-u-lg-5-8 pure-u-1">
+                class="linklist-item-infos-url pure-u-lg-5-12 pure-u-1">
                 <a href="{$value.real_url}" title="{$value.title}">
                   <i class="fa fa-link"></i> {$value.url}
                 </a>
-                {if="isLoggedIn()"}
-                  <a href="?delete_link&amp;lf_linkdate={$value.id}&amp;token={$token}"
-                     title="{$strDelete}" class="delete-link pure-u-0 pure-u-lg-visible confirm-delete">
-                    <i class="fa fa-trash"></i>
-                  </a>
-                {/if}
+                <div class="linklist-item-buttons pure-u-0 pure-u-lg-visible">
+                  <a href="#" title="{$strFold}" class="fold-button"><i class="fa fa-chevron-up"></i></a>
+                </div>
               </div>
               <div class="mobile-buttons pure-u-1 pure-u-lg-0">
                 {if="isset($value.link_plugin)"}
@@ -234,6 +243,8 @@
                      title="{$strDelete}" class="delete-link confirm-delete">
                     <i class="fa fa-trash"></i>
                   </a>
+                  &middot;
+                  <a href="?edit_link={$value.id}" title="{$strEdit}"><i class="fa fa-pencil-square-o edit-link"></i></a>
                 {/if}
               </div>
             </div>
@@ -250,9 +261,9 @@
     {/loop}
   </div>
 
-<div class="pure-g">
+<div id="linklist-paging-bottom-block" class="pure-g">
   <div class="pure-u-lg-2-24 pure-u-1-24"></div>
-  <div class="pure-u-lg-20-24 pure-u-22-24">
+  <div id="linklist-paging-bottom-content" class="pure-u-lg-20-24 pure-u-22-24">
     {include="linklist.paging"}
   </div>
 </div>
