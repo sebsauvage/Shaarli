@@ -34,6 +34,7 @@ See [REST API](REST-API) for a list of official and community clients.
 - [related](https://github.com/ilesinge/shaarli-related) by [@ilesinge](https://github.com/ilesinge) - Show related links based on the number of identical tags.
 - [social](https://github.com/alexisju/social) by [@alexisju](https://github.com/alexisju): share links to social networks.
 - [shaarli2twitter](https://github.com/ArthurHoaro/shaarli2twitter) by [@ArthurHoaro](https://github.com/ArthurHoaro) - Automatically tweet your shared links from Shaarli
+- [shaarli2mastodon](https://github.com/kalvn/shaarli2mastodon) by [@kalvn](https://github.com/kalvn) - This Shaarli plugin allows you to automatically publish links you post on your Mastodon timeline.
 
 
 ### Third-party themes
