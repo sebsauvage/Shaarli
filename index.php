@@ -526,7 +526,11 @@ function showDailyRSS($conf) {
 
         // We pre-format some fields for proper output.
         foreach ($links as &$link) {
-            $link['formatedDescription'] = format_description($link['description'], $conf->get('redirector.url'));
+            $link['formatedDescription'] = format_description(
+                $link['description'],
+                $conf->get('redirector.url'),
+                $conf->get('redirector.encode_url')
+            );
             $link['thumbnail'] = thumbnail($conf, $link['url']);
             $link['timestamp'] = $link['created']->getTimestamp();
             if (startsWith($link['url'], '?')) {
@@ -598,7 +602,11 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager)
         $taglist = explode(' ',$link['tags']);
         uasort($taglist, 'strcasecmp');
         $linksToDisplay[$key]['taglist']=$taglist;
-        $linksToDisplay[$key]['formatedDescription'] = format_description($link['description'], $conf->get('redirector.url'));
+        $linksToDisplay[$key]['formatedDescription'] = format_description(
+            $link['description'],
+            $conf->get('redirector.url'),
+            $conf->get('redirector.encode_url')
+        );
         $linksToDisplay[$key]['thumbnail'] = thumbnail($conf, $link['url']);
         $linksToDisplay[$key]['timestamp'] =  $link['created']->getTimestamp();
     }
@@ -1688,7 +1696,11 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
     while ($i<$end && $i<count($keys))
     {
         $link = $linksToDisplay[$keys[$i]];
-        $link['description'] = format_description($link['description'], $conf->get('redirector.url'));
+        $link['description'] = format_description(
+            $link['description'],
+            $conf->get('redirector.url'),
+            $conf->get('redirector.encode_url')
+        );
         $classLi =  ($i % 2) != 0 ? '' : 'publicLinkHightLight';
         $link['class'] = $link['private'] == 0 ? $classLi : 'private';
         $link['timestamp'] = $link['created']->getTimestamp();
