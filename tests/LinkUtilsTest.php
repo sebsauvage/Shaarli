@@ -131,6 +131,21 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test text2clickable a redirector set and without URL encode.
+     */
+    public function testText2clickableWithRedirectorDontEncode()
+    {
+        $text = 'stuff http://hello.there/?is=someone&or=something#here otherstuff';
+        $redirector = 'http://redirector.to';
+        $expectedText = 'stuff <a href="'.
+            $redirector .
+            'http://hello.there/?is=someone&or=something#here' .
+            '">http://hello.there/?is=someone&or=something#here</a> otherstuff';
+        $processedText = text2clickable($text, $redirector, false);
+        $this->assertEquals($expectedText, $processedText);
+    }
+
+    /**
      * Test testSpace2nbsp.
      */
     public function testSpace2nbsp()
