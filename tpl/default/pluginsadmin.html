@@ -27,7 +27,7 @@
 
         <div>
           {if="count($enabledPlugins)==0"}
-          <p>{'No plugin enabled.'|t}</p>
+            <p class="center">{'No plugin enabled.'|t}</p>
           {else}
           <table id="plugin_table">
             <thead>
@@ -77,7 +77,7 @@
 
         <div>
           {if="count($disabledPlugins)==0"}
-          <p>{'No plugin disabled.'|t}</p>
+            <p class="center">{'No plugin disabled.'|t}</p>
           {else}
           <table>
             <thead>
@@ -135,9 +135,11 @@
       <section id="plugin_parameters">
         <div>
           {if="count($enabledPlugins)==0"}
-            <p>{'No plugin enabled.'|t}</p>
+            <p class="center">{'No plugin enabled.'|t}</p>
           {else}
+            {$counter=0}
             {loop="$enabledPlugins"}
+              {$counter=$counter+count($value.parameters)}
               {if="count($value.parameters) > 0"}
                 <div class="plugin_parameters">
                   <h3 class="window-subtitle">{function="str_replace('_', ' ', $key)"}</h3>
@@ -159,10 +161,14 @@
                 </div>
               {/if}
             {/loop}
+            {if="$counter===0"}
+              <p class="center">{'No parameter available.'|t}</p>
+            {else}
+              <div class="center">
+                <input type="submit" name="parameters_form" value="{'Save'|t}"/>
+              </div>
+            {/if}
           {/if}
-          <div class="center">
-            <input type="submit" name="parameters_form" value="{'Save'|t}"/>
-          </div>
         </div>
       </section>
     </div>

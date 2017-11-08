@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2017-10-22 13:13+0200\n"
-"PO-Revision-Date: 2017-10-22 13:14+0200\n"
+"POT-Creation-Date: 2017-11-11 10:59+0100\n"
+"PO-Revision-Date: 2017-11-11 11:00+0100\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -161,11 +161,11 @@ msgstr ""
 "a été importé avec succès en %d secondes : %d liens importés, %d liens "
 "écrasés, %d liens ignorés."
 
-#: application/PageBuilder.php:165
+#: application/PageBuilder.php:167
 msgid "The page you are trying to reach does not exist or has been deleted."
 msgstr "La page que vous essayez de consulter n'existe pas ou a été supprimée."
 
-#: application/PageBuilder.php:167
+#: application/PageBuilder.php:169
 msgid "404 Not Found"
 msgstr "404 Introuvable"
 
@@ -178,44 +178,44 @@ msgstr "Les fichiers de l'extension \"%s\" sont introuvables."
 msgid "Couldn't retrieve Updater class methods."
 msgstr "Impossible de récupérer les méthodes de la classe Updater."
 
-#: application/Updater.php:485
+#: application/Updater.php:493
 msgid "An error occurred while running the update "
 msgstr "Une erreur s'est produite lors de l'exécution de la mise à jour "
 
-#: application/Updater.php:525
+#: application/Updater.php:533
 msgid "Updates file path is not set, can't write updates."
 msgstr ""
 "Le chemin vers le fichier de mise à jour n'est pas défini, impossible "
 "d'écrire les mises à jour."
 
-#: application/Updater.php:530
+#: application/Updater.php:538
 msgid "Unable to write updates in "
 msgstr "Impossible d'écrire les mises à jour dans "
 
-#: application/Utils.php:406 tests/UtilsTest.php:398
+#: application/Utils.php:376 tests/UtilsTest.php:340
 msgid "Setting not set"
 msgstr "Paramètre non défini"
 
-#: application/Utils.php:413 tests/UtilsTest.php:396 tests/UtilsTest.php:397
+#: application/Utils.php:383 tests/UtilsTest.php:338 tests/UtilsTest.php:339
 msgid "Unlimited"
 msgstr "Illimité"
 
-#: application/Utils.php:416 tests/UtilsTest.php:393 tests/UtilsTest.php:394
-#: tests/UtilsTest.php:408
+#: application/Utils.php:386 tests/UtilsTest.php:335 tests/UtilsTest.php:336
+#: tests/UtilsTest.php:350
 msgid "B"
 msgstr "o"
 
-#: application/Utils.php:416 tests/UtilsTest.php:387 tests/UtilsTest.php:388
-#: tests/UtilsTest.php:395
+#: application/Utils.php:386 tests/UtilsTest.php:329 tests/UtilsTest.php:330
+#: tests/UtilsTest.php:337
 msgid "kiB"
 msgstr "ko"
 
-#: application/Utils.php:416 tests/UtilsTest.php:389 tests/UtilsTest.php:390
-#: tests/UtilsTest.php:406 tests/UtilsTest.php:407
+#: application/Utils.php:386 tests/UtilsTest.php:331 tests/UtilsTest.php:332
+#: tests/UtilsTest.php:348 tests/UtilsTest.php:349
 msgid "MiB"
 msgstr "Mo"
 
-#: application/Utils.php:416 tests/UtilsTest.php:391 tests/UtilsTest.php:392
+#: application/Utils.php:386 tests/UtilsTest.php:333 tests/UtilsTest.php:334
 msgid "GiB"
 msgstr "Go"
 
@@ -249,62 +249,62 @@ msgstr "Vous n'êtes pas autorisé à modifier la configuration."
 msgid "Error accessing"
 msgstr "Une erreur s'est produite en accédant à"
 
-#: index.php:133
+#: index.php:135
 msgid "Shared links on "
 msgstr "Liens partagés sur "
 
-#: index.php:155
+#: index.php:157
 msgid "Insufficient permissions:"
 msgstr "Permissions insuffisantes :"
 
-#: index.php:382
+#: index.php:384
 msgid "I said: NO. You are banned for the moment. Go away."
 msgstr "NON. Vous êtes banni pour le moment. Revenez plus tard."
 
-#: index.php:447
+#: index.php:449
 msgid "Wrong login/password."
 msgstr "Nom d'utilisateur ou mot de passe incorrects."
 
-#: index.php:1107
+#: index.php:1092
 msgid "You are not supposed to change a password on an Open Shaarli."
 msgstr ""
 "Vous n'êtes pas censé modifier le mot de passe d'un Shaarli en mode ouvert."
 
-#: index.php:1112 index.php:1153 index.php:1229 index.php:1259 index.php:1359
+#: index.php:1097 index.php:1138 index.php:1214 index.php:1244 index.php:1344
 msgid "Wrong token."
 msgstr "Jeton invalide."
 
-#: index.php:1117
+#: index.php:1102
 msgid "The old password is not correct."
 msgstr "L'ancien mot de passe est incorrect."
 
-#: index.php:1137
+#: index.php:1122
 msgid "Your password has been changed"
 msgstr "Votre mot de passe a été modifié"
 
-#: index.php:1190
+#: index.php:1175
 msgid "Configuration was saved."
 msgstr "La configuration a été sauvegardé."
 
-#: index.php:1241
+#: index.php:1226
 #, php-format
 msgid "The tag was removed from %d link."
 msgid_plural "The tag was removed from %d links."
 msgstr[0] "Le tag a été supprimé de %d lien."
 msgstr[1] "Le tag a été supprimé de %d liens."
 
-#: index.php:1242
+#: index.php:1227
 #, php-format
 msgid "The tag was renamed in %d link."
 msgid_plural "The tag was renamed in %d links."
 msgstr[0] "Le tag a été renommé dans %d lien."
 msgstr[1] "Le tag a été renommé dans %d liens."
 
-#: index.php:1458
+#: index.php:1443
 msgid "Note: "
 msgstr "Note : "
 
-#: index.php:1567
+#: index.php:1552
 #, php-format
 msgid ""
 "The file you are trying to upload is probably bigger than what this "
@@ -314,7 +314,7 @@ msgstr ""
 "le serveur web peut accepter (%s). Merci de l'envoyer en parties plus "
 "légères."
 
-#: index.php:1983
+#: index.php:1972
 #, php-format
 msgid ""
 "<pre>Sessions do not seem to work correctly on your server.<br>Make sure the "
@@ -333,7 +333,7 @@ msgstr ""
 "cookies. Nous vous recommandons d'accéder à votre serveur depuis son adresse "
 "IP ou un <em>Fully Qualified Domain Name</em>.<br>"
 
-#: index.php:1993
+#: index.php:1982
 msgid "Click to try again."
 msgstr "Cliquer ici pour réessayer."
 
@@ -608,84 +608,72 @@ msgstr "Continent"
 msgid "City"
 msgstr "Ville"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:163
-msgid "Redirector"
-msgstr "Redirecteur"
-
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:164
-msgid "e. g."
-msgstr "ex :"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:164
-msgid "will mask the HTTP_REFERER"
-msgstr "masque le HTTP_REFERER"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:179
 msgid "Disable session cookie hijacking protection"
 msgstr "Désactiver la protection contre le détournement de cookies"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:181
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:166
 msgid "Check this if you get disconnected or if your IP address changes often"
 msgstr ""
 "Cocher cette case si vous êtes souvent déconnecté ou si votre adresse IP "
 "change souvent"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:198
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:183
 msgid "Private links by default"
 msgstr "Liens privés par défaut"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:199
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:184
 msgid "All new links are private by default"
 msgstr "Tous les nouveaux liens sont privés par défaut"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:214
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:199
 msgid "RSS direct links"
 msgstr "Liens directs dans le flux RSS"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:215
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:200
 msgid "Check this to use direct URL instead of permalink in feeds"
 msgstr ""
 "Cocher cette case pour utiliser des liens directs au lieu des permaliens "
 "dans le flux RSS"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:230
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:215
 msgid "Hide public links"
 msgstr "Cacher les liens publics"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:231
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:216
 msgid "Do not show any links if the user is not logged in"
 msgstr "N'afficher aucun lien sans être connecté"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:246
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:231
 #: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:150
 msgid "Check updates"
 msgstr "Vérifier les mises à jour"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:247
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:232
 #: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:152
 msgid "Notify me when a new release is ready"
 msgstr "Me notifier lorsqu'une nouvelle version est disponible"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:262
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:247
 #: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
 msgid "Enable REST API"
 msgstr "Activer l'API REST"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:263
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:248
 #: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:170
 msgid "Allow third party software to use Shaarli such as mobile application"
 msgstr ""
 "Permets aux applications tierces d'utiliser Shaarli, par exemple les "
 "applications mobiles"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:278
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:263
 msgid "API secret"
 msgstr "Clé d'API secrète"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:289
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:274
 #: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:74
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:139
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:192
+#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:199
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -1130,6 +1118,10 @@ msgstr "dans la documentation"
 msgid "Plugin configuration"
 msgstr "Configuration des extensions"
 
+#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:195
+msgid "No parameter available."
+msgstr "Aucun paramètre disponible."
+
 #: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:19
 #: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:19
 msgid "tags"
@@ -1291,6 +1283,15 @@ msgid ""
 msgstr ""
 "Glisser ce lien dans votre barre de favoris ou cliquer droit dessus et « "
 "Ajouter aux favoris »"
+
+#~ msgid "Redirector"
+#~ msgstr "Redirecteur"
+
+#~ msgid "e. g."
+#~ msgstr "ex :"
+
+#~ msgid "will mask the HTTP_REFERER"
+#~ msgstr "masque le HTTP_REFERER"
 
 #~ msgid ""
 #~ "An error occurred while parsing JSON configuration file (%s): error code #"
