@@ -148,6 +148,33 @@ class ConfigManager
     }
 
     /**
+     * Remove a config element from the config file.
+     *
+     * @param string $setting    Asked setting, keys separated with dots.
+     * @param bool   $write      Write the new setting in the config file, default false.
+     * @param bool   $isLoggedIn User login state, default false.
+     *
+     * @throws \Exception Invalid
+     */
+    public function remove($setting, $write = false, $isLoggedIn = false)
+    {
+        if (empty($setting) || ! is_string($setting)) {
+            throw new \Exception(t('Invalid setting key parameter. String expected, got: '). gettype($setting));
+        }
+
+        // During the ConfigIO transition, map legacy settings to the new ones.
+        if ($this->configIO instanceof ConfigPhp && isset(ConfigPhp::$LEGACY_KEYS_MAPPING[$setting])) {
+            $setting = ConfigPhp::$LEGACY_KEYS_MAPPING[$setting];
+        }
+
+        $settings = explode('.', $setting);
+        self::removeConfig($settings, $this->loadedConfig);
+        if ($write) {
+            $this->write($isLoggedIn);
+        }
+    }
+
+    /**
      * Check if a settings exists.
      *
      * Supports nested settings with dot separated keys.
@@ -272,7 +299,7 @@ class ConfigManager
      *
      * @param array $settings Ordered array which contains keys to find.
      * @param mixed $value
-     * @param array $conf   Loaded settings, then sub-array.
+     * @param array $conf     Loaded settings, then sub-array.
      *
      * @return mixed Found setting or NOT_FOUND flag.
      */
@@ -287,6 +314,27 @@ class ConfigManager
             return self::setConfig($settings, $value, $conf[$setting]);
         }
         $conf[$setting] = $value;
+    }
+
+    /**
+     * Recursive function which find asked setting in the loaded config and deletes it.
+     *
+     * @param array $settings Ordered array which contains keys to find.
+     * @param array $conf     Loaded settings, then sub-array.
+     *
+     * @return mixed Found setting or NOT_FOUND flag.
+     */
+    protected static function removeConfig($settings, &$conf)
+    {
+        if (!is_array($settings) || count($settings) == 0) {
+            return self::$NOT_FOUND;
+        }
+
+        $setting = array_shift($settings);
+        if (count($settings) > 0) {
+            return self::removeConfig($settings, $conf[$setting]);
+        }
+        unset($conf[$setting]);
     }
 
     /**
