@@ -1328,3 +1328,21 @@ form[name="linkform"].page-form {
 .markdown *:last-child {
     margin-bottom: 5px !important;
 }
+
+/**
+ * Pure Button
+ */
+.pure-button-success,
+.pure-button-error,
+.pure-button-warning,
+.pure-button-primary,
+.pure-button-shaarli,
+.pure-button-secondary {
+    color: white !important;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.pure-button-shaarli {
+    background-color: #1B926C;
+}
