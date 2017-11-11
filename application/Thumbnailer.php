@@ -1,6 +1,11 @@
 <?php
 
+namespace Shaarli;
+
+use Shaarli\Config\ConfigManager;
+use WebThumbnailer\Exception\WebThumbnailerException;
 use WebThumbnailer\WebThumbnailer;
+use WebThumbnailer\Application\ConfigManager as WTConfigManager;
 
 /**
  * Class Thumbnailer
@@ -28,7 +33,7 @@ class Thumbnailer
     {
         $this->conf = $conf;
         $this->wt = new WebThumbnailer();
-        \WebThumbnailer\Application\ConfigManager::addFile('inc/web-thumbnailer.json');
+        WTConfigManager::addFile('inc/web-thumbnailer.json');
         $this->wt->maxWidth($this->conf->get('thumbnails.width'))
                  ->maxHeight($this->conf->get('thumbnails.height'))
                  ->crop(true)
@@ -44,6 +49,12 @@ class Thumbnailer
      */
     public function get($url)
     {
-        return $this->wt->thumbnail($url);
+        try {
+            return $this->wt->thumbnail($url);
+        } catch (WebThumbnailerException $e) {
+            // Exceptions are only thrown in debug mode.
+            error_log(get_class($e) .': '. $e->getMessage());
+            return false;
+        }
     }
 }

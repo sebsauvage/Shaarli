@@ -1,7 +1,10 @@
 <?php
 
-require_once 'application/Thumbnailer.php';
-require_once 'application/config/ConfigManager.php';
+namespace Shaarli;
+
+use PHPUnit\Framework\TestCase;
+use Shaarli\Config\ConfigManager;
+use WebThumbnailer\Application\ConfigManager as WTConfigManager;
 
 /**
  * Class ThumbnailerTest
@@ -11,31 +14,48 @@ require_once 'application/config/ConfigManager.php';
  *   1. the thumbnailer library is itself tested
  *   2. we don't want to make too many external requests during the tests
  */
-class ThumbnailerTest extends PHPUnit_Framework_TestCase
+class ThumbnailerTest extends TestCase
 {
+    const WIDTH = 190;
+
+    const HEIGHT = 210;
+
+    /**
+     * @var Thumbnailer;
+     */
+    protected $thumbnailer;
+
+    public function setUp()
+    {
+        $conf = new ConfigManager('tests/utils/config/configJson');
+        $conf->set('thumbnails.width', self::WIDTH);
+        $conf->set('thumbnails.height', self::HEIGHT);
+        $conf->set('dev.debug', true);
+
+        $this->thumbnailer = new Thumbnailer($conf);
+        // cache files in the sandbox
+        WTConfigManager::addFile('tests/utils/config/wt.json');
+    }
+
+    public function tearDown()
+    {
+        $this->rrmdirContent('sandbox/');
+    }
+
     /**
      * Test a thumbnail with a custom size.
      */
     public function testThumbnailValid()
     {
-        $conf = new ConfigManager('tests/utils/config/configJson');
-        $width = 200;
-        $height = 200;
-        $conf->set('thumbnails.width', $width);
-        $conf->set('thumbnails.height', $height);
-
-        $thumbnailer = new Thumbnailer($conf);
-        $thumb = $thumbnailer->get('https://github.com/shaarli/Shaarli/');
+        $thumb = $this->thumbnailer->get('https://github.com/shaarli/Shaarli/');
         $this->assertNotFalse($thumb);
         $image = imagecreatefromstring(file_get_contents($thumb));
-        $this->assertEquals($width, imagesx($image));
-        $this->assertEquals($height, imagesy($image));
+        $this->assertEquals(self::WIDTH, imagesx($image));
+        $this->assertEquals(self::HEIGHT, imagesy($image));
     }
 
     /**
      * Test a thumbnail that can't be retrieved.
-     *
-     * @expectedException WebThumbnailer\Exception\ThumbnailNotFoundException
      */
     public function testThumbnailNotValid()
     {
@@ -47,5 +67,19 @@ class ThumbnailerTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($thumb);
 
         ini_set('error_log', $oldlog);
+    }
+
+    protected function rrmdirContent($dir) {
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (is_dir($dir."/".$object))
+                        $this->rrmdirContent($dir."/".$object);
+                    else
+                        unlink($dir."/".$object);
+                }
+            }
+        }
     }
 }

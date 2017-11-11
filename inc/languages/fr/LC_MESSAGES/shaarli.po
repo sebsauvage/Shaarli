@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2018-01-24 18:43+0100\n"
-"PO-Revision-Date: 2018-03-06 18:44+0100\n"
+"POT-Creation-Date: 2018-05-05 12:47+0200\n"
+"PO-Revision-Date: 2018-05-05 12:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -56,7 +56,7 @@ msgstr "Liens directs"
 
 #: application/FeedBuilder.php:153
 #: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:88
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:178
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:177
 msgid "Permalink"
 msgstr "Permalien"
 
@@ -68,17 +68,21 @@ msgstr "Le fichier d'historique n'est pas accessible en lecture ou en écriture"
 msgid "Could not parse history file"
 msgstr "Format incorrect pour le fichier d'historique"
 
-#: application/Languages.php:161
+#: application/Languages.php:177
 msgid "Automatic"
 msgstr "Automatique"
 
-#: application/Languages.php:162
+#: application/Languages.php:178
 msgid "English"
 msgstr "Anglais"
 
-#: application/Languages.php:163
+#: application/Languages.php:179
 msgid "French"
 msgstr "Français"
+
+#: application/Languages.php:180
+msgid "German"
+msgstr "Allemand"
 
 #: application/LinkDB.php:136
 msgid "You are not authorized to add a link."
@@ -163,11 +167,11 @@ msgstr ""
 "a été importé avec succès en %d secondes : %d liens importés, %d liens "
 "écrasés, %d liens ignorés."
 
-#: application/PageBuilder.php:168
+#: application/PageBuilder.php:173
 msgid "The page you are trying to reach does not exist or has been deleted."
 msgstr "La page que vous essayez de consulter n'existe pas ou a été supprimée."
 
-#: application/PageBuilder.php:170
+#: application/PageBuilder.php:175
 msgid "404 Not Found"
 msgstr "404 Introuvable"
 
@@ -180,17 +184,17 @@ msgstr "Les fichiers de l'extension \"%s\" sont introuvables."
 msgid "Couldn't retrieve Updater class methods."
 msgstr "Impossible de récupérer les méthodes de la classe Updater."
 
-#: application/Updater.php:506
+#: application/Updater.php:544
 msgid "An error occurred while running the update "
 msgstr "Une erreur s'est produite lors de l'exécution de la mise à jour "
 
-#: application/Updater.php:546
+#: application/Updater.php:584
 msgid "Updates file path is not set, can't write updates."
 msgstr ""
 "Le chemin vers le fichier de mise à jour n'est pas défini, impossible "
 "d'écrire les mises à jour."
 
-#: application/Updater.php:551
+#: application/Updater.php:589
 msgid "Unable to write updates in "
 msgstr "Impossible d'écrire les mises à jour dans "
 
@@ -230,6 +234,7 @@ msgstr ""
 "Shaarli a les droits d'écriture dans le dossier dans lequel il est installé."
 
 #: application/config/ConfigManager.php:135
+#: application/config/ConfigManager.php:162
 msgid "Invalid setting key parameter. String expected, got: "
 msgstr "Clé de paramétrage invalide. Chaîne de caractères obtenue, attendu : "
 
@@ -251,135 +256,133 @@ msgstr "Vous n'êtes pas autorisé à modifier la configuration."
 msgid "Error accessing"
 msgstr "Une erreur s'est produite en accédant à"
 
-#: index.php:142
+#: index.php:143
 msgid "Shared links on "
 msgstr "Liens partagés sur "
 
-#: index.php:164
+#: index.php:165
 msgid "Insufficient permissions:"
 msgstr "Permissions insuffisantes :"
 
-#: index.php:303
+#: index.php:304
 msgid "I said: NO. You are banned for the moment. Go away."
 msgstr "NON. Vous êtes banni pour le moment. Revenez plus tard."
 
-#: index.php:368
+#: index.php:369
 msgid "Wrong login/password."
 msgstr "Nom d'utilisateur ou mot de passe incorrects."
 
-#: index.php:576 tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:42
+#: index.php:577 tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:46
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:46
 msgid "Daily"
 msgstr "Quotidien"
 
-#: index.php:681 tmp/loginform.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
+#: index.php:682 tmp/loginform.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
 #: tmp/loginform.b91ef64efc3688266305ea9b42e5017e.rtpl.php:44
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:71
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:95
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:71
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:95
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:75
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:99
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:75
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:99
 msgid "Login"
 msgstr "Connexion"
 
-#: index.php:722 tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:39
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:39
+#: index.php:750 tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:41
 msgid "Picture wall"
 msgstr "Mur d'images"
 
-#: index.php:770 tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
+#: index.php:798 tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:36
 #: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:19
 msgid "Tag cloud"
 msgstr "Nuage de tags"
 
-#: index.php:803 tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:19
+#: index.php:831 tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:19
 msgid "Tag list"
 msgstr "Liste des tags"
 
-#: index.php:1028 tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:31
+#: index.php:1056 tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:31
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:31
 msgid "Tools"
 msgstr "Outils"
 
-#: index.php:1037
+#: index.php:1065
 msgid "You are not supposed to change a password on an Open Shaarli."
 msgstr ""
 "Vous n'êtes pas censé modifier le mot de passe d'un Shaarli en mode ouvert."
 
-#: index.php:1042 index.php:1084 index.php:1162 index.php:1193 index.php:1293
+#: index.php:1070 index.php:1112 index.php:1189 index.php:1220 index.php:1325
 msgid "Wrong token."
 msgstr "Jeton invalide."
 
-#: index.php:1047
+#: index.php:1075
 msgid "The old password is not correct."
 msgstr "L'ancien mot de passe est incorrect."
 
-#: index.php:1067
+#: index.php:1095
 msgid "Your password has been changed"
 msgstr "Votre mot de passe a été modifié"
 
-#: index.php:1072
+#: index.php:1100
 #: tmp/changepassword.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
 msgid "Change password"
 msgstr "Modification du mot de passe"
 
-#: index.php:1121
+#: index.php:1149
 msgid "Configuration was saved."
 msgstr "La configuration a été sauvegardé."
 
-#: index.php:1145 tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
+#: index.php:1172 tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
 msgid "Configure"
 msgstr "Configurer"
 
-#: index.php:1156 tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
+#: index.php:1183 tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
 msgid "Manage tags"
 msgstr "Gérer les tags"
 
-#: index.php:1174
+#: index.php:1201
 #, php-format
 msgid "The tag was removed from %d link."
 msgid_plural "The tag was removed from %d links."
 msgstr[0] "Le tag a été supprimé de %d lien."
 msgstr[1] "Le tag a été supprimé de %d liens."
 
-#: index.php:1175
+#: index.php:1202
 #, php-format
 msgid "The tag was renamed in %d link."
 msgid_plural "The tag was renamed in %d links."
 msgstr[0] "Le tag a été renommé dans %d lien."
 msgstr[1] "Le tag a été renommé dans %d liens."
 
-#: index.php:1183 tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
+#: index.php:1210 tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
 msgid "Shaare a new link"
 msgstr "Partager un nouveau lien"
 
-#: index.php:1353 tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:170
+#: index.php:1385 tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
 msgid "Edit"
 msgstr "Modifier"
 
-#: index.php:1353 index.php:1418
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
+#: index.php:1385 index.php:1455
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:26
 msgid "Shaare"
 msgstr "Shaare"
 
-#: index.php:1387
+#: index.php:1424
 msgid "Note: "
 msgstr "Note : "
 
-#: index.php:1427 tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:65
+#: index.php:1464 tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:65
 msgid "Export"
 msgstr "Exporter"
 
-#: index.php:1489 tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:83
+#: index.php:1526 tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:83
 msgid "Import"
 msgstr "Importer"
 
-#: index.php:1499
+#: index.php:1536
 #, php-format
 msgid ""
 "The file you are trying to upload is probably bigger than what this "
@@ -389,16 +392,16 @@ msgstr ""
 "le serveur web peut accepter (%s). Merci de l'envoyer en parties plus "
 "légères."
 
-#: index.php:1538 tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
+#: index.php:1575 tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:22
 msgid "Plugin administration"
 msgstr "Administration des extensions"
 
-#: index.php:1703
+#: index.php:1759
 msgid "Search: "
 msgstr "Recherche : "
 
-#: index.php:1930
+#: index.php:1798
 #, php-format
 msgid ""
 "<pre>Sessions do not seem to work correctly on your server.<br>Make sure the "
@@ -417,7 +420,7 @@ msgstr ""
 "cookies. Nous vous recommandons d'accéder à votre serveur depuis son adresse "
 "IP ou un <em>Fully Qualified Domain Name</em>.<br>"
 
-#: index.php:1940
+#: index.php:1808
 msgid "Click to try again."
 msgstr "Cliquer ici pour réessayer."
 
@@ -577,11 +580,11 @@ msgstr "URL de l'API Wallabag"
 msgid "Wallabag API version (1 or 2)"
 msgstr "Version de l'API Wallabag (1 ou 2)"
 
-#: tests/LanguagesTest.php:188 tests/LanguagesTest.php:201
+#: tests/LanguagesTest.php:214 tests/LanguagesTest.php:227
 #: tests/languages/fr/LanguagesFrTest.php:160
 #: tests/languages/fr/LanguagesFrTest.php:173
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:81
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:81
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:85
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:85
 msgid "Search"
 msgid_plural "Search"
 msgstr[0] "Rechercher"
@@ -625,8 +628,8 @@ msgid "Rename"
 msgstr "Renommer"
 
 #: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:79
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:172
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:77
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:171
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -736,8 +739,29 @@ msgstr ""
 msgid "API secret"
 msgstr "Clé d'API secrète"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:274
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:74
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:277
+msgid "Enable thumbnails"
+msgstr "Activer les miniatures"
+
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:279
+msgid "Warning: "
+msgstr "Attention : "
+
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:281
+msgid "It's recommended to visit the picture wall after enabling this feature."
+msgstr ""
+"Il est recommandé de visiter le Mur d'images après avoir activé cette "
+"fonctionnalité."
+
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:283
+msgid ""
+"If you have a large database, the first retrieval may take a few minutes."
+msgstr ""
+"Si vous avez beaucoup de liens, la première récupération peut prendre "
+"plusieurs minutes."
+
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:297
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:72
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:139
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:199
 msgid "Save"
@@ -763,25 +787,27 @@ msgstr "Tous les liens d'un jour sur une page."
 msgid "Next day"
 msgstr "Jour suivant"
 
-#: tpl/editlink.html
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
 msgid "Edit Shaare"
 msgstr "Modifier le Shaare"
+
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
 msgid "New Shaare"
 msgstr "Nouveau Shaare"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:25
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:23
 msgid "Created:"
 msgstr "Création :"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
 msgid "URL"
 msgstr "URL"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:34
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:32
 msgid "Title"
 msgstr "Titre"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:40
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:38
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:75
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:99
@@ -789,17 +815,17 @@ msgstr "Titre"
 msgid "Description"
 msgstr "Description"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:46
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:44
 msgid "Tags"
 msgstr "Tags"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:59
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:57
 #: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:168
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:167
 msgid "Private"
 msgstr "Privé"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:74
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:72
 msgid "Apply Changes"
 msgstr "Appliquer"
 
@@ -876,15 +902,15 @@ msgstr ""
 
 #: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:33
 #: tmp/loginform.b91ef64efc3688266305ea9b42e5017e.rtpl.php:30
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:147
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:147
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:151
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:151
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
 #: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
 #: tmp/loginform.b91ef64efc3688266305ea9b42e5017e.rtpl.php:34
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:148
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:148
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:152
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:152
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -901,28 +927,28 @@ msgid "Install"
 msgstr "Installer"
 
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:80
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:79
 msgid "shaare"
 msgid_plural "shaares"
 msgstr[0] "shaare"
 msgstr[1] "shaares"
 
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:18
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:84
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:83
 msgid "private link"
 msgid_plural "private links"
 msgstr[0] "lien privé"
 msgstr[1] "liens privés"
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:31
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:117
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:117
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:30
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:121
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:121
 msgid "Search text"
 msgstr "Recherche texte"
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:38
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:124
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:124
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:37
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:128
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:128
 #: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
 #: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:64
 #: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
@@ -930,52 +956,52 @@ msgstr "Recherche texte"
 msgid "Filter by tag"
 msgstr "Filtrer par tag"
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:111
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:110
 msgid "Nothing found."
 msgstr "Aucun résultat."
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:119
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:118
 #, php-format
 msgid "%s result"
 msgid_plural "%s results"
 msgstr[0] "%s résultat"
 msgstr[1] "%s résultats"
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:123
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:122
 msgid "for"
 msgstr "pour"
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:130
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:129
 msgid "tagged"
 msgstr "taggé"
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:134
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:133
 msgid "Remove tag"
 msgstr "Retirer le tag"
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:143
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:142
 msgid "with status"
 msgstr "avec le statut"
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:154
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:153
 msgid "without any tag"
 msgstr "sans tag"
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:174
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:173
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
 #: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:42
 msgid "Fold"
 msgstr "Replier"
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:176
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:175
 msgid "Edited: "
 msgstr "Modifié : "
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:180
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:179
 msgid "permalink"
 msgstr "permalien"
 
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:182
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:181
 msgid "Add tag"
 msgstr "Ajouter un tag"
 
@@ -1021,8 +1047,8 @@ msgstr ""
 "réessayer plus tard."
 
 #: tmp/loginform.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:151
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:151
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:155
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:155
 msgid "Remember me"
 msgstr "Rester connecté"
 
@@ -1053,35 +1079,40 @@ msgstr "Déplier tout"
 msgid "Are you sure you want to delete this link?"
 msgstr "Êtes-vous sûr de vouloir supprimer ce lien ?"
 
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:61
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:86
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:61
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:86
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:65
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:90
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:65
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:90
 msgid "RSS Feed"
 msgstr "Flux RSS"
 
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:66
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:102
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:66
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:102
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:70
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:106
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:70
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:106
 msgid "Logout"
 msgstr "Déconnexion"
 
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:169
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:173
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:173
 msgid "is available"
 msgstr "est disponible"
 
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:176
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:176
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:180
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:180
 msgid "Error"
 msgstr "Erreur"
 
-#: tmp/picwall.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
+#: tmp/picwall.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
+msgid "Picture wall unavailable (thumbnails are disabled)."
+msgstr ""
+"Le mur d'images n'est pas disponible (les miniatures sont désactivées)."
+
+#: tmp/picwall.b91ef64efc3688266305ea9b42e5017e.rtpl.php:25
 msgid "Picture Wall"
 msgstr "Mur d'images"
 
-#: tmp/picwall.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
+#: tmp/picwall.b91ef64efc3688266305ea9b42e5017e.rtpl.php:25
 msgid "pics"
 msgstr "images"
 

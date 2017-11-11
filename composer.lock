@@ -4,8 +4,49 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "308a35eab91602fbb449f2c669c445ed",
+    "content-hash": "efa8b74ec9a15bb8c18e4a36fd13d480",
     "packages": [
+        {
+            "name": "arthurhoaro/web-thumbnailer",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ArthurHoaro/web-thumbnailer.git",
+                "reference": "10e2919c2aa0bf55f4593c8b05508a98c79d6706"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ArthurHoaro/web-thumbnailer/zipball/10e2919c2aa0bf55f4593c8b05508a98c79d6706",
+                "reference": "10e2919c2aa0bf55f4593c8b05508a98c79d6706",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "5.2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "WebThumbnailer\\": [
+                        "src/",
+                        "tests/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arthur Hoaro",
+                    "homepage": "http://hoa.ro"
+                }
+            ],
+            "time": "2017-11-11T15:39:49+00:00"
+        },
         {
             "name": "container-interop/container-interop",
             "version": "1.2.0",

@@ -131,9 +131,17 @@
 
         <div class="linklist-item linklist-item{if="$value.class"} {$value.class}{/if}" data-id="{$value.id}">
           <div class="linklist-item-title">
-            {$thumb=thumbnail($value.url)}
-            {if="$thumb!=false"}
-              <div class="linklist-item-thumbnail">{$thumb}</div>
+            {if="$thumbnails_enabled && !empty($value.thumbnail)"}
+              <div class="linklist-item-thumbnail">
+                <div class="thumbnail">
+                  <a href="{$value.real_url}">
+                  {ignore}RainTPL hack: put the 2 src on two different line to avoid path replace bug{/ignore}
+                  <img data-src="{$value.thumbnail}#" class="b-lazy"
+                    src="#"
+                    alt="thumbnail" width="{$thumbnails_width}" height="{$thumbnails_height}" />
+                  </a>
+                </div>
+              </div>
             {/if}
 
             {if="$is_logged_in"}
@@ -268,5 +276,6 @@
 </div>
 
 {include="page.footer"}
+<script src="js/thumbnails.min.js?v={$version_hash}"></script>
 </body>
 </html>

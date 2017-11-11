@@ -30,9 +30,11 @@
         <li class="pure-menu-item" id="shaarli-menu-tags">
           <a href="?do=tagcloud" class="pure-menu-link">{'Tag cloud'|t}</a>
         </li>
-        <li class="pure-menu-item" id="shaarli-menu-picwall">
-          <a href="?do=picwall{$searchcrits}" class="pure-menu-link">{'Picture wall'|t}</a>
-        </li>
+        {if="$thumbnails_enabled"}
+          <li class="pure-menu-item" id="shaarli-menu-picwall">
+            <a href="?do=picwall{$searchcrits}" class="pure-menu-link">{'Picture wall'|t}</a>
+          </li>
+        {/if}
         <li class="pure-menu-item" id="shaarli-menu-daily">
           <a href="?do=daily" class="pure-menu-link">{'Daily'|t}</a>
         </li>

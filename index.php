@@ -74,13 +74,13 @@ require_once 'application/Url.php';
 require_once 'application/Utils.php';
 require_once 'application/PluginManager.php';
 require_once 'application/Router.php';
-require_once 'application/Thumbnailer.php';
 require_once 'application/Updater.php';
-use \Shaarli\Languages;
-use \Shaarli\ThemeUtils;
 use \Shaarli\Config\ConfigManager;
+use \Shaarli\Languages;
 use \Shaarli\Security\LoginManager;
 use \Shaarli\Security\SessionManager;
+use \Shaarli\ThemeUtils;
+use \Shaarli\Thumbnailer;
 
 // Ensure the PHP version is supported
 try {
@@ -603,7 +603,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     if ($targetPage == Router::$PAGE_PICWALL)
     {
         if (! $conf->get('thumbnails.enabled')) {
-            header('Location: ?');
+            $PAGE->renderPage('picwall');
             exit;
         }
 
@@ -614,23 +614,19 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         $thumbnailer = new Thumbnailer($conf);
 
 
-        $cpt = 0;
+        $newThumbnailsCpt = 0;
         // Get only links which have a thumbnail.
-        foreach($links as $link)
+        foreach($links as $key => $link)
         {
-            $permalink='?'.$link['shorturl'];
             // Not a note,
             // and (never retrieved yet or no valid cache file)
             if ($link['url'][0] != '?'
                 && (! isset($link['thumbnail']) || ($link['thumbnail'] !== false && ! is_file($link['thumbnail'])))
             ) {
-                $link['thumbnail'] = $thumbnailer->get($link['url']);
-                // FIXME! we really need to get rid of ArrayAccess...
-                $item = $LINKSDB[$link['linkdate']];
-                $item['thumbnail'] = $link['thumbnail'];
-                $LINKSDB[$link['linkdate']] = $item;
-                $updateDB = true;
-                $cpt++;
+                $item = $LINKSDB[$key];
+                $item['thumbnail'] = $thumbnailer->get($link['url']);
+                $LINKSDB[$key] = $item;
+                $newThumbnailsCpt++;
             }
 
             if (isset($link['thumbnail']) && $link['thumbnail'] !== false) {
@@ -639,14 +635,13 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
 
             // If we retrieved new thumbnails, we update the database every 20 links.
             // Downloading everything the first time may take a very long time
-            if (!empty($updateDB) && $cpt == 20) {
+            if ($newThumbnailsCpt == 20) {
                 $LINKSDB->save($conf->get('resource.page_cache'));
-                $updateDB = false;
-                $cpt = 0;
+                $newThumbnailsCpt = 0;
             }
         }
 
-        if (!empty($updateDB)) {
+        if ($newThumbnailsCpt > 0) {
             $LINKSDB->save($conf->get('resource.page_cache'));
         }
 
@@ -1619,11 +1614,9 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
         if ($conf->get('thumbnails.enabled') && $link['url'][0] != '?'
             && (! isset($link['thumbnail']) || ($link['thumbnail'] !== false && ! is_file($link['thumbnail'])))
         ) {
-            $link['thumbnail'] = $thumbnailer->get($link['url']);
-            // FIXME! we really need to get rid of ArrayAccess...
-            $item = $LINKSDB[$keys[$i]];
-            $item['thumbnail'] = $link['thumbnail'];
-            $LINKSDB[$keys[$i]] = $item;
+            $elem = $LINKSDB[$keys[$i]];
+            $elem['thumbnail'] = $thumbnailer->get($link['url']);
+            $LINKSDB[$keys[$i]] = $elem;
             $updateDB = true;
         }
 

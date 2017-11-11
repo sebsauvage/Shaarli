@@ -684,4 +684,19 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
         $this->assertEquals(4194304, $this->conf->get('general.download_max_size'));
         $this->assertEquals(3, $this->conf->get('general.download_timeout'));
     }
+
+    /**
+     * Test updateMethodAtomDefault with show_atom set to true.
+     * => nothing to do
+     */
+    public function testUpdateMethodWebThumbnailerEnabled()
+    {
+        $this->conf->set('thumbnail.enable_thumbnails', true);
+        $updater = new Updater([], [], $this->conf, true);
+        $this->assertTrue($updater->updateMethodWebThumbnailer());
+        $this->assertFalse($this->conf->exists('thumbnail'));
+        $this->assertTrue($this->conf->get('thumbnails.enabled'));
+        $this->assertEquals(125, $this->conf->get('thumbnails.width'));
+        $this->assertEquals(90, $this->conf->get('thumbnails.height'));
+    }
 }

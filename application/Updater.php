@@ -480,7 +480,19 @@ class Updater
         }
 
         $this->conf->write($this->isLoggedIn);
+        return true;
+    }
 
+    /**
+     * * Move thumbnails management to WebThumbnailer, coming with new settings.
+     */
+    public function updateMethodWebThumbnailer()
+    {
+        $this->conf->set('thumbnails.enabled', $this->conf->get('thumbnail.enable_thumbnails', true));
+        $this->conf->set('thumbnails.width', 125);
+        $this->conf->set('thumbnails.height', 90);
+        $this->conf->remove('thumbnail');
+        $this->conf->write(true);
         return true;
     }
 }
