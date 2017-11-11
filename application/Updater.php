@@ -443,6 +443,7 @@ class Updater
     public function updateMethodReorderDatastore()
     {
         $this->linkDB->save($this->conf->get('resource.page_cache'));
+        return true;
     }
 }
 
