@@ -55,13 +55,6 @@
 			</span>
 		</a><br><br>
 
-		{if="$sslenabled"}
-		<a class="smallbutton" onclick="activateFirefoxSocial(this)"><b>✚Add to Firefox social</b></a>
-		<a href="#">
-			<span>&#x21D0; Click on this button to add Shaarli to the "Share this page" button in Firefox.</span>
-		</a><br><br>
-		{/if}
-
 		{loop="$tools_plugin"}
             {$value}
         {/loop}
@@ -69,31 +62,6 @@
 		<div class="clear"></div>
 
 		<script>
-			{if="$sslenabled"}
-			function activateFirefoxSocial(node) {
-				var loc = location.href;
-				var baseURL = loc.substring(0, loc.lastIndexOf("/"));
-
-				// Keeping the data separated (ie. not in the DOM) so that it's maintainable and diffable.
-				var data = {
-					name: "{$shaarlititle}",
-					description: "The personal, minimalist, super-fast, no-database delicious clone.",
-					author: "Shaarli",
-					version: "1.0.0",
-
-					iconURL: baseURL + "/img/favicon.ico",
-					icon32URL: baseURL + "/img/favicon.ico",
-					icon64URL: baseURL + "/img/favicon.ico",
-
-					shareURL: baseURL + "{noparse}?post=%{url}&title=%{title}&description=%{text}&source=firefoxsocialapi{/noparse}",
-					homepageURL: baseURL
-				};
-				node.setAttribute("data-service", JSON.stringify(data));
-
-				var activate = new CustomEvent("ActivateSocialFeature");
-				node.dispatchEvent(activate);
-			}
-			{/if}
 			function alertBookmarklet() {
 				alert('Drag this link to your bookmarks toolbar, or right-click it and choose Bookmark This Link...');
 				return false;

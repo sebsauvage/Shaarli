@@ -98,29 +98,6 @@ function htmlEntities(str) {
   return str.replace(/[\u00A0-\u9999<>&]/gim, i => `&#${i.charCodeAt(0)};`);
 }
 
-function activateFirefoxSocial(node) {
-  const loc = location.href;
-  const baseURL = loc.substring(0, loc.lastIndexOf('/') + 1);
-
-  const data = {
-    name: document.title,
-    description: document.getElementById('translation-delete-link').innerHTML,
-    author: 'Shaarli',
-    version: '1.0.0',
-
-    iconURL: `${baseURL}/images/favicon.ico`,
-    icon32URL: `${baseURL}/images/favicon.ico`,
-    icon64URL: `${baseURL}/images/favicon.ico`,
-
-    shareURL: `${baseURL}?post=%{url}&title=%{title}&description=%{text}&source=firefoxsocialapi`,
-    homepageURL: baseURL,
-  };
-  node.setAttribute('data-service', JSON.stringify(data));
-
-  const activate = new CustomEvent('ActivateSocialFeature');
-  node.dispatchEvent(activate);
-}
-
 /**
  * Add the class 'hidden' to city options not attached to the current selected continent.
  *
@@ -432,16 +409,6 @@ function init(description) {
       alert(bkmMessage.value);
     });
   });
-
-  /**
-   * Firefox Social
-   */
-  const ffButton = document.getElementById('ff-social-button');
-  if (ffButton != null) {
-    ffButton.addEventListener('click', (event) => {
-      activateFirefoxSocial(event.target);
-    });
-  }
 
   const continent = document.getElementById('continent');
   const city = document.getElementById('city');
