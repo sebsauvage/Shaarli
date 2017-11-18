@@ -17,17 +17,15 @@ Using one of the following methods:
 - by cloning the Git repository
 - using Docker: [see the documentation](docker/shaarli-images)
 
----
+--------------------------------------------------------------------------------
 
 ## Latest release (recommended)
-### Download as an archive
-Get the latest released version from the [releases](https://github.com/shaarli/Shaarli/releases) page.
 
-**Download our *shaarli-full* archive** to include dependencies.
+### Download as an archive
+
+In most cases, you should download the latest Shaarli release from the [releases](https://github.com/shaarli/Shaarli/releases) page. **Download our *shaarli-full* archive** to include dependencies.
 
 The current latest released version is `v0.9.1`
-
-Or in command lines:
 
 ```bash
 $ wget https://github.com/shaarli/Shaarli/releases/download/v0.9.1/shaarli-v0.9.1-full.zip
@@ -35,21 +33,27 @@ $ unzip shaarli-v0.9.1-full.zip
 $ mv Shaarli /path/to/shaarli/
 ```
 
-In most cases, download Shaarli from the [releases](https://github.com/shaarli/Shaarli/releases) page. 
-Cloning using `git` or downloading Github branches as zip files requires additional steps (see below).
-
 ### Using git
+
+Cloning using `git` or downloading Github branches as zip files requires additional steps:
+
+ * Install [Composer](Unit-tests.md#install_composer) to manage Shaarli dependencies.
+ * Install [python3-virtualenv](https://pypi.python.org/pypi/virtualenv) to build the local HTML documentation.
 
 ```
 $ mkdir -p /path/to/shaarli && cd /path/to/shaarli/
 $ git clone -b latest https://github.com/shaarli/Shaarli.git .
 $ composer install --no-dev --prefer-dist
 $ make translate
+$ make htmldoc
 ```
+
+--------------------------------------------------------------------------------
 
 ## Stable version
 
 The stable version has been experienced by Shaarli users, and will receive security updates.
+
 
 ### Download as an archive
 
@@ -69,9 +73,9 @@ $ tar xvf stable.tar.gz
 $ mv Shaarli-stable /path/to/shaarli/
 ```
 
-### Clone with Git 
+### Using git
 
-[Composer](https://getcomposer.org/) is required to build a functional Shaarli installation when pulling from git.
+Install [Composer](Unit-tests.md#install_composer) to manage Shaarli dependencies.
 
 ```bash
 $ git clone https://github.com/shaarli/Shaarli.git -b stable /path/to/shaarli/
@@ -80,9 +84,14 @@ $ cd /path/to/shaarli/
 $ composer install --no-dev --prefer-dist
 ```
 
+
+--------------------------------------------------------------------------------
+
 ## Development version (mainline)
 
 _Use at your own risk!_
+
+Install [Composer](Unit-tests.md#install_composer) to manage Shaarli dependencies.
 
 To get the latest changes from the `master` branch:
 
@@ -93,7 +102,10 @@ $ git clone https://github.com/shaarli/Shaarli.git -b master /path/to/shaarli/
 $ cd /path/to/shaarli
 $ composer install --no-dev --prefer-dist
 $ make translate
+$ make htmldoc
 ```
+
+-------------------------------------------------------------------------------
 
 ## Finish Installation
 

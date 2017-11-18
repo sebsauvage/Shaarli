@@ -1,17 +1,6 @@
 # The personal, minimalist, super-fast, database free, bookmarking service.
 # Makefile for PHP code analysis & testing, documentation and release generation
 
-# Prerequisites:
-# - install Composer, either:
-#   - from your distro's package manager;
-#   - from the official website (https://getcomposer.org/download/);
-# - install/update test dependencies:
-#   $ composer install  # 1st setup
-#   $ composer update
-# - install Xdebug for PHPUnit code coverage reports:
-#   - see http://xdebug.org/docs/install
-#   - enable in php.ini
-
 BIN = vendor/bin
 PHP_SOURCE = index.php application tests plugins
 PHP_COMMA_SOURCE = index.php,application,tests,plugins
