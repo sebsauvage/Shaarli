@@ -2,12 +2,12 @@
 
 The framework used is [PHPUnit](https://phpunit.de/); it can be installed with [Composer](https://getcomposer.org/), which is a dependency management tool.
 
-Regarding Composer, you can either use:
+### Install composer
+
+You can either use:
 
 - a system-wide version, e.g. installed through your distro's package manager
-- a local version, downloadable [here](https://getcomposer.org/download/)
-
-#### Sample usage
+- a local version, downloadable [here](https://getcomposer.org/download/).
 
 ```bash
 # system-wide version
@@ -28,6 +28,8 @@ $ composer update
 ```
 
 #### Install and enable Xdebug to generate PHPUnit coverage reports
+
+See http://xdebug.org/docs/install
 
 For Debian-based distros:
 ```bash
