@@ -1,22 +1,12 @@
 <?php
+require_once 'tests/utils/FakeConfigManager.php';
+
 // Initialize reference data _before_ PHPUnit starts a session
 require_once 'tests/utils/ReferenceSessionIdHashes.php';
 ReferenceSessionIdHashes::genAllHashes();
 
 use \Shaarli\SessionManager;
 use \PHPUnit\Framework\TestCase;
-
-
-/**
- * Fake ConfigManager
- */
-class FakeConfigManager
-{
-    public static function get($key)
-    {
-        return $key;
-    }
-}
 
 
 /**
@@ -27,12 +17,16 @@ class SessionManagerTest extends TestCase
     // Session ID hashes
     protected static $sidHashes = null;
 
+    // Fake ConfigManager
+    protected static $conf = null;
+
     /**
      * Assign reference data
      */
     public static function setUpBeforeClass()
     {
         self::$sidHashes = ReferenceSessionIdHashes::getHashes();
+        self::$conf = new FakeConfigManager();
     }
 
     /**
@@ -41,8 +35,7 @@ class SessionManagerTest extends TestCase
     public function testGenerateToken()
     {
         $session = [];
-        $conf = new FakeConfigManager();
-        $sessionManager = new SessionManager($session, $conf);
+        $sessionManager = new SessionManager($session, self::$conf);
 
         $token = $sessionManager->generateToken();
 
@@ -61,9 +54,7 @@ class SessionManagerTest extends TestCase
                 $token => 1,
             ],
         ];
-        $conf = new FakeConfigManager();
-        $sessionManager = new SessionManager($session, $conf);
-
+        $sessionManager = new SessionManager($session, self::$conf);
 
         // check and destroy the token
         $this->assertTrue($sessionManager->checkToken($token));
@@ -79,8 +70,7 @@ class SessionManagerTest extends TestCase
     public function testGenerateAndCheckToken()
     {
         $session = [];
-        $conf = new FakeConfigManager();
-        $sessionManager = new SessionManager($session, $conf);
+        $sessionManager = new SessionManager($session, self::$conf);
 
         $token = $sessionManager->generateToken();
 
@@ -102,8 +92,7 @@ class SessionManagerTest extends TestCase
     public function testCheckInvalidToken()
     {
         $session = [];
-        $conf = new FakeConfigManager();
-        $sessionManager = new SessionManager($session, $conf);
+        $sessionManager = new SessionManager($session, self::$conf);
 
         $this->assertFalse($sessionManager->checkToken('4dccc3a45ad9d03e5542b90c37d8db6d10f2b38b'));
     }

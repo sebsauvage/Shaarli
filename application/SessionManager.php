@@ -12,12 +12,12 @@ class SessionManager
      * Constructor
      *
      * @param array         $session The $_SESSION array (reference)
-     * @param ConfigManager $conf    ConfigManager instance (reference)
+     * @param ConfigManager $conf    ConfigManager instance
      */
-    public function __construct(& $session, & $conf)
+    public function __construct(& $session, $conf)
     {
         $this->session = &$session;
-        $this->conf = &$conf;
+        $this->conf = $conf;
     }
 
     /**
