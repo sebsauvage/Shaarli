@@ -76,7 +76,7 @@ function get_http_response($url, $timeout = 30, $maxBytes = 4194304)
     curl_setopt($ch, CURLOPT_USERAGENT,         $userAgent);
 
     // Max download size management
-    curl_setopt($ch, CURLOPT_BUFFERSIZE,        1024);
+    curl_setopt($ch, CURLOPT_BUFFERSIZE,        1024*16);
     curl_setopt($ch, CURLOPT_NOPROGRESS,        false);
     curl_setopt($ch, CURLOPT_PROGRESSFUNCTION,
         function($arg0, $arg1, $arg2, $arg3, $arg4 = 0) use ($maxBytes)
