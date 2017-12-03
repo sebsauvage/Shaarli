@@ -186,4 +186,36 @@ class ServerUrlTest extends PHPUnit_Framework_TestCase
             )
         );
     }
+
+    /**
+     * Misconfigured server (see #1022): Proxy HTTP but 443
+     */
+    public function testHttpWithPort433()
+    {
+        $this->assertEquals(
+            'https://host.tld',
+            server_url(
+                array(
+                    'HTTPS' => 'Off',
+                    'SERVER_NAME' => 'host.tld',
+                    'SERVER_PORT' => '80',
+                    'HTTP_X_FORWARDED_PROTO' => 'http',
+                    'HTTP_X_FORWARDED_PORT' => '443'
+                )
+            )
+        );
+
+        $this->assertEquals(
+            'https://host.tld',
+            server_url(
+                array(
+                    'HTTPS' => 'Off',
+                    'SERVER_NAME' => 'host.tld',
+                    'SERVER_PORT' => '80',
+                    'HTTP_X_FORWARDED_PROTO' => 'https, http',
+                    'HTTP_X_FORWARDED_PORT' => '443, 80'
+                )
+            )
+        );
+    }
 }

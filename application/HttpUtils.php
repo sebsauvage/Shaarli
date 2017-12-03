@@ -302,6 +302,13 @@ function server_url($server)
                 $port = $server['HTTP_X_FORWARDED_PORT'];
             }
 
+            // This is a workaround for proxies that don't forward the scheme properly.
+            // Connecting over port 443 has to be in HTTPS.
+            // See https://github.com/shaarli/Shaarli/issues/1022
+            if ($port == '443') {
+                $scheme = 'https';
+            }
+
             if (($scheme == 'http' && $port != '80')
                 || ($scheme == 'https' && $port != '443')
             ) {
