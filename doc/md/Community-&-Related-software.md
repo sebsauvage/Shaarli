@@ -48,10 +48,12 @@ See [Theming](Theming) for a list of community-contributed themes, and an instal
 
 
 ### Mobile Apps
-- [ShaarliOS](https://github.com/mro/ShaarliOS) iOS share extension - see [#308](https://github.com/shaarli/Shaarli/issues/308#issuecomment-184592070) for some promo codes,
+- [ShaarliOS](https://github.com/mro/ShaarliOS) - Apple iOS share extension.
 - [Shaarli for Android](http://sebsauvage.net/links/?ZAyDzg) - Android application that adds Shaarli as a sharing provider
 - [Shaarlier for Android](https://github.com/dimtion/Shaarlier) - Android application to simply add links directly into your Shaarli
 
+### Browser addons
+ * [Shaarli Web Extension](https://github.com/ikipatang/shaarli-web-extension) - toolbar button to share your current tab with Shaarli.
 
 ### Server apps
 - [shaarchiver](https://github.com/nodiscc/shaarchiver) - Archive your Shaarli bookmarks and their content
@@ -62,7 +64,5 @@ See [Theming](Theming) for a list of community-contributed themes, and an instal
 - [Self dead link](https://github.com/qwertygc/shaarli-dev-code/blob/master/self-dead-link.php) - Detect dead links on shaarli. This version use the database of shaarli. [Another version](https://github.com/qwertygc/shaarli-dev-code/blob/master/dead-link.php), can be used for other shaarli instances (but is more resource consuming).
 - [Bookmark Archiver](https://github.com/pirate/bookmark-archiver) - Save an archived copy of all websites starred using browser bookmarks/Shaarli/Delicious/Instapaper/Unmark.it/Pocket/Pinboard. Outputs browseable html. 
 
-
 ## Alternatives to Shaarli
-See the [bookmarks & link sharing](https://github.com/Kickball/awesome-selfhosted/#bookmarks--link-sharing)
-section on [awesome-selfhosted](https://github.com/Kickball/awesome-selfhosted/).
+See [awesome-selfhosted: bookmarks & link sharing](https://github.com/Kickball/awesome-selfhosted/#bookmarks--link-sharing).
