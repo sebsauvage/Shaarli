@@ -1,3 +1,6 @@
+A brief guide on getting starting using docker is given in [Docker 101](docker-101.md).
+To learn more about user data and how to keep it across versions, please see [Upgrade and Migration](../Upgrade-and-migration.md).
+
 ## Get and run a Shaarli image
 
 ### DockerHub repository
