@@ -15,7 +15,7 @@ Using one of the following methods:
 - by downloading full release archives including all dependencies
 - by downloading Github archives
 - by cloning the Git repository
-- using Docker: [see the documentation](docker/shaarli-images)
+- using Docker: [see the documentation](docker/shaarli-images.md)
 
 --------------------------------------------------------------------------------
 
