@@ -81,3 +81,14 @@ backstabbing_galileo
 $ docker ps -a
 CONTAINER ID  IMAGE            COMMAND               CREATED         STATUS        PORTS                 NAMES
 ```
+
+### Automatic builds
+
+Docker users can start a personal instance from an [autobuild image](https://hub.docker.com/r/shaarli/shaarli/). For example to start a temporary Shaarli at ``localhost:8000``, and keep session data (config, storage):
+```
+MY_SHAARLI_VOLUME=$(cd /path/to/shaarli/data/ && pwd -P)
+docker run -ti --rm \
+         -p 8000:80 \
+         -v $MY_SHAARLI_VOLUME:/var/www/shaarli/data \
+         shaarli/shaarli
+```
