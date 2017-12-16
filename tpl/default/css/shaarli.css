@@ -453,6 +453,11 @@ body, .pure-g [class*="pure-u"] {
     background: #1b926c;
 }
 
+.linklist-filters .filter-block {
+    color: #f5f5f5;
+    background: #ac2925;
+}
+
 .linklist-pages {
     margin: 5px 0;
     color: #252525;

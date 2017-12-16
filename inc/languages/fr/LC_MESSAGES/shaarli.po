@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2017-11-11 10:59+0100\n"
-"PO-Revision-Date: 2017-11-11 11:00+0100\n"
+"POT-Creation-Date: 2017-12-16 14:27+0100\n"
+"PO-Revision-Date: 2017-12-16 14:27+0100\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.5\n"
 "X-Poedit-Basepath: ../../../..\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -161,11 +161,11 @@ msgstr ""
 "a été importé avec succès en %d secondes : %d liens importés, %d liens "
 "écrasés, %d liens ignorés."
 
-#: application/PageBuilder.php:167
+#: application/PageBuilder.php:169
 msgid "The page you are trying to reach does not exist or has been deleted."
 msgstr "La page que vous essayez de consulter n'existe pas ou a été supprimée."
 
-#: application/PageBuilder.php:169
+#: application/PageBuilder.php:171
 msgid "404 Not Found"
 msgstr "404 Introuvable"
 
@@ -178,17 +178,17 @@ msgstr "Les fichiers de l'extension \"%s\" sont introuvables."
 msgid "Couldn't retrieve Updater class methods."
 msgstr "Impossible de récupérer les méthodes de la classe Updater."
 
-#: application/Updater.php:493
+#: application/Updater.php:506
 msgid "An error occurred while running the update "
 msgstr "Une erreur s'est produite lors de l'exécution de la mise à jour "
 
-#: application/Updater.php:533
+#: application/Updater.php:546
 msgid "Updates file path is not set, can't write updates."
 msgstr ""
 "Le chemin vers le fichier de mise à jour n'est pas défini, impossible "
 "d'écrire les mises à jour."
 
-#: application/Updater.php:538
+#: application/Updater.php:551
 msgid "Unable to write updates in "
 msgstr "Impossible d'écrire les mises à jour dans "
 
@@ -265,46 +265,46 @@ msgstr "NON. Vous êtes banni pour le moment. Revenez plus tard."
 msgid "Wrong login/password."
 msgstr "Nom d'utilisateur ou mot de passe incorrects."
 
-#: index.php:1092
+#: index.php:1093
 msgid "You are not supposed to change a password on an Open Shaarli."
 msgstr ""
 "Vous n'êtes pas censé modifier le mot de passe d'un Shaarli en mode ouvert."
 
-#: index.php:1097 index.php:1138 index.php:1214 index.php:1244 index.php:1344
+#: index.php:1098 index.php:1139 index.php:1215 index.php:1245 index.php:1345
 msgid "Wrong token."
 msgstr "Jeton invalide."
 
-#: index.php:1102
+#: index.php:1103
 msgid "The old password is not correct."
 msgstr "L'ancien mot de passe est incorrect."
 
-#: index.php:1122
+#: index.php:1123
 msgid "Your password has been changed"
 msgstr "Votre mot de passe a été modifié"
 
-#: index.php:1175
+#: index.php:1176
 msgid "Configuration was saved."
 msgstr "La configuration a été sauvegardé."
 
-#: index.php:1226
+#: index.php:1227
 #, php-format
 msgid "The tag was removed from %d link."
 msgid_plural "The tag was removed from %d links."
 msgstr[0] "Le tag a été supprimé de %d lien."
 msgstr[1] "Le tag a été supprimé de %d liens."
 
-#: index.php:1227
+#: index.php:1228
 #, php-format
 msgid "The tag was renamed in %d link."
 msgid_plural "The tag was renamed in %d links."
 msgstr[0] "Le tag a été renommé dans %d lien."
 msgstr[1] "Le tag a été renommé dans %d liens."
 
-#: index.php:1443
+#: index.php:1444
 msgid "Note: "
 msgstr "Note : "
 
-#: index.php:1552
+#: index.php:1553
 #, php-format
 msgid ""
 "The file you are trying to upload is probably bigger than what this "
@@ -314,7 +314,7 @@ msgstr ""
 "le serveur web peut accepter (%s). Merci de l'envoyer en parties plus "
 "légères."
 
-#: index.php:1972
+#: index.php:1973
 #, php-format
 msgid ""
 "<pre>Sessions do not seem to work correctly on your server.<br>Make sure the "
@@ -333,7 +333,7 @@ msgstr ""
 "cookies. Nous vous recommandons d'accéder à votre serveur depuis son adresse "
 "IP ou un <em>Fully Qualified Domain Name</em>.<br>"
 
-#: index.php:1982
+#: index.php:1983
 msgid "Click to try again."
 msgstr "Cliquer ici pour réessayer."
 
@@ -870,10 +870,10 @@ msgstr "Recherche texte"
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:38
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:124
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:124
-#: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:33
-#: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:61
-#: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:33
-#: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:71
+#: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
+#: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:64
+#: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
+#: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:74
 msgid "Filter by tag"
 msgstr "Filtrer par tag"
 
@@ -933,25 +933,25 @@ msgstr "Filtres"
 
 #: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:12
 #: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:12
-msgid "Filter private links"
-msgstr "Filtrer par liens privés"
+msgid "Filter links by visibility"
+msgstr "Filtrer les liens par visibilité"
 
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:18
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:18
+#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:17
+#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:17
 msgid "Filter untagged links"
 msgstr "Filtrer par liens privés"
 
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:22
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:74
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:22
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:74
+#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:21
+#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:73
+#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:21
+#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:73
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:43
 #: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:43
 msgid "Fold all"
 msgstr "Replier tout"
 
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:67
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:67
+#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:66
+#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:66
 msgid "Links per page"
 msgstr "Liens par page"
 
@@ -1127,8 +1127,8 @@ msgstr "Aucun paramètre disponible."
 msgid "tags"
 msgstr "tags"
 
-#: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:23
-#: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:23
+#: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
+#: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
 msgid "List all links with those tags"
 msgstr "Lister tous les liens avec ces tags"
 
@@ -1283,6 +1283,9 @@ msgid ""
 msgstr ""
 "Glisser ce lien dans votre barre de favoris ou cliquer droit dessus et « "
 "Ajouter aux favoris »"
+
+#~ msgid "Filter private links"
+#~ msgstr "Filtrer par liens privés"
 
 #~ msgid "Redirector"
 #~ msgstr "Redirecteur"

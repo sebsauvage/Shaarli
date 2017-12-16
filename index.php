@@ -282,7 +282,7 @@ function logout() {
         unset($_SESSION['uid']);
         unset($_SESSION['ip']);
         unset($_SESSION['username']);
-        unset($_SESSION['privateonly']);
+        unset($_SESSION['visibility']);
         unset($_SESSION['untaggedonly']);
     }
     setcookie('shaarli_staySignedIn', FALSE, 0, WEB_PATH);
@@ -800,7 +800,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager)
     // -------- Tag cloud
     if ($targetPage == Router::$PAGE_TAGCLOUD)
     {
-        $visibility = ! empty($_SESSION['privateonly']) ? 'private' : 'all';
+        $visibility = ! empty($_SESSION['visibility']) ? $_SESSION['visibility'] : '';
         $filteringTags = isset($_GET['searchtags']) ? explode(' ', $_GET['searchtags']) : [];
         $tags = $LINKSDB->linksCountPerTag($filteringTags, $visibility);
 
@@ -845,7 +845,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager)
     // -------- Tag list
     if ($targetPage == Router::$PAGE_TAGLIST)
     {
-        $visibility = ! empty($_SESSION['privateonly']) ? 'private' : 'all';
+        $visibility = ! empty($_SESSION['visibility']) ? $_SESSION['visibility'] : '';
         $filteringTags = isset($_GET['searchtags']) ? explode(' ', $_GET['searchtags']) : [];
         $tags = $LINKSDB->linksCountPerTag($filteringTags, $visibility);
         foreach ($filteringTags as $tag) {
@@ -1011,15 +1011,16 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager)
     }
 
     // -------- User wants to see only private links (toggle)
-    if (isset($_GET['privateonly'])) {
-        if (empty($_SESSION['privateonly'])) {
-            $_SESSION['privateonly'] = 1; // See only private links
-        } else {
-            unset($_SESSION['privateonly']); // See all links
+    if (isset($_GET['visibility'])) {
+        unset($_SESSION['visibility']);
+        if ($_GET['visibility'] === 'private') {
+            $_SESSION['visibility'] = 'private'; // See only private links
+        } else if ($_GET['visibility'] === 'public') {
+            $_SESSION['visibility'] = 'public'; // See only public links
         }
 
         if (! empty($_SERVER['HTTP_REFERER'])) {
-            $location = generateLocation($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST'], array('privateonly'));
+            $location = generateLocation($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST'], array('visibility'));
         } else {
             $location = '?';
         }
@@ -1667,7 +1668,7 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
         }
     } else {
         // Filter links according search parameters.
-        $visibility = ! empty($_SESSION['privateonly']) ? 'private' : 'all';
+        $visibility = ! empty($_SESSION['visibility']) ? $_SESSION['visibility'] : '';
         $request = [
             'searchtags' => $searchtags,
             'searchterm' => $searchterm,
@@ -1743,7 +1744,7 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
         'result_count' => count($linksToDisplay),
         'search_term' => $searchterm,
         'search_tags' => $searchtags,
-        'visibility' => ! empty($_SESSION['privateonly']) ? 'private' : '',
+        'visibility' => ! empty($_SESSION['visibility']) ? $_SESSION['visibility'] : '',
         'redirector' => $conf->get('redirector.url'),  // Optional redirector URL.
         'links' => $linkDisp,
     );
