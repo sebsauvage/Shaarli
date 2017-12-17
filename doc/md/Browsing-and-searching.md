@@ -18,10 +18,10 @@ Use the `Filter by tags` field to restrict displayed links to entries tagged wit
 
 The `Tag cloud` page diplays a "cloud" view of all tags in your Shaarli.
 
- * More frequently used tags are displayed with a bigger font size.
- * When sorting by `Most used` or `Alphabetical`, tags are displayed as a _list_, along with counters and edit/delete button for each tag.
+ * The most frequently used tags are displayed with a bigger font size.
+ * When sorting by `Most used` or `Alphabetical`, tags are displayed as a _list_, along with counters and edit/delete buttons for each tag.
  * Clicking on any tag will display a list of all Shaares matching this tag.
- * Clicking on the counter next to a tag `example` , will filter the tag cloud to only display tags found in Shaares tagged `example`. Repeat this any number of times to further filter the tag cloud. Click `List all links with those tags` to display Shaares matching your current tag filter.
+ * Clicking on the counter next to a tag `example`, will filter the tag cloud to only display tags found in Shaares tagged `example`. Repeat this any number of times to further filter the tag cloud. Click `List all links with those tags` to display Shaares matching your current tag filter.
 
 ## Filtering RSS feeds/Picture wall
 
