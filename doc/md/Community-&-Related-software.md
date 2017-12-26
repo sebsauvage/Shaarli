@@ -1,23 +1,7 @@
 _Unofficial but related work on Shaarli. If you maintain one of these,
 please get in touch with us to help us find a way to adapt your work to our fork._
 
-## Community
-- [Liens en vrac de sebsauvage](http://sebsauvage.net/links/) - the original Shaarli
-- [A large list of Shaarlis](http://porneia.free.fr/pub/links/ou-est-shaarli.html)
-- [A list of working Shaarli aggregators](https://raw.githubusercontent.com/Oros42/find_shaarlis/master/annuaires.json)
-- [A list of some known Shaarlis](https://github.com/Oros42/shaarlis_list)
-- [Adieu Delicious, Diigo et StumbleUpon. Salut Shaarli ! - sebsauvage.net](http://sebsauvage.net/rhaa/index.php?2011/09/16/09/29/58-adieu-delicious-diigo-et-stumbleupon-salut-shaarli-) (fr) _16/09/2011 - the original post about Shaarli_
-- [Original ideas/fixme/TODO page](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:ideas)
-- [Original discussion page](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:discussion) (fr)
-- [Original revisions history](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
-- [Shaarli.fr/my](https://www.shaarli.fr/my.php) - Unofficial, unsupported (old fork) hosted Shaarlis provider, courtesy of [DMeloni](https://github.com/DMeloni)
-
-
-### Articles and social media discussions
-- 2016-09-22 - Hacker News - https://news.ycombinator.com/item?id=12552176
-- 2015-08-15 - Reddit - [Question about migrating from WordPress to Shaarli.](https://www.reddit.com/r/selfhosted/comments/3h3zwh/question_about_migrating_from_wordpress_to_shaarli/)
-- 2015-06-22 - Hacker News - https://news.ycombinator.com/item?id=9755366
-- 2015-05-12 - Reddit - [shaarli - Self hosted Bookmarking / Delicious (PHP, MySQL)](https://www.reddit.com/r/selfhosted/comments/35pkkc/shaarli_self_hosted_bookmarking_delicious_php/)
+## Related software
 
 
 ### REST API clients
@@ -67,3 +51,20 @@ See [Theming](Theming) for a list of community-contributed themes, and an instal
 
 ## Alternatives to Shaarli
 See [awesome-selfhosted: bookmarks & link sharing](https://github.com/Kickball/awesome-selfhosted/#bookmarks--link-sharing).
+
+## Community
+- [Liens en vrac de sebsauvage](http://sebsauvage.net/links/) - the original Shaarli
+- [A large list of Shaarlis](http://porneia.free.fr/pub/links/ou-est-shaarli.html)
+- [A list of working Shaarli aggregators](https://raw.githubusercontent.com/Oros42/find_shaarlis/master/annuaires.json)
+- [A list of some known Shaarlis](https://github.com/Oros42/shaarlis_list)
+- [Adieu Delicious, Diigo et StumbleUpon. Salut Shaarli ! - sebsauvage.net](http://sebsauvage.net/rhaa/index.php?2011/09/16/09/29/58-adieu-delicious-diigo-et-stumbleupon-salut-shaarli-) (fr) _16/09/2011 - the original post about Shaarli_
+- [Original ideas/fixme/TODO page](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:ideas)
+- [Original discussion page](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:discussion) (fr)
+- [Original revisions history](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
+- [Shaarli.fr/my](https://www.shaarli.fr/my.php) - Unofficial, unsupported (old fork) hosted Shaarlis provider, courtesy of [DMeloni](https://github.com/DMeloni)
+
+### Articles and social media discussions
+- 2016-09-22 - Hacker News - https://news.ycombinator.com/item?id=12552176
+- 2015-08-15 - Reddit - [Question about migrating from WordPress to Shaarli.](https://www.reddit.com/r/selfhosted/comments/3h3zwh/question_about_migrating_from_wordpress_to_shaarli/)
+- 2015-06-22 - Hacker News - https://news.ycombinator.com/item?id=9755366
+- 2015-05-12 - Reddit - [shaarli - Self hosted Bookmarking / Delicious (PHP, MySQL)](https://www.reddit.com/r/selfhosted/comments/35pkkc/shaarli_self_hosted_bookmarking_delicious_php/)
