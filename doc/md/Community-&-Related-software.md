@@ -26,7 +26,7 @@ See [REST API](REST-API) for a list of official and community clients.
 See [Theming](Theming) for a list of community-contributed themes, and an installation guide.
 
 
-## Integration with other platforms 
+### Integration with other platforms 
 - [tt-rss-shaarli](https://github.com/jcsaaddupuy/tt-rss-shaarli) - [Tiny-Tiny RSS](http://tt-rss.org/) plugin that adds support for sharing articles with Shaarli
 - [octopress-shaarli](https://github.com/ahmet2mir/octopress-shaarli) - Octopress plugin to retrieve Shaarli links on the sidebar
 - [Scuttle to Shaarli](https://github.com/q2apro/scuttle-to-shaarli) - Import bookmarks from Scuttle
