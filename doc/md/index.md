@@ -22,19 +22,24 @@ It runs the latest development version of Shaarli and is updated/reset daily.
 
 Login: `demo`; Password: `demo`
 
-Docker users can start a personal instance from an [autobuild image](https://hub.docker.com/r/shaarli/shaarli/). For example to start a temporary Shaarli at ``localhost:8000``, and keep session data (config, storage):
-```
-MY_SHAARLI_VOLUME=$(cd /path/to/shaarli/data/ && pwd -P)
-docker run -ti --rm \
-         -p 8000:80 \
-         -v $MY_SHAARLI_VOLUME:/var/www/shaarli/data \
-         shaarli/shaarli
-```
-
-A brief guide on getting starting using docker is given in [Docker 101](docker/docker-101).
-To learn more about user data and how to keep it across versions, please see [Upgrade and Migration](Upgrade-and-migration) documentation.
-
 ## Features
+
+Shaarli can be used:
+
+- to share, comment and save interesting links and news.
+- to bookmark useful/frequent personal links (as private links) and share them between computers.
+- as a minimal blog/microblog/writing platform (no character limit).
+- as a read-it-later list (for example items tagged `readlater`).
+- to draft and save articles/posts/ideas.
+- to keep code snippets.
+- to keep notes and documentation.
+- as a shared clipboard/notepad/pastebin between machines.
+- as a todo list.
+- to store playlists (e.g. with the `music` or `video` tags).
+- to keep extracts/comments from webpages that may disappear.
+- to keep track of ongoing discussions (for example items tagged `discussion`).
+- [to feed RSS aggregators](http://shaarli.chassegnouf.net/?9Efeiw) (planets) with specific tags.
+- to feed other social networks, blogs... using RSS feeds and external services (dlvr.it, ifttt.com ...).
 
 ### Interface
 - minimalist design (simple is beautiful)
@@ -89,14 +94,12 @@ Easily extensible by any client using the REST API exposed by Shaarli.
 
 See the [API documentation](http://shaarli.github.io/api-documentation/).
 
-### Other usages
-Though Shaarli is primarily a bookmarking application, it can serve other purposes
-(see [Features](Features)):
-
-- micro-blogging
-- pastebin
-- online notepad
-- snippet archive
+### Using Shaarli as a blog, notepad, pastebin...
+- Go to your Shaarli setup and log in
+- Click the `Add Link` button
+- To share text only, do not enter any URL in the corresponding input field and click `Add Link`
+- Pick a title and enter your article, or note, in the description field; add a few tags; optionally check `Private` then click `Save`
+- Voilà!  Your article is now published (privately if you selected that option) and accessible using its permalink.
 
 ## About
 ### Shaarli community fork

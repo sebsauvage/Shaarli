@@ -22,16 +22,15 @@ pages:
     - Reverse proxy configuration: docker/reverse-proxy-configuration.md
     - Docker resources: docker/resources.md
 - Usage:
-    - Features: Features.md
     - Bookmarklet: Bookmarklet.md
     - Browsing and searching: Browsing-and-searching.md
     - Firefox share: Firefox-share.md
     - RSS feeds: RSS-feeds.md 
     - REST API: REST-API.md
+    - Community & Related software: Community-&-Related-software.md
 - How To:
     - Backup, restore, import and export: Backup,-restore,-import-and-export.md
     - Various hacks: Various-hacks.md
-- Troubleshooting: Troubleshooting.md
 - Development:
     - Development guidelines: Development-guidelines.md
     - Continuous integration tools: Continuous-integration-tools.md
@@ -47,6 +46,5 @@ pages:
     - Theming: Theming.md
     - Unit tests: Unit-tests.md
     - Unit tests inside Docker: Unit-tests-Docker.md
-- About:
-    - FAQ: FAQ.md
-    - Community & Related software: Community-&-Related-software.md
+- FAQ: FAQ.md
+- Troubleshooting: Troubleshooting.md

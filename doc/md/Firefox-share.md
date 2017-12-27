@@ -1,3 +1,6 @@
+| Note | Firefox Share is no longer available for Firefox 57 and later versions. |
+|---------|---------|
+
 ### Add Shaarli as a sharing service to Firefox
 
 - Open your Shaarli and `Login`
