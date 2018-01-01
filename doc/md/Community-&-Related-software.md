@@ -20,6 +20,7 @@ See [REST API](REST-API) for a list of official and community clients.
 - [social](https://github.com/alexisju/social) by [@alexisju](https://github.com/alexisju): share links to social networks.
 - [shaarli2twitter](https://github.com/ArthurHoaro/shaarli2twitter) by [@ArthurHoaro](https://github.com/ArthurHoaro) - Automatically tweet your shared links from Shaarli
 - [shaarli2mastodon](https://github.com/kalvn/shaarli2mastodon) by [@kalvn](https://github.com/kalvn) - This Shaarli plugin allows you to automatically publish links you post on your Mastodon timeline.
+- [shaarli-descriptor](https://github.com/immanuelfodor/shaarli-descriptor) by [@immanuelfodor](https://github.com/immanuelfodor) - Customize the default height/number of rows of the Description field when editing a link.
 
 
 ### Third-party themes
