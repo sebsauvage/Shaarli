@@ -1,7 +1,7 @@
 <div class="shaarli-menu pure-g" id="shaarli-menu">
   <div class="pure-u-lg-0 pure-u-1">
     <div class="pure-menu">
-      <a href="{$titleLink}" class="pure-menu-link">
+      <a href="{$titleLink}" class="pure-menu-link shaarli-title" id="shaarli-title-mobile">
         <img src="img/icon.png" width="16" height="16" class="head-logo" alt="logo" />
         {$shaarlititle}
       </a>
@@ -12,32 +12,32 @@
     <div class="pure-menu menu-transform pure-menu-horizontal pure-g">
       <ul class="pure-menu-list pure-u-lg-5-6 pure-u-1">
         <li class="pure-menu-item pure-u-0 pure-u-lg-visible">
-          <a href="{$titleLink}" class="pure-menu-link">
+          <a href="{$titleLink}" class="pure-menu-link shaarli-title" id="shaarli-title-desktop">
             <img src="img/icon.png" width="16" height="16" class="head-logo" alt="logo" />
             {$shaarlititle}
           </a>
         </li>
         {if="isLoggedIn() || $openshaarli"}
           <li class="pure-menu-item">
-            <a href="?do=addlink" class="pure-menu-link">
+            <a href="?do=addlink" class="pure-menu-link" id="shaarli-menu-shaare">
               <i class="fa fa-plus" ></i> {'Shaare'|t}
             </a>
           </li>
-          <li class="pure-menu-item">
+          <li class="pure-menu-item" id="shaarli-menu-tools">
             <a href="?do=tools" class="pure-menu-link">{'Tools'|t}</a>
           </li>
         {/if}
-        <li class="pure-menu-item">
+        <li class="pure-menu-item" id="shaarli-menu-tags">
           <a href="?do=tagcloud" class="pure-menu-link">{'Tag cloud'|t}</a>
         </li>
-        <li class="pure-menu-item">
+        <li class="pure-menu-item" id="shaarli-menu-picwall">
           <a href="?do=picwall{$searchcrits}" class="pure-menu-link">{'Picture wall'|t}</a>
         </li>
-        <li class="pure-menu-item">
+        <li class="pure-menu-item" id="shaarli-menu-daily">
           <a href="?do=daily" class="pure-menu-link">{'Daily'|t}</a>
         </li>
         {loop="$plugins_header.buttons_toolbar"}
-          <li class="pure-menu-item">
+          <li class="pure-menu-item shaarli-menu-plugin">
             <a
               {$value.attr.class=isset($value.class) ? $value.attr.class . ' pure-menu-link' : 'pure-menu-link'}
               {loop="$value.attr"}
@@ -47,47 +47,47 @@
             </a>
           </li>
         {/loop}
-        <li class="pure-menu-item pure-u-lg-0">
+        <li class="pure-menu-item pure-u-lg-0 shaarli-menu-mobile" id="shaarli-menu-mobile-rss">
             <a href="?do={$feed_type}{$searchcrits}" class="pure-menu-link">{'RSS Feed'|t}</a>
         </li>
         {if="isLoggedIn()"}
-          <li class="pure-menu-item pure-u-lg-0">
+          <li class="pure-menu-item pure-u-lg-0 shaarli-menu-mobile" id="shaarli-menu-mobile-logout">
             <a href="?do=logout" class="pure-menu-link">{'Logout'|t}</a>
           </li>
         {else}
-          <li class="pure-menu-item pure-u-lg-0">
+          <li class="pure-menu-item pure-u-lg-0 shaarli-menu-mobile" id="shaarli-menu-mobile-login">
             <a href="?do=login" class="pure-menu-link">{'Login'|t}</a>
           </li>
         {/if}
       </ul>
       <div class="header-buttons pure-u-lg-1-6 pure-u-0 pure-u-lg-visible">
         <ul class="pure-menu-list">
-          <li class="pure-menu-item">
+          <li class="pure-menu-item" id="shaarli-menu-desktop-search">
             <a href="#" class="pure-menu-link subheader-opener"
                data-open-id="search"
                id="search-button" title="{'Search'|t}">
               <i class="fa fa-search"></i>
             </a>
           </li>
-          <li class="pure-menu-item">
+          <li class="pure-menu-item" id="shaarli-menu-desktop-rss">
             <a href="?do={$feed_type}{$searchcrits}" class="pure-menu-link" title="{'RSS Feed'|t}">
               <i class="fa fa-rss"></i>
             </a>
           </li>
           {if="!isLoggedIn()"}
-          <li class="pure-menu-item">
-            <a href="?do=login" class="pure-menu-link"
-               data-open-id="header-login-form"
-               id="login-button" title="{'Login'|t}">
-              <i class="fa fa-user"></i>
-            </a>
-          </li>
+            <li class="pure-menu-item" id="shaarli-menu-desktop-login">
+              <a href="?do=login" class="pure-menu-link"
+                 data-open-id="header-login-form"
+                 id="login-button" title="{'Login'|t}">
+                <i class="fa fa-user"></i>
+              </a>
+            </li>
           {else}
-          <li class="pure-menu-item">
-            <a href="?do=logout" class="pure-menu-link" title="{'Logout'|t}">
-              <i class="fa fa-sign-out"></i>
-            </a>
-          </li>
+            <li class="pure-menu-item" id="shaarli-menu-desktop-logout">
+              <a href="?do=logout" class="pure-menu-link" title="{'Logout'|t}">
+                <i class="fa fa-sign-out"></i>
+              </a>
+            </li>
           {/if}
         </ul>
       </div>
@@ -156,7 +156,7 @@
 {/if}
 
 {if="!empty($plugin_errors) && isLoggedIn()"}
-  <div class="pure-g new-version-message pure-alert pure-alert-error pure-alert-closable">
+  <div class="pure-g new-version-message pure-alert pure-alert-error pure-alert-closable" id="shaarli-errors-alert">
     <div class="pure-u-2-24"></div>
     <div class="pure-u-20-24">
         {loop="plugin_errors"}
