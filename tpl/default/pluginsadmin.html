@@ -137,9 +137,9 @@
           {if="count($enabledPlugins)==0"}
             <p class="center">{'No plugin enabled.'|t}</p>
           {else}
-            {$counter=0}
+            {$nbParameters=0}
             {loop="$enabledPlugins"}
-              {$counter=$counter+count($value.parameters)}
+              {$nbParameters=$nbParameters+count($value.parameters)}
               {if="count($value.parameters) > 0"}
                 <div class="plugin_parameters">
                   <h3 class="window-subtitle">{function="str_replace('_', ' ', $key)"}</h3>
@@ -161,7 +161,7 @@
                 </div>
               {/if}
             {/loop}
-            {if="$counter===0"}
+            {if="$nbParameters===0"}
               <p class="center">{'No parameter available.'|t}</p>
             {else}
               <div class="center">
