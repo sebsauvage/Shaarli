@@ -25,11 +25,11 @@ Using one of the following methods:
 
 In most cases, you should download the latest Shaarli release from the [releases](https://github.com/shaarli/Shaarli/releases) page. **Download our *shaarli-full* archive** to include dependencies.
 
-The current latest released version is `v0.9.1`
+The current latest released version is `v0.9.3`
 
 ```bash
-$ wget https://github.com/shaarli/Shaarli/releases/download/v0.9.1/shaarli-v0.9.1-full.zip
-$ unzip shaarli-v0.9.1-full.zip
+$ wget https://github.com/shaarli/Shaarli/releases/download/v0.9.3/shaarli-v0.9.3-full.zip
+$ unzip shaarli-v0.9.3-full.zip
 $ mv Shaarli /path/to/shaarli/
 ```
 
@@ -96,7 +96,7 @@ Install [Composer](Unit-tests.md#install_composer) to manage Shaarli dependencie
 To get the latest changes from the `master` branch:
 
 ```bash
-# clone the repository  
+# clone the repository
 $ git clone https://github.com/shaarli/Shaarli.git -b master /path/to/shaarli/
 # install/update third-party dependencies
 $ cd /path/to/shaarli

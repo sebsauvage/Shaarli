@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v0.9.3](https://github.com/shaarli/Shaarli/releases/tag/v0.9.3) - 2018-01-04
+**XSS vulnerability fixed. Please update.**
+
+## Security
+- Fix an XSS (cross-site-scripting) vulnerability in `index.php`
+
+
 ## [v0.9.2](https://github.com/shaarli/Shaarli/releases/tag/v0.9.2) - 2017-10-07
 
 **Major security issue fixed. Please update.**
@@ -41,6 +48,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Security
 
 - Fixed reflected XSS vulnerability introduced in v0.9.1, discovered by @chb9 ([CVE-2017-15215](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15215)).
+
 
 ## [v0.9.1](https://github.com/shaarli/Shaarli/releases/tag/v0.9.1) - 2017-08-23
 
@@ -115,7 +123,7 @@ Theming:
     - Introduce a new theme
     - Allow selecting themes/templates from the configuration page
     - New/Edit link form can be submitted using CTRL+Enter in the textarea
-    - Shaarli version is displayed in the footer when logged in 
+    - Shaarli version is displayed in the footer when logged in
 - Add plugin placeholders to Atom/RSS feed templates
 - Add OpenSearch to feed templates
 - Add `campaign_` to the URL cleanup pattern list
@@ -145,7 +153,7 @@ Theming:
 - Improved date time display depending on the locale
 - Partial namespace support for Shaarli classes
 - Shaarli version is now only present in `shaarli_version.php`
-- Human readable maximum file size upload 
+- Human readable maximum file size upload
 
 
 ### Removed
@@ -171,6 +179,12 @@ Theming:
 - Markdown plugin: escape HTML entities by default
 
 
+## [v0.8.5](https://github.com/shaarli/Shaarli/releases/tag/v0.8.5) - 2018-01-04
+**XSS vulnerability fixed. Please update.**
+
+## Security
+- Fix an XSS (cross-site-scripting) vulnerability in `index.php`
+
 ## [v0.8.4](https://github.com/shaarli/Shaarli/releases/tag/v0.8.4) - 2017-03-04
 ### Security
 - Markdown plugin: escape HTML entities by default
@@ -186,7 +200,7 @@ Theming:
 
 ## [v0.8.1](https://github.com/shaarli/Shaarli/releases/tag/v0.8.1) - 2016-12-12
 
-> Note: this version will create an automatic backup of your database if anything goes wrong. 
+> Note: this version will create an automatic backup of your database if anything goes wrong.
 
 ### Added
 - Add CHANGELOG.md to track the whole project's history
@@ -203,7 +217,7 @@ Theming:
 - Link ID complete refactoring:
     - Links now have a numeric ID instead of dates
     - Short URLs are now created once and can't change over time (previous URL are kept)
-- Templates: 
+- Templates:
     - Changed placeholder behaviour for: `buttons_toolbar`, `fields_toolbar` and `action_plugin`
     - Cleanup `{loop}` declarations in templates
     - Tools: hide Firefox Social button when not in HTTPS
@@ -221,7 +235,7 @@ Theming:
 - Plugins:
     - Tools: only display parameter description when it exists
     - archive.org: do not propose archival of private notes
-    - Markdown: 
+    - Markdown:
         - render links properly in code blocks
         - bug regarding the `nomarkdown` tag
     - W3C compliance
@@ -360,7 +374,7 @@ Please use our release archives, or follow the
 ### Fixed
 - Fix a bug where renaming a tag was causing a 404
 - Fix a bug allowing to search blank terms
-- Fix a bug preventing to remove a tag with special chars when searching 
+- Fix a bug preventing to remove a tag with special chars when searching
 
 
 ## [v0.6.2](https://github.com/shaarli/Shaarli/releases/tag/v0.6.2) - 2015-12-23
@@ -666,7 +680,7 @@ Initial release on GitHub.
 - When you click the key to see only private links, it turns yellow
 
 ### Changed
-- The "Daily" page now automatically skips empty days. 
+- The "Daily" page now automatically skips empty days.
 
 ### Fixed
 - Corrected the tag encoding (there was a bug when selecting a second tag which contains accented characters)
@@ -964,7 +978,7 @@ Initial release on GitHub.
 - Nicer timezone selection patch by killruana
 
 ### Fixed
-- New lines now appear correctly in the RSS feed descriptions. 
+- New lines now appear correctly in the RSS feed descriptions.
 
 
 ## [v0.0.17beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
@@ -1018,7 +1032,7 @@ Initial release on GitHub.
 ## [v0.0.14beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
 ### Added
 - You no longer need to disable `magic_quotes` on your host.
-  Shaarli will cope with this option beeing activated. 
+  Shaarli will cope with this option beeing activated.
 
 
 ## [v0.0.13beta](http://sebsauvage.net/wiki/doku.php?id=php:shaarli:history)
