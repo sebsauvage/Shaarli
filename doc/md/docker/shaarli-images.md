@@ -11,6 +11,8 @@ repository.
 - `latest`: latest branch (tarball release)
 - `master`: master branch (tarball release)
 - `stable`: stable branch (tarball release)
+- `armhf-latest`: latest branch for ARMv7 32bit processors (tarball release)
+- `armhf-master`: master branch for ARMv7 32bit processors (tarball release)
 
 The `latest` and `master` images rely on:
 
@@ -24,6 +26,7 @@ The `stable` image relies on:
 - [PHP5-FPM](http://php-fpm.org/)
 - [Nginx](http://nginx.org/)
 
+The `armhf-*` images rely on [Linuxserver.io Alpine armhf images](https://hub.docker.com/r/lsiobase/alpine.armhf/).
 
 ### Download from DockerHub
 ```bash
