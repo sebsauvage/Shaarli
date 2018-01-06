@@ -16,6 +16,7 @@ See [REST API](REST-API) for a list of official and community clients.
 - [twemoji](https://github.com/NerosTie/twemoji) by [@NerosTie](https://github.com/NerosTie): Add colorful emojis to your Shaarli (Twemoji version) 
 - [google analytics](https://github.com/ericjuden/Shaarli-Google-Analytics-Plugin) by [@ericjuden](http://github.com/ericjuden): Adds Google Analytics tracking support
 - [launch](https://github.com/ArthurHoaro/launch-plugin) - Launch Plugin is a plugin designed to enhance and customize Launch Theme for Shaarli.
+- [markdown-toolbar](https://github.com/immanuelfodor/shaarli-markdown-toolbar) by [@immanuelfodor](https://github.com/immanuelfodor) - Easily insert markdown syntax into the Description field when editing a link.
 - [related](https://github.com/ilesinge/shaarli-related) by [@ilesinge](https://github.com/ilesinge) - Show related links based on the number of identical tags.
 - [social](https://github.com/alexisju/social) by [@alexisju](https://github.com/alexisju): share links to social networks.
 - [shaarli2twitter](https://github.com/ArthurHoaro/shaarli2twitter) by [@ArthurHoaro](https://github.com/ArthurHoaro) - Automatically tweet your shared links from Shaarli
