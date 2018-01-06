@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 **XSS vulnerability fixed. Please update.**
 
 ## Security
-- Fix an XSS (cross-site-scripting) vulnerability in `index.php`
+- Fix an XSS (cross-site-scripting) vulnerability in `index.php` -
+  [CVE-2018-5249](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-5249)
 
 
 ## [v0.9.2](https://github.com/shaarli/Shaarli/releases/tag/v0.9.2) - 2017-10-07
@@ -183,7 +184,8 @@ Theming:
 **XSS vulnerability fixed. Please update.**
 
 ## Security
-- Fix an XSS (cross-site-scripting) vulnerability in `index.php`
+- Fix an XSS (cross-site-scripting) vulnerability in `index.php` -
+  [CVE-2018-5249](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-5249)
 
 ## [v0.8.4](https://github.com/shaarli/Shaarli/releases/tag/v0.8.4) - 2017-03-04
 ### Security
