@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v0.9.4](https://github.com/shaarli/Shaarli/releases/tag/v0.9.4) - UNPUBLISHED
+### Added
+- Enable translations: Shaarli is now also available in French. Other language translations are welcome!
+- Add EditorConfig configuration
+- Add favicons for mobile devices
+- Add Alpine Linux arm32v7 Dockerfiles (master, latest)
+
+### Changed
+- Do not write bookmark edition history during file imports (performance)
+- Migrate Docker images (master, latest) to Alpine Linux
+- Improve unitary tests and code coverage
+- Improve thumbnail display
+- Improve theme ergonomics
+- Improve messages if there is no plugin or parameter available in the admin page
+- Increase buffer size for cURL download
+- Force HTTPS if the original port is 443 behind a reverse proxy (workaround)
+
+### Removed
+- Remove redirector setting from Configure page
+
+### Fixed
+- Fix broken links in the documentation
+- Enable access to `data/user.css` (Apache 2.2 & 2.4)
+- Don't URL encode description links if parameter `redirector.encode_url` is set to false
+- Fix an issue preventing the Save button to appear for plugin parameters
+
+
 ## [v0.9.3](https://github.com/shaarli/Shaarli/releases/tag/v0.9.3) - 2018-01-04
 **XSS vulnerability fixed. Please update.**
 
