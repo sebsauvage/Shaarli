@@ -45,6 +45,10 @@ Shaarli cannot import data directly from [Scuttle](https://github.com/scronide/s
 However, you can use the third-party [scuttle-to-shaarli](https://github.com/q2apro/scuttle-to-shaarli)
 tool to export the Scuttle database to the Netscape HTML format compatible with the Shaarli importer.
 
+### Refind
+
+You can use the third-party tool [Derefind](https://github.com/ShawnPConroy/Derefind) to convert refind.com bookmark exports to a format that can be imported into Shaarli.
+
 ## Import Shaarli links to Firefox
 
 - Export your Shaarli links as described above.
