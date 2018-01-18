@@ -21,7 +21,7 @@ _This bookmarklet button is compatible with Firefox, Opera, Chrome and Safari. U
 
 Websites which enforce Content Security Policy (CSP), such as github.com, disallow usage of bookmarklets. Unfortunatly, there is nothing Shaarli can do about it.
 
-See [#196](https://github.com/shaarli/Shaarli#196).
+See [#196](https://github.com/shaarli/Shaarli/issues/196).
 
 There is an open bug for both Firefox and Chromium:
 
