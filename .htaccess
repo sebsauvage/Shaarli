@@ -1,4 +1,12 @@
+# Disable directory listing
+Options -Indexes
+
 RewriteEngine On
+
+# Prevent accessing subdirectories not managed by SCM
+RewriteRule ^(.git|doxygen|vendor) - [F]
+
+# REST API
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [QSA,L]
