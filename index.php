@@ -1425,16 +1425,10 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager)
             // If this is an HTTP(S) link, we try go get the page to extract the title (otherwise we will to straight to the edit form.)
             if (empty($title) && strpos(get_url_scheme($url), 'http') !== false) {
                 // Short timeout to keep the application responsive
-                list($headers, $content) = get_http_response($url, 4);
-                if (strpos($headers[0], '200 OK') !== false) {
-                    // Retrieve charset.
-                    $charset = get_charset($headers, $content);
-                    // Extract title.
-                    $title = html_extract_title($content);
-                    // Re-encode title in utf-8 if necessary.
-                    if (! empty($title) && strtolower($charset) != 'utf-8') {
-                        $title = mb_convert_encoding($title, 'utf-8', $charset);
-                    }
+                // The callback will fill $charset and $title with data from the downloaded page.
+                get_http_response($url, 25, 4194304, get_curl_download_callback($charset, $title));
+                if (! empty($title) && strtolower($charset) != 'utf-8') {
+                    $title = mb_convert_encoding($title, 'utf-8', $charset);
                 }
             }
 

@@ -1,6 +1,55 @@
 <?php
 
 /**
+ * Get cURL callback function for CURLOPT_WRITEFUNCTION
+ *
+ * @param string $charset     to extract from the downloaded page (reference)
+ * @param string $title       to extract from the downloaded page (reference)
+ * @param string $curlGetInfo Optionnaly overrides curl_getinfo function
+ *
+ * @return Closure
+ */
+function get_curl_download_callback(&$charset, &$title, $curlGetInfo = 'curl_getinfo')
+{
+    /**
+     * cURL callback function for CURLOPT_WRITEFUNCTION (called during the download).
+     *
+     * While downloading the remote page, we check that the HTTP code is 200 and content type is 'html/text'
+     * Then we extract the title and the charset and stop the download when it's done.
+     *
+     * @param resource $ch   cURL resource
+     * @param string   $data chunk of data being downloaded
+     *
+     * @return int|bool length of $data or false if we need to stop the download
+     */
+    return function(&$ch, $data) use ($curlGetInfo, &$charset, &$title) {
+        $responseCode = $curlGetInfo($ch, CURLINFO_RESPONSE_CODE);
+        if (!empty($responseCode) && $responseCode != 200) {
+            return false;
+        }
+        $contentType = $curlGetInfo($ch, CURLINFO_CONTENT_TYPE);
+        if (!empty($contentType) && strpos($contentType, 'text/html') === false) {
+            return false;
+        }
+        if (empty($charset)) {
+            $charset = header_extract_charset($contentType);
+        }
+        if (empty($charset)) {
+            $charset = html_extract_charset($data);
+        }
+        if (empty($title)) {
+            $title = html_extract_title($data);
+        }
+        // We got everything we want, stop the download.
+        if (!empty($responseCode) && !empty($contentType) && !empty($charset) && !empty($title)) {
+            return false;
+        }
+
+        return strlen($data);
+    };
+}
+
+/**
  * Extract title from an HTML document.
  *
  * @param string $html HTML content where to look for a title.
@@ -16,45 +65,17 @@ function html_extract_title($html)
 }
 
 /**
- * Determine charset from downloaded page.
- * Priority:
- *   1. HTTP headers (Content type).
- *   2. HTML content page (tag <meta charset>).
- *   3. Use a default charset (default: UTF-8).
+ * Extract charset from HTTP header if it's defined.
  *
- * @param array  $headers           HTTP headers array.
- * @param string $htmlContent       HTML content where to look for charset.
- * @param string $defaultCharset    Default charset to apply if other methods failed.
- *
- * @return string Determined charset.
- */
-function get_charset($headers, $htmlContent, $defaultCharset = 'utf-8')
-{
-    if ($charset = headers_extract_charset($headers)) {
-        return $charset;
-    }
-
-    if ($charset = html_extract_charset($htmlContent)) {
-        return $charset;
-    }
-
-    return $defaultCharset;
-}
-
-/**
- * Extract charset from HTTP headers if it's defined.
- *
- * @param array $headers HTTP headers array.
+ * @param string $header HTTP header Content-Type line.
  *
  * @return bool|string Charset string if found (lowercase), false otherwise.
  */
-function headers_extract_charset($headers)
+function header_extract_charset($header)
 {
-    if (! empty($headers['Content-Type']) && strpos($headers['Content-Type'], 'charset=') !== false) {
-        preg_match('/charset="?([^; ]+)/i', $headers['Content-Type'], $match);
-        if (! empty($match[1])) {
-            return strtolower(trim($match[1]));
-        }
+    preg_match('/charset="?([^; ]+)/i', $header, $match);
+    if (! empty($match[1])) {
+        return strtolower(trim($match[1]));
     }
 
     return false;
