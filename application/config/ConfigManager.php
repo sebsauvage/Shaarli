@@ -123,7 +123,7 @@ class ConfigManager
      * Supports nested settings with dot separated keys.
      *
      * @param string $setting    Asked setting, keys separated with dots.
-     * @param string $value      Value to set.
+     * @param mixed  $value      Value to set.
      * @param bool   $write      Write the new setting in the config file, default false.
      * @param bool   $isLoggedIn User login state, default false.
      *
