@@ -1,8 +1,8 @@
 <div class="paging">
 {if="isLoggedIn()"}
     <div class="paging_privatelinks">
-        <a href="?visibility={$nextVisibility}">
-		{if="$visibility=='private' || $visibility=='public'"}
+        <a href="?visibility=private">
+		{if="$visibility=='private'"}
 		<img src="images/private_16x16_active.png#" width="16" height="16" title="Filter links by visibility" alt="Filter links by visibility">
 		{else}
 		<img src="images/private_16x16.png#" width="16" height="16" title="Filter links by visibility" alt="Filter links by visibility">

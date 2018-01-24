@@ -1012,11 +1012,21 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager)
 
     // -------- User wants to see only private links (toggle)
     if (isset($_GET['visibility'])) {
-        unset($_SESSION['visibility']);
         if ($_GET['visibility'] === 'private') {
-            $_SESSION['visibility'] = 'private'; // See only private links
+            // Visibility not set or not already private, set private, otherwise reset it
+            if (empty($_SESSION['visibility']) || $_SESSION['visibility'] !== 'private') {
+                // See only private links
+                $_SESSION['visibility'] = 'private';
+            } else {
+                unset($_SESSION['visibility']);
+            }
         } else if ($_GET['visibility'] === 'public') {
-            $_SESSION['visibility'] = 'public'; // See only public links
+            if (empty($_SESSION['visibility']) || $_SESSION['visibility'] !== 'public') {
+                // See only public links
+                $_SESSION['visibility'] = 'public';
+            } else {
+                unset($_SESSION['visibility']);
+            }
         }
 
         if (! empty($_SERVER['HTTP_REFERER'])) {

@@ -85,7 +85,6 @@ class PageBuilder
         $this->tpl->assign('scripturl', index_url($_SERVER));
         $visibility = ! empty($_SESSION['visibility']) ? $_SESSION['visibility'] : '';
         $this->tpl->assign('visibility', $visibility);
-        $this->tpl->assign('nextVisibility', $this->getNextVisibility($visibility));
         $this->tpl->assign('untaggedonly', !empty($_SESSION['untaggedonly']));
         $this->tpl->assign('pagetitle', $this->conf->get('general.title', 'Shaarli'));
         if ($this->conf->exists('general.header_link')) {
@@ -171,25 +170,5 @@ class PageBuilder
         header($_SERVER['SERVER_PROTOCOL'] .' '. t('404 Not Found'));
         $this->tpl->assign('error_message', $message);
         $this->renderPage('404');
-    }
-
-    /**
-     * Return the next visibility option:
-     *      private -> public -> all
-     *
-     * @param string $current visibility value
-     *
-     * @return string next visibility value
-     */
-    protected function getNextVisibility($current)
-    {
-        switch ($current) {
-            case 'private':
-                return 'public';
-            case 'public':
-                return '';
-            default:
-                return 'private';
-        }
     }
 }
