@@ -37,6 +37,20 @@ class ConfigPhpTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Read an empty existent config file -> array with blank default values.
+     */
+    public function testReadEmpty()
+    {
+        $dataFile = 'tests/utils/config/emptyConfigPhp.php';
+        $conf = $this->configIO->read($dataFile);
+        $this->assertEmpty($conf['login']);
+        $this->assertEmpty($conf['title']);
+        $this->assertEmpty($conf['titleLink']);
+        $this->assertEmpty($conf['config']);
+        $this->assertEmpty($conf['plugins']);
+    }
+
+    /**
      * Write a new config file.
      */
     public function testWriteNew()

@@ -83,10 +83,10 @@ class ConfigPhp implements ConfigIO
 
         $out = array();
         foreach (self::$ROOT_KEYS as $key) {
-            $out[$key] = $GLOBALS[$key];
+            $out[$key] = isset($GLOBALS[$key]) ? $GLOBALS[$key] : '';
         }
-        $out['config'] = $GLOBALS['config'];
-        $out['plugins'] = !empty($GLOBALS['plugins']) ? $GLOBALS['plugins'] : array();
+        $out['config'] = isset($GLOBALS['config']) ? $GLOBALS['config'] : [];
+        $out['plugins'] = isset($GLOBALS['plugins']) ? $GLOBALS['plugins'] : [];
         return $out;
     }
 
