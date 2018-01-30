@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v0.9.4](https://github.com/shaarli/Shaarli/releases/tag/v0.9.4) - UNPUBLISHED
+## [v0.10.0](https://github.com/shaarli/Shaarli/releases/tag/v0.10.0) - UNPUBLISHED
+
+## [v0.9.4](https://github.com/shaarli/Shaarli/releases/tag/v0.9.4) - 2018-01-30
 ### Added
 - Enable translations: Shaarli is now also available in French. Other language translations are welcome!
 - Add EditorConfig configuration
@@ -20,6 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Improve messages if there is no plugin or parameter available in the admin page
 - Increase buffer size for cURL download
 - Force HTTPS if the original port is 443 behind a reverse proxy (workaround)
+- Improve page title retrieval performances
 
 ### Removed
 - Remove redirector setting from Configure page
