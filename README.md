@@ -9,10 +9,10 @@ _It is designed to be personal (single-user), fast and handy._
 [![](https://img.shields.io/badge/stable-v0.8.5-blue.svg)](https://github.com/shaarli/Shaarli/releases/tag/v0.8.5)
 [![](https://img.shields.io/travis/shaarli/Shaarli/stable.svg?label=stable)](https://travis-ci.org/shaarli/Shaarli)
 &bull;
-[![](https://img.shields.io/badge/latest-v0.9.3-blue.svg)](https://github.com/shaarli/Shaarli/releases/tag/v0.9.3)
+[![](https://img.shields.io/badge/latest-v0.9.4-blue.svg)](https://github.com/shaarli/Shaarli/releases/tag/v0.9.4)
 [![](https://img.shields.io/travis/shaarli/Shaarli/latest.svg?label=latest)](https://travis-ci.org/shaarli/Shaarli)
 &bull;
-[![](https://img.shields.io/badge/master-v0.9.x-blue.svg)](https://github.com/shaarli/Shaarli)
+[![](https://img.shields.io/badge/master-v0.10.x-blue.svg)](https://github.com/shaarli/Shaarli)
 [![](https://img.shields.io/travis/shaarli/Shaarli.svg?label=master)](https://travis-ci.org/shaarli/Shaarli)
 
 [![Join the chat at https://gitter.im/shaarli/Shaarli](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/shaarli/Shaarli)
