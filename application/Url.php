@@ -260,7 +260,7 @@ class Url
         if (! function_exists('idn_to_ascii') || ! isset($this->parts['host'])) {
             return $out;
         }
-        $asciiHost = idn_to_ascii($this->parts['host']);
+        $asciiHost = idn_to_ascii($this->parts['host'], 0, INTL_IDNA_VARIANT_UTS46);
         return str_replace($this->parts['host'], $asciiHost, $out);
     }
 
