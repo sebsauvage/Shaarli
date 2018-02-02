@@ -124,6 +124,11 @@ if (isset($_COOKIE['shaarli']) && !SessionManager::checkId($_COOKIE['shaarli']))
 $conf = new ConfigManager();
 $sessionManager = new SessionManager($_SESSION, $conf);
 
+// LC_MESSAGES isn't defined without php-intl, in this case use LC_COLLATE locale instead.
+if (! defined('LC_MESSAGES')) {
+    define('LC_MESSAGES', LC_COLLATE);
+}
+
 // Sniff browser language and set date format accordingly.
 if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
     autoLocale($_SERVER['HTTP_ACCEPT_LANGUAGE']);

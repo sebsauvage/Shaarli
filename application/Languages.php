@@ -69,6 +69,8 @@ class Languages
     {
         $this->conf = $conf;
         $confLanguage = $this->conf->get('translation.language', 'auto');
+        // Auto mode or invalid parameter, use the detected language.
+        // If the detected language is invalid, it doesn't matter, it will use English.
         if ($confLanguage === 'auto' || ! $this->isValidLanguage($confLanguage)) {
             $this->language = substr($language, 0, 5);
         } else {
