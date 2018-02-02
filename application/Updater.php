@@ -445,6 +445,18 @@ class Updater
         $this->linkDB->save($this->conf->get('resource.page_cache'));
         return true;
     }
+
+    /**
+     * Change privateonly session key to visibility.
+     */
+    public function updateMethodVisibilitySession()
+    {
+        if (isset($_SESSION['privateonly'])) {
+            unset($_SESSION['privateonly']);
+            $_SESSION['visibility'] = 'private';
+        }
+        return true;
+    }
 }
 
 /**

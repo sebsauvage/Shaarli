@@ -83,7 +83,8 @@ class PageBuilder
             ApplicationUtils::getVersionHash(SHAARLI_VERSION, $this->conf->get('credentials.salt'))
         );
         $this->tpl->assign('scripturl', index_url($_SERVER));
-        $this->tpl->assign('privateonly', !empty($_SESSION['privateonly'])); // Show only private links?
+        $visibility = ! empty($_SESSION['visibility']) ? $_SESSION['visibility'] : '';
+        $this->tpl->assign('visibility', $visibility);
         $this->tpl->assign('untaggedonly', !empty($_SESSION['untaggedonly']));
         $this->tpl->assign('pagetitle', $this->conf->get('general.title', 'Shaarli'));
         if ($this->conf->exists('general.header_link')) {
