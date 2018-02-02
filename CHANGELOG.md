@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v0.10.0](https://github.com/shaarli/Shaarli/releases/tag/v0.10.0) - UNPUBLISHED
 
+## [v0.9.5](https://github.com/shaarli/Shaarli/releases/tag/v0.9.5) - 2018-02-02
+### Fixed
+- Fix a warning happening when `php-intl` is not installed on the system
+- Fix warnings happening when updating from legacy SebSauvage version
+
 ## [v0.9.4](https://github.com/shaarli/Shaarli/releases/tag/v0.9.4) - 2018-01-30
 ### Added
 - Enable translations: Shaarli is now also available in French. Other language translations are welcome!
