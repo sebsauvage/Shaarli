@@ -2,7 +2,7 @@
 <html>
 <head>{include="includes"}</head>
 <body
-{if="ban_canLogin($conf)"}
+{if="$user_can_login"}
   {if="empty($username)"}
     onload="document.loginform.login.focus();"
   {else}

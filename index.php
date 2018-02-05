@@ -78,6 +78,7 @@ require_once 'application/Updater.php';
 use \Shaarli\Languages;
 use \Shaarli\ThemeUtils;
 use \Shaarli\Config\ConfigManager;
+use \Shaarli\LoginManager;
 use \Shaarli\SessionManager;
 
 // Ensure the PHP version is supported
@@ -122,6 +123,7 @@ if (isset($_COOKIE['shaarli']) && !SessionManager::checkId($_COOKIE['shaarli']))
 }
 
 $conf = new ConfigManager();
+$loginManager = new LoginManager($GLOBALS, $conf);
 $sessionManager = new SessionManager($_SESSION, $conf);
 
 // LC_MESSAGES isn't defined without php-intl, in this case use LC_COLLATE locale instead.
@@ -293,108 +295,22 @@ function logout() {
     setcookie('shaarli_staySignedIn', FALSE, 0, WEB_PATH);
 }
 
-
-// ------------------------------------------------------------------------------------------
-// Brute force protection system
-// Several consecutive failed logins will ban the IP address for 30 minutes.
-if (!is_file($conf->get('resource.ban_file', 'data/ipbans.php'))) {
-    // FIXME! globals
-    file_put_contents(
-        $conf->get('resource.ban_file', 'data/ipbans.php'),
-        "<?php\n\$GLOBALS['IPBANS']=".var_export(array('FAILURES'=>array(),'BANS'=>array()),true).";\n?>"
-    );
-}
-include $conf->get('resource.ban_file', 'data/ipbans.php');
-/**
- * Signal a failed login. Will ban the IP if too many failures:
- *
- * @param ConfigManager $conf Configuration Manager instance.
- */
-function ban_loginFailed($conf)
-{
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $trusted = $conf->get('security.trusted_proxies', array());
-    if (in_array($ip, $trusted)) {
-        $ip = getIpAddressFromProxy($_SERVER, $trusted);
-        if (!$ip) {
-            return;
-        }
-    }
-    $gb = $GLOBALS['IPBANS'];
-    if (! isset($gb['FAILURES'][$ip])) {
-        $gb['FAILURES'][$ip]=0;
-    }
-    $gb['FAILURES'][$ip]++;
-    if ($gb['FAILURES'][$ip] > ($conf->get('security.ban_after') - 1))
-    {
-        $gb['BANS'][$ip] = time() + $conf->get('security.ban_after', 1800);
-        logm($conf->get('resource.log'), $_SERVER['REMOTE_ADDR'], 'IP address banned from login');
-    }
-    $GLOBALS['IPBANS'] = $gb;
-    file_put_contents(
-        $conf->get('resource.ban_file', 'data/ipbans.php'),
-        "<?php\n\$GLOBALS['IPBANS']=".var_export($gb,true).";\n?>"
-    );
-}
-
-/**
- * Signals a successful login. Resets failed login counter.
- *
- * @param ConfigManager $conf Configuration Manager instance.
- */
-function ban_loginOk($conf)
-{
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $gb = $GLOBALS['IPBANS'];
-    unset($gb['FAILURES'][$ip]); unset($gb['BANS'][$ip]);
-    $GLOBALS['IPBANS'] = $gb;
-    file_put_contents(
-        $conf->get('resource.ban_file', 'data/ipbans.php'),
-        "<?php\n\$GLOBALS['IPBANS']=".var_export($gb,true).";\n?>"
-    );
-}
-
-/**
- * Checks if the user CAN login. If 'true', the user can try to login.
- *
- * @param ConfigManager $conf Configuration Manager instance.
- *
- * @return bool: true if the user is allowed to login.
- */
-function ban_canLogin($conf)
-{
-    $ip=$_SERVER["REMOTE_ADDR"]; $gb=$GLOBALS['IPBANS'];
-    if (isset($gb['BANS'][$ip]))
-    {
-        // User is banned. Check if the ban has expired:
-        if ($gb['BANS'][$ip]<=time())
-        {   // Ban expired, user can try to login again.
-            logm($conf->get('resource.log'), $_SERVER['REMOTE_ADDR'], 'Ban lifted.');
-            unset($gb['FAILURES'][$ip]); unset($gb['BANS'][$ip]);
-            file_put_contents(
-                $conf->get('resource.ban_file', 'data/ipbans.php'),
-                "<?php\n\$GLOBALS['IPBANS']=".var_export($gb,true).";\n?>"
-            );
-            return true; // Ban has expired, user can login.
-        }
-        return false; // User is banned.
-    }
-    return true; // User is not banned.
-}
-
 // ------------------------------------------------------------------------------------------
 // Process login form: Check if login/password is correct.
 if (isset($_POST['login']))
 {
-    if (!ban_canLogin($conf)) die(t('I said: NO. You are banned for the moment. Go away.'));
+    if (! $loginManager->canLogin($_SERVER)) {
+        die(t('I said: NO. You are banned for the moment. Go away.'));
+    }
     if (isset($_POST['password'])
         && $sessionManager->checkToken($_POST['token'])
         && (check_auth($_POST['login'], $_POST['password'], $conf))
-    ) {   // Login/password is OK.
-        ban_loginOk($conf);
+    ) {
+        // Login/password is OK.
+        $loginManager->handleSuccessfulLogin($_SERVER);
+
         // If user wants to keep the session cookie even after the browser closes:
-        if (!empty($_POST['longlastingsession']))
-        {
+        if (!empty($_POST['longlastingsession'])) {
             $_SESSION['longlastingsession'] = 31536000; // (31536000 seconds = 1 year)
             $expiration = time() + $_SESSION['longlastingsession']; // calculate relative cookie expiration (1 year from now)
             setcookie('shaarli_staySignedIn', STAY_SIGNED_IN_TOKEN, $expiration, WEB_PATH);
@@ -437,10 +353,8 @@ if (isset($_POST['login']))
             }
         }
         header('Location: ?'); exit;
-    }
-    else
-    {
-        ban_loginFailed($conf);
+    } else {
+        $loginManager->handleFailedLogin($_SERVER);
         $redir = '&username='. urlencode($_POST['login']);
         if (isset($_GET['post'])) {
             $redir .= '&post=' . urlencode($_GET['post']);
@@ -684,8 +598,9 @@ function showLinkList($PAGE, $LINKSDB, $conf, $pluginManager) {
  * @param LinkDB         $LINKSDB
  * @param History        $history        instance
  * @param SessionManager $sessionManager SessionManager instance
+ * @param LoginManager   $loginManager   LoginManager instance
  */
-function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager)
+function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, $loginManager)
 {
     $updater = new Updater(
         read_updates_file($conf->get('resource.updates')),
@@ -761,6 +676,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager)
         $PAGE->assign('returnurl',(isset($_SERVER['HTTP_REFERER']) ? escape($_SERVER['HTTP_REFERER']):''));
         // add default state of the 'remember me' checkbox
         $PAGE->assign('remember_user_default', $conf->get('privacy.remember_user_default'));
+        $PAGE->assign('user_can_login', $loginManager->canLogin($_SERVER));
         $PAGE->renderPage('loginform');
         exit;
     }
@@ -2330,7 +2246,7 @@ $response = $app->run(true);
 if ($response->getStatusCode() == 404 && strpos($_SERVER['REQUEST_URI'], '/api/v1') === false) {
     // We use UTF-8 for proper international characters handling.
     header('Content-Type: text/html; charset=utf-8');
-    renderPage($conf, $pluginManager, $linkDb, $history, $sessionManager);
+    renderPage($conf, $pluginManager, $linkDb, $history, $sessionManager, $loginManager);
 } else {
     $app->respond($response);
 }

@@ -5,7 +5,7 @@
 </head>
 <body>
 {include="page.header"}
-{if="!ban_canLogin($conf)"}
+{if="!$user_can_login"}
 <div class="pure-g pure-alert pure-alert-error pure-alert-closable center">
   <div class="pure-u-2-24"></div>
   <div class="pure-u-20-24">
