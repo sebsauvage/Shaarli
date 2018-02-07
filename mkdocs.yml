@@ -22,9 +22,8 @@ pages:
     - Reverse proxy configuration: docker/reverse-proxy-configuration.md
     - Docker resources: docker/resources.md
 - Usage:
-    - Bookmarklet: Bookmarklet.md
     - Browsing and searching: Browsing-and-searching.md
-    - Firefox share: Firefox-share.md
+    - Sharing content: Sharing-content.md
     - RSS feeds: RSS-feeds.md 
     - REST API: REST-API.md
     - Community & Related software: Community-&-Related-software.md

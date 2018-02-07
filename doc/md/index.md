@@ -94,13 +94,6 @@ Easily extensible by any client using the REST API exposed by Shaarli.
 
 See the [API documentation](http://shaarli.github.io/api-documentation/).
 
-### Using Shaarli as a blog, notepad, pastebin...
-- Go to your Shaarli setup and log in
-- Click the `Add Link` button
-- To share text only, do not enter any URL in the corresponding input field and click `Add Link`
-- Pick a title and enter your article, or note, in the description field; add a few tags; optionally check `Private` then click `Save`
-- Voilà!  Your article is now published (privately if you selected that option) and accessible using its permalink.
-
 ## About
 ### Shaarli community fork
 This friendly fork is maintained by the Shaarli community at https://github.com/shaarli/Shaarli
