@@ -17,7 +17,7 @@ While logged in to your Shaarli, you can add new Shaares in several ways:
  * [Bookmarklet]
  * [Firefox Share](#firefox-share)
  * Third-party [apps and browser addons](Community-\&-Related-software.md#mobile-apps)
-
+ * [REST API](https://shaarli.github.io/api-documentation/)
 
 ### +Shaare button
 
