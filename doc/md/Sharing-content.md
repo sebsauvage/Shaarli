@@ -72,7 +72,7 @@ _Share_ button [images/firefoxshare.png](images/firefoxshare.png)
 
 ## Editing Shaares
 
-Any Shaare can edited by clicking its ![](https://raw.githubusercontent.com/shaarli/Shaarli/master/images/edit_icon.png) `Edit` button.
+Any Shaare can edited by clicking its ![](images/edit_icon.png) `Edit` button.
 
 Editing a Shaare will not change it's permalink, each permalink always points to the 
 latest revision of a Shaare.
