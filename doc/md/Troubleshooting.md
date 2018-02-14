@@ -63,7 +63,7 @@ Related threads:
 
 ### I forgot my password!
 
-Delete the file `data/config.php` and display the page again. You will be asked for a new login/password.
+Delete the file `data/config.json.php` and display the page again. You will be asked for a new login/password.
 
 ### I'm locked out - Login bruteforce protection
 
@@ -97,7 +97,7 @@ php56 1
 
 ```php
 //list($status,$headers,$data) = getHTTP($url,4); // Short timeout to keep the application responsive.
-// FIXME: Decode charset according to charset specified in either 1) HTTP response headers or 2) <head> in html 
+// FIXME: Decode charset according to charset specified in either 1) HTTP response headers or 2) <head> in html
 //if (strpos($status,'200 OK')) $title=html_extract_title($data);
 ```
 
@@ -106,11 +106,11 @@ php56 1
 
 ### Dates are not properly formatted
 
-Shaarli tries to sniff the language of the browser (using HTTP_ACCEPT_LANGUAGE headers) and choose a date format accordingly. But Shaarli can only use the date formats (and more generaly speaking, the locales) provided by the webserver. So even if you have a browser in French, you may end up with dates in US format (it's the case on sebsauvage.net :-( )
-
-### Problems on CentOS servers
-
-On **CentOS**/RedHat derivatives, you may need to install the `php-mbstring` package.
+Shaarli tries to sniff the language of the browser (using `HTTP_ACCEPT_LANGUAGE` headers)
+and choose a date format accordingly. But Shaarli can only use the date formats
+(and more generally speaking, the locales) provided by the webserver.
+So even if you have a browser in French, you may end up with dates in US format
+(it's the case on sebsauvage.net :-( )
 
 ### My session expires! I can't stay logged in
 
@@ -126,7 +126,3 @@ This can be caused by several things:
 ## Sessions do not seem to work correctly on your server
 
 Follow the instructions in the error message. Make sure you are accessing shaarli via a direct IP address or a proper hostname. If you have **no dots** in the hostname (e.g. `localhost` or `http://my-webserver/shaarli/`), some browsers will not store cookies at all (this respects the [HTTP cookie specification](http://curl.haxx.se/rfc/cookie_spec.html)).
-
-### pubsubhubbub support
-
-Download [publisher.php](https://pubsubhubbub.googlecode.com/git/publisher_clients/php/library/publisher.php) at the root of your Shaarli installation and set `$GLOBALS['config']['PUBSUBHUB_URL']` in your `config.php`

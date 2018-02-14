@@ -2,14 +2,14 @@
 
 ### Note your current version
 
-If anything goes wrong, it's important for us to know which version you're upgrading from.  
+If anything goes wrong, it's important for us to know which version you're upgrading from.
 The current version is present in the `version.php` file.
 
 ### Backup your data
 
 Shaarli stores all user data under the `data` directory:
 
-- `data/config.php` - main configuration file
+- `data/config.json.php` (or `data/config.php` for older Shaarli versions) - main configuration file
 - `data/datastore.php` - bookmarked links
 - `data/ipbans.php` - banned IP addresses
 - `data/updates.txt` - contains all automatic update to the configuration and datastore files already run
@@ -39,7 +39,7 @@ We recommend that you use the latest release tarball with the `-full` suffix. It
 
 Once downloaded, extract the archive locally and update your remote installation (e.g. via FTP) -be sure you keep the content of the `data` directory!
 
-If you use translations in gettext mode - meaning you manually changed the default mode -, 
+If you use translations in gettext mode - meaning you manually changed the default mode -,
 reload your web server.
 
 After upgrading, access your fresh Shaarli installation from a web browser; the configuration and data store will then be automatically updated, and new settings added to `data/config.json.php` (see [Shaarli configuration](Shaarli configuration) for more details).
@@ -192,7 +192,10 @@ Total 3317 (delta 2050), reused 3301 (delta 2034)to
 
 #### Step 3: configuration
 
-After migrating, access your fresh Shaarli installation from a web browser; the configuration will then be automatically updated, and new settings added to `data/config.php` (see [Shaarli configuration](Shaarli-configuration) for more details).
+After migrating, access your fresh Shaarli installation from a web browser; the
+configuration will then be automatically updated, and new settings added to
+`data/config.json.php` (see [Shaarli configuration](Shaarli-configuration) for more
+details).
 
 ## Troubleshooting
 
