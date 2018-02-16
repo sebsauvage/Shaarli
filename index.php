@@ -207,7 +207,7 @@ function setup_login_state($conf)
     }
     // If session does not exist on server side, or IP address has changed, or session has expired, logout.
     if (empty($_SESSION['uid'])
-        || ($conf->get('security.session_protection_disabled') === false && $_SESSION['ip'] != allIPs())
+        || ($conf->get('security.session_protection_disabled') === false && $_SESSION['ip'] != client_ip_id($_SERVER))
         || time() >= $_SESSION['expires_on'])
     {
         logout();
@@ -231,16 +231,6 @@ $userIsLoggedIn = setup_login_state($conf);
 // ------------------------------------------------------------------------------------------
 // Session management
 
-// Returns the IP address of the client (Used to prevent session cookie hijacking.)
-function allIPs()
-{
-    $ip = $_SERVER['REMOTE_ADDR'];
-    // Then we use more HTTP headers to prevent session hijacking from users behind the same proxy.
-    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) { $ip=$ip.'_'.$_SERVER['HTTP_X_FORWARDED_FOR']; }
-    if (isset($_SERVER['HTTP_CLIENT_IP'])) { $ip=$ip.'_'.$_SERVER['HTTP_CLIENT_IP']; }
-    return $ip;
-}
-
 /**
  * Load user session.
  *
@@ -249,7 +239,7 @@ function allIPs()
 function fillSessionInfo($conf)
 {
     $_SESSION['uid'] = sha1(uniqid('',true).'_'.mt_rand()); // Generate unique random number (different than phpsessionid)
-    $_SESSION['ip']=allIPs();                // We store IP address(es) of the client to make sure session is not hijacked.
+    $_SESSION['ip'] = client_ip_id($_SERVER);
     $_SESSION['username']= $conf->get('credentials.login');
     $_SESSION['expires_on']=time()+INACTIVITY_TIMEOUT;  // Set session expiration.
 }
