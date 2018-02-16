@@ -37,7 +37,7 @@ This is important in case plugins are depending on each other. Read plugins READ
 
 ## File mode
 
-Enabled plugin are stored in your `config.php` parameters file, under the `array`:
+Enabled plugin are stored in your `config.json.php` parameters file, under the `array`:
 
 ```php
 $GLOBALS['config']['ENABLED_PLUGINS']
@@ -48,7 +48,7 @@ Example:
 
 ```php
 $GLOBALS['config']['ENABLED_PLUGINS'] = array(
-    'qrcode', 
+    'qrcode',
     'archiveorg',
     'wallabag',
     'markdown',

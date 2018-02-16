@@ -1,4 +1,4 @@
-TODO: This page is out of date
+## Directory structure
 
 Here is the directory structure of Shaarli and the purpose of the different files:
 
@@ -6,10 +6,16 @@ Here is the directory structure of Shaarli and the purpose of the different file
 	index.php        # Main program
 	application/     # Shaarli classes
 		├── LinkDB.php
+
+        ...
+
 		└── Utils.php
-	tests/       # Shaarli unitary & functional tests
+	tests/           # Shaarli unitary & functional tests
 		├── LinkDBTest.php
-		├── utils  # utilities to ease testing
+
+        ...
+
+		├── utils    # utilities to ease testing
 		│   └── ReferenceLinkDB.php
 		└── UtilsTest.php
     COPYING          # Shaarli license
@@ -18,17 +24,18 @@ Here is the directory structure of Shaarli and the purpose of the different file
     	├── blazy.*                # picture wall lazy image loading library
         ├── shaarli.css, reset.css # Shaarli stylesheet.
         ├── qr.*                   # qr code generation library
-        └──rain.tpl.class.php      # RainTPL templating library
-    tpl/             # RainTPL templates for Shaarli. They are used to build the pages.
+        └── rain.tpl.class.php     # RainTPL templating library
     images/          # Images and icons used in Shaarli
-    data/            # data storage: bookmark database, configuration, logs, banlist…
-        ├── config.php             # Shaarli configuration (login, password, timezone, title…)
+    data/            # data storage: bookmark database, configuration, logs, banlist...
+        ├── config.json.php        # Shaarli configuration (login, password, timezone, title...)
         ├── datastore.php          # Your link database (compressed).
         ├── ipban.php              # IP address ban system data
         ├── lastupdatecheck.txt    # Update check timestamp file
-        └──log.txt                 # login/IPban log.
+        └── log.txt                # login/IPban log.
+    tpl/             # RainTPL templates for Shaarli. They are used to build the pages.
     cache/           # thumbnails cache
                      # This directory is automatically created. You can erase it anytime you want.
     tmp/             # Temporary directory for compiled RainTPL templates.
                      # This directory is automatically created. You can erase it anytime you want.
+    vendor/          # Third-party dependencies. This directory is created by Composer
 ```
