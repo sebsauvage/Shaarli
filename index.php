@@ -101,8 +101,6 @@ if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
 // Set default cookie expiration and path.
 session_set_cookie_params($cookie['lifetime'], $cookiedir, $_SERVER['SERVER_NAME']);
 // Set session parameters on server side.
-// If the user does not access any page within this time, his/her session is considered expired.
-define('INACTIVITY_TIMEOUT', 3600); // in seconds.
 // Use cookies to store session.
 ini_set('session.use_cookies', 1);
 // Force cookies for session (phpsessionID forbidden in URL).
@@ -183,11 +181,12 @@ define('STAY_SIGNED_IN_TOKEN', sha1($conf->get('credentials.hash') . $_SERVER['R
 /**
  * Checking session state (i.e. is the user still logged in)
  *
- * @param ConfigManager $conf The configuration manager.
+ * @param ConfigManager  $conf           Configuration Manager instance.
+ * @param SessionManager $sessionManager SessionManager instance
  *
- * @return bool: true if the user is logged in, false otherwise.
+ * @return bool true if the user is logged in, false otherwise.
  */
-function setup_login_state($conf)
+function setup_login_state($conf, $sessionManager)
 {
     if ($conf->get('security.open_shaarli')) {
         return true;
@@ -202,7 +201,7 @@ function setup_login_state($conf)
         $_COOKIE['shaarli_staySignedIn']===STAY_SIGNED_IN_TOKEN &&
         !$loginFailure)
     {
-        fillSessionInfo($conf);
+        fillSessionInfo($conf, $sessionManager);
         $userIsLoggedIn = true;
     }
     // If session does not exist on server side, or IP address has changed, or session has expired, logout.
@@ -216,9 +215,8 @@ function setup_login_state($conf)
     }
     if (!empty($_SESSION['longlastingsession'])) {
         $_SESSION['expires_on']=time()+$_SESSION['longlastingsession']; // In case of "Stay signed in" checked.
-    }
-    else {
-        $_SESSION['expires_on']=time()+INACTIVITY_TIMEOUT; // Standard session expiration date.
+    } else {
+        $_SESSION['expires_on'] = time() + $sessionManager::$INACTIVITY_TIMEOUT;
     }
     if (!$loginFailure) {
         $userIsLoggedIn = true;
@@ -226,39 +224,42 @@ function setup_login_state($conf)
 
     return $userIsLoggedIn;
 }
-$userIsLoggedIn = setup_login_state($conf);
+
+$userIsLoggedIn = setup_login_state($conf, $sessionManager);
 
 // ------------------------------------------------------------------------------------------
 // Session management
 
 /**
- * Load user session.
+ * Load user session
  *
- * @param ConfigManager $conf Configuration Manager instance.
+ * @param ConfigManager  $conf           Configuration Manager instance.
+ * @param SessionManager $sessionManager SessionManager instance
  */
-function fillSessionInfo($conf)
+function fillSessionInfo($conf, $sessionManager)
 {
     $_SESSION['uid'] = sha1(uniqid('',true).'_'.mt_rand()); // Generate unique random number (different than phpsessionid)
     $_SESSION['ip'] = client_ip_id($_SERVER);
     $_SESSION['username']= $conf->get('credentials.login');
-    $_SESSION['expires_on']=time()+INACTIVITY_TIMEOUT;  // Set session expiration.
+    $_SESSION['expires_on'] = time() + $sessionManager::$INACTIVITY_TIMEOUT;
 }
 
 /**
  * Check that user/password is correct.
  *
- * @param string        $login    Username
- * @param string        $password User password
- * @param ConfigManager $conf     Configuration Manager instance.
+ * @param string         $login          Username
+ * @param string         $password       User password
+ * @param ConfigManager  $conf           Configuration Manager instance.
+ * @param SessionManager $sessionManager SessionManager instance
  *
  * @return bool: authentication successful or not.
  */
-function check_auth($login, $password, $conf)
+function check_auth($login, $password, $conf, $sessionManager)
 {
     $hash = sha1($password . $login . $conf->get('credentials.salt'));
-    if ($login == $conf->get('credentials.login') && $hash == $conf->get('credentials.hash'))
-    {   // Login/password is correct.
-        fillSessionInfo($conf);
+    if ($login == $conf->get('credentials.login') && $hash == $conf->get('credentials.hash')) {
+        // Login/password is correct.
+        fillSessionInfo($conf, $sessionManager);
         logm($conf->get('resource.log'), $_SERVER['REMOTE_ADDR'], 'Login successful');
         return true;
     }
@@ -287,14 +288,13 @@ function logout() {
 
 // ------------------------------------------------------------------------------------------
 // Process login form: Check if login/password is correct.
-if (isset($_POST['login']))
-{
+if (isset($_POST['login'])) {
     if (! $loginManager->canLogin($_SERVER)) {
         die(t('I said: NO. You are banned for the moment. Go away.'));
     }
     if (isset($_POST['password'])
         && $sessionManager->checkToken($_POST['token'])
-        && (check_auth($_POST['login'], $_POST['password'], $conf))
+        && (check_auth($_POST['login'], $_POST['password'], $conf, $sessionManager))
     ) {
         // Login/password is OK.
         $loginManager->handleSuccessfulLogin($_SERVER);

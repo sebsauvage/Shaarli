@@ -6,6 +6,10 @@ namespace Shaarli;
  */
 class SessionManager
 {
+    /** Session expiration timeout, in seconds */
+    public static $INACTIVITY_TIMEOUT = 3600;
+
+    /** Local reference to the global $_SESSION array */
     protected $session = [];
 
     /**
