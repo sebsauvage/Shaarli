@@ -9,8 +9,14 @@ class SessionManager
     /** Session expiration timeout, in seconds */
     public static $INACTIVITY_TIMEOUT = 3600;
 
+    /** Name of the cookie set after logging in **/
+    public static $LOGGED_IN_COOKIE = 'shaarli_staySignedIn';
+
     /** Local reference to the global $_SESSION array */
     protected $session = [];
+
+    /** ConfigManager instance **/
+    protected $conf = null;
 
     /**
      * Constructor
@@ -83,5 +89,39 @@ class SessionManager
         }
 
         return true;
+    }
+
+    /**
+     * Store user login information after a successful login
+     *
+     * @param array $server The global $_SERVER array
+     */
+    public function storeLoginInfo($server)
+    {
+        // Generate unique random number (different than phpsessionid)
+        $this->session['uid'] = sha1(uniqid('', true) . '_' . mt_rand());
+        $this->session['ip'] = client_ip_id($server);
+        $this->session['username'] = $this->conf->get('credentials.login');
+        $this->session['expires_on'] = time() + self::$INACTIVITY_TIMEOUT;
+    }
+
+    /**
+     * Logout a user by unsetting all login information
+     *
+     * See:
+     * - https://secure.php.net/manual/en/function.setcookie.php
+     *
+     * @param string $webPath path on the server in which the cookie will be available on
+     */
+    public function logout($webPath)
+    {
+        if (isset($this->session)) {
+            unset($this->session['uid']);
+            unset($this->session['ip']);
+            unset($this->session['username']);
+            unset($this->session['visibility']);
+            unset($this->session['untaggedonly']);
+        }
+        setcookie(self::$LOGGED_IN_COOKIE, 'false', 0, $webPath);
     }
 }

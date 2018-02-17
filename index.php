@@ -197,11 +197,11 @@ function setup_login_state($conf, $sessionManager)
         $userIsLoggedIn = false;  // Shaarli is not configured yet.
         $loginFailure = true;
     }
-    if (isset($_COOKIE['shaarli_staySignedIn']) &&
-        $_COOKIE['shaarli_staySignedIn']===STAY_SIGNED_IN_TOKEN &&
-        !$loginFailure)
-    {
-        fillSessionInfo($conf, $sessionManager);
+    if (isset($_COOKIE[SessionManager::$LOGGED_IN_COOKIE])
+        && $_COOKIE[SessionManager::$LOGGED_IN_COOKIE] === STAY_SIGNED_IN_TOKEN
+        && !$loginFailure
+    ) {
+        $sessionManager->storeLoginInfo($_SERVER);
         $userIsLoggedIn = true;
     }
     // If session does not exist on server side, or IP address has changed, or session has expired, logout.
@@ -209,7 +209,7 @@ function setup_login_state($conf, $sessionManager)
         || ($conf->get('security.session_protection_disabled') === false && $_SESSION['ip'] != client_ip_id($_SERVER))
         || time() >= $_SESSION['expires_on'])
     {
-        logout();
+        $sessionManager->logout(WEB_PATH);
         $userIsLoggedIn = false;
         $loginFailure = true;
     }
@@ -231,20 +231,6 @@ $userIsLoggedIn = setup_login_state($conf, $sessionManager);
 // Session management
 
 /**
- * Load user session
- *
- * @param ConfigManager  $conf           Configuration Manager instance.
- * @param SessionManager $sessionManager SessionManager instance
- */
-function fillSessionInfo($conf, $sessionManager)
-{
-    $_SESSION['uid'] = sha1(uniqid('',true).'_'.mt_rand()); // Generate unique random number (different than phpsessionid)
-    $_SESSION['ip'] = client_ip_id($_SERVER);
-    $_SESSION['username']= $conf->get('credentials.login');
-    $_SESSION['expires_on'] = time() + $sessionManager::$INACTIVITY_TIMEOUT;
-}
-
-/**
  * Check that user/password is correct.
  *
  * @param string         $login          Username
@@ -259,7 +245,7 @@ function check_auth($login, $password, $conf, $sessionManager)
     $hash = sha1($password . $login . $conf->get('credentials.salt'));
     if ($login == $conf->get('credentials.login') && $hash == $conf->get('credentials.hash')) {
         // Login/password is correct.
-        fillSessionInfo($conf, $sessionManager);
+        $sessionManager->storeLoginInfo($_SERVER);
         logm($conf->get('resource.log'), $_SERVER['REMOTE_ADDR'], 'Login successful');
         return true;
     }
@@ -272,18 +258,6 @@ function isLoggedIn()
 {
     global $userIsLoggedIn;
     return $userIsLoggedIn;
-}
-
-// Force logout.
-function logout() {
-    if (isset($_SESSION)) {
-        unset($_SESSION['uid']);
-        unset($_SESSION['ip']);
-        unset($_SESSION['username']);
-        unset($_SESSION['visibility']);
-        unset($_SESSION['untaggedonly']);
-    }
-    setcookie('shaarli_staySignedIn', FALSE, 0, WEB_PATH);
 }
 
 // ------------------------------------------------------------------------------------------
@@ -303,10 +277,13 @@ if (isset($_POST['login'])) {
         if (!empty($_POST['longlastingsession'])) {
             $_SESSION['longlastingsession'] = 31536000; // (31536000 seconds = 1 year)
             $expiration = time() + $_SESSION['longlastingsession']; // calculate relative cookie expiration (1 year from now)
-            setcookie('shaarli_staySignedIn', STAY_SIGNED_IN_TOKEN, $expiration, WEB_PATH);
+            setcookie($sessionManager::$LOGGED_IN_COOKIE, STAY_SIGNED_IN_TOKEN, $expiration, WEB_PATH);
             $_SESSION['expires_on'] = $expiration;  // Set session expiration on server-side.
 
-            $cookiedir = ''; if(dirname($_SERVER['SCRIPT_NAME'])!='/') $cookiedir=dirname($_SERVER["SCRIPT_NAME"]).'/';
+            $cookiedir = '';
+            if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
+                $cookiedir = dirname($_SERVER["SCRIPT_NAME"]) . '/';
+            }
             session_set_cookie_params($_SESSION['longlastingsession'],$cookiedir,$_SERVER['SERVER_NAME']); // Set session cookie expiration on client side
             // Note: Never forget the trailing slash on the cookie path!
             session_regenerate_id(true);  // Send cookie with new expiration date to browser.
@@ -676,7 +653,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=logout'))
     {
         invalidateCaches($conf->get('resource.page_cache'));
-        logout();
+        $sessionManager->logout(WEB_PATH);
         header('Location: ?');
         exit;
     }
