@@ -8,20 +8,123 @@ class LoginManager
 {
     protected $globals = [];
     protected $configManager = null;
+    protected $sessionManager = null;
     protected $banFile = '';
+    protected $isLoggedIn = false;
+    protected $openShaarli = false;
 
     /**
      * Constructor
      *
-     * @param array         $globals       The $GLOBALS array (reference)
-     * @param ConfigManager $configManager Configuration Manager instance.
+     * @param array          $globals        The $GLOBALS array (reference)
+     * @param ConfigManager  $configManager  Configuration Manager instance
+     * @param SessionManager $sessionManager SessionManager instance
      */
-    public function __construct(& $globals, $configManager)
+    public function __construct(& $globals, $configManager, $sessionManager)
     {
         $this->globals = &$globals;
         $this->configManager = $configManager;
+        $this->sessionManager = $sessionManager;
         $this->banFile = $this->configManager->get('resource.ban_file', 'data/ipbans.php');
         $this->readBanFile();
+        if ($this->configManager->get('security.open_shaarli')) {
+            $this->openShaarli = true;
+        }
+    }
+
+    /**
+     * Check user session state and validity (expiration)
+     *
+     * @param array  $server  The $_SERVER array
+     * @param array  $session The $_SESSION array (reference)
+     * @param array  $cookie  The $_COOKIE array
+     * @param string $webPath Path on the server in which the cookie will be available on
+     * @param string $token   Session token
+     *
+     * @return bool true if the user session is valid, false otherwise
+     */
+    public function checkLoginState($server, & $session, $cookie, $webPath, $token)
+    {
+        if (! $this->configManager->exists('credentials.login')) {
+            // Shaarli is not configured yet
+            $this->isLoggedIn = false;
+            return;
+        }
+
+        if (isset($cookie[SessionManager::$LOGGED_IN_COOKIE])
+            && $cookie[SessionManager::$LOGGED_IN_COOKIE] === $token
+        ) {
+            $this->sessionManager->storeLoginInfo($server);
+            $this->isLoggedIn = true;
+        }
+
+        // Logout when:
+        // - the session does not exist on the server side
+        // - the session has expired
+        // - the client IP address has changed
+        if (empty($session['uid'])
+            || ($this->configManager->get('security.session_protection_disabled') === false
+                && $session['ip'] != client_ip_id($server))
+            || time() >= $session['expires_on']
+        ) {
+            $this->sessionManager->logout($webPath);
+            $this->isLoggedIn = false;
+            return;
+        }
+
+        // Extend session validity
+        if (! empty($session['longlastingsession'])) {
+            // "Stay signed in" is enabled
+            $session['expires_on'] = time() + $session['longlastingsession'];
+        } else {
+            $session['expires_on'] = time() + SessionManager::$INACTIVITY_TIMEOUT;
+        }
+    }
+
+    /**
+     * Return whether the user is currently logged in
+     *
+     * @return true when the user is logged in, false otherwise
+     */
+    public function isLoggedIn()
+    {
+        if ($this->openShaarli) {
+            return true;
+        }
+        return $this->isLoggedIn;
+    }
+
+    /**
+     * Check user credentials are valid
+     *
+     * @param array  $server   The $_SERVER array
+     * @param string $login    Username
+     * @param string $password Password
+     *
+     * @return bool true if the provided credentials are valid, false otherwise
+     */
+    public function checkCredentials($server, $login, $password)
+    {
+        $hash = sha1($password . $login . $this->configManager->get('credentials.salt'));
+
+        if ($login != $this->configManager->get('credentials.login')
+            || $hash != $this->configManager->get('credentials.hash')
+        ) {
+            logm(
+                $this->configManager->get('resource.log'),
+                $server['REMOTE_ADDR'],
+                'Login failed for user ' . $login
+            );
+            return false;
+        }
+
+        $this->sessionManager->storeLoginInfo($server);
+        logm(
+            $this->configManager->get('resource.log'),
+            $server['REMOTE_ADDR'],
+            'Login successful'
+        );
+        return true;
     }
 
     /**

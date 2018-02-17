@@ -38,7 +38,7 @@ class LoginManagerTest extends TestCase
         $this->globals = &$GLOBALS;
         unset($this->globals['IPBANS']);
 
-        $this->loginManager = new LoginManager($this->globals, $this->configManager);
+        $this->loginManager = new LoginManager($this->globals, $this->configManager, null);
         $this->server['REMOTE_ADDR'] = $this->ipAddr;
     }
 
@@ -59,7 +59,7 @@ class LoginManagerTest extends TestCase
             $this->banFile,
             "<?php\n\$GLOBALS['IPBANS']=array('FAILURES' => array('127.0.0.1' => 99));\n?>"
         );
-        new LoginManager($this->globals, $this->configManager);
+        new LoginManager($this->globals, $this->configManager, null);
         $this->assertEquals(99, $this->globals['IPBANS']['FAILURES']['127.0.0.1']);
     }
 
