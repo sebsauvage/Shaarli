@@ -192,7 +192,7 @@ authors:
 ### generate Doxygen documentation
 doxygen: clean
 	@rm -rf doxygen
-	@( cat Doxyfile ; echo "PROJECT_NUMBER=`git describe`" ) | doxygen -
+	@doxygen Doxyfile
 
 ### generate HTML documentation from Markdown pages with MkDocs
 htmldoc:

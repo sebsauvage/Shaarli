@@ -804,6 +804,7 @@ RECURSIVE              = YES
 # run.
 
 EXCLUDE                = vendor \
+                         data \
                          tpl \
                          inc \
                          doc \
