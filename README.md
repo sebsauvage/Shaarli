@@ -6,7 +6,7 @@ _Do you want to share the links you discover?_
 _Shaarli is a minimalist link sharing service that you can install on your own server._
 _It is designed to be personal (single-user), fast and handy._
 
-[![](https://img.shields.io/badge/stable-v0.8.5-blue.svg)](https://github.com/shaarli/Shaarli/releases/tag/v0.8.5)
+[![](https://img.shields.io/badge/stable-v0.8.6-blue.svg)](https://github.com/shaarli/Shaarli/releases/tag/v0.8.6)
 [![](https://img.shields.io/travis/shaarli/Shaarli/stable.svg?label=stable)](https://travis-ci.org/shaarli/Shaarli)
 &bull;
 [![](https://img.shields.io/badge/latest-v0.9.5-blue.svg)](https://github.com/shaarli/Shaarli/releases/tag/v0.9.5)
