@@ -1,32 +1,30 @@
-window.onload = function () {
-    var continent = document.getElementById('continent');
-    var city = document.getElementById('city');
-    if (continent != null && city != null) {
-        continent.addEventListener('change', function(event) {
-            hideTimezoneCities(city, continent.options[continent.selectedIndex].value, true);
-        });
-        hideTimezoneCities(city, continent.options[continent.selectedIndex].value, false);
-    }
-};
+import Awesomplete from 'awesomplete';
+import 'awesomplete/awesomplete.css';
 
-/**
- * Add the class 'hidden' to city options not attached to the current selected continent.
- *
- * @param cities           List of <option> elements
- * @param currentContinent Current selected continent
- * @param reset            Set to true to reset the selected value
- */
-function hideTimezoneCities(cities, currentContinent, reset = false) {
-    var first = true;
-    [].forEach.call(cities, function(option) {
-        if (option.getAttribute('data-continent') != currentContinent) {
-            option.className = 'hidden';
-        } else {
-            option.className = '';
-            if (reset === true && first === true) {
-                option.setAttribute('selected', 'selected');
-                first = false;
-            }
+(() => {
+  const awp = Awesomplete.$;
+  const autocompleteFields = document.querySelectorAll('input[data-multiple]');
+  [...autocompleteFields].forEach((autocompleteField) => {
+    const awesomplete = new Awesomplete(awp(autocompleteField));
+    awesomplete.filter = (text, input) => Awesomplete.FILTER_CONTAINS(text, input.match(/[^ ]*$/)[0]);
+    awesomplete.replace = (text) => {
+      const before = awesomplete.input.value.match(/^.+ \s*|/)[0];
+      awesomplete.input.value = `${before}${text} `;
+    };
+    awesomplete.minChars = 1;
+
+    autocompleteField.addEventListener('input', () => {
+      const proposedTags = autocompleteField.getAttribute('data-list').replace(/,/g, '').split(' ');
+      const reg = /(\w+) /g;
+      let match;
+      while ((match = reg.exec(autocompleteField.value)) !== null) {
+        const id = proposedTags.indexOf(match[1]);
+        if (id !== -1) {
+          proposedTags.splice(id, 1);
         }
+      }
+
+      awesomplete.list = proposedTags;
     });
-}
+  });
+})();
