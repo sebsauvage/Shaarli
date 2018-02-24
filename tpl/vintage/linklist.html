@@ -22,7 +22,7 @@
                 {if="!empty($search_tags)"}
                     value="{$search_tags}"
                 {/if}
-                autocomplete="off" class="awesomplete" data-multiple data-minChars="1"
+                autocomplete="off" data-multiple data-minChars="1"
                 data-list="{loop="$tags"}{$key}, {/loop}"
             >
             <input type="submit" value="Search" class="bigbutton">
@@ -86,13 +86,13 @@
                     <div class="linkeditbuttons">
                         <form method="GET" class="buttoneditform">
                             <input type="hidden" name="edit_link" value="{$value.id}">
-                            <input type="image" alt="Edit" src="images/edit_icon.png#" title="Edit" class="button_edit">
+                            <input type="image" alt="Edit" src="img/edit_icon.png" title="Edit" class="button_edit">
                         </form><br>
                         <form method="GET" class="buttoneditform">
                             <input type="hidden" name="lf_linkdate" value="{$value.id}">
                             <input type="hidden" name="token" value="{$token}">
                             <input type="hidden" name="delete_link">
-                            <input type="image" alt="Delete" src="images/delete_icon.png#" title="Delete"
+                            <input type="image" alt="Delete" src="img/delete_icon.png" title="Delete"
                                    class="button_delete" onClick="return confirmDeleteLink();">
                         </form>
                     </div>
@@ -146,10 +146,5 @@
 
     {include="page.footer"}
 
-<script src="inc/awesomplete.min.js#"></script>
-<script src="inc/awesomplete-multiple-tags.js#"></script>
-<script>
-    awesompleteUniqueTag('#tagfilter_value');
-</script>
 </body>
 </html>

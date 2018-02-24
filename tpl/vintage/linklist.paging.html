@@ -1,11 +1,11 @@
 <div class="paging">
 {if="isLoggedIn()"}
     <div class="paging_privatelinks">
-        <a href="?visibility=private">
+      <a href="?visibility=private">
 		{if="$visibility=='private'"}
-		<img src="images/private_16x16_active.png#" width="16" height="16" title="Filter links by visibility" alt="Filter links by visibility">
-		{else}
-		<img src="images/private_16x16.png#" width="16" height="16" title="Filter links by visibility" alt="Filter links by visibility">
+      <img src="img/private_16x16_active.png" width="16" height="16" title="Click to see all links" alt="Click to see all links">
+    {else}
+      <img src="img/private_16x16.png" width="16" height="16" title="Click to see only private links" alt="Click to see only private links">
 		{/if}
 		</a>
 
