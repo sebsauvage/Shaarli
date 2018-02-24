@@ -573,6 +573,7 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager)
         $pageBuilder->assign($key, $value);
     }
 
+    $pageBuilder->assign('pagetitle', t('Daily') .' - '. $conf->get('general.title', 'Shaarli'));
     $pageBuilder->renderPage('daily');
     exit;
 }
@@ -677,6 +678,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         // add default state of the 'remember me' checkbox
         $PAGE->assign('remember_user_default', $conf->get('privacy.remember_user_default'));
         $PAGE->assign('user_can_login', $loginManager->canLogin($_SERVER));
+        $PAGE->assign('pagetitle', t('Login') .' - '. $conf->get('general.title', 'Shaarli'));
         $PAGE->renderPage('loginform');
         exit;
     }
@@ -717,6 +719,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign($key, $value);
         }
 
+        $PAGE->assign('pagetitle', t('Picture wall') .' - '. $conf->get('general.title', 'Shaarli'));
         $PAGE->renderPage('picwall');
         exit;
     }
@@ -752,8 +755,9 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             );
         }
 
+        $searchTags = implode(' ', escape($filteringTags));
         $data = array(
-            'search_tags' => implode(' ', escape($filteringTags)),
+            'search_tags' => $searchTags,
             'tags' => $tagList,
         );
         $pluginManager->executeHooks('render_tagcloud', $data, array('loggedin' => isLoggedIn()));
@@ -762,6 +766,8 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign($key, $value);
         }
 
+        $searchTags = ! empty($searchTags) ? $searchTags .' - ' : '';
+        $PAGE->assign('pagetitle', $searchTags. t('Tag cloud') .' - '. $conf->get('general.title', 'Shaarli'));
         $PAGE->renderPage('tag.cloud');
         exit;
     }
@@ -782,8 +788,9 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             alphabetical_sort($tags, false, true);
         }
 
+        $searchTags = implode(' ', escape($filteringTags));
         $data = [
-            'search_tags' => implode(' ', escape($filteringTags)),
+            'search_tags' => $searchTags,
             'tags' => $tags,
         ];
         $pluginManager->executeHooks('render_taglist', $data, ['loggedin' => isLoggedIn()]);
@@ -792,6 +799,8 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign($key, $value);
         }
 
+        $searchTags = ! empty($searchTags) ? $searchTags .' - ' : '';
+        $PAGE->assign('pagetitle', $searchTags . t('Tag list') .' - '. $conf->get('general.title', 'Shaarli'));
         $PAGE->renderPage('tag.list');
         exit;
     }
@@ -1016,6 +1025,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign($key, $value);
         }
 
+        $PAGE->assign('pagetitle', t('Tools') .' - '. $conf->get('general.title', 'Shaarli'));
         $PAGE->renderPage('tools');
         exit;
     }
@@ -1059,6 +1069,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         }
         else // show the change password form.
         {
+            $PAGE->assign('pagetitle', t('Change password') .' - '. $conf->get('general.title', 'Shaarli'));
             $PAGE->renderPage('changepassword');
             exit;
         }
@@ -1131,6 +1142,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign('api_secret', $conf->get('api.secret'));
             $PAGE->assign('languages', Languages::getAvailableLanguages());
             $PAGE->assign('language', $conf->get('translation.language'));
+            $PAGE->assign('pagetitle', t('Configure') .' - '. $conf->get('general.title', 'Shaarli'));
             $PAGE->renderPage('configure');
             exit;
         }
@@ -1141,6 +1153,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     {
         if (empty($_POST['fromtag']) || (empty($_POST['totag']) && isset($_POST['renametag']))) {
             $PAGE->assign('fromtag', ! empty($_GET['fromtag']) ? escape($_GET['fromtag']) : '');
+            $PAGE->assign('pagetitle', t('Manage tags') .' - '. $conf->get('general.title', 'Shaarli'));
             $PAGE->renderPage('changetag');
             exit;
         }
@@ -1167,6 +1180,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     // -------- User wants to add a link without using the bookmarklet: Show form.
     if ($targetPage == Router::$PAGE_ADDLINK)
     {
+        $PAGE->assign('pagetitle', t('Shaare a new link') .' - '. $conf->get('general.title', 'Shaarli'));
         $PAGE->renderPage('addlink');
         exit;
     }
@@ -1336,6 +1350,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign($key, $value);
         }
 
+        $PAGE->assign('pagetitle', t('Edit') .' '. t('Shaare') .' - '. $conf->get('general.title', 'Shaarli'));
         $PAGE->renderPage('editlink');
         exit;
     }
@@ -1400,6 +1415,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign($key, $value);
         }
 
+        $PAGE->assign('pagetitle', t('Shaare') .' - '. $conf->get('general.title', 'Shaarli'));
         $PAGE->renderPage('editlink');
         exit;
     }
@@ -1408,6 +1424,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         // Export links as a Netscape Bookmarks file
 
         if (empty($_GET['selection'])) {
+            $PAGE->assign('pagetitle', t('Export') .' - '. $conf->get('general.title', 'Shaarli'));
             $PAGE->renderPage('export');
             exit;
         }
@@ -1469,6 +1486,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
                     true
                 )
             );
+            $PAGE->assign('pagetitle', t('Import') .' - '. $conf->get('general.title', 'Shaarli'));
             $PAGE->renderPage('import');
             exit;
         }
@@ -1517,6 +1535,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
 
         $PAGE->assign('enabledPlugins', $enabledPlugins);
         $PAGE->assign('disabledPlugins', $disabledPlugins);
+        $PAGE->assign('pagetitle', t('Plugin administration') .' - '. $conf->get('general.title', 'Shaarli'));
         $PAGE->renderPage('pluginsadmin');
         exit;
     }
@@ -1680,6 +1699,16 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
     // If there is only a single link, we change on-the-fly the title of the page.
     if (count($linksToDisplay) == 1) {
         $data['pagetitle'] = $linksToDisplay[$keys[0]]['title'] .' - '. $conf->get('general.title');
+    } elseif (! empty($searchterm) || ! empty($searchtags)) {
+        $data['pagetitle'] = t('Search: ');
+        $data['pagetitle'] .= ! empty($searchterm) ? $searchterm .' ' : '';
+        $bracketWrap = function ($tag) {
+            return '['. $tag .']';
+        };
+        $data['pagetitle'] .= ! empty($searchtags)
+            ? implode(' ', array_map($bracketWrap, preg_split('/\s+/', $searchtags))).' '
+            : '';
+        $data['pagetitle'] .= '- '. $conf->get('general.title');
     }
 
     $pluginManager->executeHooks('render_linklist', $data, array('loggedin' => isLoggedIn()));
