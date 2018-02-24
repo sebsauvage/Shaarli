@@ -22,11 +22,13 @@
   Error: {$versionError}
 </div>
 {/if}
+
+<script src="js/shaarli.min.js"></script>
+
 {if="isLoggedIn()"}
 <script>function confirmDeleteLink() { var agree=confirm("Are you sure you want to delete this link ?"); if (agree) return true ; else return false ; }</script>
 {/if}
 
-<script src="js/shaarli.js"></script>
 {loop="$plugins_footer.js_files"}
 	<script src="{$value}#"></script>
 {/loop}
