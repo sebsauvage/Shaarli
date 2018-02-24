@@ -18,12 +18,18 @@ Here is the directory structure of Shaarli and the purpose of the different file
 		├── utils    # utilities to ease testing
 		│   └── ReferenceLinkDB.php
 		└── UtilsTest.php
+	assets/
+	    ├── common/                # Assets shared by multiple themes
+	        ├── ...
+        ├── default/               # Assets for the default template, before compilation
+            ├── fonts/                  # Font files
+            ├── img/                    # Images used by the default theme
+            ├── js/                     # JavaScript files in ES6 syntax
+            ├── scss/                   # SASS files
+        └── vintage/               # Assets for the vintage template, before compilation
+            └── ...
     COPYING          # Shaarli license
     inc/             # static assets and 3rd party libraries
-    	├── awesomplete.*          # tags autocompletion library
-    	├── blazy.*                # picture wall lazy image loading library
-        ├── shaarli.css, reset.css # Shaarli stylesheet.
-        ├── qr.*                   # qr code generation library
         └── rain.tpl.class.php     # RainTPL templating library
     images/          # Images and icons used in Shaarli
     data/            # data storage: bookmark database, configuration, logs, banlist...
@@ -33,6 +39,13 @@ Here is the directory structure of Shaarli and the purpose of the different file
         ├── lastupdatecheck.txt    # Update check timestamp file
         └── log.txt                # login/IPban log.
     tpl/             # RainTPL templates for Shaarli. They are used to build the pages.
+        ├── default/               # Default Shaarli theme
+            ├── fonts/                  # Font files
+            ├── img/                    # Images
+            ├── js/                     # JavaScript files compiled by Babel and compatible with all browsers
+            ├── css/                    # CSS files compiled with SASS
+        └── vintage/               # Legacy Shaarli theme
+            └── ...
     cache/           # thumbnails cache
                      # This directory is automatically created. You can erase it anytime you want.
     tmp/             # Temporary directory for compiled RainTPL templates.
