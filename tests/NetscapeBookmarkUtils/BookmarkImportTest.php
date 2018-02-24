@@ -127,6 +127,21 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Attempt to import bookmarks from a file with a lowercase Doctype
+     */
+    public function testImportLowecaseDoctype()
+    {
+        $files = file2array('lowercase_doctype.htm');
+        $this->assertStringMatchesFormat(
+            'File lowercase_doctype.htm (386 bytes) was successfully processed in %d seconds:'
+            .' 2 links imported, 0 links overwritten, 0 links skipped.',
+            NetscapeBookmarkUtils::import(null, $files, $this->linkDb, $this->conf, $this->history)
+        );
+        $this->assertEquals(2, count($this->linkDb));
+    }
+
+
+    /**
      * Ensure IE dumps are supported
      */
     public function testImportInternetExplorerEncoding()

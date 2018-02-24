@@ -108,7 +108,7 @@ class NetscapeBookmarkUtils
         $filesize = $files['filetoupload']['size'];
         $data = file_get_contents($files['filetoupload']['tmp_name']);
 
-        if (strpos($data, '<!DOCTYPE NETSCAPE-Bookmark-file-1>') === false) {
+        if (preg_match('/<!DOCTYPE NETSCAPE-Bookmark-file-1>/i', $data) === 0) {
             return self::importStatus($filename, $filesize);
         }
 
@@ -160,7 +160,7 @@ class NetscapeBookmarkUtils
             } else if ($post['privacy'] == 'public') {
                 // all imported links are public
                 $private = 0;
-            }                
+            }
 
             $newLink = array(
                 'title' => $bkm['title'],
