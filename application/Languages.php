@@ -98,6 +98,12 @@ class Languages
         $this->translator->setLanguage($this->language);
         $this->translator->loadDomain(self::DEFAULT_DOMAIN, 'inc/languages');
 
+        // Default extension translation from the current theme
+        $themeTransFolder = rtrim($this->conf->get('raintpl_tpl'), '/') .'/'. $this->conf->get('theme') .'/language';
+        if (is_dir($themeTransFolder)) {
+            $this->translator->loadDomain($this->conf->get('theme'), $themeTransFolder, false);
+        }
+
         foreach ($this->conf->get('translation.extensions', []) as $domain => $translationPath) {
             if ($domain !== self::DEFAULT_DOMAIN) {
                 $this->translator->loadDomain($domain, $translationPath, false);
@@ -116,12 +122,23 @@ class Languages
         $translations = new Translations();
         // Core translations
         try {
-            /** @var Translations $translations */
             $translations = $translations->addFromPoFile('inc/languages/'. $this->language .'/LC_MESSAGES/shaarli.po');
             $translations->setDomain('shaarli');
             $this->translator->loadTranslations($translations);
         } catch (\InvalidArgumentException $e) {}
 
+        // Default extension translation from the current theme
+        $theme = $this->conf->get('theme');
+        $themeTransFolder = rtrim($this->conf->get('raintpl_tpl'), '/') .'/'. $theme .'/language';
+        if (is_dir($themeTransFolder)) {
+            try {
+                $translations = Translations::fromPoFile(
+                    $themeTransFolder .'/'. $this->language .'/LC_MESSAGES/'. $theme .'.po'
+                );
+                $translations->setDomain($theme);
+                $this->translator->loadTranslations($translations);
+            } catch (\InvalidArgumentException $e) {}
+        }
 
         // Extension translations (plugins, themes, etc.).
         foreach ($this->conf->get('translation.extensions', []) as $domain => $translationPath) {
@@ -130,7 +147,6 @@ class Languages
             }
 
             try {
-                /** @var Translations $extension */
                 $extension = Translations::fromPoFile($translationPath . $this->language .'/LC_MESSAGES/'. $domain .'.po');
                 $extension->setDomain($domain);
                 $this->translator->loadTranslations($extension);

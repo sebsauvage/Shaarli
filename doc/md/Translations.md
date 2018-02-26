@@ -76,6 +76,18 @@ Then click on the "Update" button, and you can start to translate every availabl
 
 Save when you're done, then you can submit a pull request containing the new `shaarli.po`.
 
+### Theme translations 
+
+Theme translation extensions are loaded automatically if they're present.
+
+As a theme developer, all you have to do is to add the `.po` and `.mo` compiled file like this:
+
+    tpl/<theme name>/language/<lang>/LC_MESSAGES/<theme name>.po
+    tpl/<theme name>/language/<lang>/LC_MESSAGES/<theme name>.mo
+
+Where `<lang>` is the ISO 3166-1 alpha-2 language code. 
+Read the following section "Extend Shaarli's translation" to learn how to generate those files.
+
 ### Extend Shaarli's translation
 
 If you're writing a custom theme, or a non official plugin, you might want to use the translation system,
