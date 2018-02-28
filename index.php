@@ -1376,7 +1376,12 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             if (empty($title) && strpos(get_url_scheme($url), 'http') !== false) {
                 // Short timeout to keep the application responsive
                 // The callback will fill $charset and $title with data from the downloaded page.
-                get_http_response($url, 25, 4194304, get_curl_download_callback($charset, $title));
+                get_http_response(
+                    $url,
+                    $conf->get('general.download_max_size', 4194304),
+                    $conf->get('general.download_timeout', 30),
+                    get_curl_download_callback($charset, $title)
+                );
                 if (! empty($title) && strtolower($charset) != 'utf-8') {
                     $title = mb_convert_encoding($title, 'utf-8', $charset);
                 }
