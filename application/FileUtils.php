@@ -37,7 +37,7 @@ class FileUtils
         if (is_file($file) && !is_writeable($file)) {
             // The datastore exists but is not writeable
             throw new IOException($file);
-        } else if (!is_file($file) && !is_writeable(dirname($file))) {
+        } elseif (!is_file($file) && !is_writeable(dirname($file))) {
             // The datastore does not exist and its parent directory is not writeable
             throw new IOException(dirname($file));
         }
