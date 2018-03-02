@@ -42,7 +42,9 @@ RUN rm -rf /etc/php7/php-fpm.d/www.conf \
 WORKDIR /var/www
 COPY --from=composer /app/shaarli shaarli
 
+RUN chown -R nginx:nginx .
 VOLUME /var/www/shaarli/data
+
 EXPOSE 80
 
 ENTRYPOINT ["/bin/s6-svscan", "/etc/services.d"]
