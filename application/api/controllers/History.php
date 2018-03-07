@@ -36,7 +36,7 @@ class History extends ApiController
         if (empty($offset)) {
             $offset = 0;
         }
-        else if (ctype_digit($offset)) {
+        elseif (ctype_digit($offset)) {
             $offset = (int) $offset;
         } else {
             throw new ApiBadParametersException('Invalid offset');
@@ -46,7 +46,7 @@ class History extends ApiController
         $limit = $request->getParam('limit');
         if (empty($limit)) {
             $limit = count($history);
-        } else if (ctype_digit($limit)) {
+        } elseif (ctype_digit($limit)) {
             $limit = (int) $limit;
         } else {
             throw new ApiBadParametersException('Invalid limit');

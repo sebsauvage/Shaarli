@@ -887,7 +887,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         if (empty($params['searchtags'])) {
             $params['searchtags'] = trim($_GET['addtag']);
         }
-        else if ($addtag) {
+        elseif ($addtag) {
             $params['searchtags'] = trim($params['searchtags']).' '.trim($_GET['addtag']);
         }
 
@@ -953,7 +953,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             } else {
                 unset($_SESSION['visibility']);
             }
-        } else if ($_GET['visibility'] === 'public') {
+        } elseif ($_GET['visibility'] === 'public') {
             if (empty($_SESSION['visibility']) || $_SESSION['visibility'] !== 'public') {
                 // See only public links
                 $_SESSION['visibility'] = 'public';

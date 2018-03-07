@@ -117,7 +117,7 @@ class LinkFilter
         foreach ($this->links as $key => $value) {
             if ($value['private'] && $visibility === 'private') {
                 $out[$key] = $value;
-            } else if (! $value['private'] && $visibility === 'public') {
+            } elseif (! $value['private'] && $visibility === 'public') {
                 $out[$key] = $value;
             }
         }
@@ -210,7 +210,7 @@ class LinkFilter
             if ($visibility !== 'all') {
                 if (! $link['private'] && $visibility === 'private') {
                     continue;
-                } else if ($link['private'] && $visibility === 'public') {
+                } elseif ($link['private'] && $visibility === 'public') {
                     continue;
                 }
             }
@@ -337,7 +337,7 @@ class LinkFilter
             if ($visibility !== 'all') {
                 if (! $link['private'] && $visibility === 'private') {
                     continue;
-                } else if ($link['private'] && $visibility === 'public') {
+                } elseif ($link['private'] && $visibility === 'public') {
                     continue;
                 }
             }
@@ -380,7 +380,7 @@ class LinkFilter
             if ($visibility !== 'all') {
                 if (! $link['private'] && $visibility === 'private') {
                     continue;
-                } else if ($link['private'] && $visibility === 'public') {
+                } elseif ($link['private'] && $visibility === 'public') {
                     continue;
                 }
             }

@@ -59,9 +59,9 @@ class Links extends ApiController
         $limit = $request->getParam('limit');
         if (empty($limit)) {
             $limit = self::$DEFAULT_LIMIT;
-        } else if (ctype_digit($limit)) {
+        } elseif (ctype_digit($limit)) {
             $limit = intval($limit);
-        } else if ($limit === 'all') {
+        } elseif ($limit === 'all') {
             $limit = count($links);
         } else {
             throw new ApiBadParametersException('Invalid limit');
