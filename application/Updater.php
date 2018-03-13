@@ -457,6 +457,32 @@ class Updater
         }
         return true;
     }
+
+    /**
+     * Add download size and timeout to the configuration file
+     *
+     * @return bool true if the update is successful, false otherwise.
+     */
+    public function updateMethodDownloadSizeAndTimeoutConf()
+    {
+        if ($this->conf->exists('general.download_max_size')
+            && $this->conf->exists('general.download_timeout')
+        ) {
+            return true;
+        }
+
+        if (! $this->conf->exists('general.download_max_size')) {
+            $this->conf->set('general.download_max_size', 1024*1024*4);
+        }
+
+        if (! $this->conf->exists('general.download_timeout')) {
+            $this->conf->set('general.download_timeout', 30);
+        }
+
+        $this->conf->write($this->isLoggedIn);
+
+        return true;
+    }
 }
 
 /**
