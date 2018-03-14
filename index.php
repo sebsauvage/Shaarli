@@ -1093,7 +1093,6 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $conf->set('general.title', escape($_POST['title']));
             $conf->set('general.header_link', escape($_POST['titleLink']));
             $conf->set('resource.theme', escape($_POST['theme']));
-            $conf->set('redirector.url', escape($_POST['redirector']));
             $conf->set('security.session_protection_disabled', !empty($_POST['disablesessionprotection']));
             $conf->set('privacy.default_private_links', !empty($_POST['privateLinkByDefault']));
             $conf->set('feed.rss_permalinks', !empty($_POST['enableRssPermalinks']));
@@ -1126,7 +1125,6 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign('title', $conf->get('general.title'));
             $PAGE->assign('theme', $conf->get('resource.theme'));
             $PAGE->assign('theme_available', ThemeUtils::getThemes($conf->get('resource.raintpl_tpl')));
-            $PAGE->assign('redirector', $conf->get('redirector.url'));
             list($continents, $cities) = generateTimeZoneData(
                 timezone_identifiers_list(),
                 $conf->get('general.timezone')
