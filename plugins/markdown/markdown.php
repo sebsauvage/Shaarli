@@ -288,7 +288,7 @@ function sanitize_html($description)
             $description);
     }
     $description = preg_replace(
-        '#(<[^>]+)on[a-z]*="?[^ "]*"?#is',
+        '#(<[^>]+\s)on[a-z]*="?[^ "]*"?#is',
         '$1',
         $description);
     return $description;
