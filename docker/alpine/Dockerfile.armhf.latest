@@ -37,7 +37,9 @@ RUN curl -L https://github.com/shaarli/Shaarli/archive/latest.tar.gz | tar xzf -
     && cd shaarli \
     && composer --prefer-dist --no-dev install \
     && rm -rf ~/.composer \
-    && chown -R nginx:nginx .
+    && chown -R nginx:nginx . \
+    && ln -sf /dev/stdout /var/log/nginx/shaarli.access.log \
+    && ln -sf /dev/stderr /var/log/nginx/shaarli.error.log
 
 VOLUME /var/www/shaarli/data
 
