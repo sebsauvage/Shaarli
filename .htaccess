@@ -6,6 +6,10 @@ RewriteEngine On
 # Prevent accessing subdirectories not managed by SCM
 RewriteRule ^(.git|doxygen|vendor) - [F]
 
+# Forward the "Authorization" HTTP header
+RewriteCond %{HTTP:Authorization} ^(.*)
+RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+
 # REST API
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
