@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v0.10.0](https://github.com/shaarli/Shaarli/releases/tag/v0.10.0) - UNPUBLISHED
 
+
+## [v0.9.6](https://github.com/shaarli/Shaarli/releases/tag/v0.9.6) - 2018-03-25
+## Changed
+- htaccess: prevent accessing resources not managed by SCM
+- htaccess: always forward the 'Authorization' HTTP header
+
+
 ## [v0.9.5](https://github.com/shaarli/Shaarli/releases/tag/v0.9.5) - 2018-02-02
 ### Fixed
 - Fix a warning happening when `php-intl` is not installed on the system
