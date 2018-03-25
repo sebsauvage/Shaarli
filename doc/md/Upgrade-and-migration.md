@@ -3,7 +3,7 @@
 ### Note your current version
 
 If anything goes wrong, it's important for us to know which version you're upgrading from.
-The current version is present in the `version.php` file.
+The current version is present in the `shaarli_version.php` file.
 
 ### Backup your data
 
