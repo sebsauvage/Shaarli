@@ -172,4 +172,30 @@ class LanguagesFrTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('voiture', t($txt, $txt, 1, 'test'));
         $this->assertEquals('Fouille', t('Search', 'Search', 1, 'test'));
     }
+
+    /**
+     * Test t() with an extension language file coming from the theme in gettext mode
+     */
+    public function testTranslationThemeExtensionGettext()
+    {
+        $this->conf->set('translation.mode', 'gettext');
+        $this->conf->set('raintpl_tpl', 'tests/utils/customtpl/');
+        $this->conf->set('theme', 'dummy');
+        new Languages('en', $this->conf);
+        $txt = 'rooster'; // ignore me poedit
+        $this->assertEquals('coq', t($txt, $txt, 1, 'dummy'));
+    }
+
+    /**
+     * Test t() with an extension language file coming from the theme in PHP mode
+     */
+    public function testTranslationThemeExtensionPhp()
+    {
+        $this->conf->set('translation.mode', 'php');
+        $this->conf->set('raintpl_tpl', 'tests/utils/customtpl/');
+        $this->conf->set('theme', 'dummy');
+        new Languages('en', $this->conf);
+        $txt = 'rooster'; // ignore me poedit
+        $this->assertEquals('coq', t($txt, $txt, 1, 'dummy'));
+    }
 }
