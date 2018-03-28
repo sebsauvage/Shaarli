@@ -38,12 +38,14 @@ $ mv Shaarli /path/to/shaarli/
 Cloning using `git` or downloading Github branches as zip files requires additional steps:
 
  * Install [Composer](Unit-tests.md#install_composer) to manage Shaarli dependencies.
+ * Install [yarn](https://yarnpkg.com/lang/en/docs/install/) to build the frontend dependencies.
  * Install [python3-virtualenv](https://pypi.python.org/pypi/virtualenv) to build the local HTML documentation.
 
 ```
 $ mkdir -p /path/to/shaarli && cd /path/to/shaarli/
 $ git clone -b latest https://github.com/shaarli/Shaarli.git .
 $ composer install --no-dev --prefer-dist
+$ make build_frontend
 $ make translate
 $ make htmldoc
 ```
@@ -91,7 +93,9 @@ $ composer install --no-dev --prefer-dist
 
 _Use at your own risk!_
 
-Install [Composer](Unit-tests.md#install_composer) to manage Shaarli dependencies.
+Install [Composer](Unit-tests.md#install_composer) to manage Shaarli PHP dependencies,
+and [yarn](https://yarnpkg.com/lang/en/docs/install/) 
+for front-end dependencies.
 
 To get the latest changes from the `master` branch:
 
@@ -101,6 +105,7 @@ $ git clone https://github.com/shaarli/Shaarli.git -b master /path/to/shaarli/
 # install/update third-party dependencies
 $ cd /path/to/shaarli
 $ composer install --no-dev --prefer-dist
+$ make build_frontend
 $ make translate
 $ make htmldoc
 ```

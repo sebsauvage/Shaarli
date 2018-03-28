@@ -10,7 +10,7 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 
-[*.{htaccess,html,xml}]
+[*.{htaccess,html,xml,js}]
 indent_size = 2
 
 [*.php]

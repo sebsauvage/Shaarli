@@ -83,6 +83,13 @@ $ make translate
 
 If you use translations in gettext mode, reload your web server.
 
+Shaarli >= `v0.10.0` manages its front-end dependencies with nodejs. You need to install 
+[yarn](https://yarnpkg.com/lang/en/docs/install/):
+
+```bash
+$ make build_frontend
+``` 
+
 ### Migrating and upgrading from Sebsauvage's repository
 
 If you have installed Shaarli from [Sebsauvage's original Git repository](https://github.com/sebsauvage/Shaarli), you can use [Git remotes](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes) to update your working copy.
@@ -169,6 +176,13 @@ $ make translate
 ```
 
 If you use translations in gettext mode, reload your web server.
+
+Shaarli >= `v0.10.0` manages its front-end dependencies with nodejs. You need to install 
+[yarn](https://yarnpkg.com/lang/en/docs/install/):
+
+```bash
+$ make build_frontend
+``` 
 
 Optionally, you can delete information related to the legacy version:
 
