@@ -35,6 +35,7 @@ pages:
     - Continuous integration tools: Continuous-integration-tools.md
     - GnuPG signature: GnuPG-signature.md
     - Directory structure: Directory-structure.md
+    - Link Structure: Link-structure.md
     - 3rd party libraries: 3rd-party-libraries.md
     - Plugin System: Plugin-System.md
     - Release Shaarli: Release-Shaarli.md
