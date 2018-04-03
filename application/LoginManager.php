@@ -6,11 +6,22 @@ namespace Shaarli;
  */
 class LoginManager
 {
+    /** @var array A reference to the $_GLOBALS array */
     protected $globals = [];
+
+    /** @var ConfigManager Configuration Manager instance **/
     protected $configManager = null;
+
+    /** @var SessionManager Session Manager instance **/
     protected $sessionManager = null;
+
+    /** @var string Path to the file containing IP bans */
     protected $banFile = '';
+
+    /** @var bool Whether the user is logged in **/
     protected $isLoggedIn = false;
+
+    /** @var bool Whether the Shaarli instance is open to public edition **/
     protected $openShaarli = false;
 
     /**
