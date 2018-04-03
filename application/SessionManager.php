@@ -1,21 +1,23 @@
 <?php
 namespace Shaarli;
 
+use Shaarli\Config\ConfigManager;
+
 /**
  * Manages the server-side session
  */
 class SessionManager
 {
-    /** Session expiration timeout, in seconds */
+    /** @var int Session expiration timeout, in seconds */
     public static $INACTIVITY_TIMEOUT = 3600;
 
-    /** Name of the cookie set after logging in **/
+    /** @var string Name of the cookie set after logging in **/
     public static $LOGGED_IN_COOKIE = 'shaarli_staySignedIn';
 
-    /** Local reference to the global $_SESSION array */
+    /** @var array Local reference to the global $_SESSION array */
     protected $session = [];
 
-    /** ConfigManager instance **/
+    /** @var ConfigManager Configuration Manager instance **/
     protected $conf = null;
 
     /**
@@ -94,14 +96,27 @@ class SessionManager
     /**
      * Store user login information after a successful login
      *
-     * @param array $server The global $_SERVER array
+     * @param string $clientIpId Client IP address identifier
      */
-    public function storeLoginInfo($server)
+    public function storeLoginInfo($clientIpId)
     {
         // Generate unique random number (different than phpsessionid)
         $this->session['uid'] = sha1(uniqid('', true) . '_' . mt_rand());
-        $this->session['ip'] = client_ip_id($server);
+        $this->session['ip'] = $clientIpId;
         $this->session['username'] = $this->conf->get('credentials.login');
+        $this->session['expires_on'] = time() + self::$INACTIVITY_TIMEOUT;
+    }
+
+    /**
+     * Extend session validity
+     */
+    public function extendSession()
+    {
+        if (! empty($this->session['longlastingsession'])) {
+            // "Stay signed in" is enabled
+            $this->session['expires_on'] = time() + $this->session['longlastingsession'];
+            return;
+        }
         $this->session['expires_on'] = time() + self::$INACTIVITY_TIMEOUT;
     }
 
@@ -123,5 +138,42 @@ class SessionManager
             unset($this->session['untaggedonly']);
         }
         setcookie(self::$LOGGED_IN_COOKIE, 'false', 0, $webPath);
+    }
+
+    /**
+     * Check whether the session has expired
+     *
+     * @param string $clientIpId Client IP address identifier
+     *
+     * @return bool true if the session has expired, false otherwise
+     */
+    public function hasSessionExpired()
+    {
+        if (empty($this->session['uid'])) {
+            return true;
+        }
+        if (time() >= $this->session['expires_on']) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check whether the client IP address has changed
+     *
+     * @param string $clientIpId Client IP address identifier
+     *
+     * @return bool true if the IP has changed, false if it has not, or
+     *              if session protection has been disabled
+     */
+    public function hasClientIpChanged($clientIpId)
+    {
+        if ($this->conf->get('security.session_protection_disabled') === true) {
+            return false;
+        }
+        if ($this->session['ip'] == $clientIpId) {
+            return false;
+        }
+        return true;
     }
 }

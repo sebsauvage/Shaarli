@@ -1,6 +1,8 @@
 <?php
 namespace Shaarli;
 
+use Shaarli\Config\ConfigManager;
+
 /**
  * User login management
  */
@@ -62,34 +64,24 @@ class LoginManager
             return;
         }
 
+        $clientIpId = client_ip_id($server);
+
         if (isset($cookie[SessionManager::$LOGGED_IN_COOKIE])
             && $cookie[SessionManager::$LOGGED_IN_COOKIE] === $token
         ) {
-            $this->sessionManager->storeLoginInfo($server);
+            $this->sessionManager->storeLoginInfo($clientIpId);
             $this->isLoggedIn = true;
         }
 
-        // Logout when:
-        // - the session does not exist on the server side
-        // - the session has expired
-        // - the client IP address has changed
-        if (empty($session['uid'])
-            || ($this->configManager->get('security.session_protection_disabled') === false
-                && $session['ip'] != client_ip_id($server))
-            || time() >= $session['expires_on']
+        if ($this->sessionManager->hasSessionExpired()
+            || $this->sessionManager->hasClientIpChanged($clientIpId)
         ) {
             $this->sessionManager->logout($webPath);
             $this->isLoggedIn = false;
             return;
         }
 
-        // Extend session validity
-        if (! empty($session['longlastingsession'])) {
-            // "Stay signed in" is enabled
-            $session['expires_on'] = time() + $session['longlastingsession'];
-        } else {
-            $session['expires_on'] = time() + SessionManager::$INACTIVITY_TIMEOUT;
-        }
+        $this->sessionManager->extendSession();
     }
 
     /**
@@ -129,7 +121,8 @@ class LoginManager
             return false;
         }
 
-        $this->sessionManager->storeLoginInfo($server);
+        $clientIpId = client_ip_id($server);
+        $this->sessionManager->storeLoginInfo($clientIpId);
         logm(
             $this->configManager->get('resource.log'),
             $server['REMOTE_ADDR'],
