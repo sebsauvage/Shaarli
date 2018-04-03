@@ -1,4 +1,8 @@
 {
+  "name": "shaarli",
+  "description": "Shaarli frontend",
+  "author": "The Shaarli Community",
+  "license": "Zlib",
   "dependencies": {
     "awesomplete": "^1.1.2",
     "blazy": "^1.8.2",
