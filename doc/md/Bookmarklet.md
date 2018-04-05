@@ -13,8 +13,8 @@ _This bookmarklet button is compatible with Firefox, Opera, Chrome and Safari. U
 - When you are visiting a webpage you would like to share with Shaarli, click the _bookmarklet_ you just added.
 - A window opens.
     - You can freely edit title, description, tags... to find it later using the text search or tag filtering.
-    - You will be able to edit this link later using the ![](https://raw.githubusercontent.com/shaarli/Shaarli/master/images/edit_icon.png) edit button.
-    - You can also check the “Private” box so that the link is saved but only visible to you. 
+    - You will be able to edit this link later using the ![](images/edit_icon.png) edit button.
+    - You can also check the “Private” box so that the link is saved but only visible to you.
 - Click `Save`.**Voilà! Your link is now shared.**
 
 ## Troubleshooting: The bookmarklet doesn't work with a few websites (e.g. Github.com)
