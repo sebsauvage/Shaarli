@@ -249,8 +249,12 @@
               <span class="label-name">{'Enable thumbnails'|t}</span><br>
               <span class="label-desc">
                 {'Warning: '|t}
-                {'It\'s recommended to visit the picture wall after enabling this feature.'|t}
-                {'If you have a large database, the first retrieval may take a few minutes.'|t}
+                {if="$gd_enabled"}
+                  {'It\'s recommended to visit the picture wall after enabling this feature.'|t}
+                  {'If you have a large database, the first retrieval may take a few minutes.'|t}
+                {else}
+                  {'You need to enable the extension <code>php-gd</code> to use thumbnails.'|t}
+                {/if}
               </span>
             </label>
           </div>
@@ -258,7 +262,7 @@
         <div class="pure-u-lg-{$ratioInput} pure-u-{$ratioInputMobile}">
           <div class="form-input">
             <input type="checkbox" name="enableThumbnails" id="enableThumbnails"
-                   {if="$thumbnails_enabled"}checked{/if}/>
+                   {if="$thumbnails_enabled"}checked{/if} {if="!$gd_enabled"}disabled{/if} />
           </div>
         </div>
       </div>

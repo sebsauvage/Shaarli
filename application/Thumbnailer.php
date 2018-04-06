@@ -32,6 +32,14 @@ class Thumbnailer
     public function __construct($conf)
     {
         $this->conf = $conf;
+
+        if (! $this->checkRequirements()) {
+            $this->conf->set('thumbnails.enabled', false);
+            $this->conf->write(true);
+            // TODO: create a proper error handling system able to catch exceptions...
+            die(t('php-gd extension must be loaded to use thumbnails. Thumbnails are now disabled. Please reload the page.'));
+        }
+
         $this->wt = new WebThumbnailer();
         WTConfigManager::addFile('inc/web-thumbnailer.json');
         $this->wt->maxWidth($this->conf->get('thumbnails.width'))
@@ -56,5 +64,14 @@ class Thumbnailer
             error_log(get_class($e) .': '. $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Make sure that requirements are match to use thumbnails:
+     *   - php-gd is loaded
+     */
+    protected function checkRequirements()
+    {
+        return extension_loaded('gd');
     }
 }

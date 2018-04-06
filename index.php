@@ -1036,7 +1036,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $conf->set('api.enabled', !empty($_POST['enableApi']));
             $conf->set('api.secret', escape($_POST['apiSecret']));
             $conf->set('translation.language', escape($_POST['language']));
-            $conf->set('thumbnails.enabled', !empty($_POST['enableThumbnails']));
+            $conf->set('thumbnails.enabled', extension_loaded('gd') && !empty($_POST['enableThumbnails']));
 
             try {
                 $conf->write($loginManager->isLoggedIn());
@@ -1076,6 +1076,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign('api_secret', $conf->get('api.secret'));
             $PAGE->assign('languages', Languages::getAvailableLanguages());
             $PAGE->assign('language', $conf->get('translation.language'));
+            $PAGE->assign('gd_enabled', extension_loaded('gd'));
             $PAGE->assign('pagetitle', t('Configure') .' - '. $conf->get('general.title', 'Shaarli'));
             $PAGE->renderPage('configure');
             exit;
@@ -1618,6 +1619,7 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
             $elem['thumbnail'] = $thumbnailer->get($link['url']);
             $LINKSDB[$keys[$i]] = $elem;
             $updateDB = true;
+            $link['thumbnail'] = $elem['thumbnail'];
         }
 
         // Check for both signs of a note: starting with ? and 7 chars long.

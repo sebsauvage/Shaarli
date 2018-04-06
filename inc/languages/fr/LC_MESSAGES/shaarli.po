@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2018-05-05 12:47+0200\n"
-"PO-Revision-Date: 2018-05-05 12:47+0200\n"
+"POT-Creation-Date: 2018-05-05 12:48+0200\n"
+"PO-Revision-Date: 2018-05-05 12:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -180,6 +180,14 @@ msgstr "404 Introuvable"
 msgid "Plugin \"%s\" files not found."
 msgstr "Les fichiers de l'extension \"%s\" sont introuvables."
 
+#: application/Thumbnailer.php:40
+msgid ""
+"php-gd extension must be loaded to use thumbnails. Thumbnails are now "
+"disabled. Please reload the page."
+msgstr ""
+"php-gd extension must be loaded to use thumbnails. Thumbnails are now "
+"disabled. Please reload the page."
+
 #: application/Updater.php:76
 msgid "Couldn't retrieve Updater class methods."
 msgstr "Impossible de récupérer les méthodes de la classe Updater."
@@ -311,7 +319,7 @@ msgid "You are not supposed to change a password on an Open Shaarli."
 msgstr ""
 "Vous n'êtes pas censé modifier le mot de passe d'un Shaarli en mode ouvert."
 
-#: index.php:1070 index.php:1112 index.php:1189 index.php:1220 index.php:1325
+#: index.php:1070 index.php:1112 index.php:1190 index.php:1221 index.php:1326
 msgid "Wrong token."
 msgstr "Jeton invalide."
 
@@ -333,56 +341,56 @@ msgstr "Modification du mot de passe"
 msgid "Configuration was saved."
 msgstr "La configuration a été sauvegardé."
 
-#: index.php:1172 tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
+#: index.php:1173 tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
 msgid "Configure"
 msgstr "Configurer"
 
-#: index.php:1183 tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
+#: index.php:1184 tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
 msgid "Manage tags"
 msgstr "Gérer les tags"
 
-#: index.php:1201
+#: index.php:1202
 #, php-format
 msgid "The tag was removed from %d link."
 msgid_plural "The tag was removed from %d links."
 msgstr[0] "Le tag a été supprimé de %d lien."
 msgstr[1] "Le tag a été supprimé de %d liens."
 
-#: index.php:1202
+#: index.php:1203
 #, php-format
 msgid "The tag was renamed in %d link."
 msgid_plural "The tag was renamed in %d links."
 msgstr[0] "Le tag a été renommé dans %d lien."
 msgstr[1] "Le tag a été renommé dans %d liens."
 
-#: index.php:1210 tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
+#: index.php:1211 tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
 msgid "Shaare a new link"
 msgstr "Partager un nouveau lien"
 
-#: index.php:1385 tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
+#: index.php:1386 tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
 msgid "Edit"
 msgstr "Modifier"
 
-#: index.php:1385 index.php:1455
+#: index.php:1386 index.php:1456
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:26
 msgid "Shaare"
 msgstr "Shaare"
 
-#: index.php:1424
+#: index.php:1425
 msgid "Note: "
 msgstr "Note : "
 
-#: index.php:1464 tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:65
+#: index.php:1465 tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:65
 msgid "Export"
 msgstr "Exporter"
 
-#: index.php:1526 tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:83
+#: index.php:1527 tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:83
 msgid "Import"
 msgstr "Importer"
 
-#: index.php:1536
+#: index.php:1537
 #, php-format
 msgid ""
 "The file you are trying to upload is probably bigger than what this "
@@ -392,16 +400,16 @@ msgstr ""
 "le serveur web peut accepter (%s). Merci de l'envoyer en parties plus "
 "légères."
 
-#: index.php:1575 tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
+#: index.php:1576 tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:22
 msgid "Plugin administration"
 msgstr "Administration des extensions"
 
-#: index.php:1759
+#: index.php:1761
 msgid "Search: "
 msgstr "Recherche : "
 
-#: index.php:1798
+#: index.php:1800
 #, php-format
 msgid ""
 "<pre>Sessions do not seem to work correctly on your server.<br>Make sure the "
@@ -420,7 +428,7 @@ msgstr ""
 "cookies. Nous vous recommandons d'accéder à votre serveur depuis son adresse "
 "IP ou un <em>Fully Qualified Domain Name</em>.<br>"
 
-#: index.php:1808
+#: index.php:1810
 msgid "Click to try again."
 msgstr "Cliquer ici pour réessayer."
 
@@ -747,20 +755,26 @@ msgstr "Activer les miniatures"
 msgid "Warning: "
 msgstr "Attention : "
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:281
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:283
 msgid "It's recommended to visit the picture wall after enabling this feature."
 msgstr ""
 "Il est recommandé de visiter le Mur d'images après avoir activé cette "
 "fonctionnalité."
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:283
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:285
 msgid ""
 "If you have a large database, the first retrieval may take a few minutes."
 msgstr ""
 "Si vous avez beaucoup de liens, la première récupération peut prendre "
 "plusieurs minutes."
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:297
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:289
+msgid "You need to enable the extension <code>php-gd</code> to use thumbnails."
+msgstr ""
+"Vous devez activer l'extension <code>php-gd</code> pour utiliser les "
+"miniatures."
+
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:305
 #: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:72
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:139
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:199
