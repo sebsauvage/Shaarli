@@ -1,54 +1,56 @@
 Files: *
 License: zlib/libpng
 Copyright: (c) 2011-2015 Sébastien SAUVAGE <sebsauvage@sebsauvage.net>
-           (c) 2011-2017 The Shaarli Community, see AUTHORS
+           (c) 2011-2018 The Shaarli Community, see AUTHORS
 
-Files: inc/reset.css
+Files: assets/vintage/css/reset.css
 License: BSD (http://opensource.org/licenses/BSD-3-Clause)
 Copyright: (c) 2010, Yahoo! Inc.
 
-Files: images/calendar.png, images/edit_icon.png, images/feed-icon-14x14.png, images/private.png, images/private_16x16.png, images/private_16x16_active.png, images/tag_blue.png
+Files: assets/vintage/img/calendar.png
+       assets/vintage/img/edit_icon.png
+       assets/vintage/img/feed-icon-14x14.png
+       assets/vintage/img/private.png
+       assets/vintage/img/private_16x16.png
+       assets/vintage/img/private_16x16_active.png
+       assets/vintage/img/tag_blue.png
 License: CC-BY (http://creativecommons.org/licenses/by/3.0/)
 Copyright: (c) 2014 Yusuke Kamiyamane
 Source: http://p.yusukekamiyamane.com/
 
-Files: images/delete_icon.png
+Files: assets/vintage/img/delete_icon.png
 License: CC-BY (http://creativecommons.org/licenses/by/3.0/)
 Copyright: (c) 2014 Designmodo
 Source: http://designmodo.com/linecons-free/
 
-Files: images/floral_left.png, images/floral_right.png, images/squiggle.png, images/squiggle_closing.png
+Files: assets/vintage/img/floral_left.png
+       assets/vintage/img/floral_right.png
+       assets/vintage/img/squiggle.png
+       assets/vintage/img/squiggle_closing.png
 Licence: Public Domain
 Source: https://openclipart.org/people/j4p4n/j4p4n_ornimental_bookend_-_left.svg
 
-Files: images/Paper_texture_v5_by_bashcorpo_w1000.jpg
+Files: assets/vintage/img/Paper_texture_v5_by_bashcorpo_w1000.jpg
 Licence: Public Domain
 Source: http://bashcorpo.deviantart.com/art/Grungy-paper-texture-v-5-22966998
 
-Files: images/logo.png
+Files: assets/vintage/img/logo.png
+       assets/vintage/img/logo.png
 License: zlib/libpng
 Copyright: (c) 2011-2014 idleman idleman@idleman.fr
 
-Files: inc/blazy*.js
+Files: assets/default/img/sad_star.png
 License: MIT License (http://opensource.org/licenses/MIT)
-Copyright: (C) Bjoern Klinggaard - @bklinggaard - http://dinbror.dk/blazy
+Copyright: (C) 2015 kalvn - https://github.com/kalvn/Shaarli-Material
 
 Files: inc/rain.tpl.class.php
+License: LGPL-3+ (https://www.gnu.org/licenses/lgpl-3.0.txt)
 Copyright: 2011-2012, Federico Ulfo <rainelemental@gmail.com>
            2011-2012, The Rain Team <hello@raintm.com>
-License: LGPL-3+ (https://www.gnu.org/licenses/lgpl-3.0.txt)
-
-Files: inc/awesomplete*
-License: MIT License (http://opensource.org/licenses/MIT)
-Copyright: (C) 2015 Lea Verou - https://github.com/LeaVerou/awesomplete
 
 Files: plugins/wallabag/wallabag.png
 License: MIT License (http://opensource.org/licenses/MIT)
 Copyright: (C) 2015 Nicolas Lœuillet - https://github.com/wallabag/wallabag
-
-Files: tpl/default/sad_star.png
-License: MIT License (http://opensource.org/licenses/MIT)
-Copyright: (C) 2015 kalvn - https://github.com/kalvn/Shaarli-Material
 
 ----------------------------------------------------
 ZLIB/LIBPNG LICENSE
