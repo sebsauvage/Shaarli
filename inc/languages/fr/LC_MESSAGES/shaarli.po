@@ -769,12 +769,6 @@ msgstr "Modifier le Shaare"
 msgid "New Shaare"
 msgstr "Nouveau Shaare"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:26
-msgid "Shaare"
-msgstr "Shaare"
-
 #: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:25
 msgid "Created:"
 msgstr "Création :"
