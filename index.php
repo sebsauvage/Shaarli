@@ -123,6 +123,7 @@ if (isset($_COOKIE['shaarli']) && !SessionManager::checkId($_COOKIE['shaarli']))
 $conf = new ConfigManager();
 $sessionManager = new SessionManager($_SESSION, $conf);
 $loginManager = new LoginManager($GLOBALS, $conf, $sessionManager);
+$clientIpId = client_ip_id($_SERVER);
 
 // LC_MESSAGES isn't defined without php-intl, in this case use LC_COLLATE locale instead.
 if (! defined('LC_MESSAGES')) {
@@ -178,7 +179,7 @@ if (! is_file($conf->getConfigFileExt())) {
 // a token depending of deployment salt, user password, and the current ip
 define('STAY_SIGNED_IN_TOKEN', sha1($conf->get('credentials.hash') . $_SERVER['REMOTE_ADDR'] . $conf->get('credentials.salt')));
 
-$loginManager->checkLoginState($_SERVER, $_SESSION, $_COOKIE, WEB_PATH, STAY_SIGNED_IN_TOKEN);
+$loginManager->checkLoginState($_SESSION, $_COOKIE, WEB_PATH, $clientIpId, STAY_SIGNED_IN_TOKEN);
 
 /**
  * Adapter function for PageBuilder
@@ -200,7 +201,7 @@ if (isset($_POST['login'])) {
     }
     if (isset($_POST['password'])
         && $sessionManager->checkToken($_POST['token'])
-        && $loginManager->checkCredentials($_SERVER, $_POST['login'], $_POST['password'])
+        && $loginManager->checkCredentials($_SERVER['REMOTE_ADDR'], $clientIpId, $_POST['login'], $_POST['password'])
     ) {
         // Login/password is OK.
         $loginManager->handleSuccessfulLogin($_SERVER);

@@ -48,23 +48,21 @@ class LoginManager
     /**
      * Check user session state and validity (expiration)
      *
-     * @param array  $server  The $_SERVER array
-     * @param array  $session The $_SESSION array (reference)
-     * @param array  $cookie  The $_COOKIE array
-     * @param string $webPath Path on the server in which the cookie will be available on
-     * @param string $token   Session token
+     * @param array  $session    The $_SESSION array (reference)
+     * @param array  $cookie     The $_COOKIE array
+     * @param string $webPath    Path on the server in which the cookie will be available on
+     * @param string $clientIpId Client IP address identifier
+     * @param string $token      Session token
      *
      * @return bool true if the user session is valid, false otherwise
      */
-    public function checkLoginState($server, & $session, $cookie, $webPath, $token)
+    public function checkLoginState(& $session, $cookie, $webPath, $clientIpId, $token)
     {
         if (! $this->configManager->exists('credentials.login')) {
             // Shaarli is not configured yet
             $this->isLoggedIn = false;
             return;
         }
-
-        $clientIpId = client_ip_id($server);
 
         if (isset($cookie[SessionManager::$LOGGED_IN_COOKIE])
             && $cookie[SessionManager::$LOGGED_IN_COOKIE] === $token
@@ -100,13 +98,14 @@ class LoginManager
     /**
      * Check user credentials are valid
      *
-     * @param array  $server   The $_SERVER array
-     * @param string $login    Username
-     * @param string $password Password
+     * @param string $remoteIp   Remote client IP address
+     * @param string $clientIpId Client IP address identifier
+     * @param string $login      Username
+     * @param string $password   Password
      *
      * @return bool true if the provided credentials are valid, false otherwise
      */
-    public function checkCredentials($server, $login, $password)
+    public function checkCredentials($remoteIp, $clientIpId, $login, $password)
     {
         $hash = sha1($password . $login . $this->configManager->get('credentials.salt'));
 
@@ -115,17 +114,16 @@ class LoginManager
         ) {
             logm(
                 $this->configManager->get('resource.log'),
-                $server['REMOTE_ADDR'],
+                $remoteIp,
                 'Login failed for user ' . $login
             );
             return false;
         }
 
-        $clientIpId = client_ip_id($server);
         $this->sessionManager->storeLoginInfo($clientIpId);
         logm(
             $this->configManager->get('resource.log'),
-            $server['REMOTE_ADDR'],
+            $remoteIp,
             'Login successful'
         );
         return true;
