@@ -182,9 +182,11 @@ define('STAY_SIGNED_IN_TOKEN', sha1($conf->get('credentials.hash') . $_SERVER['R
 $loginManager->checkLoginState($_SESSION, $_COOKIE, WEB_PATH, $clientIpId, STAY_SIGNED_IN_TOKEN);
 
 /**
- * Adapter function for PageBuilder
+ * Adapter function to ensure compatibility with third-party templates
  *
- * TODO: update PageBuilder and tests
+ * @see https://github.com/shaarli/Shaarli/pull/1086
+ *
+ * @return bool true when the user is logged in, false otherwise
  */
 function isLoggedIn()
 {
@@ -383,9 +385,10 @@ function showDailyRSS($conf, $loginManager) {
  * @param PageBuilder   $pageBuilder   Template engine wrapper.
  * @param LinkDB        $LINKSDB       LinkDB instance.
  * @param ConfigManager $conf          Configuration Manager instance.
- * @param PluginManager $pluginManager Plugin Manager instane.
+ * @param PluginManager $pluginManager Plugin Manager instance.
+ * @param LoginManager  $loginManager  Login Manager instance
  */
-function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager)
+function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
 {
     $day = date('Ymd', strtotime('-1 day')); // Yesterday, in format YYYYMMDD.
     if (isset($_GET['day'])) {
@@ -523,7 +526,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         die($e->getMessage());
     }
 
-    $PAGE = new PageBuilder($conf, $LINKSDB, $sessionManager->generateToken());
+    $PAGE = new PageBuilder($conf, $LINKSDB, $sessionManager->generateToken(), $loginManager->isLoggedIn());
     $PAGE->assign('linkcount', count($LINKSDB));
     $PAGE->assign('privateLinkcount', count_private($LINKSDB));
     $PAGE->assign('plugin_errors', $pluginManager->getErrors());
@@ -708,7 +711,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
 
     // Daily page.
     if ($targetPage == Router::$PAGE_DAILY) {
-        showDaily($PAGE, $LINKSDB, $conf, $pluginManager);
+        showDaily($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager);
     }
 
     // ATOM and RSS feed.

@@ -1,11 +1,11 @@
 <div class="linklist-paging">
   <div class="paging pure-g">
     <div class="linklist-filters pure-u-1-3">
-      {if="isLoggedIn() or !empty($action_plugin)"}
+      {if="$is_logged_in or !empty($action_plugin)"}
         <span class="linklist-filters-text pure-u-0 pure-u-lg-visible">
           {'Filters'|t}
         </span>
-        {if="isLoggedIn()"}
+        {if="$is_logged_in"}
         <a href="?visibility=private" title="{'Only display private links'|t}"
            class="{if="$visibility==='private'"}filter-on{else}filter-off{/if}"
         ><i class="fa fa-user-secret"></i></a>

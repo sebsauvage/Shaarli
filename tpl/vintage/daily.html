@@ -53,7 +53,7 @@
                                 <img src="img/squiggle.png" width="25" height="26" title="permalink" alt="permalink">
                             </a>
                         </div>
-                        {if="!$hide_timestamps || isLoggedIn()"}
+                        {if="!$hide_timestamps || $is_logged_in"}
                             <div class="dailyEntryLinkdate">
                                 <a href="?{$value.shorturl}">{function="strftime('%c', $link.timestamp)"}</a>
                             </div>
