@@ -1,8 +1,7 @@
 To install Shaarli, simply place the files in a directory under your webserver's
 Document Root (or directly at the document root).
 
-Also, please make sure your server meets the [requirements](Server-requirements)
-and is properly [configured](Server-configuration).
+Also, please make sure your server is properly [configured](Server-configuration).
 
 Multiple releases branches are available:
 
@@ -23,7 +22,7 @@ Using one of the following methods:
 
 ### Download as an archive
 
-In most cases, you should download the latest Shaarli release from the [releases](https://github.com/shaarli/Shaarli/releases) page. **Download our *shaarli-full* archive** to include dependencies.
+In most cases, you should download the latest Shaarli release from the [releases](https://github.com/shaarli/Shaarli/releases) page. Download our **shaarli-full** archive to include dependencies.
 
 The current latest released version is `v0.9.6`
 
@@ -37,7 +36,7 @@ $ mv Shaarli /path/to/shaarli/
 
 Cloning using `git` or downloading Github branches as zip files requires additional steps:
 
- * Install [Composer](Unit-tests.md#install_composer) to manage Shaarli dependencies.
+ * Install [Composer](Unit-tests.md#install_composer) to manage third-party [PHP dependencies](3rd-party-libraries.md#composer).
  * Install [yarn](https://yarnpkg.com/lang/en/docs/install/) to build the frontend dependencies.
  * Install [python3-virtualenv](https://pypi.python.org/pypi/virtualenv) to build the local HTML documentation.
 
