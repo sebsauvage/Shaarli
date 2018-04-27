@@ -78,8 +78,8 @@ require_once 'application/Updater.php';
 use \Shaarli\Languages;
 use \Shaarli\ThemeUtils;
 use \Shaarli\Config\ConfigManager;
-use \Shaarli\LoginManager;
-use \Shaarli\SessionManager;
+use \Shaarli\Security\LoginManager;
+use \Shaarli\Security\SessionManager;
 
 // Ensure the PHP version is supported
 try {

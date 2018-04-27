@@ -1,5 +1,5 @@
 <?php
-namespace Shaarli;
+namespace Shaarli\Security;
 
 use Shaarli\Config\ConfigManager;
 

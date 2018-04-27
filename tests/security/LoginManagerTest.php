@@ -1,5 +1,5 @@
 <?php
-namespace Shaarli;
+namespace Shaarli\Security;
 
 require_once 'tests/utils/FakeConfigManager.php';
 use \PHPUnit\Framework\TestCase;
