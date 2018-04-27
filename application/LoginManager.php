@@ -48,7 +48,6 @@ class LoginManager
     /**
      * Check user session state and validity (expiration)
      *
-     * @param array  $session    The $_SESSION array (reference)
      * @param array  $cookie     The $_COOKIE array
      * @param string $webPath    Path on the server in which the cookie will be available on
      * @param string $clientIpId Client IP address identifier
@@ -56,7 +55,7 @@ class LoginManager
      *
      * @return bool true if the user session is valid, false otherwise
      */
-    public function checkLoginState(& $session, $cookie, $webPath, $clientIpId, $token)
+    public function checkLoginState($cookie, $webPath, $clientIpId, $token)
     {
         if (! $this->configManager->exists('credentials.login')) {
             // Shaarli is not configured yet

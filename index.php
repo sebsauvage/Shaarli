@@ -179,7 +179,7 @@ if (! is_file($conf->getConfigFileExt())) {
 // a token depending of deployment salt, user password, and the current ip
 define('STAY_SIGNED_IN_TOKEN', sha1($conf->get('credentials.hash') . $_SERVER['REMOTE_ADDR'] . $conf->get('credentials.salt')));
 
-$loginManager->checkLoginState($_SESSION, $_COOKIE, WEB_PATH, $clientIpId, STAY_SIGNED_IN_TOKEN);
+$loginManager->checkLoginState($_COOKIE, WEB_PATH, $clientIpId, STAY_SIGNED_IN_TOKEN);
 
 /**
  * Adapter function to ensure compatibility with third-party templates
