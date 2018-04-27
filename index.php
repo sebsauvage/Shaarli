@@ -179,7 +179,7 @@ if (! is_file($conf->getConfigFileExt())) {
 // a token depending of deployment salt, user password, and the current ip
 define('STAY_SIGNED_IN_TOKEN', sha1($conf->get('credentials.hash') . $_SERVER['REMOTE_ADDR'] . $conf->get('credentials.salt')));
 
-$loginManager->checkLoginState($_COOKIE, WEB_PATH, $clientIpId, STAY_SIGNED_IN_TOKEN);
+$loginManager->checkLoginState($_COOKIE, $clientIpId, STAY_SIGNED_IN_TOKEN);
 
 /**
  * Adapter function to ensure compatibility with third-party templates
@@ -205,30 +205,34 @@ if (isset($_POST['login'])) {
         && $sessionManager->checkToken($_POST['token'])
         && $loginManager->checkCredentials($_SERVER['REMOTE_ADDR'], $clientIpId, $_POST['login'], $_POST['password'])
     ) {
-        // Login/password is OK.
         $loginManager->handleSuccessfulLogin($_SERVER);
 
-        // If user wants to keep the session cookie even after the browser closes:
-        if (!empty($_POST['longlastingsession'])) {
-            $_SESSION['longlastingsession'] = 31536000; // (31536000 seconds = 1 year)
-            $expiration = time() + $_SESSION['longlastingsession']; // calculate relative cookie expiration (1 year from now)
-            setcookie($sessionManager::$LOGGED_IN_COOKIE, STAY_SIGNED_IN_TOKEN, $expiration, WEB_PATH);
-            $_SESSION['expires_on'] = $expiration;  // Set session expiration on server-side.
-
-            $cookiedir = '';
-            if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
-                $cookiedir = dirname($_SERVER["SCRIPT_NAME"]) . '/';
-            }
-            session_set_cookie_params($_SESSION['longlastingsession'],$cookiedir,$_SERVER['SERVER_NAME']); // Set session cookie expiration on client side
+        $cookiedir = '';
+        if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
             // Note: Never forget the trailing slash on the cookie path!
-            session_regenerate_id(true);  // Send cookie with new expiration date to browser.
+            $cookiedir = dirname($_SERVER["SCRIPT_NAME"]) . '/';
         }
-        else // Standard session expiration (=when browser closes)
-        {
-            $cookiedir = ''; if(dirname($_SERVER['SCRIPT_NAME'])!='/') $cookiedir=dirname($_SERVER["SCRIPT_NAME"]).'/';
-            session_set_cookie_params(0,$cookiedir,$_SERVER['SERVER_NAME']); // 0 means "When browser closes"
-            session_regenerate_id(true);
+
+        if (!empty($_POST['longlastingsession'])) {
+            // Keep the session cookie even after the browser closes
+            $sessionManager->setStaySignedIn(true);
+            $expirationTime = $sessionManager->extendSession();
+
+            setcookie(
+                $sessionManager::$LOGGED_IN_COOKIE,
+                STAY_SIGNED_IN_TOKEN,
+                $expirationTime,
+                WEB_PATH
+            );
+
+        } else {
+            // Standard session expiration (=when browser closes)
+            $expirationTime = 0;
         }
+
+        // Send cookie with the new expiration date to the browser
+        session_set_cookie_params($expirationTime, $cookiedir, $_SERVER['SERVER_NAME']);
+        session_regenerate_id(true);
 
         // Optional redirect after login:
         if (isset($_GET['post'])) {
@@ -590,7 +594,8 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=logout'))
     {
         invalidateCaches($conf->get('resource.page_cache'));
-        $sessionManager->logout(WEB_PATH);
+        $sessionManager->logout();
+        setcookie(SessionManager::$LOGGED_IN_COOKIE, 'false', 0, WEB_PATH);
         header('Location: ?');
         exit;
     }

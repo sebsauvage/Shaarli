@@ -9,7 +9,10 @@ use Shaarli\Config\ConfigManager;
 class SessionManager
 {
     /** @var int Session expiration timeout, in seconds */
-    public static $INACTIVITY_TIMEOUT = 3600;
+    public static $SHORT_TIMEOUT = 3600;    // 1 hour
+
+    /** @var int Session expiration timeout, in seconds */
+    public static $LONG_TIMEOUT = 31536000; // 1 year
 
     /** @var string Name of the cookie set after logging in **/
     public static $LOGGED_IN_COOKIE = 'shaarli_staySignedIn';
@@ -19,6 +22,9 @@ class SessionManager
 
     /** @var ConfigManager Configuration Manager instance **/
     protected $conf = null;
+
+    /** @var bool Whether the user should stay signed in (LONG_TIMEOUT) */
+    protected $staySignedIn = false;
 
     /**
      * Constructor
@@ -30,6 +36,16 @@ class SessionManager
     {
         $this->session = &$session;
         $this->conf = $conf;
+    }
+
+    /**
+     * Define whether the user should stay signed in across browser sessions
+     *
+     * @param bool $staySignedIn Keep the user signed in
+     */
+    public function setStaySignedIn($staySignedIn)
+    {
+        $this->staySignedIn = $staySignedIn;
     }
 
     /**
@@ -104,7 +120,7 @@ class SessionManager
         $this->session['uid'] = sha1(uniqid('', true) . '_' . mt_rand());
         $this->session['ip'] = $clientIpId;
         $this->session['username'] = $this->conf->get('credentials.login');
-        $this->session['expires_on'] = time() + self::$INACTIVITY_TIMEOUT;
+        $this->extendTimeValidityBy(self::$SHORT_TIMEOUT);
     }
 
     /**
@@ -112,12 +128,24 @@ class SessionManager
      */
     public function extendSession()
     {
-        if (! empty($this->session['longlastingsession'])) {
-            // "Stay signed in" is enabled
-            $this->session['expires_on'] = time() + $this->session['longlastingsession'];
-            return;
+        if ($this->staySignedIn) {
+            return $this->extendTimeValidityBy(self::$LONG_TIMEOUT);
         }
-        $this->session['expires_on'] = time() + self::$INACTIVITY_TIMEOUT;
+        return $this->extendTimeValidityBy(self::$SHORT_TIMEOUT);
+    }
+
+    /**
+     * Extend expiration time
+     *
+     * @param int $duration Expiration time extension (seconds)
+     *
+     * @return int New session expiration time
+     */
+    protected function extendTimeValidityBy($duration)
+    {
+        $expirationTime = time() + $duration;
+        $this->session['expires_on'] = $expirationTime;
+        return $expirationTime;
     }
 
     /**
@@ -125,19 +153,17 @@ class SessionManager
      *
      * See:
      * - https://secure.php.net/manual/en/function.setcookie.php
-     *
-     * @param string $webPath path on the server in which the cookie will be available on
      */
-    public function logout($webPath)
+    public function logout()
     {
         if (isset($this->session)) {
             unset($this->session['uid']);
             unset($this->session['ip']);
+            unset($this->session['expires_on']);
             unset($this->session['username']);
             unset($this->session['visibility']);
             unset($this->session['untaggedonly']);
         }
-        setcookie(self::$LOGGED_IN_COOKIE, 'false', 0, $webPath);
     }
 
     /**
