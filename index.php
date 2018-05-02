@@ -1376,8 +1376,8 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
                 // The callback will fill $charset and $title with data from the downloaded page.
                 get_http_response(
                     $url,
-                    $conf->get('general.download_max_size', 4194304),
                     $conf->get('general.download_timeout', 30),
+                    $conf->get('general.download_max_size', 4194304),
                     get_curl_download_callback($charset, $title)
                 );
                 if (! empty($title) && strtolower($charset) != 'utf-8') {
