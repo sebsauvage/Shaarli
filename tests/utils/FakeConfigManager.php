@@ -42,4 +42,16 @@ class FakeConfigManager
         }
         return $key;
     }
+
+    /**
+     * Check if a setting exists
+     *
+     * @param string $setting Asked setting, keys separated with dots
+     *
+     * @return bool true if the setting exists, false otherwise
+     */
+    public function exists($setting)
+    {
+        return array_key_exists($setting, $this->values);
+    }
 }

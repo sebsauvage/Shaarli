@@ -46,7 +46,7 @@ class LoginManager
         $this->sessionManager = $sessionManager;
         $this->banFile = $this->configManager->get('resource.ban_file', 'data/ipbans.php');
         $this->readBanFile();
-        if ($this->configManager->get('security.open_shaarli')) {
+        if ($this->configManager->get('security.open_shaarli') === true) {
             $this->openShaarli = true;
         }
     }
@@ -80,8 +80,6 @@ class LoginManager
      *
      * @param array  $cookie     The $_COOKIE array
      * @param string $clientIpId Client IP address identifier
-     *
-     * @return bool true if the user session is valid, false otherwise
      */
     public function checkLoginState($cookie, $clientIpId)
     {
@@ -94,11 +92,12 @@ class LoginManager
         if (isset($cookie[self::$STAY_SIGNED_IN_COOKIE])
             && $cookie[self::$STAY_SIGNED_IN_COOKIE] === $this->staySignedInToken
         ) {
+            // The user client has a valid stay-signed-in cookie
+            // Session information is updated with the current client information
             $this->sessionManager->storeLoginInfo($clientIpId);
             $this->isLoggedIn = true;
-        }
 
-        if ($this->sessionManager->hasSessionExpired()
+        } elseif ($this->sessionManager->hasSessionExpired()
             || $this->sessionManager->hasClientIpChanged($clientIpId)
         ) {
             $this->sessionManager->logout();
