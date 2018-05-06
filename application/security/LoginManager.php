@@ -8,6 +8,9 @@ use Shaarli\Config\ConfigManager;
  */
 class LoginManager
 {
+    /** @var string Name of the cookie set after logging in **/
+    public static $STAY_SIGNED_IN_COOKIE = 'shaarli_staySignedIn';
+
     /** @var array A reference to the $_GLOBALS array */
     protected $globals = [];
 
@@ -25,6 +28,9 @@ class LoginManager
 
     /** @var bool Whether the Shaarli instance is open to public edition **/
     protected $openShaarli = false;
+
+    /** @var string User sign-in token depending on remote IP and credentials */
+    protected $staySignedInToken = '';
 
     /**
      * Constructor
@@ -46,15 +52,38 @@ class LoginManager
     }
 
     /**
+     * Generate a token depending on deployment salt, user password and client IP
+     *
+     * @param string $clientIpAddress The remote client IP address
+     */
+    public function generateStaySignedInToken($clientIpAddress)
+    {
+        $this->staySignedInToken = sha1(
+            $this->configManager->get('credentials.hash')
+            . $clientIpAddress
+            . $this->configManager->get('credentials.salt')
+        );
+    }
+
+    /**
+     * Return the user's client stay-signed-in token
+     *
+     * @return string User's client stay-signed-in token
+     */
+    public function getStaySignedInToken()
+    {
+        return $this->staySignedInToken;
+    }
+
+    /**
      * Check user session state and validity (expiration)
      *
      * @param array  $cookie     The $_COOKIE array
      * @param string $clientIpId Client IP address identifier
-     * @param string $token      Session token
      *
      * @return bool true if the user session is valid, false otherwise
      */
-    public function checkLoginState($cookie, $clientIpId, $token)
+    public function checkLoginState($cookie, $clientIpId)
     {
         if (! $this->configManager->exists('credentials.login')) {
             // Shaarli is not configured yet
@@ -62,8 +91,8 @@ class LoginManager
             return;
         }
 
-        if (isset($cookie[SessionManager::$LOGGED_IN_COOKIE])
-            && $cookie[SessionManager::$LOGGED_IN_COOKIE] === $token
+        if (isset($cookie[self::$STAY_SIGNED_IN_COOKIE])
+            && $cookie[self::$STAY_SIGNED_IN_COOKIE] === $this->staySignedInToken
         ) {
             $this->sessionManager->storeLoginInfo($clientIpId);
             $this->isLoggedIn = true;

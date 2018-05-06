@@ -18,6 +18,18 @@ class LoginManagerTest extends TestCase
     protected $server = [];
     protected $trustedProxy = '10.1.1.100';
 
+    /** @var string User login */
+    protected $login = 'johndoe';
+
+    /** @var string User password */
+    protected $password = 'IC4nHazL0g1n?';
+
+    /** @var string Hash of the salted user password */
+    protected $passwordHash = '';
+
+    /** @var string Salt used by hash functions */
+    protected $salt = '669e24fa9c5a59a613f98e8e38327384504a4af2';
+
     /**
      * Prepare or reset test resources
      */
@@ -27,7 +39,12 @@ class LoginManagerTest extends TestCase
             unlink($this->banFile);
         }
 
+        $this->passwordHash = sha1($this->password . $this->login . $this->salt);
+
         $this->configManager = new \FakeConfigManager([
+            'credentials.login' => $this->login,
+            'credentials.hash' => $this->passwordHash,
+            'credentials.salt' => $this->salt,
             'resource.ban_file' => $this->banFile,
             'resource.log' => $this->logFile,
             'security.ban_after' => 4,
@@ -195,5 +212,19 @@ class LoginManagerTest extends TestCase
         // lift the ban
         $this->globals['IPBANS']['BANS'][$this->ipAddr] = time() - 3600;
         $this->assertTrue($this->loginManager->canLogin($this->server));
+    }
+
+    /**
+     * Generate a token depending on the user credentials and client IP
+     */
+    public function testGenerateStaySignedInToken()
+    {
+        $ipAddress = '10.1.47.179';
+        $this->loginManager->generateStaySignedInToken($ipAddress);
+
+        $this->assertEquals(
+            sha1($this->passwordHash . $ipAddress . $this->salt),
+            $this->loginManager->getStaySignedInToken()
+        );
     }
 }

@@ -14,9 +14,6 @@ class SessionManager
     /** @var int Session expiration timeout, in seconds */
     public static $LONG_TIMEOUT = 31536000; // 1 year
 
-    /** @var string Name of the cookie set after logging in **/
-    public static $LOGGED_IN_COOKIE = 'shaarli_staySignedIn';
-
     /** @var array Local reference to the global $_SESSION array */
     protected $session = [];
 
