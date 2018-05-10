@@ -218,5 +218,9 @@ translate:
 
 ### Run ESLint check against Shaarli's JS files
 eslint:
-	@yarn run eslint assets/vintage/js/
-	@yarn run eslint assets/default/js/
+	@yarn run eslint -c .dev/.eslintrc.js assets/vintage/js/
+	@yarn run eslint -c .dev/.eslintrc.js assets/default/js/
+
+### Run CSSLint check against Shaarli's SCSS files
+sasslint:
+	@yarn run sass-lint -c .dev/.sasslintrc 'assets/default/scss/*.scss' -v -q

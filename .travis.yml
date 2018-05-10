@@ -27,6 +27,7 @@ matrix:
       script:
         - yarn run build # Just to be sure that the build isn't broken
         - make eslint
+        - make sasslint
 
 cache:
   directories:
