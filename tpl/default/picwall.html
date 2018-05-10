@@ -18,9 +18,9 @@
       {/loop}
     </div>
 
-    <div id="picwall_container">
+    <div id="picwall_container" class="picwall-container">
       {loop="$linksToDisplay"}
-        <div class="picwall_pictureframe">
+        <div class="picwall-pictureframe">
           {$value.thumbnail}<a href="{$value.real_url}"><span class="info">{$value.title}</span></a>
           {loop="$value.picwall_plugin"}
             {$value}
