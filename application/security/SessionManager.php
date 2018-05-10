@@ -113,8 +113,6 @@ class SessionManager
      */
     public function storeLoginInfo($clientIpId)
     {
-        // Generate unique random number (different than phpsessionid)
-        $this->session['uid'] = sha1(uniqid('', true) . '_' . mt_rand());
         $this->session['ip'] = $clientIpId;
         $this->session['username'] = $this->conf->get('credentials.login');
         $this->extendTimeValidityBy(self::$SHORT_TIMEOUT);
@@ -154,7 +152,6 @@ class SessionManager
     public function logout()
     {
         if (isset($this->session)) {
-            unset($this->session['uid']);
             unset($this->session['ip']);
             unset($this->session['expires_on']);
             unset($this->session['username']);
@@ -172,9 +169,6 @@ class SessionManager
      */
     public function hasSessionExpired()
     {
-        if (empty($this->session['uid'])) {
-            return true;
-        }
         if (time() >= $this->session['expires_on']) {
             return true;
         }

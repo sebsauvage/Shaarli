@@ -164,7 +164,6 @@ class SessionManagerTest extends TestCase
     {
         $this->sessionManager->storeLoginInfo('ip_id');
 
-        $this->assertTrue(isset($this->session['uid']));
         $this->assertGreaterThan(time(), $this->session['expires_on']);
         $this->assertEquals('ip_id', $this->session['ip']);
         $this->assertEquals('johndoe', $this->session['username']);
@@ -209,7 +208,6 @@ class SessionManagerTest extends TestCase
     public function testLogout()
     {
         $this->session = [
-            'uid' => 'some-uid',
             'ip' => 'ip_id',
             'expires_on' => time() + 1000,
             'username' => 'johndoe',
@@ -218,7 +216,6 @@ class SessionManagerTest extends TestCase
         ];
         $this->sessionManager->logout();
 
-        $this->assertFalse(isset($this->session['uid']));
         $this->assertFalse(isset($this->session['ip']));
         $this->assertFalse(isset($this->session['expires_on']));
         $this->assertFalse(isset($this->session['username']));
@@ -227,19 +224,10 @@ class SessionManagerTest extends TestCase
     }
 
     /**
-     * The session is considered as expired because the UID is missing
-     */
-    public function testHasExpiredNoUid()
-    {
-        $this->assertTrue($this->sessionManager->hasSessionExpired());
-    }
-
-    /**
      * The session is active and expiration time has been reached
      */
     public function testHasExpiredTimeElapsed()
     {
-        $this->session['uid'] = 'some-uid';
         $this->session['expires_on'] = time() - 10;
 
         $this->assertTrue($this->sessionManager->hasSessionExpired());
@@ -250,7 +238,6 @@ class SessionManagerTest extends TestCase
      */
     public function testHasNotExpired()
     {
-        $this->session['uid'] = 'some-uid';
         $this->session['expires_on'] = time() + 1000;
 
         $this->assertFalse($this->sessionManager->hasSessionExpired());
