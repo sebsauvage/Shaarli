@@ -38,9 +38,11 @@ See [Theming](Theming) for a list of community-contributed themes, and an instal
 - [ShaarliOS](https://github.com/mro/ShaarliOS) - Apple iOS share extension.
 - [Shaarli for Android](http://sebsauvage.net/links/?ZAyDzg) - Android application that adds Shaarli as a sharing provider
 - [Shaarlier for Android](https://github.com/dimtion/Shaarlier) - Android application to simply add links directly into your Shaarli
+- [Stakali for Android](https://stakali.toneiv.eu) - Stakali is a personal bookmark manager which synchronizes with Shaarli 
 
 ### Browser addons
- * [Shaarli Web Extension](https://github.com/ikipatang/shaarli-web-extension) - toolbar button to share your current tab with Shaarli.
+- [Shaarli Firefox Extension](https://github.com/ikipatang/shaarli-web-extension) - toolbar button to share your current tab with Shaarli.
+- [Shaarli Chrome Extension](https://github.com/octplane/Shiny-Shaarli) - toolbar button to share your current tab with Shaarli.
 
 ### Server apps
 - [shaarchiver](https://github.com/nodiscc/shaarchiver) - Archive your Shaarli bookmarks and their content
