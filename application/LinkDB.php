@@ -458,8 +458,10 @@ You use the community supported version of the original Shaarli project, by Seba
                 $tags[$caseMapping[strtolower($tag)]]++;
             }
         }
-        // Sort tags by usage (most used tag first)
-        arsort($tags);
+        $keys = array_keys($tags);
+        $tmpTags = array_combine($keys, $keys);
+        // We sort tags by DESC occurrences, then ASC alphabetically for equal values.
+        array_multisort($tags, SORT_DESC, $tmpTags, SORT_ASC, $tags);
         return $tags;
     }
 
