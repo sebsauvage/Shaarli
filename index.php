@@ -2175,6 +2175,12 @@ $app->group('/api/v1', function() {
     $this->post('/links', '\Shaarli\Api\Controllers\Links:postLink')->setName('postLink');
     $this->put('/links/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:putLink')->setName('putLink');
     $this->delete('/links/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:deleteLink')->setName('deleteLink');
+
+    $this->get('/tags', '\Shaarli\Api\Controllers\Tags:getTags')->setName('getTags');
+    $this->get('/tags/{tagName:[\w]+}', '\Shaarli\Api\Controllers\Tags:getTag')->setName('getTag');
+    $this->put('/tags/{tagName:[\w]+}', '\Shaarli\Api\Controllers\Tags:putTag')->setName('putTag');
+    $this->delete('/tags/{tagName:[\w]+}', '\Shaarli\Api\Controllers\Tags:deleteTag')->setName('deleteTag');
+
     $this->get('/history', '\Shaarli\Api\Controllers\History:getHistory')->setName('getHistory');
 })->add('\Shaarli\Api\ApiMiddleware');
 

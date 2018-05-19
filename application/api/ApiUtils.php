@@ -134,4 +134,20 @@ class ApiUtils
 
         return $oldLink;
     }
+
+    /**
+     * Format a Tag for the REST API.
+     *
+     * @param string $tag         Tag name
+     * @param int    $occurrences Number of links using this tag
+     *
+     * @return array Link data formatted for the REST API.
+     */
+    public static function formatTag($tag, $occurences)
+    {
+        return [
+            'name'       => $tag,
+            'occurrences' => $occurences,
+        ];
+    }
 }
