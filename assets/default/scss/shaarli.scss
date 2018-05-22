@@ -755,6 +755,14 @@ body,
   font-size: 1.3em;
 }
 
+.pin-link {
+    font-size: 1.3em;
+}
+
+.pinned-link {
+    color: #0b5ea6 !important;
+}
+
 .linklist-item-description {
   position: relative;
   padding: 0 10px;
@@ -846,6 +854,10 @@ body,
 
 .ctrl-edit {
   margin: 0 7px;
+}
+
+.ctrl-delete {
+    margin: 0 7px 0 0;
 }
 
 // 64em -> lg
