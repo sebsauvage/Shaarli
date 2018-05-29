@@ -21,7 +21,7 @@
       </p>
     {/if}
 
-    <div id="search-tagcloud" class="pure-g">
+    <div id="search-tagcloud" class="pure-g searchform-block search-tagcloud">
       <div class="pure-u-lg-1-4"></div>
       <div class="pure-u-1 pure-u-lg-1-2">
         <form method="GET">
@@ -45,7 +45,7 @@
       {/loop}
     </div>
 
-    <div id="taglist">
+    <div id="taglist" class="taglist-container">
       {loop="tags"}
         <div class="tag-list-item pure-g" data-tag="{$key}">
           <div class="pure-u-1">

@@ -26,6 +26,7 @@ Dockerfile      text
 
 # Exclude from Git archives
 .editorconfig     export-ignore
+.dev              export-ignore
 .gitattributes    export-ignore
 .github           export-ignore
 .gitignore        export-ignore
