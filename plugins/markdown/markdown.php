@@ -6,6 +6,8 @@
  * Shaare's descriptions are parsed with Markdown.
  */
 
+use Shaarli\Config\ConfigManager;
+
 /*
  * If this tag is used on a shaare, the description won't be processed by Parsedown.
  */
@@ -50,6 +52,7 @@ function hook_markdown_render_feed($data, $conf)
             $value = stripNoMarkdownTag($value);
             continue;
         }
+        $value['description'] = reverse_feed_permalink($value['description']);
         $value['description'] = process_markdown(
             $value['description'],
             $conf->get('security.markdown_escape', true),
@@ -242,6 +245,11 @@ function reverse_nl2br($description)
 function reverse_space2nbsp($description)
 {
     return preg_replace('/(^| )&nbsp;/m', '$1 ', $description);
+}
+
+function reverse_feed_permalink($description)
+{
+    return preg_replace('@&#8212; <a href="([^"]+)" title="[^"]+">(\w+)</a>$@im', '&#8212; [$2]($1)', $description);
 }
 
 /**
