@@ -84,10 +84,7 @@ class LoginManagerTest extends TestCase
         $this->globals = &$GLOBALS;
         unset($this->globals['IPBANS']);
 
-        $this->session = [
-            'expires_on' => time() + 100,
-            'ip' => $this->clientIpAddress,
-        ];
+        $this->session = [];
 
         $this->sessionManager = new SessionManager($this->session, $this->configManager);
         $this->loginManager = new LoginManager($this->globals, $this->configManager, $this->sessionManager);
@@ -281,12 +278,18 @@ class LoginManagerTest extends TestCase
      */
     public function testCheckLoginStateStaySignedInWithInvalidToken()
     {
+        // simulate a previous login
+        $this->session = [
+            'ip' => $this->clientIpAddress,
+            'expires_on' => time() + 100,
+        ];
         $this->loginManager->generateStaySignedInToken($this->clientIpAddress);
         $this->cookie[LoginManager::$STAY_SIGNED_IN_COOKIE] = 'nope';
 
         $this->loginManager->checkLoginState($this->cookie, $this->clientIpAddress);
 
-        $this->assertFalse($this->loginManager->isLoggedIn());
+        $this->assertTrue($this->loginManager->isLoggedIn());
+        $this->assertTrue(empty($this->session['username']));
     }
 
     /**
@@ -300,6 +303,8 @@ class LoginManagerTest extends TestCase
         $this->loginManager->checkLoginState($this->cookie, $this->clientIpAddress);
 
         $this->assertTrue($this->loginManager->isLoggedIn());
+        $this->assertEquals($this->login, $this->session['username']);
+        $this->assertEquals($this->clientIpAddress, $this->session['ip']);
     }
 
     /**

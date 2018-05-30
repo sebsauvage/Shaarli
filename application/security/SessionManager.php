@@ -169,6 +169,9 @@ class SessionManager
      */
     public function hasSessionExpired()
     {
+        if (empty($this->session['expires_on'])) {
+            return true;
+        }
         if (time() >= $this->session['expires_on']) {
             return true;
         }
@@ -188,7 +191,7 @@ class SessionManager
         if ($this->conf->get('security.session_protection_disabled') === true) {
             return false;
         }
-        if ($this->session['ip'] == $clientIpId) {
+        if (isset($this->session['ip']) && $this->session['ip'] === $clientIpId) {
             return false;
         }
         return true;

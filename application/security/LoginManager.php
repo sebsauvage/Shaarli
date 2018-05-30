@@ -95,7 +95,6 @@ class LoginManager
             // The user client has a valid stay-signed-in cookie
             // Session information is updated with the current client information
             $this->sessionManager->storeLoginInfo($clientIpId);
-            $this->isLoggedIn = true;
 
         } elseif ($this->sessionManager->hasSessionExpired()
             || $this->sessionManager->hasClientIpChanged($clientIpId)
@@ -105,6 +104,7 @@ class LoginManager
             return;
         }
 
+        $this->isLoggedIn = true;
         $this->sessionManager->extendSession();
     }
 
