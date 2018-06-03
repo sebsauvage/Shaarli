@@ -78,8 +78,8 @@ require_once 'application/Updater.php';
 use \Shaarli\Languages;
 use \Shaarli\ThemeUtils;
 use \Shaarli\Config\ConfigManager;
-use \Shaarli\LoginManager;
-use \Shaarli\SessionManager;
+use \Shaarli\Security\LoginManager;
+use \Shaarli\Security\SessionManager;
 
 // Ensure the PHP version is supported
 try {
@@ -101,8 +101,6 @@ if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
 // Set default cookie expiration and path.
 session_set_cookie_params($cookie['lifetime'], $cookiedir, $_SERVER['SERVER_NAME']);
 // Set session parameters on server side.
-// If the user does not access any page within this time, his/her session is considered expired.
-define('INACTIVITY_TIMEOUT', 3600); // in seconds.
 // Use cookies to store session.
 ini_set('session.use_cookies', 1);
 // Force cookies for session (phpsessionID forbidden in URL).
@@ -123,8 +121,10 @@ if (isset($_COOKIE['shaarli']) && !SessionManager::checkId($_COOKIE['shaarli']))
 }
 
 $conf = new ConfigManager();
-$loginManager = new LoginManager($GLOBALS, $conf);
 $sessionManager = new SessionManager($_SESSION, $conf);
+$loginManager = new LoginManager($GLOBALS, $conf, $sessionManager);
+$loginManager->generateStaySignedInToken($_SERVER['REMOTE_ADDR']);
+$clientIpId = client_ip_id($_SERVER);
 
 // LC_MESSAGES isn't defined without php-intl, in this case use LC_COLLATE locale instead.
 if (! defined('LC_MESSAGES')) {
@@ -177,156 +177,60 @@ if (! is_file($conf->getConfigFileExt())) {
     install($conf, $sessionManager);
 }
 
-// a token depending of deployment salt, user password, and the current ip
-define('STAY_SIGNED_IN_TOKEN', sha1($conf->get('credentials.hash') . $_SERVER['REMOTE_ADDR'] . $conf->get('credentials.salt')));
+$loginManager->checkLoginState($_COOKIE, $clientIpId);
 
 /**
- * Checking session state (i.e. is the user still logged in)
+ * Adapter function to ensure compatibility with third-party templates
  *
- * @param ConfigManager $conf The configuration manager.
+ * @see https://github.com/shaarli/Shaarli/pull/1086
  *
- * @return bool: true if the user is logged in, false otherwise.
+ * @return bool true when the user is logged in, false otherwise
  */
-function setup_login_state($conf)
-{
-    if ($conf->get('security.open_shaarli')) {
-        return true;
-    }
-    $userIsLoggedIn = false; // By default, we do not consider the user as logged in;
-    $loginFailure = false; // If set to true, every attempt to authenticate the user will fail. This indicates that an important condition isn't met.
-    if (! $conf->exists('credentials.login')) {
-        $userIsLoggedIn = false;  // Shaarli is not configured yet.
-        $loginFailure = true;
-    }
-    if (isset($_COOKIE['shaarli_staySignedIn']) &&
-        $_COOKIE['shaarli_staySignedIn']===STAY_SIGNED_IN_TOKEN &&
-        !$loginFailure)
-    {
-        fillSessionInfo($conf);
-        $userIsLoggedIn = true;
-    }
-    // If session does not exist on server side, or IP address has changed, or session has expired, logout.
-    if (empty($_SESSION['uid'])
-        || ($conf->get('security.session_protection_disabled') === false && $_SESSION['ip'] != allIPs())
-        || time() >= $_SESSION['expires_on'])
-    {
-        logout();
-        $userIsLoggedIn = false;
-        $loginFailure = true;
-    }
-    if (!empty($_SESSION['longlastingsession'])) {
-        $_SESSION['expires_on']=time()+$_SESSION['longlastingsession']; // In case of "Stay signed in" checked.
-    }
-    else {
-        $_SESSION['expires_on']=time()+INACTIVITY_TIMEOUT; // Standard session expiration date.
-    }
-    if (!$loginFailure) {
-        $userIsLoggedIn = true;
-    }
-
-    return $userIsLoggedIn;
-}
-$userIsLoggedIn = setup_login_state($conf);
-
-// ------------------------------------------------------------------------------------------
-// Session management
-
-// Returns the IP address of the client (Used to prevent session cookie hijacking.)
-function allIPs()
-{
-    $ip = $_SERVER['REMOTE_ADDR'];
-    // Then we use more HTTP headers to prevent session hijacking from users behind the same proxy.
-    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) { $ip=$ip.'_'.$_SERVER['HTTP_X_FORWARDED_FOR']; }
-    if (isset($_SERVER['HTTP_CLIENT_IP'])) { $ip=$ip.'_'.$_SERVER['HTTP_CLIENT_IP']; }
-    return $ip;
-}
-
-/**
- * Load user session.
- *
- * @param ConfigManager $conf Configuration Manager instance.
- */
-function fillSessionInfo($conf)
-{
-    $_SESSION['uid'] = sha1(uniqid('',true).'_'.mt_rand()); // Generate unique random number (different than phpsessionid)
-    $_SESSION['ip']=allIPs();                // We store IP address(es) of the client to make sure session is not hijacked.
-    $_SESSION['username']= $conf->get('credentials.login');
-    $_SESSION['expires_on']=time()+INACTIVITY_TIMEOUT;  // Set session expiration.
-}
-
-/**
- * Check that user/password is correct.
- *
- * @param string        $login    Username
- * @param string        $password User password
- * @param ConfigManager $conf     Configuration Manager instance.
- *
- * @return bool: authentication successful or not.
- */
-function check_auth($login, $password, $conf)
-{
-    $hash = sha1($password . $login . $conf->get('credentials.salt'));
-    if ($login == $conf->get('credentials.login') && $hash == $conf->get('credentials.hash'))
-    {   // Login/password is correct.
-        fillSessionInfo($conf);
-        logm($conf->get('resource.log'), $_SERVER['REMOTE_ADDR'], 'Login successful');
-        return true;
-    }
-    logm($conf->get('resource.log'), $_SERVER['REMOTE_ADDR'], 'Login failed for user '.$login);
-    return false;
-}
-
-// Returns true if the user is logged in.
 function isLoggedIn()
 {
-    global $userIsLoggedIn;
-    return $userIsLoggedIn;
+    global $loginManager;
+    return $loginManager->isLoggedIn();
 }
 
-// Force logout.
-function logout() {
-    if (isset($_SESSION)) {
-        unset($_SESSION['uid']);
-        unset($_SESSION['ip']);
-        unset($_SESSION['username']);
-        unset($_SESSION['visibility']);
-        unset($_SESSION['untaggedonly']);
-    }
-    setcookie('shaarli_staySignedIn', FALSE, 0, WEB_PATH);
-}
 
 // ------------------------------------------------------------------------------------------
 // Process login form: Check if login/password is correct.
-if (isset($_POST['login']))
-{
+if (isset($_POST['login'])) {
     if (! $loginManager->canLogin($_SERVER)) {
         die(t('I said: NO. You are banned for the moment. Go away.'));
     }
     if (isset($_POST['password'])
         && $sessionManager->checkToken($_POST['token'])
-        && (check_auth($_POST['login'], $_POST['password'], $conf))
+        && $loginManager->checkCredentials($_SERVER['REMOTE_ADDR'], $clientIpId, $_POST['login'], $_POST['password'])
     ) {
-        // Login/password is OK.
         $loginManager->handleSuccessfulLogin($_SERVER);
 
-        // If user wants to keep the session cookie even after the browser closes:
-        if (!empty($_POST['longlastingsession'])) {
-            $_SESSION['longlastingsession'] = 31536000; // (31536000 seconds = 1 year)
-            $expiration = time() + $_SESSION['longlastingsession']; // calculate relative cookie expiration (1 year from now)
-            setcookie('shaarli_staySignedIn', STAY_SIGNED_IN_TOKEN, $expiration, WEB_PATH);
-            $_SESSION['expires_on'] = $expiration;  // Set session expiration on server-side.
-
-            $cookiedir = ''; if(dirname($_SERVER['SCRIPT_NAME'])!='/') $cookiedir=dirname($_SERVER["SCRIPT_NAME"]).'/';
-            session_set_cookie_params($_SESSION['longlastingsession'],$cookiedir,$_SERVER['SERVER_NAME']); // Set session cookie expiration on client side
+        $cookiedir = '';
+        if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
             // Note: Never forget the trailing slash on the cookie path!
-            session_regenerate_id(true);  // Send cookie with new expiration date to browser.
+            $cookiedir = dirname($_SERVER["SCRIPT_NAME"]) . '/';
         }
-        else // Standard session expiration (=when browser closes)
-        {
-            $cookiedir = ''; if(dirname($_SERVER['SCRIPT_NAME'])!='/') $cookiedir=dirname($_SERVER["SCRIPT_NAME"]).'/';
-            session_set_cookie_params(0,$cookiedir,$_SERVER['SERVER_NAME']); // 0 means "When browser closes"
-            session_regenerate_id(true);
+
+        if (!empty($_POST['longlastingsession'])) {
+            // Keep the session cookie even after the browser closes
+            $sessionManager->setStaySignedIn(true);
+            $expirationTime = $sessionManager->extendSession();
+
+            setcookie(
+                $loginManager::$STAY_SIGNED_IN_COOKIE,
+                $loginManager->getStaySignedInToken(),
+                $expirationTime,
+                WEB_PATH
+            );
+
+        } else {
+            // Standard session expiration (=when browser closes)
+            $expirationTime = 0;
         }
+
+        // Send cookie with the new expiration date to the browser
+        session_set_cookie_params($expirationTime, $cookiedir, $_SERVER['SERVER_NAME']);
+        session_regenerate_id(true);
 
         // Optional redirect after login:
         if (isset($_GET['post'])) {
@@ -380,15 +284,16 @@ if (!isset($_SESSION['tokens'])) $_SESSION['tokens']=array();  // Token are atta
  * Gives the last 7 days (which have links).
  * This RSS feed cannot be filtered.
  *
- * @param ConfigManager $conf Configuration Manager instance.
+ * @param ConfigManager $conf         Configuration Manager instance
+ * @param LoginManager  $loginManager LoginManager instance
  */
-function showDailyRSS($conf) {
+function showDailyRSS($conf, $loginManager) {
     // Cache system
     $query = $_SERVER['QUERY_STRING'];
     $cache = new CachedPage(
         $conf->get('config.PAGE_CACHE'),
         page_url($_SERVER),
-        startsWith($query,'do=dailyrss') && !isLoggedIn()
+        startsWith($query,'do=dailyrss') && !$loginManager->isLoggedIn()
     );
     $cached = $cache->cachedVersion();
     if (!empty($cached)) {
@@ -400,7 +305,7 @@ function showDailyRSS($conf) {
     // Read links from database (and filter private links if used it not logged in).
     $LINKSDB = new LinkDB(
         $conf->get('resource.datastore'),
-        isLoggedIn(),
+        $loginManager->isLoggedIn(),
         $conf->get('privacy.hide_public_links'),
         $conf->get('redirector.url'),
         $conf->get('redirector.encode_url')
@@ -482,9 +387,10 @@ function showDailyRSS($conf) {
  * @param PageBuilder   $pageBuilder   Template engine wrapper.
  * @param LinkDB        $LINKSDB       LinkDB instance.
  * @param ConfigManager $conf          Configuration Manager instance.
- * @param PluginManager $pluginManager Plugin Manager instane.
+ * @param PluginManager $pluginManager Plugin Manager instance.
+ * @param LoginManager  $loginManager  Login Manager instance
  */
-function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager)
+function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
 {
     $day = date('Ymd', strtotime('-1 day')); // Yesterday, in format YYYYMMDD.
     if (isset($_GET['day'])) {
@@ -542,7 +448,7 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager)
 
     /* Hook is called before column construction so that plugins don't have
        to deal with columns. */
-    $pluginManager->executeHooks('render_daily', $data, array('loggedin' => isLoggedIn()));
+    $pluginManager->executeHooks('render_daily', $data, array('loggedin' => $loginManager->isLoggedIn()));
 
     /* We need to spread the articles on 3 columns.
        I did not want to use a JavaScript lib like http://masonry.desandro.com/
@@ -586,8 +492,8 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager)
  * @param ConfigManager $conf    Configuration Manager instance.
  * @param PluginManager $pluginManager Plugin Manager instance.
  */
-function showLinkList($PAGE, $LINKSDB, $conf, $pluginManager) {
-    buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager); // Compute list of links to display
+function showLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager) {
+    buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager, $loginManager);
     $PAGE->renderPage('linklist');
 }
 
@@ -607,7 +513,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         read_updates_file($conf->get('resource.updates')),
         $LINKSDB,
         $conf,
-        isLoggedIn()
+        $loginManager->isLoggedIn()
     );
     try {
         $newUpdates = $updater->update();
@@ -622,18 +528,18 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         die($e->getMessage());
     }
 
-    $PAGE = new PageBuilder($conf, $LINKSDB, $sessionManager->generateToken());
+    $PAGE = new PageBuilder($conf, $LINKSDB, $sessionManager->generateToken(), $loginManager->isLoggedIn());
     $PAGE->assign('linkcount', count($LINKSDB));
     $PAGE->assign('privateLinkcount', count_private($LINKSDB));
     $PAGE->assign('plugin_errors', $pluginManager->getErrors());
 
     // Determine which page will be rendered.
     $query = (isset($_SERVER['QUERY_STRING'])) ? $_SERVER['QUERY_STRING'] : '';
-    $targetPage = Router::findPage($query, $_GET, isLoggedIn());
+    $targetPage = Router::findPage($query, $_GET, $loginManager->isLoggedIn());
 
     if (
         // if the user isn't logged in
-        !isLoggedIn() &&
+        !$loginManager->isLoggedIn() &&
         // and Shaarli doesn't have public content...
         $conf->get('privacy.hide_public_links') &&
         // and is configured to enforce the login
@@ -661,7 +567,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         $pluginManager->executeHooks('render_' . $name, $plugin_data,
             array(
                 'target' => $targetPage,
-                'loggedin' => isLoggedIn()
+                'loggedin' => $loginManager->isLoggedIn()
             )
         );
         $PAGE->assign('plugins_' . $name, $plugin_data);
@@ -686,7 +592,8 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=logout'))
     {
         invalidateCaches($conf->get('resource.page_cache'));
-        logout();
+        $sessionManager->logout();
+        setcookie(LoginManager::$STAY_SIGNED_IN_COOKIE, 'false', 0, WEB_PATH);
         header('Location: ?');
         exit;
     }
@@ -713,7 +620,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         $data = array(
             'linksToDisplay' => $linksToDisplay,
         );
-        $pluginManager->executeHooks('render_picwall', $data, array('loggedin' => isLoggedIn()));
+        $pluginManager->executeHooks('render_picwall', $data, array('loggedin' => $loginManager->isLoggedIn()));
 
         foreach ($data as $key => $value) {
             $PAGE->assign($key, $value);
@@ -760,7 +667,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             'search_tags' => $searchTags,
             'tags' => $tagList,
         );
-        $pluginManager->executeHooks('render_tagcloud', $data, array('loggedin' => isLoggedIn()));
+        $pluginManager->executeHooks('render_tagcloud', $data, array('loggedin' => $loginManager->isLoggedIn()));
 
         foreach ($data as $key => $value) {
             $PAGE->assign($key, $value);
@@ -793,7 +700,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             'search_tags' => $searchTags,
             'tags' => $tags,
         ];
-        $pluginManager->executeHooks('render_taglist', $data, ['loggedin' => isLoggedIn()]);
+        $pluginManager->executeHooks('render_taglist', $data, ['loggedin' => $loginManager->isLoggedIn()]);
 
         foreach ($data as $key => $value) {
             $PAGE->assign($key, $value);
@@ -807,7 +714,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
 
     // Daily page.
     if ($targetPage == Router::$PAGE_DAILY) {
-        showDaily($PAGE, $LINKSDB, $conf, $pluginManager);
+        showDaily($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager);
     }
 
     // ATOM and RSS feed.
@@ -820,7 +727,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         $cache = new CachedPage(
             $conf->get('resource.page_cache'),
             page_url($_SERVER),
-            startsWith($query,'do='. $targetPage) && !isLoggedIn()
+            startsWith($query,'do='. $targetPage) && !$loginManager->isLoggedIn()
         );
         $cached = $cache->cachedVersion();
         if (!empty($cached)) {
@@ -829,15 +736,15 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         }
 
         // Generate data.
-        $feedGenerator = new FeedBuilder($LINKSDB, $feedType, $_SERVER, $_GET, isLoggedIn());
+        $feedGenerator = new FeedBuilder($LINKSDB, $feedType, $_SERVER, $_GET, $loginManager->isLoggedIn());
         $feedGenerator->setLocale(strtolower(setlocale(LC_COLLATE, 0)));
-        $feedGenerator->setHideDates($conf->get('privacy.hide_timestamps') && !isLoggedIn());
+        $feedGenerator->setHideDates($conf->get('privacy.hide_timestamps') && !$loginManager->isLoggedIn());
         $feedGenerator->setUsePermalinks(isset($_GET['permalinks']) || !$conf->get('feed.rss_permalinks'));
         $data = $feedGenerator->buildData();
 
         // Process plugin hook.
         $pluginManager->executeHooks('render_feed', $data, array(
-            'loggedin' => isLoggedIn(),
+            'loggedin' => $loginManager->isLoggedIn(),
             'target' => $targetPage,
         ));
 
@@ -985,7 +892,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     // -------- Handle other actions allowed for non-logged in users:
-    if (!isLoggedIn())
+    if (!$loginManager->isLoggedIn())
     {
         // User tries to post new link but is not logged in:
         // Show login screen, then redirect to ?post=...
@@ -1001,7 +908,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             exit;
         }
 
-        showLinkList($PAGE, $LINKSDB, $conf, $pluginManager);
+        showLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager);
         if (isset($_GET['edit_link'])) {
             header('Location: ?do=login&edit_link='. escape($_GET['edit_link']));
             exit;
@@ -1052,7 +959,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $conf->set('credentials.salt', sha1(uniqid('', true) .'_'. mt_rand()));
             $conf->set('credentials.hash', sha1($_POST['setpassword'] . $conf->get('credentials.login') . $conf->get('credentials.salt')));
             try {
-                $conf->write(isLoggedIn());
+                $conf->write($loginManager->isLoggedIn());
             }
             catch(Exception $e) {
                 error_log(
@@ -1103,7 +1010,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $conf->set('translation.language', escape($_POST['language']));
 
             try {
-                $conf->write(isLoggedIn());
+                $conf->write($loginManager->isLoggedIn());
                 $history->updateSettings();
                 invalidateCaches($conf->get('resource.page_cache'));
             }
@@ -1555,7 +1462,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             else {
                 $conf->set('general.enabled_plugins', save_plugin_config($_POST));
             }
-            $conf->write(isLoggedIn());
+            $conf->write($loginManager->isLoggedIn());
             $history->updateSettings();
         }
         catch (Exception $e) {
@@ -1580,7 +1487,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     // -------- Otherwise, simply display search form and links:
-    showLinkList($PAGE, $LINKSDB, $conf, $pluginManager);
+    showLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager);
     exit;
 }
 
@@ -1592,8 +1499,9 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
  * @param LinkDB        $LINKSDB       LinkDB instance.
  * @param ConfigManager $conf          Configuration Manager instance.
  * @param PluginManager $pluginManager Plugin Manager instance.
+ * @param LoginManager  $loginManager  LoginManager instance
  */
-function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
+function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
 {
     // Used in templates
     if (isset($_GET['searchtags'])) {
@@ -1631,8 +1539,6 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
     foreach ($linksToDisplay as $key => $value) {
         $keys[] = $key;
     }
-
-
 
     // Select articles according to paging.
     $pagecount = ceil(count($keys) / $_SESSION['LINKS_PER_PAGE']);
@@ -1714,7 +1620,7 @@ function buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager)
         $data['pagetitle'] .= '- '. $conf->get('general.title');
     }
 
-    $pluginManager->executeHooks('render_linklist', $data, array('loggedin' => isLoggedIn()));
+    $pluginManager->executeHooks('render_linklist', $data, array('loggedin' => $loginManager->isLoggedIn()));
 
     foreach ($data as $key => $value) {
         $PAGE->assign($key, $value);
@@ -1985,7 +1891,7 @@ function install($conf, $sessionManager) {
         );
         try {
             // Everything is ok, let's create config file.
-            $conf->write(isLoggedIn());
+            $conf->write($loginManager->isLoggedIn());
         }
         catch(Exception $e) {
             error_log(
@@ -2249,7 +2155,7 @@ try {
 
 $linkDb = new LinkDB(
     $conf->get('resource.datastore'),
-    isLoggedIn(),
+    $loginManager->isLoggedIn(),
     $conf->get('privacy.hide_public_links'),
     $conf->get('redirector.url'),
     $conf->get('redirector.encode_url')

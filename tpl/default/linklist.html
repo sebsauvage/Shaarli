@@ -136,7 +136,7 @@
               <div class="linklist-item-thumbnail">{$thumb}</div>
             {/if}
 
-            {if="isLoggedIn()"}
+            {if="$is_logged_in"}
               <div class="linklist-item-editbuttons">
                 {if="$value.private"}
                   <span class="label label-private">{$strPrivate}</span>
@@ -179,7 +179,7 @@
 
             <div class="linklist-item-infos-date-url-block pure-g">
               <div class="linklist-item-infos-dateblock pure-u-lg-7-12 pure-u-1">
-                {if="isLoggedIn()"}
+                {if="$is_logged_in"}
                   <div class="linklist-item-infos-controls-group pure-u-0 pure-u-lg-visible">
                     <span class="linklist-item-infos-controls-item ctrl-checkbox">
                       <input type="checkbox" class="delete-checkbox" value="{$value.id}">
@@ -196,7 +196,7 @@
                   </div>
                 {/if}
                 <a href="?{$value.shorturl}" title="{$strPermalink}">
-                  {if="!$hide_timestamps || isLoggedIn()"}
+                  {if="!$hide_timestamps || $is_logged_in"}
                     {$updated=$value.updated_timestamp ? $strEdited. format_date($value.updated) : $strPermalink}
                     <span class="linkdate" title="{$updated}">
                       <i class="fa fa-clock-o"></i>
@@ -236,7 +236,7 @@
                     {if="$link_plugin_counter - 1 != $counter"}&middot;{/if}
                   {/loop}
                 {/if}
-                {if="isLoggedIn()"}
+                {if="$is_logged_in"}
                   &middot;
                   <a href="?delete_link&amp;lf_linkdate={$value.id}&amp;token={$token}"
                      title="{$strDelete}" class="delete-link confirm-delete">

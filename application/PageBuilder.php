@@ -25,6 +25,9 @@ class PageBuilder
      * @var LinkDB $linkDB instance.
      */
     protected $linkDB;
+    
+    /** @var bool $isLoggedIn Whether the user is logged in **/
+    protected $isLoggedIn = false;
 
     /**
      * PageBuilder constructor.
@@ -34,12 +37,13 @@ class PageBuilder
      * @param LinkDB        $linkDB instance.
      * @param string        $token  Session token
      */
-    public function __construct(&$conf, $linkDB = null, $token = null)
+    public function __construct(&$conf, $linkDB = null, $token = null, $isLoggedIn = false)
     {
         $this->tpl = false;
         $this->conf = $conf;
         $this->linkDB = $linkDB;
         $this->token = $token;
+        $this->isLoggedIn = $isLoggedIn;
     }
 
     /**
@@ -55,7 +59,7 @@ class PageBuilder
                 $this->conf->get('resource.update_check'),
                 $this->conf->get('updates.check_updates_interval'),
                 $this->conf->get('updates.check_updates'),
-                isLoggedIn(),
+                $this->isLoggedIn,
                 $this->conf->get('updates.check_updates_branch')
             );
             $this->tpl->assign('newVersion', escape($version));
@@ -67,6 +71,7 @@ class PageBuilder
             $this->tpl->assign('versionError', escape($exc->getMessage()));
         }
 
+        $this->tpl->assign('is_logged_in', $this->isLoggedIn);
         $this->tpl->assign('feedurl', escape(index_url($_SERVER)));
         $searchcrits = ''; // Search criteria
         if (!empty($_GET['searchtags'])) {

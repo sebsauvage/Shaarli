@@ -17,7 +17,7 @@
             {$shaarlititle}
           </a>
         </li>
-        {if="isLoggedIn() || $openshaarli"}
+        {if="$is_logged_in || $openshaarli"}
           <li class="pure-menu-item">
             <a href="?do=addlink" class="pure-menu-link" id="shaarli-menu-shaare">
               <i class="fa fa-plus" ></i> {'Shaare'|t}
@@ -50,7 +50,7 @@
         <li class="pure-menu-item pure-u-lg-0 shaarli-menu-mobile" id="shaarli-menu-mobile-rss">
             <a href="?do={$feed_type}{$searchcrits}" class="pure-menu-link">{'RSS Feed'|t}</a>
         </li>
-        {if="isLoggedIn()"}
+        {if="$is_logged_in"}
           <li class="pure-menu-item pure-u-lg-0 shaarli-menu-mobile" id="shaarli-menu-mobile-logout">
             <a href="?do=logout" class="pure-menu-link">{'Logout'|t}</a>
           </li>
@@ -74,7 +74,7 @@
               <i class="fa fa-rss"></i>
             </a>
           </li>
-          {if="!isLoggedIn()"}
+          {if="!$is_logged_in"}
             <li class="pure-menu-item" id="shaarli-menu-desktop-login">
               <a href="?do=login" class="pure-menu-link"
                  data-open-id="header-login-form"
@@ -120,7 +120,7 @@
       </div>
     </div>
   </div>
-  {if="!isLoggedIn()"}
+  {if="!$is_logged_in"}
     <form method="post" name="loginform">
       <div class="subheader-form header-login-form" id="header-login-form">
         <input type="text" name="login" placeholder="{'Username'|t}" tabindex="3">
@@ -155,7 +155,7 @@
   </div>
 {/if}
 
-{if="!empty($plugin_errors) && isLoggedIn()"}
+{if="!empty($plugin_errors) && $is_logged_in"}
   <div class="pure-g new-version-message pure-alert pure-alert-error pure-alert-closable" id="shaarli-errors-alert">
     <div class="pure-u-2-24"></div>
     <div class="pure-u-20-24">
