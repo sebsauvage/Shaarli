@@ -144,7 +144,7 @@ class DeleteTagTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test DELETE link endpoint: reach not existing ID.
+     * Test DELETE tag endpoint: reach not existing tag.
      *
      * @expectedException Shaarli\Api\Exceptions\ApiTagNotFoundException
      * @expectedExceptionMessage Tag not found

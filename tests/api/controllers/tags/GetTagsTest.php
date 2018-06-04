@@ -79,7 +79,7 @@ class GetTagsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test basic getLinks service: returns all tags.
+     * Test basic getTags service: returns all tags.
      */
     public function testGetTagsAll()
     {
@@ -102,12 +102,12 @@ class GetTagsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('cartoon', $data[1]['name']);
         $this->assertEquals(3, $data[1]['occurrences']);
         // Case insensitive
-        $this->assertEquals(self::NB_FIELDS_TAG, count($data[2]));
-        $this->assertEquals('sTuff', $data[2]['name']);
-        $this->assertEquals(2, $data[2]['occurrences']);
+        $this->assertEquals(self::NB_FIELDS_TAG, count($data[5]));
+        $this->assertEquals('sTuff', $data[5]['name']);
+        $this->assertEquals(2, $data[5]['occurrences']);
         // End
         $this->assertEquals(self::NB_FIELDS_TAG, count($data[count($data) - 1]));
-        $this->assertEquals('ut', $data[count($data) - 1]['name']);
+        $this->assertEquals('w3c', $data[count($data) - 1]['name']);
         $this->assertEquals(1, $data[count($data) - 1]['occurrences']);
     }
 
@@ -181,7 +181,7 @@ class GetTagsTest extends \PHPUnit_Framework_TestCase
         $data = json_decode((string) $response->getBody(), true);
         $this->assertEquals(count($tags), count($data));
         $this->assertEquals(self::NB_FIELDS_TAG, count($data[0]));
-        $this->assertEquals('css', $data[0]['name']);
+        $this->assertEquals('Mercurial', $data[0]['name']);
         $this->assertEquals(1, $data[0]['occurrences']);
     }
 

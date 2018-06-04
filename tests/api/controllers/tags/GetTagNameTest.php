@@ -112,7 +112,7 @@ class GetTagNameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test basic getLink service: get non existent link => ApiLinkNotFoundException.
+     * Test basic getTag service: get non existent tag => ApiTagNotFoundException.
      *
      * @expectedException Shaarli\Api\Exceptions\ApiTagNotFoundException
      * @expectedExceptionMessage Tag not found
