@@ -9,6 +9,11 @@ pagecache
 .buildpath
 .project
 
+# macOS General
+.DS_Store
+.AppleDouble
+.LSOverride
+
 # Raintpl generated pages
 *.rtpl.php
 
