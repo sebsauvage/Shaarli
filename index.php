@@ -174,7 +174,7 @@ if (! is_file($conf->getConfigFileExt())) {
     }
 
     // Display the installation form if no existing config is found
-    install($conf, $sessionManager);
+    install($conf, $sessionManager, $loginManager);
 }
 
 $loginManager->checkLoginState($_COOKIE, $clientIpId);
@@ -1823,8 +1823,9 @@ function lazyThumbnail($conf, $url,$href=false)
  *
  * @param ConfigManager  $conf           Configuration Manager instance.
  * @param SessionManager $sessionManager SessionManager instance
+ * @param LoginManager   $loginManager   LoginManager instance
  */
-function install($conf, $sessionManager) {
+function install($conf, $sessionManager, $loginManager) {
     // On free.fr host, make sure the /sessions directory exists, otherwise login will not work.
     if (endsWith($_SERVER['HTTP_HOST'],'.free.fr') && !is_dir($_SERVER['DOCUMENT_ROOT'].'/sessions')) mkdir($_SERVER['DOCUMENT_ROOT'].'/sessions',0705);
 
