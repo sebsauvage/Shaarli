@@ -436,15 +436,17 @@ You use the community supported version of the original Shaarli project, by Seba
 
     /**
      * Returns the list tags appearing in the links with the given tags
-     * @param $filteringTags: tags selecting the links to consider
-     * @param $visibility: process only all/private/public links
-     * @return: a tag=>linksCount array
+     *
+     * @param array $filteringTags tags selecting the links to consider
+     * @param string $visibility   process only all/private/public links
+     *
+     * @return array tag => linksCount
      */
     public function linksCountPerTag($filteringTags = [], $visibility = 'all')
     {
-        $links = empty($filteringTags) ? $this->links : $this->filterSearch(['searchtags' => $filteringTags], false, $visibility);
-        $tags = array();
-        $caseMapping = array();
+        $links = $this->filterSearch(['searchtags' => $filteringTags], false, $visibility);
+        $tags = [];
+        $caseMapping = [];
         foreach ($links as $link) {
             foreach (preg_split('/\s+/', $link['tags'], 0, PREG_SPLIT_NO_EMPTY) as $tag) {
                 if (empty($tag)) {
@@ -458,8 +460,19 @@ You use the community supported version of the original Shaarli project, by Seba
                 $tags[$caseMapping[strtolower($tag)]]++;
             }
         }
-        // Sort tags by usage (most used tag first)
-        arsort($tags);
+
+        /*
+         * Formerly used arsort(), which doesn't define the sort behaviour for equal values.
+         * Also, this function doesn't produce the same result between PHP 5.6 and 7.
+         *
+         * So we now use array_multisort() to sort tags by DESC occurrences,
+         * then ASC alphabetically for equal values.
+         *
+         * @see https://github.com/shaarli/Shaarli/issues/1142
+         */
+        $keys = array_keys($tags);
+        $tmpTags = array_combine($keys, $keys);
+        array_multisort($tags, SORT_DESC, $tmpTags, SORT_ASC, $tags);
         return $tags;
     }
 

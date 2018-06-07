@@ -11,6 +11,7 @@
  */
 function get_curl_download_callback(&$charset, &$title, $curlGetInfo = 'curl_getinfo')
 {
+    $isRedirected = false;
     /**
      * cURL callback function for CURLOPT_WRITEFUNCTION (called during the download).
      *
@@ -22,16 +23,24 @@ function get_curl_download_callback(&$charset, &$title, $curlGetInfo = 'curl_get
      *
      * @return int|bool length of $data or false if we need to stop the download
      */
-    return function(&$ch, $data) use ($curlGetInfo, &$charset, &$title) {
+    return function(&$ch, $data) use ($curlGetInfo, &$charset, &$title, &$isRedirected) {
         $responseCode = $curlGetInfo($ch, CURLINFO_RESPONSE_CODE);
-        if (!empty($responseCode) && $responseCode != 200) {
+        if (!empty($responseCode) && in_array($responseCode, [301, 302])) {
+            $isRedirected = true;
+            return strlen($data);
+        }
+        if (!empty($responseCode) && $responseCode !== 200) {
             return false;
         }
-        $contentType = $curlGetInfo($ch, CURLINFO_CONTENT_TYPE);
+        // After a redirection, the content type will keep the previous request value
+        // until it finds the next content-type header.
+        if (! $isRedirected || strpos(strtolower($data), 'content-type') !== false) {
+            $contentType = $curlGetInfo($ch, CURLINFO_CONTENT_TYPE);
+        }
         if (!empty($contentType) && strpos($contentType, 'text/html') === false) {
             return false;
         }
-        if (empty($charset)) {
+        if (!empty($contentType) && empty($charset)) {
             $charset = header_extract_charset($contentType);
         }
         if (empty($charset)) {

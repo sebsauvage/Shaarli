@@ -542,4 +542,104 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(3, count($res));
         $this->assertNotContains('cartoon', $linkDB[4]['tags']);
     }
+
+    /**
+     * Test linksCountPerTag all tags without filter.
+     * Equal occurrences should be sorted alphabetically.
+     */
+    public function testCountLinkPerTagAllNoFilter()
+    {
+        $expected = [
+            'web' => 4,
+            'cartoon' => 3,
+            'dev' => 2,
+            'gnu' => 2,
+            'hashtag' => 2,
+            'sTuff' => 2,
+            '-exclude' => 1,
+            '.hidden' => 1,
+            'Mercurial' => 1,
+            'css' => 1,
+            'free' => 1,
+            'html' => 1,
+            'media' => 1,
+            'samba' => 1,
+            'software' => 1,
+            'stallman' => 1,
+            'tag1' => 1,
+            'tag2' => 1,
+            'tag3' => 1,
+            'tag4' => 1,
+            'ut' => 1,
+            'w3c' => 1,
+        ];
+        $tags = self::$privateLinkDB->linksCountPerTag();
+
+        $this->assertEquals($expected, $tags, var_export($tags, true));
+    }
+
+    /**
+     * Test linksCountPerTag all tags with filter.
+     * Equal occurrences should be sorted alphabetically.
+     */
+    public function testCountLinkPerTagAllWithFilter()
+    {
+        $expected = [
+            'gnu' => 2,
+            'hashtag' => 2,
+            '-exclude' => 1,
+            '.hidden' => 1,
+            'free' => 1,
+            'media' => 1,
+            'software' => 1,
+            'stallman' => 1,
+            'stuff' => 1,
+            'web' => 1,
+        ];
+        $tags = self::$privateLinkDB->linksCountPerTag(['gnu']);
+
+        $this->assertEquals($expected, $tags, var_export($tags, true));
+    }
+
+    /**
+     * Test linksCountPerTag public tags with filter.
+     * Equal occurrences should be sorted alphabetically.
+     */
+    public function testCountLinkPerTagPublicWithFilter()
+    {
+        $expected = [
+            'gnu' => 2,
+            'hashtag' => 2,
+            '-exclude' => 1,
+            '.hidden' => 1,
+            'free' => 1,
+            'media' => 1,
+            'software' => 1,
+            'stallman' => 1,
+            'stuff' => 1,
+            'web' => 1,
+        ];
+        $tags = self::$privateLinkDB->linksCountPerTag(['gnu'], 'public');
+
+        $this->assertEquals($expected, $tags, var_export($tags, true));
+    }
+
+    /**
+     * Test linksCountPerTag public tags with filter.
+     * Equal occurrences should be sorted alphabetically.
+     */
+    public function testCountLinkPerTagPrivateWithFilter()
+    {
+        $expected = [
+            'cartoon' => 1,
+            'dev' => 1,
+            'tag1' => 1,
+            'tag2' => 1,
+            'tag3' => 1,
+            'tag4' => 1,
+        ];
+        $tags = self::$privateLinkDB->linksCountPerTag(['dev'], 'private');
+
+        $this->assertEquals($expected, $tags, var_export($tags, true));
+    }
 }

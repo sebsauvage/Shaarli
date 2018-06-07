@@ -1,5 +1,5 @@
 <?php
-namespace Shaarli;
+namespace Shaarli\Security;
 
 require_once 'tests/utils/FakeConfigManager.php';
 use \PHPUnit\Framework\TestCase;
@@ -9,14 +9,53 @@ use \PHPUnit\Framework\TestCase;
  */
 class LoginManagerTest extends TestCase
 {
+    /** @var \FakeConfigManager Configuration Manager instance */
     protected $configManager = null;
+
+    /** @var LoginManager Login Manager instance */
     protected $loginManager = null;
+
+    /** @var SessionManager Session Manager instance */
+    protected $sessionManager = null;
+
+    /** @var string Banned IP filename */
     protected $banFile = 'sandbox/ipbans.php';
+
+    /** @var string Log filename */
     protected $logFile = 'sandbox/shaarli.log';
+
+    /** @var array Simulates the $_COOKIE array */
+    protected $cookie = [];
+
+    /** @var array Simulates the $GLOBALS array */
     protected $globals = [];
-    protected $ipAddr = '127.0.0.1';
+
+    /** @var array Simulates the $_SERVER array */
     protected $server = [];
+
+    /** @var array Simulates the $_SESSION array */
+    protected $session = [];
+
+    /** @var string Advertised client IP address */
+    protected $clientIpAddress = '10.1.47.179';
+
+    /** @var string Local client IP address */
+    protected $ipAddr = '127.0.0.1';
+
+    /** @var string Trusted proxy IP address */
     protected $trustedProxy = '10.1.1.100';
+
+    /** @var string User login */
+    protected $login = 'johndoe';
+
+    /** @var string User password */
+    protected $password = 'IC4nHazL0g1n?';
+
+    /** @var string Hash of the salted user password */
+    protected $passwordHash = '';
+
+    /** @var string Salt used by hash functions */
+    protected $salt = '669e24fa9c5a59a613f98e8e38327384504a4af2';
 
     /**
      * Prepare or reset test resources
@@ -27,7 +66,12 @@ class LoginManagerTest extends TestCase
             unlink($this->banFile);
         }
 
+        $this->passwordHash = sha1($this->password . $this->login . $this->salt);
+
         $this->configManager = new \FakeConfigManager([
+            'credentials.login' => $this->login,
+            'credentials.hash' => $this->passwordHash,
+            'credentials.salt' => $this->salt,
             'resource.ban_file' => $this->banFile,
             'resource.log' => $this->logFile,
             'security.ban_after' => 4,
@@ -35,10 +79,15 @@ class LoginManagerTest extends TestCase
             'security.trusted_proxies' => [$this->trustedProxy],
         ]);
 
+        $this->cookie = [];
+
         $this->globals = &$GLOBALS;
         unset($this->globals['IPBANS']);
 
-        $this->loginManager = new LoginManager($this->globals, $this->configManager);
+        $this->session = [];
+
+        $this->sessionManager = new SessionManager($this->session, $this->configManager);
+        $this->loginManager = new LoginManager($this->globals, $this->configManager, $this->sessionManager);
         $this->server['REMOTE_ADDR'] = $this->ipAddr;
     }
 
@@ -59,7 +108,7 @@ class LoginManagerTest extends TestCase
             $this->banFile,
             "<?php\n\$GLOBALS['IPBANS']=array('FAILURES' => array('127.0.0.1' => 99));\n?>"
         );
-        new LoginManager($this->globals, $this->configManager);
+        new LoginManager($this->globals, $this->configManager, null);
         $this->assertEquals(99, $this->globals['IPBANS']['FAILURES']['127.0.0.1']);
     }
 
@@ -195,5 +244,131 @@ class LoginManagerTest extends TestCase
         // lift the ban
         $this->globals['IPBANS']['BANS'][$this->ipAddr] = time() - 3600;
         $this->assertTrue($this->loginManager->canLogin($this->server));
+    }
+
+    /**
+     * Generate a token depending on the user credentials and client IP
+     */
+    public function testGenerateStaySignedInToken()
+    {
+        $this->loginManager->generateStaySignedInToken($this->clientIpAddress);
+
+        $this->assertEquals(
+            sha1($this->passwordHash . $this->clientIpAddress . $this->salt),
+            $this->loginManager->getStaySignedInToken()
+        );
+    }
+
+    /**
+     * Check user login - Shaarli has not yet been configured
+     */
+    public function testCheckLoginStateNotConfigured()
+    {
+        $configManager = new \FakeConfigManager([
+            'resource.ban_file' => $this->banFile,
+        ]);
+        $loginManager = new LoginManager($this->globals, $configManager, null);
+        $loginManager->checkLoginState([], '');
+
+        $this->assertFalse($loginManager->isLoggedIn());
+    }
+
+    /**
+     * Check user login - the client cookie does not match the server token
+     */
+    public function testCheckLoginStateStaySignedInWithInvalidToken()
+    {
+        // simulate a previous login
+        $this->session = [
+            'ip' => $this->clientIpAddress,
+            'expires_on' => time() + 100,
+        ];
+        $this->loginManager->generateStaySignedInToken($this->clientIpAddress);
+        $this->cookie[LoginManager::$STAY_SIGNED_IN_COOKIE] = 'nope';
+
+        $this->loginManager->checkLoginState($this->cookie, $this->clientIpAddress);
+
+        $this->assertTrue($this->loginManager->isLoggedIn());
+        $this->assertTrue(empty($this->session['username']));
+    }
+
+    /**
+     * Check user login - the client cookie matches the server token
+     */
+    public function testCheckLoginStateStaySignedInWithValidToken()
+    {
+        $this->loginManager->generateStaySignedInToken($this->clientIpAddress);
+        $this->cookie[LoginManager::$STAY_SIGNED_IN_COOKIE] = $this->loginManager->getStaySignedInToken();
+
+        $this->loginManager->checkLoginState($this->cookie, $this->clientIpAddress);
+
+        $this->assertTrue($this->loginManager->isLoggedIn());
+        $this->assertEquals($this->login, $this->session['username']);
+        $this->assertEquals($this->clientIpAddress, $this->session['ip']);
+    }
+
+    /**
+     * Check user login - the session has expired
+     */
+    public function testCheckLoginStateSessionExpired()
+    {
+        $this->loginManager->generateStaySignedInToken($this->clientIpAddress);
+        $this->session['expires_on'] = time() - 100;
+
+        $this->loginManager->checkLoginState($this->cookie, $this->clientIpAddress);
+
+        $this->assertFalse($this->loginManager->isLoggedIn());
+    }
+
+    /**
+     * Check user login - the remote client IP has changed
+     */
+    public function testCheckLoginStateClientIpChanged()
+    {
+        $this->loginManager->generateStaySignedInToken($this->clientIpAddress);
+
+        $this->loginManager->checkLoginState($this->cookie, '10.7.157.98');
+
+        $this->assertFalse($this->loginManager->isLoggedIn());
+    }
+
+    /**
+     * Check user credentials - wrong login supplied
+     */
+    public function testCheckCredentialsWrongLogin()
+    {
+        $this->assertFalse(
+            $this->loginManager->checkCredentials('', '', 'b4dl0g1n', $this->password)
+        );
+    }
+
+    /**
+     * Check user credentials - wrong password supplied
+     */
+    public function testCheckCredentialsWrongPassword()
+    {
+        $this->assertFalse(
+            $this->loginManager->checkCredentials('', '', $this->login, 'b4dp455wd')
+        );
+    }
+
+    /**
+     * Check user credentials - wrong login and password supplied
+     */
+    public function testCheckCredentialsWrongLoginAndPassword()
+    {
+        $this->assertFalse(
+            $this->loginManager->checkCredentials('', '', 'b4dl0g1n', 'b4dp455wd')
+        );
+    }
+
+    /**
+     * Check user credentials - correct login and password supplied
+     */
+    public function testCheckCredentialsGoodLoginAndPassword()
+    {
+        $this->assertTrue(
+            $this->loginManager->checkCredentials('', '', $this->login, $this->password)
+        );
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * GET an HTTP URL to retrieve its content
- * Uses the cURL library or a fallback method 
+ * Uses the cURL library or a fallback method
  *
  * @param string          $url               URL to get (http://...)
  * @param int             $timeout           network timeout (in seconds)
@@ -414,6 +414,37 @@ function getIpAddressFromProxy($server, $trustedIps)
 
     return array_pop($ips);
 }
+
+
+/**
+ * Return an identifier based on the advertised client IP address(es)
+ *
+ * This aims at preventing session hijacking from users behind the same proxy
+ * by relying on HTTP headers.
+ *
+ * See:
+ * - https://secure.php.net/manual/en/reserved.variables.server.php
+ * - https://stackoverflow.com/questions/3003145/how-to-get-the-client-ip-address-in-php
+ * - https://stackoverflow.com/questions/12233406/preventing-session-hijacking
+ * - https://stackoverflow.com/questions/21354859/trusting-x-forwarded-for-to-identify-a-visitor
+ *
+ * @param array $server The $_SERVER array
+ *
+ * @return string An identifier based on client IP address information
+ */
+function client_ip_id($server)
+{
+    $ip = $server['REMOTE_ADDR'];
+
+    if (isset($server['HTTP_X_FORWARDED_FOR'])) {
+        $ip = $ip . '_' . $server['HTTP_X_FORWARDED_FOR'];
+    }
+    if (isset($server['HTTP_CLIENT_IP'])) {
+        $ip = $ip . '_' . $server['HTTP_CLIENT_IP'];
+    }
+    return $ip;
+}
+
 
 /**
  * Returns true if Shaarli's currently browsed in HTTPS.

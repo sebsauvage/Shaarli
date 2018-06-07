@@ -1,0 +1,15 @@
+options:
+  max-warnings: 0
+rules:
+  property-sort-order:
+    - 1
+    -
+      order: 'concentric'
+  no-important:
+    - 0
+  no-vendor-prefixes:
+    - 0 # this will be fixed with v2: see https://github.com/sasstools/sass-lint/pull/1137
+  nesting-depth:
+    - 1
+    -
+      max-depth: 4

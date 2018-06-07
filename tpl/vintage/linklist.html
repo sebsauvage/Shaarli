@@ -82,7 +82,7 @@
             <a id="{$value.shorturl}"></a>
             <div class="thumbnail">{$value.url|thumbnail}</div>
             <div class="linkcontainer">
-                {if="isLoggedIn()"}
+                {if="$is_logged_in"}
                     <div class="linkeditbuttons">
                         <form method="GET" class="buttoneditform">
                             <input type="hidden" name="edit_link" value="{$value.id}">
@@ -102,7 +102,7 @@
                 </span>
                 <br>
                 {if="$value.description"}<div class="linkdescription">{$value.description}</div>{/if}
-                {if="!$hide_timestamps || isLoggedIn()"}
+                {if="!$hide_timestamps || $is_logged_in"}
                     {$updated=$value.updated_timestamp ? 'Edited: '. format_date($value.updated) : 'Permalink'}
                     <span class="linkdate" title="Permalink">
                         <a href="?{$value.shorturl}">
