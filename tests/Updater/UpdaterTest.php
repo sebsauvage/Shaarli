@@ -20,7 +20,7 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
     /**
      * @var string Config file path (without extension).
      */
-    protected static $configFile = 'tests/utils/config/configJson';
+    protected static $configFile = 'sandbox/config';
 
     /**
      * @var ConfigManager
@@ -32,6 +32,7 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        copy('tests/utils/config/configJson.json.php', self::$configFile .'.json.php');
         $this->conf = new ConfigManager(self::$configFile);
     }
 
@@ -686,17 +687,48 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
     }
 
     /**
-     * Test updateMethodAtomDefault with show_atom set to true.
-     * => nothing to do
+     * Test updateMethodWebThumbnailer with thumbnails enabled.
      */
     public function testUpdateMethodWebThumbnailerEnabled()
     {
+        $this->conf->remove('thumbnails');
         $this->conf->set('thumbnail.enable_thumbnails', true);
-        $updater = new Updater([], [], $this->conf, true);
+        $updater = new Updater([], [], $this->conf, true, $_SESSION);
         $this->assertTrue($updater->updateMethodWebThumbnailer());
         $this->assertFalse($this->conf->exists('thumbnail'));
         $this->assertTrue($this->conf->get('thumbnails.enabled'));
         $this->assertEquals(125, $this->conf->get('thumbnails.width'));
         $this->assertEquals(90, $this->conf->get('thumbnails.height'));
+        $this->assertContains('You have enabled thumbnails', $_SESSION['warnings'][0]);
+    }
+
+    /**
+     * Test updateMethodWebThumbnailer with thumbnails disabled.
+     */
+    public function testUpdateMethodWebThumbnailerDisabled()
+    {
+        $this->conf->remove('thumbnails');
+        $this->conf->set('thumbnail.enable_thumbnails', false);
+        $updater = new Updater([], [], $this->conf, true, $_SESSION);
+        $this->assertTrue($updater->updateMethodWebThumbnailer());
+        $this->assertFalse($this->conf->exists('thumbnail'));
+        $this->assertFalse($this->conf->get('thumbnails.enabled'));
+        $this->assertEquals(125, $this->conf->get('thumbnails.width'));
+        $this->assertEquals(90, $this->conf->get('thumbnails.height'));
+        $this->assertTrue(empty($_SESSION['warnings']));
+    }
+
+    /**
+     * Test updateMethodWebThumbnailer with thumbnails disabled.
+     */
+    public function testUpdateMethodWebThumbnailerNothingToDo()
+    {
+        $updater = new Updater([], [], $this->conf, true, $_SESSION);
+        $this->assertTrue($updater->updateMethodWebThumbnailer());
+        $this->assertFalse($this->conf->exists('thumbnail'));
+        $this->assertTrue($this->conf->get('thumbnails.enabled'));
+        $this->assertEquals(90, $this->conf->get('thumbnails.width'));
+        $this->assertEquals(53, $this->conf->get('thumbnails.height'));
+        $this->assertTrue(empty($_SESSION['warnings']));
     }
 }

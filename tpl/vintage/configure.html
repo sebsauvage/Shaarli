@@ -132,11 +132,13 @@
         <td valign="top"><b>Enable thumbnails</b></td>
         <td>
           <input type="checkbox" name="enableThumbnails" id="enableThumbnails"
-                 {if="$thumbnails_enabled"}checked{/if}/>
+                 {if="$thumbnails_enabled"}checked{/if} {if="!$gd_enabled"}disabled{/if}>
           <label for="enableThumbnails">
-            &nbsp;<strong>Warning:</strong>
-            If you have a large database, the first retrieval may take a few minutes.
-            It's recommended to visit the picture wall after enabling this feature
+            {if="! $gd_enabled"}
+              {'You need to enable the extension <code>php-gd</code> to use thumbnails.'|t}
+            {elseif="$thumbnails_enabled"}
+              <a href="?do=thumbs_update">{'Synchonize thumbnails'|t}</a>
+            {/if}
           </label>
         </td>
       </tr>

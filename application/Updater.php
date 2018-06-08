@@ -31,6 +31,11 @@ class Updater
     protected $isLoggedIn;
 
     /**
+     * @var array $_SESSION
+     */
+    protected $session;
+
+    /**
      * @var ReflectionMethod[] List of current class methods.
      */
     protected $methods;
@@ -42,13 +47,17 @@ class Updater
      * @param LinkDB        $linkDB      LinkDB instance.
      * @param ConfigManager $conf        Configuration Manager instance.
      * @param boolean       $isLoggedIn  True if the user is logged in.
+     * @param array         $session     $_SESSION (by reference)
+     *
+     * @throws ReflectionException
      */
-    public function __construct($doneUpdates, $linkDB, $conf, $isLoggedIn)
+    public function __construct($doneUpdates, $linkDB, $conf, $isLoggedIn, &$session = [])
     {
         $this->doneUpdates = $doneUpdates;
         $this->linkDB = $linkDB;
         $this->conf = $conf;
         $this->isLoggedIn = $isLoggedIn;
+        $this->session = &$session;
 
         // Retrieve all update methods.
         $class = new ReflectionClass($this);
@@ -488,11 +497,23 @@ class Updater
      */
     public function updateMethodWebThumbnailer()
     {
-        $this->conf->set('thumbnails.enabled', $this->conf->get('thumbnail.enable_thumbnails', true));
+        if ($this->conf->exists('thumbnails.enabled')) {
+            return true;
+        }
+
+        $thumbnailsEnabled = $this->conf->get('thumbnail.enable_thumbnails', true);
+        $this->conf->set('thumbnails.enabled', $thumbnailsEnabled);
         $this->conf->set('thumbnails.width', 125);
         $this->conf->set('thumbnails.height', 90);
         $this->conf->remove('thumbnail');
         $this->conf->write(true);
+
+        if ($thumbnailsEnabled) {
+            $this->session['warnings'][] = t(
+                'You have enabled thumbnails. <a href="?do=thumbs_update">Please synchonize them</a>.'
+            );
+        }
+
         return true;
     }
 }

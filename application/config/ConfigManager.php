@@ -367,10 +367,6 @@ class ConfigManager
         $this->setEmpty('general.enabled_plugins', self::$DEFAULT_PLUGINS);
         $this->setEmpty('general.default_note_title', 'Note: ');
 
-        $this->setEmpty('thumbnails.enabled', true);
-        $this->setEmpty('thumbnails.width', 120);
-        $this->setEmpty('thumbnails.height', 120);
-
         $this->setEmpty('updates.check_updates', false);
         $this->setEmpty('updates.check_updates_branch', 'stable');
         $this->setEmpty('updates.check_updates_interval', 86400);
@@ -384,9 +380,6 @@ class ConfigManager
         $this->setEmpty('privacy.hide_timestamps', false);
         // default state of the 'remember me' checkbox of the login form
         $this->setEmpty('privacy.remember_user_default', true);
-
-        $this->setEmpty('thumbnail.enable_thumbnails', true);
-        $this->setEmpty('thumbnail.enable_localcache', true);
 
         $this->setEmpty('redirector.url', '');
         $this->setEmpty('redirector.encode_url', true);

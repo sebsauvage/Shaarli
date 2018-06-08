@@ -1210,3 +1210,43 @@ ul.errors {
     width: 13px;
     height: 13px;
 }
+
+.thumbnails-update-container {
+    padding: 20px 0;
+    width: 50%;
+    margin: auto;
+}
+
+.thumbnails-update-container .thumbnail-placeholder {
+    background: grey;
+    margin: auto;
+}
+
+.thumbnails-update-container .thumbnail-link-title {
+    width: 75%;
+    margin: auto;
+
+    padding-bottom: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.progressbar {
+    border-radius: 6px;
+    background-color: #111;
+    padding: 1px;
+}
+
+.progressbar > div {
+    border-radius: 10px;
+    background: repeating-linear-gradient(
+        -45deg,
+        #f5f5f5,
+        #f5f5f5 6px,
+        #d0d0d0 6px,
+        #d0d0d0 12px
+    );
+    width: 0%;
+    height: 10px;
+}

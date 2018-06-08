@@ -24,6 +24,7 @@ module.exports = [
   {
     entry: {
       thumbnails: './assets/common/js/thumbnails.js',
+      thumbnails_update: './assets/common/js/thumbnails-update.js',
       pluginsadmin: './assets/default/js/plugins-admin.js',
       shaarli: [
         './assets/default/js/base.js',
@@ -97,6 +98,7 @@ module.exports = [
         './assets/vintage/css/shaarli.css',
       ].concat(glob.sync('./assets/vintage/img/*')),
       thumbnails: './assets/common/js/thumbnails.js',
+      thumbnails_update: './assets/common/js/thumbnails-update.js',
     },
     output: {
       filename: '[name].min.js',

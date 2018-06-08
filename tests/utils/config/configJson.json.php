@@ -61,11 +61,6 @@
     "dev": {
         "debug": true
     },
-    "thumbnails": {
-        "enabled": true,
-        "width": 125,
-        "height": 90
-    },
     "updates": {
         "check_updates": false,
         "check_updates_branch": "stable",
@@ -79,6 +74,11 @@
         "language": "auto",
         "mode": "php",
         "extensions": []
+    },
+    "thumbnails": {
+        "enabled": true,
+        "width": 90,
+        "height": 53
     }
 }
 */ ?>

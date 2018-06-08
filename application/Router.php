@@ -7,6 +7,8 @@
  */
 class Router
 {
+    public static $AJAX_THUMB_UPDATE = 'ajax_thumb_update';
+
     public static $PAGE_LOGIN = 'login';
 
     public static $PAGE_PICWALL = 'picwall';
@@ -46,6 +48,8 @@ class Router
     public static $PAGE_PLUGINSADMIN = 'pluginadmin';
 
     public static $PAGE_SAVE_PLUGINSADMIN = 'save_pluginadmin';
+
+    public static $PAGE_THUMBS_UPDATE = 'thumbs_update';
 
     public static $GET_TOKEN = 'token';
 
@@ -99,6 +103,14 @@ class Router
 
         if (startsWith($query, 'do='. self::$PAGE_FEED_RSS)) {
             return self::$PAGE_FEED_RSS;
+        }
+
+        if (startsWith($query, 'do='. self::$PAGE_THUMBS_UPDATE)) {
+            return self::$PAGE_THUMBS_UPDATE;
+        }
+
+        if (startsWith($query, 'do='. self::$AJAX_THUMB_UPDATE)) {
+            return self::$AJAX_THUMB_UPDATE;
         }
 
         // At this point, only loggedin pages.

@@ -514,7 +514,8 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         read_updates_file($conf->get('resource.updates')),
         $LINKSDB,
         $conf,
-        $loginManager->isLoggedIn()
+        $loginManager->isLoggedIn(),
+        $_SESSION
     );
     try {
         $newUpdates = $updater->update();
@@ -529,7 +530,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         die($e->getMessage());
     }
 
-    $PAGE = new PageBuilder($conf, $LINKSDB, $sessionManager->generateToken(), $loginManager->isLoggedIn());
+    $PAGE = new PageBuilder($conf, $_SESSION, $LINKSDB, $sessionManager->generateToken(), $loginManager->isLoggedIn());
     $PAGE->assign('linkcount', count($LINKSDB));
     $PAGE->assign('privateLinkcount', count_private($LINKSDB));
     $PAGE->assign('plugin_errors', $pluginManager->getErrors());
@@ -611,38 +612,13 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         $links = $LINKSDB->filterSearch($_GET);
         $linksToDisplay = array();
 
-        $thumbnailer = new Thumbnailer($conf);
-
-
-        $newThumbnailsCpt = 0;
         // Get only links which have a thumbnail.
+        // Note: we do not retrieve thumbnails here, the request is too heavy.
         foreach($links as $key => $link)
         {
-            // Not a note,
-            // and (never retrieved yet or no valid cache file)
-            if ($link['url'][0] != '?'
-                && (! isset($link['thumbnail']) || ($link['thumbnail'] !== false && ! is_file($link['thumbnail'])))
-            ) {
-                $item = $LINKSDB[$key];
-                $item['thumbnail'] = $thumbnailer->get($link['url']);
-                $LINKSDB[$key] = $item;
-                $newThumbnailsCpt++;
-            }
-
             if (isset($link['thumbnail']) && $link['thumbnail'] !== false) {
                 $linksToDisplay[] = $link; // Add to array.
             }
-
-            // If we retrieved new thumbnails, we update the database every 20 links.
-            // Downloading everything the first time may take a very long time
-            if ($newThumbnailsCpt == 20) {
-                $LINKSDB->save($conf->get('resource.page_cache'));
-                $newThumbnailsCpt = 0;
-            }
-        }
-
-        if ($newThumbnailsCpt > 0) {
-            $LINKSDB->save($conf->get('resource.page_cache'));
         }
 
         $data = array(
@@ -1036,7 +1012,15 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $conf->set('api.enabled', !empty($_POST['enableApi']));
             $conf->set('api.secret', escape($_POST['apiSecret']));
             $conf->set('translation.language', escape($_POST['language']));
-            $conf->set('thumbnails.enabled', extension_loaded('gd') && !empty($_POST['enableThumbnails']));
+
+            $thumbnailsEnabled = extension_loaded('gd') && !empty($_POST['enableThumbnails']);
+            $conf->set('thumbnails.enabled', $thumbnailsEnabled);
+
+            if (! $conf->get('thumbnails.enabled') && $thumbnailsEnabled) {
+                $_SESSION['warnings'][] = t(
+                    'You have enabled thumbnails. <a href="?do=thumbs_update">Please synchonize them</a>.'
+                );
+            }
 
             try {
                 $conf->write($loginManager->isLoggedIn());
@@ -1521,6 +1505,43 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         exit;
     }
 
+    // -------- Thumbnails Update
+    if ($targetPage == Router::$PAGE_THUMBS_UPDATE) {
+        $ids = [];
+        foreach ($LINKSDB as $link) {
+            // A note or not HTTP(S)
+            if ($link['url'][0] === '?' || ! startsWith(strtolower($link['url']), 'http')) {
+                continue;
+            }
+            $ids[] = $link['id'];
+        }
+        $PAGE->assign('ids', $ids);
+        $PAGE->assign('pagetitle', t('Thumbnail update') .' - '. $conf->get('general.title', 'Shaarli'));
+        $PAGE->renderPage('thumbnails');
+        exit;
+    }
+
+    // -------- Single Thumbnail Update
+    if ($targetPage == Router::$AJAX_THUMB_UPDATE) {
+        if (! isset($_POST['id']) || ! ctype_digit($_POST['id'])) {
+            http_response_code(400);
+            exit;
+        }
+        $id = (int) $_POST['id'];
+        if (empty($LINKSDB[$id])) {
+            http_response_code(404);
+            exit;
+        }
+        $thumbnailer = new Thumbnailer($conf);
+        $link = $LINKSDB[$id];
+        $link['thumbnail'] = $thumbnailer->get($link['url']);
+        $LINKSDB[$id] = $link;
+        $LINKSDB->save($conf->get('resource.page_cache'));
+
+        echo json_encode($link);
+        exit;
+    }
+
     // -------- Otherwise, simply display search form and links:
     showLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager);
     exit;
@@ -1777,7 +1798,7 @@ function install($conf, $sessionManager, $loginManager) {
         exit;
     }
 
-    $PAGE = new PageBuilder($conf, null, $sessionManager->generateToken());
+    $PAGE = new PageBuilder($conf, $_SESSION, null, $sessionManager->generateToken());
     list($continents, $cities) = generateTimeZoneData(timezone_identifiers_list(), date_default_timezone_get());
     $PAGE->assign('continents', $continents);
     $PAGE->assign('cities', $cities);

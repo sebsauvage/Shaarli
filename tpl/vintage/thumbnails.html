@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>{include="includes"}</head>
+<body>
+<div id="pageheader">
+{include="page.header"}
+</div>
+
+<div class="center thumbnails-update-container">
+  <div class="thumbnail-placeholder" style="width: {$thumbnails_width}px; height: {$thumbnails_height}px;"></div>
+
+  <div class="thumbnail-link-title"></div>
+
+  <div class="progressbar">
+    <div></div>
+  </div>
+
+  <div class="progress-counter">
+    <span class="progress-current">0</span> / <span class="progress-total">{$ids|count}</span>
+  </div>
+</div>
+
+<input type="hidden" name="ids" value="{function="implode($ids, ',')"}" />
+
+{include="page.footer"}
+<script src="js/thumbnails_update.min.js?v={$version_hash}"></script>
+</body>
+</html>
