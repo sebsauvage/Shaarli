@@ -8,7 +8,7 @@ Read first:
 
 ### Docker test images
 
-Test Dockerfiles are located under `docker/tests/<distribution>/Dockerfile`,
+Test Dockerfiles are located under `tests/docker/<distribution>/Dockerfile`,
 and can be used to build Docker images to run Shaarli test suites under common
 Linux environments.
 
@@ -27,7 +27,7 @@ What's behind the curtains:
     - test PHP dependencies (OS packages)
     - Composer
 - the local workspace is mapped to the container's `/shaarli/` directory,
-- the files are rsync'd to so tests are run using a standard Linux user account
+- the files are rsync'd so tests are run using a standard Linux user account
   (running tests as `root` would bypass permission checks and may hide issues)
 - the tests are run inside the container.
 
@@ -36,7 +36,7 @@ What's behind the curtains:
 ```bash
 # build the Debian 9 Docker image
 $ cd /path/to/shaarli
-$ cd docker/test/debian9
+$ cd tests/docker/debian9
 $ docker build -t shaarli-test:debian9 .
 ```
 

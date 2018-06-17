@@ -8,9 +8,9 @@ The images can be found in the [`shaarli/shaarli`](https://hub.docker.com/r/shaa
 repository.
 
 ### Available image tags
-- `latest`: latest branch (tarball release)
-- `master`: master branch (tarball release)
-- `stable`: stable branch (tarball release)
+- `latest`: latest branch
+- `master`: master branch
+- `stable`: stable branch
 
 The `latest` and `master` images rely on:
 
@@ -24,7 +24,13 @@ The `stable` image relies on:
 - [PHP5-FPM](http://php-fpm.org/)
 - [Nginx](http://nginx.org/)
 
-Additional [Dockerfiles](https://github.com/shaarli/Shaarli/tree/master/docker) are provided for the `arm32v7` platform, relying on [Linuxserver.io Alpine armhf images](https://hub.docker.com/r/lsiobase/alpine.armhf/). These images must be built using [`docker build`](https://docs.docker.com/engine/reference/commandline/build/) on an `arm32v7` machine or using an emulator such as [qemu](https://resin.io/blog/building-arm-containers-on-any-x86-machine-even-dockerhub/).
+Additional Dockerfiles are provided for the `arm32v7` platform, relying on
+[Linuxserver.io Alpine armhf
+images](https://hub.docker.com/r/lsiobase/alpine.armhf/). These images must be
+built using [`docker
+build`](https://docs.docker.com/engine/reference/commandline/build/) on an
+`arm32v7` machine or using an emulator such as
+[qemu](https://resin.io/blog/building-arm-containers-on-any-x86-machine-even-dockerhub/).
 
 ### Download from DockerHub
 ```bash
