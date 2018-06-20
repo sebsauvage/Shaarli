@@ -1,13 +1,29 @@
 # Stage 1:
-# - Get Shaarli sources
-# - Resolve PHP dependencies with Composer
-FROM composer:latest as composer
-RUN curl -L https://github.com/shaarli/Shaarli/archive/latest.tar.gz | tar xzf - \
-    && mv Shaarli-latest shaarli \
-    && cd shaarli \
-    && composer --prefer-dist --no-dev install
+# - Copy Shaarli sources
+# - Build documentation
+FROM python:3-alpine as docs
+ADD . /usr/src/app/shaarli
+RUN cd /usr/src/app/shaarli \
+    && pip install --no-cache-dir mkdocs \
+    && mkdocs build
 
 # Stage 2:
+# - Resolve PHP dependencies with Composer
+FROM composer:latest as composer
+COPY --from=docs /usr/src/app/shaarli /app/shaarli
+RUN cd shaarli \
+    && composer --prefer-dist --no-dev install
+
+# Stage 3:
+# - Frontend dependencies
+FROM node:9.9-alpine as node
+COPY --from=composer /app/shaarli shaarli
+RUN cd shaarli \
+    && yarn install \
+    && yarn run build \
+    && rm -rf node_modules
+
+# Stage 4:
 # - Shaarli image
 FROM alpine:3.6
 LABEL maintainer="Shaarli Community"
@@ -30,9 +46,9 @@ RUN apk --update --no-cache add \
         php7-zlib \
         s6
 
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY php-fpm.conf /etc/php7/php-fpm.conf
-COPY services.d /etc/services.d
+COPY .docker/nginx.conf /etc/nginx/nginx.conf
+COPY .docker/php-fpm.conf /etc/php7/php-fpm.conf
+COPY .docker/services.d /etc/services.d
 
 RUN rm -rf /etc/php7/php-fpm.d/www.conf \
     && sed -i 's/post_max_size.*/post_max_size = 10M/' /etc/php7/php.ini \
@@ -40,7 +56,7 @@ RUN rm -rf /etc/php7/php-fpm.d/www.conf \
 
 
 WORKDIR /var/www
-COPY --from=composer /app/shaarli shaarli
+COPY --from=node /shaarli shaarli
 
 RUN chown -R nginx:nginx . \
     && ln -sf /dev/stdout /var/log/nginx/shaarli.access.log \

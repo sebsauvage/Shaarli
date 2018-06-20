@@ -33,7 +33,9 @@ Dockerfile      text
 .travis.yml       export-ignore
 doc/**/*.json     export-ignore
 doc/**/*.md       export-ignore
-docker/           export-ignore
+.docker/          export-ignore
+.dockerignore     export-ignore
+Dockerfile*       export-ignore
 Doxyfile          export-ignore
 Makefile          export-ignore
 node_modules/     export-ignore
