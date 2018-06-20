@@ -5,10 +5,58 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v0.10.0](https://github.com/shaarli/Shaarli/releases/tag/v0.10.0) - UNPUBLISHED
+**PHP 5.5 compatibility has been dropped.** Shaarli now requires at least PHP 5.6.
+
+### Added
+- Add a filter to display public links only
+- Add PHP 7.2 support
+- Add German translation
+- Resolve front-end dependencies from NPM
+- Build front-end bundles with Yarn and Webpack
+- Lint Javascript code with ESLint
+- Lint SASS code with SASSLint
+- Support redirection in cURL download callback
+- Introduce multi-stage builds for Docker images
+- Use Travis matrix and stages to run Javascript tests in a dedicated environment
+
+### Changed
+- Use a specific page title in all pages
+- Daily: run hooks before creating the columns
+- Load theme translations files automatically
+- Make max download size and timeout configurable
+- Make Nginx logs accessible as stdout/stderr for Docker images
+- Update buttons used to toggle link visibility filters
+- Rewrite Javascript code for ES6 compliance
+- Refactor IP ban management
+- Refactor user login management
+- Refactor server-side session management
+- Update Doxygen configuration
+- Update Parsedown
+
+### Removed
+- Drop support for PHP 5.5
+- Remove vendored front-end libraries
+- Remove environment specific .gitignore entries
+
+### Fixed
+- Ignore the case while checking DOCTYPE during the file import
+- Fix removal of on=... attributes from html generated from Markdown
+- httpd: always forward the 'Authorization' header
+- Ensure user-specific CSS file is loaded
+- Fix feed permalink rendering when Markdown escaping is enabled
+- Fix order of tags with the same number of occurrences
+
+### Security
+- Update `.htaccess` to prevent accessing Git metadata when using a Git-based installation
+
+
+## [v0.9.7](https://github.com/shaarli/Shaarli/releases/tag/v0.9.7) - 2018-06-20
+### Changed
+- Build the Docker images from the local Git sources
 
 
 ## [v0.9.6](https://github.com/shaarli/Shaarli/releases/tag/v0.9.6) - 2018-03-25
-## Changed
+### Changed
 - htaccess: prevent accessing resources not managed by SCM
 - htaccess: always forward the 'Authorization' HTTP header
 
@@ -220,6 +268,19 @@ Theming:
 
 ### Security
 - Markdown plugin: escape HTML entities by default
+
+
+## [v0.8.7](https://github.com/shaarli/Shaarli/releases/tag/v0.8.7) - 2018-06-20
+### Changed
+- Build the Docker image from the local Git sources
+
+### Removed
+- Disable PHP 5.3 Travis build (unsupported)
+
+
+## [v0.8.6](https://github.com/shaarli/Shaarli/releases/tag/v0.8.6) - 2018-02-19
+### Changed
+- Run version check tests against the 'stable' branch
 
 
 ## [v0.8.5](https://github.com/shaarli/Shaarli/releases/tag/v0.8.5) - 2018-01-04
