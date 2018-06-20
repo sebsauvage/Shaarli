@@ -25,11 +25,11 @@ Using one of the following methods:
 
 In most cases, you should download the latest Shaarli release from the [releases](https://github.com/shaarli/Shaarli/releases) page. **Download our *shaarli-full* archive** to include dependencies.
 
-The current latest released version is `v0.9.6`
+The current latest released version is `v0.9.7`
 
 ```bash
-$ wget https://github.com/shaarli/Shaarli/releases/download/v0.9.6/shaarli-v0.9.6-full.zip
-$ unzip shaarli-v0.9.6-full.zip
+$ wget https://github.com/shaarli/Shaarli/releases/download/v0.9.7/shaarli-v0.9.7-full.zip
+$ unzip shaarli-v0.9.7-full.zip
 $ mv Shaarli /path/to/shaarli/
 ```
 
@@ -94,7 +94,7 @@ $ composer install --no-dev --prefer-dist
 _Use at your own risk!_
 
 Install [Composer](Unit-tests.md#install_composer) to manage Shaarli PHP dependencies,
-and [yarn](https://yarnpkg.com/lang/en/docs/install/) 
+and [yarn](https://yarnpkg.com/lang/en/docs/install/)
 for front-end dependencies.
 
 To get the latest changes from the `master` branch:
