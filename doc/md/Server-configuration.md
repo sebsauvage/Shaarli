@@ -1,139 +1,130 @@
-*Example virtual host configurations for popular web servers*
 
+- [Prerequisites](#prerequisistes)
 - [Apache](#apache)
 - [Nginx](#nginx)
+- [Proxies](#proxies)
+- [See also](#see-also)
 
 ## Prerequisites
 ### Shaarli
-- Shaarli is installed in a directory readable/writeable by the user
-- the correct read/write permissions have been granted to the web server _user and/or group_
-- for HTTPS / SSL:
-    - a key pair (public, private) and a certificate have been generated
-    - the appropriate server SSL extension is installed and active
 
-### HTTPS, TLS and self-signed certificates
-Related guides:
+- A web server and PHP interpreter module/service have been installed.
+- You have write access to the Shaarli installation directory.
+- The correct read/write permissions have been granted to the web server user and group.
+- Your PHP interpreter is compatible with supported PHP versions:
 
-- [How to Create Self-Signed SSL Certificates with OpenSSL](http://www.xenocafe.com/tutorials/linux/centos/openssl/self_signed_certificates/index.php)
-- [How do I create my own Certificate Authority?](https://workaround.org/certificate-authority)
-- Generate a self-signed certificate (will trigger browser warnings) with apache2:
-  `make-ssl-cert generate-default-snakeoil --force-overwrite` will create `/etc/ssl/certs/ssl-cert-snakeoil.pem` and `/etc/ssl/private/ssl-cert-snakeoil.key`
+Version | Status | Shaarli compatibility
+:---:|:---:|:---:
+7.2 | Supported | Yes
+7.1 | Supported | Yes
+7.0 | Supported | Yes
+5.6 | Supported | Yes
+5.5 | EOL: 2016-07-10 | Yes
+5.4 | EOL: 2015-09-14 | Yes (up to Shaarli 0.8.x)
+5.3 | EOL: 2014-08-14 | Yes (up to Shaarli 0.8.x)
 
-### Proxies
-If Shaarli is served behind a proxy (i.e. there is a proxy server between clients and the web server hosting Shaarli), please refer to the proxy server documentation for proper configuration. In particular, you have to ensure that the following server variables are properly set:
+- The following PHP extensions are installed on the server:
 
-- `X-Forwarded-Proto`
-- `X-Forwarded-Host`
-- `X-Forwarded-For`
+Extension | Required? | Usage
+---|:---:|---
+[`openssl`](http://php.net/manual/en/book.openssl.php) | All | OpenSSL, HTTPS
+[`php-mbstring`](http://php.net/manual/en/book.mbstring.php) | CentOS, Fedora, RHEL, Windows, some hosting providers | multibyte (Unicode) string support
+[`php-gd`](http://php.net/manual/en/book.image.php) | optional | thumbnail resizing
+[`php-intl`](http://php.net/manual/en/book.intl.php) | optional | localized text sorting (e.g. `e->è->f`)
+[`php-curl`](http://php.net/manual/en/book.curl.php) | optional | using cURL for fetching webpages and thumbnails in a more robust way
+[`php-gettext`](http://php.net/manual/en/book.gettext.php) | optional | Use the translation system in gettext mode (faster)
 
-See also [proxy-related](https://github.com/shaarli/Shaarli/issues?utf8=%E2%9C%93&q=label%3Aproxy+) issues.
+--------------------------------------------------------------------------------
+
+### SSL/TLS configuration 
+
+To setup HTTPS / SSL on your webserver (recommended), you must generate a public/private **key pair** and a **certificate**, and install, configure and activate the appropriate **webserver SSL extension**.
+
+#### Let's Encrypt
+
+[Let's Encrypt](https://en.wikipedia.org/wiki/Let%27s_Encrypt) is a certificate authority that provides free TLS/X.509 certificates via an automated process.
+
+ * Install `certbot` using the appropriate method described on https://certbot.eff.org/.
+ 
+Location of the `certbot` program and template configuration files may vary depending on which installation method was used. Change the file paths below accordingly. Here is an easy way to create a signed certificate using `certbot`, it assumes `certbot` was installed through APT on a Debian-based distribution:
+
+ * Stop the apache2/nginx service.
+ * Run `certbot --agree-tos --standalone --preferred-challenges tls-sni --email "youremail@example.com" --domain yourdomain.example.com`
+ * For the Apache webserver, copy `/usr/lib/python2.7/dist-packages/certbot_apache/options-ssl-apache.conf` to `/etc/letsencrypt/options-ssl-apache.conf` (paths may vary depending on installation method)
+ * For Nginx: TODO
+ * Setup your webserver as described below
+ * Restart the apache2/nginx service.
+
+#### Self-signed certificates
+
+If you don't want to request a certificate from Let's Encrypt, or are unable to (for example, webserver on a LAN, or domain name not registered in the public DNS system), you can generate a self-signed certificate. This certificate will trigger security warnings in web browsers, unless you add it to the browser's SSL store manually.
+
+* Apache: run `make-ssl-cert generate-default-snakeoil --force-overwrite`
+* Nginx: TODO
+
+--------------------------------------------------------------------------------
 
 ## Apache
-### Minimal
-```apache
-<VirtualHost *:80>
-    ServerName   shaarli.my-domain.org
-    DocumentRoot /absolute/path/to/shaarli/
-</VirtualHost>
-```
-### Debug - Log all the things!
-This configuration will log both Apache and PHP errors, which may prove useful to identify server configuration errors.
 
-See:
+Here is a basic configuration example for the Apache web server with `mod_php`.
 
-- [Apache/PHP - error log per VirtualHost](http://stackoverflow.com/q/176) (StackOverflow)
-- [PHP: php_value vs php_admin_value and the use of php_flag explained](https://ma.ttias.be/php-php_value-vs-php_admin_value-and-the-use-of-php_flag-explained/)
-
-```apache
-<VirtualHost *:80>
-    ServerName   shaarli.my-domain.org
-    DocumentRoot /absolute/path/to/shaarli/
-
-    LogLevel  warn
-    ErrorLog  /var/log/apache2/shaarli-error.log
-    CustomLog /var/log/apache2/shaarli-access.log combined
-
-    php_flag  log_errors on
-    php_flag  display_errors on
-    php_value error_reporting 2147483647
-    php_value error_log /var/log/apache2/shaarli-php-error.log
-</VirtualHost>
-```
-
-### Standard - Keep access and error logs
-```apache
-<VirtualHost *:80>
-    ServerName   shaarli.my-domain.org
-    DocumentRoot /absolute/path/to/shaarli/
-
-    LogLevel  warn
-    ErrorLog  /var/log/apache2/shaarli-error.log
-    CustomLog /var/log/apache2/shaarli-access.log combined
-</VirtualHost>
-```
-
-### Paranoid - Redirect HTTP (:80) to HTTPS (:443)
-See [Server-side TLS](https://wiki.mozilla.org/Security/Server_Side_TLS#Apache) (Mozilla).
+In `/etc/apache2/sites-available/shaarli.conf`:
 
 ```apache
 <VirtualHost *:443>
     ServerName   shaarli.my-domain.org
     DocumentRoot /absolute/path/to/shaarli/
 
+    # Logging
+    # Possible values include: debug, info, notice, warn, error, crit, alert, emerg.
+    LogLevel  warn
+    ErrorLog  /var/log/apache2/shaarli-error.log
+    CustomLog /var/log/apache2/shaarli-access.log combined
+
+    # Let's Encrypt SSL configuration (recommended)
     SSLEngine             on
-    SSLCertificateFile    /absolute/path/to/the/website/certificate.pem
-    SSLCertificateKeyFile /absolute/path/to/the/website/key.key
+    SSLCertificateFile    /etc/letsencrypt/live/yourdomain.example.com/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/yourdomain.example.com/privkey.pem
+    Include /etc/letsencrypt/options-ssl-apache.conf
+
+    # Self-signed SSL cert configuration
+    #SSLEngine             on
+    #SSLCertificateFile    /etc/ssl/certs/ssl-cert-snakeoil.pem
+    #SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+
+    # Optional, log PHP errors, useful for debugging
+    #php_flag  log_errors on
+    #php_flag  display_errors on
+    #php_value error_reporting 2147483647
+    #php_value error_log /var/log/apache2/shaarli-php-error.log
 
     <Directory /absolute/path/to/shaarli/>
+        #Required for .htaccess support
         AllowOverride All
-        Options Indexes FollowSymLinks MultiViews
         Order allow,deny
-        allow from all
+        Allow from all
+
+        Options Indexes FollowSymLinks MultiViews #TODO is Indexes/Multiviews required?
+
+        # Optional - required for playvideos plugin
+        #Header set Content-Security-Policy "script-src 'self' 'unsafe-inline' https://www.youtube.com https://s.ytimg.com 'unsafe-eval'"
     </Directory>
 
-    LogLevel  warn
-    ErrorLog  /var/log/apache2/shaarli-error.log
-    CustomLog /var/log/apache2/shaarli-access.log combined
-</VirtualHost>
-<VirtualHost *:80>
-    ServerName   shaarli.my-domain.org
-    Redirect 301 / https://shaarli.my-domain.org
-
-    LogLevel  warn
-    ErrorLog  /var/log/apache2/shaarli-error.log
-    CustomLog /var/log/apache2/shaarli-access.log combined
 </VirtualHost>
 ```
 
-### .htaccess
+Enable this configuration with `sudo a2ensite shaarli`
 
-Shaarli use `.htaccess` Apache files to deny access to files that shouldn't be directly accessed (datastore, config, etc.). You need the directive `AllowOverride All` in your virtual host configuration for them to work.
+_Note: If you use Apache 2.2 or lower, you need [mod_version](https://httpd.apache.org/docs/current/mod/mod_version.html) to be installed and enabled._
 
-**Warning**: If you use Apache 2.2 or lower, you need [mod_version](https://httpd.apache.org/docs/current/mod/mod_version.html) to be installed and enabled.
- 
-Apache module `mod_rewrite` **must** be enabled to use the REST API. URL rewriting rules for the Slim microframework are stated in the root `.htaccess` file.
+_Note: Apache module `mod_rewrite` must be enabled to use the REST API._
 
-## LightHttpd
 
 ## Nginx
-### Foreword
-Nginx does not natively interpret PHP scripts; to this effect, we will run a [FastCGI](https://en.wikipedia.org/wiki/FastCGI) service, to which Nginx's FastCGI module will proxy all requests to PHP resources.
 
-Required packages:
+Here is a basic configuration example for the Nginx web server, using the [php-fpm](http://php-fpm.org) PHP FastCGI Process Manager, and Nginx's [FastCGI](https://en.wikipedia.org/wiki/FastCGI) module.
 
-- [nginx](http://nginx.org)
-- [php-fpm](http://php-fpm.org) - PHP FastCGI Process Manager
-
-Official documentation:
-
-- [Beginner's guide](http://nginx.org/en/docs/beginners_guide.html)
-- [ngx_http_fastcgi_module](http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html)
-- [Pitfalls](http://wiki.nginx.org/Pitfalls)
-
-Community resources:
-
-- [Server-side TLS (Nginx)](https://wiki.mozilla.org/Security/Server_Side_TLS#Nginx) (Mozilla)
-- [PHP configuration examples](http://kbeezie.com/nginx-configuration-examples/) (Karl Blessing)
+<!--- TODO refactor everything below this point --->
 
 ### Common setup
 Once Nginx and PHP-FPM are installed, we need to ensure:
@@ -404,3 +395,39 @@ http {
     }
 }
 ```
+
+## Proxies
+If Shaarli is served behind a proxy (i.e. there is a proxy server between clients and the web server hosting Shaarli), please refer to the proxy server documentation for proper configuration. In particular, you have to ensure that the following server variables are properly set:
+
+- `X-Forwarded-Proto`
+- `X-Forwarded-Host`
+- `X-Forwarded-For`
+
+See also [proxy-related](https://github.com/shaarli/Shaarli/issues?utf8=%E2%9C%93&q=label%3Aproxy+) issues.
+
+
+## See also
+
+ * [Server security](Server-security.md)
+
+#### Webservers
+
+- [Apache/PHP - error log per VirtualHost](http://stackoverflow.com/q/176) (StackOverflow)
+- [Apache - PHP: php_value vs php_admin_value and the use of php_flag explained](https://ma.ttias.be/php-php_value-vs-php_admin_value-and-the-use-of-php_flag-explained/)
+- [Server-side TLS (Apache)](https://wiki.mozilla.org/Security/Server_Side_TLS#Apache) (Mozilla)
+- [Nginx Beginner's guide](http://nginx.org/en/docs/beginners_guide.html)
+- [Nginx ngx_http_fastcgi_module](http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html)
+- [Nginx Pitfalls](http://wiki.nginx.org/Pitfalls)
+- [Nginx PHP configuration examples](http://kbeezie.com/nginx-configuration-examples/) (Karl Blessing)
+- [Server-side TLS (Nginx)](https://wiki.mozilla.org/Security/Server_Side_TLS#Nginx) (Mozilla)
+- [How to Create Self-Signed SSL Certificates with OpenSSL](http://www.xenocafe.com/tutorials/linux/centos/openssl/self_signed_certificates/index.php)
+- [How do I create my own Certificate Authority?](https://workaround.org/certificate-authority)
+
+#### PHP
+
+- [Travis configuration](https://github.com/shaarli/Shaarli/blob/master/.travis.yml)
+- [PHP: Supported versions](http://php.net/supported-versions.php)
+- [PHP: Unsupported versions](http://php.net/eol.php) _(EOL - End Of Life)_
+- [PHP 7 Changelog](http://php.net/ChangeLog-7.php)
+- [PHP 5 Changelog](http://php.net/ChangeLog-5.php)
+- [PHP: Bugs](https://bugs.php.net/)
