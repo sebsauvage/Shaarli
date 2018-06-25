@@ -32,7 +32,7 @@ See [Theming](Theming) for a list of community-contributed themes, and an instal
 - [tt-rss-shaarli](https://github.com/jcsaaddupuy/tt-rss-shaarli) - [Tiny-Tiny RSS](http://tt-rss.org/) plugin that adds support for sharing articles with Shaarli
 - [octopress-shaarli](https://github.com/ahmet2mir/octopress-shaarli) - Octopress plugin to retrieve Shaarli links on the sidebar
 - [Scuttle to Shaarli](https://github.com/q2apro/scuttle-to-shaarli) - Import bookmarks from Scuttle
-
+- [Shaarli_ynh](https://github.com/YunoHost-Apps/shaarli_ynh) - Shaarli is available as a [Yunohost](https://yunohost.org) app [![Install Shaarli with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=shaarli)
 
 ### Mobile Apps
 - [ShaarliOS](https://github.com/mro/ShaarliOS) - Apple iOS share extension.
