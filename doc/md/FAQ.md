@@ -22,7 +22,9 @@ With Shaarli:
 Shaarli stands for _shaaring_ your _links_.
 
 ### My Shaarli is broken!
-First of all, ensure that both the [web server](Server-configuration) and [Shaarli](Shaarli-configuration) are correctly configured, and that your installation is [supported](Server-requirements).
+First of all, ensure that both the [web server](Server-configuration) and
+[Shaarli](Shaarli-configuration) are correctly configured, and that your
+installation is [supported](Server-configuration).
 
 If everything looks right but the issue(s) remain(s), please:
 

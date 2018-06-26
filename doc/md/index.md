@@ -6,7 +6,7 @@ Do you want to share the links you discover?
 Shaarli is a minimalist link sharing service that you can install on your own server.
 It is designed to be personal (single-user), fast and handy.
 
-<!--- TODO screenshots --->
+<!-- TODO screenshots -->
 
 Here you can find some info on how to use, configure, tweak and solve problems with your Shaarli.
 For general information, read the [README](https://github.com/shaarli/Shaarli/blob/master/README.md).
@@ -30,7 +30,7 @@ It runs the latest development version of Shaarli and is updated/reset daily.
 
 Login: `demo`; Password: `demo`
 
-<!---- TODO review everything below this point --->
+<!-- TODO review everything below this point -->
 
 
 ## Features
@@ -98,7 +98,7 @@ Shaarli can be used:
 - bruteforce protection on the login form
 - protected against [XSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery) and session cookie hijacking
 
-<!---- TODO Limitations --->
+<!-- TODO Limitations -->
 
 ### REST API
 
@@ -116,12 +116,17 @@ This is a community fork of the original [Shaarli](https://github.com/sebsauvage
 
 The original project is currently unmaintained, and the developer [has informed us](https://github.com/sebsauvage/Shaarli/issues/191) that he would have no time to work on Shaarli in the near future.
 
-The Shaarli community has carried on the work to provide [many patches](https://github.com/shaarli/Shaarli/compare/sebsauvage:master...master) for [bug fixes and enhancements](https://github.com/shaarli/Shaarli/issues?q=is%3Aclosed+) in this repository, and will keep maintaining the project for the foreseeable future, while keeping Shaarli simple and efficient.
+The Shaarli community has carried on the work to provide [many
+patches](https://github.com/shaarli/Shaarli/compare/sebsauvage:master...master) for
+[bug fixes and enhancements](https://github.com/shaarli/Shaarli/issues?q=is%3Aclosed+)
+in this repository, and will keep maintaining the project for the foreseeable
+future, while keeping Shaarli simple and efficient.
 
 
 ### Contributing
 
 If you'd like to help, please:
+
 - have a look at the open [issues](https://github.com/shaarli/Shaarli/issues)
 and [pull requests](https://github.com/shaarli/Shaarli/pulls)
 - feel free to report bugs (feedback is much appreciated)
@@ -132,5 +137,9 @@ and [pull requests](https://github.com/shaarli/Shaarli/pulls)
 
 ### License
 
-Shaarli is [Free Software](http://en.wikipedia.org/wiki/Free_software). See [COPYING](https://github.com/shaarli/Shaarli/blob/master/COPYING) for a detail of the contributors and licenses for each individual component. A list of contributors is available [here](https://github.com/shaarli/Shaarli/blob/master/AUTHORS).
+Shaarli is [Free Software](http://en.wikipedia.org/wiki/Free_software). See
+[COPYING](https://github.com/shaarli/Shaarli/blob/master/COPYING) for a detail
+of the contributors and licenses for each individual component. A list of
+contributors is available
+[here](https://github.com/shaarli/Shaarli/blob/master/AUTHORS).
 
