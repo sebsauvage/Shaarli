@@ -5,7 +5,7 @@ FROM python:3-alpine as docs
 ADD . /usr/src/app/shaarli
 RUN cd /usr/src/app/shaarli \
     && pip install --no-cache-dir mkdocs \
-    && mkdocs build
+    && mkdocs build --clean
 
 # Stage 2:
 # - Resolve PHP dependencies with Composer

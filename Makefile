@@ -207,7 +207,7 @@ htmldoc:
 	python3 -m venv venv/
 	bash -c 'source venv/bin/activate; \
 	pip install mkdocs; \
-	mkdocs build'
+	mkdocs build --clean'
 	find doc/html/ -type f -exec chmod a-x '{}' \;
 	rm -r venv
 

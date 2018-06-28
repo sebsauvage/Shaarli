@@ -5,6 +5,7 @@ site_description: The personal, minimalist, super-fast, database free, bookmarki
 theme: readthedocs
 docs_dir: doc/md
 site_dir: doc/html
+strict: true
 
 pages:
 - Home: index.md
@@ -23,7 +24,7 @@ pages:
 - Usage:
     - Browsing and searching: Browsing-and-searching.md
     - Sharing content: Sharing-content.md
-    - RSS feeds: RSS-feeds.md 
+    - RSS feeds: RSS-feeds.md
     - REST API: REST-API.md
     - Community & Related software: Community-&-Related-software.md
 - How To:

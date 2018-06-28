@@ -1,4 +1,4 @@
-Content posted to Shaarli is separated in items called _Shaares_. For each Shaare, 
+Content posted to Shaarli is separated in items called _Shaares_. For each Shaare,
 you can customize the following aspects:
 
  * URL to link to
@@ -13,10 +13,10 @@ you can customize the following aspects:
 
 While logged in to your Shaarli, you can add new Shaares in several ways:
 
- * [+Shaare button]
- * [Bookmarklet]
+ * [+Shaare button](#shaare-button)
+ * [Bookmarklet](#bookmarklet)
  * [Firefox Share](#firefox-share)
- * Third-party [apps and browser addons](Community-\&-Related-software.md#mobile-apps)
+ * Third-party [apps and browser addons](Community-&-Related-software.md#mobile-apps)
  * [REST API](https://shaarli.github.io/api-documentation/)
 
 ### +Shaare button
@@ -33,14 +33,14 @@ While logged in to your Shaarli, you can add new Shaares in several ways:
 
 ### Bookmarklet
 
-The _Bookmarklet_ \[[1](https://en.wikipedia.org/wiki/Bookmarklet)\] is a special 
-browser bookmark you can use to add new content to your Shaarli. This bookmarklet is 
+The _Bookmarklet_ \[[1](https://en.wikipedia.org/wiki/Bookmarklet)\] is a special
+browser bookmark you can use to add new content to your Shaarli. This bookmarklet is
 compatible with Firefox, Opera, Chrome and Safari. To set it up:
 
  * Access the `Tools` page from the button in the toolbar.
  * Drag the **`✚Shaare link` button** to your browser's bookmarks bar.
 
-Once this is done, you can shaare any URL you are visiting simply by clicking the 
+Once this is done, you can shaare any URL you are visiting simply by clicking the
 bookmarklet in your browser! The same `New Shaare` dialog as above is displayed.
 
 | Note | Websites which enforce Content Security Policy (CSP), such as github.com, disallow usage of bookmarklets. Unfortunately, there is nothing Shaarli can do about it. \[[1](https://github.com/shaarli/Shaarli/issues/196)]\ \[[2](https://bugzilla.mozilla.org/show_bug.cgi?id=866522)]\ \[[3](https://code.google.com/p/chromium/issues/detail?id=233903)]\ |
@@ -59,8 +59,8 @@ Before using Firefox Share, you must first add Shaarli as a sharing provider:
 - Click the `Tools` button in the top bar
 - Click the `✚Add to Firefox social` button and accept the activation.
 
-Once this is done, you can share any URL you are visiting by clicking the Firefox 
-_Share_ button [images/firefoxshare.png](images/firefoxshare.png)
+Once this is done, you can share any URL you are visiting by clicking the Firefox
+_Share_ button ![images/firefoxshare.png](images/firefoxshare.png)
 
 | Note | Firefox Share is no longer available for Firefox 57 and later versions. |
 |---------|---------|
@@ -74,15 +74,15 @@ _Share_ button [images/firefoxshare.png](images/firefoxshare.png)
 
 Any Shaare can edited by clicking its ![](images/edit_icon.png) `Edit` button.
 
-Editing a Shaare will not change it's permalink, each permalink always points to the 
+Editing a Shaare will not change it's permalink, each permalink always points to the
 latest revision of a Shaare.
 
 --------------------------------------------------------------------------------
 
 ## Using shaarli as a blog, notepad, pastebin...
 
-While adding or editing a link, leave the URL field blank to create a text-only 
-("note") post. This allows you to post any kind of text content, such as blog 
-articles, private or public notes, snippets... There is no character limit! You can 
+While adding or editing a link, leave the URL field blank to create a text-only
+("note") post. This allows you to post any kind of text content, such as blog
+articles, private or public notes, snippets... There is no character limit! You can
 access your Shaare from its permalink.
 

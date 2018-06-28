@@ -48,7 +48,7 @@ if (! file_exists(__DIR__ . '/vendor/autoload.php')) {
         ."If you installed Shaarli through Git or using the development branch,\n"
         ."please refer to the installation documentation to install PHP"
         ." dependencies using Composer:\n"
-        ."- https://shaarli.readthedocs.io/en/master/Server-requirements/\n"
+        ."- https://shaarli.readthedocs.io/en/master/Server-configuration/\n"
         ."- https://shaarli.readthedocs.io/en/master/Download-and-Installation/";
     exit;
 }

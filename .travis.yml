@@ -28,6 +28,15 @@ matrix:
         - yarn run build # Just to be sure that the build isn't broken
         - make eslint
         - make sasslint
+    - language: python
+      python: 3.6
+      cache:
+        directories:
+          - $HOME/.cache/pip
+      install:
+        - pip install mkdocs
+      script:
+        - mkdocs build --clean
 
 cache:
   directories:
