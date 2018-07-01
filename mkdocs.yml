@@ -27,9 +27,9 @@ pages:
     - RSS feeds: RSS-feeds.md
     - REST API: REST-API.md
     - Community & Related software: Community-&-Related-software.md
-- How To:
-    - Backup, restore, import and export: Backup,-restore,-import-and-export.md
-    - Various hacks: Various-hacks.md
+- Guides:
+    - Backup, restore, import and export: guides/backup-restore-import-export.md
+    - Various hacks: guides/various-hacks.md
 - Development:
     - Development guidelines: Development-guidelines.md
     - Continuous integration tools: Continuous-integration-tools.md
