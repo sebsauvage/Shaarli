@@ -25,7 +25,7 @@ RUN cd shaarli \
 
 # Stage 4:
 # - Shaarli image
-FROM alpine:3.6
+FROM alpine:3.7
 LABEL maintainer="Shaarli Community"
 
 RUN apk --update --no-cache add \
