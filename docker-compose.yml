@@ -1,8 +1,13 @@
 ---
-# Shaarli - Docker Compose script
+# Shaarli - Docker Compose example configuration
 #
 # See:
 # - https://shaarli.readthedocs.io/en/master/docker/shaarli-images/
+# - https://shaarli.readthedocs.io/en/master/guides/install-shaarli-with-debian9-and-docker/
+#
+# Environment variables:
+# - SHAARLI_VIRTUAL_HOST      Fully Qualified Domain Name for the Shaarli instance
+# - SHAARLI_LETSENCRYPT_EMAIL Contact email for certificate renewal
 version: '3'
 
 networks:

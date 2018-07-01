@@ -28,6 +28,7 @@ pages:
     - REST API: REST-API.md
     - Community & Related software: Community-&-Related-software.md
 - Guides:
+    - Install Shaarli on Debian 9 with Docker: guides/install-shaarli-with-debian9-and-docker.md
     - Backup, restore, import and export: guides/backup-restore-import-export.md
     - Various hacks: guides/various-hacks.md
 - Development:
