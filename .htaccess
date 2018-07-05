@@ -14,3 +14,10 @@ RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [QSA,L]
+
+<Limit GET POST PUT DELETE OPTIONS>
+    Require all granted
+</Limit>
+<LimitExcept GET POST PUT DELETE OPTIONS>
+    Require all denied
+</LimitExcept>
