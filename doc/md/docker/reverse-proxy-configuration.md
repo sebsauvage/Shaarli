@@ -19,6 +19,8 @@ The following HTTP headers are set by using the `ProxyPass` directive:
 - `X-Forwarded-Host`
 - `X-Forwarded-Server`
 
+The original `SERVER_NAME` can be send to the proxied host using the `ProxyPreserveHost` directive. 
+
 ```apache
 <VirtualHost *:80>
     ServerName shaarli.domain.tld
@@ -37,7 +39,8 @@ The following HTTP headers are set by using the `ProxyPass` directive:
     CustomLog /var/log/apache2/shaarli-access.log combined
 
     RequestHeader set X-Forwarded-Proto "https"
-
+    ProxyPreserveHost On
+    
     ProxyPass        / http://127.0.0.1:10080/
     ProxyPassReverse / http://127.0.0.1:10080/
 </VirtualHost>
