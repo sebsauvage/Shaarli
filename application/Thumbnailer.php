@@ -14,6 +14,27 @@ use WebThumbnailer\Application\ConfigManager as WTConfigManager;
  */
 class Thumbnailer
 {
+    const COMMON_MEDIA_DOMAINS = [
+        'imgur.com',
+        'flickr.com',
+        'youtube.com',
+        'wikimedia.org',
+        'redd.it',
+        'gfycat.com',
+        'media.giphy.com',
+        'twitter.com',
+        'twimg.com',
+        'instagram.com',
+        'pinterest.com',
+        'pinterest.fr',
+        'tumblr.com',
+        'deviantart.com',
+    ];
+
+    const MODE_ALL = 'all';
+    const MODE_COMMON = 'common';
+    const MODE_NONE = 'none';
+
     /**
      * @var WebThumbnailer instance.
      */
@@ -57,13 +78,42 @@ class Thumbnailer
      */
     public function get($url)
     {
+        if ($this->conf->get('thumbnails.mode') === self::MODE_COMMON
+            && ! $this->isCommonMediaOrImage($url)
+        ) {
+            return false;
+        }
+
         try {
             return $this->wt->thumbnail($url);
         } catch (WebThumbnailerException $e) {
             // Exceptions are only thrown in debug mode.
-            error_log(get_class($e) .': '. $e->getMessage());
-            return false;
+            error_log(get_class($e) . ': ' . $e->getMessage());
         }
+        return false;
+    }
+
+    /**
+     * We check weather the given URL is from a common media domain,
+     * or if the file extension is an image.
+     *
+     * @param string $url to check
+     *
+     * @return bool true if it's an image or from a common media domain, false otherwise.
+     */
+    public function isCommonMediaOrImage($url)
+    {
+        foreach (self::COMMON_MEDIA_DOMAINS as $domain) {
+            if (strpos($url, $domain) !== false) {
+                return true;
+            }
+        }
+
+        if (endsWith($url, '.jpg') || endsWith($url, '.png') || endsWith($url, '.jpeg')) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

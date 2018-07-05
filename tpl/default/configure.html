@@ -259,8 +259,17 @@
         </div>
         <div class="pure-u-lg-{$ratioInput} pure-u-{$ratioInputMobile}">
           <div class="form-input">
-            <input type="checkbox" name="enableThumbnails" id="enableThumbnails"
-                   {if="$thumbnails_enabled"}checked{/if} {if="!$gd_enabled"}disabled{/if} />
+            <select name="enableThumbnails" id="enableThumbnails" class="align">
+              <option value="all"    {if="$thumbnails_mode=='all'"}selected{/if}>
+                {'All'|t}
+              </option>
+              <option value="common" {if="$thumbnails_mode=='common'"}selected{/if}>
+                {'Only common media hosts'|t}
+              </option>
+              <option value="none"   {if="$thumbnails_mode=='none'"}selected{/if}>
+                {'None'|t}
+              </option>
+            </select>
           </div>
         </div>
       </div>

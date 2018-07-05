@@ -76,7 +76,7 @@
         "extensions": []
     },
     "thumbnails": {
-        "enabled": true,
+        "mode": "common",
         "width": 90,
         "height": 53
     }

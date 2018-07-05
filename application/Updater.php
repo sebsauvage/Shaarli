@@ -2,6 +2,7 @@
 use Shaarli\Config\ConfigJson;
 use Shaarli\Config\ConfigPhp;
 use Shaarli\Config\ConfigManager;
+use Shaarli\Thumbnailer;
 
 /**
  * Class Updater.
@@ -497,12 +498,12 @@ class Updater
      */
     public function updateMethodWebThumbnailer()
     {
-        if ($this->conf->exists('thumbnails.enabled')) {
+        if ($this->conf->exists('thumbnails.mode')) {
             return true;
         }
 
         $thumbnailsEnabled = $this->conf->get('thumbnail.enable_thumbnails', true);
-        $this->conf->set('thumbnails.enabled', $thumbnailsEnabled);
+        $this->conf->set('thumbnails.mode', $thumbnailsEnabled ? Thumbnailer::MODE_ALL : Thumbnailer::MODE_NONE);
         $this->conf->set('thumbnails.width', 125);
         $this->conf->set('thumbnails.height', 90);
         $this->conf->remove('thumbnail');

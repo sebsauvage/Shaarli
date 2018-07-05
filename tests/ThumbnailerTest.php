@@ -25,14 +25,20 @@ class ThumbnailerTest extends TestCase
      */
     protected $thumbnailer;
 
+    /**
+     * @var ConfigManager
+     */
+    protected $conf;
+
     public function setUp()
     {
-        $conf = new ConfigManager('tests/utils/config/configJson');
-        $conf->set('thumbnails.width', self::WIDTH);
-        $conf->set('thumbnails.height', self::HEIGHT);
-        $conf->set('dev.debug', true);
+        $this->conf = new ConfigManager('tests/utils/config/configJson');
+        $this->conf->set('thumbnails.mode', Thumbnailer::MODE_ALL);
+        $this->conf->set('thumbnails.width', self::WIDTH);
+        $this->conf->set('thumbnails.height', self::HEIGHT);
+        $this->conf->set('dev.debug', true);
 
-        $this->thumbnailer = new Thumbnailer($conf);
+        $this->thumbnailer = new Thumbnailer($this->conf);
         // cache files in the sandbox
         WTConfigManager::addFile('tests/utils/config/wt.json');
     }
@@ -43,15 +49,38 @@ class ThumbnailerTest extends TestCase
     }
 
     /**
-     * Test a thumbnail with a custom size.
+     * Test a thumbnail with a custom size in 'all' mode.
      */
-    public function testThumbnailValid()
+    public function testThumbnailAllValid()
     {
         $thumb = $this->thumbnailer->get('https://github.com/shaarli/Shaarli/');
         $this->assertNotFalse($thumb);
         $image = imagecreatefromstring(file_get_contents($thumb));
         $this->assertEquals(self::WIDTH, imagesx($image));
         $this->assertEquals(self::HEIGHT, imagesy($image));
+    }
+
+    /**
+     * Test a thumbnail with a custom size in 'common' mode.
+     */
+    public function testThumbnailCommonValid()
+    {
+        $this->conf->set('thumbnails.mode', Thumbnailer::MODE_COMMON);
+        $thumb = $this->thumbnailer->get('https://imgur.com/jlFgGpe');
+        $this->assertNotFalse($thumb);
+        $image = imagecreatefromstring(file_get_contents($thumb));
+        $this->assertEquals(self::WIDTH, imagesx($image));
+        $this->assertEquals(self::HEIGHT, imagesy($image));
+    }
+
+    /**
+     * Test a thumbnail in 'common' mode which isn't include in common websites.
+     */
+    public function testThumbnailCommonInvalid()
+    {
+        $this->conf->set('thumbnails.mode', Thumbnailer::MODE_COMMON);
+        $thumb = $this->thumbnailer->get('https://github.com/shaarli/Shaarli/');
+        $this->assertFalse($thumb);
     }
 
     /**

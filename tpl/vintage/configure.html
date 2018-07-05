@@ -131,8 +131,17 @@
       <tr>
         <td valign="top"><b>Enable thumbnails</b></td>
         <td>
-          <input type="checkbox" name="enableThumbnails" id="enableThumbnails"
-                 {if="$thumbnails_enabled"}checked{/if} {if="!$gd_enabled"}disabled{/if}>
+          <select name="enableThumbnails" id="enableThumbnails" class="align">
+            <option value="all"    {if="$thumbnails_mode=='all'"}selected{/if}>
+            {'All'|t}
+            </option>
+            <option value="common" {if="$thumbnails_mode=='common'"}selected{/if}>
+            {'Only common media hosts'|t}
+            </option>
+            <option value="none"   {if="$thumbnails_mode=='none'"}selected{/if}>
+            {'None'|t}
+            </option>
+          </select>
           <label for="enableThumbnails">
             {if="! $gd_enabled"}
               {'You need to enable the extension <code>php-gd</code> to use thumbnails.'|t}

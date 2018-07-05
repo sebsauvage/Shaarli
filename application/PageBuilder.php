@@ -1,6 +1,7 @@
 <?php
 
 use Shaarli\Config\ConfigManager;
+use Shaarli\Thumbnailer;
 
 /**
  * This class is in charge of building the final page.
@@ -119,7 +120,10 @@ class PageBuilder
             $this->tpl->assign('tags', $this->linkDB->linksCountPerTag());
         }
 
-        $this->tpl->assign('thumbnails_enabled', $this->conf->get('thumbnails.enabled'));
+        $this->tpl->assign(
+            'thumbnails_enabled',
+            $this->conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE
+        );
         $this->tpl->assign('thumbnails_width', $this->conf->get('thumbnails.width'));
         $this->tpl->assign('thumbnails_height', $this->conf->get('thumbnails.height'));
 

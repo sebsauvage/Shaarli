@@ -603,7 +603,9 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     // -------- Picture wall
     if ($targetPage == Router::$PAGE_PICWALL)
     {
-        if (! $conf->get('thumbnails.enabled')) {
+        $PAGE->assign('pagetitle', t('Picture wall') .' - '. $conf->get('general.title', 'Shaarli'));
+        if (! $conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) === Thumbnailer::MODE_NONE) {
+            $PAGE->assign('linksToDisplay', []);
             $PAGE->renderPage('picwall');
             exit;
         }
@@ -630,7 +632,6 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign($key, $value);
         }
 
-        $PAGE->assign('pagetitle', t('Picture wall') .' - '. $conf->get('general.title', 'Shaarli'));
         $PAGE->renderPage('picwall');
         exit;
     }
@@ -1013,14 +1014,13 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $conf->set('api.secret', escape($_POST['apiSecret']));
             $conf->set('translation.language', escape($_POST['language']));
 
-            $thumbnailsEnabled = extension_loaded('gd') && !empty($_POST['enableThumbnails']);
-            $conf->set('thumbnails.enabled', $thumbnailsEnabled);
-
-            if (! $conf->get('thumbnails.enabled') && $thumbnailsEnabled) {
+            $thumbnailsMode = extension_loaded('gd') ? $_POST['enableThumbnails'] : Thumbnailer::MODE_NONE;
+            if ($conf->get('thumbnails.enabled', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE) {
                 $_SESSION['warnings'][] = t(
-                    'You have enabled thumbnails. <a href="?do=thumbs_update">Please synchonize them</a>.'
+                    'You have enabled or changed thumbnails mode. <a href="?do=thumbs_update">Please synchonize them</a>.'
                 );
             }
+            $conf->set('thumbnails.mode', $thumbnailsMode);
 
             try {
                 $conf->write($loginManager->isLoggedIn());
@@ -1061,6 +1061,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign('languages', Languages::getAvailableLanguages());
             $PAGE->assign('language', $conf->get('translation.language'));
             $PAGE->assign('gd_enabled', extension_loaded('gd'));
+            $PAGE->assign('thumbnails_mode', $conf->get('thumbnails.mode', Thumbnailer::MODE_NONE));
             $PAGE->assign('pagetitle', t('Configure') .' - '. $conf->get('general.title', 'Shaarli'));
             $PAGE->renderPage('configure');
             exit;
@@ -1162,7 +1163,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $link['title'] = $link['url'];
         }
 
-        if ($conf->get('thumbnails.enabled')) {
+        if ($conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE) {
             $thumbnailer = new Thumbnailer($conf);
             $link['thumbnail'] = $thumbnailer->get($url);
         }
@@ -1606,7 +1607,8 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
     $i = ($page-1) * $_SESSION['LINKS_PER_PAGE'];
     $end = $i + $_SESSION['LINKS_PER_PAGE'];
 
-    if ($conf->get('thumbnails.enabled')) {
+    $thumbnailsEnabled = $conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE;
+    if ($thumbnailsEnabled) {
         $thumbnailer = new Thumbnailer($conf);
     }
 
@@ -1633,7 +1635,7 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
 
         // Thumbnails enabled, not a note,
         // and (never retrieved yet or no valid cache file)
-        if ($conf->get('thumbnails.enabled') && $link['url'][0] != '?'
+        if ($thumbnailsEnabled && $link['url'][0] != '?'
             && (! isset($link['thumbnail']) || ($link['thumbnail'] !== false && ! is_file($link['thumbnail'])))
         ) {
             $elem = $LINKSDB[$keys[$i]];
