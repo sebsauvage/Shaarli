@@ -13,13 +13,13 @@ This guide assumes that:
     - [mod_proxy](https://httpd.apache.org/docs/2.4/mod/mod_proxy.html)
     - [Reverse Proxy Request Headers](https://httpd.apache.org/docs/2.4/mod/mod_proxy.html#x-headers)
 
-The following HTTP headers are set by using the `ProxyPass` directive:
+The following HTTP headers are set when the `ProxyPass` directive is set:
 
 - `X-Forwarded-For`
 - `X-Forwarded-Host`
 - `X-Forwarded-Server`
 
-The original `SERVER_NAME` can be send to the proxied host using the `ProxyPreserveHost` directive. 
+The original `SERVER_NAME` can be sent to the proxied host by setting the [`ProxyPreserveHost`](https://httpd.apache.org/docs/2.4/mod/mod_proxy.html#ProxyPreserveHost) directive to `On`.
 
 ```apache
 <VirtualHost *:80>
