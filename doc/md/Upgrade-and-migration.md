@@ -35,7 +35,7 @@ As all user data is kept under `data`, this is the only directory you need to wo
 
 All tagged revisions can be downloaded as tarballs or ZIP archives from the [releases](https://github.com/shaarli/Shaarli/releases) page.
 
-We recommend that you use the latest release tarball with the `-full` suffix. It contains the dependencies, please read [Download and installation](Download-and-installation) for `git` complete instructions.
+We recommend that you use the latest release tarball with the `-full` suffix. It contains the dependencies, please read [Download and Installation](Download-and-Installation) for `git` complete instructions.
 
 Once downloaded, extract the archive locally and update your remote installation (e.g. via FTP) -be sure you keep the content of the `data` directory!
 
