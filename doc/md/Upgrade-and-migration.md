@@ -27,7 +27,7 @@ As all user data is kept under `data`, this is the only directory you need to wo
 
 - backup the `data` directory
 - install or update Shaarli:
-    - fresh installation - see [Download and installation](Download-and-installation)
+    - fresh installation - see [Download and Installation](Download-and-Installation)
     - update - see the following sections
 - check or restore the `data` directory
 
