@@ -68,16 +68,16 @@ class Links extends ApiController
         }
 
         // 'environment' is set by Slim and encapsulate $_SERVER.
-        $index = index_url($this->ci['environment']);
+        $indexUrl = index_url($this->ci['environment']);
 
         $out = [];
-        $cpt = 0;
+        $index = 0;
         foreach ($links as $link) {
             if (count($out) >= $limit) {
                 break;
             }
-            if ($cpt++ >= $offset) {
-                $out[] = ApiUtils::formatLink($link, $index);
+            if ($index++ >= $offset) {
+                $out[] = ApiUtils::formatLink($link, $indexUrl);
             }
         }
 
