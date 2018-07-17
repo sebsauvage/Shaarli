@@ -632,6 +632,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign($key, $value);
         }
 
+
         $PAGE->renderPage('picwall');
         exit;
     }
@@ -1015,9 +1016,11 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $conf->set('translation.language', escape($_POST['language']));
 
             $thumbnailsMode = extension_loaded('gd') ? $_POST['enableThumbnails'] : Thumbnailer::MODE_NONE;
-            if ($conf->get('thumbnails.enabled', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE) {
+            if ($thumbnailsMode !== Thumbnailer::MODE_NONE
+                && $thumbnailsMode !== $conf->get('thumbnails.mode', Thumbnailer::MODE_NONE)
+            ) {
                 $_SESSION['warnings'][] = t(
-                    'You have enabled or changed thumbnails mode. <a href="?do=thumbs_update">Please synchonize them</a>.'
+                    'You have enabled or changed thumbnails mode. <a href="?do=thumbs_update">Please synchronize them</a>.'
                 );
             }
             $conf->set('thumbnails.mode', $thumbnailsMode);
@@ -1517,7 +1520,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $ids[] = $link['id'];
         }
         $PAGE->assign('ids', $ids);
-        $PAGE->assign('pagetitle', t('Thumbnail update') .' - '. $conf->get('general.title', 'Shaarli'));
+        $PAGE->assign('pagetitle', t('Thumbnails update') .' - '. $conf->get('general.title', 'Shaarli'));
         $PAGE->renderPage('thumbnails');
         exit;
     }

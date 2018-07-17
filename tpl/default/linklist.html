@@ -132,7 +132,7 @@
         <div class="linklist-item linklist-item{if="$value.class"} {$value.class}{/if}" data-id="{$value.id}">
           <div class="linklist-item-title">
             {if="$thumbnails_enabled && !empty($value.thumbnail)"}
-              <div class="linklist-item-thumbnail">
+              <div class="linklist-item-thumbnail" style="width:{$thumbnails_width}px;height:{$thumbnails_height}px;">
                 <div class="thumbnail">
                   <a href="{$value.real_url}">
                   {ignore}RainTPL hack: put the 2 src on two different line to avoid path replace bug{/ignore}

@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "arthurhoaro/web-thumbnailer",
-            "version": "v1.2.0",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ArthurHoaro/web-thumbnailer.git",
-                "reference": "d6bc683c7081ee6a0bdedc317ad88a9d9cddc4d6"
+                "reference": "a5a52f69e8e8f3c71fab9649e2a927e2d3f418f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ArthurHoaro/web-thumbnailer/zipball/d6bc683c7081ee6a0bdedc317ad88a9d9cddc4d6",
-                "reference": "d6bc683c7081ee6a0bdedc317ad88a9d9cddc4d6",
+                "url": "https://api.github.com/repos/ArthurHoaro/web-thumbnailer/zipball/a5a52f69e8e8f3c71fab9649e2a927e2d3f418f1",
+                "reference": "a5a52f69e8e8f3c71fab9649e2a927e2d3f418f1",
                 "shasum": ""
             },
             "require": {
@@ -52,7 +52,7 @@
                 }
             ],
             "description": "PHP library which will retrieve a thumbnail for any given URL",
-            "time": "2018-06-30T12:12:07+00:00"
+            "time": "2018-07-17T10:21:14+00:00"
         },
         {
             "name": "container-interop/container-interop",

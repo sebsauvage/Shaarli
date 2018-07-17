@@ -384,6 +384,9 @@ class ConfigManager
         $this->setEmpty('redirector.url', '');
         $this->setEmpty('redirector.encode_url', true);
 
+        $this->setEmpty('thumbnails.width', '125');
+        $this->setEmpty('thumbnails.height', '90');
+
         $this->setEmpty('translation.language', 'auto');
         $this->setEmpty('translation.mode', 'php');
         $this->setEmpty('translation.extensions', []);

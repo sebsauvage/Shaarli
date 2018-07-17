@@ -636,23 +636,22 @@ body,
 }
 
 .linklist-item {
+  position: relative;
   margin: 0 0 10px;
   box-shadow: 1px 1px 3px $light-grey;
   background: $almost-white;
 
   &.private {
-    .linklist-item-title {
-      &::before {
-        @extend %private-border;
-        margin-top: 3px;
-      }
-    }
-
-    .linklist-item-description {
-      &::before {
-        @extend %private-border;
-        height: 100%;
-      }
+    &::before {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      background: $orange;
+      width: 2px;
+      height: 100%;
+      content: '';
     }
   }
 }

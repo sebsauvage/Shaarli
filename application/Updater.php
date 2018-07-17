@@ -511,7 +511,7 @@ class Updater
 
         if ($thumbnailsEnabled) {
             $this->session['warnings'][] = t(
-                'You have enabled thumbnails. <a href="?do=thumbs_update">Please synchonize them</a>.'
+                'You have enabled or changed thumbnails mode. <a href="?do=thumbs_update">Please synchronize them</a>.'
             );
         }
 

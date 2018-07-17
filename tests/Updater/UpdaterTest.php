@@ -700,7 +700,7 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
         $this->assertEquals(\Shaarli\Thumbnailer::MODE_ALL, $this->conf->get('thumbnails.mode'));
         $this->assertEquals(125, $this->conf->get('thumbnails.width'));
         $this->assertEquals(90, $this->conf->get('thumbnails.height'));
-        $this->assertContains('You have enabled thumbnails', $_SESSION['warnings'][0]);
+        $this->assertContains('You have enabled or changed thumbnails', $_SESSION['warnings'][0]);
     }
 
     /**
