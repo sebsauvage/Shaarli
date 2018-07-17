@@ -58,6 +58,9 @@ class LoginManager
      */
     public function generateStaySignedInToken($clientIpAddress)
     {
+        if ($this->configManager->get('security.session_protection_disabled') === true) {
+            $clientIpAddress = '';
+        }
         $this->staySignedInToken = sha1(
             $this->configManager->get('credentials.hash')
             . $clientIpAddress

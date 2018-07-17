@@ -260,6 +260,20 @@ class LoginManagerTest extends TestCase
     }
 
     /**
+     * Generate a token depending on the user credentials with session protected disabled
+     */
+    public function testGenerateStaySignedInTokenSessionProtectionDisabled()
+    {
+        $this->configManager->set('security.session_protection_disabled', true);
+        $this->loginManager->generateStaySignedInToken($this->clientIpAddress);
+
+        $this->assertEquals(
+            sha1($this->passwordHash . $this->salt),
+            $this->loginManager->getStaySignedInToken()
+        );
+    }
+
+    /**
      * Check user login - Shaarli has not yet been configured
      */
     public function testCheckLoginStateNotConfigured()
