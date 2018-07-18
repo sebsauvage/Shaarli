@@ -152,3 +152,22 @@ See the reference API client:
 
 - [Documentation](http://python-shaarli-client.readthedocs.io/en/latest/) on ReadTheDocs
 - [python-shaarli-client](https://github.com/shaarli/python-shaarli-client) on Github
+
+## Troubleshooting
+
+### Debug mode
+
+> This should never be used in a production environment.
+
+For security reasons, authentication issues will always return an `HTTP 401` error code without any detail.
+
+It is possible to enable the debug mode in `config.json.php` 
+to get the actual error message in the HTTP response body with:
+
+```json
+{
+  "dev": {
+    "debug": true
+  }
+}
+```
