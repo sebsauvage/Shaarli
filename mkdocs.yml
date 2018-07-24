@@ -5,7 +5,10 @@ site_description: The personal, minimalist, super-fast, database free, bookmarki
 theme: readthedocs
 docs_dir: doc/md
 site_dir: doc/html
-strict: true
+# Disable strict mode until ReadTheDocs provides up-to-date MkDocs settings:
+# - https://github.com/shaarli/Shaarli/issues/1179
+# - https://github.com/rtfd/readthedocs.org/issues/4314
+# strict: true
 
 pages:
 - Home: index.md
