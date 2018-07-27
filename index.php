@@ -1103,7 +1103,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         // Linkdate is kept here to:
         //   - use the same permalink for notes as they're displayed when creating them
         //   - let users hack creation date of their posts
-        //     See: https://shaarli.readthedocs.io/en/master/Various-hacks/#changing-the-timestamp-for-a-shaare
+        //     See: https://shaarli.readthedocs.io/en/master/guides/various-hacks/#changing-the-timestamp-for-a-shaare
         $linkdate = escape($_POST['lf_linkdate']);
         if (isset($LINKSDB[$id])) {
             // Edit
