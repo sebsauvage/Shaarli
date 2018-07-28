@@ -75,11 +75,12 @@ require_once 'application/Utils.php';
 require_once 'application/PluginManager.php';
 require_once 'application/Router.php';
 require_once 'application/Updater.php';
-use \Shaarli\Languages;
-use \Shaarli\ThemeUtils;
 use \Shaarli\Config\ConfigManager;
+use \Shaarli\Languages;
 use \Shaarli\Security\LoginManager;
 use \Shaarli\Security\SessionManager;
+use \Shaarli\ThemeUtils;
+use \Shaarli\Thumbnailer;
 
 // Ensure the PHP version is supported
 try {
@@ -513,7 +514,8 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         read_updates_file($conf->get('resource.updates')),
         $LINKSDB,
         $conf,
-        $loginManager->isLoggedIn()
+        $loginManager->isLoggedIn(),
+        $_SESSION
     );
     try {
         $newUpdates = $updater->update();
@@ -528,7 +530,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         die($e->getMessage());
     }
 
-    $PAGE = new PageBuilder($conf, $LINKSDB, $sessionManager->generateToken(), $loginManager->isLoggedIn());
+    $PAGE = new PageBuilder($conf, $_SESSION, $LINKSDB, $sessionManager->generateToken(), $loginManager->isLoggedIn());
     $PAGE->assign('linkcount', count($LINKSDB));
     $PAGE->assign('privateLinkcount', count_private($LINKSDB));
     $PAGE->assign('plugin_errors', $pluginManager->getErrors());
@@ -601,19 +603,23 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     // -------- Picture wall
     if ($targetPage == Router::$PAGE_PICWALL)
     {
+        $PAGE->assign('pagetitle', t('Picture wall') .' - '. $conf->get('general.title', 'Shaarli'));
+        if (! $conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) === Thumbnailer::MODE_NONE) {
+            $PAGE->assign('linksToDisplay', []);
+            $PAGE->renderPage('picwall');
+            exit;
+        }
+
         // Optionally filter the results:
         $links = $LINKSDB->filterSearch($_GET);
         $linksToDisplay = array();
 
         // Get only links which have a thumbnail.
-        foreach($links as $link)
+        // Note: we do not retrieve thumbnails here, the request is too heavy.
+        foreach($links as $key => $link)
         {
-            $permalink='?'.$link['shorturl'];
-            $thumb=lazyThumbnail($conf, $link['url'],$permalink);
-            if ($thumb!='') // Only output links which have a thumbnail.
-            {
-                $link['thumbnail']=$thumb; // Thumbnail HTML code.
-                $linksToDisplay[]=$link; // Add to array.
+            if (isset($link['thumbnail']) && $link['thumbnail'] !== false) {
+                $linksToDisplay[] = $link; // Add to array.
             }
         }
 
@@ -626,7 +632,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign($key, $value);
         }
 
-        $PAGE->assign('pagetitle', t('Picture wall') .' - '. $conf->get('general.title', 'Shaarli'));
+
         $PAGE->renderPage('picwall');
         exit;
     }
@@ -1009,6 +1015,16 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $conf->set('api.secret', escape($_POST['apiSecret']));
             $conf->set('translation.language', escape($_POST['language']));
 
+            $thumbnailsMode = extension_loaded('gd') ? $_POST['enableThumbnails'] : Thumbnailer::MODE_NONE;
+            if ($thumbnailsMode !== Thumbnailer::MODE_NONE
+                && $thumbnailsMode !== $conf->get('thumbnails.mode', Thumbnailer::MODE_NONE)
+            ) {
+                $_SESSION['warnings'][] = t(
+                    'You have enabled or changed thumbnails mode. <a href="?do=thumbs_update">Please synchronize them</a>.'
+                );
+            }
+            $conf->set('thumbnails.mode', $thumbnailsMode);
+
             try {
                 $conf->write($loginManager->isLoggedIn());
                 $history->updateSettings();
@@ -1047,6 +1063,8 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign('api_secret', $conf->get('api.secret'));
             $PAGE->assign('languages', Languages::getAvailableLanguages());
             $PAGE->assign('language', $conf->get('translation.language'));
+            $PAGE->assign('gd_enabled', extension_loaded('gd'));
+            $PAGE->assign('thumbnails_mode', $conf->get('thumbnails.mode', Thumbnailer::MODE_NONE));
             $PAGE->assign('pagetitle', t('Configure') .' - '. $conf->get('general.title', 'Shaarli'));
             $PAGE->renderPage('configure');
             exit;
@@ -1146,6 +1164,11 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         // If title is empty, use the URL as title.
         if ($link['title'] == '') {
             $link['title'] = $link['url'];
+        }
+
+        if ($conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE) {
+            $thumbnailer = new Thumbnailer($conf);
+            $link['thumbnail'] = $thumbnailer->get($url);
         }
 
         $pluginManager->executeHooks('save_link', $link);
@@ -1486,6 +1509,43 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         exit;
     }
 
+    // -------- Thumbnails Update
+    if ($targetPage == Router::$PAGE_THUMBS_UPDATE) {
+        $ids = [];
+        foreach ($LINKSDB as $link) {
+            // A note or not HTTP(S)
+            if ($link['url'][0] === '?' || ! startsWith(strtolower($link['url']), 'http')) {
+                continue;
+            }
+            $ids[] = $link['id'];
+        }
+        $PAGE->assign('ids', $ids);
+        $PAGE->assign('pagetitle', t('Thumbnails update') .' - '. $conf->get('general.title', 'Shaarli'));
+        $PAGE->renderPage('thumbnails');
+        exit;
+    }
+
+    // -------- Single Thumbnail Update
+    if ($targetPage == Router::$AJAX_THUMB_UPDATE) {
+        if (! isset($_POST['id']) || ! ctype_digit($_POST['id'])) {
+            http_response_code(400);
+            exit;
+        }
+        $id = (int) $_POST['id'];
+        if (empty($LINKSDB[$id])) {
+            http_response_code(404);
+            exit;
+        }
+        $thumbnailer = new Thumbnailer($conf);
+        $link = $LINKSDB[$id];
+        $link['thumbnail'] = $thumbnailer->get($link['url']);
+        $LINKSDB[$id] = $link;
+        $LINKSDB->save($conf->get('resource.page_cache'));
+
+        echo json_encode($link);
+        exit;
+    }
+
     // -------- Otherwise, simply display search form and links:
     showLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager);
     exit;
@@ -1549,6 +1609,12 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
     // Start index.
     $i = ($page-1) * $_SESSION['LINKS_PER_PAGE'];
     $end = $i + $_SESSION['LINKS_PER_PAGE'];
+
+    $thumbnailsEnabled = $conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE;
+    if ($thumbnailsEnabled) {
+        $thumbnailer = new Thumbnailer($conf);
+    }
+
     $linkDisp = array();
     while ($i<$end && $i<count($keys))
     {
@@ -1569,14 +1635,31 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
         $taglist = preg_split('/\s+/', $link['tags'], -1, PREG_SPLIT_NO_EMPTY);
         uasort($taglist, 'strcasecmp');
         $link['taglist'] = $taglist;
+
+        // Thumbnails enabled, not a note,
+        // and (never retrieved yet or no valid cache file)
+        if ($thumbnailsEnabled && $link['url'][0] != '?'
+            && (! isset($link['thumbnail']) || ($link['thumbnail'] !== false && ! is_file($link['thumbnail'])))
+        ) {
+            $elem = $LINKSDB[$keys[$i]];
+            $elem['thumbnail'] = $thumbnailer->get($link['url']);
+            $LINKSDB[$keys[$i]] = $elem;
+            $updateDB = true;
+            $link['thumbnail'] = $elem['thumbnail'];
+        }
+
         // Check for both signs of a note: starting with ? and 7 chars long.
-        if ($link['url'][0] === '?' &&
-            strlen($link['url']) === 7) {
+        if ($link['url'][0] === '?' && strlen($link['url']) === 7) {
             $link['url'] = index_url($_SERVER) . $link['url'];
         }
 
         $linkDisp[$keys[$i]] = $link;
         $i++;
+    }
+
+    // If we retrieved new thumbnails, we update the database.
+    if (!empty($updateDB)) {
+        $LINKSDB->save($conf->get('resource.page_cache'));
     }
 
     // Compute paging navigation
@@ -1628,194 +1711,6 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
 
     return;
 }
-
-/**
- * Compute the thumbnail for a link.
- *
- * With a link to the original URL.
- * Understands various services (youtube.com...)
- * Input: $url = URL for which the thumbnail must be found.
- *        $href = if provided, this URL will be followed instead of $url
- * Returns an associative array with thumbnail attributes (src,href,width,height,style,alt)
- * Some of them may be missing.
- * Return an empty array if no thumbnail available.
- *
- * @param ConfigManager $conf Configuration Manager instance.
- * @param string        $url
- * @param string|bool   $href
- *
- * @return array
- */
-function computeThumbnail($conf, $url, $href = false)
-{
-    if (!$conf->get('thumbnail.enable_thumbnails')) return array();
-    if ($href==false) $href=$url;
-
-    // For most hosts, the URL of the thumbnail can be easily deduced from the URL of the link.
-    // (e.g. http://www.youtube.com/watch?v=spVypYk4kto --->  http://img.youtube.com/vi/spVypYk4kto/default.jpg )
-    //                                     ^^^^^^^^^^^                                 ^^^^^^^^^^^
-    $domain = parse_url($url,PHP_URL_HOST);
-    if ($domain=='youtube.com' || $domain=='www.youtube.com')
-    {
-        parse_str(parse_url($url,PHP_URL_QUERY), $params); // Extract video ID and get thumbnail
-        if (!empty($params['v'])) return array('src'=>'https://img.youtube.com/vi/'.$params['v'].'/default.jpg',
-                                               'href'=>$href,'width'=>'120','height'=>'90','alt'=>'YouTube thumbnail');
-    }
-    if ($domain=='youtu.be') // Youtube short links
-    {
-        $path = parse_url($url,PHP_URL_PATH);
-        return array('src'=>'https://img.youtube.com/vi'.$path.'/default.jpg',
-                     'href'=>$href,'width'=>'120','height'=>'90','alt'=>'YouTube thumbnail');
-    }
-    if ($domain=='pix.toile-libre.org') // pix.toile-libre.org image hosting
-    {
-        parse_str(parse_url($url,PHP_URL_QUERY), $params); // Extract image filename.
-        if (!empty($params) && !empty($params['img'])) return array('src'=>'http://pix.toile-libre.org/upload/thumb/'.urlencode($params['img']),
-                                                                    'href'=>$href,'style'=>'max-width:120px; max-height:150px','alt'=>'pix.toile-libre.org thumbnail');
-    }
-
-    if ($domain=='imgur.com')
-    {
-        $path = parse_url($url,PHP_URL_PATH);
-        if (startsWith($path,'/a/')) return array(); // Thumbnails for albums are not available.
-        if (startsWith($path,'/r/')) return array('src'=>'https://i.imgur.com/'.basename($path).'s.jpg',
-                                                  'href'=>$href,'width'=>'90','height'=>'90','alt'=>'imgur.com thumbnail');
-        if (startsWith($path,'/gallery/')) return array('src'=>'https://i.imgur.com'.substr($path,8).'s.jpg',
-                                                        'href'=>$href,'width'=>'90','height'=>'90','alt'=>'imgur.com thumbnail');
-
-        if (substr_count($path,'/')==1) return array('src'=>'https://i.imgur.com/'.substr($path,1).'s.jpg',
-                                                     'href'=>$href,'width'=>'90','height'=>'90','alt'=>'imgur.com thumbnail');
-    }
-    if ($domain=='i.imgur.com')
-    {
-        $pi = pathinfo(parse_url($url,PHP_URL_PATH));
-        if (!empty($pi['filename'])) return array('src'=>'https://i.imgur.com/'.$pi['filename'].'s.jpg',
-                                                  'href'=>$href,'width'=>'90','height'=>'90','alt'=>'imgur.com thumbnail');
-    }
-    if ($domain=='dailymotion.com' || $domain=='www.dailymotion.com')
-    {
-        if (strpos($url,'dailymotion.com/video/')!==false)
-        {
-            $thumburl=str_replace('dailymotion.com/video/','dailymotion.com/thumbnail/video/',$url);
-            return array('src'=>$thumburl,
-                         'href'=>$href,'width'=>'120','style'=>'height:auto;','alt'=>'DailyMotion thumbnail');
-        }
-    }
-    if (endsWith($domain,'.imageshack.us'))
-    {
-        $ext=strtolower(pathinfo($url,PATHINFO_EXTENSION));
-        if ($ext=='jpg' || $ext=='jpeg' || $ext=='png' || $ext=='gif')
-        {
-            $thumburl = substr($url,0,strlen($url)-strlen($ext)).'th.'.$ext;
-            return array('src'=>$thumburl,
-                         'href'=>$href,'width'=>'120','style'=>'height:auto;','alt'=>'imageshack.us thumbnail');
-        }
-    }
-
-    // Some other hosts are SLOW AS HELL and usually require an extra HTTP request to get the thumbnail URL.
-    // So we deport the thumbnail generation in order not to slow down page generation
-    // (and we also cache the thumbnail)
-
-    if (! $conf->get('thumbnail.enable_localcache')) return array(); // If local cache is disabled, no thumbnails for services which require the use a local cache.
-
-    if ($domain=='flickr.com' || endsWith($domain,'.flickr.com')
-        || $domain=='vimeo.com'
-        || $domain=='ted.com' || endsWith($domain,'.ted.com')
-        || $domain=='xkcd.com' || endsWith($domain,'.xkcd.com')
-    )
-    {
-        if ($domain=='vimeo.com')
-        {   // Make sure this vimeo URL points to a video (/xxx... where xxx is numeric)
-            $path = parse_url($url,PHP_URL_PATH);
-            if (!preg_match('!/\d+.+?!',$path)) return array(); // This is not a single video URL.
-        }
-        if ($domain=='xkcd.com' || endsWith($domain,'.xkcd.com'))
-        {   // Make sure this URL points to a single comic (/xxx... where xxx is numeric)
-            $path = parse_url($url,PHP_URL_PATH);
-            if (!preg_match('!/\d+.+?!',$path)) return array();
-        }
-        if ($domain=='ted.com' || endsWith($domain,'.ted.com'))
-        {   // Make sure this TED URL points to a video (/talks/...)
-            $path = parse_url($url,PHP_URL_PATH);
-            if ("/talks/" !== substr($path,0,7)) return array(); // This is not a single video URL.
-        }
-        $sign = hash_hmac('sha256', $url, $conf->get('credentials.salt')); // We use the salt to sign data (it's random, secret, and specific to each installation)
-        return array('src'=>index_url($_SERVER).'?do=genthumbnail&hmac='.$sign.'&url='.urlencode($url),
-                     'href'=>$href,'width'=>'120','style'=>'height:auto;','alt'=>'thumbnail');
-    }
-
-    // For all other, we try to make a thumbnail of links ending with .jpg/jpeg/png/gif
-    // Technically speaking, we should download ALL links and check their Content-Type to see if they are images.
-    // But using the extension will do.
-    $ext=strtolower(pathinfo($url,PATHINFO_EXTENSION));
-    if ($ext=='jpg' || $ext=='jpeg' || $ext=='png' || $ext=='gif')
-    {
-        $sign = hash_hmac('sha256', $url, $conf->get('credentials.salt')); // We use the salt to sign data (it's random, secret, and specific to each installation)
-        return array('src'=>index_url($_SERVER).'?do=genthumbnail&hmac='.$sign.'&url='.urlencode($url),
-                     'href'=>$href,'width'=>'120','style'=>'height:auto;','alt'=>'thumbnail');
-    }
-    return array(); // No thumbnail.
-
-}
-
-
-// Returns the HTML code to display a thumbnail for a link
-// with a link to the original URL.
-// Understands various services (youtube.com...)
-// Input: $url = URL for which the thumbnail must be found.
-//        $href = if provided, this URL will be followed instead of $url
-// Returns '' if no thumbnail available.
-function thumbnail($url,$href=false)
-{
-    // FIXME!
-    global $conf;
-    $t = computeThumbnail($conf, $url,$href);
-    if (count($t)==0) return ''; // Empty array = no thumbnail for this URL.
-
-    $html='<a href="'.escape($t['href']).'"><img src="'.escape($t['src']).'"';
-    if (!empty($t['width']))  $html.=' width="'.escape($t['width']).'"';
-    if (!empty($t['height'])) $html.=' height="'.escape($t['height']).'"';
-    if (!empty($t['style']))  $html.=' style="'.escape($t['style']).'"';
-    if (!empty($t['alt']))    $html.=' alt="'.escape($t['alt']).'"';
-    $html.='></a>';
-    return $html;
-}
-
-// Returns the HTML code to display a thumbnail for a link
-// for the picture wall (using lazy image loading)
-// Understands various services (youtube.com...)
-// Input: $url = URL for which the thumbnail must be found.
-//        $href = if provided, this URL will be followed instead of $url
-// Returns '' if no thumbnail available.
-function lazyThumbnail($conf, $url,$href=false)
-{
-    // FIXME!
-    global $conf;
-    $t = computeThumbnail($conf, $url,$href);
-    if (count($t)==0) return ''; // Empty array = no thumbnail for this URL.
-
-    $html='<a href="'.escape($t['href']).'">';
-
-    // Lazy image
-    $html.='<img class="b-lazy" src="#" data-src="'.escape($t['src']).'"';
-
-    if (!empty($t['width']))  $html.=' width="'.escape($t['width']).'"';
-    if (!empty($t['height'])) $html.=' height="'.escape($t['height']).'"';
-    if (!empty($t['style']))  $html.=' style="'.escape($t['style']).'"';
-    if (!empty($t['alt']))    $html.=' alt="'.escape($t['alt']).'"';
-    $html.='>';
-
-    // No-JavaScript fallback.
-    $html.='<noscript><img src="'.escape($t['src']).'"';
-    if (!empty($t['width']))  $html.=' width="'.escape($t['width']).'"';
-    if (!empty($t['height'])) $html.=' height="'.escape($t['height']).'"';
-    if (!empty($t['style']))  $html.=' style="'.escape($t['style']).'"';
-    if (!empty($t['alt']))    $html.=' alt="'.escape($t['alt']).'"';
-    $html.='></noscript></a>';
-
-    return $html;
-}
-
 
 /**
  * Installation
@@ -1908,7 +1803,7 @@ function install($conf, $sessionManager, $loginManager) {
         exit;
     }
 
-    $PAGE = new PageBuilder($conf, null, $sessionManager->generateToken());
+    $PAGE = new PageBuilder($conf, $_SESSION, null, $sessionManager->generateToken());
     list($continents, $cities) = generateTimeZoneData(timezone_identifiers_list(), date_default_timezone_get());
     $PAGE->assign('continents', $continents);
     $PAGE->assign('cities', $cities);
@@ -1917,232 +1812,6 @@ function install($conf, $sessionManager, $loginManager) {
     exit;
 }
 
-/**
- * Because some f*cking services like flickr require an extra HTTP request to get the thumbnail URL,
- * I have deported the thumbnail URL code generation here, otherwise this would slow down page generation.
- * The following function takes the URL a link (e.g. a flickr page) and return the proper thumbnail.
- * This function is called by passing the URL:
- * http://mywebsite.com/shaarli/?do=genthumbnail&hmac=[HMAC]&url=[URL]
- * [URL] is the URL of the link (e.g. a flickr page)
- * [HMAC] is the signature for the [URL] (so that these URL cannot be forged).
- * The function below will fetch the image from the webservice and store it in the cache.
- *
- * @param ConfigManager $conf Configuration Manager instance,
- */
-function genThumbnail($conf)
-{
-    // Make sure the parameters in the URL were generated by us.
-    $sign = hash_hmac('sha256', $_GET['url'], $conf->get('credentials.salt'));
-    if ($sign!=$_GET['hmac']) die('Naughty boy!');
-
-    $cacheDir = $conf->get('resource.thumbnails_cache', 'cache');
-    // Let's see if we don't already have the image for this URL in the cache.
-    $thumbname=hash('sha1',$_GET['url']).'.jpg';
-    if (is_file($cacheDir .'/'. $thumbname))
-    {   // We have the thumbnail, just serve it:
-        header('Content-Type: image/jpeg');
-        echo file_get_contents($cacheDir .'/'. $thumbname);
-        return;
-    }
-    // We may also serve a blank image (if service did not respond)
-    $blankname=hash('sha1',$_GET['url']).'.gif';
-    if (is_file($cacheDir .'/'. $blankname))
-    {
-        header('Content-Type: image/gif');
-        echo file_get_contents($cacheDir .'/'. $blankname);
-        return;
-    }
-
-    // Otherwise, generate the thumbnail.
-    $url = $_GET['url'];
-    $domain = parse_url($url,PHP_URL_HOST);
-
-    if ($domain=='flickr.com' || endsWith($domain,'.flickr.com'))
-    {
-        // Crude replacement to handle new flickr domain policy (They prefer www. now)
-        $url = str_replace('http://flickr.com/','http://www.flickr.com/',$url);
-
-        // Is this a link to an image, or to a flickr page ?
-        $imageurl='';
-        if (endsWith(parse_url($url, PHP_URL_PATH), '.jpg'))
-        {  // This is a direct link to an image. e.g. http://farm1.staticflickr.com/5/5921913_ac83ed27bd_o.jpg
-            preg_match('!(http://farm\d+\.staticflickr\.com/\d+/\d+_\w+_)\w.jpg!',$url,$matches);
-            if (!empty($matches[1])) $imageurl=$matches[1].'m.jpg';
-        }
-        else // This is a flickr page (html)
-        {
-            // Get the flickr html page.
-            list($headers, $content) = get_http_response($url, 20);
-            if (strpos($headers[0], '200 OK') !== false)
-            {
-                // flickr now nicely provides the URL of the thumbnail in each flickr page.
-                preg_match('!<link rel=\"image_src\" href=\"(.+?)\"!', $content, $matches);
-                if (!empty($matches[1])) $imageurl=$matches[1];
-
-                // In albums (and some other pages), the link rel="image_src" is not provided,
-                // but flickr provides:
-                // <meta property="og:image" content="http://farm4.staticflickr.com/3398/3239339068_25d13535ff_z.jpg" />
-                if ($imageurl=='')
-                {
-                    preg_match('!<meta property=\"og:image\" content=\"(.+?)\"!', $content, $matches);
-                    if (!empty($matches[1])) $imageurl=$matches[1];
-                }
-            }
-        }
-
-        if ($imageurl!='')
-        {   // Let's download the image.
-            // Image is 240x120, so 10 seconds to download should be enough.
-            list($headers, $content) = get_http_response($imageurl, 10);
-            if (strpos($headers[0], '200 OK') !== false) {
-                // Save image to cache.
-                file_put_contents($cacheDir .'/'. $thumbname, $content);
-                header('Content-Type: image/jpeg');
-                echo $content;
-                return;
-            }
-        }
-    }
-
-    elseif ($domain=='vimeo.com' )
-    {
-        // This is more complex: we have to perform a HTTP request, then parse the result.
-        // Maybe we should deport this to JavaScript ? Example: http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo/4285098#4285098
-        $vid = substr(parse_url($url,PHP_URL_PATH),1);
-        list($headers, $content) = get_http_response('https://vimeo.com/api/v2/video/'.escape($vid).'.php', 5);
-        if (strpos($headers[0], '200 OK') !== false) {
-            $t = unserialize($content);
-            $imageurl = $t[0]['thumbnail_medium'];
-            // Then we download the image and serve it to our client.
-            list($headers, $content) = get_http_response($imageurl, 10);
-            if (strpos($headers[0], '200 OK') !== false) {
-                // Save image to cache.
-                file_put_contents($cacheDir .'/'. $thumbname, $content);
-                header('Content-Type: image/jpeg');
-                echo $content;
-                return;
-            }
-        }
-    }
-
-    elseif ($domain=='ted.com' || endsWith($domain,'.ted.com'))
-    {
-        // The thumbnail for TED talks is located in the <link rel="image_src" [...]> tag on that page
-        // http://www.ted.com/talks/mikko_hypponen_fighting_viruses_defending_the_net.html
-        // <link rel="image_src" href="http://images.ted.com/images/ted/28bced335898ba54d4441809c5b1112ffaf36781_389x292.jpg" />
-        list($headers, $content) = get_http_response($url, 5);
-        if (strpos($headers[0], '200 OK') !== false) {
-            // Extract the link to the thumbnail
-            preg_match('!link rel="image_src" href="(http://images.ted.com/images/ted/.+_\d+x\d+\.jpg)"!', $content, $matches);
-            if (!empty($matches[1]))
-            {   // Let's download the image.
-                $imageurl=$matches[1];
-                // No control on image size, so wait long enough
-                list($headers, $content) = get_http_response($imageurl, 20);
-                if (strpos($headers[0], '200 OK') !== false) {
-                    $filepath = $cacheDir .'/'. $thumbname;
-                    file_put_contents($filepath, $content); // Save image to cache.
-                    if (resizeImage($filepath))
-                    {
-                        header('Content-Type: image/jpeg');
-                        echo file_get_contents($filepath);
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    elseif ($domain=='xkcd.com' || endsWith($domain,'.xkcd.com'))
-    {
-        // There is no thumbnail available for xkcd comics, so download the whole image and resize it.
-        // http://xkcd.com/327/
-        // <img src="http://imgs.xkcd.com/comics/exploits_of_a_mom.png" title="<BLABLA>" alt="<BLABLA>" />
-        list($headers, $content) = get_http_response($url, 5);
-        if (strpos($headers[0], '200 OK') !== false) {
-            // Extract the link to the thumbnail
-            preg_match('!<img src="(http://imgs.xkcd.com/comics/.*)" title="[^s]!', $content, $matches);
-            if (!empty($matches[1]))
-            {   // Let's download the image.
-                $imageurl=$matches[1];
-                // No control on image size, so wait long enough
-                list($headers, $content) = get_http_response($imageurl, 20);
-                if (strpos($headers[0], '200 OK') !== false) {
-                    $filepath = $cacheDir.'/'.$thumbname;
-                    // Save image to cache.
-                    file_put_contents($filepath, $content);
-                    if (resizeImage($filepath))
-                    {
-                        header('Content-Type: image/jpeg');
-                        echo file_get_contents($filepath);
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    else
-    {
-        // For all other domains, we try to download the image and make a thumbnail.
-        // We allow 30 seconds max to download (and downloads are limited to 4 Mb)
-        list($headers, $content) = get_http_response($url, 30);
-        if (strpos($headers[0], '200 OK') !== false) {
-            $filepath = $cacheDir .'/'.$thumbname;
-            // Save image to cache.
-            file_put_contents($filepath, $content);
-            if (resizeImage($filepath))
-            {
-                header('Content-Type: image/jpeg');
-                echo file_get_contents($filepath);
-                return;
-            }
-        }
-    }
-
-
-    // Otherwise, return an empty image (8x8 transparent gif)
-    $blankgif = base64_decode('R0lGODlhCAAIAIAAAP///////yH5BAEKAAEALAAAAAAIAAgAAAIHjI+py+1dAAA7');
-    // Also put something in cache so that this URL is not requested twice.
-    file_put_contents($cacheDir .'/'. $blankname, $blankgif);
-    header('Content-Type: image/gif');
-    echo $blankgif;
-}
-
-// Make a thumbnail of the image (to width: 120 pixels)
-// Returns true if success, false otherwise.
-function resizeImage($filepath)
-{
-    if (!function_exists('imagecreatefromjpeg')) return false; // GD not present: no thumbnail possible.
-
-    // Trick: some stupid people rename GIF as JPEG... or else.
-    // So we really try to open each image type whatever the extension is.
-    $header=file_get_contents($filepath,false,NULL,0,256); // Read first 256 bytes and try to sniff file type.
-    $im=false;
-    $i=strpos($header,'GIF8'); if (($i!==false) && ($i==0)) $im = imagecreatefromgif($filepath); // Well this is crude, but it should be enough.
-    $i=strpos($header,'PNG'); if (($i!==false) && ($i==1)) $im = imagecreatefrompng($filepath);
-    $i=strpos($header,'JFIF'); if ($i!==false) $im = imagecreatefromjpeg($filepath);
-    if (!$im) return false;  // Unable to open image (corrupted or not an image)
-    $w = imagesx($im);
-    $h = imagesy($im);
-    $ystart = 0; $yheight=$h;
-    if ($h>$w) { $ystart= ($h/2)-($w/2); $yheight=$w/2; }
-    $nw = 120;   // Desired width
-    $nh = min(floor(($h*$nw)/$w),120); // Compute new width/height, but maximum 120 pixels height.
-    // Resize image:
-    $im2 = imagecreatetruecolor($nw,$nh);
-    imagecopyresampled($im2, $im, 0, 0, 0, $ystart, $nw, $nh, $w, $yheight);
-    imageinterlace($im2,true); // For progressive JPEG.
-    $tempname=$filepath.'_TEMP.jpg';
-    imagejpeg($im2, $tempname, 90);
-    imagedestroy($im);
-    imagedestroy($im2);
-    unlink($filepath);
-    rename($tempname,$filepath);  // Overwrite original picture with thumbnail.
-    return true;
-}
-
-if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=genthumbnail')) { genThumbnail($conf); exit; }  // Thumbnail generation/cache does not need the link database.
 if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=dailyrss')) { showDailyRSS($conf); exit; }
 if (!isset($_SESSION['LINKS_PER_PAGE'])) {
     $_SESSION['LINKS_PER_PAGE'] = $conf->get('general.links_per_page', 20);

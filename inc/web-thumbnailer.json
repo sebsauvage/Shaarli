@@ -1,0 +1,13 @@
+{
+  "settings": {
+    "default": {
+      "download_mode": "DOWNLOAD",
+      "_comment": "infinite cache",
+      "cache_duration": -1,
+      "timeout": 10
+    },
+    "path": {
+      "cache": "cache/"
+    }
+  }
+}

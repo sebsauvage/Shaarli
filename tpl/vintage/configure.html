@@ -128,6 +128,29 @@
           <input type="text" name="apiSecret" id="apiSecret" size="50" value="{$api_secret}" />
         </td>
       </tr>
+      <tr>
+        <td valign="top"><b>Enable thumbnails</b></td>
+        <td>
+          <select name="enableThumbnails" id="enableThumbnails" class="align">
+            <option value="all"    {if="$thumbnails_mode=='all'"}selected{/if}>
+            {'All'|t}
+            </option>
+            <option value="common" {if="$thumbnails_mode=='common'"}selected{/if}>
+            {'Only common media hosts'|t}
+            </option>
+            <option value="none"   {if="$thumbnails_mode=='none'"}selected{/if}>
+            {'None'|t}
+            </option>
+          </select>
+          <label for="enableThumbnails">
+            {if="! $gd_enabled"}
+              {'You need to enable the extension <code>php-gd</code> to use thumbnails.'|t}
+            {elseif="$thumbnails_enabled"}
+              <a href="?do=thumbs_update">{'Synchonize thumbnails'|t}</a>
+            {/if}
+          </label>
+        </td>
+      </tr>
 
       <tr>
         <td></td>

@@ -45,6 +45,14 @@
       </a>
     </div>
 
+    {if="$thumbnails_enabled"}
+      <div class="tools-item">
+        <a href="?do=thumbs_update" title="{'Synchronize all link thumbnails'|t}">
+          <span class="pure-button pure-u-lg-2-3 pure-u-3-4">{'Synchronize thumbnails'|t}</span>
+        </a>
+      </div>
+    {/if}
+
     {loop="$tools_plugin"}
       <div class="tools-item">
         {$value}

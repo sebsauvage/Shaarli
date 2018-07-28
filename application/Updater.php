@@ -2,6 +2,7 @@
 use Shaarli\Config\ConfigJson;
 use Shaarli\Config\ConfigPhp;
 use Shaarli\Config\ConfigManager;
+use Shaarli\Thumbnailer;
 
 /**
  * Class Updater.
@@ -31,6 +32,11 @@ class Updater
     protected $isLoggedIn;
 
     /**
+     * @var array $_SESSION
+     */
+    protected $session;
+
+    /**
      * @var ReflectionMethod[] List of current class methods.
      */
     protected $methods;
@@ -42,13 +48,17 @@ class Updater
      * @param LinkDB        $linkDB      LinkDB instance.
      * @param ConfigManager $conf        Configuration Manager instance.
      * @param boolean       $isLoggedIn  True if the user is logged in.
+     * @param array         $session     $_SESSION (by reference)
+     *
+     * @throws ReflectionException
      */
-    public function __construct($doneUpdates, $linkDB, $conf, $isLoggedIn)
+    public function __construct($doneUpdates, $linkDB, $conf, $isLoggedIn, &$session = [])
     {
         $this->doneUpdates = $doneUpdates;
         $this->linkDB = $linkDB;
         $this->conf = $conf;
         $this->isLoggedIn = $isLoggedIn;
+        $this->session = &$session;
 
         // Retrieve all update methods.
         $class = new ReflectionClass($this);
@@ -480,6 +490,30 @@ class Updater
         }
 
         $this->conf->write($this->isLoggedIn);
+        return true;
+    }
+
+    /**
+     * * Move thumbnails management to WebThumbnailer, coming with new settings.
+     */
+    public function updateMethodWebThumbnailer()
+    {
+        if ($this->conf->exists('thumbnails.mode')) {
+            return true;
+        }
+
+        $thumbnailsEnabled = $this->conf->get('thumbnail.enable_thumbnails', true);
+        $this->conf->set('thumbnails.mode', $thumbnailsEnabled ? Thumbnailer::MODE_ALL : Thumbnailer::MODE_NONE);
+        $this->conf->set('thumbnails.width', 125);
+        $this->conf->set('thumbnails.height', 90);
+        $this->conf->remove('thumbnail');
+        $this->conf->write(true);
+
+        if ($thumbnailsEnabled) {
+            $this->session['warnings'][] = t(
+                'You have enabled or changed thumbnails mode. <a href="?do=thumbs_update">Please synchronize them</a>.'
+            );
+        }
 
         return true;
     }

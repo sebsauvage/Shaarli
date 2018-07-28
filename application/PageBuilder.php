@@ -1,6 +1,7 @@
 <?php
 
 use Shaarli\Config\ConfigManager;
+use Shaarli\Thumbnailer;
 
 /**
  * This class is in charge of building the final page.
@@ -22,10 +23,20 @@ class PageBuilder
     protected $conf;
 
     /**
+     * @var array $_SESSION
+     */
+    protected $session;
+
+    /**
      * @var LinkDB $linkDB instance.
      */
     protected $linkDB;
-    
+
+    /**
+     * @var null|string XSRF token
+     */
+    protected $token;
+
     /** @var bool $isLoggedIn Whether the user is logged in **/
     protected $isLoggedIn = false;
 
@@ -33,14 +44,17 @@ class PageBuilder
      * PageBuilder constructor.
      * $tpl is initialized at false for lazy loading.
      *
-     * @param ConfigManager $conf   Configuration Manager instance (reference).
-     * @param LinkDB        $linkDB instance.
-     * @param string        $token  Session token
+     * @param ConfigManager $conf       Configuration Manager instance (reference).
+     * @param array         $session    $_SESSION array
+     * @param LinkDB        $linkDB     instance.
+     * @param string        $token      Session token
+     * @param bool          $isLoggedIn
      */
-    public function __construct(&$conf, $linkDB = null, $token = null, $isLoggedIn = false)
+    public function __construct(&$conf, $session, $linkDB = null, $token = null, $isLoggedIn = false)
     {
         $this->tpl = false;
         $this->conf = $conf;
+        $this->session = $session;
         $this->linkDB = $linkDB;
         $this->token = $token;
         $this->isLoggedIn = $isLoggedIn;
@@ -105,6 +119,19 @@ class PageBuilder
         if ($this->linkDB !== null) {
             $this->tpl->assign('tags', $this->linkDB->linksCountPerTag());
         }
+
+        $this->tpl->assign(
+            'thumbnails_enabled',
+            $this->conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE
+        );
+        $this->tpl->assign('thumbnails_width', $this->conf->get('thumbnails.width'));
+        $this->tpl->assign('thumbnails_height', $this->conf->get('thumbnails.height'));
+
+        if (! empty($_SESSION['warnings'])) {
+            $this->tpl->assign('global_warnings', $_SESSION['warnings']);
+            unset($_SESSION['warnings']);
+        }
+
         // To be removed with a proper theme configuration.
         $this->tpl->assign('conf', $this->conf);
     }

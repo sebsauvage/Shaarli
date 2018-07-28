@@ -23,7 +23,8 @@ const extractCssVintage = new ExtractTextPlugin({
 module.exports = [
   {
     entry: {
-      picwall: './assets/common/js/picwall.js',
+      thumbnails: './assets/common/js/thumbnails.js',
+      thumbnails_update: './assets/common/js/thumbnails-update.js',
       pluginsadmin: './assets/default/js/plugins-admin.js',
       shaarli: [
         './assets/default/js/base.js',
@@ -96,7 +97,8 @@ module.exports = [
         './assets/vintage/css/reset.css',
         './assets/vintage/css/shaarli.css',
       ].concat(glob.sync('./assets/vintage/img/*')),
-      picwall: './assets/common/js/picwall.js',
+      thumbnails: './assets/common/js/thumbnails.js',
+      thumbnails_update: './assets/common/js/thumbnails-update.js',
     },
     output: {
       filename: '[name].min.js',

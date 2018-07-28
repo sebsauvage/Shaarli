@@ -81,6 +81,18 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('testSetWriteGetNested', $this->conf->get('foo.bar.key.stuff'));
     }
 
+    public function testSetDeleteNested()
+    {
+        $this->conf->set('foo.bar.key.stuff', 'testSetDeleteNested');
+        $this->assertTrue($this->conf->exists('foo.bar'));
+        $this->assertTrue($this->conf->exists('foo.bar.key.stuff'));
+        $this->assertEquals('testSetDeleteNested', $this->conf->get('foo.bar.key.stuff'));
+
+        $this->conf->remove('foo.bar');
+        $this->assertFalse($this->conf->exists('foo.bar.key.stuff'));
+        $this->assertFalse($this->conf->exists('foo.bar'));
+    }
+
     /**
      * Set with an empty key.
      *
@@ -101,6 +113,17 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
     public function testSetArrayKey()
     {
         $this->conf->set(array('foo' => 'bar'), 'stuff');
+    }
+
+    /**
+     * Remove with an empty key.
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp #^Invalid setting key parameter. String expected, got.*#
+     */
+    public function testRmoveEmptyKey()
+    {
+        $this->conf->remove('');
     }
 
     /**

@@ -242,6 +242,37 @@
           </div>
         </div>
       </div>
+      <div class="pure-g">
+        <div class="pure-u-lg-{$ratioLabel} pure-u-{$ratioLabelMobile}">
+          <div class="form-label">
+            <label for="enableThumbnails">
+              <span class="label-name">{'Enable thumbnails'|t}</span><br>
+              <span class="label-desc">
+                {if="! $gd_enabled"}
+                  {'You need to enable the extension <code>php-gd</code> to use thumbnails.'|t}
+                {elseif="$thumbnails_enabled"}
+                  <a href="?do=thumbs_update">{'Synchronize thumbnails'|t}</a>
+                {/if}
+              </span>
+            </label>
+          </div>
+        </div>
+        <div class="pure-u-lg-{$ratioInput} pure-u-{$ratioInputMobile}">
+          <div class="form-input">
+            <select name="enableThumbnails" id="enableThumbnails" class="align">
+              <option value="all"    {if="$thumbnails_mode=='all'"}selected{/if}>
+                {'All'|t}
+              </option>
+              <option value="common" {if="$thumbnails_mode=='common'"}selected{/if}>
+                {'Only common media hosts'|t}
+              </option>
+              <option value="none"   {if="$thumbnails_mode=='none'"}selected{/if}>
+                {'None'|t}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
       <div class="center">
         <input type="submit" value="{'Save'|t}" name="save">
       </div>

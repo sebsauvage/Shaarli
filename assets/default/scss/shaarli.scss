@@ -146,6 +146,17 @@ body,
   background-color: $main-green;
 }
 
+.pure-alert-warning {
+  a {
+    color: $warning-text;
+    font-weight: bold;
+  }
+}
+
+.page-single-alert {
+  margin-top: 100px;
+}
+
 .anchor {
   &:target {
     padding-top: 40px;
@@ -625,23 +636,22 @@ body,
 }
 
 .linklist-item {
+  position: relative;
   margin: 0 0 10px;
   box-shadow: 1px 1px 3px $light-grey;
   background: $almost-white;
 
   &.private {
-    .linklist-item-title {
-      &::before {
-        @extend %private-border;
-        margin-top: 3px;
-      }
-    }
-
-    .linklist-item-description {
-      &::before {
-        @extend %private-border;
-        height: 100%;
-      }
+    &::before {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      background: $orange;
+      width: 2px;
+      height: 100%;
+      content: '';
     }
   }
 }
@@ -1542,4 +1552,41 @@ form {
 
 .pure-button-shaarli {
   background-color: $main-green;
+}
+
+.progressbar {
+  border-radius: 6px;
+  background-color: $main-green;
+  padding: 1px;
+
+  > div {
+    border-radius: 10px;
+    background: repeating-linear-gradient(
+      -45deg,
+      $almost-white,
+      $almost-white 6px,
+      $background-color 6px,
+      $background-color 12px
+    );
+    width: 0%;
+    height: 10px;
+  }
+}
+
+.thumbnails-page-container {
+  .progress-counter {
+    padding: 10px 0 20px;
+  }
+
+  .thumbnail-placeholder {
+    margin: 10px auto;
+    background-color: $light-grey;
+  }
+
+  .thumbnail-link-title {
+    padding-bottom: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
