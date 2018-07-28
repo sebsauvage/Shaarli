@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v0.10.0](https://github.com/shaarli/Shaarli/releases/tag/v0.10.0) - UNPUBLISHED
+## [v0.10.0](https://github.com/shaarli/Shaarli/releases/tag/v0.10.0) - 2018-07-28
 **PHP 5.5 compatibility has been dropped.** Shaarli now requires at least PHP 5.6.
 
 ### Added
@@ -18,8 +18,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Support redirection in cURL download callback
 - Introduce multi-stage builds for Docker images
 - Use Travis matrix and stages to run Javascript tests in a dedicated environment
+- Add tag endpoint in the REST API
+- Build the documentation in Travis builds
+- Provide a Docker Compose example 
 
 ### Changed
+- Use web-thumbnailer to retrieve thumbnails (see #687)
 - Use a specific page title in all pages
 - Daily: run hooks before creating the columns
 - Load theme translations files automatically
@@ -32,6 +36,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Refactor server-side session management
 - Update Doxygen configuration
 - Update Parsedown
+- Improve documentation
+- Docker: build the images from the local sources
+- Docker: bump alpine version to 3.7
+- Docker: expose a volume for the thumbnail cache
 
 ### Removed
 - Drop support for PHP 5.5
@@ -45,6 +53,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Ensure user-specific CSS file is loaded
 - Fix feed permalink rendering when Markdown escaping is enabled
 - Fix order of tags with the same number of occurrences
+- Fixed the referrer meta tag in default template
+- Disable MkDocs' strict mode for ReadTheDocs builds to pass
+- fix and simplify Dockerfile for armhf
 
 ### Security
 - Update `.htaccess` to prevent accessing Git metadata when using a Git-based installation
