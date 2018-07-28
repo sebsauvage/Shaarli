@@ -170,6 +170,7 @@ release_tar: composer_dependencies htmldoc translate build_frontend
 	git archive --prefix=$(ARCHIVE_PREFIX) -o $(ARCHIVE_VERSION).tar HEAD
 	tar rvf $(ARCHIVE_VERSION).tar --transform "s|^vendor|$(ARCHIVE_PREFIX)vendor|" vendor/
 	tar rvf $(ARCHIVE_VERSION).tar --transform "s|^doc/html|$(ARCHIVE_PREFIX)doc/html|" doc/html/
+	tar rvf $(ARCHIVE_VERSION).tar --transform "s|^tpl|$(ARCHIVE_PREFIX)tpl|" tpl/
 	gzip $(ARCHIVE_VERSION).tar
 
 ### generate a release zip and include 3rd-party dependencies and translations
@@ -180,6 +181,8 @@ release_zip: composer_dependencies htmldoc translate build_frontend
 	zip -r $(ARCHIVE_VERSION).zip $(ARCHIVE_PREFIX)doc/
 	rsync -a vendor/ $(ARCHIVE_PREFIX)vendor/
 	zip -r $(ARCHIVE_VERSION).zip $(ARCHIVE_PREFIX)vendor/
+	rsync -a tpl/ $(ARCHIVE_PREFIX)tpl/
+	zip -r $(ARCHIVE_VERSION).zip $(ARCHIVE_PREFIX)tpl/
 	rm -rf $(ARCHIVE_PREFIX)
 
 ##
