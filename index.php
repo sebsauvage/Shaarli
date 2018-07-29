@@ -356,7 +356,6 @@ function showDailyRSS($conf, $loginManager) {
                 $conf->get('redirector.url'),
                 $conf->get('redirector.encode_url')
             );
-            $link['thumbnail'] = thumbnail($conf, $link['url']);
             $link['timestamp'] = $link['created']->getTimestamp();
             if (startsWith($link['url'], '?')) {
                 $link['url'] = index_url($_SERVER) . $link['url'];  // make permalink URL absolute
@@ -371,6 +370,7 @@ function showDailyRSS($conf, $loginManager) {
         $tpl->assign('links', $links);
         $tpl->assign('rssdate', escape($dayDate->format(DateTime::RSS)));
         $tpl->assign('hide_timestamps', $conf->get('privacy.hide_timestamps', false));
+        $tpl->assign('index_url', $pageaddr);
         $html = $tpl->draw('dailyrss', true);
 
         echo $html . PHP_EOL;
@@ -433,7 +433,6 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
             $conf->get('redirector.url'),
             $conf->get('redirector.encode_url')
         );
-        $linksToDisplay[$key]['thumbnail'] = thumbnail($conf, $link['url']);
         $linksToDisplay[$key]['timestamp'] =  $link['created']->getTimestamp();
     }
 
@@ -1812,7 +1811,11 @@ function install($conf, $sessionManager, $loginManager) {
     exit;
 }
 
-if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=dailyrss')) { showDailyRSS($conf); exit; }
+if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=dailyrss')) {
+    showDailyRSS($conf, $loginManager);
+    exit;
+}
+
 if (!isset($_SESSION['LINKS_PER_PAGE'])) {
     $_SESSION['LINKS_PER_PAGE'] = $conf->get('general.links_per_page', 20);
 }
