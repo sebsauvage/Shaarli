@@ -68,8 +68,12 @@
                         <div class="dailyEntryTitle">
                             <a href="{$link.real_url}">{$link.title}</a>
                         </div>
-                        {if="$link.thumbnail"}
-                            <div class="dailyEntryThumbnail">{$link.thumbnail}</div>
+                        {if="$thumbnails_enabled && !empty($link.thumbnail)"}
+                            <div class="dailyEntryThumbnail">
+                              <img data-src="{$link.thumbnail}#" class="b-lazy"
+                                   src="#"
+                                   alt="thumbnail" width="{$thumbnails_width}" height="{$thumbnails_height}" />
+                            </div>
                         {/if}
                         <div class="dailyEntryDescription">{$link.formatedDescription}</div>
 
@@ -97,5 +101,6 @@
     <div id="closing"><img src="img/squiggle_closing.png" width="66" height="61" alt="-"></div>
 </div>
 {include="page.footer"}
+<script src="js/thumbnails.min.js?v={$version_hash}"></script>
 </body>
 </html>

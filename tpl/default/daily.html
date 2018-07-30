@@ -69,9 +69,12 @@
                     </a>
                     <a href="{$link.real_url}">{$link.title}</a>
                   </div>
-                  {$thumb=thumbnail($value.url)}
-                  {if="$thumb!=false"}
-                    <div class="daily-entry-thumbnail">{$thumb}</div>
+                  {if="$thumbnails_enabled && !empty($link.thumbnail)"}
+                    <div class="daily-entry-thumbnail">
+                      <img data-src="{$link.thumbnail}#" class="b-lazy"
+                           src="#"
+                           alt="thumbnail" width="{$thumbnails_width}" height="{$thumbnails_height}" />
+                    </div>
                   {/if}
                   <div class="daily-entry-description">{$link.formatedDescription}</div>
                   {if="$link.tags"}
@@ -83,7 +86,7 @@
                       {/loop}
                     </div>
                   {/if}
-                  <div class="dailyEntryFooter">
+                  <div class="dailyEntryFooter clear">
                     {loop="$link.link_plugin"}
                       {$value}
                     {/loop}
@@ -108,6 +111,7 @@
   </div>
 </div>
 {include="page.footer"}
+<script src="js/thumbnails.min.js?v={$version_hash}"></script>
 </body>
 </html>
 
