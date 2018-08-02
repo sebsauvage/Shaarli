@@ -1251,7 +1251,7 @@ msgstr "Changer les paramètres de Shaarli : titre, fuseau horaire, etc."
 
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:17
 msgid "Configure your Shaarli"
-msgstr "Conguration de Shaarli"
+msgstr "Configurer Shaarli"
 
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:21
 msgid "Enable, disable and configure plugins"
@@ -1259,11 +1259,11 @@ msgstr "Activer, désactiver et configurer les extensions"
 
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
 msgid "Change your password"
-msgstr "Modification du mot de passe"
+msgstr "Modifier le mot de passe"
 
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
 msgid "Rename or delete a tag in all links"
-msgstr "Rename or delete a tag in all links"
+msgstr "Renommer ou supprimer un tag dans tous les liens"
 
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
 msgid ""
@@ -1283,7 +1283,7 @@ msgid ""
 "Opera, delicious...)"
 msgstr ""
 "Exporter les marques pages au format Netscape HTML (comme exportés depuis "
-"Firefox, Chrome, Opera, delicious...)"
+"Firefox, Chrome, Opera, delicious…)"
 
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
 msgid "Export database"
