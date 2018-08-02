@@ -1298,7 +1298,7 @@ msgid ""
 "Drag one of these button to your bookmarks toolbar or right-click it and "
 "\"Bookmark This Link\""
 msgstr ""
-"Glisser un de ces bouttons dans votre barre de favoris ou cliquer droit "
+"Glisser un de ces boutons dans votre barre de favoris ou cliquer droit "
 "dessus et « Ajouter aux favoris »"
 
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:82
