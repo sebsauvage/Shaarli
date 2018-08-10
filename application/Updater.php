@@ -502,7 +502,7 @@ class Updater
             return true;
         }
 
-        $thumbnailsEnabled = $this->conf->get('thumbnail.enable_thumbnails', true);
+        $thumbnailsEnabled = extension_loaded('gd') && $this->conf->get('thumbnail.enable_thumbnails', true);
         $this->conf->set('thumbnails.mode', $thumbnailsEnabled ? Thumbnailer::MODE_ALL : Thumbnailer::MODE_NONE);
         $this->conf->set('thumbnails.width', 125);
         $this->conf->set('thumbnails.height', 90);
