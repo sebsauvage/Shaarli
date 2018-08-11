@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v0.10.2](https://github.com/shaarli/Shaarli/releases/tag/v0.10.2) - 2018-08-11
+
+### Fixed
+
+- Docker build
+
 ## [v0.10.1](https://github.com/shaarli/Shaarli/releases/tag/v0.10.1) - 2018-08-11
 
 ### Changed 
