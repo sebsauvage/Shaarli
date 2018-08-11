@@ -1635,9 +1635,9 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
         uasort($taglist, 'strcasecmp');
         $link['taglist'] = $taglist;
 
-        // Thumbnails enabled, not a note,
+        // Logged in, thumbnails enabled, not a note,
         // and (never retrieved yet or no valid cache file)
-        if ($thumbnailsEnabled && $link['url'][0] != '?'
+        if ($loginManager->isLoggedIn() && $thumbnailsEnabled && $link['url'][0] != '?'
             && (! isset($link['thumbnail']) || ($link['thumbnail'] !== false && ! is_file($link['thumbnail'])))
         ) {
             $elem = $LINKSDB[$keys[$i]];
