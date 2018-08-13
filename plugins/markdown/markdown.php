@@ -28,6 +28,7 @@ function hook_markdown_render_linklist($data, $conf)
             $value = stripNoMarkdownTag($value);
             continue;
         }
+        $value['description_src'] = $value['description'];
         $value['description'] = process_markdown(
             $value['description'],
             $conf->get('security.markdown_escape', true),
