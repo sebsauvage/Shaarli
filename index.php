@@ -1858,6 +1858,7 @@ $app->group('/api/v1', function() {
 })->add('\Shaarli\Api\ApiMiddleware');
 
 $response = $app->run(true);
+
 // Hack to make Slim and Shaarli router work together:
 // If a Slim route isn't found and NOT API call, we call renderPage().
 if ($response->getStatusCode() == 404 && strpos($_SERVER['REQUEST_URI'], '/api/v1') === false) {
@@ -1865,5 +1866,12 @@ if ($response->getStatusCode() == 404 && strpos($_SERVER['REQUEST_URI'], '/api/v
     header('Content-Type: text/html; charset=utf-8');
     renderPage($conf, $pluginManager, $linkDb, $history, $sessionManager, $loginManager);
 } else {
+    $response = $response
+        ->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader(
+            'Access-Control-Allow-Headers',
+            'X-Requested-With, Content-Type, Accept, Origin, Authorization'
+        )
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     $app->respond($response);
 }
