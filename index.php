@@ -1236,10 +1236,10 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $id = (int) escape($id);
             $link = $LINKSDB[$id];
             $pluginManager->executeHooks('delete_link', $link);
+            $history->deleteLink($link);
             unset($LINKSDB[$id]);
         }
         $LINKSDB->save($conf->get('resource.page_cache')); // save to disk
-        $history->deleteLink($link);
 
         // If we are called from the bookmarklet, we must close the popup:
         if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) { echo '<script>self.close();</script>'; exit; }
