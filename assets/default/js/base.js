@@ -548,7 +548,7 @@ function init(description) {
       event.preventDefault();
       const block = findParent(event.target, 'div', { class: 'tag-list-item' });
       const tag = block.getAttribute('data-tag');
-      const refreshedToken = document.getElementById('token');
+      const refreshedToken = document.getElementById('token').value;
 
       if (confirm(`Are you sure you want to delete the tag "${tag}"?`)) {
         const xhr = new XMLHttpRequest();

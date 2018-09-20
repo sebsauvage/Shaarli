@@ -1084,7 +1084,8 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             die(t('Wrong token.'));
         }
 
-        $alteredLinks = $LINKSDB->renameTag(escape($_POST['fromtag']), escape($_POST['totag']));
+        $toTag = isset($_POST['totag']) ? escape($_POST['totag']) : null;
+        $alteredLinks = $LINKSDB->renameTag(escape($_POST['fromtag']), $toTag);
         $LINKSDB->save($conf->get('resource.page_cache'));
         foreach ($alteredLinks as $link) {
             $history->updateLink($link);
