@@ -125,6 +125,8 @@
       {$strPermalink=t('Permalink')}
       {$strPermalinkLc=t('permalink')}
       {$strAddTag=t('Add tag')}
+      {$strToggleSticky=t('Toggle sticky')}
+      {$strSticky=t('Sticky')}
       {ignore}End of translations{/ignore}
       {loop="links"}
         <div class="anchor" id="{$value.shorturl}"></div>
@@ -203,11 +205,21 @@
                     </span>
                     <span class="linklist-item-infos-controls-item ctrl-pin">
                       <a href="?do=pin&amp;id={$value.id}&amp;token={$token}"
-                         title="{$strDelete}" class="pin-link {if="$value.sticky"}pinned-link{/if} pure-u-0 pure-u-lg-visible">
+                         title="{$strToggleSticky}" class="pin-link {if="$value.sticky"}pinned-link{/if} pure-u-0 pure-u-lg-visible">
                         <i class="fa fa-thumb-tack"></i>
                       </a>
                     </span>
                   </div>
+                {else}
+                  {if="$value.sticky"}
+                    <div class="linklist-item-infos-controls-group pure-u-0 pure-u-lg-visible">
+                      <span class="linklist-item-infos-controls-item ctrl-pin">
+                        <span title="{$strSticky}" class="pin-link pinned-link pure-u-0 pure-u-lg-visible">
+                          <i class="fa fa-thumb-tack"></i>
+                        </span>
+                      </span>
+                    </div>
+                  {/if}
                 {/if}
                 <a href="?{$value.shorturl}" title="{$strPermalink}">
                   {if="!$hide_timestamps || $is_logged_in"}
