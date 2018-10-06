@@ -47,6 +47,8 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
         $data = hook_markdown_render_linklist($data, $this->conf);
         $this->assertNotFalse(strpos($data['links'][0]['description'], '<h1>'));
         $this->assertNotFalse(strpos($data['links'][0]['description'], '<p>'));
+
+        $this->assertEquals($markdown, $data['links'][0]['description_src']);
     }
 
     /**
