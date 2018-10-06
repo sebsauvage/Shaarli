@@ -215,6 +215,15 @@ function reverse_text2clickable($description)
             $descriptionLine
         );
 
+        // Make hashtag links markdown ready, otherwise the links will be ignored with escape set to true
+        if (!$codeBlockOn && !$codeLineOn) {
+            $descriptionLine = preg_replace(
+                '#<a href="([^ ]*)"'. $hashtagTitle .'>([^<]+)</a>#m',
+                '[$2]($1)',
+                $descriptionLine
+            );
+        }
+
         $descriptionOut .= $descriptionLine;
         if ($lineCount++ < count($descriptionLines) - 1) {
             $descriptionOut .= PHP_EOL;

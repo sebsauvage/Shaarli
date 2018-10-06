@@ -107,6 +107,18 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test reverse_text2clickable().
+     */
+    public function testReverseText2clickableHashtags()
+    {
+        $text = file_get_contents('tests/plugins/resources/hashtags.raw');
+        $md = file_get_contents('tests/plugins/resources/hashtags.md');
+        $clickableText = hashtag_autolink($text);
+        $reversedText = reverse_text2clickable($clickableText);
+        $this->assertEquals($md, $reversedText);
+    }
+
+    /**
      * Test reverse_nl2br().
      */
     public function testReverseNl2br()
@@ -246,7 +258,7 @@ class PluginMarkdownTest extends PHPUnit_Framework_TestCase
             $this->conf->get('security.markdown_escape', true),
             $this->conf->get('security.allowed_protocols')
         );
-        $this->assertEquals($html, $data);
+        $this->assertEquals($html, $data . PHP_EOL);
     }
 
     /**
