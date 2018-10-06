@@ -1353,6 +1353,25 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         exit;
     }
 
+    if ($targetPage == Router::$PAGE_PINLINK) {
+        if (! isset($_GET['id']) || empty($LINKSDB[$_GET['id']])) {
+            // FIXME! Use a proper error system.
+            $msg = t('Invalid link ID provided');
+            echo '<script>alert("'. $msg .'");document.location=\''. index_url($_SERVER) .'\';</script>';
+            exit;
+        }
+        if (! $sessionManager->checkToken($_GET['token'])) {
+            die('Wrong token.');
+        }
+
+        $link = $LINKSDB[$_GET['id']];
+        $link['sticky'] = ! $link['sticky'];
+        $LINKSDB[(int) $_GET['id']] = $link;
+        $LINKSDB->save($conf->get('resource.page_cache'));
+        header('Location: '.index_url($_SERVER));
+        exit;
+    }
+
     if ($targetPage == Router::$PAGE_EXPORT) {
         // Export links as a Netscape Bookmarks file
 

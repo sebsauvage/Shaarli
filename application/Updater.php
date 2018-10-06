@@ -517,6 +517,26 @@ class Updater
 
         return true;
     }
+
+    /**
+     * Set sticky = false on all links
+     *
+     * @return bool true if the update is successful, false otherwise.
+     */
+    public function updateMethodSetSticky()
+    {
+        foreach ($this->linkDB as $key => $link) {
+            if (isset($link['sticky'])) {
+                return true;
+            }
+            $link['sticky'] = false;
+            $this->linkDB[$key] = $link;
+        }
+
+        $this->linkDB->save($this->conf->get('resource.page_cache'));
+
+        return true;
+    }
 }
 
 /**
