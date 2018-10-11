@@ -20,6 +20,4 @@ the blocks defined in base.html and its included child templates.
 
 {% if page and page.is_homepage %}<meta name="description" content="{{ config.site_description }}">{% endif %}
 {% if config.site_author %}<meta name="author" content="{{ config.site_author }}">{% endif %}
-{% if config.site_favicon %}<link rel="shortcut icon" href="{{ config.site_favicon|url }}">
-{% else %}<link rel="shortcut icon" href="{{ 'img/favicon.ico'|url }}">{% endif %}
 {%- endblock %}
