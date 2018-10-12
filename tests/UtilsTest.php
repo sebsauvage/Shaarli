@@ -187,7 +187,8 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     /**
      * Test generate location with valid data.
      */
-    public function testGenerateLocation() {
+    public function testGenerateLocation()
+    {
         $ref = 'http://localhost/?test';
         $this->assertEquals($ref, generateLocation($ref, 'localhost'));
         $ref = 'http://localhost:8080/?test';
@@ -199,7 +200,8 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     /**
      * Test generate location - anti loop.
      */
-    public function testGenerateLocationLoop() {
+    public function testGenerateLocationLoop()
+    {
         $ref = 'http://localhost/?test';
         $this->assertEquals('?', generateLocation($ref, 'localhost', array('test')));
     }
@@ -207,7 +209,8 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     /**
      * Test generate location - from other domain.
      */
-    public function testGenerateLocationOut() {
+    public function testGenerateLocationOut()
+    {
         $ref = 'http://somewebsite.com/?test';
         $this->assertEquals('?', generateLocation($ref, 'localhost'));
     }

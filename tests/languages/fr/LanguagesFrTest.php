@@ -3,7 +3,6 @@
 
 namespace Shaarli;
 
-
 use Shaarli\Config\ConfigManager;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Shaarli\Api\Controllers;
 
-
 use PHPUnit\Framework\TestCase;
 use Shaarli\Config\ConfigManager;
 use Slim\Container;

@@ -3,7 +3,6 @@
 
 namespace Shaarli\Api\Controllers;
 
-
 use Shaarli\Config\ConfigManager;
 use Slim\Container;
 use Slim\Http\Environment;

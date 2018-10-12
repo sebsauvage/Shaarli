@@ -16,7 +16,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
     /**
      * Helper method
      */
-    private function assertUrlIsCleaned($query='', $fragment='')
+    private function assertUrlIsCleaned($query = '', $fragment = '')
     {
         $url = new Url(self::$baseUrl.$query.$fragment);
         $url->cleanup();
@@ -135,13 +135,13 @@ class UrlTest extends PHPUnit_Framework_TestCase
             'about://reader?url=' . urlencode(self::$baseUrl .'?my=stuff&is=kept')
         );
         $this->assertEquals(self::$baseUrl.'?my=stuff&is=kept', $url->cleanup());
-
     }
 
     /**
      * Test default http scheme.
      */
-    public function testDefaultScheme() {
+    public function testDefaultScheme()
+    {
         $url = new Url(self::$baseUrl);
         $this->assertEquals('http', $url->getScheme());
         $url = new Url('domain.tld');

@@ -17,7 +17,7 @@ class FakeApplicationUtils extends ApplicationUtils
     /**
      * Toggle HTTP requests, allow overriding the version code
      */
-    public static function getVersion($url, $timeout=0)
+    public static function getVersion($url, $timeout = 0)
     {
         return self::$VERSION_CODE;
     }
@@ -67,7 +67,7 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
             '0.5.4',
             ApplicationUtils::getVersion(
                 'https://raw.githubusercontent.com/shaarli/Shaarli/'
-               .'v0.5.4/shaarli_version.php',
+                .'v0.5.4/shaarli_version.php',
                 $testTimeout
             )
         );
@@ -75,7 +75,7 @@ class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
             self::$versionPattern,
             ApplicationUtils::getVersion(
                 'https://raw.githubusercontent.com/shaarli/Shaarli/'
-               .'latest/shaarli_version.php',
+                .'latest/shaarli_version.php',
                 $testTimeout
             )
         );

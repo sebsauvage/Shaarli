@@ -15,7 +15,8 @@ class PluginQrcodeTest extends PHPUnit_Framework_TestCase
     /**
      * Reset plugin path
      */
-    public function setUp() {
+    public function setUp()
+    {
         PluginManager::$PLUGINS_PATH = 'plugins';
     }
 

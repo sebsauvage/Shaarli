@@ -28,4 +28,3 @@ class UnparseUrlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($ref, unparse_url(parse_url($ref)));
     }
 }
-

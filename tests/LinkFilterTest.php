@@ -297,7 +297,7 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             3,
             count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, '"free software"'))
-        );        
+        );
     }
 
     /**

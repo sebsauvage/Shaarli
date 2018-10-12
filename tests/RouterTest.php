@@ -218,7 +218,6 @@ class RouterTest extends PHPUnit_Framework_TestCase
             Router::$PAGE_CHANGEPASSWORD,
             Router::findPage('do=changepasswd&stuff', array(), true)
         );
-
     }
 
     /**

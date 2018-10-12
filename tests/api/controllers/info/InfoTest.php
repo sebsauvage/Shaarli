@@ -10,9 +10,9 @@ use Slim\Http\Response;
 
 /**
  * Class InfoTest
- * 
+ *
  * Test REST API controller Info.
- * 
+ *
  * @package Api\Controllers
  */
 class InfoTest extends \PHPUnit_Framework_TestCase

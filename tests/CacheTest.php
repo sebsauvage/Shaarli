@@ -84,7 +84,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
         invalidateCaches(self::$testCacheDir);
         foreach (self::$pages as $page) {
             $this->assertFileNotExists(self::$testCacheDir.'/'.$page.'.cache');
-        }        
+        }
 
         $this->assertArrayNotHasKey('tags', $_SESSION);
     }

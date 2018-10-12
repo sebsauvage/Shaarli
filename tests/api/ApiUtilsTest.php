@@ -4,7 +4,6 @@ namespace Shaarli\Api;
 
 use Shaarli\Base64Url;
 
-
 /**
  * Class ApiUtilsTest
  */
@@ -34,7 +33,7 @@ class ApiUtilsTest extends \PHPUnit_Framework_TestCase
         $payload = Base64Url::encode('{
             "iat": '. time() .'
         }');
-        $signature = Base64Url::encode(hash_hmac('sha512', $header .'.'. $payload , $secret, true));
+        $signature = Base64Url::encode(hash_hmac('sha512', $header .'.'. $payload, $secret, true));
         return $header .'.'. $payload .'.'. $signature;
     }
 

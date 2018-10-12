@@ -410,4 +410,3 @@ function ut_curl_getinfo_rs_ct_ko($ch, $type)
             return 'text/plain';
     }
 }
-

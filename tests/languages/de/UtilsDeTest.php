@@ -20,7 +20,7 @@ class UtilsDeTest extends UtilsTest
     public function testDateFormatNoTime()
     {
         $date = DateTime::createFromFormat('Ymd_His', '20170101_101112');
-        $this->assertRegExp('/1\. Januar 2017/', format_date($date, false,true));
+        $this->assertRegExp('/1\. Januar 2017/', format_date($date, false, true));
     }
 
     /**

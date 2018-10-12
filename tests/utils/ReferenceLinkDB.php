@@ -150,8 +150,8 @@ class ReferenceLinkDB
         $tags,
         $updated = '',
         $shorturl = '',
-        $pinned = false)
-    {
+        $pinned = false
+    ) {
         $link = array(
             'id' => $id,
             'title' => $title,
@@ -201,7 +201,7 @@ class ReferenceLinkDB
 
         $order = $order === 'ASC' ? -1 : 1;
         // Reorder array by dates.
-        usort($this->_links, function($a, $b) use ($order) {
+        usort($this->_links, function ($a, $b) use ($order) {
             if (isset($a['sticky']) && isset($b['sticky']) && $a['sticky'] !== $b['sticky']) {
                 return $a['sticky'] ? -1 : 1;
             }
