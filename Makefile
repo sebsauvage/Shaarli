@@ -3,7 +3,6 @@
 
 BIN = vendor/bin
 PHP_SOURCE = index.php application tests plugins
-PHP_COMMA_SOURCE = index.php,application,tests,plugins
 
 all: static_analysis_summary check_permissions test
 
@@ -18,21 +17,12 @@ docker_%:
 	cd ~/shaarli && make $*
 
 ##
-# Concise status of the project
-# These targets are non-blocking: || exit 0
-##
-
-static_analysis_summary: code_sniffer_source copy_paste mess_detector_summary
-	@echo
-
-##
 # PHP_CodeSniffer
 # Detects PHP syntax errors
 # Documentation (usage, output formatting):
 # - http://pear.php.net/manual/en/package.php.php-codesniffer.usage.php
 # - http://pear.php.net/manual/en/package.php.php-codesniffer.reporting.php
 ##
-
 code_sniffer: code_sniffer_full
 
 ### - errors filtered by coding standard: PEAR, PSR1, PSR2, Zend...
@@ -50,52 +40,6 @@ code_sniffer_full:
 ### - errors grouped by kind
 code_sniffer_source:
 	@$(BIN)/phpcs $(PHP_SOURCE) --report-source || exit 0
-
-##
-# PHP Copy/Paste Detector
-# Detects code redundancy
-# Documentation: https://github.com/sebastianbergmann/phpcpd
-##
-
-copy_paste:
-	@echo "-----------------------"
-	@echo "PHP COPY/PASTE DETECTOR"
-	@echo "-----------------------"
-	@$(BIN)/phpcpd $(PHP_SOURCE) || exit 0
-	@echo
-
-##
-# PHP Mess Detector
-# Detects PHP syntax errors, sorted by category
-# Rules documentation: http://phpmd.org/rules/index.html
-##
-MESS_DETECTOR_RULES = cleancode,codesize,controversial,design,naming,unusedcode
-
-mess_title:
-	@echo "-----------------"
-	@echo "PHP MESS DETECTOR"
-	@echo "-----------------"
-
-###  - all warnings
-mess_detector: mess_title
-	@$(BIN)/phpmd $(PHP_COMMA_SOURCE) text $(MESS_DETECTOR_RULES) | sed 's_.*\/__'
-
-### - all warnings + HTML output contains links to PHPMD's documentation
-mess_detector_html:
-	@$(BIN)/phpmd $(PHP_COMMA_SOURCE) html $(MESS_DETECTOR_RULES) \
-	--reportfile phpmd.html || exit 0
-
-### - warnings grouped by message, sorted by descending frequency order
-mess_detector_grouped: mess_title
-	@$(BIN)/phpmd $(PHP_SOURCE) text $(MESS_DETECTOR_RULES) \
-	| cut -f 2 | sort | uniq -c | sort -nr
-
-### - summary: number of warnings by rule set
-mess_detector_summary: mess_title
-	@for rule in $$(echo $(MESS_DETECTOR_RULES) | tr ',' ' '); do \
-		warnings=$$($(BIN)/phpmd $(PHP_COMMA_SOURCE) text $$rule | wc -l); \
-		printf "$$warnings\t$$rule\n"; \
-	done;
 
 ##
 # Checks source file & script permissions
