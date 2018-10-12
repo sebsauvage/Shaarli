@@ -73,7 +73,6 @@ function hook_demo_plugin_render_header($data)
 {
     // Only execute when linklist is rendered.
     if ($data['_PAGE_'] == Router::$PAGE_LINKLIST) {
-
         // If loggedin
         if ($data['_LOGGEDIN_'] === true) {
             /*
@@ -448,8 +447,7 @@ function hook_demo_plugin_render_feed($data)
     foreach ($data['links'] as &$link) {
         if ($data['_PAGE_'] == Router::$PAGE_FEED_ATOM) {
             $link['description'] .= ' - ATOM Feed' ;
-        }
-        elseif ($data['_PAGE_'] == Router::$PAGE_FEED_RSS) {
+        } elseif ($data['_PAGE_'] == Router::$PAGE_FEED_RSS) {
             $link['description'] .= ' - RSS Feed';
         }
     }

@@ -6,7 +6,7 @@
  * PubSub is a protocol which fasten up RSS fetching:
  *   - Every time a new link is posted, Shaarli notify the hub.
  *   - The hub notify all feed subscribers that a new link has been posted.
- *   - Subscribers retrieve the new link. 
+ *   - Subscribers retrieve the new link.
  */
 
 use pubsubhubbub\publisher\Publisher;
@@ -82,7 +82,8 @@ function hook_pubsubhubbub_save_link($data, $conf)
  *
  * @throws Exception An error occurred.
  */
-function nocurl_http_post($url, $postString) {
+function nocurl_http_post($url, $postString)
+{
     $params = array('http' => array(
         'method' => 'POST',
         'content' => $postString,
