@@ -2,7 +2,6 @@
 # Makefile for PHP code analysis & testing, documentation and release generation
 
 BIN = vendor/bin
-PHP_SOURCE = index.php application tests plugins
 
 all: static_analysis_summary check_permissions test
 
@@ -23,23 +22,26 @@ docker_%:
 # - http://pear.php.net/manual/en/package.php.php-codesniffer.usage.php
 # - http://pear.php.net/manual/en/package.php.php-codesniffer.reporting.php
 ##
-code_sniffer: code_sniffer_full
+PHPCS := $(BIN)/phpcs
+
+code_sniffer:
+	@$(PHPCS)
 
 ### - errors filtered by coding standard: PEAR, PSR1, PSR2, Zend...
 PHPCS_%:
-	@$(BIN)/phpcs $(PHP_SOURCE) --report-full --report-width=200 --standard=$*
+	@$(PHPCS) --report-full --report-width=200 --standard=$*
 
 ### - errors by Git author
 code_sniffer_blame:
-	@$(BIN)/phpcs $(PHP_SOURCE) --report-gitblame
+	@$(PHPCS) --report-gitblame
 
 ### - all errors/warnings
 code_sniffer_full:
-	@$(BIN)/phpcs $(PHP_SOURCE) --report-full --report-width=200
+	@$(PHPCS) --report-full --report-width=200
 
 ### - errors grouped by kind
 code_sniffer_source:
-	@$(BIN)/phpcs $(PHP_SOURCE) --report-source || exit 0
+	@$(PHPCS) --report-source || exit 0
 
 ##
 # Checks source file & script permissions
