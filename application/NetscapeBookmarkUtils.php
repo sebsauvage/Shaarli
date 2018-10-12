@@ -82,7 +82,10 @@ class NetscapeBookmarkUtils
             $status .= t('has an unknown file format. Nothing was imported.');
         } else {
             $status .= vsprintf(
-                t('was successfully processed in %d seconds: %d links imported, %d links overwritten, %d links skipped.'),
+                t(
+                    'was successfully processed in %d seconds: '
+                    .'%d links imported, %d links overwritten, %d links skipped.'
+                ),
                 [$duration, $importCount, $overwriteCount, $skipCount]
             );
         }

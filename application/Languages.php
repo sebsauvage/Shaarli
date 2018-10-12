@@ -149,7 +149,9 @@ class Languages
             }
 
             try {
-                $extension = Translations::fromPoFile($translationPath . $this->language .'/LC_MESSAGES/'. $domain .'.po');
+                $extension = Translations::fromPoFile(
+                    $translationPath . $this->language .'/LC_MESSAGES/'. $domain .'.po'
+                );
                 $extension->setDomain($domain);
                 $this->translator->loadTranslations($extension);
             } catch (\InvalidArgumentException $e) {

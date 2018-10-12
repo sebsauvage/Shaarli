@@ -83,7 +83,9 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
             'Date: Sat, 28 Oct 2017 12:01:33 GMT',
             'Content-Type: text/html; charset=utf-8',
             'Status: 200 OK',
-            'end' => 'th=device-width"><title>Refactoring · GitHub</title><link rel="search" type="application/opensea',
+            'end' => 'th=device-width">'
+            .'<title>Refactoring · GitHub</title>'
+            .'<link rel="search" type="application/opensea',
             '<title>ignored</title>',
         ];
         foreach ($data as $key => $line) {
@@ -106,7 +108,9 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
         $callback = get_curl_download_callback($charset, $title, 'ut_curl_getinfo_no_charset');
         $data = [
             'HTTP/1.1 200 OK',
-            'end' => 'th=device-width"><title>Refactoring · GitHub</title><link rel="search" type="application/opensea',
+            'end' => 'th=device-width">'
+            .'<title>Refactoring · GitHub</title>'
+            .'<link rel="search" type="application/opensea',
             '<title>ignored</title>',
         ];
         foreach ($data as $key => $line) {
@@ -126,7 +130,9 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
         $data = [
             'HTTP/1.1 200 OK',
             '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
-            'end' => 'th=device-width"><title>Refactoring · GitHub</title><link rel="search" type="application/opensea',
+            'end' => 'th=device-width">'
+            .'<title>Refactoring · GitHub</title>'
+            .'<link rel="search" type="application/opensea',
             '<title>ignored</title>',
         ];
         foreach ($data as $key => $line) {
@@ -211,23 +217,26 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
     public function testText2clickableWithoutRedirector()
     {
         $text = 'stuff http://hello.there/is=someone#here otherstuff';
-        $expectedText = 'stuff <a href="http://hello.there/is=someone#here">http://hello.there/is=someone#here</a> otherstuff';
+        $expectedText = 'stuff <a href="http://hello.there/is=someone#here">'
+            .'http://hello.there/is=someone#here</a> otherstuff';
         $processedText = text2clickable($text, '');
         $this->assertEquals($expectedText, $processedText);
 
         $text = 'stuff http://hello.there/is=someone#here(please) otherstuff';
-        $expectedText = 'stuff <a href="http://hello.there/is=someone#here(please)">http://hello.there/is=someone#here(please)</a> otherstuff';
+        $expectedText = 'stuff <a href="http://hello.there/is=someone#here(please)">'
+            .'http://hello.there/is=someone#here(please)</a> otherstuff';
         $processedText = text2clickable($text, '');
         $this->assertEquals($expectedText, $processedText);
 
         $text = 'stuff http://hello.there/is=someone#here(please)&no otherstuff';
-        $expectedText = 'stuff <a href="http://hello.there/is=someone#here(please)&no">http://hello.there/is=someone#here(please)&no</a> otherstuff';
+        $expectedText = 'stuff <a href="http://hello.there/is=someone#here(please)&no">'
+            .'http://hello.there/is=someone#here(please)&no</a> otherstuff';
         $processedText = text2clickable($text, '');
         $this->assertEquals($expectedText, $processedText);
     }
 
     /**
-     * Test text2clickable a redirector set.
+     * Test text2clickable with a redirector set.
      */
     public function testText2clickableWithRedirector()
     {

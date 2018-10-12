@@ -7,7 +7,8 @@
  * @param int             $timeout           network timeout (in seconds)
  * @param int             $maxBytes          maximum downloaded bytes (default: 4 MiB)
  * @param callable|string $curlWriteFunction Optional callback called during the download (cURL CURLOPT_WRITEFUNCTION).
- *                                           Can be used to add download conditions on the headers (response code, content type, etc.).
+ *                                           Can be used to add download conditions on the
+ *                                           headers (response code, content type, etc.).
  *
  * @return array HTTP response headers, downloaded content
  *

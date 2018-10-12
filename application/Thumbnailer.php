@@ -58,7 +58,10 @@ class Thumbnailer
             $this->conf->set('thumbnails.enabled', false);
             $this->conf->write(true);
             // TODO: create a proper error handling system able to catch exceptions...
-            die(t('php-gd extension must be loaded to use thumbnails. Thumbnails are now disabled. Please reload the page.'));
+            die(t(
+                'php-gd extension must be loaded to use thumbnails. '
+                .'Thumbnails are now disabled. Please reload the page.'
+            ));
         }
 
         $this->wt = new WebThumbnailer();

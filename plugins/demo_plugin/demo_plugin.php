@@ -108,10 +108,10 @@ function hook_demo_plugin_render_header($data)
          *      ],
          *  ]
          * This example renders as:
-         *      <form form-attribute-1="form attribute 1 value" form-attribute-2="form attribute 2 value">
-         *          <input input-1-attribute-1="input 1 attribute 1 value" input-1-attribute-2="input 1 attribute 2 value">
-         *          <input input-2-attribute-1="input 2 attribute 1 value">
-         *      </form>
+         * <form form-attribute-1="form attribute 1 value" form-attribute-2="form attribute 2 value">
+         *   <input input-1-attribute-1="input 1 attribute 1 value" input-1-attribute-2="input 1 attribute 2 value">
+         *   <input input-2-attribute-1="input 2 attribute 1 value">
+         * </form>
          */
         $form = array(
             'attr' => array(

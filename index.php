@@ -806,7 +806,10 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $params['searchtags'] = trim($params['searchtags']).' '.trim($_GET['addtag']);
         }
 
-        unset($params['page']); // We also remove page (keeping the same page has no sense, since the results are different)
+        // We also remove page (keeping the same page has no sense, since the
+        // results are different)
+        unset($params['page']);
+
         header('Location: ?'.http_build_query($params));
         exit;
     }
@@ -837,7 +840,9 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
                 unset($params['searchtags']);
             }
 
-            unset($params['page']); // We also remove page (keeping the same page has no sense, since the results are different)
+            // We also remove page (keeping the same page has no sense, since
+            // the results are different)
+            unset($params['page']);
         }
         header('Location: ?'.http_build_query($params));
         exit;
@@ -954,15 +959,26 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             }
 
             // Make sure old password is correct.
-            $oldhash = sha1($_POST['oldpassword'].$conf->get('credentials.login').$conf->get('credentials.salt'));
-            if ($oldhash!= $conf->get('credentials.hash')) {
-                echo '<script>alert("'. t('The old password is not correct.') .'");document.location=\'?do=changepasswd\';</script>';
+            $oldhash = sha1(
+                $_POST['oldpassword'].$conf->get('credentials.login').$conf->get('credentials.salt')
+            );
+            if ($oldhash != $conf->get('credentials.hash')) {
+                echo '<script>alert("'
+                    . t('The old password is not correct.')
+                    .'");document.location=\'?do=changepasswd\';</script>';
                 exit;
             }
             // Save new password
             // Salt renders rainbow-tables attacks useless.
             $conf->set('credentials.salt', sha1(uniqid('', true) .'_'. mt_rand()));
-            $conf->set('credentials.hash', sha1($_POST['setpassword'] . $conf->get('credentials.login') . $conf->get('credentials.salt')));
+            $conf->set(
+                'credentials.hash',
+                sha1(
+                    $_POST['setpassword']
+                    . $conf->get('credentials.login')
+                    . $conf->get('credentials.salt')
+                )
+            );
             try {
                 $conf->write($loginManager->isLoggedIn());
             } catch (Exception $e) {
@@ -1015,7 +1031,8 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
                 && $thumbnailsMode !== $conf->get('thumbnails.mode', Thumbnailer::MODE_NONE)
             ) {
                 $_SESSION['warnings'][] = t(
-                    'You have enabled or changed thumbnails mode. <a href="?do=thumbs_update">Please synchronize them</a>.'
+                    'You have enabled or changed thumbnails mode. '
+                    .'<a href="?do=thumbs_update">Please synchronize them</a>.'
                 );
             }
             $conf->set('thumbnails.mode', $thumbnailsMode);
@@ -1296,7 +1313,9 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $description = empty($_GET['description']) ? '' : escape($_GET['description']);
             $tags = empty($_GET['tags']) ? '' : escape($_GET['tags']);
             $private = !empty($_GET['private']) && $_GET['private'] === "1" ? 1 : 0;
-            // If this is an HTTP(S) link, we try go get the page to extract the title (otherwise we will to straight to the edit form.)
+
+            // If this is an HTTP(S) link, we try go get the page to extract
+            // the title (otherwise we will to straight to the edit form.)
             if (empty($title) && strpos(get_url_scheme($url), 'http') !== false) {
                 // Short timeout to keep the application responsive
                 // The callback will fill $charset and $title with data from the downloaded page.
@@ -1514,7 +1533,11 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             );
 
             // TODO: do not handle exceptions/errors in JS.
-            echo '<script>alert("'. $e->getMessage() .'");document.location=\'?do='. Router::$PAGE_PLUGINSADMIN .'\';</script>';
+            echo '<script>alert("'
+                . $e->getMessage()
+                .'");document.location=\'?do='
+                . Router::$PAGE_PLUGINSADMIN
+                .'\';</script>';
             exit;
         }
         header('Location: ?do='. Router::$PAGE_PLUGINSADMIN);
@@ -1749,7 +1772,8 @@ function install($conf, $sessionManager, $loginManager)
     // This part makes sure sessions works correctly.
     // (Because on some hosts, session.save_path may not be set correctly,
     // or we may not have write access to it.)
-    if (isset($_GET['test_session']) && ( !isset($_SESSION) || !isset($_SESSION['session_tested']) || $_SESSION['session_tested']!='Working')) {
+    if (isset($_GET['test_session'])
+        && ( !isset($_SESSION) || !isset($_SESSION['session_tested']) || $_SESSION['session_tested']!='Working')) {
         // Step 2: Check if data in session is correct.
         $msg = t(
             '<pre>Sessions do not seem to work correctly on your server.<br>'.
@@ -1817,7 +1841,10 @@ function install($conf, $sessionManager, $loginManager)
             echo '<script>alert("'. $e->getMessage() .'");document.location=\'?\';</script>';
             exit;
         }
-        echo '<script>alert("Shaarli is now configured. Please enter your login/password and start shaaring your links!");document.location=\'?do=login\';</script>';
+        echo '<script>alert('
+            .'"Shaarli is now configured. '
+            .'Please enter your login/password and start shaaring your links!"'
+            .');document.location=\'?do=login\';</script>';
         exit;
     }
 

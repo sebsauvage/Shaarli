@@ -114,7 +114,9 @@ class PutLinkTest extends \PHPUnit_Framework_TestCase
             \DateTime::createFromFormat('Ymd_His', '20150310_114651'),
             \DateTime::createFromFormat(\DateTime::ATOM, $data['created'])
         );
-        $this->assertTrue(new \DateTime('5 seconds ago') < \DateTime::createFromFormat(\DateTime::ATOM, $data['updated']));
+        $this->assertTrue(
+            new \DateTime('5 seconds ago') < \DateTime::createFromFormat(\DateTime::ATOM, $data['updated'])
+        );
 
         $historyEntry = $this->history->getHistory()[0];
         $this->assertEquals(\History::UPDATED, $historyEntry['event']);
@@ -159,7 +161,9 @@ class PutLinkTest extends \PHPUnit_Framework_TestCase
             \DateTime::createFromFormat('Ymd_His', '20150310_114651'),
             \DateTime::createFromFormat(\DateTime::ATOM, $data['created'])
         );
-        $this->assertTrue(new \DateTime('5 seconds ago') < \DateTime::createFromFormat(\DateTime::ATOM, $data['updated']));
+        $this->assertTrue(
+            new \DateTime('5 seconds ago') < \DateTime::createFromFormat(\DateTime::ATOM, $data['updated'])
+        );
     }
 
     /**

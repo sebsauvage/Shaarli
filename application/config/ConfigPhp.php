@@ -104,12 +104,20 @@ class ConfigPhp implements ConfigIO
 
         // Store all $conf['config']
         foreach ($conf['config'] as $key => $value) {
-            $configStr .= '$GLOBALS[\'config\'][\''. $key .'\'] = '.var_export($conf['config'][$key], true).';'. PHP_EOL;
+            $configStr .= '$GLOBALS[\'config\'][\''
+                . $key
+                .'\'] = '
+                .var_export($conf['config'][$key], true).';'
+                . PHP_EOL;
         }
 
         if (isset($conf['plugins'])) {
             foreach ($conf['plugins'] as $key => $value) {
-                $configStr .= '$GLOBALS[\'plugins\'][\''. $key .'\'] = '.var_export($conf['plugins'][$key], true).';'. PHP_EOL;
+                $configStr .= '$GLOBALS[\'plugins\'][\''
+                    . $key
+                    .'\'] = '
+                    .var_export($conf['plugins'][$key], true).';'
+                    . PHP_EOL;
             }
         }
 

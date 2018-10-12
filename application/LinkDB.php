@@ -249,11 +249,14 @@ class LinkDB implements Iterator, Countable, ArrayAccess
             'id' => 1,
             'title'=> t('The personal, minimalist, super-fast, database free, bookmarking service'),
             'url'=>'https://shaarli.readthedocs.io',
-            'description'=>t('Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.
+            'description'=>t(
+                'Welcome to Shaarli! This is your first public bookmark. '
+                .'To edit or delete me, you must first login.
 
 To learn how to use Shaarli, consult the link "Documentation" at the bottom of this page.
 
-You use the community supported version of the original Shaarli project, by Sebastien Sauvage.'),
+You use the community supported version of the original Shaarli project, by Sebastien Sauvage.'
+            ),
             'private'=>0,
             'created'=> new DateTime(),
             'tags'=>'opensource software'
@@ -419,8 +422,12 @@ You use the community supported version of the original Shaarli project, by Seba
      *
      * @return array filtered links, all links if no suitable filter was provided.
      */
-    public function filterSearch($filterRequest = array(), $casesensitive = false, $visibility = 'all', $untaggedonly = false)
-    {
+    public function filterSearch(
+        $filterRequest = array(),
+        $casesensitive = false,
+        $visibility = 'all',
+        $untaggedonly = false
+    ) {
         // Filter link database according to parameters.
         $searchtags = isset($filterRequest['searchtags']) ? escape($filterRequest['searchtags']) : '';
         $searchterm = isset($filterRequest['searchterm']) ? escape($filterRequest['searchterm']) : '';
