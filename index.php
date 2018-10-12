@@ -28,7 +28,7 @@ if (date_default_timezone_get() == '') {
 define('WEB_PATH', substr($_SERVER['REQUEST_URI'], 0, 1+strrpos($_SERVER['REQUEST_URI'], '/', 0)));
 
 // High execution time in case of problematic imports/exports.
-ini_set('max_input_time','60');
+ini_set('max_input_time', '60');
 
 // Try to set max upload file size and read
 ini_set('memory_limit', '128M');
@@ -85,7 +85,7 @@ use \Shaarli\Thumbnailer;
 // Ensure the PHP version is supported
 try {
     ApplicationUtils::checkPHPVersion('5.5', PHP_VERSION);
-} catch(Exception $exc) {
+} catch (Exception $exc) {
     header('Content-Type: text/plain; charset=utf-8');
     echo $exc->getMessage();
     exit;
@@ -223,7 +223,6 @@ if (isset($_POST['login'])) {
                 $expirationTime,
                 WEB_PATH
             );
-
         } else {
             // Standard session expiration (=when browser closes)
             $expirationTime = 0;
@@ -257,7 +256,8 @@ if (isset($_POST['login'])) {
                 exit;
             }
         }
-        header('Location: ?'); exit;
+        header('Location: ?');
+        exit;
     } else {
         $loginManager->handleFailedLogin($_SERVER);
         $redir = '&username='. urlencode($_POST['login']);
@@ -278,7 +278,9 @@ if (isset($_POST['login'])) {
 // ------------------------------------------------------------------------------------------
 // Token management for XSRF protection
 // Token should be used in any form which acts on data (create,update,delete,import...).
-if (!isset($_SESSION['tokens'])) $_SESSION['tokens']=array();  // Token are attached to the session.
+if (!isset($_SESSION['tokens'])) {
+    $_SESSION['tokens']=array();  // Token are attached to the session.
+}
 
 /**
  * Daily RSS feed: 1 RSS entry per day giving all the links on that day.
@@ -288,13 +290,14 @@ if (!isset($_SESSION['tokens'])) $_SESSION['tokens']=array();  // Token are atta
  * @param ConfigManager $conf         Configuration Manager instance
  * @param LoginManager  $loginManager LoginManager instance
  */
-function showDailyRSS($conf, $loginManager) {
+function showDailyRSS($conf, $loginManager)
+{
     // Cache system
     $query = $_SERVER['QUERY_STRING'];
     $cache = new CachedPage(
         $conf->get('config.PAGE_CACHE'),
         page_url($_SERVER),
-        startsWith($query,'do=dailyrss') && !$loginManager->isLoggedIn()
+        startsWith($query, 'do=dailyrss') && !$loginManager->isLoggedIn()
     );
     $cached = $cache->cachedVersion();
     if (!empty($cached)) {
@@ -395,7 +398,7 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
 {
     $day = date('Ymd', strtotime('-1 day')); // Yesterday, in format YYYYMMDD.
     if (isset($_GET['day'])) {
-      $day = $_GET['day'];
+        $day = $_GET['day'];
     }
 
     $days = $LINKSDB->days();
@@ -413,7 +416,7 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
              $previousday=$days[$i - 1];
         }
         if ($i < count($days) - 1) {
-          $nextday = $days[$i + 1];
+            $nextday = $days[$i + 1];
         }
     }
     try {
@@ -424,8 +427,8 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
     }
 
     // We pre-format some fields for proper output.
-    foreach($linksToDisplay as $key => $link) {
-        $taglist = explode(' ',$link['tags']);
+    foreach ($linksToDisplay as $key => $link) {
+        $taglist = explode(' ', $link['tags']);
         uasort($taglist, 'strcasecmp');
         $linksToDisplay[$key]['taglist']=$taglist;
         $linksToDisplay[$key]['formatedDescription'] = format_description(
@@ -457,14 +460,14 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
     */
     $columns = array(array(), array(), array()); // Entries to display, for each column.
     $fill = array(0, 0, 0);  // Rough estimate of columns fill.
-    foreach($data['linksToDisplay'] as $key => $link) {
+    foreach ($data['linksToDisplay'] as $key => $link) {
         // Roughly estimate length of entry (by counting characters)
         // Title: 30 chars = 1 line. 1 line is 30 pixels height.
         // Description: 836 characters gives roughly 342 pixel height.
         // This is not perfect, but it's usually OK.
         $length = strlen($link['title']) + (342 * strlen($link['description'])) / 836;
         if ($link['thumbnail']) {
-          $length += 100; // 1 thumbnails roughly takes 100 pixels height.
+            $length += 100; // 1 thumbnails roughly takes 100 pixels height.
         }
         // Then put in column which is the less filled:
         $smallest = min($fill); // find smallest value in array.
@@ -492,8 +495,9 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
  * @param ConfigManager $conf    Configuration Manager instance.
  * @param PluginManager $pluginManager Plugin Manager instance.
  */
-function showLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager) {
-    buildLinkList($PAGE,$LINKSDB, $conf, $pluginManager, $loginManager);
+function showLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
+{
+    buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager);
     $PAGE->renderPage('linklist');
 }
 
@@ -524,8 +528,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
                 $updater->getDoneUpdates()
             );
         }
-    }
-    catch(Exception $e) {
+    } catch (Exception $e) {
         die($e->getMessage());
     }
 
@@ -538,8 +541,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     $query = (isset($_SERVER['QUERY_STRING'])) ? $_SERVER['QUERY_STRING'] : '';
     $targetPage = Router::findPage($query, $_GET, $loginManager->isLoggedIn());
 
-    if (
-        // if the user isn't logged in
+    if (// if the user isn't logged in
         !$loginManager->isLoggedIn() &&
         // and Shaarli doesn't have public content...
         $conf->get('privacy.hide_public_links') &&
@@ -563,9 +565,11 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         'footer',
     );
 
-    foreach($common_hooks as $name) {
+    foreach ($common_hooks as $name) {
         $plugin_data = array();
-        $pluginManager->executeHooks('render_' . $name, $plugin_data,
+        $pluginManager->executeHooks(
+            'render_' . $name,
+            $plugin_data,
             array(
                 'target' => $targetPage,
                 'loggedin' => $loginManager->isLoggedIn()
@@ -575,13 +579,15 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     // -------- Display login form.
-    if ($targetPage == Router::$PAGE_LOGIN)
-    {
-        if ($conf->get('security.open_shaarli')) { header('Location: ?'); exit; }  // No need to login for open Shaarli
+    if ($targetPage == Router::$PAGE_LOGIN) {
+        if ($conf->get('security.open_shaarli')) {
+            header('Location: ?');
+            exit;
+        }  // No need to login for open Shaarli
         if (isset($_GET['username'])) {
             $PAGE->assign('username', escape($_GET['username']));
         }
-        $PAGE->assign('returnurl',(isset($_SERVER['HTTP_REFERER']) ? escape($_SERVER['HTTP_REFERER']):''));
+        $PAGE->assign('returnurl', (isset($_SERVER['HTTP_REFERER']) ? escape($_SERVER['HTTP_REFERER']):''));
         // add default state of the 'remember me' checkbox
         $PAGE->assign('remember_user_default', $conf->get('privacy.remember_user_default'));
         $PAGE->assign('user_can_login', $loginManager->canLogin($_SERVER));
@@ -590,8 +596,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         exit;
     }
     // -------- User wants to logout.
-    if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=logout'))
-    {
+    if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=logout')) {
         invalidateCaches($conf->get('resource.page_cache'));
         $sessionManager->logout();
         setcookie(LoginManager::$STAY_SIGNED_IN_COOKIE, 'false', 0, WEB_PATH);
@@ -600,8 +605,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     // -------- Picture wall
-    if ($targetPage == Router::$PAGE_PICWALL)
-    {
+    if ($targetPage == Router::$PAGE_PICWALL) {
         $PAGE->assign('pagetitle', t('Picture wall') .' - '. $conf->get('general.title', 'Shaarli'));
         if (! $conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) === Thumbnailer::MODE_NONE) {
             $PAGE->assign('linksToDisplay', []);
@@ -615,8 +619,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
 
         // Get only links which have a thumbnail.
         // Note: we do not retrieve thumbnails here, the request is too heavy.
-        foreach($links as $key => $link)
-        {
+        foreach ($links as $key => $link) {
             if (isset($link['thumbnail']) && $link['thumbnail'] !== false) {
                 $linksToDisplay[] = $link; // Add to array.
             }
@@ -637,8 +640,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     // -------- Tag cloud
-    if ($targetPage == Router::$PAGE_TAGCLOUD)
-    {
+    if ($targetPage == Router::$PAGE_TAGCLOUD) {
         $visibility = ! empty($_SESSION['visibility']) ? $_SESSION['visibility'] : '';
         $filteringTags = isset($_GET['searchtags']) ? explode(' ', $_GET['searchtags']) : [];
         $tags = $LINKSDB->linksCountPerTag($filteringTags, $visibility);
@@ -653,7 +655,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         alphabetical_sort($tags, false, true);
 
         $tagList = array();
-        foreach($tags as $key => $value) {
+        foreach ($tags as $key => $value) {
             if (in_array($key, $filteringTags)) {
                 continue;
             }
@@ -685,8 +687,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     // -------- Tag list
-    if ($targetPage == Router::$PAGE_TAGLIST)
-    {
+    if ($targetPage == Router::$PAGE_TAGLIST) {
         $visibility = ! empty($_SESSION['visibility']) ? $_SESSION['visibility'] : '';
         $filteringTags = isset($_GET['searchtags']) ? explode(' ', $_GET['searchtags']) : [];
         $tags = $LINKSDB->linksCountPerTag($filteringTags, $visibility);
@@ -732,7 +733,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         $cache = new CachedPage(
             $conf->get('resource.page_cache'),
             page_url($_SERVER),
-            startsWith($query,'do='. $targetPage) && !$loginManager->isLoggedIn()
+            startsWith($query, 'do='. $targetPage) && !$loginManager->isLoggedIn()
         );
         $cached = $cache->cachedVersion();
         if (!empty($cached)) {
@@ -770,11 +771,14 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     // -------- User clicks on a tag in a link: The tag is added to the list of searched tags (searchtags=...)
-    if (isset($_GET['addtag']))
-    {
+    if (isset($_GET['addtag'])) {
         // Get previous URL (http_referer) and add the tag to the searchtags parameters in query.
-        if (empty($_SERVER['HTTP_REFERER'])) { header('Location: ?searchtags='.urlencode($_GET['addtag'])); exit; } // In case browser does not send HTTP_REFERER
-        parse_str(parse_url($_SERVER['HTTP_REFERER'],PHP_URL_QUERY), $params);
+        if (empty($_SERVER['HTTP_REFERER'])) {
+            // In case browser does not send HTTP_REFERER
+            header('Location: ?searchtags='.urlencode($_GET['addtag']));
+            exit;
+        }
+        parse_str(parse_url($_SERVER['HTTP_REFERER'], PHP_URL_QUERY), $params);
 
         // Prevent redirection loop
         if (isset($params['addtag'])) {
@@ -798,8 +802,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         // Append the tag if necessary
         if (empty($params['searchtags'])) {
             $params['searchtags'] = trim($_GET['addtag']);
-        }
-        elseif ($addtag) {
+        } elseif ($addtag) {
             $params['searchtags'] = trim($params['searchtags']).' '.trim($_GET['addtag']);
         }
 
@@ -828,7 +831,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $tags = explode(' ', $params['searchtags']);
             // Remove value from array $tags.
             $tags = array_diff($tags, array($_GET['removetag']));
-            $params['searchtags'] = implode(' ',$tags);
+            $params['searchtags'] = implode(' ', $tags);
 
             if (empty($params['searchtags'])) {
                 unset($params['searchtags']);
@@ -897,12 +900,10 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     // -------- Handle other actions allowed for non-logged in users:
-    if (!$loginManager->isLoggedIn())
-    {
+    if (!$loginManager->isLoggedIn()) {
         // User tries to post new link but is not logged in:
         // Show login screen, then redirect to ?post=...
-        if (isset($_GET['post']))
-        {
+        if (isset($_GET['post'])) {
             header( // Redirect to login page, then back to post link.
                 'Location: ?do=login&post='.urlencode($_GET['post']).
                 (!empty($_GET['title'])?'&title='.urlencode($_GET['title']):'').
@@ -925,8 +926,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     // -------- All other functions are reserved for the registered user:
 
     // -------- Display the Tools menu if requested (import/export/bookmarklet...)
-    if ($targetPage == Router::$PAGE_TOOLS)
-    {
+    if ($targetPage == Router::$PAGE_TOOLS) {
         $data = [
             'pageabsaddr' => index_url($_SERVER),
             'sslenabled' => is_https($_SERVER),
@@ -943,15 +943,15 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     // -------- User wants to change his/her password.
-    if ($targetPage == Router::$PAGE_CHANGEPASSWORD)
-    {
+    if ($targetPage == Router::$PAGE_CHANGEPASSWORD) {
         if ($conf->get('security.open_shaarli')) {
             die(t('You are not supposed to change a password on an Open Shaarli.'));
         }
 
-        if (!empty($_POST['setpassword']) && !empty($_POST['oldpassword']))
-        {
-            if (!$sessionManager->checkToken($_POST['token'])) die(t('Wrong token.')); // Go away!
+        if (!empty($_POST['setpassword']) && !empty($_POST['oldpassword'])) {
+            if (!$sessionManager->checkToken($_POST['token'])) {
+                die(t('Wrong token.')); // Go away!
+            }
 
             // Make sure old password is correct.
             $oldhash = sha1($_POST['oldpassword'].$conf->get('credentials.login').$conf->get('credentials.salt'));
@@ -965,8 +965,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $conf->set('credentials.hash', sha1($_POST['setpassword'] . $conf->get('credentials.login') . $conf->get('credentials.salt')));
             try {
                 $conf->write($loginManager->isLoggedIn());
-            }
-            catch(Exception $e) {
+            } catch (Exception $e) {
                 error_log(
                     'ERROR while writing config file after changing password.' . PHP_EOL .
                     $e->getMessage()
@@ -978,9 +977,8 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             }
             echo '<script>alert("'. t('Your password has been changed') .'");document.location=\'?do=tools\';</script>';
             exit;
-        }
-        else // show the change password form.
-        {
+        } else {
+            // show the change password form.
             $PAGE->assign('pagetitle', t('Change password') .' - '. $conf->get('general.title', 'Shaarli'));
             $PAGE->renderPage('changepassword');
             exit;
@@ -988,10 +986,8 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     // -------- User wants to change configuration
-    if ($targetPage == Router::$PAGE_CONFIGURE)
-    {
-        if (!empty($_POST['title']) )
-        {
+    if ($targetPage == Router::$PAGE_CONFIGURE) {
+        if (!empty($_POST['title'])) {
             if (!$sessionManager->checkToken($_POST['token'])) {
                 die(t('Wrong token.')); // Go away!
             }
@@ -1028,8 +1024,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
                 $conf->write($loginManager->isLoggedIn());
                 $history->updateSettings();
                 invalidateCaches($conf->get('resource.page_cache'));
-            }
-            catch(Exception $e) {
+            } catch (Exception $e) {
                 error_log(
                     'ERROR while writing config file after configuration update.' . PHP_EOL .
                     $e->getMessage()
@@ -1041,9 +1036,8 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             }
             echo '<script>alert("'. t('Configuration was saved.') .'");document.location=\'?do=configure\';</script>';
             exit;
-        }
-        else // Show the configuration form.
-        {
+        } else {
+            // Show the configuration form.
             $PAGE->assign('title', $conf->get('general.title'));
             $PAGE->assign('theme', $conf->get('resource.theme'));
             $PAGE->assign('theme_available', ThemeUtils::getThemes($conf->get('resource.raintpl_tpl')));
@@ -1071,8 +1065,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     // -------- User wants to rename a tag or delete it
-    if ($targetPage == Router::$PAGE_CHANGETAG)
-    {
+    if ($targetPage == Router::$PAGE_CHANGETAG) {
         if (empty($_POST['fromtag']) || (empty($_POST['totag']) && isset($_POST['renametag']))) {
             $PAGE->assign('fromtag', ! empty($_GET['fromtag']) ? escape($_GET['fromtag']) : '');
             $PAGE->assign('pagetitle', t('Manage tags') .' - '. $conf->get('general.title', 'Shaarli'));
@@ -1101,16 +1094,14 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     // -------- User wants to add a link without using the bookmarklet: Show form.
-    if ($targetPage == Router::$PAGE_ADDLINK)
-    {
+    if ($targetPage == Router::$PAGE_ADDLINK) {
         $PAGE->assign('pagetitle', t('Shaare a new link') .' - '. $conf->get('general.title', 'Shaarli'));
         $PAGE->renderPage('addlink');
         exit;
     }
 
     // -------- User clicked the "Save" button when editing a link: Save link to database.
-    if (isset($_POST['save_edit']))
-    {
+    if (isset($_POST['save_edit'])) {
         // Go away!
         if (! $sessionManager->checkToken($_POST['token'])) {
             die(t('Wrong token.'));
@@ -1197,14 +1188,16 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     // -------- User clicked the "Cancel" button when editing a link.
-    if (isset($_POST['cancel_edit']))
-    {
+    if (isset($_POST['cancel_edit'])) {
         $id = isset($_POST['lf_id']) ? (int) escape($_POST['lf_id']) : false;
         if (! isset($LINKSDB[$id])) {
             header('Location: ?');
         }
         // If we are called from the bookmarklet, we must close the popup:
-        if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) { echo '<script>self.close();</script>'; exit; }
+        if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) {
+            echo '<script>self.close();</script>';
+            exit;
+        }
         $link = $LINKSDB[$id];
         $returnurl = ( isset($_POST['returnurl']) ? $_POST['returnurl'] : '?' );
         // Scroll to the link which has been edited.
@@ -1215,8 +1208,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     // -------- User clicked the "Delete" button when editing a link: Delete link from database.
-    if ($targetPage == Router::$PAGE_DELETELINK)
-    {
+    if ($targetPage == Router::$PAGE_DELETELINK) {
         if (! $sessionManager->checkToken($_GET['token'])) {
             die(t('Wrong token.'));
         }
@@ -1230,7 +1222,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $ids = [$ids];
         }
         // assert at least one id is given
-        if(!count($ids)){
+        if (!count($ids)) {
             die('no id provided');
         }
         foreach ($ids as $id) {
@@ -1243,15 +1235,18 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         $LINKSDB->save($conf->get('resource.page_cache')); // save to disk
 
         // If we are called from the bookmarklet, we must close the popup:
-        if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) { echo '<script>self.close();</script>'; exit; }
+        if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) {
+            echo '<script>self.close();</script>';
+            exit;
+        }
 
         $location = '?';
         if (isset($_SERVER['HTTP_REFERER'])) {
             // Don't redirect to where we were previously if it was a permalink or an edit_link, because it would 404.
             $location = generateLocation(
-                    $_SERVER['HTTP_REFERER'],
-                    $_SERVER['HTTP_HOST'],
-                    ['delete_link', 'edit_link', $link['shorturl']]
+                $_SERVER['HTTP_REFERER'],
+                $_SERVER['HTTP_HOST'],
+                ['delete_link', 'edit_link', $link['shorturl']]
             );
         }
 
@@ -1260,11 +1255,13 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     // -------- User clicked the "EDIT" button on a link: Display link edit form.
-    if (isset($_GET['edit_link']))
-    {
+    if (isset($_GET['edit_link'])) {
         $id = (int) escape($_GET['edit_link']);
         $link = $LINKSDB[$id];  // Read database
-        if (!$link) { header('Location: ?'); exit; } // Link not found in database.
+        if (!$link) {
+            header('Location: ?');
+            exit;
+        } // Link not found in database.
         $link['linkdate'] = $link['created']->format(LinkDB::LINK_DATE_FORMAT);
         $data = array(
             'link' => $link,
@@ -1290,8 +1287,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         $link_is_new = false;
         // Check if URL is not already in database (in this case, we will edit the existing link)
         $link = $LINKSDB->getLinkFromUrl($url);
-        if (! $link)
-        {
+        if (! $link) {
             $link_is_new = true;
             $linkdate = strval(date(LinkDB::LINK_DATE_FORMAT));
             // Get title if it was provided in URL (by the bookmarklet).
@@ -1408,7 +1404,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         header('Content-Type: text/html; charset=utf-8');
         header(
             'Content-disposition: attachment; filename=bookmarks_'
-           .$selection.'_'.$now->format(LinkDB::LINK_DATE_FORMAT).'.html'
+            .$selection.'_'.$now->format(LinkDB::LINK_DATE_FORMAT).'.html'
         );
         $PAGE->assign('date', $now->format(DateTime::RFC822));
         $PAGE->assign('eol', PHP_EOL);
@@ -1476,14 +1472,20 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         $pluginMeta = $pluginManager->getPluginsMeta();
 
         // Split plugins into 2 arrays: ordered enabled plugins and disabled.
-        $enabledPlugins = array_filter($pluginMeta, function($v) { return $v['order'] !== false; });
+        $enabledPlugins = array_filter($pluginMeta, function ($v) {
+            return $v['order'] !== false;
+        });
         // Load parameters.
         $enabledPlugins = load_plugin_parameter_values($enabledPlugins, $conf->get('plugins', array()));
         uasort(
             $enabledPlugins,
-            function($a, $b) { return $a['order'] - $b['order']; }
+            function ($a, $b) {
+                return $a['order'] - $b['order'];
+            }
         );
-        $disabledPlugins = array_filter($pluginMeta, function($v) { return $v['order'] === false; });
+        $disabledPlugins = array_filter($pluginMeta, function ($v) {
+            return $v['order'] === false;
+        });
 
         $PAGE->assign('enabledPlugins', $enabledPlugins);
         $PAGE->assign('disabledPlugins', $disabledPlugins);
@@ -1500,14 +1502,12 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
                 foreach ($_POST as $param => $value) {
                     $conf->set('plugins.'. $param, escape($value));
                 }
-            }
-            else {
+            } else {
                 $conf->set('general.enabled_plugins', save_plugin_config($_POST));
             }
             $conf->write($loginManager->isLoggedIn());
             $history->updateSettings();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             error_log(
                 'ERROR while saving plugin configuration:.' . PHP_EOL .
                 $e->getMessage()
@@ -1635,8 +1635,7 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
     }
 
     $linkDisp = array();
-    while ($i<$end && $i<count($keys))
-    {
+    while ($i<$end && $i<count($keys)) {
         $link = $linksToDisplay[$keys[$i]];
         $link['description'] = format_description(
             $link['description'],
@@ -1739,16 +1738,18 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
  * @param SessionManager $sessionManager SessionManager instance
  * @param LoginManager   $loginManager   LoginManager instance
  */
-function install($conf, $sessionManager, $loginManager) {
+function install($conf, $sessionManager, $loginManager)
+{
     // On free.fr host, make sure the /sessions directory exists, otherwise login will not work.
-    if (endsWith($_SERVER['HTTP_HOST'],'.free.fr') && !is_dir($_SERVER['DOCUMENT_ROOT'].'/sessions')) mkdir($_SERVER['DOCUMENT_ROOT'].'/sessions',0705);
+    if (endsWith($_SERVER['HTTP_HOST'], '.free.fr') && !is_dir($_SERVER['DOCUMENT_ROOT'].'/sessions')) {
+        mkdir($_SERVER['DOCUMENT_ROOT'].'/sessions', 0705);
+    }
 
 
     // This part makes sure sessions works correctly.
     // (Because on some hosts, session.save_path may not be set correctly,
     // or we may not have write access to it.)
-    if (isset($_GET['test_session']) && ( !isset($_SESSION) || !isset($_SESSION['session_tested']) || $_SESSION['session_tested']!='Working'))
-    {
+    if (isset($_GET['test_session']) && ( !isset($_SESSION) || !isset($_SESSION['session_tested']) || $_SESSION['session_tested']!='Working')) {
         // Step 2: Check if data in session is correct.
         $msg = t(
             '<pre>Sessions do not seem to work correctly on your server.<br>'.
@@ -1764,19 +1765,18 @@ function install($conf, $sessionManager, $loginManager) {
         echo '<br><a href="?">'. t('Click to try again.') .'</a></pre>';
         die;
     }
-    if (!isset($_SESSION['session_tested']))
-    {   // Step 1 : Try to store data in session and reload page.
+    if (!isset($_SESSION['session_tested'])) {
+        // Step 1 : Try to store data in session and reload page.
         $_SESSION['session_tested'] = 'Working';  // Try to set a variable in session.
         header('Location: '.index_url($_SERVER).'?test_session');  // Redirect to check stored data.
     }
-    if (isset($_GET['test_session']))
-    {   // Step 3: Sessions are OK. Remove test parameter from URL.
+    if (isset($_GET['test_session'])) {
+        // Step 3: Sessions are OK. Remove test parameter from URL.
         header('Location: '.index_url($_SERVER));
     }
 
 
-    if (!empty($_POST['setlogin']) && !empty($_POST['setpassword']))
-    {
+    if (!empty($_POST['setlogin']) && !empty($_POST['setpassword'])) {
         $tz = 'UTC';
         if (!empty($_POST['continent']) && !empty($_POST['city'])
             && isTimeZoneValid($_POST['continent'], $_POST['city'])
@@ -1807,12 +1807,11 @@ function install($conf, $sessionManager, $loginManager) {
         try {
             // Everything is ok, let's create config file.
             $conf->write($loginManager->isLoggedIn());
-        }
-        catch(Exception $e) {
+        } catch (Exception $e) {
             error_log(
-                    'ERROR while writing config file after installation.' . PHP_EOL .
+                'ERROR while writing config file after installation.' . PHP_EOL .
                     $e->getMessage()
-                );
+            );
 
             // TODO: do not handle exceptions/errors in JS.
             echo '<script>alert("'. $e->getMessage() .'");document.location=\'?\';</script>';
@@ -1842,7 +1841,7 @@ if (!isset($_SESSION['LINKS_PER_PAGE'])) {
 
 try {
     $history = new History($conf->get('resource.history'));
-} catch(Exception $e) {
+} catch (Exception $e) {
     die($e->getMessage());
 }
 
@@ -1861,7 +1860,7 @@ $container['history'] = $history;
 $app = new \Slim\App($container);
 
 // REST API routes
-$app->group('/api/v1', function() {
+$app->group('/api/v1', function () {
     $this->get('/info', '\Shaarli\Api\Controllers\Info:getInfo')->setName('getInfo');
     $this->get('/links', '\Shaarli\Api\Controllers\Links:getLinks')->setName('getLinks');
     $this->get('/links/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:getLink')->setName('getLink');
