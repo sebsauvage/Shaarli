@@ -64,29 +64,30 @@ function get_http_response($url, $timeout = 30, $maxBytes = 4194304, $curlWriteF
     }
 
     // General cURL settings
-    curl_setopt($ch, CURLOPT_AUTOREFERER,       true);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION,    true);
-    curl_setopt($ch, CURLOPT_HEADER,            true);
+    curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_HEADER, true);
     curl_setopt(
         $ch,
         CURLOPT_HTTPHEADER,
         array('Accept-Language: ' . $acceptLanguage)
     );
-    curl_setopt($ch, CURLOPT_MAXREDIRS,         $maxRedirs);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER,    true);
-    curl_setopt($ch, CURLOPT_TIMEOUT,           $timeout);
-    curl_setopt($ch, CURLOPT_USERAGENT,         $userAgent);
+    curl_setopt($ch, CURLOPT_MAXREDIRS, $maxRedirs);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+    curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
 
     if (is_callable($curlWriteFunction)) {
         curl_setopt($ch, CURLOPT_WRITEFUNCTION, $curlWriteFunction);
     }
 
     // Max download size management
-    curl_setopt($ch, CURLOPT_BUFFERSIZE,        1024*16);
-    curl_setopt($ch, CURLOPT_NOPROGRESS,        false);
-    curl_setopt($ch, CURLOPT_PROGRESSFUNCTION,
-        function($arg0, $arg1, $arg2, $arg3, $arg4 = 0) use ($maxBytes)
-        {
+    curl_setopt($ch, CURLOPT_BUFFERSIZE, 1024*16);
+    curl_setopt($ch, CURLOPT_NOPROGRESS, false);
+    curl_setopt(
+        $ch,
+        CURLOPT_PROGRESSFUNCTION,
+        function ($arg0, $arg1, $arg2, $arg3, $arg4 = 0) use ($maxBytes) {
             if (version_compare(phpversion(), '5.5', '<')) {
                 // PHP version lower than 5.5
                 // Callback has 4 arguments
@@ -232,7 +233,6 @@ function get_redirected_headers($url, $redirectionLimit = 3)
         && !empty($headers)
         && (strpos($headers[0], '301') !== false || strpos($headers[0], '302') !== false)
         && !empty($headers['Location'])) {
-
         $redirection = is_array($headers['Location']) ? end($headers['Location']) : $headers['Location'];
         if ($redirection != $url) {
             $redirection = getAbsoluteUrl($url, $redirection);

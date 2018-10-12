@@ -7,7 +7,7 @@ use Slim\Http\Response;
 
 /**
  * Class Info
- * 
+ *
  * REST API Controller: /info
  *
  * @package Api\Controllers
@@ -17,7 +17,7 @@ class Info extends ApiController
 {
     /**
      * Service providing various information about Shaarli instance.
-     * 
+     *
      * @param Request  $request  Slim request.
      * @param Response $response Slim response.
      *

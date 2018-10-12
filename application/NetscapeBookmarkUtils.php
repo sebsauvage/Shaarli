@@ -72,12 +72,11 @@ class NetscapeBookmarkUtils
     private static function importStatus(
         $filename,
         $filesize,
-        $importCount=0,
-        $overwriteCount=0,
-        $skipCount=0,
-        $duration=0
-    )
-    {
+        $importCount = 0,
+        $overwriteCount = 0,
+        $skipCount = 0,
+        $duration = 0
+    ) {
         $status = sprintf(t('File %s (%d bytes) '), $filename, $filesize);
         if ($importCount == 0 && $overwriteCount == 0 && $skipCount == 0) {
             $status .= t('has an unknown file format. Nothing was imported.');

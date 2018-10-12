@@ -92,7 +92,7 @@ class Languages
     /**
      * Initialize the translator using php gettext extension (gettext dependency act as a wrapper).
      */
-    protected function initGettextTranslator ()
+    protected function initGettextTranslator()
     {
         $this->translator = new GettextTranslator();
         $this->translator->setLanguage($this->language);
@@ -125,7 +125,8 @@ class Languages
             $translations = $translations->addFromPoFile('inc/languages/'. $this->language .'/LC_MESSAGES/shaarli.po');
             $translations->setDomain('shaarli');
             $this->translator->loadTranslations($translations);
-        } catch (\InvalidArgumentException $e) {}
+        } catch (\InvalidArgumentException $e) {
+        }
 
         // Default extension translation from the current theme
         $theme = $this->conf->get('theme');
@@ -137,7 +138,8 @@ class Languages
                 );
                 $translations->setDomain($theme);
                 $this->translator->loadTranslations($translations);
-            } catch (\InvalidArgumentException $e) {}
+            } catch (\InvalidArgumentException $e) {
+            }
         }
 
         // Extension translations (plugins, themes, etc.).
@@ -150,7 +152,8 @@ class Languages
                 $extension = Translations::fromPoFile($translationPath . $this->language .'/LC_MESSAGES/'. $domain .'.po');
                 $extension->setDomain($domain);
                 $this->translator->loadTranslations($extension);
-            } catch (\InvalidArgumentException $e) {}
+            } catch (\InvalidArgumentException $e) {
+            }
         }
     }
 

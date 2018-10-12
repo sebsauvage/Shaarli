@@ -65,7 +65,7 @@ class ApiMiddleware
         try {
             $this->checkRequest($request);
             $response = $next($request, $response);
-        } catch(ApiException $e) {
+        } catch (ApiException $e) {
             $e->setResponse($response);
             $e->setDebug($this->conf->get('dev.debug', false));
             $response = $e->getApiResponse();
@@ -98,7 +98,8 @@ class ApiMiddleware
      *
      * @throws ApiAuthorizationException The token couldn't be validated.
      */
-    protected function checkToken($request) {
+    protected function checkToken($request)
+    {
         if (! $request->hasHeader('Authorization')) {
             throw new ApiAuthorizationException('JWT token not provided');
         }

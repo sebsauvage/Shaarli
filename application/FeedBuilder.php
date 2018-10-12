@@ -163,7 +163,8 @@ class FeedBuilder
             $upDate = $link['updated'];
             $link['up_iso_date'] = $this->getIsoDate($upDate, DateTime::ATOM);
         } else {
-            $link['up_iso_date'] = $this->getIsoDate($pubDate, DateTime::ATOM);;
+            $link['up_iso_date'] = $this->getIsoDate($pubDate, DateTime::ATOM);
+            ;
         }
 
         // Save the more recent item.
@@ -261,7 +262,6 @@ class FeedBuilder
         }
         if ($this->feedType == self::$FEED_RSS) {
             return $date->format(DateTime::RSS);
-
         }
         return $date->format(DateTime::ATOM);
     }

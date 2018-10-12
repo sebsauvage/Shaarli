@@ -10,7 +10,8 @@ use Slim\Http\Response;
  * Parent Exception related to the API, able to generate a valid Response (ResponseInterface).
  * Also can include various information in debug mode.
  */
-abstract class ApiException extends \Exception {
+abstract class ApiException extends \Exception
+{
 
     /**
      * @var Response instance from Slim.
@@ -27,7 +28,7 @@ abstract class ApiException extends \Exception {
      *
      * @return Response Final response to give.
      */
-    public abstract function getApiResponse();
+    abstract public function getApiResponse();
 
     /**
      * Creates ApiResponse body.
@@ -36,7 +37,8 @@ abstract class ApiException extends \Exception {
      *
      * @return array|string response body
      */
-    protected function getApiResponseBody() {
+    protected function getApiResponseBody()
+    {
         if ($this->debug !== true) {
             return $this->getMessage();
         }
