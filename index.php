@@ -111,7 +111,7 @@ ini_set('session.use_trans_sid', false);
 
 session_name('shaarli');
 // Start session if needed (Some server auto-start sessions).
-if (session_id() == '') {
+if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
