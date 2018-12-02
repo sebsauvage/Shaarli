@@ -30,7 +30,7 @@ abstract class ApiController
     protected $linkDb;
 
     /**
-     * @var \History
+     * @var \Shaarli\History
      */
     protected $history;
 

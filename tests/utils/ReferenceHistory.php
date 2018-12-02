@@ -1,5 +1,7 @@
 <?php
 
+use Shaarli\History;
+
 /**
  * Populates a reference history
  */

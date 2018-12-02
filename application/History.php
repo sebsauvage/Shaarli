@@ -1,4 +1,9 @@
 <?php
+namespace Shaarli;
+
+use DateTime;
+use Exception;
+use FileUtils;
 
 /**
  * Class History
@@ -141,7 +146,7 @@ class History
      * Save a new event and write it in the history file.
      *
      * @param string $status Event key, should be defined as constant.
-     * @param mixed  $id     Event item identifier (e.g. link ID).
+     * @param mixed $id Event item identifier (e.g. link ID).
      */
     protected function addEvent($status, $id = null)
     {
@@ -166,11 +171,11 @@ class History
      */
     protected function check()
     {
-        if (! is_file($this->historyFilePath)) {
+        if (!is_file($this->historyFilePath)) {
             FileUtils::writeFlatDB($this->historyFilePath, []);
         }
 
-        if (! is_writable($this->historyFilePath)) {
+        if (!is_writable($this->historyFilePath)) {
             throw new Exception(t('History file isn\'t readable or writable'));
         }
     }
@@ -191,7 +196,7 @@ class History
      */
     protected function write()
     {
-        $comparaison = new DateTime('-'. $this->retentionTime . ' seconds');
+        $comparaison = new DateTime('-' . $this->retentionTime . ' seconds');
         foreach ($this->history as $key => $value) {
             if ($value['datetime'] < $comparaison) {
                 unset($this->history[$key]);

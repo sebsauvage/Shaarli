@@ -37,7 +37,7 @@ class DeleteTagTest extends \PHPUnit_Framework_TestCase
     protected $linkDB;
 
     /**
-     * @var \History instance.
+     * @var \Shaarli\History instance.
      */
     protected $history;
 
@@ -62,7 +62,7 @@ class DeleteTagTest extends \PHPUnit_Framework_TestCase
         $this->linkDB = new \LinkDB(self::$testDatastore, true, false);
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
-        $this->history = new \History(self::$testHistory);
+        $this->history = new \Shaarli\History(self::$testHistory);
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
         $this->container['db'] = $this->linkDB;
@@ -103,12 +103,12 @@ class DeleteTagTest extends \PHPUnit_Framework_TestCase
 
         // 2 links affected
         $historyEntry = $this->history->getHistory()[0];
-        $this->assertEquals(\History::UPDATED, $historyEntry['event']);
+        $this->assertEquals(\Shaarli\History::UPDATED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );
         $historyEntry = $this->history->getHistory()[1];
-        $this->assertEquals(\History::UPDATED, $historyEntry['event']);
+        $this->assertEquals(\Shaarli\History::UPDATED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );
@@ -137,7 +137,7 @@ class DeleteTagTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($tags[strtolower($tagName)] > 0);
 
         $historyEntry = $this->history->getHistory()[0];
-        $this->assertEquals(\History::UPDATED, $historyEntry['event']);
+        $this->assertEquals(\Shaarli\History::UPDATED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );

@@ -32,7 +32,7 @@ class PutLinkTest extends \PHPUnit_Framework_TestCase
     protected $refDB = null;
 
     /**
-     * @var \History instance.
+     * @var \Shaarli\History instance.
      */
     protected $history;
 
@@ -62,12 +62,12 @@ class PutLinkTest extends \PHPUnit_Framework_TestCase
 
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
-        $this->history = new \History(self::$testHistory);
+        $this->history = new \Shaarli\History(self::$testHistory);
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
         $this->container['db'] = new \LinkDB(self::$testDatastore, true, false);
-        $this->container['history'] = new \History(self::$testHistory);
+        $this->container['history'] = new \Shaarli\History(self::$testHistory);
 
         $this->controller = new Links($this->container);
 
@@ -119,7 +119,7 @@ class PutLinkTest extends \PHPUnit_Framework_TestCase
         );
 
         $historyEntry = $this->history->getHistory()[0];
-        $this->assertEquals(\History::UPDATED, $historyEntry['event']);
+        $this->assertEquals(\Shaarli\History::UPDATED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );

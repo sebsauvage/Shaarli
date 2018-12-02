@@ -33,7 +33,7 @@ class PutTagTest extends \PHPUnit_Framework_TestCase
     protected $refDB = null;
 
     /**
-     * @var \History instance.
+     * @var \Shaarli\History instance.
      */
     protected $history;
 
@@ -68,7 +68,7 @@ class PutTagTest extends \PHPUnit_Framework_TestCase
 
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
-        $this->history = new \History(self::$testHistory);
+        $this->history = new \Shaarli\History(self::$testHistory);
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
@@ -113,12 +113,12 @@ class PutTagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $tags[$newName]);
 
         $historyEntry = $this->history->getHistory()[0];
-        $this->assertEquals(\History::UPDATED, $historyEntry['event']);
+        $this->assertEquals(\Shaarli\History::UPDATED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );
         $historyEntry = $this->history->getHistory()[1];
-        $this->assertEquals(\History::UPDATED, $historyEntry['event']);
+        $this->assertEquals(\Shaarli\History::UPDATED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );

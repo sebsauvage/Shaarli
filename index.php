@@ -76,6 +76,7 @@ require_once 'application/PluginManager.php';
 require_once 'application/Router.php';
 require_once 'application/Updater.php';
 use \Shaarli\Config\ConfigManager;
+use Shaarli\History;
 use \Shaarli\Languages;
 use \Shaarli\Security\LoginManager;
 use \Shaarli\Security\SessionManager;

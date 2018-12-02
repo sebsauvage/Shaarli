@@ -37,7 +37,7 @@ class DeleteLinkTest extends \PHPUnit_Framework_TestCase
     protected $linkDB;
 
     /**
-     * @var \History instance.
+     * @var \Shaarli\History instance.
      */
     protected $history;
 
@@ -62,7 +62,7 @@ class DeleteLinkTest extends \PHPUnit_Framework_TestCase
         $this->linkDB = new \LinkDB(self::$testDatastore, true, false);
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
-        $this->history = new \History(self::$testHistory);
+        $this->history = new \Shaarli\History(self::$testHistory);
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
         $this->container['db'] = $this->linkDB;
@@ -100,7 +100,7 @@ class DeleteLinkTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(isset($this->linkDB[$id]));
 
         $historyEntry = $this->history->getHistory()[0];
-        $this->assertEquals(\History::DELETED, $historyEntry['event']);
+        $this->assertEquals(\Shaarli\History::DELETED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );
