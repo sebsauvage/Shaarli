@@ -39,6 +39,7 @@
             "Shaarli\\Exceptions\\": "application/exceptions",
             "Shaarli\\Feed\\": "application/feed",
             "Shaarli\\Http\\": "application/http",
+            "Shaarli\\Render\\": "application/render",
             "Shaarli\\Security\\": "application/security"
         }
     }

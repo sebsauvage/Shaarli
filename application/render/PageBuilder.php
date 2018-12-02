@@ -1,5 +1,11 @@
 <?php
 
+namespace Shaarli\Render;
+
+use ApplicationUtils;
+use Exception;
+use LinkDB;
+use RainTPL;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Thumbnailer;
 
@@ -37,7 +43,9 @@ class PageBuilder
      */
     protected $token;
 
-    /** @var bool $isLoggedIn Whether the user is logged in **/
+    /**
+     * @var bool $isLoggedIn Whether the user is logged in
+     */
     protected $isLoggedIn = false;
 
     /**
@@ -101,7 +109,7 @@ class PageBuilder
             ApplicationUtils::getVersionHash(SHAARLI_VERSION, $this->conf->get('credentials.salt'))
         );
         $this->tpl->assign('index_url', index_url($_SERVER));
-        $visibility = ! empty($_SESSION['visibility']) ? $_SESSION['visibility'] : '';
+        $visibility = !empty($_SESSION['visibility']) ? $_SESSION['visibility'] : '';
         $this->tpl->assign('visibility', $visibility);
         $this->tpl->assign('untaggedonly', !empty($_SESSION['untaggedonly']));
         $this->tpl->assign('pagetitle', $this->conf->get('general.title', 'Shaarli'));
@@ -126,7 +134,7 @@ class PageBuilder
         $this->tpl->assign('thumbnails_width', $this->conf->get('thumbnails.width'));
         $this->tpl->assign('thumbnails_height', $this->conf->get('thumbnails.height'));
 
-        if (! empty($_SESSION['warnings'])) {
+        if (!empty($_SESSION['warnings'])) {
             $this->tpl->assign('global_warnings', $_SESSION['warnings']);
             unset($_SESSION['warnings']);
         }
@@ -189,16 +197,16 @@ class PageBuilder
 
     /**
      * Render a 404 page (uses the template : tpl/404.tpl)
-     * usage : $PAGE->render404('The link was deleted')
+     * usage: $PAGE->render404('The link was deleted')
      *
-     * @param string $message A messate to display what is not found
+     * @param string $message A message to display what is not found
      */
     public function render404($message = '')
     {
         if (empty($message)) {
             $message = t('The page you are trying to reach does not exist or has been deleted.');
         }
-        header($_SERVER['SERVER_PROTOCOL'] .' '. t('404 Not Found'));
+        header($_SERVER['SERVER_PROTOCOL'] . ' ' . t('404 Not Found'));
         $this->tpl->assign('error_message', $message);
         $this->renderPage('404');
     }

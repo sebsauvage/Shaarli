@@ -67,7 +67,6 @@ require_once 'application/LinkDB.php';
 require_once 'application/LinkFilter.php';
 require_once 'application/LinkUtils.php';
 require_once 'application/NetscapeBookmarkUtils.php';
-require_once 'application/PageBuilder.php';
 require_once 'application/TimeZone.php';
 require_once 'application/Utils.php';
 require_once 'application/PluginManager.php';
@@ -78,9 +77,10 @@ use \Shaarli\Feed\CachedPage;
 use \Shaarli\Feed\FeedBuilder;
 use \Shaarli\History;
 use \Shaarli\Languages;
+use \Shaarli\Render\PageBuilder;
+use \Shaarli\Render\ThemeUtils;
 use \Shaarli\Security\LoginManager;
 use \Shaarli\Security\SessionManager;
-use \Shaarli\ThemeUtils;
 use \Shaarli\Thumbnailer;
 
 // Ensure the PHP version is supported
