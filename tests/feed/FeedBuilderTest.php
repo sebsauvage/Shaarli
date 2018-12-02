@@ -1,6 +1,11 @@
 <?php
 
-require_once 'application/FeedBuilder.php';
+namespace Shaarli\Feed;
+
+use DateTime;
+use LinkDB;
+use ReferenceLinkDB;
+
 require_once 'application/LinkDB.php';
 
 /**
@@ -8,7 +13,7 @@ require_once 'application/LinkDB.php';
  *
  * Unit tests for FeedBuilder.
  */
-class FeedBuilderTest extends PHPUnit_Framework_TestCase
+class FeedBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string locale Basque (Spain).
@@ -90,7 +95,7 @@ class FeedBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('http://host.tld/?WDWyig', $link['url']);
         $this->assertRegExp('/Tue, 10 Mar 2015 11:46:51 \+\d{4}/', $link['pub_iso_date']);
         $pub = DateTime::createFromFormat(DateTime::RSS, $link['pub_iso_date']);
-        $up  = DateTime::createFromFormat(DateTime::ATOM, $link['up_iso_date']);
+        $up = DateTime::createFromFormat(DateTime::ATOM, $link['up_iso_date']);
         $this->assertEquals($pub, $up);
         $this->assertContains('Stallman has a beard', $link['description']);
         $this->assertContains('Permalink', $link['description']);

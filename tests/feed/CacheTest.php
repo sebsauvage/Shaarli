@@ -2,16 +2,17 @@
 /**
  * Cache tests
  */
+namespace Shaarli\Feed;
 
 // required to access $_SESSION array
 session_start();
 
-require_once 'application/Cache.php';
+require_once 'application/feed/Cache.php';
 
 /**
  * Unitary tests for cached pages
  */
-class CacheTest extends PHPUnit_Framework_TestCase
+class CacheTest extends \PHPUnit\Framework\TestCase
 {
     // test cache directory
     protected static $testCacheDir = 'sandbox/dummycache';
@@ -25,16 +26,16 @@ class CacheTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        if (! is_dir(self::$testCacheDir)) {
+        if (!is_dir(self::$testCacheDir)) {
             mkdir(self::$testCacheDir);
         } else {
-            array_map('unlink', glob(self::$testCacheDir.'/*'));
+            array_map('unlink', glob(self::$testCacheDir . '/*'));
         }
 
         foreach (self::$pages as $page) {
-            file_put_contents(self::$testCacheDir.'/'.$page.'.cache', $page);
+            file_put_contents(self::$testCacheDir . '/' . $page . '.cache', $page);
         }
-        file_put_contents(self::$testCacheDir.'/intru.der', 'ShouldNotBeThere');
+        file_put_contents(self::$testCacheDir . '/intru.der', 'ShouldNotBeThere');
     }
 
     /**
@@ -42,7 +43,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        array_map('unlink', glob(self::$testCacheDir.'/*'));
+        array_map('unlink', glob(self::$testCacheDir . '/*'));
         rmdir(self::$testCacheDir);
     }
 
@@ -53,10 +54,10 @@ class CacheTest extends PHPUnit_Framework_TestCase
     {
         purgeCachedPages(self::$testCacheDir);
         foreach (self::$pages as $page) {
-            $this->assertFileNotExists(self::$testCacheDir.'/'.$page.'.cache');
+            $this->assertFileNotExists(self::$testCacheDir . '/' . $page . '.cache');
         }
 
-        $this->assertFileExists(self::$testCacheDir.'/intru.der');
+        $this->assertFileExists(self::$testCacheDir . '/intru.der');
     }
 
     /**
@@ -68,7 +69,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
         ini_set('error_log', '/dev/null');
         $this->assertEquals(
             'Cannot purge sandbox/dummycache_missing: no directory',
-            purgeCachedPages(self::$testCacheDir.'_missing')
+            purgeCachedPages(self::$testCacheDir . '_missing')
         );
         ini_set('error_log', $oldlog);
     }
@@ -83,7 +84,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
 
         invalidateCaches(self::$testCacheDir);
         foreach (self::$pages as $page) {
-            $this->assertFileNotExists(self::$testCacheDir.'/'.$page.'.cache');
+            $this->assertFileNotExists(self::$testCacheDir . '/' . $page . '.cache');
         }
 
         $this->assertArrayNotHasKey('tags', $_SESSION);

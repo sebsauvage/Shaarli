@@ -1,4 +1,8 @@
 <?php
+namespace Shaarli\Feed;
+
+use DateTime;
+use LinkDB;
 
 /**
  * FeedBuilder class.
@@ -38,12 +42,12 @@ class FeedBuilder
     protected $feedType;
 
     /**
-     * @var array $_SERVER.
+     * @var array $_SERVER
      */
     protected $serverInfo;
 
     /**
-     * @var array $_GET.
+     * @var array $_GET
      */
     protected $userInput;
 
@@ -75,10 +79,10 @@ class FeedBuilder
     /**
      * Feed constructor.
      *
-     * @param LinkDB  $linkDB        LinkDB instance.
-     * @param string  $feedType      Type of feed.
-     * @param array   $serverInfo    $_SERVER.
-     * @param array   $userInput     $_GET.
+     * @param LinkDB  $linkDB     LinkDB instance.
+     * @param string  $feedType   Type of feed.
+     * @param array   $serverInfo $_SERVER.
+     * @param array   $userInput  $_GET.
      * @param boolean $isLoggedIn True if the user is currently logged in, false otherwise.
      */
     public function __construct($linkDB, $feedType, $serverInfo, $userInput, $isLoggedIn)
@@ -124,7 +128,7 @@ class FeedBuilder
         $data['show_dates'] = !$this->hideDates || $this->isLoggedIn;
         // Remove leading slash from REQUEST_URI.
         $data['self_link'] = escape(server_url($this->serverInfo))
-                           . escape($this->serverInfo['REQUEST_URI']);
+            . escape($this->serverInfo['REQUEST_URI']);
         $data['index_url'] = $pageaddr;
         $data['usepermalinks'] = $this->usePermalinks === true;
         $data['links'] = $linkDisplayed;
@@ -142,18 +146,18 @@ class FeedBuilder
      */
     protected function buildItem($link, $pageaddr)
     {
-        $link['guid'] = $pageaddr .'?'. $link['shorturl'];
+        $link['guid'] = $pageaddr . '?' . $link['shorturl'];
         // Check for both signs of a note: starting with ? and 7 chars long.
         if ($link['url'][0] === '?' && strlen($link['url']) === 7) {
             $link['url'] = $pageaddr . $link['url'];
         }
         if ($this->usePermalinks === true) {
-            $permalink = '<a href="'. $link['url'] .'" title="'. t('Direct link') .'">'. t('Direct link') .'</a>';
+            $permalink = '<a href="' . $link['url'] . '" title="' . t('Direct link') . '">' . t('Direct link') . '</a>';
         } else {
-            $permalink = '<a href="'. $link['guid'] .'" title="'. t('Permalink') .'">'. t('Permalink') .'</a>';
+            $permalink = '<a href="' . $link['guid'] . '" title="' . t('Permalink') . '">' . t('Permalink') . '</a>';
         }
-        $link['description']  = format_description($link['description'], '', false, $pageaddr);
-        $link['description'] .= PHP_EOL .'<br>&#8212; '. $permalink;
+        $link['description'] = format_description($link['description'], '', false, $pageaddr);
+        $link['description'] .= PHP_EOL . '<br>&#8212; ' . $permalink;
 
         $pubDate = $link['created'];
         $link['pub_iso_date'] = $this->getIsoDate($pubDate);
@@ -164,7 +168,6 @@ class FeedBuilder
             $link['up_iso_date'] = $this->getIsoDate($upDate, DateTime::ATOM);
         } else {
             $link['up_iso_date'] = $this->getIsoDate($pubDate, DateTime::ATOM);
-            ;
         }
 
         // Save the more recent item.
@@ -223,11 +226,11 @@ class FeedBuilder
     public function getTypeLanguage()
     {
         // Use the locale do define the language, if available.
-        if (! empty($this->locale) && preg_match('/^\w{2}[_\-]\w{2}/', $this->locale)) {
-            $length = ($this->feedType == self::$FEED_RSS) ? 5 : 2;
+        if (!empty($this->locale) && preg_match('/^\w{2}[_\-]\w{2}/', $this->locale)) {
+            $length = ($this->feedType === self::$FEED_RSS) ? 5 : 2;
             return str_replace('_', '-', substr($this->locale, 0, $length));
         }
-        return ($this->feedType == self::$FEED_RSS) ? 'en-en' : 'en';
+        return ($this->feedType === self::$FEED_RSS) ? 'en-en' : 'en';
     }
 
     /**
@@ -287,7 +290,7 @@ class FeedBuilder
         }
 
         $intNb = intval($this->userInput['nb']);
-        if (! is_int($intNb) || $intNb == 0) {
+        if (!is_int($intNb) || $intNb == 0) {
             return self::$DEFAULT_NB_LINKS;
         }
 

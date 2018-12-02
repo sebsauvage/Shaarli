@@ -2,13 +2,12 @@
 /**
  * PageCache tests
  */
-
-require_once 'application/CachedPage.php';
+namespace Shaarli\Feed;
 
 /**
  * Unitary tests for cached pages
  */
-class CachedPageTest extends PHPUnit_Framework_TestCase
+class CachedPageTest extends \PHPUnit\Framework\TestCase
 {
     // test cache directory
     protected static $testCacheDir = 'sandbox/pagecache';
@@ -20,10 +19,10 @@ class CachedPageTest extends PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        if (! is_dir(self::$testCacheDir)) {
+        if (!is_dir(self::$testCacheDir)) {
             mkdir(self::$testCacheDir);
         }
-        self::$filename = self::$testCacheDir.'/'.sha1(self::$url).'.cache';
+        self::$filename = self::$testCacheDir . '/' . sha1(self::$url) . '.cache';
     }
 
     /**

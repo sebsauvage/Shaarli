@@ -1,4 +1,6 @@
 <?php
+
+namespace Shaarli\Feed;
 /**
  * Simple cache system, mainly for the RSS/ATOM feeds
  */
@@ -24,7 +26,7 @@ class CachedPage
     {
         // TODO: check write access to the cache directory
         $this->cacheDir = $cacheDir;
-        $this->filename = $this->cacheDir.'/'.sha1($url).'.cache';
+        $this->filename = $this->cacheDir . '/' . sha1($url) . '.cache';
         $this->shouldBeCached = $shouldBeCached;
     }
 

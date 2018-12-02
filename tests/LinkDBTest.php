@@ -3,9 +3,7 @@
  * Link datastore tests
  */
 
-use Shaarli\Exceptions\IOException;
-
-require_once 'application/Cache.php';
+require_once 'application/feed/Cache.php';
 require_once 'application/FileUtils.php';
 require_once 'application/LinkDB.php';
 require_once 'application/Utils.php';

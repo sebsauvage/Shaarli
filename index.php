@@ -57,10 +57,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 // Shaarli library
 require_once 'application/ApplicationUtils.php';
-require_once 'application/Cache.php';
-require_once 'application/CachedPage.php';
 require_once 'application/config/ConfigPlugin.php';
-require_once 'application/FeedBuilder.php';
+require_once 'application/feed/Cache.php';
 require_once 'application/FileUtils.php';
 require_once 'application/History.php';
 require_once 'application/HttpUtils.php';
@@ -76,7 +74,9 @@ require_once 'application/PluginManager.php';
 require_once 'application/Router.php';
 require_once 'application/Updater.php';
 use \Shaarli\Config\ConfigManager;
-use Shaarli\History;
+use \Shaarli\Feed\CachedPage;
+use \Shaarli\Feed\FeedBuilder;
+use \Shaarli\History;
 use \Shaarli\Languages;
 use \Shaarli\Security\LoginManager;
 use \Shaarli\Security\SessionManager;
