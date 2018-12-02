@@ -97,7 +97,7 @@ function escape($input)
 
     if (is_array($input)) {
         $out = array();
-        foreach($input as $key => $value) {
+        foreach ($input as $key => $value) {
             $out[$key] = escape($value);
         }
         return $out;
@@ -355,10 +355,13 @@ function return_bytes($val)
     $val = trim($val);
     $last = strtolower($val[strlen($val)-1]);
     $val = intval(substr($val, 0, -1));
-    switch($last) {
-        case 'g': $val *= 1024;
-        case 'm': $val *= 1024;
-        case 'k': $val *= 1024;
+    switch ($last) {
+        case 'g':
+            $val *= 1024;
+        case 'm':
+            $val *= 1024;
+        case 'k':
+            $val *= 1024;
     }
     return $val;
 }
@@ -452,6 +455,7 @@ function alphabetical_sort(&$data, $reverse = false, $byKeys = false)
  *
  * @return string Text translated.
  */
-function t($text, $nText = '', $nb = 1, $domain = 'shaarli') {
+function t($text, $nText = '', $nb = 1, $domain = 'shaarli')
+{
     return dn__($domain, $text, $nText, $nb);
 }

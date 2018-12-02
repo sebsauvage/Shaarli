@@ -62,7 +62,7 @@ class LinkFilter
             $visibility = 'all';
         }
 
-        switch($type) {
+        switch ($type) {
             case self::$FILTER_HASH:
                 return $this->filterSmallHash($request);
             case self::$FILTER_TAG | self::$FILTER_TEXT: // == "vuotext"
@@ -205,7 +205,6 @@ class LinkFilter
 
         // Iterate over every stored link.
         foreach ($this->links as $id => $link) {
-
             // ignore non private links when 'privatonly' is on.
             if ($visibility !== 'all') {
                 if (! $link['private'] && $visibility === 'private') {
@@ -257,11 +256,11 @@ class LinkFilter
     private static function tag2regex($tag)
     {
         $len = strlen($tag);
-        if(!$len || $tag === "-" || $tag === "*"){
+        if (!$len || $tag === "-" || $tag === "*") {
             // nothing to search, return empty regex
             return '';
         }
-        if($tag[0] === "-") {
+        if ($tag[0] === "-") {
             // query is negated
             $i = 1; // use offset to start after '-' character
             $regex = '(?!'; // create negative lookahead
@@ -271,14 +270,14 @@ class LinkFilter
         }
         $regex .= '.*(?:^| )'; // before tag may only be a space or the beginning
         // iterate over string, separating it into placeholder and content
-        for(; $i < $len; $i++){
-            if($tag[$i] === '*'){
+        for (; $i < $len; $i++) {
+            if ($tag[$i] === '*') {
                 // placeholder found
                 $regex .= '[^ ]*?';
             } else {
                 // regular characters
                 $offset = strpos($tag, '*', $i);
-                if($offset === false){
+                if ($offset === false) {
                     // no placeholder found, set offset to end of string
                     $offset = $len;
                 }
@@ -310,19 +309,19 @@ class LinkFilter
     {
         // get single tags (we may get passed an array, even though the docs say different)
         $inputTags = $tags;
-        if(!is_array($tags)) {
+        if (!is_array($tags)) {
             // we got an input string, split tags
             $inputTags = preg_split('/(?:\s+)|,/', $inputTags, -1, PREG_SPLIT_NO_EMPTY);
         }
 
-        if(!count($inputTags)){
+        if (!count($inputTags)) {
             // no input tags
             return $this->noFilter($visibility);
         }
 
         // build regex from all tags
         $re = '/^' . implode(array_map("self::tag2regex", $inputTags)) . '.*$/';
-        if(!$casesensitive) {
+        if (!$casesensitive) {
             // make regex case insensitive
             $re .= 'i';
         }
@@ -342,7 +341,7 @@ class LinkFilter
                 }
             }
             $search = $link['tags']; // build search string, start with tags of current link
-            if(strlen(trim($link['description'])) && strpos($link['description'], '#') !== false){
+            if (strlen(trim($link['description'])) && strpos($link['description'], '#') !== false) {
                 // description given and at least one possible tag found
                 $descTags = array();
                 // find all tags in the form of #tag in the description
@@ -351,13 +350,13 @@ class LinkFilter
                     $link['description'],
                     $descTags
                 );
-                if(count($descTags[1])){
+                if (count($descTags[1])) {
                     // there were some tags in the description, add them to the search string
                     $search .= ' ' . implode(' ', $descTags[1]);
                 }
             };
             // match regular expression with search string
-            if(!preg_match($re, $search)){
+            if (!preg_match($re, $search)) {
                 // this entry does _not_ match our regex
                 continue;
             }

@@ -24,11 +24,9 @@
         "gettext/gettext": "^4.4"
     },
     "require-dev": {
-        "phpmd/phpmd" : "@stable",
+        "phpunit/phpcov": "*",
         "phpunit/phpunit": "^5.0",
-        "sebastian/phpcpd": "*",
-        "squizlabs/php_codesniffer": "2.*",
-        "phpunit/phpcov": "*"
+        "squizlabs/php_codesniffer": "2.*"
     },
     "autoload": {
         "psr-4": {

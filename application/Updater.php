@@ -183,7 +183,7 @@ class Updater
             }
         }
 
-        try{
+        try {
             $this->conf->write($this->isLoggedIn);
             return true;
         } catch (IOException $e) {

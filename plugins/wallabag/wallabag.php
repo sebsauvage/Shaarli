@@ -69,4 +69,3 @@ function wallabag_dummy_translation()
     t('Wallabag API URL');
     t('Wallabag API version (1 or 2)');
 }
-

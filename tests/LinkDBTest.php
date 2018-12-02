@@ -362,7 +362,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     public function testLinkRealUrlWithoutRedirector()
     {
         $db = new LinkDB(self::$testDatastore, false, false);
-        foreach($db as $link) {
+        foreach ($db as $link) {
             $this->assertEquals($link['url'], $link['real_url']);
         }
     }
@@ -374,13 +374,13 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     {
         $redirector = 'http://redirector.to?';
         $db = new LinkDB(self::$testDatastore, false, false, $redirector);
-        foreach($db as $link) {
+        foreach ($db as $link) {
             $this->assertStringStartsWith($redirector, $link['real_url']);
             $this->assertNotFalse(strpos($link['real_url'], urlencode('://')));
         }
 
         $db = new LinkDB(self::$testDatastore, false, false, $redirector, false);
-        foreach($db as $link) {
+        foreach ($db as $link) {
             $this->assertStringStartsWith($redirector, $link['real_url']);
             $this->assertFalse(strpos($link['real_url'], urlencode('://')));
         }

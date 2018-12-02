@@ -139,7 +139,6 @@ function hook_markdown_render_includes($data)
         || $data['_PAGE_'] == Router::$PAGE_DAILY
         || $data['_PAGE_'] == Router::$PAGE_EDITLINK
     ) {
-
         $data['css_files'][] = PluginManager::$PLUGINS_PATH . '/markdown/markdown.css';
     }
 
@@ -195,8 +194,7 @@ function reverse_text2clickable($description)
         // Detect and toggle block of code
         if (!$codeBlockOn) {
             $codeBlockOn = preg_match('/^```/', $descriptionLine) > 0;
-        }
-        elseif (preg_match('/^```/', $descriptionLine) > 0) {
+        } elseif (preg_match('/^```/', $descriptionLine) > 0) {
             $codeBlockOn = false;
         }
 
@@ -302,13 +300,17 @@ function sanitize_html($description)
     foreach ($escapeTags as $tag) {
         $description = preg_replace_callback(
             '#<\s*'. $tag .'[^>]*>(.*</\s*'. $tag .'[^>]*>)?#is',
-            function ($match) { return escape($match[0]); },
-            $description);
+            function ($match) {
+                return escape($match[0]);
+            },
+            $description
+        );
     }
     $description = preg_replace(
         '#(<[^>]+\s)on[a-z]*="?[^ "]*"?#is',
         '$1',
-        $description);
+        $description
+    );
     return $description;
 }
 
@@ -341,7 +343,7 @@ function process_markdown($description, $escape = true, $allowedProtocols = [])
         ->text($processedDescription);
     $processedDescription = sanitize_html($processedDescription);
 
-    if(!empty($processedDescription)){
+    if (!empty($processedDescription)) {
         $processedDescription = '<div class="markdown">'. $processedDescription . '</div>';
     }
 

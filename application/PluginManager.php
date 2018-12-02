@@ -75,8 +75,7 @@ class PluginManager
 
             try {
                 $this->loadPlugin($dirs[$index], $plugin);
-            }
-            catch (PluginFileNotFoundException $e) {
+            } catch (PluginFileNotFoundException $e) {
                 error_log($e->getMessage());
             }
         }

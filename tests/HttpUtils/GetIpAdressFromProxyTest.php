@@ -5,7 +5,8 @@ require_once 'application/HttpUtils.php';
 /**
  * Unitary tests for getIpAddressFromProxy()
  */
-class GetIpAdressFromProxyTest extends PHPUnit_Framework_TestCase {
+class GetIpAdressFromProxyTest extends PHPUnit_Framework_TestCase
+{
 
     /**
      * Test without proxy

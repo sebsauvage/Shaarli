@@ -24,7 +24,7 @@ class ApplicationUtils
      *
      * @return mixed the version code from the repository if available, else 'false'
      */
-    public static function getLatestGitVersionCode($url, $timeout=2)
+    public static function getLatestGitVersionCode($url, $timeout = 2)
     {
         list($headers, $data) = get_http_response($url, $timeout);
 
@@ -86,13 +86,14 @@ class ApplicationUtils
      *
      * @return mixed the new version code if available and greater, else 'false'
      */
-    public static function checkUpdate($currentVersion,
-                                       $updateFile,
-                                       $checkInterval,
-                                       $enableCheck,
-                                       $isLoggedIn,
-                                       $branch='stable')
-    {
+    public static function checkUpdate(
+        $currentVersion,
+        $updateFile,
+        $checkInterval,
+        $enableCheck,
+        $isLoggedIn,
+        $branch = 'stable'
+    ) {
         // Do not check versions for visitors
         // Do not check if the user doesn't want to
         // Do not check with dev version

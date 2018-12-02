@@ -28,4 +28,3 @@ class GetUrlSchemeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('git', get_url_scheme('git://domain.tld/push?pull=clone#checkout'));
     }
 }
-

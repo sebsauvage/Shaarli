@@ -23,7 +23,7 @@ function get_curl_download_callback(&$charset, &$title, $curlGetInfo = 'curl_get
      *
      * @return int|bool length of $data or false if we need to stop the download
      */
-    return function(&$ch, $data) use ($curlGetInfo, &$charset, &$title, &$isRedirected) {
+    return function (&$ch, $data) use ($curlGetInfo, &$charset, &$title, &$isRedirected) {
         $responseCode = $curlGetInfo($ch, CURLINFO_RESPONSE_CODE);
         if (!empty($responseCode) && in_array($responseCode, [301, 302])) {
             $isRedirected = true;
@@ -201,7 +201,8 @@ function space2nbsp($text)
 
  * @return string formatted description.
  */
-function format_description($description, $redirector = '', $urlEncode = true, $indexUrl = '') {
+function format_description($description, $redirector = '', $urlEncode = true, $indexUrl = '')
+{
     return nl2br(space2nbsp(hashtag_autolink(text2clickable($description, $redirector, $urlEncode), $indexUrl)));
 }
 

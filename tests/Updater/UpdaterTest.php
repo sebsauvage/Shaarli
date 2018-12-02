@@ -393,20 +393,32 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
         $this->assertEquals('Naming conventions... #private', $linkDB[0]['description']);
         $this->assertEquals('samba cartoon web', $linkDB[0]['tags']);
         $this->assertTrue($linkDB[0]['private']);
-        $this->assertEquals(DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_142300'), $linkDB[0]['created']);
+        $this->assertEquals(
+            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_142300'),
+            $linkDB[0]['created']
+        );
 
         $this->assertTrue(isset($linkDB[1]));
         $this->assertFalse(isset($linkDB[1]['linkdate']));
         $this->assertEquals(1, $linkDB[1]['id']);
         $this->assertEquals('UserFriendly - Samba', $linkDB[1]['title']);
-        $this->assertEquals(DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_172539'), $linkDB[1]['created']);
+        $this->assertEquals(
+            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_172539'),
+            $linkDB[1]['created']
+        );
 
         $this->assertTrue(isset($linkDB[2]));
         $this->assertFalse(isset($linkDB[2]['linkdate']));
         $this->assertEquals(2, $linkDB[2]['id']);
         $this->assertEquals('Geek and Poke', $linkDB[2]['title']);
-        $this->assertEquals(DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_182539'), $linkDB[2]['created']);
-        $this->assertEquals(DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_190301'), $linkDB[2]['updated']);
+        $this->assertEquals(
+            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_182539'),
+            $linkDB[2]['created']
+        );
+        $this->assertEquals(
+            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_190301'),
+            $linkDB[2]['updated']
+        );
     }
 
     /**

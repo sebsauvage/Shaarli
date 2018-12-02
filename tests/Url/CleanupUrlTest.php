@@ -107,4 +107,3 @@ class CleanupUrlTest extends PHPUnit_Framework_TestCase
         );
     }
 }
-

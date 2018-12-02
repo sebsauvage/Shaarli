@@ -3,7 +3,6 @@
 
 namespace Shaarli\Api\Controllers;
 
-
 use Shaarli\Api\Exceptions\ApiBadParametersException;
 use Shaarli\Config\ConfigManager;
 use Slim\Container;

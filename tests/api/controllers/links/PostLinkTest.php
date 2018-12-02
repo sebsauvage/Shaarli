@@ -2,7 +2,6 @@
 
 namespace Shaarli\Api\Controllers;
 
-
 use PHPUnit\Framework\TestCase;
 use Shaarli\Config\ConfigManager;
 use Slim\Container;
@@ -128,7 +127,9 @@ class PostLinkTest extends TestCase
         $this->assertEquals('', $data['description']);
         $this->assertEquals([], $data['tags']);
         $this->assertEquals(false, $data['private']);
-        $this->assertTrue(new \DateTime('5 seconds ago') < \DateTime::createFromFormat(\DateTime::ATOM, $data['created']));
+        $this->assertTrue(
+            new \DateTime('5 seconds ago') < \DateTime::createFromFormat(\DateTime::ATOM, $data['created'])
+        );
         $this->assertEquals('', $data['updated']);
 
         $historyEntry = $this->history->getHistory()[0];
@@ -171,7 +172,9 @@ class PostLinkTest extends TestCase
         $this->assertEquals($link['description'], $data['description']);
         $this->assertEquals($link['tags'], $data['tags']);
         $this->assertEquals(true, $data['private']);
-        $this->assertTrue(new \DateTime('2 seconds ago') < \DateTime::createFromFormat(\DateTime::ATOM, $data['created']));
+        $this->assertTrue(
+            new \DateTime('2 seconds ago') < \DateTime::createFromFormat(\DateTime::ATOM, $data['created'])
+        );
         $this->assertEquals('', $data['updated']);
     }
 

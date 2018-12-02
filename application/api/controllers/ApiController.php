@@ -41,7 +41,7 @@ abstract class ApiController
 
     /**
      * ApiController constructor.
-     * 
+     *
      * Note: enabling debug mode displays JSON with readable formatting.
      *
      * @param Container $ci Slim container.

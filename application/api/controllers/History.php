@@ -35,8 +35,7 @@ class History extends ApiController
         $offset = $request->getParam('offset');
         if (empty($offset)) {
             $offset = 0;
-        }
-        elseif (ctype_digit($offset)) {
+        } elseif (ctype_digit($offset)) {
             $offset = (int) $offset;
         } else {
             throw new ApiBadParametersException('Invalid offset');

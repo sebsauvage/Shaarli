@@ -107,8 +107,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         $hidePublicLinks,
         $redirector = '',
         $redirectorEncode = true
-    )
-    {
+    ) {
         $this->datastore = $datastore;
         $this->loggedIn = $isLoggedIn;
         $this->hidePublicLinks = $hidePublicLinks;
@@ -250,11 +249,14 @@ class LinkDB implements Iterator, Countable, ArrayAccess
             'id' => 1,
             'title'=> t('The personal, minimalist, super-fast, database free, bookmarking service'),
             'url'=>'https://shaarli.readthedocs.io',
-            'description'=>t('Welcome to Shaarli! This is your first public bookmark. To edit or delete me, you must first login.
+            'description'=>t(
+                'Welcome to Shaarli! This is your first public bookmark. '
+                .'To edit or delete me, you must first login.
 
 To learn how to use Shaarli, consult the link "Documentation" at the bottom of this page.
 
-You use the community supported version of the original Shaarli project, by Sebastien Sauvage.'),
+You use the community supported version of the original Shaarli project, by Sebastien Sauvage.'
+            ),
             'private'=>0,
             'created'=> new DateTime(),
             'tags'=>'opensource software'
@@ -317,8 +319,7 @@ You use the community supported version of the original Shaarli project, by Seba
                 } else {
                     $link['real_url'] .= $link['url'];
                 }
-            }
-            else {
+            } else {
                 $link['real_url'] = $link['url'];
             }
 
@@ -403,7 +404,8 @@ You use the community supported version of the original Shaarli project, by Seba
      *
      * @return array list of shaare found.
      */
-    public function filterDay($request) {
+    public function filterDay($request)
+    {
         $linkFilter = new LinkFilter($this->links);
         return $linkFilter->filter(LinkFilter::$FILTER_DAY, $request);
     }
@@ -420,8 +422,12 @@ You use the community supported version of the original Shaarli project, by Seba
      *
      * @return array filtered links, all links if no suitable filter was provided.
      */
-    public function filterSearch($filterRequest = array(), $casesensitive = false, $visibility = 'all', $untaggedonly = false)
-    {
+    public function filterSearch(
+        $filterRequest = array(),
+        $casesensitive = false,
+        $visibility = 'all',
+        $untaggedonly = false
+    ) {
         // Filter link database according to parameters.
         $searchtags = isset($filterRequest['searchtags']) ? escape($filterRequest['searchtags']) : '';
         $searchterm = isset($filterRequest['searchterm']) ? escape($filterRequest['searchterm']) : '';
@@ -492,8 +498,7 @@ You use the community supported version of the original Shaarli project, by Seba
         $delete = empty($to);
         // True for case-sensitive tag search.
         $linksToAlter = $this->filterSearch(['searchtags' => $from], true);
-        foreach($linksToAlter as $key => &$value)
-        {
+        foreach ($linksToAlter as $key => &$value) {
             $tags = preg_split('/\s+/', trim($value['tags']));
             if (($pos = array_search($from, $tags)) !== false) {
                 if ($delete) {
@@ -536,7 +541,7 @@ You use the community supported version of the original Shaarli project, by Seba
     {
         $order = $order === 'ASC' ? -1 : 1;
         // Reorder array by dates.
-        usort($this->links, function($a, $b) use ($order) {
+        usort($this->links, function ($a, $b) use ($order) {
             if (isset($a['sticky']) && isset($b['sticky']) && $a['sticky'] !== $b['sticky']) {
                 return $a['sticky'] ? -1 : 1;
             }

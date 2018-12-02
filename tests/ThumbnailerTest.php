@@ -98,15 +98,17 @@ class ThumbnailerTest extends TestCase
         ini_set('error_log', $oldlog);
     }
 
-    protected function rrmdirContent($dir) {
+    protected function rrmdirContent($dir)
+    {
         if (is_dir($dir)) {
             $objects = scandir($dir);
             foreach ($objects as $object) {
                 if ($object != "." && $object != "..") {
-                    if (is_dir($dir."/".$object))
+                    if (is_dir($dir."/".$object)) {
                         $this->rrmdirContent($dir."/".$object);
-                    else
+                    } else {
                         unlink($dir."/".$object);
+                    }
                 }
             }
         }
