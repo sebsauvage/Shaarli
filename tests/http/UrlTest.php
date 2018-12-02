@@ -3,12 +3,13 @@
  * Url's tests
  */
 
-require_once 'application/Url.php';
+namespace Shaarli\Http;
+
 
 /**
  * Unitary tests for URL utilities
  */
-class UrlTest extends PHPUnit_Framework_TestCase
+class UrlTest extends \PHPUnit\Framework\TestCase
 {
     // base URL for tests
     protected static $baseUrl = 'http://domain.tld:3000';
@@ -18,7 +19,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
      */
     private function assertUrlIsCleaned($query = '', $fragment = '')
     {
-        $url = new Url(self::$baseUrl.$query.$fragment);
+        $url = new Url(self::$baseUrl . $query . $fragment);
         $url->cleanup();
         $this->assertEquals(self::$baseUrl, $url->toString());
     }
@@ -38,7 +39,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         $ref = 'http://username:password@hostname:9090/path'
-              .'?arg1=value1&arg2=value2#anchor';
+            . '?arg1=value1&arg2=value2#anchor';
         $url = new Url($ref);
         $this->assertEquals($ref, $url->toString());
     }
@@ -52,7 +53,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $this->assertUrlIsCleaned();
 
         // URL with no annoying elements
-        $ref = self::$baseUrl.'?p1=val1&p2=1234#edit';
+        $ref = self::$baseUrl . '?p1=val1&p2=1234#edit';
         $url = new Url($ref);
         $this->assertEquals($ref, $url->cleanup());
     }
@@ -115,26 +116,26 @@ class UrlTest extends PHPUnit_Framework_TestCase
         // ditch annoying query params and fragment, keep useful params
         $url = new Url(
             self::$baseUrl
-            .'?fb=zomg&my=stuff&utm_medium=numnum&is=kept#tk.rss_all'
+            . '?fb=zomg&my=stuff&utm_medium=numnum&is=kept#tk.rss_all'
         );
-        $this->assertEquals(self::$baseUrl.'?my=stuff&is=kept', $url->cleanup());
+        $this->assertEquals(self::$baseUrl . '?my=stuff&is=kept', $url->cleanup());
 
 
         // ditch annoying query params, keep useful params and fragment
         $url = new Url(
             self::$baseUrl
-            .'?fb=zomg&my=stuff&utm_medium=numnum&is=kept#again'
+            . '?fb=zomg&my=stuff&utm_medium=numnum&is=kept#again'
         );
         $this->assertEquals(
-            self::$baseUrl.'?my=stuff&is=kept#again',
+            self::$baseUrl . '?my=stuff&is=kept#again',
             $url->cleanup()
         );
 
         // test firefox reader url
         $url = new Url(
-            'about://reader?url=' . urlencode(self::$baseUrl .'?my=stuff&is=kept')
+            'about://reader?url=' . urlencode(self::$baseUrl . '?my=stuff&is=kept')
         );
-        $this->assertEquals(self::$baseUrl.'?my=stuff&is=kept', $url->cleanup());
+        $this->assertEquals(self::$baseUrl . '?my=stuff&is=kept', $url->cleanup());
     }
 
     /**

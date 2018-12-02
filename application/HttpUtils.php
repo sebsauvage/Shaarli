@@ -1,4 +1,7 @@
 <?php
+
+use Shaarli\Http\Url;
+
 /**
  * GET an HTTP URL to retrieve its content
  * Uses the cURL library or a fallback method
