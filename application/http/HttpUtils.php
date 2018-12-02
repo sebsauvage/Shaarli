@@ -41,7 +41,7 @@ function get_http_response($url, $timeout = 30, $maxBytes = 4194304, $curlWriteF
     $cleanUrl = $urlObj->idnToAscii();
 
     if (!filter_var($cleanUrl, FILTER_VALIDATE_URL) || !$urlObj->isHttp()) {
-        return array(array(0 => 'Invalid HTTP Url'), false);
+        return array(array(0 => 'Invalid HTTP UrlUtils'), false);
     }
 
     $userAgent =

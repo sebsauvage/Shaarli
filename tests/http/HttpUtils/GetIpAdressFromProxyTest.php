@@ -1,11 +1,13 @@
 <?php
 
-require_once 'application/HttpUtils.php';
+namespace Shaarli\Http;
+
+require_once 'application/http/HttpUtils.php';
 
 /**
  * Unitary tests for getIpAddressFromProxy()
  */
-class GetIpAdressFromProxyTest extends PHPUnit_Framework_TestCase
+class GetIpAdressFromProxyTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

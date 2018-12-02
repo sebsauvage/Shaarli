@@ -3,12 +3,14 @@
  * HttpUtils' tests
  */
 
-require_once 'application/HttpUtils.php';
+namespace Shaarli\Http;
+
+require_once 'application/http/HttpUtils.php';
 
 /**
  * Unitary tests for get_http_response()
  */
-class GetHttpUrlTest extends PHPUnit_Framework_TestCase
+class GetHttpUrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Get an invalid local URL
@@ -17,12 +19,12 @@ class GetHttpUrlTest extends PHPUnit_Framework_TestCase
     {
         // Local
         list($headers, $content) = get_http_response('/non/existent', 1);
-        $this->assertEquals('Invalid HTTP Url', $headers[0]);
+        $this->assertEquals('Invalid HTTP UrlUtils', $headers[0]);
         $this->assertFalse($content);
 
         // Non HTTP
         list($headers, $content) = get_http_response('ftp://save.tld/mysave', 1);
-        $this->assertEquals('Invalid HTTP Url', $headers[0]);
+        $this->assertEquals('Invalid HTTP UrlUtils', $headers[0]);
         $this->assertFalse($content);
     }
 

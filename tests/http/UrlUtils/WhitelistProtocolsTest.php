@@ -1,15 +1,15 @@
 <?php
 
-require_once 'application/Url.php';
+namespace Shaarli\Http;
 
-use Shaarli\Config\ConfigManager;
+require_once 'application/http/UrlUtils.php';
 
 /**
  * Class WhitelistProtocolsTest
  *
- * Test whitelist_protocols() function of Url.
+ * Test whitelist_protocols() function of UrlUtils.
  */
-class WhitelistProtocolsTest extends PHPUnit_Framework_TestCase
+class WhitelistProtocolsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test whitelist_protocols() on a note (relative URL).

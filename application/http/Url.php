@@ -206,7 +206,7 @@ class Url
     }
 
     /**
-     * Test if the Url is an HTTP one.
+     * Test if the UrlUtils is an HTTP one.
      *
      * @return true is HTTP, false otherwise.
      */

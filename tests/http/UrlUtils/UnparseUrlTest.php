@@ -1,14 +1,16 @@
 <?php
 /**
- * Unpares Url's tests
+ * Unpares UrlUtils's tests
  */
 
-require_once 'application/Url.php';
+namespace Shaarli\Http;
+
+require_once 'application/http/UrlUtils.php';
 
 /**
  * Unitary tests for unparse_url()
  */
-class UnparseUrlTest extends PHPUnit_Framework_TestCase
+class UnparseUrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Thanks for building nothing

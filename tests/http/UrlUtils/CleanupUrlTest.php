@@ -3,9 +3,11 @@
  * Unitary tests for cleanup_url()
  */
 
-require_once 'application/Url.php';
+namespace Shaarli\Http;
 
-class CleanupUrlTest extends PHPUnit_Framework_TestCase
+require_once 'application/http/UrlUtils.php';
+
+class CleanupUrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string reference URL

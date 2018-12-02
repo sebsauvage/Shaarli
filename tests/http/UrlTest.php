@@ -1,6 +1,6 @@
 <?php
 /**
- * Url's tests
+ * UrlUtils's tests
  */
 
 namespace Shaarli\Http;

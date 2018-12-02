@@ -28,7 +28,7 @@ function unparse_url($parsedUrl)
 /**
  * Removes undesired query parameters and fragments
  *
- * @param string url Url to be cleaned
+ * @param string url UrlUtils to be cleaned
  *
  * @return string the string representation of this URL after cleanup
  */
@@ -41,7 +41,7 @@ function cleanup_url($url)
 /**
  * Get URL scheme.
  *
- * @param string url Url for which the scheme is requested
+ * @param string url UrlUtils for which the scheme is requested
  *
  * @return mixed the URL scheme or false if none is provided.
  */

@@ -3,12 +3,14 @@
  * HttpUtils' tests
  */
 
-require_once 'application/HttpUtils.php';
+namespace Shaarli\Http;
+
+require_once 'application/http/HttpUtils.php';
 
 /**
  * Unitary tests for index_url()
  */
-class IndexUrlTest extends PHPUnit_Framework_TestCase
+class IndexUrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * If on the main page, remove "index.php" from the URL resource

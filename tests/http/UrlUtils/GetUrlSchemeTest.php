@@ -3,12 +3,14 @@
  * Unitary tests for get_url_scheme()
  */
 
-require_once 'application/Url.php';
+namespace Shaarli\Http;
 
-class GetUrlSchemeTest extends PHPUnit_Framework_TestCase
+require_once 'application/http/UrlUtils.php';
+
+class GetUrlSchemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Get empty scheme string for empty Url
+     * Get empty scheme string for empty UrlUtils
      */
     public function testGetUrlSchemeEmpty()
     {
@@ -16,7 +18,7 @@ class GetUrlSchemeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get normal scheme of Url
+     * Get normal scheme of UrlUtils
      */
     public function testGetUrlScheme()
     {

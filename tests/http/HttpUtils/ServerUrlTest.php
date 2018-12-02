@@ -3,12 +3,14 @@
  * HttpUtils' tests
  */
 
-require_once 'application/HttpUtils.php';
+namespace Shaarli\Http;
+
+require_once 'application/http/HttpUtils.php';
 
 /**
  * Unitary tests for server_url()
  */
-class ServerUrlTest extends PHPUnit_Framework_TestCase
+class ServerUrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Detect if the server uses SSL

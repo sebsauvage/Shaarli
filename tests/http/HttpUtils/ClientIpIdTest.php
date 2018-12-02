@@ -3,12 +3,14 @@
  * HttpUtils' tests
  */
 
-require_once 'application/HttpUtils.php';
+namespace Shaarli\Http;
+
+require_once 'application/http/HttpUtils.php';
 
 /**
  * Unitary tests for client_ip_id()
  */
-class ClientIpIdTest extends PHPUnit_Framework_TestCase
+class ClientIpIdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Get a remote client ID based on its IP
