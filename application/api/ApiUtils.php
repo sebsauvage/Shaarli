@@ -1,7 +1,7 @@
 <?php
 namespace Shaarli\Api;
 
-use Shaarli\Base64Url;
+use Shaarli\Http\Base64Url;
 use Shaarli\Api\Exceptions\ApiAuthorizationException;
 
 /**
@@ -12,7 +12,7 @@ class ApiUtils
     /**
      * Validates a JWT token authenticity.
      *
-     * @param string $token JWT token extracted from the headers.
+     * @param string $token  JWT token extracted from the headers.
      * @param string $secret API secret set in the settings.
      *
      * @throws ApiAuthorizationException the token is not valid.
@@ -50,7 +50,7 @@ class ApiUtils
     /**
      * Format a Link for the REST API.
      *
-     * @param array $link Link data read from the datastore.
+     * @param array  $link     Link data read from the datastore.
      * @param string $indexUrl Shaarli's index URL (used for relative URL).
      *
      * @return array Link data formatted for the REST API.

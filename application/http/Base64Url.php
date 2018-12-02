@@ -1,6 +1,6 @@
 <?php
 
-namespace Shaarli;
+namespace Shaarli\Http;
 
 /**
  * URL-safe Base64 operations

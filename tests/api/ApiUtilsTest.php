@@ -2,7 +2,7 @@
 
 namespace Shaarli\Api;
 
-use Shaarli\Base64Url;
+use Shaarli\Http\Base64Url;
 
 /**
  * Class ApiUtilsTest
