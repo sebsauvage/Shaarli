@@ -111,7 +111,7 @@ class ConfigJsonTest extends \PHPUnit_Framework_TestCase
     /**
      * Write to invalid path.
      *
-     * @expectedException \IOException
+     * @expectedException \Shaarli\Exceptions\IOException
      */
     public function testWriteInvalidArray()
     {
@@ -122,7 +122,7 @@ class ConfigJsonTest extends \PHPUnit_Framework_TestCase
     /**
      * Write to invalid path.
      *
-     * @expectedException \IOException
+     * @expectedException \Shaarli\Exceptions\IOException
      */
     public function testWriteInvalidBlank()
     {

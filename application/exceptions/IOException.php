@@ -1,4 +1,7 @@
 <?php
+namespace Shaarli\Exceptions;
+
+use Exception;
 
 /**
  * Exception class thrown when a filesystem access failure happens
@@ -17,6 +20,6 @@ class IOException extends Exception
     {
         $this->path = $path;
         $this->message = empty($message) ? t('Error accessing') : $message;
-        $this->message .= ' "' . $this->path .'"';
+        $this->message .= ' "' . $this->path . '"';
     }
 }

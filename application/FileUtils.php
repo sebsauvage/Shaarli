@@ -1,5 +1,7 @@
 <?php
 
+use Shaarli\Exceptions\IOException;
+
 require_once 'exceptions/IOException.php';
 
 /**

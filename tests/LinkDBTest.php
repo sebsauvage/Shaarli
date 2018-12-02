@@ -3,6 +3,8 @@
  * Link datastore tests
  */
 
+use Shaarli\Exceptions\IOException;
+
 require_once 'application/Cache.php';
 require_once 'application/FileUtils.php';
 require_once 'application/LinkDB.php';
@@ -100,7 +102,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
     /**
      * Attempt to instantiate a LinkDB whereas the datastore is not writable
      *
-     * @expectedException              IOException
+     * @expectedException              Shaarli\Exceptions\IOException
      * @expectedExceptionMessageRegExp /Error accessing "null"/
      */
     public function testConstructDatastoreNotWriteable()

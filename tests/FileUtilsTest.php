@@ -1,5 +1,7 @@
 <?php
 
+use Shaarli\Exceptions\IOException;
+
 require_once 'application/FileUtils.php';
 
 /**
@@ -48,7 +50,7 @@ class FileUtilsTest extends PHPUnit_Framework_TestCase
     /**
      * File not writable: raise an exception.
      *
-     * @expectedException IOException
+     * @expectedException Shaarli\Exceptions\IOException
      * @expectedExceptionMessage Error accessing "sandbox/flat.db"
      */
     public function testWriteWithoutPermission()
@@ -61,7 +63,7 @@ class FileUtilsTest extends PHPUnit_Framework_TestCase
     /**
      * Folder non existent: raise an exception.
      *
-     * @expectedException IOException
+     * @expectedException Shaarli\Exceptions\IOException
      * @expectedExceptionMessage Error accessing "nopefolder"
      */
     public function testWriteFolderDoesNotExist()
@@ -72,7 +74,7 @@ class FileUtilsTest extends PHPUnit_Framework_TestCase
     /**
      * Folder non writable: raise an exception.
      *
-     * @expectedException IOException
+     * @expectedException Shaarli\Exceptions\IOException
      * @expectedExceptionMessage Error accessing "sandbox"
      */
     public function testWriteFolderPermission()
