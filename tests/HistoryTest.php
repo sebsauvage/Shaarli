@@ -4,7 +4,6 @@ namespace Shaarli;
 
 use DateTime;
 use Exception;
-use FileUtils;
 
 class HistoryTest extends \PHPUnit\Framework\TestCase
 {

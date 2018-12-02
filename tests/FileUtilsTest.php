@@ -1,15 +1,15 @@
 <?php
 
-use Shaarli\Exceptions\IOException;
+namespace Shaarli;
 
-require_once 'application/FileUtils.php';
+use Exception;
 
 /**
  * Class FileUtilsTest
  *
  * Test file utility class.
  */
-class FileUtilsTest extends PHPUnit_Framework_TestCase
+class FileUtilsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string Test file path.

@@ -1,6 +1,7 @@
 <?php
 
 use Shaarli\Exceptions\IOException;
+use Shaarli\FileUtils;
 
 /**
  * Data storage for links.

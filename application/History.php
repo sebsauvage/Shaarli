@@ -3,7 +3,6 @@ namespace Shaarli;
 
 use DateTime;
 use Exception;
-use FileUtils;
 
 /**
  * Class History
@@ -71,7 +70,7 @@ class History
      * History constructor.
      *
      * @param string $historyFilePath History file path.
-     * @param int    $retentionTime   History content rentention time in seconds.
+     * @param int    $retentionTime   History content retention time in seconds.
      *
      * @throws Exception if something goes wrong.
      */
@@ -146,7 +145,7 @@ class History
      * Save a new event and write it in the history file.
      *
      * @param string $status Event key, should be defined as constant.
-     * @param mixed $id Event item identifier (e.g. link ID).
+     * @param mixed  $id     Event item identifier (e.g. link ID).
      */
     protected function addEvent($status, $id = null)
     {
