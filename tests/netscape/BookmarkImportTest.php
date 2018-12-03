@@ -1,7 +1,7 @@
 <?php
+namespace Shaarli\Netscape;
 
-require_once 'application/NetscapeBookmarkUtils.php';
-
+use DateTime;
 use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
@@ -28,7 +28,7 @@ function file2array($filename)
 /**
  * Netscape bookmark import
  */
-class BookmarkImportTest extends PHPUnit_Framework_TestCase
+class BookmarkImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string datastore to test write operations

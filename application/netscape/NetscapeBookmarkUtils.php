@@ -1,5 +1,10 @@
 <?php
 
+namespace Shaarli\Netscape;
+
+use DateTime;
+use DateTimeZone;
+use Exception;
 use Psr\Log\LogLevel;
 use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
@@ -33,8 +38,8 @@ class NetscapeBookmarkUtils
     public static function filterAndFormat($linkDb, $selection, $prependNoteUrl, $indexUrl)
     {
         // see tpl/export.html for possible values
-        if (! in_array($selection, array('all', 'public', 'private'))) {
-            throw new Exception(t('Invalid export selection:') .' "'.$selection.'"');
+        if (!in_array($selection, array('all', 'public', 'private'))) {
+            throw new Exception(t('Invalid export selection:') . ' "' . $selection . '"');
         }
 
         $bookmarkLinks = array();
@@ -86,7 +91,7 @@ class NetscapeBookmarkUtils
             $status .= vsprintf(
                 t(
                     'was successfully processed in %d seconds: '
-                    .'%d links imported, %d links overwritten, %d links skipped.'
+                    . '%d links imported, %d links overwritten, %d links skipped.'
                 ),
                 [$duration, $importCount, $overwriteCount, $skipCount]
             );
@@ -97,11 +102,11 @@ class NetscapeBookmarkUtils
     /**
      * Imports Web bookmarks from an uploaded Netscape bookmark dump
      *
-     * @param array         $post      Server $_POST parameters
-     * @param array         $files     Server $_FILES parameters
-     * @param LinkDB        $linkDb    Loaded LinkDB instance
-     * @param ConfigManager $conf      instance
-     * @param History       $history   History instance
+     * @param array         $post    Server $_POST parameters
+     * @param array         $files   Server $_FILES parameters
+     * @param LinkDB        $linkDb  Loaded LinkDB instance
+     * @param ConfigManager $conf    instance
+     * @param History       $history History instance
      *
      * @return string Summary of the bookmark import status
      */
@@ -117,7 +122,7 @@ class NetscapeBookmarkUtils
         }
 
         // Overwrite existing links?
-        $overwrite = ! empty($post['overwrite']);
+        $overwrite = !empty($post['overwrite']);
 
         // Add tags to all imported links?
         if (empty($post['default_tags'])) {
@@ -140,7 +145,7 @@ class NetscapeBookmarkUtils
         );
         $logger = new Logger(
             $conf->get('resource.data_dir'),
-            ! $conf->get('dev.debug') ? LogLevel::INFO : LogLevel::DEBUG,
+            !$conf->get('dev.debug') ? LogLevel::INFO : LogLevel::DEBUG,
             [
                 'prefix' => 'import.',
                 'extension' => 'log',
@@ -195,7 +200,7 @@ class NetscapeBookmarkUtils
             }
 
             // Add a new link - @ used for UNIX timestamps
-            $newLinkDate = new DateTime('@'.strval($bkm['time']));
+            $newLinkDate = new DateTime('@' . strval($bkm['time']));
             $newLinkDate->setTimezone(new DateTimeZone(date_default_timezone_get()));
             $newLink['created'] = $newLinkDate;
             $newLink['id'] = $linkDb->getNextId();

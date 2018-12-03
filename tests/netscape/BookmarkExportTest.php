@@ -1,13 +1,14 @@
 <?php
+namespace Shaarli\Netscape;
 
 use Shaarli\Bookmark\LinkDB;
 
-require_once 'application/NetscapeBookmarkUtils.php';
+require_once 'tests/utils/ReferenceLinkDB.php';
 
 /**
  * Netscape bookmark export
  */
-class BookmarkExportTest extends PHPUnit_Framework_TestCase
+class BookmarkExportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string datastore to test write operations
@@ -15,7 +16,7 @@ class BookmarkExportTest extends PHPUnit_Framework_TestCase
     protected static $testDatastore = 'sandbox/datastore.php';
 
     /**
-     * @var ReferenceLinkDB instance.
+     * @var \ReferenceLinkDB instance.
      */
     protected static $refDb = null;
 
@@ -29,7 +30,7 @@ class BookmarkExportTest extends PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$refDb = new ReferenceLinkDB();
+        self::$refDb = new \ReferenceLinkDB();
         self::$refDb->write(self::$testDatastore);
         self::$linkDb = new LinkDB(self::$testDatastore, true, false);
     }
