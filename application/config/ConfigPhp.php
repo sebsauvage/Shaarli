@@ -27,7 +27,7 @@ class ConfigPhp implements ConfigIO
     /**
      * Map legacy config keys with the new ones.
      * If ConfigPhp is used, getting <newkey> will actually look for <legacykey>.
-     * The Updater will use this array to transform keys when switching to JSON.
+     * The updater will use this array to transform keys when switching to JSON.
      *
      * @var array current key => legacy key.
      */

@@ -62,6 +62,7 @@ require_once 'application/config/ConfigPlugin.php';
 require_once 'application/feed/Cache.php';
 require_once 'application/http/HttpUtils.php';
 require_once 'application/http/UrlUtils.php';
+require_once 'application/updater/UpdaterUtils.php';
 require_once 'application/FileUtils.php';
 require_once 'application/History.php';
 require_once 'application/NetscapeBookmarkUtils.php';
@@ -69,7 +70,6 @@ require_once 'application/TimeZone.php';
 require_once 'application/Utils.php';
 require_once 'application/PluginManager.php';
 require_once 'application/Router.php';
-require_once 'application/Updater.php';
 
 use \Shaarli\Bookmark\Exception\LinkNotFoundException;
 use \Shaarli\Bookmark\LinkDB;
@@ -83,6 +83,7 @@ use \Shaarli\Render\ThemeUtils;
 use \Shaarli\Security\LoginManager;
 use \Shaarli\Security\SessionManager;
 use \Shaarli\Thumbnailer;
+use Shaarli\Updater\Updater;
 
 // Ensure the PHP version is supported
 try {

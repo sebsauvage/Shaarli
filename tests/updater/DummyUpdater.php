@@ -1,12 +1,15 @@
 <?php
+namespace Shaarli\Updater;
 
+use Exception;
+use ReflectionClass;
+use ReflectionMethod;
 use Shaarli\Bookmark\LinkDB;
-
-require_once 'application/Updater.php';
+use Shaarli\Config\ConfigManager;
 
 /**
  * Class DummyUpdater.
- * Extends Updater to add update method designed for unit tests.
+ * Extends updater to add update method designed for unit tests.
  */
 class DummyUpdater extends Updater
 {

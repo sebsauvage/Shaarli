@@ -1,15 +1,24 @@
 <?php
 
+namespace Shaarli\Updater;
+
+use ApplicationUtils;
+use Exception;
+use RainTPL;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
 use Shaarli\Bookmark\LinkDB;
 use Shaarli\Bookmark\LinkFilter;
 use Shaarli\Config\ConfigJson;
-use Shaarli\Config\ConfigPhp;
 use Shaarli\Config\ConfigManager;
+use Shaarli\Config\ConfigPhp;
 use Shaarli\Exceptions\IOException;
 use Shaarli\Thumbnailer;
+use Shaarli\Updater\Exception\UpdaterException;
 
 /**
- * Class Updater.
+ * Class updater.
  * Used to update stuff when a new Shaarli's version is reached.
  * Update methods are ran only once, and the stored in a JSON file.
  */
@@ -87,12 +96,12 @@ class Updater
         }
 
         if ($this->methods === null) {
-            throw new UpdaterException(t('Couldn\'t retrieve Updater class methods.'));
+            throw new UpdaterException(t('Couldn\'t retrieve updater class methods.'));
         }
 
         foreach ($this->methods as $method) {
             // Not an update method or already done, pass.
-            if (! startsWith($method->getName(), 'updateMethod')
+            if (!startsWith($method->getName(), 'updateMethod')
                 || in_array($method->getName(), $this->doneUpdates)
             ) {
                 continue;
@@ -143,7 +152,7 @@ class Updater
                 }
             }
             $this->conf->write($this->isLoggedIn);
-            unlink($this->conf->get('resource.data_dir').'/options.php');
+            unlink($this->conf->get('resource.data_dir') . '/options.php');
         }
 
         return true;
@@ -178,10 +187,10 @@ class Updater
         $subConfig = array('config', 'plugins');
         foreach ($subConfig as $sub) {
             foreach ($oldConfig[$sub] as $key => $value) {
-                if (isset($legacyMap[$sub .'.'. $key])) {
-                    $configKey = $legacyMap[$sub .'.'. $key];
+                if (isset($legacyMap[$sub . '.' . $key])) {
+                    $configKey = $legacyMap[$sub . '.' . $key];
                 } else {
-                    $configKey = $sub .'.'. $key;
+                    $configKey = $sub . '.' . $key;
                 }
                 $this->conf->set($configKey, $value);
             }
@@ -237,7 +246,7 @@ class Updater
             return true;
         }
 
-        $save = $this->conf->get('resource.data_dir') .'/datastore.'. date('YmdHis') .'.php';
+        $save = $this->conf->get('resource.data_dir') . '/datastore.' . date('YmdHis') . '.php';
         copy($this->conf->get('resource.datastore'), $save);
 
         $links = array();
@@ -311,7 +320,7 @@ class Updater
         // We run the update only if this folder still contains the template files.
         $tplDir = $this->conf->get('resource.raintpl_tpl');
         $tplFile = $tplDir . '/linklist.html';
-        if (! file_exists($tplFile)) {
+        if (!file_exists($tplFile)) {
             return true;
         }
 
@@ -335,7 +344,7 @@ class Updater
      */
     public function updateMethodMoveUserCss()
     {
-        if (! is_file('inc/user.css')) {
+        if (!is_file('inc/user.css')) {
             return true;
         }
 
@@ -371,11 +380,11 @@ class Updater
      */
     public function updateMethodPiwikUrl()
     {
-        if (! $this->conf->exists('plugins.PIWIK_URL') || startsWith($this->conf->get('plugins.PIWIK_URL'), 'http')) {
+        if (!$this->conf->exists('plugins.PIWIK_URL') || startsWith($this->conf->get('plugins.PIWIK_URL'), 'http')) {
             return true;
         }
 
-        $this->conf->set('plugins.PIWIK_URL', 'http://'. $this->conf->get('plugins.PIWIK_URL'));
+        $this->conf->set('plugins.PIWIK_URL', 'http://' . $this->conf->get('plugins.PIWIK_URL'));
         $this->conf->write($this->isLoggedIn);
 
         return true;
@@ -485,11 +494,11 @@ class Updater
             return true;
         }
 
-        if (! $this->conf->exists('general.download_max_size')) {
-            $this->conf->set('general.download_max_size', 1024*1024*4);
+        if (!$this->conf->exists('general.download_max_size')) {
+            $this->conf->set('general.download_max_size', 1024 * 1024 * 4);
         }
 
-        if (! $this->conf->exists('general.download_timeout')) {
+        if (!$this->conf->exists('general.download_timeout')) {
             $this->conf->set('general.download_timeout', 30);
         }
 
@@ -540,98 +549,5 @@ class Updater
         $this->linkDB->save($this->conf->get('resource.page_cache'));
 
         return true;
-    }
-}
-
-/**
- * Class UpdaterException.
- */
-class UpdaterException extends Exception
-{
-    /**
-     * @var string Method where the error occurred.
-     */
-    protected $method;
-
-    /**
-     * @var Exception The parent exception.
-     */
-    protected $previous;
-
-    /**
-     * Constructor.
-     *
-     * @param string         $message  Force the error message if set.
-     * @param string         $method   Method where the error occurred.
-     * @param Exception|bool $previous Parent exception.
-     */
-    public function __construct($message = '', $method = '', $previous = false)
-    {
-        $this->method = $method;
-        $this->previous = $previous;
-        $this->message = $this->buildMessage($message);
-    }
-
-    /**
-     * Build the exception error message.
-     *
-     * @param string $message Optional given error message.
-     *
-     * @return string The built error message.
-     */
-    private function buildMessage($message)
-    {
-        $out = '';
-        if (! empty($message)) {
-            $out .= $message . PHP_EOL;
-        }
-
-        if (! empty($this->method)) {
-            $out .= t('An error occurred while running the update ') . $this->method . PHP_EOL;
-        }
-
-        if (! empty($this->previous)) {
-            $out .= '  '. $this->previous->getMessage();
-        }
-
-        return $out;
-    }
-}
-
-/**
- * Read the updates file, and return already done updates.
- *
- * @param string $updatesFilepath Updates file path.
- *
- * @return array Already done update methods.
- */
-function read_updates_file($updatesFilepath)
-{
-    if (! empty($updatesFilepath) && is_file($updatesFilepath)) {
-        $content = file_get_contents($updatesFilepath);
-        if (! empty($content)) {
-            return explode(';', $content);
-        }
-    }
-    return array();
-}
-
-/**
- * Write updates file.
- *
- * @param string $updatesFilepath Updates file path.
- * @param array  $updates         Updates array to write.
- *
- * @throws Exception Couldn't write version number.
- */
-function write_updates_file($updatesFilepath, $updates)
-{
-    if (empty($updatesFilepath)) {
-        throw new Exception(t('Updates file path is not set, can\'t write updates.'));
-    }
-
-    $res = file_put_contents($updatesFilepath, implode(';', $updates));
-    if ($res === false) {
-        throw new Exception(t('Unable to write updates in '. $updatesFilepath . '.'));
     }
 }

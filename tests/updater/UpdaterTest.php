@@ -1,19 +1,24 @@
 <?php
+namespace Shaarli\Updater;
 
+use DateTime;
+use Exception;
 use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigJson;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Config\ConfigPhp;
 use Shaarli\Thumbnailer;
 
-require_once 'tests/Updater/DummyUpdater.php';
+require_once 'application/updater/UpdaterUtils.php';
+require_once 'tests/updater/DummyUpdater.php';
+require_once 'tests/utils/ReferenceLinkDB.php';
 require_once 'inc/rain.tpl.class.php';
 
 /**
  * Class UpdaterTest.
- * Runs unit tests against the Updater class.
+ * Runs unit tests against the updater class.
  */
-class UpdaterTest extends PHPUnit_Framework_TestCase
+class UpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string Path to test datastore.
@@ -155,7 +160,7 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
     /**
      * Test Update failed.
      *
-     * @expectedException UpdaterException
+     * @expectedException \Exception
      */
     public function testUpdateFailed()
     {
@@ -181,17 +186,17 @@ class UpdaterTest extends PHPUnit_Framework_TestCase
         $this->conf->setConfigFile('tests/utils/config/configPhp');
         $this->conf->reset();
 
-        $optionsFile = 'tests/Updater/options.php';
+        $optionsFile = 'tests/updater/options.php';
         $options = '<?php
 $GLOBALS[\'privateLinkByDefault\'] = true;';
         file_put_contents($optionsFile, $options);
 
         // tmp config file.
-        $this->conf->setConfigFile('tests/Updater/config');
+        $this->conf->setConfigFile('tests/updater/config');
 
         // merge configs
         $updater = new Updater(array(), array(), $this->conf, true);
-        // This writes a new config file in tests/Updater/config.php
+        // This writes a new config file in tests/updater/config.php
         $updater->updateMethodMergeDeprecatedConfigFile();
 
         // make sure updated field is changed
@@ -218,7 +223,7 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
      */
     public function testRenameDashTags()
     {
-        $refDB = new ReferenceLinkDB();
+        $refDB = new \ReferenceLinkDB();
         $refDB->write(self::$testDatastore);
         $linkDB = new LinkDB(self::$testDatastore, true, false);
 
@@ -364,7 +369,7 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
                 'private' => true,
             ),
         );
-        $refDB = new ReferenceLinkDB();
+        $refDB = new \ReferenceLinkDB();
         $refDB->setLinks($links);
         $refDB->write(self::$testDatastore);
         $linkDB = new LinkDB(self::$testDatastore, true, false);
@@ -428,7 +433,7 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
      */
     public function testDatastoreIdsNothingToDo()
     {
-        $refDB = new ReferenceLinkDB();
+        $refDB = new \ReferenceLinkDB();
         $refDB->write(self::$testDatastore);
         $linkDB = new LinkDB(self::$testDatastore, true, false);
 
@@ -765,7 +770,7 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
             1 => ['id' => 1] + $blank,
             2 => ['id' => 2] + $blank,
         ];
-        $refDB = new ReferenceLinkDB();
+        $refDB = new \ReferenceLinkDB();
         $refDB->setLinks($links);
         $refDB->write(self::$testDatastore);
         $linkDB = new LinkDB(self::$testDatastore, true, false);
@@ -796,7 +801,7 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
             1 => ['id' => 1, 'sticky' => true] + $blank,
             2 => ['id' => 2] + $blank,
         ];
-        $refDB = new ReferenceLinkDB();
+        $refDB = new \ReferenceLinkDB();
         $refDB->setLinks($links);
         $refDB->write(self::$testDatastore);
         $linkDB = new LinkDB(self::$testDatastore, true, false);

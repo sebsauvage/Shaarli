@@ -46,7 +46,9 @@
             "Shaarli\\Feed\\": "application/feed",
             "Shaarli\\Http\\": "application/http",
             "Shaarli\\Render\\": "application/render",
-            "Shaarli\\Security\\": "application/security"
+            "Shaarli\\Security\\": "application/security",
+            "Shaarli\\Updater\\": "application/updater",
+            "Shaarli\\Updater\\Exception\\": "application/updater/exception"
         }
     }
 }
