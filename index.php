@@ -56,7 +56,6 @@ require_once 'inc/rain.tpl.class.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
 // Shaarli library
-require_once 'application/ApplicationUtils.php';
 require_once 'application/bookmark/LinkUtils.php';
 require_once 'application/config/ConfigPlugin.php';
 require_once 'application/feed/Cache.php';
@@ -71,6 +70,7 @@ require_once 'application/Utils.php';
 require_once 'application/PluginManager.php';
 require_once 'application/Router.php';
 
+use \Shaarli\ApplicationUtils;
 use \Shaarli\Bookmark\Exception\LinkNotFoundException;
 use \Shaarli\Bookmark\LinkDB;
 use \Shaarli\Config\ConfigManager;
@@ -83,7 +83,7 @@ use \Shaarli\Render\ThemeUtils;
 use \Shaarli\Security\LoginManager;
 use \Shaarli\Security\SessionManager;
 use \Shaarli\Thumbnailer;
-use Shaarli\Updater\Updater;
+use \Shaarli\Updater\Updater;
 
 // Ensure the PHP version is supported
 try {

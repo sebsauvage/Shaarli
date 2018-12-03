@@ -2,7 +2,7 @@
 
 namespace Shaarli\Render;
 
-use ApplicationUtils;
+use Shaarli\ApplicationUtils;
 use Exception;
 use Shaarli\Bookmark\LinkDB;
 use RainTPL;

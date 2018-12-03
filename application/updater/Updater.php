@@ -2,7 +2,7 @@
 
 namespace Shaarli\Updater;
 
-use ApplicationUtils;
+use Shaarli\ApplicationUtils;
 use Exception;
 use RainTPL;
 use ReflectionClass;
