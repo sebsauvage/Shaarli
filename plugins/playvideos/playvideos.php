@@ -6,6 +6,7 @@
  * Note: this plugin adds jQuery.
  */
 
+use Shaarli\Plugin\PluginManager;
 use Shaarli\Router;
 
 /**

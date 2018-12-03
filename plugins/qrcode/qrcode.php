@@ -5,6 +5,7 @@
  * Display a QRCode icon in link list.
  */
 
+use Shaarli\Plugin\PluginManager;
 use Shaarli\Router;
 
 /**

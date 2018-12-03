@@ -4,6 +4,8 @@
  * PluginArchiveorgTest.php
  */
 
+use Shaarli\Plugin\PluginManager;
+
 require_once 'plugins/archiveorg/archiveorg.php';
 
 /**

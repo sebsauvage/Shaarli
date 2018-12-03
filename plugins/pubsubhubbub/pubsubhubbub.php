@@ -12,6 +12,7 @@
 use pubsubhubbub\publisher\Publisher;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Feed\FeedBuilder;
+use Shaarli\Plugin\PluginManager;
 use Shaarli\Router;
 
 /**

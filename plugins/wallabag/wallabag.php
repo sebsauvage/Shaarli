@@ -6,6 +6,7 @@
 
 require_once 'WallabagInstance.php';
 use Shaarli\Config\ConfigManager;
+use Shaarli\Plugin\PluginManager;
 
 /**
  * Init function, return an error if the server is not set.

@@ -1,5 +1,6 @@
 <?php
 use Shaarli\Config\ConfigManager;
+use Shaarli\Plugin\PluginManager;
 
 /**
  * PluginMarkdownTest.php

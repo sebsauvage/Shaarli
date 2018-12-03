@@ -65,7 +65,6 @@ require_once 'application/updater/UpdaterUtils.php';
 require_once 'application/FileUtils.php';
 require_once 'application/TimeZone.php';
 require_once 'application/Utils.php';
-require_once 'application/PluginManager.php';
 
 use \Shaarli\ApplicationUtils;
 use \Shaarli\Bookmark\Exception\LinkNotFoundException;
@@ -76,6 +75,7 @@ use \Shaarli\Feed\FeedBuilder;
 use \Shaarli\History;
 use \Shaarli\Languages;
 use \Shaarli\Netscape\NetscapeBookmarkUtils;
+use \Shaarli\Plugin\PluginManager;
 use \Shaarli\Render\PageBuilder;
 use \Shaarli\Render\ThemeUtils;
 use \Shaarli\Router;

@@ -1,4 +1,8 @@
 <?php
+namespace Shaarli\Plugin;
+
+use Shaarli\Config\ConfigManager;
+use Shaarli\Plugin\Exception\PluginFileNotFoundException;
 
 /**
  * Class PluginManager
@@ -9,12 +13,14 @@ class PluginManager
 {
     /**
      * List of authorized plugins from configuration file.
+     *
      * @var array $authorizedPlugins
      */
     private $authorizedPlugins;
 
     /**
      * List of loaded plugins.
+     *
      * @var array $loadedPlugins
      */
     private $loadedPlugins = array();
@@ -31,12 +37,14 @@ class PluginManager
 
     /**
      * Plugins subdirectory.
+     *
      * @var string $PLUGINS_PATH
      */
     public static $PLUGINS_PATH = 'plugins';
 
     /**
      * Plugins meta files extension.
+     *
      * @var string $META_EXT
      */
     public static $META_EXT = 'meta';
@@ -84,9 +92,9 @@ class PluginManager
     /**
      * Execute all plugins registered hook.
      *
-     * @param string        $hook   name of the hook to trigger.
-     * @param array         $data   list of data to manipulate passed by reference.
-     * @param array         $params additional parameters such as page target.
+     * @param string $hook   name of the hook to trigger.
+     * @param array  $data   list of data to manipulate passed by reference.
+     * @param array  $params additional parameters such as page target.
      *
      * @return void
      */
@@ -118,7 +126,7 @@ class PluginManager
      * @param string $pluginName plugin's name.
      *
      * @return void
-     * @throws PluginFileNotFoundException - plugin files not found.
+     * @throws \Shaarli\Plugin\Exception\PluginFileNotFoundException - plugin files not found.
      */
     private function loadPlugin($dir, $pluginName)
     {
@@ -204,8 +212,8 @@ class PluginManager
 
                 $metaData[$plugin]['parameters'][$param]['value'] = '';
                 // Optional parameter description in parameter.PARAM_NAME=
-                if (isset($metaData[$plugin]['parameter.'. $param])) {
-                    $metaData[$plugin]['parameters'][$param]['desc'] = t($metaData[$plugin]['parameter.'. $param]);
+                if (isset($metaData[$plugin]['parameter.' . $param])) {
+                    $metaData[$plugin]['parameters'][$param]['desc'] = t($metaData[$plugin]['parameter.' . $param]);
                 }
             }
         }
@@ -221,24 +229,5 @@ class PluginManager
     public function getErrors()
     {
         return $this->errors;
-    }
-}
-
-/**
- * Class PluginFileNotFoundException
- *
- * Raise when plugin files can't be found.
- */
-class PluginFileNotFoundException extends Exception
-{
-    /**
-     * Construct exception with plugin name.
-     * Generate message.
-     *
-     * @param string $pluginName name of the plugin not found
-     */
-    public function __construct($pluginName)
-    {
-        $this->message = sprintf(t('Plugin "%s" files not found.'), $pluginName);
     }
 }

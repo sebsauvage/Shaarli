@@ -4,6 +4,8 @@
  * Adds tracking code on each page.
  */
 
+use Shaarli\Plugin\PluginManager;
+
 /**
  * Initialization function.
  * It will be called when the plugin is loaded.

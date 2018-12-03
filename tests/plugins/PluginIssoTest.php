@@ -2,6 +2,7 @@
 
 use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
+use Shaarli\Plugin\PluginManager;
 
 require_once 'plugins/isso/isso.php';
 

@@ -1,16 +1,12 @@
 <?php
+namespace Shaarli\Plugin;
+
 use Shaarli\Config\ConfigManager;
-
-/**
- * Plugin Manager tests
- */
-
-require_once 'application/PluginManager.php';
 
 /**
  * Unit tests for Plugins
  */
-class PluginManagerTest extends PHPUnit_Framework_TestCase
+class PluginManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Path to tests plugin.

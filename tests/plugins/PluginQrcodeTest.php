@@ -3,6 +3,7 @@
  * PluginQrcodeTest.php
  */
 
+use Shaarli\Plugin\PluginManager;
 use Shaarli\Router;
 
 require_once 'plugins/qrcode/qrcode.php';

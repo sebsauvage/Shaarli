@@ -1,5 +1,6 @@
 <?php
 use Shaarli\Config\ConfigManager;
+use Shaarli\Plugin\PluginManager;
 
 /**
  * PluginWallabagTest.php.php
@@ -11,7 +12,7 @@ require_once 'plugins/wallabag/wallabag.php';
  * Class PluginWallabagTest
  * Unit test for the Wallabag plugin
  */
-class PluginWallabagTest extends PHPUnit_Framework_TestCase
+class PluginWallabagTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Reset plugin path

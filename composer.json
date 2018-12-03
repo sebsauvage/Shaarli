@@ -46,6 +46,8 @@
             "Shaarli\\Feed\\": "application/feed",
             "Shaarli\\Http\\": "application/http",
             "Shaarli\\Netscape\\": "application/netscape",
+            "Shaarli\\Plugin\\": "application/plugin",
+            "Shaarli\\Plugin\\Exception\\": "application/plugin/exception",
             "Shaarli\\Render\\": "application/render",
             "Shaarli\\Security\\": "application/security",
             "Shaarli\\Updater\\": "application/updater",
