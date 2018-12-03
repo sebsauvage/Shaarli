@@ -5,6 +5,7 @@
  */
 
 use Shaarli\Config\ConfigManager;
+use Shaarli\Router;
 
 /**
  * Display an error everywhere if the plugin is enabled without configuration.

@@ -1,15 +1,10 @@
 <?php
-
-/**
- * Router tests
- */
-
-require_once 'application/Router.php';
+namespace Shaarli;
 
 /**
  * Unit tests for Router
  */
-class RouterTest extends PHPUnit_Framework_TestCase
+class RouterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test findPage: login page output.

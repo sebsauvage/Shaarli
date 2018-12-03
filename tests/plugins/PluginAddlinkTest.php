@@ -4,6 +4,8 @@
  * PluginPlayvideosTest.php
  */
 
+use Shaarli\Router;
+
 require_once 'plugins/addlink_toolbar/addlink_toolbar.php';
 require_once 'application/Router.php';
 

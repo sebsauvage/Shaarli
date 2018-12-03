@@ -7,6 +7,7 @@
  */
 
 use Shaarli\Config\ConfigManager;
+use Shaarli\Router;
 
 /*
  * If this tag is used on a shaare, the description won't be processed by Parsedown.

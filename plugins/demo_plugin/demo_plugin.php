@@ -15,6 +15,7 @@
  */
 
 use Shaarli\Config\ConfigManager;
+use Shaarli\Router;
 
 /**
  * In the footer hook, there is a working example of a translation extension for Shaarli.

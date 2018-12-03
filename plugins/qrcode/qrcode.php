@@ -5,6 +5,8 @@
  * Display a QRCode icon in link list.
  */
 
+use Shaarli\Router;
+
 /**
  * Add qrcode icon to link_plugin when rendering linklist.
  *
