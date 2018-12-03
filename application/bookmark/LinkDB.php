@@ -6,8 +6,8 @@ use ArrayAccess;
 use Countable;
 use DateTime;
 use Iterator;
-use LinkFilter;
-use LinkNotFoundException;
+use Shaarli\Bookmark\LinkFilter;
+use Shaarli\Bookmark\Exception\LinkNotFoundException;
 use Shaarli\Exceptions\IOException;
 use Shaarli\FileUtils;
 
@@ -107,10 +107,10 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      *
      * Checks if the datastore exists; else, attempts to create a dummy one.
      *
-     * @param string $datastore datastore file path.
-     * @param boolean $isLoggedIn is the user logged in?
-     * @param boolean $hidePublicLinks if true all links are private.
-     * @param string $redirector link redirector set in user settings.
+     * @param string  $datastore        datastore file path.
+     * @param boolean $isLoggedIn       is the user logged in?
+     * @param boolean $hidePublicLinks  if true all links are private.
+     * @param string  $redirector       link redirector set in user settings.
      * @param boolean $redirectorEncode Enable urlencode on redirected urls (default: true).
      */
     public function __construct(
@@ -426,12 +426,12 @@ You use the community supported version of the original Shaarli project, by Seba
     /**
      * Filter links according to search parameters.
      *
-     * @param array $filterRequest Search request content. Supported keys:
+     * @param array  $filterRequest  Search request content. Supported keys:
      *                                - searchtags: list of tags
      *                                - searchterm: term search
-     * @param bool $casesensitive Optional: Perform case sensitive filter
-     * @param string $visibility return only all/private/public links
-     * @param string $untaggedonly return only untagged links
+     * @param bool   $casesensitive  Optional: Perform case sensitive filter
+     * @param string $visibility     return only all/private/public links
+     * @param bool   $untaggedonly   return only untagged links
      *
      * @return array filtered links, all links if no suitable filter was provided.
      */
@@ -457,8 +457,8 @@ You use the community supported version of the original Shaarli project, by Seba
     /**
      * Returns the list tags appearing in the links with the given tags
      *
-     * @param array $filteringTags tags selecting the links to consider
-     * @param string $visibility process only all/private/public links
+     * @param array  $filteringTags tags selecting the links to consider
+     * @param string $visibility    process only all/private/public links
      *
      * @return array tag => linksCount
      */
@@ -500,7 +500,7 @@ You use the community supported version of the original Shaarli project, by Seba
      * Rename or delete a tag across all links.
      *
      * @param string $from Tag to rename
-     * @param string $to New tag. If none is provided, the from tag will be deleted
+     * @param string $to   New tag. If none is provided, the from tag will be deleted
      *
      * @return array|bool List of altered links or false on error
      */

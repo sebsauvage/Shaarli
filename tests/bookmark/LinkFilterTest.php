@@ -1,13 +1,14 @@
 <?php
 
-use Shaarli\Bookmark\LinkDB;
+namespace Shaarli\Bookmark;
 
-require_once 'application/LinkFilter.php';
+use Exception;
+use ReferenceLinkDB;
 
 /**
  * Class LinkFilterTest.
  */
-class LinkFilterTest extends PHPUnit_Framework_TestCase
+class LinkFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string Test datastore path.
@@ -29,7 +30,7 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
     protected static $linkDB;
 
     /**
-     * Instanciate linkFilter with ReferenceLinkDB data.
+     * Instantiate linkFilter with ReferenceLinkDB data.
      */
     public static function setUpBeforeClass()
     {
@@ -81,10 +82,14 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
             count(
                 self::$linkFilter->filter(
                     LinkFilter::$FILTER_TAG,
-                    /*$request=*/'',
-                    /*$casesensitive=*/false,
-                    /*$visibility=*/'all',
-                    /*$untaggedonly=*/true
+                    /*$request=*/
+                    '',
+                    /*$casesensitive=*/
+                    false,
+                    /*$visibility=*/
+                    'all',
+                    /*$untaggedonly=*/
+                    true
                 )
             )
         );
@@ -229,7 +234,7 @@ class LinkFilterTest extends PHPUnit_Framework_TestCase
     /**
      * No link for this hash
      *
-     * @expectedException LinkNotFoundException
+     * @expectedException \Shaarli\Bookmark\Exception\LinkNotFoundException
      */
     public function testFilterUnknownSmallHash()
     {

@@ -36,6 +36,7 @@
             "Shaarli\\Api\\Controllers\\": "application/api/controllers",
             "Shaarli\\Api\\Exceptions\\": "application/api/exceptions",
             "Shaarli\\Bookmark\\": "application/bookmark",
+            "Shaarli\\Bookmark\\Exception\\": "application/bookmark/exception",
             "Shaarli\\Config\\": "application/config/",
             "Shaarli\\Config\\Exception\\": "application/config/exception",
             "Shaarli\\Exceptions\\": "application/exceptions",

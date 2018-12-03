@@ -6,7 +6,7 @@
 namespace Shaarli\Bookmark;
 
 use DateTime;
-use LinkNotFoundException;
+use Shaarli\Bookmark\Exception\LinkNotFoundException;
 use ReferenceLinkDB;
 use ReflectionClass;
 use Shaarli;
@@ -457,7 +457,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     /**
      * Test filterHash() with an invalid smallhash.
      *
-     * @expectedException LinkNotFoundException
+     * @expectedException \Shaarli\Bookmark\Exception\LinkNotFoundException
      */
     public function testFilterHashInValid1()
     {
@@ -468,7 +468,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     /**
      * Test filterHash() with an empty smallhash.
      *
-     * @expectedException LinkNotFoundException
+     * @expectedException \Shaarli\Bookmark\Exception\LinkNotFoundException
      */
     public function testFilterHashInValid()
     {

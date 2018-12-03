@@ -1,6 +1,9 @@
 <?php
 
-use Shaarli\Bookmark\LinkDB;
+namespace Shaarli\Bookmark;
+
+use Exception;
+use Shaarli\Bookmark\Exception\LinkNotFoundException;
 
 /**
  * Class LinkFilter.
@@ -12,22 +15,22 @@ class LinkFilter
     /**
      * @var string permalinks.
      */
-    public static $FILTER_HASH   = 'permalink';
+    public static $FILTER_HASH = 'permalink';
 
     /**
      * @var string text search.
      */
-    public static $FILTER_TEXT   = 'fulltext';
+    public static $FILTER_TEXT = 'fulltext';
 
     /**
      * @var string tag filter.
      */
-    public static $FILTER_TAG    = 'tags';
+    public static $FILTER_TAG = 'tags';
 
     /**
      * @var string filter by day.
      */
-    public static $FILTER_DAY    = 'FILTER_DAY';
+    public static $FILTER_DAY = 'FILTER_DAY';
 
     /**
      * @var string Allowed characters for hashtags (regex syntax).
@@ -60,7 +63,7 @@ class LinkFilter
      */
     public function filter($type, $request, $casesensitive = false, $visibility = 'all', $untaggedonly = false)
     {
-        if (! in_array($visibility, ['all', 'public', 'private'])) {
+        if (!in_array($visibility, ['all', 'public', 'private'])) {
             $visibility = 'all';
         }
 
@@ -119,7 +122,7 @@ class LinkFilter
         foreach ($this->links as $key => $value) {
             if ($value['private'] && $visibility === 'private') {
                 $out[$key] = $value;
-            } elseif (! $value['private'] && $visibility === 'public') {
+            } elseif (!$value['private'] && $visibility === 'public') {
                 $out[$key] = $value;
             }
         }
@@ -134,7 +137,7 @@ class LinkFilter
      *
      * @return array $filtered array containing permalink data.
      *
-     * @throws LinkNotFoundException if the smallhash doesn't match any link.
+     * @throws \Shaarli\Bookmark\Exception\LinkNotFoundException if the smallhash doesn't match any link.
      */
     private function filterSmallHash($smallHash)
     {
@@ -171,7 +174,7 @@ class LinkFilter
      *  - see https://github.com/shaarli/Shaarli/issues/75 for examples
      *
      * @param string $searchterms search query.
-     * @param string $visibility Optional: return only all/private/public links.
+     * @param string $visibility  Optional: return only all/private/public links.
      *
      * @return array search results.
      */
@@ -209,7 +212,7 @@ class LinkFilter
         foreach ($this->links as $id => $link) {
             // ignore non private links when 'privatonly' is on.
             if ($visibility !== 'all') {
-                if (! $link['private'] && $visibility === 'private') {
+                if (!$link['private'] && $visibility === 'private') {
                     continue;
                 } elseif ($link['private'] && $visibility === 'public') {
                     continue;
@@ -252,7 +255,9 @@ class LinkFilter
 
     /**
      * generate a regex fragment out of a tag
+     *
      * @param string $tag to to generate regexs from. may start with '-' to negate, contain '*' as wildcard
+     *
      * @return string generated regex fragment
      */
     private static function tag2regex($tag)
@@ -336,7 +341,7 @@ class LinkFilter
             // check level of visibility
             // ignore non private links when 'privateonly' is on.
             if ($visibility !== 'all') {
-                if (! $link['private'] && $visibility === 'private') {
+                if (!$link['private'] && $visibility === 'private') {
                     continue;
                 } elseif ($link['private'] && $visibility === 'public') {
                     continue;
@@ -379,7 +384,7 @@ class LinkFilter
         $filtered = [];
         foreach ($this->links as $key => $link) {
             if ($visibility !== 'all') {
-                if (! $link['private'] && $visibility === 'private') {
+                if (!$link['private'] && $visibility === 'private') {
                     continue;
                 } elseif ($link['private'] && $visibility === 'public') {
                     continue;
@@ -408,7 +413,7 @@ class LinkFilter
      */
     public function filterDay($day)
     {
-        if (! checkDateFormat('Ymd', $day)) {
+        if (!checkDateFormat('Ymd', $day)) {
             throw new Exception('Invalid date format');
         }
 
@@ -440,16 +445,5 @@ class LinkFilter
         $tagsOut = str_replace(',', ' ', $tagsOut);
 
         return preg_split('/\s+/', $tagsOut, -1, PREG_SPLIT_NO_EMPTY);
-    }
-}
-
-class LinkNotFoundException extends Exception
-{
-    /**
-     * LinkNotFoundException constructor.
-     */
-    public function __construct()
-    {
-        $this->message =  t('The link you are trying to reach does not exist or has been deleted.');
     }
 }
