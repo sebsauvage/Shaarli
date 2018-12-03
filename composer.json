@@ -29,6 +29,9 @@
         "phpunit/phpunit": "^5.0",
         "squizlabs/php_codesniffer": "2.*"
     },
+    "suggest": {
+        "ext-curl": "*"
+    },
     "autoload": {
         "psr-4": {
             "Shaarli\\": "application",
