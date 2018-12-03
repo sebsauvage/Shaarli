@@ -1,11 +1,15 @@
 <?php
 
-require_once 'application/LinkUtils.php';
+namespace Shaarli\Bookmark;
+
+use ReferenceLinkDB;
+
+require_once 'tests/utils/CurlUtils.php';
 
 /**
-* Class LinkUtilsTest.
-*/
-class LinkUtilsTest extends PHPUnit_Framework_TestCase
+ * Class LinkUtilsTest.
+ */
+class LinkUtilsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test html_extract_title() when the title is found.
@@ -13,9 +17,9 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
     public function testHtmlExtractExistentTitle()
     {
         $title = 'Read me please.';
-        $html = '<html><meta>stuff</meta><title>'. $title .'</title></html>';
+        $html = '<html><meta>stuff</meta><title>' . $title . '</title></html>';
         $this->assertEquals($title, html_extract_title($html));
-        $html = '<html><title>'. $title .'</title>blabla<title>another</title></html>';
+        $html = '<html><title>' . $title . '</title>blabla<title>another</title></html>';
         $this->assertEquals($title, html_extract_title($html));
     }
 
@@ -34,7 +38,7 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
     public function testHeadersExtractExistentCharset()
     {
         $charset = 'x-MacCroatian';
-        $headers = 'text/html; charset='. $charset;
+        $headers = 'text/html; charset=' . $charset;
         $this->assertEquals(strtolower($charset), header_extract_charset($headers));
     }
 
@@ -56,7 +60,7 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
     public function testHtmlExtractExistentCharset()
     {
         $charset = 'x-MacCroatian';
-        $html = '<html><meta>stuff2</meta><meta charset="'. $charset .'"/></html>';
+        $html = '<html><meta>stuff2</meta><meta charset="' . $charset . '"/></html>';
         $this->assertEquals(strtolower($charset), html_extract_charset($html));
     }
 
@@ -84,8 +88,8 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
             'Content-Type: text/html; charset=utf-8',
             'Status: 200 OK',
             'end' => 'th=device-width">'
-            .'<title>Refactoring · GitHub</title>'
-            .'<link rel="search" type="application/opensea',
+                . '<title>Refactoring · GitHub</title>'
+                . '<link rel="search" type="application/opensea',
             '<title>ignored</title>',
         ];
         foreach ($data as $key => $line) {
@@ -109,8 +113,8 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
         $data = [
             'HTTP/1.1 200 OK',
             'end' => 'th=device-width">'
-            .'<title>Refactoring · GitHub</title>'
-            .'<link rel="search" type="application/opensea',
+                . '<title>Refactoring · GitHub</title>'
+                . '<link rel="search" type="application/opensea',
             '<title>ignored</title>',
         ];
         foreach ($data as $key => $line) {
@@ -131,8 +135,8 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
             'HTTP/1.1 200 OK',
             '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
             'end' => 'th=device-width">'
-            .'<title>Refactoring · GitHub</title>'
-            .'<link rel="search" type="application/opensea',
+                . '<title>Refactoring · GitHub</title>'
+                . '<link rel="search" type="application/opensea',
             '<title>ignored</title>',
         ];
         foreach ($data as $key => $line) {
@@ -218,19 +222,19 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
     {
         $text = 'stuff http://hello.there/is=someone#here otherstuff';
         $expectedText = 'stuff <a href="http://hello.there/is=someone#here">'
-            .'http://hello.there/is=someone#here</a> otherstuff';
+            . 'http://hello.there/is=someone#here</a> otherstuff';
         $processedText = text2clickable($text, '');
         $this->assertEquals($expectedText, $processedText);
 
         $text = 'stuff http://hello.there/is=someone#here(please) otherstuff';
         $expectedText = 'stuff <a href="http://hello.there/is=someone#here(please)">'
-            .'http://hello.there/is=someone#here(please)</a> otherstuff';
+            . 'http://hello.there/is=someone#here(please)</a> otherstuff';
         $processedText = text2clickable($text, '');
         $this->assertEquals($expectedText, $processedText);
 
         $text = 'stuff http://hello.there/is=someone#here(please)&no otherstuff';
         $expectedText = 'stuff <a href="http://hello.there/is=someone#here(please)&no">'
-            .'http://hello.there/is=someone#here(please)&no</a> otherstuff';
+            . 'http://hello.there/is=someone#here(please)&no</a> otherstuff';
         $processedText = text2clickable($text, '');
         $this->assertEquals($expectedText, $processedText);
     }
@@ -242,7 +246,7 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
     {
         $text = 'stuff http://hello.there/is=someone#here otherstuff';
         $redirector = 'http://redirector.to';
-        $expectedText = 'stuff <a href="'.
+        $expectedText = 'stuff <a href="' .
             $redirector .
             urlencode('http://hello.there/is=someone#here') .
             '">http://hello.there/is=someone#here</a> otherstuff';
@@ -257,7 +261,7 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
     {
         $text = 'stuff http://hello.there/?is=someone&or=something#here otherstuff';
         $redirector = 'http://redirector.to';
-        $expectedText = 'stuff <a href="'.
+        $expectedText = 'stuff <a href="' .
             $redirector .
             'http://hello.there/?is=someone&or=something#here' .
             '">http://hello.there/?is=someone&or=something#here</a> otherstuff';
@@ -270,8 +274,8 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
      */
     public function testSpace2nbsp()
     {
-        $text = '  Are you   thrilled  by flags   ?'. PHP_EOL .' Really?';
-        $expectedText = '&nbsp; Are you &nbsp; thrilled &nbsp;by flags &nbsp; ?'. PHP_EOL .'&nbsp;Really?';
+        $text = '  Are you   thrilled  by flags   ?' . PHP_EOL . ' Really?';
+        $expectedText = '&nbsp; Are you &nbsp; thrilled &nbsp;by flags &nbsp; ?' . PHP_EOL . '&nbsp;Really?';
         $processedText = space2nbsp($text);
         $this->assertEquals($expectedText, $processedText);
     }
@@ -317,105 +321,13 @@ class LinkUtilsTest extends PHPUnit_Framework_TestCase
      * Util function to build an hashtag link.
      *
      * @param string $hashtag Hashtag name.
-     * @param string $index   Index URL.
+     * @param string $index Index URL.
      *
      * @return string HTML hashtag link.
      */
     private function getHashtagLink($hashtag, $index = '')
     {
-        $hashtagLink = '<a href="'. $index .'?addtag=$1" title="Hashtag $1">#$1</a>';
+        $hashtagLink = '<a href="' . $index . '?addtag=$1" title="Hashtag $1">#$1</a>';
         return str_replace('$1', $hashtag, $hashtagLink);
-    }
-}
-
-// old style mock: PHPUnit doesn't allow function mock
-
-/**
- * Returns code 200 or html content type.
- *
- * @param resource $ch   cURL resource
- * @param int      $type cURL info type
- *
- * @return int|string 200 or 'text/html'
- */
-function ut_curl_getinfo_ok($ch, $type)
-{
-    switch ($type) {
-        case CURLINFO_RESPONSE_CODE:
-            return 200;
-        case CURLINFO_CONTENT_TYPE:
-            return 'text/html; charset=utf-8';
-    }
-}
-
-/**
- * Returns code 200 or html content type without charset.
- *
- * @param resource $ch   cURL resource
- * @param int      $type cURL info type
- *
- * @return int|string 200 or 'text/html'
- */
-function ut_curl_getinfo_no_charset($ch, $type)
-{
-    switch ($type) {
-        case CURLINFO_RESPONSE_CODE:
-            return 200;
-        case CURLINFO_CONTENT_TYPE:
-            return 'text/html';
-    }
-}
-
-/**
- * Invalid response code.
- *
- * @param resource $ch   cURL resource
- * @param int      $type cURL info type
- *
- * @return int|string 404 or 'text/html'
- */
-function ut_curl_getinfo_rc_ko($ch, $type)
-{
-    switch ($type) {
-        case CURLINFO_RESPONSE_CODE:
-            return 404;
-        case CURLINFO_CONTENT_TYPE:
-            return 'text/html; charset=utf-8';
-    }
-}
-
-/**
- * Invalid content type.
- *
- * @param resource $ch   cURL resource
- * @param int      $type cURL info type
- *
- * @return int|string 200 or 'text/plain'
- */
-function ut_curl_getinfo_ct_ko($ch, $type)
-{
-    switch ($type) {
-        case CURLINFO_RESPONSE_CODE:
-            return 200;
-        case CURLINFO_CONTENT_TYPE:
-            return 'text/plain';
-    }
-}
-
-/**
- * Invalid response code and content type.
- *
- * @param resource $ch   cURL resource
- * @param int      $type cURL info type
- *
- * @return int|string 404 or 'text/plain'
- */
-function ut_curl_getinfo_rs_ct_ko($ch, $type)
-{
-    switch ($type) {
-        case CURLINFO_RESPONSE_CODE:
-            return 404;
-        case CURLINFO_CONTENT_TYPE:
-            return 'text/plain';
     }
 }

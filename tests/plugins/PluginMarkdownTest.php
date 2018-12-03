@@ -5,6 +5,7 @@ use Shaarli\Config\ConfigManager;
  * PluginMarkdownTest.php
  */
 
+require_once 'application/bookmark/LinkUtils.php';
 require_once 'application/Utils.php';
 require_once 'plugins/markdown/markdown.php';
 

@@ -7,7 +7,7 @@ use Shaarli\Bookmark\LinkDB;
  *
  * @param string $charset     to extract from the downloaded page (reference)
  * @param string $title       to extract from the downloaded page (reference)
- * @param string $curlGetInfo Optionnaly overrides curl_getinfo function
+ * @param string $curlGetInfo Optionally overrides curl_getinfo function
  *
  * @return Closure
  */
@@ -198,7 +198,7 @@ function space2nbsp($text)
  *
  * @param string $description shaare's description.
  * @param string $redirector  if a redirector is set, use it to gerenate links.
- * @param bool   $urlEncode  Use `urlencode()` on the URL after the redirector or not.
+ * @param bool   $urlEncode   Use `urlencode()` on the URL after the redirector or not.
  * @param string $indexUrl    URL to Shaarli's index.
 
  * @return string formatted description.
