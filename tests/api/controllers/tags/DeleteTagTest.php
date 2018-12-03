@@ -32,7 +32,7 @@ class DeleteTagTest extends \PHPUnit_Framework_TestCase
     protected $refDB = null;
 
     /**
-     * @var \LinkDB instance.
+     * @var \Shaarli\Bookmark\LinkDB instance.
      */
     protected $linkDB;
 
@@ -59,7 +59,7 @@ class DeleteTagTest extends \PHPUnit_Framework_TestCase
         $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
-        $this->linkDB = new \LinkDB(self::$testDatastore, true, false);
+        $this->linkDB = new \Shaarli\Bookmark\LinkDB(self::$testDatastore, true, false);
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
         $this->history = new \Shaarli\History(self::$testHistory);
@@ -97,7 +97,7 @@ class DeleteTagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(204, $response->getStatusCode());
         $this->assertEmpty((string) $response->getBody());
 
-        $this->linkDB = new \LinkDB(self::$testDatastore, true, false);
+        $this->linkDB = new \Shaarli\Bookmark\LinkDB(self::$testDatastore, true, false);
         $tags = $this->linkDB->linksCountPerTag();
         $this->assertFalse(isset($tags[$tagName]));
 
@@ -131,7 +131,7 @@ class DeleteTagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(204, $response->getStatusCode());
         $this->assertEmpty((string) $response->getBody());
 
-        $this->linkDB = new \LinkDB(self::$testDatastore, true, false);
+        $this->linkDB = new \Shaarli\Bookmark\LinkDB(self::$testDatastore, true, false);
         $tags = $this->linkDB->linksCountPerTag();
         $this->assertFalse(isset($tags[$tagName]));
         $this->assertTrue($tags[strtolower($tagName)] > 0);

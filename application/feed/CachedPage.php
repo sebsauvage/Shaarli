@@ -1,6 +1,7 @@
 <?php
 
 namespace Shaarli\Feed;
+
 /**
  * Simple cache system, mainly for the RSS/ATOM feeds
  */

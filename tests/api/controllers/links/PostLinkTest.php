@@ -74,7 +74,7 @@ class PostLinkTest extends TestCase
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->container['db'] = new \LinkDB(self::$testDatastore, true, false);
+        $this->container['db'] = new \Shaarli\Bookmark\LinkDB(self::$testDatastore, true, false);
         $this->container['history'] = new \Shaarli\History(self::$testHistory);
 
         $this->controller = new Links($this->container);
@@ -210,11 +210,11 @@ class PostLinkTest extends TestCase
         $this->assertEquals(['gnu', 'media', 'web', '.hidden', 'hashtag'], $data['tags']);
         $this->assertEquals(false, $data['private']);
         $this->assertEquals(
-            \DateTime::createFromFormat(\LinkDB::LINK_DATE_FORMAT, '20130614_184135'),
+            \DateTime::createFromFormat(\Shaarli\Bookmark\LinkDB::LINK_DATE_FORMAT, '20130614_184135'),
             \DateTime::createFromFormat(\DateTime::ATOM, $data['created'])
         );
         $this->assertEquals(
-            \DateTime::createFromFormat(\LinkDB::LINK_DATE_FORMAT, '20130615_184230'),
+            \DateTime::createFromFormat(\Shaarli\Bookmark\LinkDB::LINK_DATE_FORMAT, '20130615_184230'),
             \DateTime::createFromFormat(\DateTime::ATOM, $data['updated'])
         );
     }

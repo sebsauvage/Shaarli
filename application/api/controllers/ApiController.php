@@ -25,7 +25,7 @@ abstract class ApiController
     protected $conf;
 
     /**
-     * @var \LinkDB
+     * @var \Shaarli\Bookmark\LinkDB
      */
     protected $linkDb;
 

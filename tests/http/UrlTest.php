@@ -5,7 +5,6 @@
 
 namespace Shaarli\Http;
 
-
 /**
  * Unitary tests for URL utilities
  */

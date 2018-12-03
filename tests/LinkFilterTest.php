@@ -1,5 +1,7 @@
 <?php
 
+use Shaarli\Bookmark\LinkDB;
+
 require_once 'application/LinkFilter.php';
 
 /**

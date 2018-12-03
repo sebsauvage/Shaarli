@@ -3,10 +3,8 @@
 namespace Shaarli\Feed;
 
 use DateTime;
-use LinkDB;
+use Shaarli\Bookmark\LinkDB;
 use ReferenceLinkDB;
-
-require_once 'application/LinkDB.php';
 
 /**
  * FeedBuilderTest class.

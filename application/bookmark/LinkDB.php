@@ -1,5 +1,13 @@
 <?php
 
+namespace Shaarli\Bookmark;
+
+use ArrayAccess;
+use Countable;
+use DateTime;
+use Iterator;
+use LinkFilter;
+use LinkNotFoundException;
 use Shaarli\Exceptions\IOException;
 use Shaarli\FileUtils;
 
@@ -99,10 +107,10 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      *
      * Checks if the datastore exists; else, attempts to create a dummy one.
      *
-     * @param string  $datastore        datastore file path.
-     * @param boolean $isLoggedIn       is the user logged in?
-     * @param boolean $hidePublicLinks  if true all links are private.
-     * @param string  $redirector       link redirector set in user settings.
+     * @param string $datastore datastore file path.
+     * @param boolean $isLoggedIn is the user logged in?
+     * @param boolean $hidePublicLinks if true all links are private.
+     * @param string $redirector link redirector set in user settings.
      * @param boolean $redirectorEncode Enable urlencode on redirected urls (default: true).
      */
     public function __construct(
@@ -112,6 +120,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         $redirector = '',
         $redirectorEncode = true
     ) {
+    
         $this->datastore = $datastore;
         $this->loggedIn = $isLoggedIn;
         $this->hidePublicLinks = $hidePublicLinks;
@@ -141,7 +150,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         if (!isset($value['id']) || empty($value['url'])) {
             die(t('Internal Error: A link should always have an id and URL.'));
         }
-        if (($offset !== null && ! is_int($offset)) || ! is_int($value['id'])) {
+        if (($offset !== null && !is_int($offset)) || !is_int($value['id'])) {
             die(t('You must specify an integer as a key.'));
         }
         if ($offset !== null && $offset !== $value['id']) {
@@ -251,31 +260,31 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         $this->links = array();
         $link = array(
             'id' => 1,
-            'title'=> t('The personal, minimalist, super-fast, database free, bookmarking service'),
-            'url'=>'https://shaarli.readthedocs.io',
-            'description'=>t(
+            'title' => t('The personal, minimalist, super-fast, database free, bookmarking service'),
+            'url' => 'https://shaarli.readthedocs.io',
+            'description' => t(
                 'Welcome to Shaarli! This is your first public bookmark. '
-                .'To edit or delete me, you must first login.
+                . 'To edit or delete me, you must first login.
 
 To learn how to use Shaarli, consult the link "Documentation" at the bottom of this page.
 
 You use the community supported version of the original Shaarli project, by Sebastien Sauvage.'
             ),
-            'private'=>0,
-            'created'=> new DateTime(),
-            'tags'=>'opensource software'
+            'private' => 0,
+            'created' => new DateTime(),
+            'tags' => 'opensource software'
         );
         $link['shorturl'] = link_small_hash($link['created'], $link['id']);
         $this->links[1] = $link;
 
         $link = array(
             'id' => 0,
-            'title'=> t('My secret stuff... - Pastebin.com'),
-            'url'=>'http://sebsauvage.net/paste/?8434b27936c09649#bR7XsXhoTiLcqCpQbmOpBi3rq2zzQUC5hBI7ZT1O3x8=',
-            'description'=> t('Shhhh! I\'m a private link only YOU can see. You can delete me too.'),
-            'private'=>1,
-            'created'=> new DateTime('1 minute ago'),
-            'tags'=>'secretstuff',
+            'title' => t('My secret stuff... - Pastebin.com'),
+            'url' => 'http://sebsauvage.net/paste/?8434b27936c09649#bR7XsXhoTiLcqCpQbmOpBi3rq2zzQUC5hBI7ZT1O3x8=',
+            'description' => t('Shhhh! I\'m a private link only YOU can see. You can delete me too.'),
+            'private' => 1,
+            'created' => new DateTime('1 minute ago'),
+            'tags' => 'secretstuff',
         );
         $link['shorturl'] = link_small_hash($link['created'], $link['id']);
         $this->links[0] = $link;
@@ -301,7 +310,7 @@ You use the community supported version of the original Shaarli project, by Seba
 
         $toremove = array();
         foreach ($this->links as $key => &$link) {
-            if (! $this->loggedIn && $link['private'] != 0) {
+            if (!$this->loggedIn && $link['private'] != 0) {
                 // Transition for not upgraded databases.
                 unset($this->links[$key]);
                 continue;
@@ -311,7 +320,7 @@ You use the community supported version of the original Shaarli project, by Seba
             sanitizeLink($link);
 
             // Remove private tags if the user is not logged in.
-            if (! $this->loggedIn) {
+            if (!$this->loggedIn) {
                 $link['tags'] = preg_replace('/(^|\s+)\.[^($|\s)]+\s*/', ' ', $link['tags']);
             }
 
@@ -328,10 +337,10 @@ You use the community supported version of the original Shaarli project, by Seba
             }
 
             // To be able to load links before running the update, and prepare the update
-            if (! isset($link['created'])) {
+            if (!isset($link['created'])) {
                 $link['id'] = $link['linkdate'];
                 $link['created'] = DateTime::createFromFormat(self::LINK_DATE_FORMAT, $link['linkdate']);
-                if (! empty($link['updated'])) {
+                if (!empty($link['updated'])) {
                     $link['updated'] = DateTime::createFromFormat(self::LINK_DATE_FORMAT, $link['updated']);
                 }
                 $link['shorturl'] = smallHash($link['linkdate']);
@@ -417,12 +426,12 @@ You use the community supported version of the original Shaarli project, by Seba
     /**
      * Filter links according to search parameters.
      *
-     * @param array  $filterRequest Search request content. Supported keys:
+     * @param array $filterRequest Search request content. Supported keys:
      *                                - searchtags: list of tags
      *                                - searchterm: term search
-     * @param bool   $casesensitive Optional: Perform case sensitive filter
-     * @param string $visibility    return only all/private/public links
-     * @param string $untaggedonly  return only untagged links
+     * @param bool $casesensitive Optional: Perform case sensitive filter
+     * @param string $visibility return only all/private/public links
+     * @param string $untaggedonly return only untagged links
      *
      * @return array filtered links, all links if no suitable filter was provided.
      */
@@ -432,6 +441,7 @@ You use the community supported version of the original Shaarli project, by Seba
         $visibility = 'all',
         $untaggedonly = false
     ) {
+    
         // Filter link database according to parameters.
         $searchtags = isset($filterRequest['searchtags']) ? escape($filterRequest['searchtags']) : '';
         $searchterm = isset($filterRequest['searchterm']) ? escape($filterRequest['searchterm']) : '';
@@ -448,7 +458,7 @@ You use the community supported version of the original Shaarli project, by Seba
      * Returns the list tags appearing in the links with the given tags
      *
      * @param array $filteringTags tags selecting the links to consider
-     * @param string $visibility   process only all/private/public links
+     * @param string $visibility process only all/private/public links
      *
      * @return array tag => linksCount
      */
@@ -490,7 +500,7 @@ You use the community supported version of the original Shaarli project, by Seba
      * Rename or delete a tag across all links.
      *
      * @param string $from Tag to rename
-     * @param string $to   New tag. If none is provided, the from tag will be deleted
+     * @param string $to New tag. If none is provided, the from tag will be deleted
      *
      * @return array|bool List of altered links or false on error
      */

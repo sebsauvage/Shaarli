@@ -2,7 +2,7 @@
 namespace Shaarli\Feed;
 
 use DateTime;
-use LinkDB;
+use Shaarli\Bookmark\LinkDB;
 
 /**
  * FeedBuilder class.
@@ -32,7 +32,7 @@ class FeedBuilder
     public static $DEFAULT_NB_LINKS = 50;
 
     /**
-     * @var LinkDB instance.
+     * @var \Shaarli\Bookmark\LinkDB instance.
      */
     protected $linkDB;
 
@@ -79,11 +79,12 @@ class FeedBuilder
     /**
      * Feed constructor.
      *
-     * @param LinkDB  $linkDB     LinkDB instance.
-     * @param string  $feedType   Type of feed.
-     * @param array   $serverInfo $_SERVER.
-     * @param array   $userInput  $_GET.
-     * @param boolean $isLoggedIn True if the user is currently logged in, false otherwise.
+     * @param \Shaarli\Bookmark\LinkDB $linkDB     LinkDB instance.
+     * @param string                   $feedType   Type of feed.
+     * @param array                    $serverInfo $_SERVER.
+     * @param array                    $userInput  $_GET.
+     * @param boolean                  $isLoggedIn True if the user is currently logged in,
+     *                                             false otherwise.
      */
     public function __construct($linkDB, $feedType, $serverInfo, $userInput, $isLoggedIn)
     {

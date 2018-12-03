@@ -63,7 +63,6 @@ require_once 'application/http/HttpUtils.php';
 require_once 'application/http/UrlUtils.php';
 require_once 'application/FileUtils.php';
 require_once 'application/History.php';
-require_once 'application/LinkDB.php';
 require_once 'application/LinkFilter.php';
 require_once 'application/LinkUtils.php';
 require_once 'application/NetscapeBookmarkUtils.php';
@@ -72,6 +71,8 @@ require_once 'application/Utils.php';
 require_once 'application/PluginManager.php';
 require_once 'application/Router.php';
 require_once 'application/Updater.php';
+
+use \Shaarli\Bookmark\LinkDB;
 use \Shaarli\Config\ConfigManager;
 use \Shaarli\Feed\CachedPage;
 use \Shaarli\Feed\FeedBuilder;

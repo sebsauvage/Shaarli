@@ -127,7 +127,7 @@ class ApiMiddleware
      */
     protected function setLinkDb($conf)
     {
-        $linkDb = new \LinkDB(
+        $linkDb = new \Shaarli\Bookmark\LinkDB(
             $conf->get('resource.datastore'),
             true,
             $conf->get('privacy.hide_public_links'),

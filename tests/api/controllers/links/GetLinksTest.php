@@ -60,7 +60,7 @@ class GetLinksTest extends \PHPUnit_Framework_TestCase
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->container['db'] = new \LinkDB(self::$testDatastore, true, false);
+        $this->container['db'] = new \Shaarli\Bookmark\LinkDB(self::$testDatastore, true, false);
         $this->container['history'] = null;
 
         $this->controller = new Links($this->container);
@@ -114,7 +114,7 @@ class GetLinksTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('sTuff', $first['tags'][0]);
         $this->assertEquals(false, $first['private']);
         $this->assertEquals(
-            \DateTime::createFromFormat(\LinkDB::LINK_DATE_FORMAT, '20150310_114651')->format(\DateTime::ATOM),
+            \DateTime::createFromFormat(\Shaarli\Bookmark\LinkDB::LINK_DATE_FORMAT, '20150310_114651')->format(\DateTime::ATOM),
             $first['created']
         );
         $this->assertEmpty($first['updated']);
@@ -125,7 +125,7 @@ class GetLinksTest extends \PHPUnit_Framework_TestCase
 
         // Update date
         $this->assertEquals(
-            \DateTime::createFromFormat(\LinkDB::LINK_DATE_FORMAT, '20160803_093033')->format(\DateTime::ATOM),
+            \DateTime::createFromFormat(\Shaarli\Bookmark\LinkDB::LINK_DATE_FORMAT, '20160803_093033')->format(\DateTime::ATOM),
             $link['updated']
         );
     }

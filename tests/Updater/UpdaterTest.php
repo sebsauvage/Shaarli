@@ -1,4 +1,6 @@
 <?php
+
+use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigJson;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Config\ConfigPhp;

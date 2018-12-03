@@ -1,6 +1,7 @@
 <?php
 
 use Psr\Log\LogLevel;
+use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 use Shaarli\NetscapeBookmarkParser\NetscapeBookmarkParser;

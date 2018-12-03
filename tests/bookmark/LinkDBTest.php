@@ -3,9 +3,15 @@
  * Link datastore tests
  */
 
+namespace Shaarli\Bookmark;
+
+use DateTime;
+use LinkNotFoundException;
+use ReferenceLinkDB;
+use ReflectionClass;
+use Shaarli;
+
 require_once 'application/feed/Cache.php';
-require_once 'application/FileUtils.php';
-require_once 'application/LinkDB.php';
 require_once 'application/Utils.php';
 require_once 'tests/utils/ReferenceLinkDB.php';
 
@@ -13,7 +19,7 @@ require_once 'tests/utils/ReferenceLinkDB.php';
 /**
  * Unitary tests for LinkDB
  */
-class LinkDBTest extends PHPUnit_Framework_TestCase
+class LinkDBTest extends \PHPUnit\Framework\TestCase
 {
     // datastore to test write operations
     protected static $testDatastore = 'sandbox/datastore.php';
@@ -73,7 +79,7 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
      */
     protected static function getMethod($name)
     {
-        $class = new ReflectionClass('LinkDB');
+        $class = new ReflectionClass('Shaarli\Bookmark\LinkDB');
         $method = $class->getMethod($name);
         $method->setAccessible(true);
         return $method;
@@ -187,12 +193,12 @@ class LinkDBTest extends PHPUnit_Framework_TestCase
 
         $link = array(
             'id' => 42,
-            'title'=>'an additional link',
-            'url'=>'http://dum.my',
-            'description'=>'One more',
-            'private'=>0,
-            'created'=> DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20150518_190000'),
-            'tags'=>'unit test'
+            'title' => 'an additional link',
+            'url' => 'http://dum.my',
+            'description' => 'One more',
+            'private' => 0,
+            'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20150518_190000'),
+            'tags' => 'unit test'
         );
         $testDB[$link['id']] = $link;
         $testDB->save('tests');

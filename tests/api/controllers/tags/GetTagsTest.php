@@ -38,7 +38,7 @@ class GetTagsTest extends \PHPUnit_Framework_TestCase
     protected $container;
 
     /**
-     * @var \LinkDB instance.
+     * @var \Shaarli\Bookmark\LinkDB instance.
      */
     protected $linkDB;
 
@@ -63,7 +63,7 @@ class GetTagsTest extends \PHPUnit_Framework_TestCase
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->linkDB = new \LinkDB(self::$testDatastore, true, false);
+        $this->linkDB = new \Shaarli\Bookmark\LinkDB(self::$testDatastore, true, false);
         $this->container['db'] = $this->linkDB;
         $this->container['history'] = null;
 

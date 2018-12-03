@@ -4,7 +4,7 @@ namespace Shaarli\Render;
 
 use ApplicationUtils;
 use Exception;
-use LinkDB;
+use Shaarli\Bookmark\LinkDB;
 use RainTPL;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Thumbnailer;

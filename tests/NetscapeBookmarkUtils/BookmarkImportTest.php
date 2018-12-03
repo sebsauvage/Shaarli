@@ -2,6 +2,7 @@
 
 require_once 'application/NetscapeBookmarkUtils.php';
 
+use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 
