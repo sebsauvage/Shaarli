@@ -1,4 +1,5 @@
 <?php
+namespace Shaarli\Plugin\Addlink;
 
 use Shaarli\Plugin\PluginManager;
 use Shaarli\Router;

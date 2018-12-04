@@ -1,4 +1,5 @@
 <?php
+namespace Shaarli\Plugin\Playvideos;
 
 /**
  * PluginPlayvideosTest.php
@@ -8,13 +9,12 @@ use Shaarli\Plugin\PluginManager;
 use Shaarli\Router;
 
 require_once 'plugins/playvideos/playvideos.php';
-require_once 'application/Router.php';
 
 /**
  * Class PluginPlayvideosTest
  * Unit test for the PlayVideos plugin
  */
-class PluginPlayvideosTest extends PHPUnit_Framework_TestCase
+class PluginPlayvideosTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Reset plugin path

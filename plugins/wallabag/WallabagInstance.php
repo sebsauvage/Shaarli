@@ -1,4 +1,5 @@
 <?php
+namespace Shaarli\Plugin\Wallabag;
 
 /**
  * Class WallabagInstance.

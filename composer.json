@@ -48,6 +48,7 @@
             "Shaarli\\Netscape\\": "application/netscape",
             "Shaarli\\Plugin\\": "application/plugin",
             "Shaarli\\Plugin\\Exception\\": "application/plugin/exception",
+            "Shaarli\\Plugin\\Wallabag\\": "plugins/wallabag",
             "Shaarli\\Render\\": "application/render",
             "Shaarli\\Security\\": "application/security",
             "Shaarli\\Updater\\": "application/updater",

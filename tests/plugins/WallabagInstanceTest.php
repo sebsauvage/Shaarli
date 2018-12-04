@@ -1,11 +1,12 @@
 <?php
+namespace Shaarli\Plugin\Wallabag;
 
-require_once 'plugins/wallabag/WallabagInstance.php';
+use Shaarli\Plugin\Wallabag\WallabagInstance;
 
 /**
  * Class WallabagInstanceTest
  */
-class WallabagInstanceTest extends PHPUnit_Framework_TestCase
+class WallabagInstanceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string wallabag url.

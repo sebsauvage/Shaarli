@@ -1,10 +1,8 @@
 <?php
+namespace Shaarli\Plugin\Wallabag;
+
 use Shaarli\Config\ConfigManager;
 use Shaarli\Plugin\PluginManager;
-
-/**
- * PluginWallabagTest.php.php
- */
 
 require_once 'plugins/wallabag/wallabag.php';
 
