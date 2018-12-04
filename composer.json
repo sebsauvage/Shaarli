@@ -16,6 +16,7 @@
     },
     "require": {
         "php": ">=5.6",
+        "ext-json": "*",
         "ext-zlib": "*",
         "shaarli/netscape-bookmark-parser": "^2.1",
         "erusev/parsedown": "^1.6",
@@ -30,7 +31,11 @@
         "squizlabs/php_codesniffer": "2.*"
     },
     "suggest": {
-        "ext-curl": "*"
+        "ext-curl": "Allows fetching web pages and thumbnails in a more robust way",
+        "ext-gd": "Required for thumbnail generation",
+        "ext-gettext": "Enables faster translation system in gettext mode",
+        "ext-intl": "Provides localized text sorting",
+        "ext-mbstring": "Provides multibyte (Unicode) string support"
     },
     "autoload": {
         "psr-4": {
