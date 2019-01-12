@@ -121,7 +121,7 @@ class PostLinkTest extends TestCase
         $data = json_decode((string) $response->getBody(), true);
         $this->assertEquals(self::NB_FIELDS_LINK, count($data));
         $this->assertEquals(43, $data['id']);
-        $this->assertRegExp('/[\w-_]{6}/', $data['shorturl']);
+        $this->assertRegExp('/[\w_-]{6}/', $data['shorturl']);
         $this->assertEquals('http://domain.tld/?' . $data['shorturl'], $data['url']);
         $this->assertEquals('?' . $data['shorturl'], $data['title']);
         $this->assertEquals('', $data['description']);
@@ -166,7 +166,7 @@ class PostLinkTest extends TestCase
         $data = json_decode((string) $response->getBody(), true);
         $this->assertEquals(self::NB_FIELDS_LINK, count($data));
         $this->assertEquals(43, $data['id']);
-        $this->assertRegExp('/[\w-_]{6}/', $data['shorturl']);
+        $this->assertRegExp('/[\w_-]{6}/', $data['shorturl']);
         $this->assertEquals('http://' . $link['url'], $data['url']);
         $this->assertEquals($link['title'], $data['title']);
         $this->assertEquals($link['description'], $data['description']);
