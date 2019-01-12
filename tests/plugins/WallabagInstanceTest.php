@@ -1,8 +1,6 @@
 <?php
 namespace Shaarli\Plugin\Wallabag;
 
-use Shaarli\Plugin\Wallabag\WallabagInstance;
-
 /**
  * Class WallabagInstanceTest
  */

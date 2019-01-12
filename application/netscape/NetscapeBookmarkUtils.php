@@ -5,12 +5,12 @@ namespace Shaarli\Netscape;
 use DateTime;
 use DateTimeZone;
 use Exception;
+use Katzgrau\KLogger\Logger;
 use Psr\Log\LogLevel;
 use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 use Shaarli\NetscapeBookmarkParser\NetscapeBookmarkParser;
-use Katzgrau\KLogger\Logger;
 
 /**
  * Utilities to import and export bookmarks using the Netscape format

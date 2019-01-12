@@ -7,7 +7,7 @@ use Shaarli\Http\Base64Url;
 /**
  * Class ApiUtilsTest
  */
-class ApiUtilsTest extends \PHPUnit_Framework_TestCase
+class ApiUtilsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Force the timezone for ISO datetimes.

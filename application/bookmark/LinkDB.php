@@ -6,7 +6,6 @@ use ArrayAccess;
 use Countable;
 use DateTime;
 use Iterator;
-use Shaarli\Bookmark\LinkFilter;
 use Shaarli\Bookmark\Exception\LinkNotFoundException;
 use Shaarli\Exceptions\IOException;
 use Shaarli\FileUtils;

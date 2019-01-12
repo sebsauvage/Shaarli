@@ -2,12 +2,12 @@
 
 namespace Shaarli\Updater;
 
-use Shaarli\ApplicationUtils;
 use Exception;
 use RainTPL;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+use Shaarli\ApplicationUtils;
 use Shaarli\Bookmark\LinkDB;
 use Shaarli\Bookmark\LinkFilter;
 use Shaarli\Config\ConfigJson;

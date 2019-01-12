@@ -7,7 +7,7 @@ namespace Shaarli\Render;
  *
  * @package Shaarli
  */
-class ThemeUtilsTest extends \PHPUnit_Framework_TestCase
+class ThemeUtilsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test getThemes() with existing theme directories.

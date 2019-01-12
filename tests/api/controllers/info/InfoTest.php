@@ -2,7 +2,6 @@
 namespace Shaarli\Api\Controllers;
 
 use Shaarli\Config\ConfigManager;
-
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -15,7 +14,7 @@ use Slim\Http\Response;
  *
  * @package Api\Controllers
  */
-class InfoTest extends \PHPUnit_Framework_TestCase
+class InfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string datastore to test write operations

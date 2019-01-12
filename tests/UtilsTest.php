@@ -10,7 +10,7 @@ require_once 'application/Languages.php';
 /**
  * Unitary tests for Shaarli utilities
  */
-class UtilsTest extends PHPUnit_Framework_TestCase
+class UtilsTest extends PHPUnit\Framework\TestCase
 {
     // Log file
     protected static $testLogFile = 'tests.log';

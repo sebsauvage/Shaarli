@@ -4,7 +4,7 @@ namespace Shaarli\Config;
 /**
  * Class ConfigPhpTest
  */
-class ConfigPhpTest extends \PHPUnit_Framework_TestCase
+class ConfigPhpTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigPhp

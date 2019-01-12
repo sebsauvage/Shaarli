@@ -3,9 +3,9 @@
 namespace Shaarli;
 
 use Shaarli\Config\ConfigManager;
+use WebThumbnailer\Application\ConfigManager as WTConfigManager;
 use WebThumbnailer\Exception\WebThumbnailerException;
 use WebThumbnailer\WebThumbnailer;
-use WebThumbnailer\Application\ConfigManager as WTConfigManager;
 
 /**
  * Class Thumbnailer

@@ -1,9 +1,8 @@
 <?php
 namespace Shaarli\Api;
 
-use Shaarli\Api\Exceptions\ApiException;
 use Shaarli\Api\Exceptions\ApiAuthorizationException;
-
+use Shaarli\Api\Exceptions\ApiException;
 use Shaarli\Config\ConfigManager;
 use Slim\Container;
 use Slim\Http\Request;

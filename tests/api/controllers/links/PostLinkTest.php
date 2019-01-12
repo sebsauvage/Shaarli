@@ -4,6 +4,7 @@ namespace Shaarli\Api\Controllers;
 
 use PHPUnit\Framework\TestCase;
 use Shaarli\Config\ConfigManager;
+use Shaarli\History;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -40,7 +41,7 @@ class PostLinkTest extends TestCase
     protected $refDB = null;
 
     /**
-     * @var \Shaarli\History instance.
+     * @var HistoryController instance.
      */
     protected $history;
 
@@ -70,12 +71,12 @@ class PostLinkTest extends TestCase
 
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
-        $this->history = new \Shaarli\History(self::$testHistory);
+        $this->history = new History(self::$testHistory);
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
         $this->container['db'] = new \Shaarli\Bookmark\LinkDB(self::$testDatastore, true, false);
-        $this->container['history'] = new \Shaarli\History(self::$testHistory);
+        $this->container['history'] = new History(self::$testHistory);
 
         $this->controller = new Links($this->container);
 
@@ -133,7 +134,7 @@ class PostLinkTest extends TestCase
         $this->assertEquals('', $data['updated']);
 
         $historyEntry = $this->history->getHistory()[0];
-        $this->assertEquals(\Shaarli\History::CREATED, $historyEntry['event']);
+        $this->assertEquals(History::CREATED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );

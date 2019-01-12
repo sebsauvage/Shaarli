@@ -3,8 +3,8 @@
 namespace Shaarli\Feed;
 
 use DateTime;
-use Shaarli\Bookmark\LinkDB;
 use ReferenceLinkDB;
+use Shaarli\Bookmark\LinkDB;
 
 /**
  * FeedBuilderTest class.

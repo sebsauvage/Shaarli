@@ -5,8 +5,8 @@ require_once 'tests/utils/FakeConfigManager.php';
 require_once 'tests/utils/ReferenceSessionIdHashes.php';
 ReferenceSessionIdHashes::genAllHashes();
 
-use \Shaarli\Security\SessionManager;
-use \PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestCase;
+use Shaarli\Security\SessionManager;
 
 /**
  * Test coverage for SessionManager

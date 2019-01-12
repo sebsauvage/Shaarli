@@ -2,7 +2,6 @@
 namespace Shaarli\Feed;
 
 use DateTime;
-use Shaarli\Bookmark\LinkDB;
 
 /**
  * FeedBuilder class.

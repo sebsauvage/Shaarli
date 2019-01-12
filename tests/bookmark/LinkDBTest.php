@@ -6,7 +6,6 @@
 namespace Shaarli\Bookmark;
 
 use DateTime;
-use Shaarli\Bookmark\Exception\LinkNotFoundException;
 use ReferenceLinkDB;
 use ReflectionClass;
 use Shaarli;

@@ -4,7 +4,7 @@ namespace Shaarli\Config;
 /**
  * Class ConfigJsonTest
  */
-class ConfigJsonTest extends \PHPUnit_Framework_TestCase
+class ConfigJsonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigJson

@@ -2,10 +2,10 @@
 
 namespace Shaarli\Render;
 
-use Shaarli\ApplicationUtils;
 use Exception;
-use Shaarli\Bookmark\LinkDB;
 use RainTPL;
+use Shaarli\ApplicationUtils;
+use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Thumbnailer;
 

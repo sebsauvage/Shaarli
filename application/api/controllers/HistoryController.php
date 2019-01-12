@@ -14,7 +14,7 @@ use Slim\Http\Response;
  *
  * @package Shaarli\Api\Controllers
  */
-class History extends ApiController
+class HistoryController extends ApiController
 {
     /**
      * Service providing operation regarding Shaarli datastore and settings.
