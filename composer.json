@@ -26,6 +26,7 @@
         "gettext/gettext": "^4.4"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-master",
         "phpunit/phpcov": "*",
         "phpunit/phpunit": "^5.0",
         "squizlabs/php_codesniffer": "2.*"
