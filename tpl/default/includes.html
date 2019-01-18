@@ -21,7 +21,7 @@
   <meta property="og:type" content="article" />
   <meta property="og:url" content="{$index_url}?{$link.shorturl}" />
   {$ogDescription=isset($link.description_src) ? $link.description_src : $link.description}
-  <meta property="og:description" content="{function="substr($ogDescription, 0, 300)"}" />
+  <meta property="og:description" content="{function="substr(strip_tags($ogDescription), 0, 300)"}" />
   {if="$link.thumbnail"}
     <meta property="og:image" content="{$index_url}{$link.thumbnail}" />
   {/if}
