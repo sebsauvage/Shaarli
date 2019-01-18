@@ -22,7 +22,6 @@ inc/languages/*/LC_MESSAGES/shaarli.mo
 
 # Development and test resources
 coverage
-doxygen
 sandbox
 phpmd.html
 phpdoc.xml

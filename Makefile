@@ -146,11 +146,6 @@ authors:
 	@git shortlog -sne > AUTHORS
 	@rm .mailmap
 
-### generate Doxygen documentation
-doxygen: clean
-	@rm -rf doxygen
-	@doxygen Doxyfile
-
 ### generate phpDocumentor documentation
 phpdoc: clean
 	@docker run --rm -v $(PWD):/data -u `id -u`:`id -g` phpdoc/phpdoc
