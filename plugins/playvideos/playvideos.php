@@ -6,6 +6,9 @@
  * Note: this plugin adds jQuery.
  */
 
+use Shaarli\Plugin\PluginManager;
+use Shaarli\Router;
+
 /**
  * When linklist is displayed, add play videos to header's toolbar.
  *

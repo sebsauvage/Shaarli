@@ -16,6 +16,8 @@
     },
     "require": {
         "php": ">=5.6",
+        "ext-json": "*",
+        "ext-zlib": "*",
         "shaarli/netscape-bookmark-parser": "^2.1",
         "erusev/parsedown": "^1.6",
         "slim/slim": "^3.0",
@@ -28,15 +30,34 @@
         "phpunit/phpunit": "^5.0",
         "squizlabs/php_codesniffer": "2.*"
     },
+    "suggest": {
+        "ext-curl": "Allows fetching web pages and thumbnails in a more robust way",
+        "ext-gd": "Required for thumbnail generation",
+        "ext-gettext": "Enables faster translation system in gettext mode",
+        "ext-intl": "Provides localized text sorting",
+        "ext-mbstring": "Provides multibyte (Unicode) string support"
+    },
     "autoload": {
         "psr-4": {
             "Shaarli\\": "application",
             "Shaarli\\Api\\": "application/api/",
             "Shaarli\\Api\\Controllers\\": "application/api/controllers",
             "Shaarli\\Api\\Exceptions\\": "application/api/exceptions",
+            "Shaarli\\Bookmark\\": "application/bookmark",
+            "Shaarli\\Bookmark\\Exception\\": "application/bookmark/exception",
             "Shaarli\\Config\\": "application/config/",
             "Shaarli\\Config\\Exception\\": "application/config/exception",
-            "Shaarli\\Security\\": "application/security"
+            "Shaarli\\Exceptions\\": "application/exceptions",
+            "Shaarli\\Feed\\": "application/feed",
+            "Shaarli\\Http\\": "application/http",
+            "Shaarli\\Netscape\\": "application/netscape",
+            "Shaarli\\Plugin\\": "application/plugin",
+            "Shaarli\\Plugin\\Exception\\": "application/plugin/exception",
+            "Shaarli\\Plugin\\Wallabag\\": "plugins/wallabag",
+            "Shaarli\\Render\\": "application/render",
+            "Shaarli\\Security\\": "application/security",
+            "Shaarli\\Updater\\": "application/updater",
+            "Shaarli\\Updater\\Exception\\": "application/updater/exception"
         }
     }
 }

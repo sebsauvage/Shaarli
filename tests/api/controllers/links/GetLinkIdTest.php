@@ -3,7 +3,6 @@
 namespace Shaarli\Api\Controllers;
 
 use Shaarli\Config\ConfigManager;
-
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -18,7 +17,7 @@ use Slim\Http\Response;
  *
  * @package Shaarli\Api\Controllers
  */
-class GetLinkIdTest extends \PHPUnit_Framework_TestCase
+class GetLinkIdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string datastore to test write operations
@@ -61,7 +60,7 @@ class GetLinkIdTest extends \PHPUnit_Framework_TestCase
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->container['db'] = new \LinkDB(self::$testDatastore, true, false);
+        $this->container['db'] = new \Shaarli\Bookmark\LinkDB(self::$testDatastore, true, false);
         $this->container['history'] = null;
 
         $this->controller = new Links($this->container);
@@ -108,7 +107,7 @@ class GetLinkIdTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('sTuff', $data['tags'][0]);
         $this->assertEquals(false, $data['private']);
         $this->assertEquals(
-            \DateTime::createFromFormat(\LinkDB::LINK_DATE_FORMAT, '20150310_114651')->format(\DateTime::ATOM),
+            \DateTime::createFromFormat(\Shaarli\Bookmark\LinkDB::LINK_DATE_FORMAT, '20150310_114651')->format(\DateTime::ATOM),
             $data['created']
         );
         $this->assertEmpty($data['updated']);

@@ -4,12 +4,13 @@
 namespace Shaarli\Api\Controllers;
 
 use Shaarli\Config\ConfigManager;
+use Shaarli\History;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class PutLinkTest extends \PHPUnit_Framework_TestCase
+class PutLinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string datastore to test write operations
@@ -32,7 +33,7 @@ class PutLinkTest extends \PHPUnit_Framework_TestCase
     protected $refDB = null;
 
     /**
-     * @var \History instance.
+     * @var HistoryController instance.
      */
     protected $history;
 
@@ -62,12 +63,12 @@ class PutLinkTest extends \PHPUnit_Framework_TestCase
 
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
-        $this->history = new \History(self::$testHistory);
+        $this->history = new History(self::$testHistory);
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->container['db'] = new \LinkDB(self::$testDatastore, true, false);
-        $this->container['history'] = new \History(self::$testHistory);
+        $this->container['db'] = new \Shaarli\Bookmark\LinkDB(self::$testDatastore, true, false);
+        $this->container['history'] = new History(self::$testHistory);
 
         $this->controller = new Links($this->container);
 
@@ -119,7 +120,7 @@ class PutLinkTest extends \PHPUnit_Framework_TestCase
         );
 
         $historyEntry = $this->history->getHistory()[0];
-        $this->assertEquals(\History::UPDATED, $historyEntry['event']);
+        $this->assertEquals(History::UPDATED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );
@@ -198,11 +199,11 @@ class PutLinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['gnu', 'media', 'web', '.hidden', 'hashtag'], $data['tags']);
         $this->assertEquals(false, $data['private']);
         $this->assertEquals(
-            \DateTime::createFromFormat(\LinkDB::LINK_DATE_FORMAT, '20130614_184135'),
+            \DateTime::createFromFormat(\Shaarli\Bookmark\LinkDB::LINK_DATE_FORMAT, '20130614_184135'),
             \DateTime::createFromFormat(\DateTime::ATOM, $data['created'])
         );
         $this->assertEquals(
-            \DateTime::createFromFormat(\LinkDB::LINK_DATE_FORMAT, '20130615_184230'),
+            \DateTime::createFromFormat(\Shaarli\Bookmark\LinkDB::LINK_DATE_FORMAT, '20130615_184230'),
             \DateTime::createFromFormat(\DateTime::ATOM, $data['updated'])
         );
     }

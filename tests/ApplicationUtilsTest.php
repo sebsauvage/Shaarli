@@ -1,33 +1,14 @@
 <?php
+namespace Shaarli;
+
 use Shaarli\Config\ConfigManager;
 
-/**
- * ApplicationUtils' tests
- */
-
-require_once 'application/ApplicationUtils.php';
-
-/**
- * Fake ApplicationUtils class to avoid HTTP requests
- */
-class FakeApplicationUtils extends ApplicationUtils
-{
-    public static $VERSION_CODE = '';
-
-    /**
-     * Toggle HTTP requests, allow overriding the version code
-     */
-    public static function getVersion($url, $timeout = 0)
-    {
-        return self::$VERSION_CODE;
-    }
-}
-
+require_once 'tests/utils/FakeApplicationUtils.php';
 
 /**
  * Unitary tests for Shaarli utilities
  */
-class ApplicationUtilsTest extends PHPUnit_Framework_TestCase
+class ApplicationUtilsTest extends \PHPUnit\Framework\TestCase
 {
     protected static $testUpdateFile = 'sandbox/update.txt';
     protected static $testVersion = '0.5.0';

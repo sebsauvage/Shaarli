@@ -1,4 +1,8 @@
 <?php
+namespace Shaarli;
+
+use DateTime;
+use Exception;
 
 /**
  * Class History
@@ -66,7 +70,7 @@ class History
      * History constructor.
      *
      * @param string $historyFilePath History file path.
-     * @param int    $retentionTime   History content rentention time in seconds.
+     * @param int    $retentionTime   History content retention time in seconds.
      *
      * @throws Exception if something goes wrong.
      */
@@ -166,11 +170,11 @@ class History
      */
     protected function check()
     {
-        if (! is_file($this->historyFilePath)) {
+        if (!is_file($this->historyFilePath)) {
             FileUtils::writeFlatDB($this->historyFilePath, []);
         }
 
-        if (! is_writable($this->historyFilePath)) {
+        if (!is_writable($this->historyFilePath)) {
             throw new Exception(t('History file isn\'t readable or writable'));
         }
     }
@@ -191,7 +195,7 @@ class History
      */
     protected function write()
     {
-        $comparaison = new DateTime('-'. $this->retentionTime . ' seconds');
+        $comparaison = new DateTime('-' . $this->retentionTime . ' seconds');
         foreach ($this->history as $key => $value) {
             if ($value['datetime'] < $comparaison) {
                 unset($this->history[$key]);

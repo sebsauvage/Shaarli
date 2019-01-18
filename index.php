@@ -56,31 +56,33 @@ require_once 'inc/rain.tpl.class.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
 // Shaarli library
-require_once 'application/ApplicationUtils.php';
-require_once 'application/Cache.php';
-require_once 'application/CachedPage.php';
+require_once 'application/bookmark/LinkUtils.php';
 require_once 'application/config/ConfigPlugin.php';
-require_once 'application/FeedBuilder.php';
+require_once 'application/feed/Cache.php';
+require_once 'application/http/HttpUtils.php';
+require_once 'application/http/UrlUtils.php';
+require_once 'application/updater/UpdaterUtils.php';
 require_once 'application/FileUtils.php';
-require_once 'application/History.php';
-require_once 'application/HttpUtils.php';
-require_once 'application/LinkDB.php';
-require_once 'application/LinkFilter.php';
-require_once 'application/LinkUtils.php';
-require_once 'application/NetscapeBookmarkUtils.php';
-require_once 'application/PageBuilder.php';
 require_once 'application/TimeZone.php';
-require_once 'application/Url.php';
 require_once 'application/Utils.php';
-require_once 'application/PluginManager.php';
-require_once 'application/Router.php';
-require_once 'application/Updater.php';
+
+use \Shaarli\ApplicationUtils;
+use \Shaarli\Bookmark\Exception\LinkNotFoundException;
+use \Shaarli\Bookmark\LinkDB;
 use \Shaarli\Config\ConfigManager;
+use \Shaarli\Feed\CachedPage;
+use \Shaarli\Feed\FeedBuilder;
+use \Shaarli\History;
 use \Shaarli\Languages;
+use \Shaarli\Netscape\NetscapeBookmarkUtils;
+use \Shaarli\Plugin\PluginManager;
+use \Shaarli\Render\PageBuilder;
+use \Shaarli\Render\ThemeUtils;
+use \Shaarli\Router;
 use \Shaarli\Security\LoginManager;
 use \Shaarli\Security\SessionManager;
-use \Shaarli\ThemeUtils;
 use \Shaarli\Thumbnailer;
+use \Shaarli\Updater\Updater;
 
 // Ensure the PHP version is supported
 try {

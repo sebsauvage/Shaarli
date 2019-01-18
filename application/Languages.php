@@ -3,7 +3,6 @@
 namespace Shaarli;
 
 use Gettext\GettextTranslator;
-use Gettext\Merge;
 use Gettext\Translations;
 use Gettext\Translator;
 use Gettext\TranslatorInterface;

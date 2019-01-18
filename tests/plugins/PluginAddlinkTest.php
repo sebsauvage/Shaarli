@@ -1,17 +1,15 @@
 <?php
+namespace Shaarli\Plugin\Addlink;
 
-/**
- * PluginPlayvideosTest.php
- */
+use Shaarli\Plugin\PluginManager;
+use Shaarli\Router;
 
 require_once 'plugins/addlink_toolbar/addlink_toolbar.php';
-require_once 'application/Router.php';
 
 /**
- * Class PluginAddlinkTest
  * Unit test for the Addlink toolbar plugin
  */
-class PluginAddlinkTest extends PHPUnit_Framework_TestCase
+class PluginAddlinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Reset plugin path.

@@ -1,8 +1,11 @@
 <?php
+namespace Shaarli\Plugin\Archiveorg;
 
 /**
  * PluginArchiveorgTest.php
  */
+
+use Shaarli\Plugin\PluginManager;
 
 require_once 'plugins/archiveorg/archiveorg.php';
 
@@ -10,7 +13,7 @@ require_once 'plugins/archiveorg/archiveorg.php';
  * Class PluginArchiveorgTest
  * Unit test for the archiveorg plugin
  */
-class PluginArchiveorgTest extends PHPUnit_Framework_TestCase
+class PluginArchiveorgTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Reset plugin path

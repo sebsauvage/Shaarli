@@ -3,13 +3,15 @@
 
 namespace Shaarli\Api\Controllers;
 
+use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
+use Shaarli\History;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class DeleteLinkTest extends \PHPUnit_Framework_TestCase
+class DeleteLinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string datastore to test write operations
@@ -32,12 +34,12 @@ class DeleteLinkTest extends \PHPUnit_Framework_TestCase
     protected $refDB = null;
 
     /**
-     * @var \LinkDB instance.
+     * @var LinkDB instance.
      */
     protected $linkDB;
 
     /**
-     * @var \History instance.
+     * @var HistoryController instance.
      */
     protected $history;
 
@@ -59,10 +61,10 @@ class DeleteLinkTest extends \PHPUnit_Framework_TestCase
         $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
-        $this->linkDB = new \LinkDB(self::$testDatastore, true, false);
+        $this->linkDB = new LinkDB(self::$testDatastore, true, false);
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
-        $this->history = new \History(self::$testHistory);
+        $this->history = new History(self::$testHistory);
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
         $this->container['db'] = $this->linkDB;
@@ -96,11 +98,11 @@ class DeleteLinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(204, $response->getStatusCode());
         $this->assertEmpty((string) $response->getBody());
 
-        $this->linkDB = new \LinkDB(self::$testDatastore, true, false);
+        $this->linkDB = new LinkDB(self::$testDatastore, true, false);
         $this->assertFalse(isset($this->linkDB[$id]));
 
         $historyEntry = $this->history->getHistory()[0];
-        $this->assertEquals(\History::DELETED, $historyEntry['event']);
+        $this->assertEquals(History::DELETED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );
@@ -110,7 +112,7 @@ class DeleteLinkTest extends \PHPUnit_Framework_TestCase
     /**
      * Test DELETE link endpoint: reach not existing ID.
      *
-     * @expectedException Shaarli\Api\Exceptions\ApiLinkNotFoundException
+     * @expectedException \Shaarli\Api\Exceptions\ApiLinkNotFoundException
      */
     public function testDeleteLink404()
     {

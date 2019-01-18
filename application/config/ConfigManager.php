@@ -207,7 +207,7 @@ class ConfigManager
      *
      * @throws MissingFieldConfigException: a mandatory field has not been provided in $conf.
      * @throws UnauthorizedConfigException: user is not authorize to change configuration.
-     * @throws \IOException: an error occurred while writing the new config file.
+     * @throws \Shaarli\Exceptions\IOException: an error occurred while writing the new config file.
      */
     public function write($isLoggedIn)
     {

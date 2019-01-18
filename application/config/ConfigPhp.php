@@ -27,7 +27,7 @@ class ConfigPhp implements ConfigIO
     /**
      * Map legacy config keys with the new ones.
      * If ConfigPhp is used, getting <newkey> will actually look for <legacykey>.
-     * The Updater will use this array to transform keys when switching to JSON.
+     * The updater will use this array to transform keys when switching to JSON.
      *
      * @var array current key => legacy key.
      */
@@ -124,7 +124,7 @@ class ConfigPhp implements ConfigIO
         if (!file_put_contents($filepath, $configStr)
             || strcmp(file_get_contents($filepath), $configStr) != 0
         ) {
-            throw new \IOException(
+            throw new \Shaarli\Exceptions\IOException(
                 $filepath,
                 t('Shaarli could not create the config file. '.
                   'Please make sure Shaarli has the right to write in the folder is it installed in.')

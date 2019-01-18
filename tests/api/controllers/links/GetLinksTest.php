@@ -1,8 +1,8 @@
 <?php
 namespace Shaarli\Api\Controllers;
 
+use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
-
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -17,7 +17,7 @@ use Slim\Http\Response;
  *
  * @package Shaarli\Api\Controllers
  */
-class GetLinksTest extends \PHPUnit_Framework_TestCase
+class GetLinksTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string datastore to test write operations
@@ -60,7 +60,7 @@ class GetLinksTest extends \PHPUnit_Framework_TestCase
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->container['db'] = new \LinkDB(self::$testDatastore, true, false);
+        $this->container['db'] = new LinkDB(self::$testDatastore, true, false);
         $this->container['history'] = null;
 
         $this->controller = new Links($this->container);
@@ -114,7 +114,7 @@ class GetLinksTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('sTuff', $first['tags'][0]);
         $this->assertEquals(false, $first['private']);
         $this->assertEquals(
-            \DateTime::createFromFormat(\LinkDB::LINK_DATE_FORMAT, '20150310_114651')->format(\DateTime::ATOM),
+            \DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20150310_114651')->format(\DateTime::ATOM),
             $first['created']
         );
         $this->assertEmpty($first['updated']);
@@ -125,7 +125,7 @@ class GetLinksTest extends \PHPUnit_Framework_TestCase
 
         // Update date
         $this->assertEquals(
-            \DateTime::createFromFormat(\LinkDB::LINK_DATE_FORMAT, '20160803_093033')->format(\DateTime::ATOM),
+            \DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160803_093033')->format(\DateTime::ATOM),
             $link['updated']
         );
     }

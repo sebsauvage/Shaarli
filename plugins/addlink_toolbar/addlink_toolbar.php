@@ -5,6 +5,8 @@
  * Adds the addlink input on the linklist page.
  */
 
+use Shaarli\Router;
+
 /**
  * When linklist is displayed, add play videos to header's toolbar.
  *

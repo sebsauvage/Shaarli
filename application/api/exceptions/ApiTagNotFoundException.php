@@ -2,8 +2,6 @@
 
 namespace Shaarli\Api\Exceptions;
 
-use Slim\Http\Response;
-
 /**
  * Class ApiTagNotFoundException
  *

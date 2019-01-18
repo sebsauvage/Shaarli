@@ -1,9 +1,8 @@
 <?php
 namespace Shaarli\Api;
 
-use Shaarli\Api\Exceptions\ApiException;
 use Shaarli\Api\Exceptions\ApiAuthorizationException;
-
+use Shaarli\Api\Exceptions\ApiException;
 use Shaarli\Config\ConfigManager;
 use Slim\Container;
 use Slim\Http\Request;
@@ -127,7 +126,7 @@ class ApiMiddleware
      */
     protected function setLinkDb($conf)
     {
-        $linkDb = new \LinkDB(
+        $linkDb = new \Shaarli\Bookmark\LinkDB(
             $conf->get('resource.datastore'),
             true,
             $conf->get('privacy.hide_public_links'),

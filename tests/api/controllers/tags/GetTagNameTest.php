@@ -2,8 +2,8 @@
 
 namespace Shaarli\Api\Controllers;
 
+use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
-
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -16,7 +16,7 @@ use Slim\Http\Response;
  *
  * @package Shaarli\Api\Controllers
  */
-class GetTagNameTest extends \PHPUnit_Framework_TestCase
+class GetTagNameTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string datastore to test write operations
@@ -59,7 +59,7 @@ class GetTagNameTest extends \PHPUnit_Framework_TestCase
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->container['db'] = new \LinkDB(self::$testDatastore, true, false);
+        $this->container['db'] = new LinkDB(self::$testDatastore, true, false);
         $this->container['history'] = null;
 
         $this->controller = new Tags($this->container);

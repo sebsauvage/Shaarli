@@ -2,7 +2,8 @@
 namespace Shaarli\Security;
 
 require_once 'tests/utils/FakeConfigManager.php';
-use \PHPUnit\Framework\TestCase;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test coverage for LoginManager

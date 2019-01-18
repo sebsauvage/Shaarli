@@ -1,14 +1,17 @@
 <?php
+namespace Shaarli\Plugin\Pubsubhubbub;
+
 use Shaarli\Config\ConfigManager;
+use Shaarli\Plugin\PluginManager;
+use Shaarli\Router;
 
 require_once 'plugins/pubsubhubbub/pubsubhubbub.php';
-require_once 'application/Router.php';
 
 /**
  * Class PluginPubsubhubbubTest
  * Unit test for the pubsubhubbub plugin
  */
-class PluginPubsubhubbubTest extends PHPUnit_Framework_TestCase
+class PluginPubsubhubbubTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string Config file path (without extension).

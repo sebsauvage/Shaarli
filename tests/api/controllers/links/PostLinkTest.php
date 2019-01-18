@@ -4,6 +4,7 @@ namespace Shaarli\Api\Controllers;
 
 use PHPUnit\Framework\TestCase;
 use Shaarli\Config\ConfigManager;
+use Shaarli\History;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -40,7 +41,7 @@ class PostLinkTest extends TestCase
     protected $refDB = null;
 
     /**
-     * @var \History instance.
+     * @var HistoryController instance.
      */
     protected $history;
 
@@ -70,12 +71,12 @@ class PostLinkTest extends TestCase
 
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
-        $this->history = new \History(self::$testHistory);
+        $this->history = new History(self::$testHistory);
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->container['db'] = new \LinkDB(self::$testDatastore, true, false);
-        $this->container['history'] = new \History(self::$testHistory);
+        $this->container['db'] = new \Shaarli\Bookmark\LinkDB(self::$testDatastore, true, false);
+        $this->container['history'] = new History(self::$testHistory);
 
         $this->controller = new Links($this->container);
 
@@ -121,7 +122,7 @@ class PostLinkTest extends TestCase
         $data = json_decode((string) $response->getBody(), true);
         $this->assertEquals(self::NB_FIELDS_LINK, count($data));
         $this->assertEquals(43, $data['id']);
-        $this->assertRegExp('/[\w-_]{6}/', $data['shorturl']);
+        $this->assertRegExp('/[\w_-]{6}/', $data['shorturl']);
         $this->assertEquals('http://domain.tld/?' . $data['shorturl'], $data['url']);
         $this->assertEquals('?' . $data['shorturl'], $data['title']);
         $this->assertEquals('', $data['description']);
@@ -133,7 +134,7 @@ class PostLinkTest extends TestCase
         $this->assertEquals('', $data['updated']);
 
         $historyEntry = $this->history->getHistory()[0];
-        $this->assertEquals(\History::CREATED, $historyEntry['event']);
+        $this->assertEquals(History::CREATED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );
@@ -166,7 +167,7 @@ class PostLinkTest extends TestCase
         $data = json_decode((string) $response->getBody(), true);
         $this->assertEquals(self::NB_FIELDS_LINK, count($data));
         $this->assertEquals(43, $data['id']);
-        $this->assertRegExp('/[\w-_]{6}/', $data['shorturl']);
+        $this->assertRegExp('/[\w_-]{6}/', $data['shorturl']);
         $this->assertEquals('http://' . $link['url'], $data['url']);
         $this->assertEquals($link['title'], $data['title']);
         $this->assertEquals($link['description'], $data['description']);
@@ -210,11 +211,11 @@ class PostLinkTest extends TestCase
         $this->assertEquals(['gnu', 'media', 'web', '.hidden', 'hashtag'], $data['tags']);
         $this->assertEquals(false, $data['private']);
         $this->assertEquals(
-            \DateTime::createFromFormat(\LinkDB::LINK_DATE_FORMAT, '20130614_184135'),
+            \DateTime::createFromFormat(\Shaarli\Bookmark\LinkDB::LINK_DATE_FORMAT, '20130614_184135'),
             \DateTime::createFromFormat(\DateTime::ATOM, $data['created'])
         );
         $this->assertEquals(
-            \DateTime::createFromFormat(\LinkDB::LINK_DATE_FORMAT, '20130615_184230'),
+            \DateTime::createFromFormat(\Shaarli\Bookmark\LinkDB::LINK_DATE_FORMAT, '20130615_184230'),
             \DateTime::createFromFormat(\DateTime::ATOM, $data['updated'])
         );
     }

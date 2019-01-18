@@ -2,8 +2,9 @@
 
 namespace Shaarli\Api\Controllers;
 
+use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
-use \Slim\Container;
+use Slim\Container;
 
 /**
  * Abstract Class ApiController
@@ -25,12 +26,12 @@ abstract class ApiController
     protected $conf;
 
     /**
-     * @var \LinkDB
+     * @var LinkDB
      */
     protected $linkDb;
 
     /**
-     * @var \History
+     * @var HistoryController
      */
     protected $history;
 

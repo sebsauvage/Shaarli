@@ -1,6 +1,8 @@
 <?php
 
-require_once 'exceptions/IOException.php';
+namespace Shaarli;
+
+use Shaarli\Exceptions\IOException;
 
 /**
  * Class FileUtils
@@ -44,7 +46,7 @@ class FileUtils
 
         return file_put_contents(
             $file,
-            self::$phpPrefix.base64_encode(gzdeflate(serialize($content))).self::$phpSuffix
+            self::$phpPrefix . base64_encode(gzdeflate(serialize($content))) . self::$phpSuffix
         );
     }
 
@@ -62,7 +64,7 @@ class FileUtils
     {
         // Note that gzinflate is faster than gzuncompress.
         // See: http://www.php.net/manual/en/function.gzdeflate.php#96439
-        if (! is_readable($file)) {
+        if (!is_readable($file)) {
             return $default;
         }
 

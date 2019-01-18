@@ -1,4 +1,9 @@
 <?php
+namespace Shaarli;
+
+use Exception;
+use Shaarli\Config\ConfigManager;
+
 /**
  * Shaarli (application) utilities
  */
@@ -51,7 +56,7 @@ class ApplicationUtils
                 return false;
             }
         } else {
-            if (! is_file($remote)) {
+            if (!is_file($remote)) {
                 return false;
             }
             $data = file_get_contents($remote);
@@ -97,7 +102,7 @@ class ApplicationUtils
         // Do not check versions for visitors
         // Do not check if the user doesn't want to
         // Do not check with dev version
-        if (! $isLoggedIn || empty($enableCheck) || $currentVersion === 'dev') {
+        if (!$isLoggedIn || empty($enableCheck) || $currentVersion === 'dev') {
             return false;
         }
 
@@ -111,7 +116,7 @@ class ApplicationUtils
             return false;
         }
 
-        if (! in_array($branch, self::$GIT_BRANCHES)) {
+        if (!in_array($branch, self::$GIT_BRANCHES)) {
             throw new Exception(
                 'Invalid branch selected for updates: "' . $branch . '"'
             );
@@ -123,7 +128,7 @@ class ApplicationUtils
             self::$GIT_URL . '/' . $branch . '/' . self::$VERSION_FILE
         );
 
-        if (! $latestVersion) {
+        if (!$latestVersion) {
             // Only update the file's modification date
             file_put_contents($updateFile, $currentVersion);
             return false;
@@ -152,9 +157,9 @@ class ApplicationUtils
         if (version_compare($curVersion, $minVersion) < 0) {
             $msg = t(
                 'Your PHP version is obsolete!'
-                 . ' Shaarli requires at least PHP %s, and thus cannot run.'
-                 . ' Your PHP version has known security vulnerabilities and should be'
-                 . ' updated as soon as possible.'
+                . ' Shaarli requires at least PHP %s, and thus cannot run.'
+                . ' Your PHP version has known security vulnerabilities and should be'
+                . ' updated as soon as possible.'
             );
             throw new Exception(sprintf($msg, $minVersion));
         }
@@ -174,50 +179,50 @@ class ApplicationUtils
 
         // Check script and template directories are readable
         foreach (array(
-            'application',
-            'inc',
-            'plugins',
-            $rainTplDir,
-            $rainTplDir.'/'.$conf->get('resource.theme'),
-        ) as $path) {
-            if (! is_readable(realpath($path))) {
-                $errors[] = '"'.$path.'" '. t('directory is not readable');
+                     'application',
+                     'inc',
+                     'plugins',
+                     $rainTplDir,
+                     $rainTplDir . '/' . $conf->get('resource.theme'),
+                 ) as $path) {
+            if (!is_readable(realpath($path))) {
+                $errors[] = '"' . $path . '" ' . t('directory is not readable');
             }
         }
 
         // Check cache and data directories are readable and writable
         foreach (array(
-            $conf->get('resource.thumbnails_cache'),
-            $conf->get('resource.data_dir'),
-            $conf->get('resource.page_cache'),
-            $conf->get('resource.raintpl_tmp'),
-        ) as $path) {
-            if (! is_readable(realpath($path))) {
-                $errors[] = '"'.$path.'" '. t('directory is not readable');
+                     $conf->get('resource.thumbnails_cache'),
+                     $conf->get('resource.data_dir'),
+                     $conf->get('resource.page_cache'),
+                     $conf->get('resource.raintpl_tmp'),
+                 ) as $path) {
+            if (!is_readable(realpath($path))) {
+                $errors[] = '"' . $path . '" ' . t('directory is not readable');
             }
-            if (! is_writable(realpath($path))) {
-                $errors[] = '"'.$path.'" '. t('directory is not writable');
+            if (!is_writable(realpath($path))) {
+                $errors[] = '"' . $path . '" ' . t('directory is not writable');
             }
         }
 
         // Check configuration files are readable and writable
         foreach (array(
-            $conf->getConfigFileExt(),
-            $conf->get('resource.datastore'),
-            $conf->get('resource.ban_file'),
-            $conf->get('resource.log'),
-            $conf->get('resource.update_check'),
-        ) as $path) {
-            if (! is_file(realpath($path))) {
+                     $conf->getConfigFileExt(),
+                     $conf->get('resource.datastore'),
+                     $conf->get('resource.ban_file'),
+                     $conf->get('resource.log'),
+                     $conf->get('resource.update_check'),
+                 ) as $path) {
+            if (!is_file(realpath($path))) {
                 # the file may not exist yet
                 continue;
             }
 
-            if (! is_readable(realpath($path))) {
-                $errors[] = '"'.$path.'" '. t('file is not readable');
+            if (!is_readable(realpath($path))) {
+                $errors[] = '"' . $path . '" ' . t('file is not readable');
             }
-            if (! is_writable(realpath($path))) {
-                $errors[] = '"'.$path.'" '. t('file is not writable');
+            if (!is_writable(realpath($path))) {
+                $errors[] = '"' . $path . '" ' . t('file is not writable');
             }
         }
 

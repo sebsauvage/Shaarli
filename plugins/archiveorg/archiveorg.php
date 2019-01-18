@@ -5,6 +5,8 @@
  * Add an icon in the link list for archive.org.
  */
 
+use Shaarli\Plugin\PluginManager;
+
 /**
  * Add archive.org icon to link_plugin when rendering linklist.
  *

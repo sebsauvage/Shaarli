@@ -1,16 +1,17 @@
 <?php
 
-
 namespace Shaarli\Api\Controllers;
 
 use Shaarli\Api\Exceptions\ApiBadParametersException;
+use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
+use Shaarli\History;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class PutTagTest extends \PHPUnit_Framework_TestCase
+class PutTagTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string datastore to test write operations
@@ -33,7 +34,7 @@ class PutTagTest extends \PHPUnit_Framework_TestCase
     protected $refDB = null;
 
     /**
-     * @var \History instance.
+     * @var HistoryController instance.
      */
     protected $history;
 
@@ -43,7 +44,7 @@ class PutTagTest extends \PHPUnit_Framework_TestCase
     protected $container;
 
     /**
-     * @var \LinkDB instance.
+     * @var LinkDB instance.
      */
     protected $linkDB;
 
@@ -68,11 +69,11 @@ class PutTagTest extends \PHPUnit_Framework_TestCase
 
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
-        $this->history = new \History(self::$testHistory);
+        $this->history = new History(self::$testHistory);
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->linkDB = new \LinkDB(self::$testDatastore, true, false);
+        $this->linkDB = new LinkDB(self::$testDatastore, true, false);
         $this->container['db'] = $this->linkDB;
         $this->container['history'] = $this->history;
 
@@ -113,12 +114,12 @@ class PutTagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $tags[$newName]);
 
         $historyEntry = $this->history->getHistory()[0];
-        $this->assertEquals(\History::UPDATED, $historyEntry['event']);
+        $this->assertEquals(History::UPDATED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );
         $historyEntry = $this->history->getHistory()[1];
-        $this->assertEquals(\History::UPDATED, $historyEntry['event']);
+        $this->assertEquals(History::UPDATED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );

@@ -8,7 +8,7 @@ require_once 'application/TimeZone.php';
 /**
  * Unitary tests for timezone utilities
  */
-class TimeZoneTest extends PHPUnit_Framework_TestCase
+class TimeZoneTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var array of timezones

@@ -1,5 +1,10 @@
 <?php
+namespace Shaarli\Plugin\Isso;
+
+use DateTime;
+use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
+use Shaarli\Plugin\PluginManager;
 
 require_once 'plugins/isso/isso.php';
 
@@ -8,7 +13,7 @@ require_once 'plugins/isso/isso.php';
  *
  * Test the Isso plugin (comment system).
  */
-class PluginIssoTest extends PHPUnit_Framework_TestCase
+class PluginIssoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Reset plugin path

@@ -1,10 +1,14 @@
 <?php
+namespace Shaarli\Plugin\Markdown;
+
 use Shaarli\Config\ConfigManager;
+use Shaarli\Plugin\PluginManager;
 
 /**
  * PluginMarkdownTest.php
  */
 
+require_once 'application/bookmark/LinkUtils.php';
 require_once 'application/Utils.php';
 require_once 'plugins/markdown/markdown.php';
 
@@ -12,7 +16,7 @@ require_once 'plugins/markdown/markdown.php';
  * Class PluginMarkdownTest
  * Unit test for the Markdown plugin
  */
-class PluginMarkdownTest extends PHPUnit_Framework_TestCase
+class PluginMarkdownTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigManager instance.

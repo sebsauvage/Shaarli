@@ -1,16 +1,20 @@
 <?php
+namespace Shaarli\Plugin\Qrcode;
+
 /**
  * PluginQrcodeTest.php
  */
 
+use Shaarli\Plugin\PluginManager;
+use Shaarli\Router;
+
 require_once 'plugins/qrcode/qrcode.php';
-require_once 'application/Router.php';
 
 /**
  * Class PluginQrcodeTest
  * Unit test for the QR-Code plugin
  */
-class PluginQrcodeTest extends PHPUnit_Framework_TestCase
+class PluginQrcodeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Reset plugin path

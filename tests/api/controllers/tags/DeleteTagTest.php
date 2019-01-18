@@ -3,13 +3,15 @@
 
 namespace Shaarli\Api\Controllers;
 
+use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
+use Shaarli\History;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class DeleteTagTest extends \PHPUnit_Framework_TestCase
+class DeleteTagTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string datastore to test write operations
@@ -32,12 +34,12 @@ class DeleteTagTest extends \PHPUnit_Framework_TestCase
     protected $refDB = null;
 
     /**
-     * @var \LinkDB instance.
+     * @var LinkDB instance.
      */
     protected $linkDB;
 
     /**
-     * @var \History instance.
+     * @var HistoryController instance.
      */
     protected $history;
 
@@ -59,10 +61,10 @@ class DeleteTagTest extends \PHPUnit_Framework_TestCase
         $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
-        $this->linkDB = new \LinkDB(self::$testDatastore, true, false);
+        $this->linkDB = new LinkDB(self::$testDatastore, true, false);
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
-        $this->history = new \History(self::$testHistory);
+        $this->history = new History(self::$testHistory);
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
         $this->container['db'] = $this->linkDB;
@@ -97,18 +99,18 @@ class DeleteTagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(204, $response->getStatusCode());
         $this->assertEmpty((string) $response->getBody());
 
-        $this->linkDB = new \LinkDB(self::$testDatastore, true, false);
+        $this->linkDB = new LinkDB(self::$testDatastore, true, false);
         $tags = $this->linkDB->linksCountPerTag();
         $this->assertFalse(isset($tags[$tagName]));
 
         // 2 links affected
         $historyEntry = $this->history->getHistory()[0];
-        $this->assertEquals(\History::UPDATED, $historyEntry['event']);
+        $this->assertEquals(History::UPDATED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );
         $historyEntry = $this->history->getHistory()[1];
-        $this->assertEquals(\History::UPDATED, $historyEntry['event']);
+        $this->assertEquals(History::UPDATED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );
@@ -131,13 +133,13 @@ class DeleteTagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(204, $response->getStatusCode());
         $this->assertEmpty((string) $response->getBody());
 
-        $this->linkDB = new \LinkDB(self::$testDatastore, true, false);
+        $this->linkDB = new LinkDB(self::$testDatastore, true, false);
         $tags = $this->linkDB->linksCountPerTag();
         $this->assertFalse(isset($tags[$tagName]));
         $this->assertTrue($tags[strtolower($tagName)] > 0);
 
         $historyEntry = $this->history->getHistory()[0];
-        $this->assertEquals(\History::UPDATED, $historyEntry['event']);
+        $this->assertEquals(History::UPDATED, $historyEntry['event']);
         $this->assertTrue(
             (new \DateTime())->add(\DateInterval::createFromDateString('-5 seconds')) < $historyEntry['datetime']
         );
