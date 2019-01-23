@@ -22,15 +22,16 @@ inc/languages/*/LC_MESSAGES/shaarli.mo
 
 # Development and test resources
 coverage
-doxygen
 sandbox
 phpmd.html
+phpdoc.xml
 
 # User plugin configuration
 plugins/*/config.php
 
 # HTML documentation
 doc/html/
+doc/phpdoc/
 
 # 3rd party themes
 tpl/*

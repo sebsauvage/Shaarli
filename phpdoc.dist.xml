@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+  <title><![CDATA[Shaarli API Reference]]></title>
+  <parser>
+    <encoding>utf8</encoding>
+    <markers>
+      <item>FIXME</item>
+      <item>TODO</item>
+      <item>WIP</item>
+    </markers>
+    <target>doc/phpdoc</target>
+  </parser>
+  <transformer>
+    <target>doc/phpdoc</target>
+  </transformer>
+  <files>
+    <file>index.php</file>
+    <directory>application</directory>
+    <directory>plugins</directory>
+  </files>
+</phpdoc>
