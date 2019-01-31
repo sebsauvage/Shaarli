@@ -23,7 +23,7 @@ See [REST API](REST-API) for a list of official and community clients.
 - [shaarli2mastodon](https://github.com/kalvn/shaarli2mastodon) by [@kalvn](https://github.com/kalvn) - This Shaarli plugin allows you to automatically publish links you post on your Mastodon timeline.
 - [shaarli-descriptor](https://github.com/immanuelfodor/shaarli-descriptor) by [@immanuelfodor](https://github.com/immanuelfodor) - Customize the default height/number of rows of the Description field when editing a link.
 - [urlextern](https://github.com/trailjeep/shaarli-urlextern) by [@trailjeep](https://github.com/trailjeep) - Shaarli plugin to open external links in a new tab/window.
-
+- [favicons](https://github.com/trailjeep/shaarli-favicons) by [@trailjeep](https://github.com/trailjeep) - Shaarli plugin to add favicon/filetype icons to links.
 
 ### Third-party themes
 See [Theming](Theming) for a list of community-contributed themes, and an installation guide.
