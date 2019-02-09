@@ -544,7 +544,10 @@ body,
   color: $dark-grey;
   font-size: .9em;
 
+
   a {
+    display: inline-block;
+    margin: 3px 0;
     padding: 5px 8px;
     text-decoration: none;
   }
