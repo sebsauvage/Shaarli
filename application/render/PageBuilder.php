@@ -123,6 +123,8 @@ class PageBuilder
         $this->tpl->assign('hide_timestamps', $this->conf->get('privacy.hide_timestamps', false));
         $this->tpl->assign('token', $this->token);
 
+        $this->tpl->assign('language', $this->conf->get('translation.language'));
+
         if ($this->linkDB !== null) {
             $this->tpl->assign('tags', $this->linkDB->linksCountPerTag());
         }
