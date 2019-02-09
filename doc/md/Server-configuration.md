@@ -404,6 +404,8 @@ If Shaarli is served behind a proxy (i.e. there is a proxy server between client
 - `X-Forwarded-Host`
 - `X-Forwarded-For`
 
+In you [Shaarli configuration](Shaarli-configuration) `data/config.json.php`, add the public IP of your proxy under `security.trusted_proxies`.
+
 See also [proxy-related](https://github.com/shaarli/Shaarli/issues?utf8=%E2%9C%93&q=label%3Aproxy+) issues.
 
 ## Robots and crawlers

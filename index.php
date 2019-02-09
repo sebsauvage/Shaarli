@@ -125,7 +125,7 @@ if (isset($_COOKIE['shaarli']) && !SessionManager::checkId($_COOKIE['shaarli']))
 
 $conf = new ConfigManager();
 $sessionManager = new SessionManager($_SESSION, $conf);
-$loginManager = new LoginManager($GLOBALS, $conf, $sessionManager);
+$loginManager = new LoginManager($conf, $sessionManager);
 $loginManager->generateStaySignedInToken($_SERVER['REMOTE_ADDR']);
 $clientIpId = client_ip_id($_SERVER);
 
