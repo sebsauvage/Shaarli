@@ -156,7 +156,7 @@ class FeedBuilder
         } else {
             $permalink = '<a href="' . $link['guid'] . '" title="' . t('Permalink') . '">' . t('Permalink') . '</a>';
         }
-        $link['description'] = format_description($link['description'], '', false, $pageaddr);
+        $link['description'] = format_description($link['description'], $pageaddr);
         $link['description'] .= PHP_EOL . '<br>&#8212; ' . $permalink;
 
         $pubDate = $link['created'];

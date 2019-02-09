@@ -120,11 +120,6 @@ Must be an associative array: `translation domain => translation path`.
 - **enable_thumbnails**: Enable or disable thumbnail display.  
 - **enable_localcache**: Enable or disable local cache.
 
-### Redirector
-
-- **url**: Redirector URL, such as `anonym.to`.  
-- **encode_url**: Enable this if the redirector needs encoded URL to work properly.
-
 ## Configuration file example
 
 ```json
@@ -185,8 +180,6 @@ Must be an associative array: `translation domain => translation path`.
         "hide_public_links": false,
         "hide_timestamps": false,
         "open_shaarli": false,
-        "redirector": "http://anonym.to/?",
-        "redirector_encode_url": false
     },
     "general": {
         "header_link": "?",
@@ -217,10 +210,6 @@ Must be an associative array: `translation domain => translation path`.
     "thumbnail": {
         "enable_thumbnails": true,
         "enable_localcache": true
-    },
-    "redirector": {
-        "url": "http://anonym.to/?",
-        "encode_url": false
     },
     "plugins": {
         "WALLABAG_URL": "http://demo.wallabag.org",

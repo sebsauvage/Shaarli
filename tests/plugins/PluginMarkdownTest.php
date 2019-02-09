@@ -107,7 +107,7 @@ class PluginMarkdownTest extends \PHPUnit\Framework\TestCase
     public function testReverseText2clickable()
     {
         $text = 'stuff http://hello.there/is=someone#here otherstuff';
-        $clickableText = text2clickable($text, '');
+        $clickableText = text2clickable($text);
         $reversedText = reverse_text2clickable($clickableText);
         $this->assertEquals($text, $reversedText);
     }

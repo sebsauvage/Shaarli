@@ -312,9 +312,7 @@ function showDailyRSS($conf, $loginManager)
     $LINKSDB = new LinkDB(
         $conf->get('resource.datastore'),
         $loginManager->isLoggedIn(),
-        $conf->get('privacy.hide_public_links'),
-        $conf->get('redirector.url'),
-        $conf->get('redirector.encode_url')
+        $conf->get('privacy.hide_public_links')
     );
 
     /* Some Shaarlies may have very few links, so we need to look
@@ -356,11 +354,7 @@ function showDailyRSS($conf, $loginManager)
 
         // We pre-format some fields for proper output.
         foreach ($links as &$link) {
-            $link['formatedDescription'] = format_description(
-                $link['description'],
-                $conf->get('redirector.url'),
-                $conf->get('redirector.encode_url')
-            );
+            $link['formatedDescription'] = format_description($link['description']);
             $link['timestamp'] = $link['created']->getTimestamp();
             if (startsWith($link['url'], '?')) {
                 $link['url'] = index_url($_SERVER) . $link['url'];  // make permalink URL absolute
@@ -433,11 +427,7 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
         $taglist = explode(' ', $link['tags']);
         uasort($taglist, 'strcasecmp');
         $linksToDisplay[$key]['taglist']=$taglist;
-        $linksToDisplay[$key]['formatedDescription'] = format_description(
-            $link['description'],
-            $conf->get('redirector.url'),
-            $conf->get('redirector.encode_url')
-        );
+        $linksToDisplay[$key]['formatedDescription'] = format_description($link['description']);
         $linksToDisplay[$key]['timestamp'] =  $link['created']->getTimestamp();
     }
 
@@ -1662,11 +1652,7 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
     $linkDisp = array();
     while ($i<$end && $i<count($keys)) {
         $link = $linksToDisplay[$keys[$i]];
-        $link['description'] = format_description(
-            $link['description'],
-            $conf->get('redirector.url'),
-            $conf->get('redirector.encode_url')
-        );
+        $link['description'] = format_description($link['description']);
         $classLi =  ($i % 2) != 0 ? '' : 'publicLinkHightLight';
         $link['class'] = $link['private'] == 0 ? $classLi : 'private';
         $link['timestamp'] = $link['created']->getTimestamp();
@@ -1727,7 +1713,6 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
         'search_term' => $searchterm,
         'search_tags' => $searchtags,
         'visibility' => ! empty($_SESSION['visibility']) ? $_SESSION['visibility'] : '',
-        'redirector' => $conf->get('redirector.url'),  // Optional redirector URL.
         'links' => $linkDisp,
     );
 
@@ -1877,9 +1862,7 @@ try {
 $linkDb = new LinkDB(
     $conf->get('resource.datastore'),
     $loginManager->isLoggedIn(),
-    $conf->get('privacy.hide_public_links'),
-    $conf->get('redirector.url'),
-    $conf->get('redirector.encode_url')
+    $conf->get('privacy.hide_public_links')
 );
 
 $container = new \Slim\Container();

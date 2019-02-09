@@ -29,10 +29,10 @@ use Shaarli\FileUtils;
  *  - private:  Is this link private? 0=no, other value=yes
  *  - tags:     tags attached to this entry (separated by spaces)
  *  - title     Title of the link
- *  - url       URL of the link. Used for displayable links (no redirector, relative, etc.).
- *              Can be absolute or relative.
- *              Relative URLs are permalinks (e.g.'?m-ukcw')
- *  - real_url  Absolute processed URL.
+ *  - url       URL of the link. Used for displayable links.
+ *              Can be absolute or relative in the database but the relative links
+ *              will be converted to absolute ones in templates.
+ *  - real_url  Raw URL in stored in the DB (absolute or relative).
  *  - shorturl  Permalink smallhash
  *
  * Implements 3 interfaces:
@@ -88,19 +88,6 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     // Hide public links
     private $hidePublicLinks;
 
-    // link redirector set in user settings.
-    private $redirector;
-
-    /**
-     * Set this to `true` to urlencode link behind redirector link, `false` to leave it untouched.
-     *
-     * Example:
-     *   anonym.to needs clean URL while dereferer.org needs urlencoded URL.
-     *
-     * @var boolean $redirectorEncode parameter: true or false
-     */
-    private $redirectorEncode;
-
     /**
      * Creates a new LinkDB
      *
@@ -109,22 +96,16 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      * @param string  $datastore        datastore file path.
      * @param boolean $isLoggedIn       is the user logged in?
      * @param boolean $hidePublicLinks  if true all links are private.
-     * @param string  $redirector       link redirector set in user settings.
-     * @param boolean $redirectorEncode Enable urlencode on redirected urls (default: true).
      */
     public function __construct(
         $datastore,
         $isLoggedIn,
-        $hidePublicLinks,
-        $redirector = '',
-        $redirectorEncode = true
+        $hidePublicLinks
     ) {
     
         $this->datastore = $datastore;
         $this->loggedIn = $isLoggedIn;
         $this->hidePublicLinks = $hidePublicLinks;
-        $this->redirector = $redirector;
-        $this->redirectorEncode = $redirectorEncode === true;
         $this->check();
         $this->read();
     }
@@ -323,17 +304,7 @@ You use the community supported version of the original Shaarli project, by Seba
                 $link['tags'] = preg_replace('/(^|\s+)\.[^($|\s)]+\s*/', ' ', $link['tags']);
             }
 
-            // Do not use the redirector for internal links (Shaarli note URL starting with a '?').
-            if (!empty($this->redirector) && !startsWith($link['url'], '?')) {
-                $link['real_url'] = $this->redirector;
-                if ($this->redirectorEncode) {
-                    $link['real_url'] .= urlencode(unescape($link['url']));
-                } else {
-                    $link['real_url'] .= $link['url'];
-                }
-            } else {
-                $link['real_url'] = $link['url'];
-            }
+            $link['real_url'] = $link['url'];
 
             // To be able to load links before running the update, and prepare the update
             if (!isset($link['created'])) {

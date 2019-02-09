@@ -221,7 +221,6 @@ class ConfigManager
             'general.title',
             'general.header_link',
             'privacy.default_private_links',
-            'redirector.url',
         );
 
         // Only logged in user can alter config.
@@ -380,9 +379,6 @@ class ConfigManager
         $this->setEmpty('privacy.hide_timestamps', false);
         // default state of the 'remember me' checkbox of the login form
         $this->setEmpty('privacy.remember_user_default', true);
-
-        $this->setEmpty('redirector.url', '');
-        $this->setEmpty('redirector.encode_url', true);
 
         $this->setEmpty('thumbnails.width', '125');
         $this->setEmpty('thumbnails.height', '90');
