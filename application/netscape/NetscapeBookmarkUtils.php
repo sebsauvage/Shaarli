@@ -54,7 +54,7 @@ class NetscapeBookmarkUtils
             $link['timestamp'] = $date->getTimestamp();
             $link['taglist'] = str_replace(' ', ',', $link['tags']);
 
-            if (startsWith($link['url'], '?') && $prependNoteUrl) {
+            if (is_note($link['url']) && $prependNoteUrl) {
                 $link['url'] = $indexUrl . $link['url'];
             }
 

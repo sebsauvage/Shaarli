@@ -59,7 +59,7 @@ class ApiUtils
     {
         $out['id'] = $link['id'];
         // Not an internal link
-        if ($link['url'][0] != '?') {
+        if (! is_note($link['url'])) {
             $out['url'] = $link['url'];
         } else {
             $out['url'] = $indexUrl . $link['url'];

@@ -147,8 +147,8 @@ class FeedBuilder
     protected function buildItem($link, $pageaddr)
     {
         $link['guid'] = $pageaddr . '?' . $link['shorturl'];
-        // Check for both signs of a note: starting with ? and 7 chars long.
-        if ($link['url'][0] === '?' && strlen($link['url']) === 7) {
+        // Prepend the root URL for notes
+        if (is_note($link['url'])) {
             $link['url'] = $pageaddr . $link['url'];
         }
         if ($this->usePermalinks === true) {
