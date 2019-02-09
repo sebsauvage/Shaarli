@@ -118,7 +118,18 @@
   <div id="actions" class="subheader-form">
     <div class="pure-g">
       <div class="pure-u-1">
-        <a href="" id="actions-delete" class="button">{'Delete'|t}</a>
+        <a href="" id="actions-delete" class="button">
+          <i class="fa fa-trash"></i>
+          {'Delete'|t}
+        </a>&nbsp;
+        <a href="" class="actions-change-visibility button" data-visibility="public">
+          <i class="fa fa-globe"></i>
+          {'Set public'|t}
+        </a>&nbsp;
+        <a href="" class="actions-change-visibility button" data-visibility="private">
+          <i class="fa fa-user-secret"></i>
+          {'Set private'|t}
+        </a>
       </div>
     </div>
   </div>
