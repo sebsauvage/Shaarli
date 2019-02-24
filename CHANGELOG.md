@@ -4,6 +4,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [v0.10.3](https://github.com/shaarli/Shaarli/releases/tag/v0.10.3) - 2019-02-23
+### Added
+- Add OpenGraph metadata tags on permalink page
+- Add CORS headers to REST API reponses
+- Add a button to toggle checkboxes of displayed links
+- Add an icon to the link list when the Isso plugin is enabled
+- Add noindex, nofollow to documentation pages
+- Document usage of robots.txt
+- Add a button to set links as sticky
+
+### Changed
+- Update French translation
+- Refactor the documentation homepage
+- Bump netscape-bookmark-parser
+- Update session_start condition
+- Improve accessibility
+- Cleanup and refactor lint tooling
+
+### Fixed
+- Fix input size for dropdown search form
+- Fix history for bulk link deletion
+- Fix thumbnail requests
+- Fix hashtag rendering when markdown escaping is enabled
+- Fix AJAX tag deletion
+- Fix lint errors and improve PSR-1 and PSR-2 compliance
+
+### Removed
+- Remove Firefox Share documentation
+
 ## [v0.10.2](https://github.com/shaarli/Shaarli/releases/tag/v0.10.2) - 2018-08-11
 
 ### Fixed
@@ -12,7 +42,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v0.10.1](https://github.com/shaarli/Shaarli/releases/tag/v0.10.1) - 2018-08-11
 
-### Changed 
+### Changed
 
 - Accessibility:
     - Remove alt text on the logo
@@ -46,7 +76,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Use Travis matrix and stages to run Javascript tests in a dedicated environment
 - Add tag endpoint in the REST API
 - Build the documentation in Travis builds
-- Provide a Docker Compose example 
+- Provide a Docker Compose example
 
 ### Changed
 - Use web-thumbnailer to retrieve thumbnails (see #687)
