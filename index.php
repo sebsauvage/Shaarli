@@ -1171,6 +1171,8 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $link['thumbnail'] = $thumbnailer->get($url);
         }
 
+        $link['sticky'] = isset($link['sticky']) ? $link['sticky'] : false;
+
         $pluginManager->executeHooks('save_link', $link);
 
         $LINKSDB[$id] = $link;
