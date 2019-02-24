@@ -129,9 +129,7 @@ class ApiMiddleware
         $linkDb = new \Shaarli\Bookmark\LinkDB(
             $conf->get('resource.datastore'),
             true,
-            $conf->get('privacy.hide_public_links'),
-            $conf->get('redirector.url'),
-            $conf->get('redirector.encode_url')
+            $conf->get('privacy.hide_public_links')
         );
         $this->container['db'] = $linkDb;
     }

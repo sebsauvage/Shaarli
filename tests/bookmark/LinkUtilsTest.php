@@ -216,56 +216,27 @@ class LinkUtilsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test text2clickable without a redirector being set.
+     * Test text2clickable.
      */
-    public function testText2clickableWithoutRedirector()
+    public function testText2clickable()
     {
         $text = 'stuff http://hello.there/is=someone#here otherstuff';
         $expectedText = 'stuff <a href="http://hello.there/is=someone#here">'
             . 'http://hello.there/is=someone#here</a> otherstuff';
-        $processedText = text2clickable($text, '');
+        $processedText = text2clickable($text);
         $this->assertEquals($expectedText, $processedText);
 
         $text = 'stuff http://hello.there/is=someone#here(please) otherstuff';
         $expectedText = 'stuff <a href="http://hello.there/is=someone#here(please)">'
             . 'http://hello.there/is=someone#here(please)</a> otherstuff';
-        $processedText = text2clickable($text, '');
+        $processedText = text2clickable($text);
         $this->assertEquals($expectedText, $processedText);
 
         $text = 'stuff http://hello.there/is=someone#here(please)&no otherstuff';
+        $text = 'stuff http://hello.there/is=someone#here(please)&no otherstuff';
         $expectedText = 'stuff <a href="http://hello.there/is=someone#here(please)&no">'
             . 'http://hello.there/is=someone#here(please)&no</a> otherstuff';
-        $processedText = text2clickable($text, '');
-        $this->assertEquals($expectedText, $processedText);
-    }
-
-    /**
-     * Test text2clickable with a redirector set.
-     */
-    public function testText2clickableWithRedirector()
-    {
-        $text = 'stuff http://hello.there/is=someone#here otherstuff';
-        $redirector = 'http://redirector.to';
-        $expectedText = 'stuff <a href="' .
-            $redirector .
-            urlencode('http://hello.there/is=someone#here') .
-            '">http://hello.there/is=someone#here</a> otherstuff';
-        $processedText = text2clickable($text, $redirector);
-        $this->assertEquals($expectedText, $processedText);
-    }
-
-    /**
-     * Test text2clickable a redirector set and without URL encode.
-     */
-    public function testText2clickableWithRedirectorDontEncode()
-    {
-        $text = 'stuff http://hello.there/?is=someone&or=something#here otherstuff';
-        $redirector = 'http://redirector.to';
-        $expectedText = 'stuff <a href="' .
-            $redirector .
-            'http://hello.there/?is=someone&or=something#here' .
-            '">http://hello.there/?is=someone&or=something#here</a> otherstuff';
-        $processedText = text2clickable($text, $redirector, false);
+        $processedText = text2clickable($text);
         $this->assertEquals($expectedText, $processedText);
     }
 

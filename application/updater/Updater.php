@@ -218,7 +218,6 @@ class Updater
         try {
             $this->conf->set('general.title', escape($this->conf->get('general.title')));
             $this->conf->set('general.header_link', escape($this->conf->get('general.header_link')));
-            $this->conf->set('redirector.url', escape($this->conf->get('redirector.url')));
             $this->conf->write($this->isLoggedIn);
         } catch (Exception $e) {
             error_log($e->getMessage());
@@ -548,6 +547,16 @@ class Updater
 
         $this->linkDB->save($this->conf->get('resource.page_cache'));
 
+        return true;
+    }
+
+    /**
+     * Remove redirector settings.
+     */
+    public function updateMethodRemoveRedirector()
+    {
+        $this->conf->remove('redirector');
+        $this->conf->write(true);
         return true;
     }
 }

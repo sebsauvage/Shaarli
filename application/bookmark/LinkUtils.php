@@ -133,29 +133,15 @@ function count_private($links)
  * In a string, converts URLs to clickable links.
  *
  * @param string $text       input string.
- * @param string $redirector if a redirector is set, use it to gerenate links.
- * @param bool   $urlEncode  Use `urlencode()` on the URL after the redirector or not.
  *
  * @return string returns $text with all links converted to HTML links.
  *
  * @see Function inspired from http://www.php.net/manual/en/function.preg-replace.php#85722
  */
-function text2clickable($text, $redirector = '', $urlEncode = true)
+function text2clickable($text)
 {
     $regex = '!(((?:https?|ftp|file)://|apt:|magnet:)\S+[a-z0-9\(\)]/?)!si';
-
-    if (empty($redirector)) {
-        return preg_replace($regex, '<a href="$1">$1</a>', $text);
-    }
-    // Redirector is set, urlencode the final URL.
-    return preg_replace_callback(
-        $regex,
-        function ($matches) use ($redirector, $urlEncode) {
-            $url = $urlEncode ? urlencode($matches[1]) : $matches[1];
-            return '<a href="' . $redirector . $url .'">'. $matches[1] .'</a>';
-        },
-        $text
-    );
+    return preg_replace($regex, '<a href="$1">$1</a>', $text);
 }
 
 /**
@@ -197,15 +183,13 @@ function space2nbsp($text)
  * Format Shaarli's description
  *
  * @param string $description shaare's description.
- * @param string $redirector  if a redirector is set, use it to gerenate links.
- * @param bool   $urlEncode   Use `urlencode()` on the URL after the redirector or not.
  * @param string $indexUrl    URL to Shaarli's index.
 
  * @return string formatted description.
  */
-function format_description($description, $redirector = '', $urlEncode = true, $indexUrl = '')
+function format_description($description, $indexUrl = '')
 {
-    return nl2br(space2nbsp(hashtag_autolink(text2clickable($description, $redirector, $urlEncode), $indexUrl)));
+    return nl2br(space2nbsp(hashtag_autolink(text2clickable($description), $indexUrl)));
 }
 
 /**

@@ -362,36 +362,6 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test real_url without redirector.
-     */
-    public function testLinkRealUrlWithoutRedirector()
-    {
-        $db = new LinkDB(self::$testDatastore, false, false);
-        foreach ($db as $link) {
-            $this->assertEquals($link['url'], $link['real_url']);
-        }
-    }
-
-    /**
-     * Test real_url with redirector.
-     */
-    public function testLinkRealUrlWithRedirector()
-    {
-        $redirector = 'http://redirector.to?';
-        $db = new LinkDB(self::$testDatastore, false, false, $redirector);
-        foreach ($db as $link) {
-            $this->assertStringStartsWith($redirector, $link['real_url']);
-            $this->assertNotFalse(strpos($link['real_url'], urlencode('://')));
-        }
-
-        $db = new LinkDB(self::$testDatastore, false, false, $redirector, false);
-        foreach ($db as $link) {
-            $this->assertStringStartsWith($redirector, $link['real_url']);
-            $this->assertFalse(strpos($link['real_url'], urlencode('://')));
-        }
-    }
-
-    /**
      * Test filter with string.
      */
     public function testFilterString()
@@ -516,7 +486,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     public function testRenameTagCaseSensitive()
     {
         self::$refDB->write(self::$testDatastore);
-        $linkDB = new LinkDB(self::$testDatastore, true, false, '');
+        $linkDB = new LinkDB(self::$testDatastore, true, false);
 
         $res = $linkDB->renameTag('sTuff', 'Taz');
         $this->assertEquals(1, count($res));
