@@ -1064,7 +1064,6 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign('api_enabled', $conf->get('api.enabled', true));
             $PAGE->assign('api_secret', $conf->get('api.secret'));
             $PAGE->assign('languages', Languages::getAvailableLanguages());
-            $PAGE->assign('language', $conf->get('translation.language'));
             $PAGE->assign('gd_enabled', extension_loaded('gd'));
             $PAGE->assign('thumbnails_mode', $conf->get('thumbnails.mode', Thumbnailer::MODE_NONE));
             $PAGE->assign('pagetitle', t('Configure') .' - '. $conf->get('general.title', 'Shaarli'));
