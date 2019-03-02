@@ -2,7 +2,7 @@
 
 <div class="pure-g">
   <div class="pure-u-2-24"></div>
-  <div id="footer" class="pure-u-20-24 footer-container">
+  <footer id="footer" class="pure-u-20-24 footer-container" role="contentinfo">
     <strong><a href="https://github.com/shaarli/Shaarli">Shaarli</a></strong>
     {if="$is_logged_in===true"}
       {$version}
@@ -13,7 +13,7 @@
       {loop="$plugins_footer.text"}
           {$value}
       {/loop}
-  </div>
+  </footer>
   <div class="pure-u-2-24"></div>
 </div>
 
