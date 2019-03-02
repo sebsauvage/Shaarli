@@ -204,3 +204,16 @@ function link_small_hash($date, $id)
 {
     return smallHash($date->format(LinkDB::LINK_DATE_FORMAT) . $id);
 }
+
+/**
+ * Returns whether or not the link is an internal note.
+ * Its URL starts by `?` because it's actually a permalink.
+ *
+ * @param string $linkUrl
+ *
+ * @return bool true if internal note, false otherwise.
+ */
+function is_note($linkUrl)
+{
+    return isset($linkUrl[0]) && $linkUrl[0] === '?';
+}

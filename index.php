@@ -356,7 +356,7 @@ function showDailyRSS($conf, $loginManager)
         foreach ($links as &$link) {
             $link['formatedDescription'] = format_description($link['description']);
             $link['timestamp'] = $link['created']->getTimestamp();
-            if (startsWith($link['url'], '?')) {
+            if (is_note($link['url'])) {
                 $link['url'] = index_url($_SERVER) . $link['url'];  // make permalink URL absolute
             }
         }
@@ -1166,7 +1166,9 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $link['title'] = $link['url'];
         }
 
-        if ($conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE) {
+        if ($conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE
+            && ! is_note($link['url'])
+        ) {
             $thumbnailer = new Thumbnailer($conf);
             $link['thumbnail'] = $thumbnailer->get($url);
         }
@@ -1550,7 +1552,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         $ids = [];
         foreach ($LINKSDB as $link) {
             // A note or not HTTP(S)
-            if ($link['url'][0] === '?' || ! startsWith(strtolower($link['url']), 'http')) {
+            if (is_note($link['url']) || ! startsWith(strtolower($link['url']), 'http')) {
                 continue;
             }
             $ids[] = $link['id'];

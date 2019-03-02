@@ -289,6 +289,26 @@ class LinkUtilsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test is_note with note URLs.
+     */
+    public function testIsNote()
+    {
+        $this->assertTrue(is_note('?'));
+        $this->assertTrue(is_note('?abcDEf'));
+        $this->assertTrue(is_note('?_abcDEf#123'));
+    }
+
+    /**
+     * Test is_note with non note URLs.
+     */
+    public function testIsNotNote()
+    {
+        $this->assertFalse(is_note(''));
+        $this->assertFalse(is_note('nope'));
+        $this->assertFalse(is_note('https://github.com/shaarli/Shaarli/?hi'));
+    }
+
+    /**
      * Util function to build an hashtag link.
      *
      * @param string $hashtag Hashtag name.
