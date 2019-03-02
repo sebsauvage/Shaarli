@@ -20,7 +20,7 @@
         {if="$is_logged_in || $openshaarli"}
           <li class="pure-menu-item">
             <a href="?do=addlink" class="pure-menu-link" id="shaarli-menu-shaare">
-              <i class="fa fa-plus" ></i> {'Shaare'|t}
+              <i class="fa fa-plus" aria-hidden="true"></i> {'Shaare'|t}
             </a>
           </li>
           <li class="pure-menu-item" id="shaarli-menu-tools">
@@ -67,27 +67,27 @@
           <li class="pure-menu-item" id="shaarli-menu-desktop-search">
             <a href="#" class="pure-menu-link subheader-opener"
                data-open-id="search"
-               id="search-button" title="{'Search'|t}">
-              <i class="fa fa-search"></i>
+               id="search-button" aria-label="{'Search'|t}" title="{'Search'|t}">
+              <i class="fa fa-search" aria-hidden="true"></i>
             </a>
           </li>
           <li class="pure-menu-item" id="shaarli-menu-desktop-rss">
-            <a href="?do={$feed_type}{$searchcrits}" class="pure-menu-link" title="{'RSS Feed'|t}">
-              <i class="fa fa-rss"></i>
+            <a href="?do={$feed_type}{$searchcrits}" class="pure-menu-link" title="{'RSS Feed'|t}" aria-label="{'RSS Feed'|t}">
+              <i class="fa fa-rss" aria-hidden="true"></i>
             </a>
           </li>
           {if="!$is_logged_in"}
             <li class="pure-menu-item" id="shaarli-menu-desktop-login">
               <a href="?do=login" class="pure-menu-link"
                  data-open-id="header-login-form"
-                 id="login-button" title="{'Login'|t}">
-                <i class="fa fa-user"></i>
+                 id="login-button" aria-label="{'Login'|t}" title="{'Login'|t}">
+                <i class="fa fa-user" aria-hidden="true"></i>
               </a>
             </li>
           {else}
             <li class="pure-menu-item" id="shaarli-menu-desktop-logout">
-              <a href="?do=logout" class="pure-menu-link" title="{'Logout'|t}">
-                <i class="fa fa-sign-out"></i>
+              <a href="?do=logout" class="pure-menu-link" aria-label="{'Logout'|t}" title="{'Logout'|t}">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
               </a>
             </li>
           {/if}

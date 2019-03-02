@@ -94,7 +94,7 @@
           {'tagged'|t}
           {loop="$exploded_tags"}
               <span class="label label-tag" title="{'Remove tag'|t}">
-                <a href="?removetag={function="urlencode($value)"}">{$value}<span class="remove"><i class="fa fa-times"></i></span></a>
+                <a href="?removetag={function="urlencode($value)"}">{$value}<span class="remove"><i class="fa fa-times" aria-hidden="true"></i></span></a>
               </span>
           {/loop}
         {/if}
@@ -195,18 +195,18 @@
                       <input type="checkbox" class="link-checkbox" value="{$value.id}">
                     </span>
                     <span class="linklist-item-infos-controls-item ctrl-edit">
-                      <a href="?edit_link={$value.id}" title="{$strEdit}"><i class="fa fa-pencil-square-o edit-link"></i></a>
+                      <a href="?edit_link={$value.id}" aria-label="{$strEdit}" title="{$strEdit}"><i class="fa fa-pencil-square-o edit-link" aria-hidden="true"></i></a>
                     </span>
                     <span class="linklist-item-infos-controls-item ctrl-delete">
-                      <a href="?delete_link&amp;lf_linkdate={$value.id}&amp;token={$token}"
+                      <a href="?delete_link&amp;lf_linkdate={$value.id}&amp;token={$token}" aria-label="{$strDelete}"
                          title="{$strDelete}" class="delete-link pure-u-0 pure-u-lg-visible confirm-delete">
-                        <i class="fa fa-trash"></i>
+                        <i class="fa fa-trash" aria-hidden="true"></i>
                       </a>
                     </span>
                     <span class="linklist-item-infos-controls-item ctrl-pin">
                       <a href="?do=pin&amp;id={$value.id}&amp;token={$token}"
-                         title="{$strToggleSticky}" class="pin-link {if="$value.sticky"}pinned-link{/if} pure-u-0 pure-u-lg-visible">
-                        <i class="fa fa-thumb-tack"></i>
+                         title="{$strToggleSticky}" aria-label="{$strToggleSticky}" class="pin-link {if="$value.sticky"}pinned-link{/if} pure-u-0 pure-u-lg-visible">
+                        <i class="fa fa-thumb-tack" aria-hidden="true"></i>
                       </a>
                     </span>
                   </div>
@@ -248,10 +248,10 @@
                 {ignore}do not add space or line break between these div - Firefox issue{/ignore}
                 class="linklist-item-infos-url pure-u-lg-5-12 pure-u-1">
                 <a href="{$value.real_url}" title="{$value.title}">
-                  <i class="fa fa-link"></i> {$value.url}
+                  <i class="fa fa-link" aria-hidden="true"></i> {$value.url}
                 </a>
                 <div class="linklist-item-buttons pure-u-0 pure-u-lg-visible">
-                  <a href="#" title="{$strFold}" class="fold-button"><i class="fa fa-chevron-up"></i></a>
+                  <a href="#" aria-label="{$strFold}" title="{$strFold}" class="fold-button"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
                 </div>
               </div>
               <div class="mobile-buttons pure-u-1 pure-u-lg-0">
@@ -264,12 +264,12 @@
                 {/if}
                 {if="$is_logged_in"}
                   &middot;
-                  <a href="?delete_link&amp;lf_linkdate={$value.id}&amp;token={$token}"
+                  <a href="?delete_link&amp;lf_linkdate={$value.id}&amp;token={$token}" aria-label="{$strDelete}"
                      title="{$strDelete}" class="delete-link confirm-delete">
-                    <i class="fa fa-trash"></i>
+                    <i class="fa fa-trash" aria-hidden="true"></i>
                   </a>
                   &middot;
-                  <a href="?edit_link={$value.id}" title="{$strEdit}"><i class="fa fa-pencil-square-o edit-link"></i></a>
+                  <a href="?edit_link={$value.id}" aria-label="{$strEdit}" title="{$strEdit}"><i class="fa fa-pencil-square-o edit-link" aria-hidden="true"></i></a>
                 {/if}
               </div>
             </div>
