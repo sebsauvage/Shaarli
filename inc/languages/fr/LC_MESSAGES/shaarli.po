@@ -1255,6 +1255,9 @@ msgstr ""
 #~ msgid "Selection"
 #~ msgstr "Choisir"
 
+#~ msgid "Select all"
+#~ msgstr "Tout sélectionner"
+
 #~ msgid "Public"
 #~ msgstr "Publics"
 
