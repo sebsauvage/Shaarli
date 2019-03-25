@@ -6,21 +6,21 @@
           {'Filters'|t}
         </span>
         {if="$is_logged_in"}
-        <a href="?visibility=private" title="{'Only display private links'|t}"
+        <a href="?visibility=private" aria-label="{'Only display private links'|t}" title="{'Only display private links'|t}"
            class="{if="$visibility==='private'"}filter-on{else}filter-off{/if}"
-        ><i class="fa fa-user-secret"></i></a>
-        <a href="?visibility=public" title="{'Only display public links'|t}"
+        ><i class="fa fa-user-secret" aria-hidden="true"></i></a>
+        <a href="?visibility=public" aria-label="{'Only display public links'|t}" title="{'Only display public links'|t}"
            class="{if="$visibility==='public'"}filter-on{else}filter-off{/if}"
-        ><i class="fa fa-globe"></i></a>
+        ><i class="fa fa-globe" aria-hidden="true"></i></a>
         {/if}
-        <a href="?untaggedonly" title="{'Filter untagged links'|t}"
+        <a href="?untaggedonly" aria-label="{'Filter untagged links'|t}" title="{'Filter untagged links'|t}"
            class={if="$untaggedonly"}"filter-on"{else}"filter-off"{/if}
-        ><i class="fa fa-tag"></i></a>
-        <a href="#" title="{'Select all'|t}"
+        ><i class="fa fa-tag" aria-hidden="true"></i></a>
+        <a href="#" aria-label="{'Select all'|t}" title="{'Select all'|t}"
            class="filter-off select-all-button"
-        ><i class="fa fa-check-square-o"></i></a>
-        <a href="#" class="filter-off fold-all pure-u-lg-0" title="{'Fold all'|t}">
-          <i class="fa fa-chevron-up"></i>
+        ><i class="fa fa-check-square-o" aria-hidden="true"></i></a>
+        <a href="#" class="filter-off fold-all pure-u-lg-0" aria-label="{'Fold all'|t}" title="{'Fold all'|t}">
+          <i class="fa fa-chevron-up" aria-hidden="true"></i>
         </a>
         {loop="$action_plugin"}
           {$value.attr.class=isset($value.attr.class) ? $value.attr.class : ''}
@@ -59,8 +59,8 @@
       <form method="GET" class="pure-u-0 pure-u-lg-visible">
         <input type="text" name="linksperpage" placeholder="133">
       </form>
-      <a href="#" class="filter-off fold-all pure-u-0 pure-u-lg-visible" title="{'Fold all'|t}">
-        <i class="fa fa-chevron-up"></i>
+      <a href="#" class="filter-off fold-all pure-u-0 pure-u-lg-visible" aria-label="{'Fold all'|t}" title="{'Fold all'|t}">
+        <i class="fa fa-chevron-up" aria-hidden="true"></i>
       </a>
     </div>
   </div>
