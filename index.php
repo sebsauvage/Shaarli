@@ -1888,7 +1888,7 @@ $app->group('/api/v1', function () {
     $this->put('/tags/{tagName:[\w]+}', '\Shaarli\Api\Controllers\Tags:putTag')->setName('putTag');
     $this->delete('/tags/{tagName:[\w]+}', '\Shaarli\Api\Controllers\Tags:deleteTag')->setName('deleteTag');
 
-    $this->get('/history', '\Shaarli\Api\Controllers\History:getHistory')->setName('getHistory');
+    $this->get('/history', '\Shaarli\Api\Controllers\HistoryController:getHistory')->setName('getHistory');
 })->add('\Shaarli\Api\ApiMiddleware');
 
 $response = $app->run(true);
