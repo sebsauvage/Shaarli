@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [v0.10.4](https://github.com/shaarli/Shaarli/releases/tag/v0.10.4) - 2019-04-16
+### Fixed
+- Fix thumbnails disabling if PHP GD is not installed
+- Fix a warning if links sticky status isn't set
+
 ## [v0.10.3](https://github.com/shaarli/Shaarli/releases/tag/v0.10.3) - 2019-02-23
 ### Added
 - Add OpenGraph metadata tags on permalink page
