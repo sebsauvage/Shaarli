@@ -38,6 +38,8 @@ class Router
 
     public static $PAGE_DELETELINK = 'delete_link';
 
+    public static $PAGE_CHANGE_VISIBILITY = 'change_visibility';
+
     public static $PAGE_PINLINK = 'pin';
 
     public static $PAGE_EXPORT = 'export';
@@ -147,6 +149,10 @@ class Router
 
         if (isset($get['delete_link'])) {
             return self::$PAGE_DELETELINK;
+        }
+
+        if (isset($get[self::$PAGE_CHANGE_VISIBILITY])) {
+            return self::$PAGE_CHANGE_VISIBILITY;
         }
 
         if (startsWith($query, 'do=' . self::$PAGE_PINLINK)) {

@@ -1266,6 +1266,51 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         exit;
     }
 
+    // -------- User clicked either "Set public" or "Set private" bulk operation
+    if ($targetPage == Router::$PAGE_CHANGE_VISIBILITY) {
+        if (! $sessionManager->checkToken($_GET['token'])) {
+            die(t('Wrong token.'));
+        }
+
+        $ids = trim($_GET['ids']);
+        if (strpos($ids, ' ') !== false) {
+            // multiple, space-separated ids provided
+            $ids = array_values(array_filter(preg_split('/\s+/', escape($ids))));
+        } else {
+            // only a single id provided
+            $ids = [$ids];
+        }
+
+        // assert at least one id is given
+        if (!count($ids)) {
+            die('no id provided');
+        }
+        // assert that the visibility is valid
+        if (!isset($_GET['newVisibility']) || !in_array($_GET['newVisibility'], ['public', 'private'])) {
+            die('invalid visibility');
+        } else {
+            $private = $_GET['newVisibility'] === 'private';
+        }
+        foreach ($ids as $id) {
+            $id = (int) escape($id);
+            $link = $LINKSDB[$id];
+            $link['private'] = $private;
+            $pluginManager->executeHooks('save_link', $link);
+            $LINKSDB[$id] = $link;
+        }
+        $LINKSDB->save($conf->get('resource.page_cache')); // save to disk
+
+        $location = '?';
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $location = generateLocation(
+                $_SERVER['HTTP_REFERER'],
+                $_SERVER['HTTP_HOST']
+            );
+        }
+        header('Location: ' . $location); // After deleting the link, redirect to appropriate location
+        exit;
+    }
+
     // -------- User clicked the "EDIT" button on a link: Display link edit form.
     if (isset($_GET['edit_link'])) {
         $id = (int) escape($_GET['edit_link']);

@@ -466,6 +466,28 @@ function init(description) {
     });
   }
 
+  const changeVisibilityButtons = document.querySelectorAll('.actions-change-visibility');
+  if (changeVisibilityButtons != null && token != null) {
+    [...changeVisibilityButtons].forEach((button) => {
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        const visibility = event.target.getAttribute('data-visibility');
+
+        const links = [];
+        const linkCheckedCheckboxes = document.querySelectorAll('.link-checkbox:checked');
+        [...linkCheckedCheckboxes].forEach((checkbox) => {
+          links.push({
+            id: checkbox.value,
+            title: document.querySelector(`.linklist-item[data-id="${checkbox.value}"] .linklist-link`).innerHTML,
+          });
+        });
+
+        const ids = links.map(item => item.id);
+        window.location = `?change_visibility&token=${token.value}&newVisibility=${visibility}&ids=${ids.join('+')}`;
+      });
+    });
+  }
+
   /**
    * Select all button
    */
