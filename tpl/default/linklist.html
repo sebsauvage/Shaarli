@@ -146,13 +146,14 @@
               </div>
             {/if}
 
-            {if="$is_logged_in"}
-              <div class="linklist-item-editbuttons">
-                {if="$value.private"}
-                  <span class="label label-private">{$strPrivate}</span>
-                {/if}
-              </div>
-            {/if}
+            <div class="linklist-item-editbuttons">
+              {if="$value.sticky"}
+                <span class="label label-sticky">{$strSticky}</span>
+              {/if}
+              {if="$value.private"}
+                <span class="label label-private">{$strPrivate}</span>
+              {/if}
+            </div>
 
             <h2>
               <a href="{$value.real_url}">

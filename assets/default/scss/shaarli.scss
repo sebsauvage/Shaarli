@@ -716,11 +716,19 @@ body,
     }
   }
 
+  .label {
+    font-family: Arial, sans-serif;
+    font-size: .65em;
+  }
+
   .label-private {
     border: solid 1px $orange;
     color: $orange;
-    font-family: Arial, sans-serif;
-    font-size: .65em;
+  }
+
+  .label-sticky {
+    border: solid 1px $blue;
+    color: $blue;
   }
 }
 
