@@ -6,7 +6,7 @@
   "dependencies": {
     "awesomplete": "^1.1.2",
     "blazy": "^1.8.2",
-    "font-awesome": "^4.7.0",
+    "fork-awesome": "^1.1.7",
     "pure-extras": "^1.0.0",
     "purecss": "^1.0.0"
   },
