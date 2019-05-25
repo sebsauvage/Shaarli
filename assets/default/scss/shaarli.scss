@@ -1611,3 +1611,17 @@ form {
     white-space: nowrap;
   }
 }
+
+// Print rules
+@media print {
+  .shaarli-menu {
+    position: absolute;
+  }
+
+  .search-linklist,
+  .link-count-block,
+  .linklist-item-infos-controls-group,
+  .mobile-buttons {
+    display: none;
+  }
+}
