@@ -1,16 +1,18 @@
 <?php
 
-namespace Shaarli\Bookmark;
+namespace Shaarli\Legacy;
 
 use Exception;
-use Shaarli\Bookmark\Exception\LinkNotFoundException;
+use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 
 /**
  * Class LinkFilter.
  *
  * Perform search and filter operation on link data list.
+ *
+ * @deprecated
  */
-class LinkFilter
+class LegacyLinkFilter
 {
     /**
      * @var string permalinks.
@@ -38,12 +40,12 @@ class LinkFilter
     public static $HASHTAG_CHARS = '\p{Pc}\p{N}\p{L}\p{Mn}';
 
     /**
-     * @var LinkDB all available links.
+     * @var LegacyLinkDB all available links.
      */
     private $links;
 
     /**
-     * @param LinkDB $links initialization.
+     * @param LegacyLinkDB $links initialization.
      */
     public function __construct($links)
     {
@@ -84,10 +86,10 @@ class LinkFilter
                     $filtered = $this->links;
                 }
                 if (!empty($request[0])) {
-                    $filtered = (new LinkFilter($filtered))->filterTags($request[0], $casesensitive, $visibility);
+                    $filtered = (new LegacyLinkFilter($filtered))->filterTags($request[0], $casesensitive, $visibility);
                 }
                 if (!empty($request[1])) {
-                    $filtered = (new LinkFilter($filtered))->filterFulltext($request[1], $visibility);
+                    $filtered = (new LegacyLinkFilter($filtered))->filterFulltext($request[1], $visibility);
                 }
                 return $filtered;
             case self::$FILTER_TEXT:
@@ -137,7 +139,7 @@ class LinkFilter
      *
      * @return array $filtered array containing permalink data.
      *
-     * @throws \Shaarli\Bookmark\Exception\LinkNotFoundException if the smallhash doesn't match any link.
+     * @throws BookmarkNotFoundException if the smallhash doesn't match any link.
      */
     private function filterSmallHash($smallHash)
     {
@@ -151,7 +153,7 @@ class LinkFilter
         }
 
         if (empty($filtered)) {
-            throw new LinkNotFoundException();
+            throw new BookmarkNotFoundException();
         }
 
         return $filtered;

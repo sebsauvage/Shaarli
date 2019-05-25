@@ -3,7 +3,7 @@ namespace Shaarli\Bookmark\Exception;
 
 use Exception;
 
-class LinkNotFoundException extends Exception
+class BookmarkNotFoundException extends Exception
 {
     /**
      * LinkNotFoundException constructor.

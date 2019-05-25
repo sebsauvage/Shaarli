@@ -1,17 +1,17 @@
 <?php
 
-namespace Shaarli\Bookmark;
+namespace Shaarli\Legacy;
 
 use ArrayAccess;
 use Countable;
 use DateTime;
 use Iterator;
-use Shaarli\Bookmark\Exception\LinkNotFoundException;
+use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Exceptions\IOException;
 use Shaarli\FileUtils;
 
 /**
- * Data storage for links.
+ * Data storage for bookmarks.
  *
  * This object behaves like an associative array.
  *
@@ -29,8 +29,8 @@ use Shaarli\FileUtils;
  *  - private:  Is this link private? 0=no, other value=yes
  *  - tags:     tags attached to this entry (separated by spaces)
  *  - title     Title of the link
- *  - url       URL of the link. Used for displayable links.
- *              Can be absolute or relative in the database but the relative links
+ *  - url       URL of the link. Used for displayable bookmarks.
+ *              Can be absolute or relative in the database but the relative bookmarks
  *              will be converted to absolute ones in templates.
  *  - real_url  Raw URL in stored in the DB (absolute or relative).
  *  - shorturl  Permalink smallhash
@@ -49,11 +49,13 @@ use Shaarli\FileUtils;
  *   Example:
  *     - DB: link #1 (2010-01-01) link #2 (2016-01-01)
  *     - Order: #2 #1
- *     - Import links containing: link #3 (2013-01-01)
+ *     - Import bookmarks containing: link #3 (2013-01-01)
  *     - New DB: link #1 (2010-01-01) link #2 (2016-01-01) link #3 (2013-01-01)
  *     - Real order: #2 #3 #1
+ *
+ * @deprecated
  */
-class LinkDB implements Iterator, Countable, ArrayAccess
+class LegacyLinkDB implements Iterator, Countable, ArrayAccess
 {
     // Links are stored as a PHP serialized string
     private $datastore;
@@ -61,7 +63,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     // Link date storage format
     const LINK_DATE_FORMAT = 'Ymd_His';
 
-    // List of links (associative array)
+    // List of bookmarks (associative array)
     //  - key:   link date (e.g. "20110823_124546"),
     //  - value: associative array (keys: title, description...)
     private $links;
@@ -71,7 +73,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     private $urls;
 
     /**
-     * @var array List of all links IDS mapped with their array offset.
+     * @var array List of all bookmarks IDS mapped with their array offset.
      *            Map: id->offset.
      */
     protected $ids;
@@ -82,10 +84,10 @@ class LinkDB implements Iterator, Countable, ArrayAccess
     // Position in the $this->keys array (for the Iterator interface)
     private $position;
 
-    // Is the user logged in? (used to filter private links)
+    // Is the user logged in? (used to filter private bookmarks)
     private $loggedIn;
 
-    // Hide public links
+    // Hide public bookmarks
     private $hidePublicLinks;
 
     /**
@@ -95,7 +97,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
      *
      * @param string  $datastore        datastore file path.
      * @param boolean $isLoggedIn       is the user logged in?
-     * @param boolean $hidePublicLinks  if true all links are private.
+     * @param boolean $hidePublicLinks  if true all bookmarks are private.
      */
     public function __construct(
         $datastore,
@@ -280,7 +282,7 @@ You use the community supported version of the original Shaarli project, by Seba
      */
     private function read()
     {
-        // Public links are hidden and user not logged in => nothing to show
+        // Public bookmarks are hidden and user not logged in => nothing to show
         if ($this->hidePublicLinks && !$this->loggedIn) {
             $this->links = array();
             return;
@@ -310,7 +312,7 @@ You use the community supported version of the original Shaarli project, by Seba
 
             $link['sticky'] = isset($link['sticky']) ? $link['sticky'] : false;
 
-            // To be able to load links before running the update, and prepare the update
+            // To be able to load bookmarks before running the update, and prepare the update
             if (!isset($link['created'])) {
                 $link['id'] = $link['linkdate'];
                 $link['created'] = DateTime::createFromFormat(self::LINK_DATE_FORMAT, $link['linkdate']);
@@ -375,13 +377,13 @@ You use the community supported version of the original Shaarli project, by Seba
      *
      * @return array $filtered array containing permalink data.
      *
-     * @throws LinkNotFoundException if the smallhash is malformed or doesn't match any link.
+     * @throws BookmarkNotFoundException if the smallhash is malformed or doesn't match any link.
      */
     public function filterHash($request)
     {
         $request = substr($request, 0, 6);
-        $linkFilter = new LinkFilter($this->links);
-        return $linkFilter->filter(LinkFilter::$FILTER_HASH, $request);
+        $linkFilter = new LegacyLinkFilter($this->links);
+        return $linkFilter->filter(LegacyLinkFilter::$FILTER_HASH, $request);
     }
 
     /**
@@ -393,21 +395,21 @@ You use the community supported version of the original Shaarli project, by Seba
      */
     public function filterDay($request)
     {
-        $linkFilter = new LinkFilter($this->links);
-        return $linkFilter->filter(LinkFilter::$FILTER_DAY, $request);
+        $linkFilter = new LegacyLinkFilter($this->links);
+        return $linkFilter->filter(LegacyLinkFilter::$FILTER_DAY, $request);
     }
 
     /**
-     * Filter links according to search parameters.
+     * Filter bookmarks according to search parameters.
      *
      * @param array  $filterRequest  Search request content. Supported keys:
      *                                - searchtags: list of tags
      *                                - searchterm: term search
      * @param bool   $casesensitive  Optional: Perform case sensitive filter
-     * @param string $visibility     return only all/private/public links
-     * @param bool   $untaggedonly   return only untagged links
+     * @param string $visibility     return only all/private/public bookmarks
+     * @param bool   $untaggedonly   return only untagged bookmarks
      *
-     * @return array filtered links, all links if no suitable filter was provided.
+     * @return array filtered bookmarks, all bookmarks if no suitable filter was provided.
      */
     public function filterSearch(
         $filterRequest = array(),
@@ -420,19 +422,19 @@ You use the community supported version of the original Shaarli project, by Seba
         $searchtags = isset($filterRequest['searchtags']) ? escape($filterRequest['searchtags']) : '';
         $searchterm = isset($filterRequest['searchterm']) ? escape($filterRequest['searchterm']) : '';
 
-        // Search tags + fullsearch - blank string parameter will return all links.
-        $type = LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT; // == "vuotext"
+        // Search tags + fullsearch - blank string parameter will return all bookmarks.
+        $type = LegacyLinkFilter::$FILTER_TAG | LegacyLinkFilter::$FILTER_TEXT; // == "vuotext"
         $request = [$searchtags, $searchterm];
 
-        $linkFilter = new LinkFilter($this);
+        $linkFilter = new LegacyLinkFilter($this);
         return $linkFilter->filter($type, $request, $casesensitive, $visibility, $untaggedonly);
     }
 
     /**
-     * Returns the list tags appearing in the links with the given tags
+     * Returns the list tags appearing in the bookmarks with the given tags
      *
-     * @param array  $filteringTags tags selecting the links to consider
-     * @param string $visibility    process only all/private/public links
+     * @param array  $filteringTags tags selecting the bookmarks to consider
+     * @param string $visibility    process only all/private/public bookmarks
      *
      * @return array tag => linksCount
      */
@@ -471,12 +473,12 @@ You use the community supported version of the original Shaarli project, by Seba
     }
 
     /**
-     * Rename or delete a tag across all links.
+     * Rename or delete a tag across all bookmarks.
      *
      * @param string $from Tag to rename
      * @param string $to   New tag. If none is provided, the from tag will be deleted
      *
-     * @return array|bool List of altered links or false on error
+     * @return array|bool List of altered bookmarks or false on error
      */
     public function renameTag($from, $to)
     {
@@ -519,7 +521,7 @@ You use the community supported version of the original Shaarli project, by Seba
     }
 
     /**
-     * Reorder links by creation date (newest first).
+     * Reorder bookmarks by creation date (newest first).
      *
      * Also update the urls and ids mapping arrays.
      *
@@ -562,7 +564,7 @@ You use the community supported version of the original Shaarli project, by Seba
     }
 
     /**
-     * Returns a link offset in links array from its unique ID.
+     * Returns a link offset in bookmarks array from its unique ID.
      *
      * @param int $id Persistent ID of a link.
      *
