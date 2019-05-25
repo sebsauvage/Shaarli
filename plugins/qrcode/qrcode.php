@@ -22,7 +22,6 @@ function hook_qrcode_render_linklist($data)
     foreach ($data['links'] as &$value) {
         $qrcode = sprintf(
             $qrcode_html,
-            urlencode($value['url']),
             $value['url'],
             PluginManager::$PLUGINS_PATH
         );
