@@ -5,7 +5,7 @@ namespace Shaarli\Render;
 use Exception;
 use RainTPL;
 use Shaarli\ApplicationUtils;
-use Shaarli\Bookmark\LinkDB;
+use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Thumbnailer;
 
@@ -34,9 +34,9 @@ class PageBuilder
     protected $session;
 
     /**
-     * @var LinkDB $linkDB instance.
+     * @var BookmarkServiceInterface $bookmarkService instance.
      */
-    protected $linkDB;
+    protected $bookmarkService;
 
     /**
      * @var null|string XSRF token
@@ -52,18 +52,18 @@ class PageBuilder
      * PageBuilder constructor.
      * $tpl is initialized at false for lazy loading.
      *
-     * @param ConfigManager $conf       Configuration Manager instance (reference).
-     * @param array         $session    $_SESSION array
-     * @param LinkDB        $linkDB     instance.
-     * @param string        $token      Session token
-     * @param bool          $isLoggedIn
+     * @param ConfigManager            $conf    Configuration Manager instance (reference).
+     * @param array                    $session $_SESSION array
+     * @param BookmarkServiceInterface $linkDB  instance.
+     * @param string                   $token   Session token
+     * @param bool                     $isLoggedIn
      */
     public function __construct(&$conf, $session, $linkDB = null, $token = null, $isLoggedIn = false)
     {
         $this->tpl = false;
         $this->conf = $conf;
         $this->session = $session;
-        $this->linkDB = $linkDB;
+        $this->bookmarkService = $linkDB;
         $this->token = $token;
         $this->isLoggedIn = $isLoggedIn;
     }
@@ -125,8 +125,8 @@ class PageBuilder
 
         $this->tpl->assign('language', $this->conf->get('translation.language'));
 
-        if ($this->linkDB !== null) {
-            $this->tpl->assign('tags', $this->linkDB->linksCountPerTag());
+        if ($this->bookmarkService !== null) {
+            $this->tpl->assign('tags', $this->bookmarkService->bookmarksCountPerTag());
         }
 
         $this->tpl->assign(
@@ -140,6 +140,8 @@ class PageBuilder
             $this->tpl->assign('global_warnings', $_SESSION['warnings']);
             unset($_SESSION['warnings']);
         }
+
+        $this->tpl->assign('formatter', $this->conf->get('formatter', 'default'));
 
         // To be removed with a proper theme configuration.
         $this->tpl->assign('conf', $this->conf);

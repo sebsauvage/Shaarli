@@ -8,6 +8,9 @@
 <link href="img/favicon.png" rel="shortcut icon" type="image/png" />
 <link href="img/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
 <link type="text/css" rel="stylesheet" href="css/shaarli.min.css?v={$version_hash}" />
+{if="$formatter==='markdown'"}
+  <link type="text/css" rel="stylesheet" href="css/markdown.min.css?v={$version_hash}" />
+{/if}
 {loop="$plugins_includes.css_files"}
   <link type="text/css" rel="stylesheet" href="{$value}?v={$version_hash}#"/>
 {/loop}

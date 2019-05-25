@@ -2,6 +2,7 @@
 
 namespace Shaarli\Api\Controllers;
 
+use Shaarli\Bookmark\BookmarkFilter;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -26,8 +27,8 @@ class Info extends ApiController
     public function getInfo($request, $response)
     {
         $info = [
-            'global_counter' => count($this->linkDb),
-            'private_counter' => count_private($this->linkDb),
+            'global_counter' => $this->bookmarkService->count(),
+            'private_counter' => $this->bookmarkService->count(BookmarkFilter::$PRIVATE),
             'settings' => array(
                 'title' => $this->conf->get('general.title', 'Shaarli'),
                 'header_link' => $this->conf->get('general.header_link', '?'),

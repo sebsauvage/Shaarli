@@ -68,6 +68,28 @@
             </select>
           </div>
         </div>
+        <div class="pure-u-lg-{$ratioLabel} pure-u-1">
+          <div class="form-label">
+            <label for="formatter">
+              <span class="label-name">{'Description formatter'|t}</span>
+            </label>
+          </div>
+        </div>
+        <div class="pure-u-lg-{$ratioInput} pure-u-1">
+          <div class="form-input">
+            <select name="formatter" id="formatter" class="align">
+              {loop="$formatter_available"}
+                <option value="{$value}"
+                  {if="$value===$formatter"}
+                    selected="selected"
+                  {/if}
+                >
+                  {$value|ucfirst}
+                </option>
+              {/loop}
+            </select>
+          </div>
+        </div>
       </div>
       <div class="pure-g">
         <div class="pure-u-lg-{$ratioLabel} pure-u-1">

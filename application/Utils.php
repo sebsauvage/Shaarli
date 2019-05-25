@@ -162,7 +162,7 @@ function generateLocation($referer, $host, $loopTerms = array())
     $finalReferer = '?';
 
     // No referer if it contains any value in $loopCriteria.
-    foreach ($loopTerms as $value) {
+    foreach (array_filter($loopTerms) as $value) {
         if (strpos($referer, $value) !== false) {
             return $finalReferer;
         }

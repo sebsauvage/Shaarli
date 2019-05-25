@@ -57,6 +57,7 @@ class BookmarkMarkdownFormatter extends BookmarkDefaultFormatter
         $processedDescription = $bookmark->getDescription();
         $processedDescription = $this->filterProtocols($processedDescription);
         $processedDescription = $this->formatHashTags($processedDescription);
+        $processedDescription = $this->reverseEscapedHtml($processedDescription);
         $processedDescription = $this->parsedown
             ->setMarkupEscaped($this->escape)
             ->setBreaksEnabled(true)
@@ -194,5 +195,10 @@ class BookmarkMarkdownFormatter extends BookmarkDefaultFormatter
             $description
         );
         return $description;
+    }
+
+    protected function reverseEscapedHtml($description)
+    {
+        return unescape($description);
     }
 }

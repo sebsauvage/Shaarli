@@ -2,6 +2,9 @@
 namespace Shaarli\Feed;
 
 use DateTime;
+use Shaarli\Bookmark\Bookmark;
+use Shaarli\Bookmark\BookmarkServiceInterface;
+use Shaarli\Formatter\BookmarkFormatter;
 
 /**
  * FeedBuilder class.
@@ -26,14 +29,19 @@ class FeedBuilder
     public static $DEFAULT_LANGUAGE = 'en-en';
 
     /**
-     * @var int Number of links to display in a feed by default.
+     * @var int Number of bookmarks to display in a feed by default.
      */
     public static $DEFAULT_NB_LINKS = 50;
 
     /**
-     * @var \Shaarli\Bookmark\LinkDB instance.
+     * @var BookmarkServiceInterface instance.
      */
     protected $linkDB;
+
+    /**
+     * @var BookmarkFormatter instance.
+     */
+    protected $formatter;
 
     /**
      * @var string RSS or ATOM feed.
@@ -56,7 +64,7 @@ class FeedBuilder
     protected $isLoggedIn;
 
     /**
-     * @var boolean Use permalinks instead of direct links if true.
+     * @var boolean Use permalinks instead of direct bookmarks if true.
      */
     protected $usePermalinks;
 
@@ -78,16 +86,17 @@ class FeedBuilder
     /**
      * Feed constructor.
      *
-     * @param \Shaarli\Bookmark\LinkDB $linkDB     LinkDB instance.
+     * @param BookmarkServiceInterface $linkDB     LinkDB instance.
+     * @param BookmarkFormatter        $formatter  instance.
      * @param string                   $feedType   Type of feed.
      * @param array                    $serverInfo $_SERVER.
      * @param array                    $userInput  $_GET.
-     * @param boolean                  $isLoggedIn True if the user is currently logged in,
-     *                                             false otherwise.
+     * @param boolean                  $isLoggedIn True if the user is currently logged in, false otherwise.
      */
-    public function __construct($linkDB, $feedType, $serverInfo, $userInput, $isLoggedIn)
+    public function __construct($linkDB, $formatter, $feedType, $serverInfo, $userInput, $isLoggedIn)
     {
         $this->linkDB = $linkDB;
+        $this->formatter = $formatter;
         $this->feedType = $feedType;
         $this->serverInfo = $serverInfo;
         $this->userInput = $userInput;
@@ -101,13 +110,13 @@ class FeedBuilder
      */
     public function buildData()
     {
-        // Search for untagged links
+        // Search for untagged bookmarks
         if (isset($this->userInput['searchtags']) && empty($this->userInput['searchtags'])) {
             $this->userInput['searchtags'] = false;
         }
 
         // Optionally filter the results:
-        $linksToDisplay = $this->linkDB->filterSearch($this->userInput);
+        $linksToDisplay = $this->linkDB->search($this->userInput);
 
         $nblinksToDisplay = $this->getNbLinks(count($linksToDisplay));
 
@@ -118,6 +127,7 @@ class FeedBuilder
         }
 
         $pageaddr = escape(index_url($this->serverInfo));
+        $this->formatter->addContextData('index_url', $pageaddr);
         $linkDisplayed = array();
         for ($i = 0; $i < $nblinksToDisplay && $i < count($keys); $i++) {
             $linkDisplayed[$keys[$i]] = $this->buildItem($linksToDisplay[$keys[$i]], $pageaddr);
@@ -139,54 +149,44 @@ class FeedBuilder
     /**
      * Build a feed item (one per shaare).
      *
-     * @param array  $link     Single link array extracted from LinkDB.
-     * @param string $pageaddr Index URL.
+     * @param Bookmark $link     Single link array extracted from LinkDB.
+     * @param string   $pageaddr Index URL.
      *
      * @return array Link array with feed attributes.
      */
     protected function buildItem($link, $pageaddr)
     {
-        $link['guid'] = $pageaddr . '?' . $link['shorturl'];
-        // Prepend the root URL for notes
-        if (is_note($link['url'])) {
-            $link['url'] = $pageaddr . $link['url'];
-        }
+        $data = $this->formatter->format($link);
+        $data['guid'] = $pageaddr . '?' . $data['shorturl'];
         if ($this->usePermalinks === true) {
-            $permalink = '<a href="' . $link['url'] . '" title="' . t('Direct link') . '">' . t('Direct link') . '</a>';
+            $permalink = '<a href="'. $data['url'] .'" title="'. t('Direct link') .'">'. t('Direct link') .'</a>';
         } else {
-            $permalink = '<a href="' . $link['guid'] . '" title="' . t('Permalink') . '">' . t('Permalink') . '</a>';
+            $permalink = '<a href="'. $data['guid'] .'" title="'. t('Permalink') .'">'. t('Permalink') .'</a>';
         }
-        $link['description'] = format_description($link['description'], $pageaddr);
-        $link['description'] .= PHP_EOL . PHP_EOL . '<br>&#8212; ' . $permalink;
+        $data['description'] .= PHP_EOL . PHP_EOL . '<br>&#8212; ' . $permalink;
 
-        $pubDate = $link['created'];
-        $link['pub_iso_date'] = $this->getIsoDate($pubDate);
+        $data['pub_iso_date'] = $this->getIsoDate($data['created']);
 
         // atom:entry elements MUST contain exactly one atom:updated element.
-        if (!empty($link['updated'])) {
-            $upDate = $link['updated'];
-            $link['up_iso_date'] = $this->getIsoDate($upDate, DateTime::ATOM);
+        if (!empty($link->getUpdated())) {
+            $data['up_iso_date'] = $this->getIsoDate($data['updated'], DateTime::ATOM);
         } else {
-            $link['up_iso_date'] = $this->getIsoDate($pubDate, DateTime::ATOM);
+            $data['up_iso_date'] = $this->getIsoDate($data['created'], DateTime::ATOM);
         }
 
         // Save the more recent item.
-        if (empty($this->latestDate) || $this->latestDate < $pubDate) {
-            $this->latestDate = $pubDate;
+        if (empty($this->latestDate) || $this->latestDate < $data['created']) {
+            $this->latestDate = $data['created'];
         }
-        if (!empty($upDate) && $this->latestDate < $upDate) {
-            $this->latestDate = $upDate;
+        if (!empty($data['updated']) && $this->latestDate < $data['updated']) {
+            $this->latestDate = $data['updated'];
         }
 
-        $taglist = array_filter(explode(' ', $link['tags']), 'strlen');
-        uasort($taglist, 'strcasecmp');
-        $link['taglist'] = $taglist;
-
-        return $link;
+        return $data;
     }
 
     /**
-     * Set this to true to use permalinks instead of direct links.
+     * Set this to true to use permalinks instead of direct bookmarks.
      *
      * @param boolean $usePermalinks true to force permalinks.
      */
@@ -273,11 +273,11 @@ class FeedBuilder
      * Returns the number of link to display according to 'nb' user input parameter.
      *
      * If 'nb' not set or invalid, default value: $DEFAULT_NB_LINKS.
-     * If 'nb' is set to 'all', display all filtered links (max parameter).
+     * If 'nb' is set to 'all', display all filtered bookmarks (max parameter).
      *
-     * @param int $max maximum number of links to display.
+     * @param int $max maximum number of bookmarks to display.
      *
-     * @return int number of links to display.
+     * @return int number of bookmarks to display.
      */
     public function getNbLinks($max)
     {

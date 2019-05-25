@@ -118,7 +118,7 @@ class BookmarkArray implements \Iterator, \Countable, \ArrayAccess
         $realOffset = $this->getBookmarkOffset($offset);
         $url = $this->bookmarks[$realOffset]->getUrl();
         unset($this->urls[$url]);
-        unset($this->ids[$realOffset]);
+        unset($this->ids[$offset]);
         unset($this->bookmarks[$realOffset]);
     }
 

@@ -30,6 +30,7 @@ module.exports = [
         './assets/default/js/base.js',
         './assets/default/scss/shaarli.scss',
       ].concat(glob.sync('./assets/default/img/*')),
+      markdown: './assets/common/css/markdown.css',
     },
     output: {
       filename: '[name].min.js',
@@ -50,7 +51,7 @@ module.exports = [
           }
         },
         {
-          test: /\.scss/,
+          test: /\.s?css/,
           use: extractCssDefault.extract({
             use: [{
               loader: "css-loader",
@@ -97,6 +98,7 @@ module.exports = [
         './assets/vintage/css/reset.css',
         './assets/vintage/css/shaarli.css',
       ].concat(glob.sync('./assets/vintage/img/*')),
+      markdown: './assets/common/css/markdown.css',
       thumbnails: './assets/common/js/thumbnails.js',
       thumbnails_update: './assets/common/js/thumbnails-update.js',
     },
