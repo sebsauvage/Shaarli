@@ -47,3 +47,6 @@ tpl/default/img
 tpl/vintage/js
 tpl/vintage/css
 tpl/vintage/img
+
+# Documented scripts
+generate_templates.php
