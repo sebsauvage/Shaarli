@@ -3,7 +3,7 @@
 # - Build documentation
 FROM arm32v6/alpine:3.8 as docs
 ADD . /usr/src/app/shaarli
-RUN apk --update --no-cache add py2-pip  \
+RUN apk --update --no-cache add py2-pip \
     && cd /usr/src/app/shaarli \
     && pip install --no-cache-dir mkdocs \
     && mkdocs build --clean
