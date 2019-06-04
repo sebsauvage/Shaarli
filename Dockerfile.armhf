@@ -36,6 +36,7 @@ RUN apk --update --no-cache add \
         nginx \
         php7 \
         php7-ctype \
+        php7-curl \
         php7-fpm \
         php7-gd \
         php7-iconv \
