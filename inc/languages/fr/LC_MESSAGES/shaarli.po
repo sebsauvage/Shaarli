@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2019-05-25 16:37+0200\n"
-"PO-Revision-Date: 2019-05-25 16:37+0200\n"
+"POT-Creation-Date: 2019-07-06 12:14+0200\n"
+"PO-Revision-Date: 2019-07-06 12:17+0200\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -252,7 +252,7 @@ msgstr "404 Introuvable"
 msgid "Couldn't retrieve updater class methods."
 msgstr "Impossible de récupérer les méthodes de la classe Updater."
 
-#: application/updater/Updater.php:526 index.php:1033
+#: application/updater/Updater.php:526 index.php:1034
 msgid ""
 "You have enabled or changed thumbnails mode. <a href=\"?do=thumbs_update"
 "\">Please synchronize them</a>."
@@ -337,8 +337,8 @@ msgid "You are not supposed to change a password on an Open Shaarli."
 msgstr ""
 "Vous n'êtes pas censé modifier le mot de passe d'un Shaarli en mode ouvert."
 
-#: index.php:957 index.php:1007 index.php:1092 index.php:1122 index.php:1232
-#: index.php:1279
+#: index.php:957 index.php:1007 index.php:1094 index.php:1124 index.php:1234
+#: index.php:1281
 msgid "Wrong token."
 msgstr "Jeton invalide."
 
@@ -356,64 +356,64 @@ msgstr "Votre mot de passe a été modifié"
 msgid "Change password"
 msgstr "Modifier le mot de passe"
 
-#: index.php:1053
+#: index.php:1054
 msgid "Configuration was saved."
 msgstr "La configuration a été sauvegardée."
 
-#: index.php:1076 tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
+#: index.php:1078 tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
 msgid "Configure"
 msgstr "Configurer"
 
-#: index.php:1086 tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
+#: index.php:1088 tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
 msgid "Manage tags"
 msgstr "Gérer les tags"
 
-#: index.php:1105
+#: index.php:1107
 #, php-format
 msgid "The tag was removed from %d link."
 msgid_plural "The tag was removed from %d links."
 msgstr[0] "Le tag a été supprimé de %d lien."
 msgstr[1] "Le tag a été supprimé de %d liens."
 
-#: index.php:1106
+#: index.php:1108
 #, php-format
 msgid "The tag was renamed in %d link."
 msgid_plural "The tag was renamed in %d links."
 msgstr[0] "Le tag a été renommé dans %d lien."
 msgstr[1] "Le tag a été renommé dans %d liens."
 
-#: index.php:1113 tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
+#: index.php:1115 tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
 msgid "Shaare a new link"
 msgstr "Partager un nouveau lien"
 
-#: index.php:1342 tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
+#: index.php:1344 tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
 msgid "Edit"
 msgstr "Modifier"
 
-#: index.php:1342 index.php:1413
+#: index.php:1344 index.php:1416
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:26
 msgid "Shaare"
 msgstr "Shaare"
 
-#: index.php:1382
+#: index.php:1385
 msgid "Note: "
 msgstr "Note : "
 
-#: index.php:1421
+#: index.php:1424
 msgid "Invalid link ID provided"
 msgstr ""
 
-#: index.php:1441 tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:65
+#: index.php:1444 tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:65
 msgid "Export"
 msgstr "Exporter"
 
-#: index.php:1503 tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:83
+#: index.php:1506 tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:83
 msgid "Import"
 msgstr "Importer"
 
-#: index.php:1513
+#: index.php:1516
 #, php-format
 msgid ""
 "The file you are trying to upload is probably bigger than what this "
@@ -423,20 +423,20 @@ msgstr ""
 "le serveur web peut accepter (%s). Merci de l'envoyer en parties plus "
 "légères."
 
-#: index.php:1558 tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
+#: index.php:1561 tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:22
 msgid "Plugin administration"
 msgstr "Administration des plugins"
 
-#: index.php:1612 tmp/thumbnails.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
+#: index.php:1615 tmp/thumbnails.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
 msgid "Thumbnails update"
 msgstr "Mise à jour des miniatures"
 
-#: index.php:1778
+#: index.php:1781
 msgid "Search: "
 msgstr "Recherche : "
 
-#: index.php:1821
+#: index.php:1824
 #, php-format
 msgid ""
 "<pre>Sessions do not seem to work correctly on your server.<br>Make sure the "
@@ -455,7 +455,7 @@ msgstr ""
 "des cookies. Nous vous recommandons d'accéder à votre serveur depuis son "
 "adresse IP ou un <em>Fully Qualified Domain Name</em>.<br>"
 
-#: index.php:1831
+#: index.php:1834
 msgid "Click to try again."
 msgstr "Cliquer ici pour réessayer."
 
@@ -592,7 +592,7 @@ msgstr "Mauvaise réponse du hub %s"
 msgid "Enable PubSubHubbub feed publishing."
 msgstr "Active la publication de flux vers PubSubHubbub."
 
-#: plugins/qrcode/qrcode.php:73 plugins/wallabag/wallabag.php:68
+#: plugins/qrcode/qrcode.php:72 plugins/wallabag/wallabag.php:68
 msgid "For each link, add a QRCode icon."
 msgstr "Pour chaque lien, ajouter une icône de QRCode."
 
@@ -679,6 +679,34 @@ msgstr "Vous pouvez aussi modifier les tags dans la"
 msgid "tag list"
 msgstr "liste des tags"
 
+#: tmp/configure.90100d2eaf5d3705e14b9b4f78ecddc9.rtpl.php:143
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:312
+#: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:31
+msgid "All"
+msgstr "Tous"
+
+#: tmp/configure.90100d2eaf5d3705e14b9b4f78ecddc9.rtpl.php:147
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:316
+msgid "Only common media hosts"
+msgstr "Seulement les hébergeurs de média connus"
+
+#: tmp/configure.90100d2eaf5d3705e14b9b4f78ecddc9.rtpl.php:151
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:320
+msgid "None"
+msgstr "Aucune"
+
+#: tmp/configure.90100d2eaf5d3705e14b9b4f78ecddc9.rtpl.php:158
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:297
+msgid "You need to enable the extension <code>php-gd</code> to use thumbnails."
+msgstr ""
+"Vous devez activer l'extension <code>php-gd</code> pour utiliser les "
+"miniatures."
+
+#: tmp/configure.90100d2eaf5d3705e14b9b4f78ecddc9.rtpl.php:162
+#| msgid "Enable thumbnails"
+msgid "Synchonize thumbnails"
+msgstr ""
+
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
 msgid "title"
 msgstr "titre"
@@ -762,50 +790,41 @@ msgid "Notify me when a new release is ready"
 msgstr "Me notifier lorsqu'une nouvelle version est disponible"
 
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:247
+msgid "Automatically retrieve description for new bookmarks"
+msgstr "Récupérer automatiquement la description"
+
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:248
+msgid "Shaarli will try to retrieve the description from meta HTML headers"
+msgstr ""
+"Shaarli essaiera de récupérer la description depuis les balises HTML meta "
+"dans les entêtes"
+
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:263
 #: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
 msgid "Enable REST API"
 msgstr "Activer l'API REST"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:248
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:264
 #: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:170
 msgid "Allow third party software to use Shaarli such as mobile application"
 msgstr ""
 "Permet aux applications tierces d'utiliser Shaarli, par exemple les "
 "applications mobiles"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:263
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:279
 msgid "API secret"
 msgstr "Clé d'API secrète"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:277
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:293
 msgid "Enable thumbnails"
 msgstr "Activer les miniatures"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:281
-msgid "You need to enable the extension <code>php-gd</code> to use thumbnails."
-msgstr ""
-"Vous devez activer l'extension <code>php-gd</code> pour utiliser les "
-"miniatures."
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:285
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:301
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:56
 msgid "Synchronize thumbnails"
 msgstr "Synchroniser les miniatures"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:296
-#: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:31
-msgid "All"
-msgstr "Tous"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:300
-msgid "Only common media hosts"
-msgstr "Seulement les hébergeurs de média connus"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:304
-msgid "None"
-msgstr "Aucune"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:312
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:328
 #: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:72
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:139
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:199
@@ -1149,17 +1168,13 @@ msgstr "Déconnexion"
 
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:150
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:150
-#, fuzzy
-#| msgid "Public"
 msgid "Set public"
-msgstr "Publics"
+msgstr "Rendre public"
 
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:155
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:155
-#, fuzzy
-#| msgid "Private"
 msgid "Set private"
-msgstr "Privé"
+msgstr "Rendre privé"
 
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:187
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:187
@@ -1408,11 +1423,6 @@ msgid ""
 msgstr ""
 "Glisser ce lien dans votre barre de favoris ou cliquer droit dessus et « "
 "Ajouter aux favoris »"
-
-#, fuzzy
-#~| msgid "Enable thumbnails"
-#~ msgid "Synchonize thumbnails"
-#~ msgstr "Activer les miniatures"
 
 #~ msgid ""
 #~ "You need to browse your Shaarli over <strong>HTTPS</strong> to use this "
