@@ -35,6 +35,9 @@
 
     <div class="dailyDate">
         <span class="nomobile">&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</span>
+        {if="!empty($dayDesc)"}
+          {$dayDesc} -
+        {/if}
         {function="strftime('%A %d, %B %Y', $day)"}
         <span class="nomobile">&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</span>
     </div>

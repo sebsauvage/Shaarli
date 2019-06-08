@@ -392,9 +392,16 @@ function showDailyRSS($conf, $loginManager)
  */
 function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
 {
-    $day = date('Ymd', strtotime('-1 day')); // Yesterday, in format YYYYMMDD.
     if (isset($_GET['day'])) {
         $day = $_GET['day'];
+        if ($day === date('Ymd', strtotime('now'))) {
+            $pageBuilder->assign('dayDesc', t('Today'));
+        } elseif ($day === date('Ymd', strtotime('-1 days'))) {
+            $pageBuilder->assign('dayDesc', t('Yesterday'));
+        }
+    } else {
+        $day = date('Ymd', strtotime('now')); // Today, in format YYYYMMDD.
+        $pageBuilder->assign('dayDesc', t('Today'));
     }
 
     $days = $LINKSDB->days();

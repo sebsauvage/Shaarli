@@ -44,7 +44,12 @@
         </div>
       </div>
       <div>
-        <h3 class="window-subtitle">{function="format_date($dayDate, false)"}</h3>
+        <h3 class="window-subtitle">
+          {if="!empty($dayDesc)"}
+            {$dayDesc} -
+          {/if}
+          {function="format_date($dayDate, false)"}
+        </h3>
 
         <div id="plugin_zone_about_daily" class="plugin_zone">
           {loop="$daily_about_plugin"}
