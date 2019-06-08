@@ -12,7 +12,7 @@ RUN apk --update --no-cache add py2-pip \
 # - Resolve PHP dependencies with Composer
 FROM arm32v6/alpine:3.8 as composer
 COPY --from=docs /usr/src/app/shaarli /app/shaarli
-RUN apk --update --no-cache add php7-mbstring composer \
+RUN apk --update --no-cache add php7-curl php7-mbstring composer \
     && cd /app/shaarli \
     && composer --prefer-dist --no-dev install
 
