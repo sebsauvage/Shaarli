@@ -7,13 +7,25 @@ use Shaarli\Bookmark\LinkDB;
  *
  * @param string $charset     to extract from the downloaded page (reference)
  * @param string $title       to extract from the downloaded page (reference)
+ * @param string $description to extract from the downloaded page (reference)
+ * @param string $keywords    to extract from the downloaded page (reference)
+ * @param bool   $retrieveDescription Automatically tries to retrieve description and keywords from HTML content
  * @param string $curlGetInfo Optionally overrides curl_getinfo function
  *
  * @return Closure
  */
-function get_curl_download_callback(&$charset, &$title, $curlGetInfo = 'curl_getinfo')
-{
+function get_curl_download_callback(
+    &$charset,
+    &$title,
+    &$description,
+    &$keywords,
+    $retrieveDescription,
+    $curlGetInfo = 'curl_getinfo'
+) {
     $isRedirected = false;
+    $currentChunk = 0;
+    $foundChunk = null;
+
     /**
      * cURL callback function for CURLOPT_WRITEFUNCTION (called during the download).
      *
@@ -25,7 +37,18 @@ function get_curl_download_callback(&$charset, &$title, $curlGetInfo = 'curl_get
      *
      * @return int|bool length of $data or false if we need to stop the download
      */
-    return function (&$ch, $data) use ($curlGetInfo, &$charset, &$title, &$isRedirected) {
+    return function (&$ch, $data) use (
+        $retrieveDescription,
+        $curlGetInfo,
+        &$charset,
+        &$title,
+        &$description,
+        &$keywords,
+        &$isRedirected,
+        &$currentChunk,
+        &$foundChunk
+    ) {
+        $currentChunk++;
         $responseCode = $curlGetInfo($ch, CURLINFO_RESPONSE_CODE);
         if (!empty($responseCode) && in_array($responseCode, [301, 302])) {
             $isRedirected = true;
@@ -50,9 +73,34 @@ function get_curl_download_callback(&$charset, &$title, $curlGetInfo = 'curl_get
         }
         if (empty($title)) {
             $title = html_extract_title($data);
+            $foundChunk = ! empty($title) ? $currentChunk : $foundChunk;
         }
+        if ($retrieveDescription && empty($description)) {
+            $description = html_extract_tag('description', $data);
+            $foundChunk = ! empty($description) ? $currentChunk : $foundChunk;
+        }
+        if ($retrieveDescription && empty($keywords)) {
+            $keywords = html_extract_tag('keywords', $data);
+            if (! empty($keywords)) {
+                $foundChunk = $currentChunk;
+                // Keywords use the format tag1, tag2 multiple words, tag
+                // So we format them to match Shaarli's separator and glue multiple words with '-'
+                $keywords = implode(' ', array_map(function($keyword) {
+                    return implode('-', preg_split('/\s+/', trim($keyword)));
+                }, explode(',', $keywords)));
+            }
+        }
+
         // We got everything we want, stop the download.
-        if (!empty($responseCode) && !empty($contentType) && !empty($charset) && !empty($title)) {
+        // If we already found either the title, description or keywords,
+        // it's highly unlikely that we'll found the other metas further than
+        // in the same chunk of data or the next one. So we also stop the download after that.
+        if ((!empty($responseCode) && !empty($contentType) && !empty($charset)) && $foundChunk !== null
+            && (! $retrieveDescription
+                || $foundChunk < $currentChunk
+                || (!empty($title) && !empty($description) && !empty($keywords))
+            )
+        ) {
             return false;
         }
 
@@ -105,6 +153,35 @@ function html_extract_charset($html)
     preg_match('#<meta .*charset=["\']?([^";\'>/]+)["\']? */?>#Usi', $html, $enc);
     if (!empty($enc[1])) {
         return strtolower($enc[1]);
+    }
+
+    return false;
+}
+
+/**
+ * Extract meta tag from HTML content in either:
+ *   - OpenGraph: <meta property="og:[tag]" ...>
+ *   - Meta tag: <meta name="[tag]" ...>
+ *
+ * @param string $tag  Name of the tag to retrieve.
+ * @param string $html HTML content where to look for charset.
+ *
+ * @return bool|string Charset string if found, false otherwise.
+ */
+function html_extract_tag($tag, $html)
+{
+    $propertiesKey = ['property', 'name', 'itemprop'];
+    $properties = implode('|', $propertiesKey);
+    // Try to retrieve OpenGraph image.
+    $ogRegex = '#<meta[^>]+(?:'. $properties .')=["\']?(?:og:)?'. $tag .'["\'\s][^>]*content=["\']?(.*?)["\'/>]#';
+    // If the attributes are not in the order property => content (e.g. Github)
+    // New regex to keep this readable... more or less.
+    $ogRegexReverse = '#<meta[^>]+content=["\']([^"\']+)[^>]+(?:'. $properties .')=["\']?(?:og)?:'. $tag .'["\'\s/>]#';
+
+    if (preg_match($ogRegex, $html, $matches) > 0
+        || preg_match($ogRegexReverse, $html, $matches) > 0
+    ) {
+        return $matches[1];
     }
 
     return false;

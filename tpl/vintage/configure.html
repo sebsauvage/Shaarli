@@ -107,6 +107,14 @@
         </td>
       </tr>
       <tr>
+        <td valign="top"><b>Automatically retrieve description for new bookmarks:</b></td>
+        <td>
+          <input type="checkbox" name="retrieveDescription" id="retrieveDescription"
+                 {if="$retrieve_description"}checked{/if}/>
+          <label for="retrieveDescription">&nbsp;Shaarli will try to retrieve the description from meta HTML headers</label>
+        </td>
+      </tr>
+      <tr>
         <td valign="top"><b>Enable REST API</b></td>
         <td>
           <input type="checkbox" name="enableApi" id="enableApi"

@@ -215,6 +215,22 @@
       <div class="pure-g">
         <div class="pure-u-lg-{$ratioLabel} pure-u-{$ratioLabelMobile}">
           <div class="form-label">
+            <label for="retrieveDescription">
+              <span class="label-name">{'Automatically retrieve description for new bookmarks'|t}</span><br>
+              <span class="label-desc">{'Shaarli will try to retrieve the description from meta HTML headers'|t}</span>
+            </label>
+          </div>
+        </div>
+        <div class="pure-u-lg-{$ratioInput} pure-u-{$ratioInputMobile}">
+          <div class="form-input">
+            <input type="checkbox" name="retrieveDescription" id="retrieveDescription"
+                 {if="$retrieve_description"}checked{/if}/>
+          </div>
+        </div>
+      </div>
+      <div class="pure-g">
+        <div class="pure-u-lg-{$ratioLabel} pure-u-{$ratioLabelMobile}">
+          <div class="form-label">
             <label for="enableApi">
               <span class="label-name">{'Enable REST API'|t}</span><br>
               <span class="label-desc">{'Allow third party software to use Shaarli such as mobile application'|t}</span>

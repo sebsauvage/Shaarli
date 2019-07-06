@@ -1015,6 +1015,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $conf->set('general.timezone', $tz);
             $conf->set('general.title', escape($_POST['title']));
             $conf->set('general.header_link', escape($_POST['titleLink']));
+            $conf->set('general.retrieve_description', !empty($_POST['retrieveDescription']));
             $conf->set('resource.theme', escape($_POST['theme']));
             $conf->set('security.session_protection_disabled', !empty($_POST['disablesessionprotection']));
             $conf->set('privacy.default_private_links', !empty($_POST['privateLinkByDefault']));
@@ -1063,6 +1064,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             );
             $PAGE->assign('continents', $continents);
             $PAGE->assign('cities', $cities);
+            $PAGE->assign('retrieve_description', $conf->get('general.retrieve_description'));
             $PAGE->assign('private_links_default', $conf->get('privacy.default_private_links', false));
             $PAGE->assign('session_protection_disabled', $conf->get('security.session_protection_disabled', false));
             $PAGE->assign('enable_rss_permalinks', $conf->get('feed.rss_permalinks', false));
@@ -1364,13 +1366,14 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             // If this is an HTTP(S) link, we try go get the page to extract
             // the title (otherwise we will to straight to the edit form.)
             if (empty($title) && strpos(get_url_scheme($url), 'http') !== false) {
+                $retrieveDescription = $conf->get('general.retrieve_description');
                 // Short timeout to keep the application responsive
                 // The callback will fill $charset and $title with data from the downloaded page.
                 get_http_response(
                     $url,
                     $conf->get('general.download_timeout', 30),
                     $conf->get('general.download_max_size', 4194304),
-                    get_curl_download_callback($charset, $title)
+                    get_curl_download_callback($charset, $title, $description, $tags, $retrieveDescription)
                 );
                 if (! empty($title) && strtolower($charset) != 'utf-8') {
                     $title = mb_convert_encoding($title, 'utf-8', $charset);
