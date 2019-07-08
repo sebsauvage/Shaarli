@@ -1567,6 +1567,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     if ($targetPage == Router::$PAGE_SAVE_PLUGINSADMIN) {
         try {
             if (isset($_POST['parameters_form'])) {
+                $pluginManager->executeHooks('save_plugin_parameters', $_POST);
                 unset($_POST['parameters_form']);
                 foreach ($_POST as $param => $value) {
                     $conf->set('plugins.'. $param, escape($value));

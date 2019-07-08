@@ -2,9 +2,11 @@ options:
   max-warnings: 0
 rules:
   property-sort-order:
-    - 1
-    -
-      order: 'concentric'
+    - 0
+# Sort order rule does not work with CSS variables: https://github.com/sasstools/sass-lint/issues/1161
+#    - 1
+#    -
+#      order: 'concentric'
   no-important:
     - 0
   no-vendor-prefixes:

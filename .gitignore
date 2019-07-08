@@ -28,6 +28,7 @@ phpdoc.xml
 
 # User plugin configuration
 plugins/*/config.php
+plugins/default_colors/default_colors.css
 
 # HTML documentation
 doc/html/
