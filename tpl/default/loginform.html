@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html{if="$language !== 'auto'"} lang="{$language}"{/if}>
+<html {if="$language !== 'auto'"} lang="{$language}"{/if}>
 <head>
   {include="includes"}
 </head>
@@ -9,7 +9,7 @@
 <div class="pure-g pure-alert pure-alert-error pure-alert-closable center">
   <div class="pure-u-2-24"></div>
   <div class="pure-u-20-24">
-    {'You have been banned after too many failed login attempts. Try again later.'|t}
+    <p>{'You have been banned after too many failed login attempts. Try again later.'|t}</p>
   </div>
   <div class="pure-u-2-24">
     <i class="fa fa-times pure-alert-close"></i>
@@ -22,20 +22,19 @@
       <form method="post" name="loginform">
         <h2 class="window-title">{'Login'|t}</h2>
         <div>
-          <input type="text" name="login" placeholder="{'Username'|t}"
-             {if="!empty($username)"}value="{$username}"{/if} class="autofocus" tabindex="20">
+          <input type="text" name="login" aria-label="{'Username'|t}" placeholder="{'Username'|t}"
+             {if="!empty($username)"}value="{$username}"{/if} class="autofocus">
         </div>
         <div>
-          <input type="password" name="password" placeholder="{'Password'|t}" class="autofocus" tabindex="21">
+          <input type="password" name="password" aria-label="{'Password'|t}" placeholder="{'Password'|t}" class="autofocus">
         </div>
         <div class="remember-me">
           <input type="checkbox" name="longlastingsession" id="longlastingsessionform"
-             {if="$remember_user_default"}checked="checked"{/if}
-             tabindex="22">
+             {if="$remember_user_default"}checked="checked"{/if}>
           <label for="longlastingsessionform">{'Remember me'|t}</label>
         </div>
         <div>
-          <input type="submit" value="{'Login'|t}" class="bigbutton" tabindex="23">
+          <input type="submit" value="{'Login'|t}" class="bigbutton">
         </div>
         <input type="hidden" name="token" value="{$token}">
         {if="$returnurl"}<input type="hidden" name="returnurl" value="{$returnurl}">{/if}
@@ -48,4 +47,3 @@
 {include="page.footer"}
 </body>
 </html>
-
