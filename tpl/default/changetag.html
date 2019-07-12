@@ -11,20 +11,20 @@
     <h2 class="window-title">{"Manage tags"|t}</h2>
     <form method="POST" action="#" name="changetag" id="changetag">
       <div>
-        <input type="text" name="fromtag" placeholder="{'Tag'|t}" value="{$fromtag}"
+        <input type="text" name="fromtag" aria-label="{'Tag'|t}" placeholder="{'Tag'|t}" value="{$fromtag}"
                list="tagsList" autocomplete="off" class="awesomplete autofocus" data-minChars="1">
         <datalist id="tagsList">
           {loop="$tags"}<option>{$key}</option>{/loop}
         </datalist>
       </div>
       <div>
-        <input type="text" name="totag" placeholder="{'New name'|t}"
+        <input type="text" name="totag" aria-label="{'New name'|t}" placeholder="{'New name'|t}"
                list="toTagsList" autocomplete="off" class="awesomplete" data-minChars="1">
         <datalist id="toTagsList">
           {loop="$tags"}<option>{$key}</option>{/loop}
         </datalist>
       </div>
-      <div><i class="fa fa-info-circle"></i> {'Case sensitive'|t}</div>
+      <div><i class="fa fa-info-circle" aria-hidden="true"></i> {'Case sensitive'|t}</div>
       <input type="hidden" name="token" value="{$token}">
       <div>
         <input type="submit" value="{'Rename'|t}" name="renametag">
