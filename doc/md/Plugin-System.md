@@ -137,6 +137,7 @@ If it's still not working, please [open an issue](https://github.com/shaarli/Sha
 | [render_feed](#render_feed) | Allow to do add tags in RSS and ATOM feeds. |
 | [save_link](#save_link) | Allow to alter the link being saved in the datastore. |
 | [delete_link](#delete_link) | Allow to do an action before a link is deleted from the datastore. |
+| [save_plugin_parameters](#save_plugin_parameters) | Allow to manipulate plugin parameters before they're saved. |
 
 
 
@@ -470,6 +471,22 @@ Allow to execute any action before the link is actually removed from the datasto
 - tags
 - created
 - updated
+
+
+#### save_plugin_parameters
+
+Triggered when the plugin parameters are saved from the plugin administration page.
+
+Plugins can perform an action every times their settings are updated.
+For example it is used to update the CSS file of the `default_colors` plugins.
+
+##### Data
+
+`$data` input contains the `$_POST` array.
+
+So if the plugin has a parameter called `MYPLUGIN_PARAMETER`,
+the array will contain an entry with `MYPLUGIN_PARAMETER` as a key.
+
 
 ## Guide for template designer
 
