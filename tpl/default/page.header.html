@@ -138,8 +138,8 @@
   {if="!$is_logged_in"}
     <form method="post" name="loginform">
       <div class="subheader-form header-login-form" id="header-login-form">
-        <input type="text" name="login" placeholder="{'Username'|t}" >
-        <input type="password" name="password" placeholder="{'Password'|t}" >
+        <input type="text" name="login" aria-label="{'Username'|t}" placeholder="{'Username'|t}" >
+        <input type="password" name="password" aria-label="{'Password'|t}" placeholder="{'Password'|t}" >
         <div class="remember-me">
           <input type="checkbox" name="longlastingsession" id="longlastingsession" checked>
           <label for="longlastingsession">{'Remember me'|t}</label>

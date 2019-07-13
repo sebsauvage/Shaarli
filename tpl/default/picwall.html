@@ -32,9 +32,9 @@
         {/loop}
       </div>
 
-      <div id="picwall-container" class="picwall-container">
+      <div id="picwall-container" class="picwall-container" role="list">
         {loop="$linksToDisplay"}
-          <div class="picwall-pictureframe">
+          <div class="picwall-pictureframe" role="listitem">
             {ignore}RainTPL hack: put the 2 src on two different line to avoid path replace bug{/ignore}
             <img data-src="{$value.thumbnail}#" class="b-lazy"
                  src=""
