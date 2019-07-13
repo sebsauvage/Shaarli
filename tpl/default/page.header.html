@@ -7,7 +7,7 @@
         {$shaarlititle}
       </a>
       </header>
-      <a href="#" class="menu-toggle" id="menu-toggle" aria-label="Menu"><s class="bar" aria-hidden="true"></s><s class="bar" aria-hidden="true"></s></a>
+      <a href="#" class="menu-toggle" id="menu-toggle" aria-label="{'Menu'|t}"><s class="bar" aria-hidden="true"></s><s class="bar" aria-hidden="true"></s></a>
     </div>
   </div>
   <div class="pure-u-1">
@@ -99,37 +99,37 @@
   </div>
 </div>
 
-<div id="content" class="container">
+<main id="content" class="container" role="main">
   <div id="search" class="subheader-form searchform-block header-search">
     <form method="GET" class="pure-form searchform" name="searchform">
-      <input type="text" tabindex="1" id="searchform_value" name="searchterm" placeholder="{'Search text'|t}"
+      <input type="text" id="searchform_value" name="searchterm" aria-label="{'Search text'|t}" placeholder="{'Search text'|t}"
              {if="!empty($search_term)"}
              value="{$search_term}"
              {/if}
       >
-      <input type="text" tabindex="2" name="searchtags" id="tagfilter_value" placeholder="{'Filter by tag'|t}"
+      <input type="text" name="searchtags" id="tagfilter_value" aria-label="{'Filter by tag'|t}" placeholder="{'Filter by tag'|t}"
              {if="!empty($search_tags)"}
              value="{$search_tags}"
              {/if}
       autocomplete="off" data-multiple data-autofirst data-minChars="1"
       data-list="{loop="$tags"}{$key}, {/loop}"
       >
-      <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+      <button type="submit" class="search-button" aria-label="{'Search'|t}"><i class="fa fa-search" aria-hidden="true"></i></button>
     </form>
   </div>
   <div id="actions" class="subheader-form">
     <div class="pure-g">
       <div class="pure-u-1">
         <a href="" id="actions-delete" class="button">
-          <i class="fa fa-trash"></i>
+          <i class="fa fa-trash" aria-hidden="true"></i>
           {'Delete'|t}
         </a>&nbsp;
         <a href="" class="actions-change-visibility button" data-visibility="public">
-          <i class="fa fa-globe"></i>
+          <i class="fa fa-globe" aria-hidden="true"></i>
           {'Set public'|t}
         </a>&nbsp;
         <a href="" class="actions-change-visibility button" data-visibility="private">
-          <i class="fa fa-user-secret"></i>
+          <i class="fa fa-user-secret" aria-hidden="true"></i>
           {'Set private'|t}
         </a>
       </div>
@@ -138,15 +138,15 @@
   {if="!$is_logged_in"}
     <form method="post" name="loginform">
       <div class="subheader-form header-login-form" id="header-login-form">
-        <input type="text" name="login" placeholder="{'Username'|t}" tabindex="3">
-        <input type="password" name="password" placeholder="{'Password'|t}" tabindex="5">
+        <input type="text" name="login" placeholder="{'Username'|t}" >
+        <input type="password" name="password" placeholder="{'Password'|t}" >
         <div class="remember-me">
-          <input type="checkbox" name="longlastingsession" id="longlastingsession" tabindex="6" checked>
+          <input type="checkbox" name="longlastingsession" id="longlastingsession" checked>
           <label for="longlastingsession">{'Remember me'|t}</label>
         </div>
         <input type="hidden" name="token" value="{$token}">
         <input type="hidden" name="returnurl">
-        <input type="submit" value="Login" tabindex="7">
+        <input type="submit" value="Login">
       </div>
     </form>
   {/if}
