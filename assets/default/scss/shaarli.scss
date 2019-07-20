@@ -25,9 +25,15 @@ $warning-text: #97600d;
 $form-input-border: #d8d8d8;
 $form-input-background: #eee;
 
+:root {
+  --main-color: #{$main-green};
+  --background-color: #{$background-color};
+  --dark-main-color: #{$dark-green};
+}
+
 // General
 body {
-  background: $background-color;
+  background: var(--background-color);
 }
 
 .strong {
@@ -143,7 +149,7 @@ body,
 }
 
 .pure-alert-success {
-  background-color: $main-green;
+  background-color: var(--main-color);
 }
 
 .pure-alert-warning {
@@ -169,7 +175,7 @@ body,
   top: 0;
   transition: max-height .5s;
   z-index: 999;
-  background: $main-green;
+  background: var(--main-color);
   width: 100%;
   // Hack to transition with auto height: http://stackoverflow.com/a/8331169/1484919
   max-height: 45px;
@@ -322,7 +328,7 @@ body,
   button {
     border: 0;
     border-radius: 2px;
-    background-color: $main-green;
+    background-color: var(--main-color);
     padding: 4px 8px 6px;
     color: $almost-white;
   }
@@ -358,7 +364,7 @@ body,
 .search-tagcloud {
   button {
     &:hover {
-      color: $background-color;
+      color: var(--background-color);
     }
   }
 }
@@ -389,7 +395,7 @@ body,
   position: fixed;
   visibility: hidden;
   z-index: 999;
-  background: $main-green;
+  background: var(--main-color);
   padding: 5px 0;
   width: 100%;
   height: 30px;
@@ -411,7 +417,7 @@ body,
     margin: 0 0 5px;
     border: 1px solid $almost-white;
     border-radius: 2px;
-    background: $main-green;
+    background: var(--main-color);
     padding: 4px 0;
     width: 100px;
     height: 28px;
@@ -419,7 +425,7 @@ body,
 
     &:hover {
       background: $almost-white;
-      color: $main-green;
+      color: var(--main-color);
     }
   }
 
@@ -558,7 +564,7 @@ body,
   }
 
   .filter-on {
-    background: $main-green;
+    background: var(--main-color);
     color: $light-green;
   }
 
@@ -697,7 +703,7 @@ body,
 
       &:visited {
         .linklist-link {
-          color: $dark-green;
+          color: var(--dark-main-color);
         }
       }
 
@@ -708,7 +714,7 @@ body,
   }
 
   .linklist-link {
-    color: $main-green;
+    color: var(--main-color);
     font-size: 1.1em;
 
     &:hover {
@@ -783,14 +789,14 @@ body,
 
   a {
     text-decoration: none;
-    color: $main-green;
+    color: var(--main-color);
 
     &:hover {
       color: $dark-grey;
     }
 
     &:visited {
-      color: $dark-green;
+      color: var(--dark-main-color);
     }
   }
 }
@@ -888,7 +894,7 @@ body,
   &::before {
     display: block;
     margin: 10px auto;
-    background: linear-gradient(to right, $background-color, $dark-grey, $background-color);
+    background: linear-gradient(to right, var(--background-color), $dark-grey, var(--background-color));
     width: 80%;
     height: 1px;
     content: '';
@@ -917,7 +923,7 @@ body,
   margin: 15px 5px;
   border: 0;
   box-shadow: 1px 1px 1px $form-input-border, -1px -1px 6px $form-input-border, -1px 1px 2px $form-input-border, 1px -1px 2px $form-input-border;
-  background: $main-green;
+  background: var(--main-color);
   min-width: 150px;
   height: 35px;
   vertical-align: center;
@@ -941,7 +947,7 @@ body,
     padding: 10px 0;
     width: 100%;
     text-align: center;
-    color: $main-green;
+    color: var(--main-color);
   }
 
   .window-subtitle {
@@ -950,7 +956,7 @@ body,
 
   a {
     text-decoration: none;
-    color: $main-green;
+    color: var(--main-color);
     font-weight: bold;
 
     &.button {
@@ -1278,7 +1284,7 @@ form {
 
   .pure-button {
     &:hover {
-      background-color: $main-green;
+      background-color: var(--main-color);
       background-image: none;
       color: $almost-white;
     }
@@ -1362,7 +1368,7 @@ form {
   }
 
   .validate-rename-tag {
-    color: $main-green;
+    color: var(--main-color);
   }
 }
 
@@ -1458,7 +1464,7 @@ form {
     &::after {
       display: block;
       margin: 10px auto;
-      background: linear-gradient(to right, $background-color, $dark-grey, $background-color);
+      background: linear-gradient(to right, var(--background-color), $dark-grey, var(--background-color));
       width: 90%;
       height: 1px;
       content: '';
@@ -1508,14 +1514,14 @@ form {
 .daily-entry-description {
   a {
     text-decoration: none;
-    color: $main-green;
+    color: var(--main-color);
 
     &:hover {
       text-shadow: 1px 1px $background-linklist-info;
     }
 
     &:visited {
-      color: $dark-green;
+      color: var(--dark-main-color);
     }
   }
 }
@@ -1572,12 +1578,12 @@ form {
 }
 
 .pure-button-shaarli {
-  background-color: $main-green;
+  background-color: var(--main-color);
 }
 
 .progressbar {
   border-radius: 6px;
-  background-color: $main-green;
+  background-color: var(--main-color);
   padding: 1px;
 
   > div {
@@ -1586,8 +1592,8 @@ form {
       -45deg,
       $almost-white,
       $almost-white 6px,
-      $background-color 6px,
-      $background-color 12px
+      var(--background-color) 6px,
+      var(--background-color) 12px
     );
     width: 0%;
     height: 10px;

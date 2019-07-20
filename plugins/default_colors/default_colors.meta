@@ -1,0 +1,5 @@
+description="Override default theme colors. Use any CSS valid color."
+parameters="DEFAULT_COLORS_MAIN;DEFAULT_COLORS_BACKGROUND;DEFAULT_COLORS_DARK_MAIN"
+parameter.DEFAULT_COLORS_MAIN="Main color (navbar green)"
+parameter.DEFAULT_COLORS_BACKGROUND="Background color (light grey)"
+parameter.DEFAULT_COLORS_DARK_MAIN="Dark main color (e.g. visited links)"

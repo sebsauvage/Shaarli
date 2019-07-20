@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2019-07-06 12:14+0200\n"
-"PO-Revision-Date: 2019-07-06 12:17+0200\n"
+"POT-Creation-Date: 2019-07-13 10:45+0200\n"
+"PO-Revision-Date: 2019-07-13 10:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -403,7 +403,7 @@ msgstr "Note : "
 
 #: index.php:1424
 msgid "Invalid link ID provided"
-msgstr ""
+msgstr "ID du lien non valide"
 
 #: index.php:1444 tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:65
 msgid "Export"
@@ -428,15 +428,15 @@ msgstr ""
 msgid "Plugin administration"
 msgstr "Administration des plugins"
 
-#: index.php:1615 tmp/thumbnails.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
+#: index.php:1616 tmp/thumbnails.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
 msgid "Thumbnails update"
 msgstr "Mise à jour des miniatures"
 
-#: index.php:1781
+#: index.php:1782
 msgid "Search: "
 msgstr "Recherche : "
 
-#: index.php:1824
+#: index.php:1825
 #, php-format
 msgid ""
 "<pre>Sessions do not seem to work correctly on your server.<br>Make sure the "
@@ -455,7 +455,7 @@ msgstr ""
 "des cookies. Nous vous recommandons d'accéder à votre serveur depuis son "
 "adresse IP ou un <em>Fully Qualified Domain Name</em>.<br>"
 
-#: index.php:1834
+#: index.php:1835
 msgid "Click to try again."
 msgstr "Cliquer ici pour réessayer."
 
@@ -480,13 +480,47 @@ msgstr "Voir sur archive.org"
 msgid "For each link, add an Archive.org icon."
 msgstr "Pour chaque lien, ajoute une icône pour Archive.org."
 
-#: plugins/demo_plugin/demo_plugin.php:465
+#: plugins/default_colors/default_colors.php:33
+msgid ""
+"Default colors plugin error: This plugin is active and no custom color is "
+"configured."
+msgstr ""
+"Erreur du plugin default colors : ce plugin est actif et aucune couleur "
+"n'est configurée."
+
+#: plugins/default_colors/default_colors.php:107
+msgid "Override default theme colors. Use any CSS valid color."
+msgstr ""
+"Remplacer les couleurs du thème par défaut. Utiliser n'importe quelle "
+"couleur CSS valide."
+
+#: plugins/default_colors/default_colors.php:108
+msgid "Main color (navbar green)"
+msgstr "Couleur principale (vert de la barre de navigation)"
+
+#: plugins/default_colors/default_colors.php:109
+msgid "Background color (light grey)"
+msgstr "Couleur de fond (gris léger)"
+
+#: plugins/default_colors/default_colors.php:110
+msgid "Dark main color (e.g. visited links)"
+msgstr "Couleur principale sombre (ex : les liens visités)"
+
+#: plugins/demo_plugin/demo_plugin.php:482
 msgid ""
 "A demo plugin covering all use cases for template designers and plugin "
 "developers."
 msgstr ""
 "Une extension de démonstration couvrant tous les cas d'utilisation pour les "
 "designers de thèmes et les développeurs d'extensions."
+
+#: plugins/demo_plugin/demo_plugin.php:483
+msgid "This is a parameter dedicated to the demo plugin. It'll be suffixed."
+msgstr "Ceci est un paramètre dédié au plugin de démo. Il sera suffixé."
+
+#: plugins/demo_plugin/demo_plugin.php:484
+msgid "Other demo parameter"
+msgstr "Un autre paramètre de démo"
 
 #: plugins/isso/isso.php:22
 msgid ""
@@ -703,9 +737,8 @@ msgstr ""
 "miniatures."
 
 #: tmp/configure.90100d2eaf5d3705e14b9b4f78ecddc9.rtpl.php:162
-#| msgid "Enable thumbnails"
 msgid "Synchonize thumbnails"
-msgstr ""
+msgstr "Synchroniser les miniatures"
 
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
 msgid "title"

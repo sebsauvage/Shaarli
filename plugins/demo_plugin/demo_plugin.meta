@@ -1,1 +1,4 @@
 description="A demo plugin covering all use cases for template designers and plugin developers."
+parameters="DEMO_PLUGIN_PARAMETER;DEMO_PLUGIN_OTHER_PARAMETER"
+parameter.DEMO_PLUGIN_PARAMETER="This is a parameter dedicated to the demo plugin. It'll be suffixed."
+parameter.DEMO_PLUGIN_OTHER_PARAMETER="Other demo parameter"

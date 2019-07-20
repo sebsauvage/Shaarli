@@ -457,10 +457,29 @@ function hook_demo_plugin_render_feed($data)
 }
 
 /**
+ * When plugin parameters are saved.
+ *
+ * @param array $data $_POST array
+ *
+ * @return array Updated $_POST array
+ */
+function hook_demo_plugin_save_plugin_parameters($data)
+{
+    // Here we edit the provided value, but we can use this to generate config files, etc.
+    if (! empty($data['DEMO_PLUGIN_PARAMETER']) && ! endsWith($data['DEMO_PLUGIN_PARAMETER'], '_SUFFIX')) {
+        $data['DEMO_PLUGIN_PARAMETER'] .= '_SUFFIX';
+    }
+
+    return $data;
+}
+
+/**
  * This function is never called, but contains translation calls for GNU gettext extraction.
  */
 function demo_dummy_translation()
 {
     // meta
     t('A demo plugin covering all use cases for template designers and plugin developers.');
+    t('This is a parameter dedicated to the demo plugin. It\'ll be suffixed.');
+    t('Other demo parameter');
 }
