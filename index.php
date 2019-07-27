@@ -1126,22 +1126,24 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
 
         // lf_id should only be present if the link exists.
         $id = isset($_POST['lf_id']) ? intval(escape($_POST['lf_id'])) : $LINKSDB->getNextId();
+        $link['id'] = $id;
         // Linkdate is kept here to:
         //   - use the same permalink for notes as they're displayed when creating them
         //   - let users hack creation date of their posts
         //     See: https://shaarli.readthedocs.io/en/master/guides/various-hacks/#changing-the-timestamp-for-a-shaare
         $linkdate = escape($_POST['lf_linkdate']);
+        $link['created'] = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $linkdate);
         if (isset($LINKSDB[$id])) {
             // Edit
-            $created = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $linkdate);
-            $updated = new DateTime();
-            $shortUrl = $LINKSDB[$id]['shorturl'];
+            $link['updated'] = new DateTime();
+            $link['shorturl'] = $LINKSDB[$id]['shorturl'];
+            $link['sticky'] = isset($LINKSDB[$id]['sticky']) ? $LINKSDB[$id]['sticky'] : false;
             $new = false;
         } else {
             // New link
-            $created = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $linkdate);
-            $updated = null;
-            $shortUrl = link_small_hash($created, $id);
+            $link['updated'] = null;
+            $link['shorturl'] = link_small_hash($link['created'], $id);
+            $link['sticky'] = false;
             $new = true;
         }
 
@@ -1157,17 +1159,13 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         }
         $url = whitelist_protocols(trim($_POST['lf_url']), $conf->get('security.allowed_protocols'));
 
-        $link = array(
-            'id' => $id,
+        $link = array_merge($link, [
             'title' => trim($_POST['lf_title']),
             'url' => $url,
             'description' => $_POST['lf_description'],
             'private' => (isset($_POST['lf_private']) ? 1 : 0),
-            'created' => $created,
-            'updated' => $updated,
             'tags' => str_replace(',', ' ', $tags),
-            'shorturl' => $shortUrl,
-        );
+        ]);
 
         // If title is empty, use the URL as title.
         if ($link['title'] == '') {
@@ -1180,8 +1178,6 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $thumbnailer = new Thumbnailer($conf);
             $link['thumbnail'] = $thumbnailer->get($url);
         }
-
-        $link['sticky'] = isset($link['sticky']) ? $link['sticky'] : false;
 
         $pluginManager->executeHooks('save_link', $link);
 
