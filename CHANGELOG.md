@@ -4,6 +4,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v0.11.0](https://github.com/shaarli/Shaarli/releases/tag/v0.11.0) - 2019-07-27
+
+**Shaarli no longer officially support PHP 5.6 and PHP 7.0 as they've reached end of life.**
+
+**Shaarli classes now use namespace, third party plugins need to update.**
+
+### Added
+- Add optional PHP extension to composer suggestions.
+- composer: enforce PHP security advisories
+- phpDocumentor configuration and make target
+- Run unit tests against PHP 7.3
+- Bunch of accessibility improvements to the default template, thanks to @llune
+- Bulk actions: set visibility
+- Display sticky label in linklist
+- Add print CSS rules to the default template
+- New setting to automatically retrieve description for new bookmarks
+- Plugin to override default template colors
+
+### Changed
+- Shaarli now uses namespaces for its classes.
+- Rewrite IP ban management
+- Default template: slightly lighten visited link color
+- Hide select all button on mobile view
+- Switch from FontAwesome v4.x to ForkAwesome
+- Daily - display the current day instead of the previous one
+
+### Fixed
+- Do not check the IP address with session protection disabled
+- API: update test regexes to comply with PCRE2
+- Optimize and cleanup imports
+- ensure HTML tags are stripped from OpenGraph description
+- Documentation invalid links
+- Thumbnails disabling if PHP GD is not installed
+- Warning if links sticky status isn't set
+- Fix button overlapping on mobile in linklist
+- Do not try to retrieve thumbnails for internal link
+- Update node-sass to fix a vulnerability in node tar dependency
+- armhf Dockerfile
+- Default template: Responsive issue with delete button fix
+- Persist sticky status on bookmark update
+
+### Removed
+- Doxygen configuration
+- redirector setting
+- QRCode link to an external service
 
 ## [v0.10.4](https://github.com/shaarli/Shaarli/releases/tag/v0.10.4) - 2019-04-16
 ### Fixed
