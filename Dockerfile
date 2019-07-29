@@ -16,7 +16,7 @@ RUN cd shaarli \
 
 # Stage 3:
 # - Frontend dependencies
-FROM node:9.9-alpine as node
+FROM node:12-alpine as node
 COPY --from=composer /app/shaarli shaarli
 RUN cd shaarli \
     && yarn install \
