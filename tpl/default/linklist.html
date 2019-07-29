@@ -19,19 +19,19 @@
 <div id="search-linklist" class="searchform-block search-linklist">
 
   <form method="GET" class="pure-form searchform" name="searchform">
-    <input type="text" tabindex="1" name="searchterm" class="searchterm" placeholder="{'Search text'|t}"
+    <input type="text" name="searchterm" class="searchterm" aria-label="{'Search text'|t}" placeholder="{'Search text'|t}"
            {if="!empty($search_term)"}
            value="{$search_term}"
            {/if}
     >
-    <input type="text" tabindex="2" name="searchtags" class="searchtags" placeholder="{'Filter by tag'|t}"
+    <input type="text" name="searchtags" class="searchtags" aria-label="{'Filter by tag'|t}" placeholder="{'Filter by tag'|t}"
            {if="!empty($search_tags)"}
            value="{$search_tags}"
            {/if}
     autocomplete="off" data-multiple data-autofirst data-minChars="1"
     data-list="{loop="$tags"}{$key}, {/loop}"
     >
-    <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+    <button type="submit" class="search-button" aria-label="{'Search'|t}"><i class="fa fa-search" aria-hidden="true"></i></button>
   </form>
 </div>
 
@@ -94,7 +94,7 @@
           {'tagged'|t}
           {loop="$exploded_tags"}
               <span class="label label-tag" title="{'Remove tag'|t}">
-                <a href="?removetag={function="urlencode($value)"}">{$value}<span class="remove"><i class="fa fa-times" aria-hidden="true"></i></span></a>
+                <a href="?removetag={function="urlencode($value)"}" aria-label="{'Remove tag'|t}">{$value}<span class="remove"><i class="fa fa-times" aria-hidden="true"></i></span></a>
               </span>
           {/loop}
         {/if}
@@ -136,11 +136,11 @@
             {if="$thumbnails_enabled && !empty($value.thumbnail)"}
               <div class="linklist-item-thumbnail" style="width:{$thumbnails_width}px;height:{$thumbnails_height}px;">
                 <div class="thumbnail">
-                  <a href="{$value.real_url}">
                   {ignore}RainTPL hack: put the 2 src on two different line to avoid path replace bug{/ignore}
+                  <a href="{$value.real_url}" aria-hidden="true" tabindex="-1">
                   <img data-src="{$value.thumbnail}#" class="b-lazy"
                     src=""
-                    alt="thumbnail" width="{$thumbnails_width}" height="{$thumbnails_height}" />
+                    alt="" width="{$thumbnails_width}" height="{$thumbnails_height}" />
                   </a>
                 </div>
               </div>
@@ -158,9 +158,9 @@
             <h2>
               <a href="{$value.real_url}">
                 {if="strpos($value.url, $value.shorturl) === false"}
-                  <i class="fa fa-external-link"></i>
+                  <i class="fa fa-external-link" aria-hidden="true"></i>
                 {else}
-                  <i class="fa fa-sticky-note"></i>
+                  <i class="fa fa-sticky-note" aria-hidden="true"></i>
                 {/if}
 
                 <span class="linklist-link">{$value.title}</span>
@@ -177,7 +177,7 @@
           <div class="linklist-item-infos clear">
             {if="$value.tags"}
               <div class="linklist-item-tags">
-                <i class="fa fa-tags"></i>
+                <i class="fa fa-tags" aria-hidden="true"></i>
                 {$tag_counter=count($value.taglist)}
                 {loop="value.taglist"}
                   <span class="label label-tag" title="{$strAddTag}">
@@ -216,7 +216,7 @@
                     <div class="linklist-item-infos-controls-group pure-u-0 pure-u-lg-visible">
                       <span class="linklist-item-infos-controls-item ctrl-pin">
                         <span title="{$strSticky}" class="pin-link pinned-link pure-u-0 pure-u-lg-visible">
-                          <i class="fa fa-thumb-tack"></i>
+                          <i class="fa fa-thumb-tack" aria-hidden="true"></i>
                         </span>
                       </span>
                     </div>
@@ -226,7 +226,7 @@
                   {if="!$hide_timestamps || $is_logged_in"}
                     {$updated=$value.updated_timestamp ? $strEdited. format_date($value.updated) : $strPermalink}
                     <span class="linkdate" title="{$updated}">
-                      <i class="fa fa-clock-o"></i>
+                      <i class="fa fa-clock-o" aria-hidden="true"></i>
                       {$value.created|format_date}
                       {if="$value.updated_timestamp"}*{/if}
                       &middot;
@@ -248,7 +248,7 @@
               </div><div
                 {ignore}do not add space or line break between these div - Firefox issue{/ignore}
                 class="linklist-item-infos-url pure-u-lg-5-12 pure-u-1">
-                <a href="{$value.real_url}" title="{$value.title}">
+                <a href="{$value.real_url}" aria-label="{$value.title}" title="{$value.title}">
                   <i class="fa fa-link" aria-hidden="true"></i> {$value.url}
                 </a>
                 <div class="linklist-item-buttons pure-u-0 pure-u-lg-visible">

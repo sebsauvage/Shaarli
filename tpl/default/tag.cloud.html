@@ -26,14 +26,14 @@
       <div class="pure-u-1 pure-u-lg-1-2">
         <form method="GET">
           <input type="hidden" name="do" value="tagcloud">
-          <input type="text" name="searchtags" placeholder="{'Filter by tag'|t}"
+          <input type="text" name="searchtags" aria-label="{'Filter by tag'|t}" placeholder="{'Filter by tag'|t}"
                  {if="!empty($search_tags)"}
                     value="{$search_tags}"
                  {/if}
           autocomplete="off" data-multiple data-autofirst data-minChars="1"
           data-list="{loop="$tags"}{$key}, {/loop}"
           >
-          <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+          <button type="submit" class="search-button" aria-label="{'Search'|t}"><i class="fa fa-search" aria-hidden="true"></i></button>
         </form>
       </div>
       <div class="pure-u-lg-1-4"></div>
