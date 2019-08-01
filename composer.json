@@ -11,11 +11,11 @@
     "keywords": ["bookmark", "link", "share", "web"],
     "config": {
         "platform": {
-            "php": "5.6.31"
+            "php": "7.1.29"
         }
     },
     "require": {
-        "php": ">=5.6",
+        "php": ">=7.1",
         "ext-json": "*",
         "ext-zlib": "*",
         "shaarli/netscape-bookmark-parser": "^2.1",
