@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v0.11.1](https://github.com/shaarli/Shaarli/releases/tag/v0.11.1) - 2019-08-03
+
+Release to fix broken Docker build on the latest version.
+
+### Fixed
+- Fixed Docker build
+- Fixed a few documentation broken links
+- Fixed broken label in configuration page
+
+### Added
+- More accessibility improvements
+
 ## [v0.11.0](https://github.com/shaarli/Shaarli/releases/tag/v0.11.0) - 2019-07-27
 
 **Shaarli no longer officially support PHP 5.6 and PHP 7.0 as they've reached end of life.**
