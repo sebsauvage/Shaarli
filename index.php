@@ -465,7 +465,7 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
         // Description: 836 characters gives roughly 342 pixel height.
         // This is not perfect, but it's usually OK.
         $length = strlen($link['title']) + (342 * strlen($link['description'])) / 836;
-        if ($link['thumbnail']) {
+        if (! empty($link['thumbnail'])) {
             $length += 100; // 1 thumbnails roughly takes 100 pixels height.
         }
         // Then put in column which is the less filled:
