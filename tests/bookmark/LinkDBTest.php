@@ -619,4 +619,39 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($expected, $tags, var_export($tags, true));
     }
+
+    /**
+     * Make sure that bookmarks with the same timestamp have a consistent order:
+     * if their creation date is equal, bookmarks are sorted by ID DESC.
+     */
+    public function testConsistentOrder()
+    {
+        $nextId = 42;
+        $creation = DateTime::createFromFormat('Ymd_His', '20190807_130444');
+        $linkDB = new LinkDB(self::$testDatastore, true, false);
+        for ($i = 0; $i < 4; ++$i) {
+            $linkDB[$nextId + $i] = [
+                'id' => $nextId + $i,
+                'url' => 'http://'. $i,
+                'created' => $creation,
+                'title' => true,
+                'description' => true,
+                'tags' => true,
+            ];
+        }
+
+        // Check 4 new links 4 times
+        for ($i = 0; $i < 4; ++$i) {
+            $linkDB->save('tests');
+            $linkDB = new LinkDB(self::$testDatastore, true, false);
+            $count = 3;
+            foreach ($linkDB as $link) {
+                $this->assertEquals($nextId + $count, $link['id']);
+                $this->assertEquals('http://'. $count, $link['url']);
+                if (--$count < 0) {
+                    break;
+                }
+            }
+        }
+    }
 }

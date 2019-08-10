@@ -102,7 +102,7 @@ class LinkDB implements Iterator, Countable, ArrayAccess
         $isLoggedIn,
         $hidePublicLinks
     ) {
-    
+
         $this->datastore = $datastore;
         $this->loggedIn = $isLoggedIn;
         $this->hidePublicLinks = $hidePublicLinks;
@@ -415,7 +415,7 @@ You use the community supported version of the original Shaarli project, by Seba
         $visibility = 'all',
         $untaggedonly = false
     ) {
-    
+
         // Filter link database according to parameters.
         $searchtags = isset($filterRequest['searchtags']) ? escape($filterRequest['searchtags']) : '';
         $searchterm = isset($filterRequest['searchterm']) ? escape($filterRequest['searchterm']) : '';
@@ -532,6 +532,9 @@ You use the community supported version of the original Shaarli project, by Seba
         usort($this->links, function ($a, $b) use ($order) {
             if (isset($a['sticky']) && isset($b['sticky']) && $a['sticky'] !== $b['sticky']) {
                 return $a['sticky'] ? -1 : 1;
+            }
+            if ($a['created'] == $b['created']) {
+                return $a['id'] < $b['id'] ? 1 * $order : -1 * $order;
             }
             return $a['created'] < $b['created'] ? 1 * $order : -1 * $order;
         });
