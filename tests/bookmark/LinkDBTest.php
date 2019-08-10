@@ -49,17 +49,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
      *    - by tag,
      *    - by text,
      *  - etc.
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$refDB = new ReferenceLinkDB();
-        self::$refDB->write(self::$testDatastore);
-
-        self::$publicLinkDB = new LinkDB(self::$testDatastore, false, false);
-        self::$privateLinkDB = new LinkDB(self::$testDatastore, true, false);
-    }
-
-    /**
+     *
      * Resets test data for each test
      */
     protected function setUp()
@@ -67,6 +57,12 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
         if (file_exists(self::$testDatastore)) {
             unlink(self::$testDatastore);
         }
+
+        self::$refDB = new ReferenceLinkDB();
+        self::$refDB->write(self::$testDatastore);
+
+        self::$publicLinkDB = new LinkDB(self::$testDatastore, false, false);
+        self::$privateLinkDB = new LinkDB(self::$testDatastore, true, false);
     }
 
     /**
@@ -191,7 +187,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
         $dbSize = sizeof($testDB);
 
         $link = array(
-            'id' => 42,
+            'id' => 43,
             'title' => 'an additional link',
             'url' => 'http://dum.my',
             'description' => 'One more',
@@ -626,7 +622,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
      */
     public function testConsistentOrder()
     {
-        $nextId = 42;
+        $nextId = 43;
         $creation = DateTime::createFromFormat('Ymd_His', '20190807_130444');
         $linkDB = new LinkDB(self::$testDatastore, true, false);
         for ($i = 0; $i < 4; ++$i) {
@@ -646,6 +642,9 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
             $linkDB = new LinkDB(self::$testDatastore, true, false);
             $count = 3;
             foreach ($linkDB as $link) {
+                if ($link['sticky'] === true) {
+                    continue;
+                }
                 $this->assertEquals($nextId + $count, $link['id']);
                 $this->assertEquals('http://'. $count, $link['url']);
                 if (--$count < 0) {
