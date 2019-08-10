@@ -10,8 +10,6 @@
  *  - https://github.com/sebsauvage/Shaarli
  *
  * Licence: http://www.opensource.org/licenses/zlib-license.php
- *
- * Requires: PHP 5.5.x
  */
 
 // Set 'UTC' as the default timezone if it is not defined in php.ini
@@ -86,7 +84,7 @@ use \Shaarli\Updater\Updater;
 
 // Ensure the PHP version is supported
 try {
-    ApplicationUtils::checkPHPVersion('5.5', PHP_VERSION);
+    ApplicationUtils::checkPHPVersion('7.1', PHP_VERSION);
 } catch (Exception $exc) {
     header('Content-Type: text/plain; charset=utf-8');
     echo $exc->getMessage();
