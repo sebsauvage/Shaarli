@@ -58,13 +58,12 @@ class PluginManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test missing plugin loading.
-     *
-     * @return void
      */
     public function testPluginNotFound()
     {
         $this->pluginManager->load(array());
         $this->pluginManager->load(array('nope', 'renope'));
+        $this->addToAssertionCount(1);
     }
 
     /**

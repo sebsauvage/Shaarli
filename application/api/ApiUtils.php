@@ -15,6 +15,8 @@ class ApiUtils
      * @param string $token  JWT token extracted from the headers.
      * @param string $secret API secret set in the settings.
      *
+     * @return bool true on success
+     *
      * @throws ApiAuthorizationException the token is not valid.
      */
     public static function validateJwtToken($token, $secret)
@@ -45,6 +47,8 @@ class ApiUtils
         ) {
             throw new ApiAuthorizationException('Invalid JWT issued time');
         }
+
+        return true;
     }
 
     /**

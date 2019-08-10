@@ -150,6 +150,8 @@ class ApplicationUtils
      * @param string $minVersion minimum PHP required version
      * @param string $curVersion current PHP version (use PHP_VERSION)
      *
+     * @return bool true on success
+     *
      * @throws Exception the PHP version is not supported
      */
     public static function checkPHPVersion($minVersion, $curVersion)
@@ -163,6 +165,7 @@ class ApplicationUtils
             );
             throw new Exception(sprintf($msg, $minVersion));
         }
+        return true;
     }
 
     /**

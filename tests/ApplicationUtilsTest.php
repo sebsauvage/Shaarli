@@ -253,9 +253,9 @@ class ApplicationUtilsTest extends \PHPUnit\Framework\TestCase
     public function testCheckSupportedPHPVersion()
     {
         $minVersion = '5.3';
-        ApplicationUtils::checkPHPVersion($minVersion, '5.4.32');
-        ApplicationUtils::checkPHPVersion($minVersion, '5.5');
-        ApplicationUtils::checkPHPVersion($minVersion, '5.6.10');
+        $this->assertTrue(ApplicationUtils::checkPHPVersion($minVersion, '5.4.32'));
+        $this->assertTrue(ApplicationUtils::checkPHPVersion($minVersion, '5.5'));
+        $this->assertTrue(ApplicationUtils::checkPHPVersion($minVersion, '5.6.10'));
     }
 
     /**
@@ -265,7 +265,7 @@ class ApplicationUtilsTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheckSupportedPHPVersion51()
     {
-        ApplicationUtils::checkPHPVersion('5.3', '5.1.0');
+        $this->assertTrue(ApplicationUtils::checkPHPVersion('5.3', '5.1.0'));
     }
 
     /**
@@ -275,7 +275,7 @@ class ApplicationUtilsTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheckSupportedPHPVersion52()
     {
-        ApplicationUtils::checkPHPVersion('5.3', '5.2');
+        $this->assertTrue(ApplicationUtils::checkPHPVersion('5.3', '5.2'));
     }
 
     /**
