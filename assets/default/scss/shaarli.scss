@@ -1436,6 +1436,8 @@ form {
   -webkit-transition: opacity 500ms ease-in-out;
   -moz-transition: opacity 500ms ease-in-out;
   -o-transition: opacity 500ms ease-in-out;
+  min-width: 1px;
+  min-height: 1px;
 
   &.b-loaded {
     opacity: 1;
