@@ -156,6 +156,16 @@ class PluginMarkdownTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $processedText);
     }
 
+    public function testReverseFeedDirectLink()
+    {
+        $text = 'Description... ';
+        $text .= '&#8212; <a href="http://domain.tld/?0oc_VQ" title="Direct link">Direct link</a>';
+        $expected = 'Description... &#8212; [Direct link](http://domain.tld/?0oc_VQ)';
+        $processedText = reverse_feed_permalink($text);
+
+        $this->assertEquals($expected, $processedText);
+    }
+
     public function testReverseLastFeedPermalink()
     {
         $text = 'Description... ';

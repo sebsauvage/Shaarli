@@ -259,7 +259,7 @@ function reverse_space2nbsp($description)
 
 function reverse_feed_permalink($description)
 {
-    return preg_replace('@&#8212; <a href="([^"]+)" title="[^"]+">(\w+)</a>$@im', '&#8212; [$2]($1)', $description);
+    return preg_replace('@&#8212; <a href="([^"]+)" title="[^"]+">([^<]+)</a>$@im', '&#8212; [$2]($1)', $description);
 }
 
 /**
