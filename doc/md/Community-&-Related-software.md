@@ -35,6 +35,7 @@ See [Theming](Theming) for a list of community-contributed themes, and an instal
 - [Scuttle to Shaarli](https://github.com/q2apro/scuttle-to-shaarli) - Import bookmarks from Scuttle
 - [Shaarli app for Cloudron](https://git.cloudron.io/cloudron/shaarli-app) - Effortlessly run Shaarli with the help of [Cloudron](https://cloudron.io/) [![Install](https://cloudron.io/img/button.svg)](https://cloudron.io/button.html?app=com.github.shaarli)
 - [Shaarli_ynh](https://github.com/YunoHost-Apps/shaarli_ynh) - Shaarli is available as a [Yunohost](https://yunohost.org) app [![Install Shaarli with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=shaarli)
+- [pelican](https://blog.getpelican.com) static blog generator plugin to auto-post articles on a Shaarli instance: [shaarli_poster](https://github.com/getpelican/pelican-plugins/pull/1167)
 
 ### Mobile Apps
 - [ShaarliOS](https://github.com/mro/ShaarliOS) - Apple iOS share extension.
