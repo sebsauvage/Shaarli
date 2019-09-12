@@ -157,7 +157,7 @@ class FeedBuilder
             $permalink = '<a href="' . $link['guid'] . '" title="' . t('Permalink') . '">' . t('Permalink') . '</a>';
         }
         $link['description'] = format_description($link['description'], $pageaddr);
-        $link['description'] .= PHP_EOL . '<br>&#8212; ' . $permalink;
+        $link['description'] .= PHP_EOL . PHP_EOL . '<br>&#8212; ' . $permalink;
 
         $pubDate = $link['created'];
         $link['pub_iso_date'] = $this->getIsoDate($pubDate);
