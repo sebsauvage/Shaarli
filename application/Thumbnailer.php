@@ -27,6 +27,7 @@ class Thumbnailer
         'instagram.com',
         'pinterest.com',
         'pinterest.fr',
+        'soundcloud.com',
         'tumblr.com',
         'deviantart.com',
     ];
