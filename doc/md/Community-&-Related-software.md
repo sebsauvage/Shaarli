@@ -12,8 +12,6 @@ See [REST API](REST-API) for a list of official and community clients.
 - [autosave](https://github.com/kalvn/shaarli-plugin-autosave) by [@kalvn](https://github.com/kalvn): Automatically saves data when editing a link to avoid any loss in case of crash or unexpected shutdown.
 - [Code Coloration](https://github.com/ArthurHoaro/code-coloration) by [@ArthurHoaro](https://github.com/ArthurHoaro): client side code syntax highlighter.
 - [Disqus](https://github.com/kalvn/shaarli-plugin-disqus) by [@kalvn](https://github.com/kalvn): Adds Disqus comment system to your Shaarli.
-- [emojione](https://github.com/NerosTie/emojione) by [@NerosTie](https://github.com/NerosTie): Add colorful emojis to your Shaarli.
-- [twemoji](https://github.com/NerosTie/twemoji) by [@NerosTie](https://github.com/NerosTie): Add colorful emojis to your Shaarli (Twemoji version) 
 - [google analytics](https://github.com/ericjuden/Shaarli-Google-Analytics-Plugin) by [@ericjuden](http://github.com/ericjuden): Adds Google Analytics tracking support
 - [launch](https://github.com/ArthurHoaro/launch-plugin) - Launch Plugin is a plugin designed to enhance and customize Launch Theme for Shaarli.
 - [markdown-toolbar](https://github.com/immanuelfodor/shaarli-markdown-toolbar) by [@immanuelfodor](https://github.com/immanuelfodor) - Easily insert markdown syntax into the Description field when editing a link.
