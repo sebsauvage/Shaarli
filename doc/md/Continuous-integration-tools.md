@@ -29,4 +29,4 @@ After all jobs have finished, Travis returns the results to GitHub:
     - Orange: tests are pending
 
 ## Documentation
-[mkdocs](https://www.mkdocs.org/) is used to convert markdown documentation to HTML pages. The [public documentation](https://shaarli.readthedocs.io/en/master/) website is rendered and hosted by [readthedocs.org](https://readthedocs.org/). A copy of the documentation is also included in prebuilt [release archives](https://github.com/shaarli/Shaarli/releases) (`doc/html/` path in your Shaarli installation). To generate the HTML documentation locally, install a recent version of Python `setuptools` and rune `make doc`.
+[mkdocs](https://www.mkdocs.org/) is used to convert markdown documentation to HTML pages. The [public documentation](https://shaarli.readthedocs.io/en/master/) website is rendered and hosted by [readthedocs.org](https://readthedocs.org/). A copy of the documentation is also included in prebuilt [release archives](https://github.com/shaarli/Shaarli/releases) (`doc/html/` path in your Shaarli installation). To generate the HTML documentation locally, install a recent version of Python `setuptools` and run    `make doc`.
