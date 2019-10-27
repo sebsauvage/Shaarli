@@ -2,8 +2,8 @@
 /**
  * Demo Plugin.
  *
- * This plugin try to cover Shaarli's plugin API entirely.
- * Can be used by plugin developper to make their own.
+ * This plugin tries to completely cover Shaarli's plugin API.
+ * Can be used by plugin developers to make their own plugin.
  */
 
 /*
@@ -61,7 +61,7 @@ function demo_plugin_init($conf)
 
 /**
  * Hook render_header.
- * Executed on every page redering.
+ * Executed on every page render.
  *
  * Template placeholders:
  *   - buttons_toolbar
@@ -145,7 +145,7 @@ function hook_demo_plugin_render_header($data)
 
 /**
  * Hook render_includes.
- * Executed on every page redering.
+ * Executed on every page render.
  *
  * Template placeholders:
  *   - css_files
@@ -169,7 +169,7 @@ function hook_demo_plugin_render_includes($data)
 
 /**
  * Hook render_footer.
- * Executed on every page redering.
+ * Executed on every page render.
  *
  * Template placeholders:
  *   - text
@@ -186,7 +186,7 @@ function hook_demo_plugin_render_includes($data)
  */
 function hook_demo_plugin_render_footer($data)
 {
-    // footer text
+    // Footer text
     $data['text'][] = '<br>'. demo_plugin_t('Shaarli is now enhanced by the awesome demo_plugin.');
 
     // Free elements at the end of the page.
@@ -277,7 +277,7 @@ function hook_demo_plugin_render_editlink($data)
     // Load HTML into a string
     $html = file_get_contents(PluginManager::$PLUGINS_PATH .'/demo_plugin/field.html');
 
-    // replace value in HTML if it exists in $data
+    // Replace value in HTML if it exists in $data
     if (!empty($data['link']['stuff'])) {
         $html = sprintf($html, $data['link']['stuff']);
     } else {
@@ -324,9 +324,7 @@ function hook_demo_plugin_render_tools($data)
  */
 function hook_demo_plugin_render_picwall($data)
 {
-    // plugin_start_zone
     $data['plugin_start_zone'][] = '<center>BEFORE</center>';
-    // plugin_end_zone
     $data['plugin_end_zone'][] = '<center>AFTER</center>';
 
     return $data;
@@ -348,9 +346,7 @@ function hook_demo_plugin_render_picwall($data)
  */
 function hook_demo_plugin_render_tagcloud($data)
 {
-    // plugin_start_zone
     $data['plugin_start_zone'][] = '<center>BEFORE</center>';
-    // plugin_end_zone
     $data['plugin_end_zone'][] = '<center>AFTER</center>';
 
     return $data;
@@ -372,9 +368,7 @@ function hook_demo_plugin_render_tagcloud($data)
  */
 function hook_demo_plugin_render_daily($data)
 {
-    // plugin_start_zone
     $data['plugin_start_zone'][] = '<center>BEFORE</center>';
-    // plugin_end_zone
     $data['plugin_end_zone'][] = '<center>AFTER</center>';
 
 
@@ -465,7 +459,8 @@ function hook_demo_plugin_render_feed($data)
  */
 function hook_demo_plugin_save_plugin_parameters($data)
 {
-    // Here we edit the provided value, but we can use this to generate config files, etc.
+    // Here we edit the provided value.
+    // This hook can also be used to generate config files, etc.
     if (! empty($data['DEMO_PLUGIN_PARAMETER']) && ! endsWith($data['DEMO_PLUGIN_PARAMETER'], '_SUFFIX')) {
         $data['DEMO_PLUGIN_PARAMETER'] .= '_SUFFIX';
     }
