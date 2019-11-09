@@ -28,12 +28,12 @@ Version | Status | Shaarli compatibility
 Extension | Required? | Usage
 ---|:---:|---
 [`openssl`](http://php.net/manual/en/book.openssl.php) | All | OpenSSL, HTTPS
+[`php-json`](http://php.net/manual/en/book.json.php) | required | ?
 [`php-mbstring`](http://php.net/manual/en/book.mbstring.php) | CentOS, Fedora, RHEL, Windows, some hosting providers | multibyte (Unicode) string support
 [`php-gd`](http://php.net/manual/en/book.image.php) | optional | required to use thumbnails
 [`php-intl`](http://php.net/manual/en/book.intl.php) | optional | localized text sorting (e.g. `e->è->f`)
 [`php-curl`](http://php.net/manual/en/book.curl.php) | optional | using cURL for fetching webpages and thumbnails in a more robust way
 [`php-gettext`](http://php.net/manual/en/book.gettext.php) | optional | Use the translation system in gettext mode (faster)
-
 --------------------------------------------------------------------------------
 
 ### SSL/TLS configuration 
