@@ -12,16 +12,10 @@ repository.
 - `master`: master branch
 - `stable`: stable branch
 
-The `latest` and `master` images rely on:
+The `latest`, `master` and `stable` images rely on:
 
 - [Alpine Linux](https://www.alpinelinux.org/)
 - [PHP7-FPM](http://php-fpm.org/)
-- [Nginx](http://nginx.org/)
-
-The `stable` image relies on:
-
-- [Debian 8 Jessie](https://hub.docker.com/_/debian/)
-- [PHP5-FPM](http://php-fpm.org/)
 - [Nginx](http://nginx.org/)
 
 Additional Dockerfiles are provided for the `arm32v7` platform, relying on
