@@ -16,8 +16,6 @@ This file allows overriding rules defined in the template CSS files (only add ch
 
 **Note**: Do not edit `tpl/default/css/shaarli.css`! Your changes would be overridden when updating Shaarli.
 
-See also [Download CSS styles from an OPML list](Download CSS styles from an OPML list)
-
 ## Themes
 
 Installation:
