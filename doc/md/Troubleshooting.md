@@ -1,64 +1,5 @@
 # Troubleshooting
 
-## Browser
-
-### Redirection issues (HTTP Referer)
-
-Depending on its configuration and installed plugins, the browser may remove or alter (spoof) HTTP referers, thus preventing Shaarli from properly redirecting between pages.
-
-See:
-
-- [HTTP referer](https://en.wikipedia.org/wiki/HTTP_referer) (Wikipedia)
-- [Improve online privacy by controlling referrer information](http://www.ghacks.net/2015/01/22/improve-online-privacy-by-controlling-referrer-information/)
-- [Better security, privacy and anonymity in Firefox](http://b.agilob.net/better-security-privacy-and-anonymity-in-firefox/)
-
-### Firefox HTTP Referer options
-
-HTTP settings are available by browsing `about:config`, here are the available settings and their values.
-
-`network.http.sendRefererHeader` - determines when to send the Referer HTTP header
-
-- `0`: Never send the referring URL
-    - not recommended, may break some sites
-- `1`: Send only on clicked links
-- `2` (default): Send for links and images
-
-`network.http.referer.XOriginPolicy` - Cross-domain origin policy
-
-- `0` (default): Always send
-- `1`: Send if base domains match
-- `2`: Send if hosts match
-
-`network.http.referer.spoofSource` - Referer spoofing (~faking)
-
-- `false` (default): real referer
-- `true`: spoof referer (use target URI as referer)
-    - known to break some functionality in Shaarli
-
-`network.http.referer.trimmingPolicy` - trim the URI not to send a full Referer
-
-- `0`: (default): send full URI
-- `1`: scheme+host+port+path
-- `2`: scheme+host+port
-
-### Firefox, localhost and redirections
-
-`localhost` is not a proper Fully Qualified Domain Name (FQDN); if Firefox has
-been set up to spoof referers, or only accept requests from the same base domain/host,
-Shaarli redirections will not work properly.
-
-To solve this, assign a local domain to your host, e.g.
-```
-127.0.0.1 localhost desktop localhost.lan
-::1       localhost desktop localhost.lan
-```
-
-and browse Shaarli at http://localhost.lan/.
-
-Related threads:
-- [What is localhost.localdomain for?](https://bbs.archlinux.org/viewtopic.php?id=156064)
-- [Stop returning to the first page after editing a bookmark from another page](https://github.com/shaarli/Shaarli/issues/311)
-
 ## Login
 
 ### I forgot my password!
@@ -69,12 +10,19 @@ Delete the file `data/config.json.php` and display the page again. You will be a
 
 Login form is protected against brute force attacks: 4 failed logins will ban the IP address from login for 30 minutes. Banned IPs can still browse links.
 
-To remove the current IP bans, delete the file `data/ipbans.php`
+- To remove the current IP bans, delete the file `data/ipbans.php`
+- To list all login attempts, see `data/log.txt` (succesful/failed logins, bans/lifted bans)
 
-### List of all login attempts
+## Browser issues
 
-The file `data/log.txt` shows all logins (successful or failed) and bans/lifted bans.
-Search for `failed` in this file to look for unauthorized login attempts.
+### Redirection issues (HTTP Referer)
+
+Depending on its configuration and installed plugins, the browser may remove or alter (spoof) [HTTP referers](https://en.wikipedia.org/wiki/HTTP_referer), thus preventing Shaarli from properly redirecting between pages. Referer settings are available by browsing `about:config` and are documented [here](https://wiki.mozilla.org/Security/Referrer). `network.http.referer.spoofSource = true` in particular is known to break some functionality in Shaarli.
+
+### Firefox, localhost and redirections
+
+`localhost` is not a proper Fully Qualified Domain Name (FQDN); if Firefox has been set up to spoof referers, or only accept requests from the same base domain/host,
+Shaarli redirections will not work properly. To solve this, assign a local domain to your host, e.g. `localhost.lan` in your [hosts file](https://en.wikipedia.org/wiki/Hosts_(file)) and browse Shaarli at http://localhost.lan/.
 
 ## Hosting problems
 
@@ -123,10 +71,11 @@ This can be caused by several things:
 - You may be using OperaTurbo or OperaMini, which use their own proxies which may change from time to time.
 - If you have another application on the same webserver where Shaarli is installed, these application may forcefully expire php sessions.
 
+### Old apache versions, Internal Server Error
+
+If you hosting provider only provides apache 2.2 and no support for `mod_version`, `.htaccess` files may cause 500 errors (Internal Server Error). See [this workaround](https://github.com/shaarli/Shaarli/issues/1196#issuecomment-412271085).
+
 ## Sessions do not seem to work correctly on your server
 
 Follow the instructions in the error message. Make sure you are accessing shaarli via a direct IP address or a proper hostname. If you have **no dots** in the hostname (e.g. `localhost` or `http://my-webserver/shaarli/`), some browsers will not store cookies at all (this respects the [HTTP cookie specification](http://curl.haxx.se/rfc/cookie_spec.html)).
 
-## Old apache versions, Internal Server Error
-
-If you hosting provider only provides apache 2.2 and no support for `mod_version`, `.htaccess` files may cause 500 errors (Internal Server Error). See [this workaround](https://github.com/shaarli/Shaarli/issues/1196#issuecomment-412271085).
