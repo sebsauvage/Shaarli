@@ -126,3 +126,7 @@ This can be caused by several things:
 ## Sessions do not seem to work correctly on your server
 
 Follow the instructions in the error message. Make sure you are accessing shaarli via a direct IP address or a proper hostname. If you have **no dots** in the hostname (e.g. `localhost` or `http://my-webserver/shaarli/`), some browsers will not store cookies at all (this respects the [HTTP cookie specification](http://curl.haxx.se/rfc/cookie_spec.html)).
+
+## Old apache versions, Internal Server Error
+
+If you hosting provider only provides apache 2.2 and no support for `mod_version`, `.htaccess` files may cause 500 errors (Internal Server Error). See [this workaround](https://github.com/shaarli/Shaarli/issues/1196#issuecomment-412271085).
