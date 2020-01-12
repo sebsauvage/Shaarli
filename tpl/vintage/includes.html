@@ -24,7 +24,7 @@
   {/if}
   {if="!$hide_timestamps || $is_logged_in"}
     <meta property="article:published_time" content="{$link.created->format(DateTime::ATOM)}" />
-    {if="$link.updated"}
+    {if="!empty($link.updated)"}
       <meta property="article:modified_time" content="{$link.updated->format(DateTime::ATOM)}" />
     {/if}
   {/if}
