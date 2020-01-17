@@ -3,6 +3,10 @@ namespace Shaarli\Config;
 
 /**
  * Class ConfigPhpTest
+ *
+ * We run tests in separate processes due to the usage for $GLOBALS
+ * which are kept between tests.
+ * @runTestsInSeparateProcesses
  */
 class ConfigPhpTest extends \PHPUnit\Framework\TestCase
 {

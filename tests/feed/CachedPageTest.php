@@ -44,6 +44,7 @@ class CachedPageTest extends \PHPUnit\Framework\TestCase
         new CachedPage(self::$testCacheDir, '', false);
         new CachedPage(self::$testCacheDir, 'http://shaar.li/?do=rss', true);
         new CachedPage(self::$testCacheDir, 'http://shaar.li/?do=atom', false);
+        $this->addToAssertionCount(1);
     }
 
     /**

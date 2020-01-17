@@ -724,6 +724,9 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
      */
     public function testUpdateMethodWebThumbnailerDisabled()
     {
+        if (isset($_SESSION['warnings'])) {
+            unset($_SESSION['warnings']);
+        }
         $this->conf->remove('thumbnails');
         $this->conf->set('thumbnail.enable_thumbnails', false);
         $updater = new Updater([], [], $this->conf, true, $_SESSION);
@@ -740,6 +743,9 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
      */
     public function testUpdateMethodWebThumbnailerNothingToDo()
     {
+        if (isset($_SESSION['warnings'])) {
+            unset($_SESSION['warnings']);
+        }
         $updater = new Updater([], [], $this->conf, true, $_SESSION);
         $this->assertTrue($updater->updateMethodWebThumbnailer());
         $this->assertFalse($this->conf->exists('thumbnail'));

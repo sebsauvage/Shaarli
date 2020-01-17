@@ -60,7 +60,7 @@ class ApiUtilsTest extends \PHPUnit\Framework\TestCase
     public function testValidateJwtTokenValid()
     {
         $secret = 'WarIsPeace';
-        ApiUtils::validateJwtToken(self::generateValidJwtToken($secret), $secret);
+        $this->assertTrue(ApiUtils::validateJwtToken(self::generateValidJwtToken($secret), $secret));
     }
 
     /**
