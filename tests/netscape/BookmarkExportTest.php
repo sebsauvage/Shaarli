@@ -1,7 +1,12 @@
 <?php
 namespace Shaarli\Netscape;
 
+use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Bookmark\LinkDB;
+use Shaarli\Config\ConfigManager;
+use Shaarli\Formatter\FormatterFactory;
+use Shaarli\Formatter\BookmarkFormatter;
+use Shaarli\History;
 
 require_once 'tests/utils/ReferenceLinkDB.php';
 
@@ -21,18 +26,28 @@ class BookmarkExportTest extends \PHPUnit\Framework\TestCase
     protected static $refDb = null;
 
     /**
-     * @var LinkDB private LinkDB instance.
+     * @var BookmarkFileService private instance.
      */
-    protected static $linkDb = null;
+    protected static $bookmarkService = null;
+
+    /**
+     * @var BookmarkFormatter instance
+     */
+    protected static $formatter;
 
     /**
      * Instantiate reference data
      */
     public static function setUpBeforeClass()
     {
+        $conf = new ConfigManager('tests/utils/config/configJson');
+        $conf->set('resource.datastore', self::$testDatastore);
         self::$refDb = new \ReferenceLinkDB();
         self::$refDb->write(self::$testDatastore);
-        self::$linkDb = new LinkDB(self::$testDatastore, true, false);
+        $history = new History('sandbox/history.php');
+        self::$bookmarkService = new BookmarkFileService($conf, $history, true);
+        $factory = new FormatterFactory($conf);
+        self::$formatter = $factory->getFormatter('raw');
     }
 
     /**
@@ -42,15 +57,27 @@ class BookmarkExportTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilterAndFormatInvalid()
     {
-        NetscapeBookmarkUtils::filterAndFormat(self::$linkDb, 'derp', false, '');
+        NetscapeBookmarkUtils::filterAndFormat(
+            self::$bookmarkService,
+            self::$formatter,
+            'derp',
+            false,
+            ''
+        );
     }
 
     /**
-     * Prepare all links for export
+     * Prepare all bookmarks for export
      */
     public function testFilterAndFormatAll()
     {
-        $links = NetscapeBookmarkUtils::filterAndFormat(self::$linkDb, 'all', false, '');
+        $links = NetscapeBookmarkUtils::filterAndFormat(
+            self::$bookmarkService,
+            self::$formatter,
+            'all',
+            false,
+            ''
+        );
         $this->assertEquals(self::$refDb->countLinks(), sizeof($links));
         foreach ($links as $link) {
             $date = $link['created'];
@@ -66,11 +93,17 @@ class BookmarkExportTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Prepare private links for export
+     * Prepare private bookmarks for export
      */
     public function testFilterAndFormatPrivate()
     {
-        $links = NetscapeBookmarkUtils::filterAndFormat(self::$linkDb, 'private', false, '');
+        $links = NetscapeBookmarkUtils::filterAndFormat(
+            self::$bookmarkService,
+            self::$formatter,
+            'private',
+            false,
+            ''
+        );
         $this->assertEquals(self::$refDb->countPrivateLinks(), sizeof($links));
         foreach ($links as $link) {
             $date = $link['created'];
@@ -86,11 +119,17 @@ class BookmarkExportTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Prepare public links for export
+     * Prepare public bookmarks for export
      */
     public function testFilterAndFormatPublic()
     {
-        $links = NetscapeBookmarkUtils::filterAndFormat(self::$linkDb, 'public', false, '');
+        $links = NetscapeBookmarkUtils::filterAndFormat(
+            self::$bookmarkService,
+            self::$formatter,
+            'public',
+            false,
+            ''
+        );
         $this->assertEquals(self::$refDb->countPublicLinks(), sizeof($links));
         foreach ($links as $link) {
             $date = $link['created'];
@@ -110,7 +149,13 @@ class BookmarkExportTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilterAndFormatDoNotPrependNoteUrl()
     {
-        $links = NetscapeBookmarkUtils::filterAndFormat(self::$linkDb, 'public', false, '');
+        $links = NetscapeBookmarkUtils::filterAndFormat(
+            self::$bookmarkService,
+            self::$formatter,
+            'public',
+            false,
+            ''
+        );
         $this->assertEquals(
             '?WDWyig',
             $links[2]['url']
@@ -124,7 +169,8 @@ class BookmarkExportTest extends \PHPUnit\Framework\TestCase
     {
         $indexUrl = 'http://localhost:7469/shaarli/';
         $links = NetscapeBookmarkUtils::filterAndFormat(
-            self::$linkDb,
+            self::$bookmarkService,
+            self::$formatter,
             'public',
             true,
             $indexUrl

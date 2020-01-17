@@ -2,6 +2,9 @@
 namespace Shaarli\Netscape;
 
 use DateTime;
+use Shaarli\Bookmark\Bookmark;
+use Shaarli\Bookmark\BookmarkFilter;
+use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
@@ -41,9 +44,9 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
     protected static $historyFilePath = 'sandbox/history.php';
 
     /**
-     * @var LinkDB private LinkDB instance
+     * @var BookmarkFileService private LinkDB instance
      */
-    protected $linkDb = null;
+    protected $bookmarkService = null;
 
     /**
      * @var string Dummy page cache
@@ -82,10 +85,12 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
         }
         // start with an empty datastore
         file_put_contents(self::$testDatastore, '<?php /* S7QysKquBQA= */ ?>');
-        $this->linkDb = new LinkDB(self::$testDatastore, true, false);
+
         $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->conf->set('resource.page_cache', $this->pagecache);
+        $this->conf->set('resource.datastore', self::$testDatastore);
         $this->history = new History(self::$historyFilePath);
+        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, true);
     }
 
     /**
@@ -112,7 +117,7 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
             .' Nothing was imported.',
             NetscapeBookmarkUtils::import(null, $files, null, $this->conf, $this->history)
         );
-        $this->assertEquals(0, count($this->linkDb));
+        $this->assertEquals(0, $this->bookmarkService->count());
     }
 
     /**
@@ -125,7 +130,7 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
             'File no_doctype.htm (350 bytes) has an unknown file format. Nothing was imported.',
             NetscapeBookmarkUtils::import(null, $files, null, $this->conf, $this->history)
         );
-        $this->assertEquals(0, count($this->linkDb));
+        $this->assertEquals(0, $this->bookmarkService->count());
     }
 
     /**
@@ -136,10 +141,10 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
         $files = file2array('lowercase_doctype.htm');
         $this->assertStringMatchesFormat(
             'File lowercase_doctype.htm (386 bytes) was successfully processed in %d seconds:'
-            .' 2 links imported, 0 links overwritten, 0 links skipped.',
-            NetscapeBookmarkUtils::import(null, $files, $this->linkDb, $this->conf, $this->history)
+            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            NetscapeBookmarkUtils::import(null, $files, $this->bookmarkService, $this->conf, $this->history)
         );
-        $this->assertEquals(2, count($this->linkDb));
+        $this->assertEquals(2, $this->bookmarkService->count());
     }
 
 
@@ -151,25 +156,24 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
         $files = file2array('internet_explorer_encoding.htm');
         $this->assertStringMatchesFormat(
             'File internet_explorer_encoding.htm (356 bytes) was successfully processed in %d seconds:'
-            .' 1 links imported, 0 links overwritten, 0 links skipped.',
-            NetscapeBookmarkUtils::import([], $files, $this->linkDb, $this->conf, $this->history)
+            .' 1 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            NetscapeBookmarkUtils::import([], $files, $this->bookmarkService, $this->conf, $this->history)
         );
-        $this->assertEquals(1, count($this->linkDb));
-        $this->assertEquals(0, count_private($this->linkDb));
+        $this->assertEquals(1, $this->bookmarkService->count());
+        $this->assertEquals(0, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
 
+        $bookmark = $this->bookmarkService->findByUrl('http://hginit.com/');
+        $this->assertEquals(0, $bookmark->getId());
         $this->assertEquals(
-            array(
-                'id' => 0,
-                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160618_203944'),
-                'title' => 'Hg Init a Mercurial tutorial by Joel Spolsky',
-                'url' => 'http://hginit.com/',
-                'description' => '',
-                'private' => 0,
-                'tags' => '',
-                'shorturl' => 'La37cg',
-            ),
-            $this->linkDb->getLinkFromUrl('http://hginit.com/')
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20160618_203944'),
+            $bookmark->getCreated()
         );
+        $this->assertEquals('Hg Init a Mercurial tutorial by Joel Spolsky', $bookmark->getTitle());
+        $this->assertEquals('http://hginit.com/', $bookmark->getUrl());
+        $this->assertEquals('', $bookmark->getDescription());
+        $this->assertFalse($bookmark->isPrivate());
+        $this->assertEquals('', $bookmark->getTagsString());
+        $this->assertEquals('La37cg', $bookmark->getShortUrl());
     }
 
     /**
@@ -180,116 +184,115 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
         $files = file2array('netscape_nested.htm');
         $this->assertStringMatchesFormat(
             'File netscape_nested.htm (1337 bytes) was successfully processed in %d seconds:'
-            .' 8 links imported, 0 links overwritten, 0 links skipped.',
-            NetscapeBookmarkUtils::import([], $files, $this->linkDb, $this->conf, $this->history)
+            .' 8 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            NetscapeBookmarkUtils::import([], $files, $this->bookmarkService, $this->conf, $this->history)
         );
-        $this->assertEquals(8, count($this->linkDb));
-        $this->assertEquals(2, count_private($this->linkDb));
+        $this->assertEquals(8, $this->bookmarkService->count());
+        $this->assertEquals(2, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
 
+        $bookmark = $this->bookmarkService->findByUrl('http://nest.ed/1');
+        $this->assertEquals(0, $bookmark->getId());
         $this->assertEquals(
-            array(
-                'id' => 0,
-                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160225_235541'),
-                'title' => 'Nested 1',
-                'url' => 'http://nest.ed/1',
-                'description' => '',
-                'private' => 0,
-                'tags' => 'tag1 tag2',
-                'shorturl' => 'KyDNKA',
-            ),
-            $this->linkDb->getLinkFromUrl('http://nest.ed/1')
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20160225_235541'),
+            $bookmark->getCreated()
         );
+        $this->assertEquals('Nested 1', $bookmark->getTitle());
+        $this->assertEquals('http://nest.ed/1', $bookmark->getUrl());
+        $this->assertEquals('', $bookmark->getDescription());
+        $this->assertFalse($bookmark->isPrivate());
+        $this->assertEquals('tag1 tag2', $bookmark->getTagsString());
+        $this->assertEquals('KyDNKA', $bookmark->getShortUrl());
+
+        $bookmark = $this->bookmarkService->findByUrl('http://nest.ed/1-1');
+        $this->assertEquals(1, $bookmark->getId());
         $this->assertEquals(
-            array(
-                'id' => 1,
-                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160225_235542'),
-                'title' => 'Nested 1-1',
-                'url' => 'http://nest.ed/1-1',
-                'description' => '',
-                'private' => 0,
-                'tags' => 'folder1 tag1 tag2',
-                'shorturl' => 'T2LnXg',
-            ),
-            $this->linkDb->getLinkFromUrl('http://nest.ed/1-1')
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20160225_235542'),
+            $bookmark->getCreated()
         );
+        $this->assertEquals('Nested 1-1', $bookmark->getTitle());
+        $this->assertEquals('http://nest.ed/1-1', $bookmark->getUrl());
+        $this->assertEquals('', $bookmark->getDescription());
+        $this->assertFalse($bookmark->isPrivate());
+        $this->assertEquals('folder1 tag1 tag2', $bookmark->getTagsString());
+        $this->assertEquals('T2LnXg', $bookmark->getShortUrl());
+
+        $bookmark = $this->bookmarkService->findByUrl('http://nest.ed/1-2');
+        $this->assertEquals(2, $bookmark->getId());
         $this->assertEquals(
-            array(
-                'id' => 2,
-                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160225_235547'),
-                'title' => 'Nested 1-2',
-                'url' => 'http://nest.ed/1-2',
-                'description' => '',
-                'private' => 0,
-                'tags' => 'folder1 tag3 tag4',
-                'shorturl' => '46SZxA',
-            ),
-            $this->linkDb->getLinkFromUrl('http://nest.ed/1-2')
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20160225_235547'),
+            $bookmark->getCreated()
         );
+        $this->assertEquals('Nested 1-2', $bookmark->getTitle());
+        $this->assertEquals('http://nest.ed/1-2', $bookmark->getUrl());
+        $this->assertEquals('', $bookmark->getDescription());
+        $this->assertFalse($bookmark->isPrivate());
+        $this->assertEquals('folder1 tag3 tag4', $bookmark->getTagsString());
+        $this->assertEquals('46SZxA', $bookmark->getShortUrl());
+
+        $bookmark = $this->bookmarkService->findByUrl('http://nest.ed/2-1');
+        $this->assertEquals(3, $bookmark->getId());
         $this->assertEquals(
-            array(
-                'id' => 3,
-                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160202_202222'),
-                'title' => 'Nested 2-1',
-                'url' => 'http://nest.ed/2-1',
-                'description' => 'First link of the second section',
-                'private' => 1,
-                'tags' => 'folder2',
-                'shorturl' => '4UHOSw',
-            ),
-            $this->linkDb->getLinkFromUrl('http://nest.ed/2-1')
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20160202_202222'),
+            $bookmark->getCreated()
         );
+        $this->assertEquals('Nested 2-1', $bookmark->getTitle());
+        $this->assertEquals('http://nest.ed/2-1', $bookmark->getUrl());
+        $this->assertEquals('First link of the second section', $bookmark->getDescription());
+        $this->assertTrue($bookmark->isPrivate());
+        $this->assertEquals('folder2', $bookmark->getTagsString());
+        $this->assertEquals('4UHOSw', $bookmark->getShortUrl());
+
+        $bookmark = $this->bookmarkService->findByUrl('http://nest.ed/2-2');
+        $this->assertEquals(4, $bookmark->getId());
         $this->assertEquals(
-            array(
-                'id' => 4,
-                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160119_230227'),
-                'title' => 'Nested 2-2',
-                'url' => 'http://nest.ed/2-2',
-                'description' => 'Second link of the second section',
-                'private' => 1,
-                'tags' => 'folder2',
-                'shorturl' => 'yfzwbw',
-            ),
-            $this->linkDb->getLinkFromUrl('http://nest.ed/2-2')
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20160119_230227'),
+            $bookmark->getCreated()
         );
+        $this->assertEquals('Nested 2-2', $bookmark->getTitle());
+        $this->assertEquals('http://nest.ed/2-2', $bookmark->getUrl());
+        $this->assertEquals('Second link of the second section', $bookmark->getDescription());
+        $this->assertTrue($bookmark->isPrivate());
+        $this->assertEquals('folder2', $bookmark->getTagsString());
+        $this->assertEquals('yfzwbw', $bookmark->getShortUrl());
+
+        $bookmark = $this->bookmarkService->findByUrl('http://nest.ed/3-1');
+        $this->assertEquals(5, $bookmark->getId());
         $this->assertEquals(
-            array(
-                'id' => 5,
-                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160202_202222'),
-                'title' => 'Nested 3-1',
-                'url' => 'http://nest.ed/3-1',
-                'description' => '',
-                'private' => 0,
-                'tags' => 'folder3 folder3-1 tag3',
-                'shorturl' => 'UwxIUQ',
-            ),
-            $this->linkDb->getLinkFromUrl('http://nest.ed/3-1')
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20160202_202222'),
+            $bookmark->getCreated()
         );
+        $this->assertEquals('Nested 3-1', $bookmark->getTitle());
+        $this->assertEquals('http://nest.ed/3-1', $bookmark->getUrl());
+        $this->assertEquals('', $bookmark->getDescription());
+        $this->assertFalse($bookmark->isPrivate());
+        $this->assertEquals('folder3 folder3-1 tag3', $bookmark->getTagsString());
+        $this->assertEquals('UwxIUQ', $bookmark->getShortUrl());
+
+        $bookmark = $this->bookmarkService->findByUrl('http://nest.ed/3-2');
+        $this->assertEquals(6, $bookmark->getId());
         $this->assertEquals(
-            array(
-                'id' => 6,
-                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160119_230227'),
-                'title' => 'Nested 3-2',
-                'url' => 'http://nest.ed/3-2',
-                'description' => '',
-                'private' => 0,
-                'tags' => 'folder3 folder3-1',
-                'shorturl' => 'p8dyZg',
-            ),
-            $this->linkDb->getLinkFromUrl('http://nest.ed/3-2')
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20160119_230227'),
+            $bookmark->getCreated()
         );
+        $this->assertEquals('Nested 3-2', $bookmark->getTitle());
+        $this->assertEquals('http://nest.ed/3-2', $bookmark->getUrl());
+        $this->assertEquals('', $bookmark->getDescription());
+        $this->assertFalse($bookmark->isPrivate());
+        $this->assertEquals('folder3 folder3-1', $bookmark->getTagsString());
+        $this->assertEquals('p8dyZg', $bookmark->getShortUrl());
+
+        $bookmark = $this->bookmarkService->findByUrl('http://nest.ed/2');
+        $this->assertEquals(7, $bookmark->getId());
         $this->assertEquals(
-            array(
-                'id' => 7,
-                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160229_111541'),
-                'title' => 'Nested 2',
-                'url' => 'http://nest.ed/2',
-                'description' => '',
-                'private' => 0,
-                'tags' => 'tag4',
-                'shorturl' => 'Gt3Uug',
-            ),
-            $this->linkDb->getLinkFromUrl('http://nest.ed/2')
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20160229_111541'),
+            $bookmark->getCreated()
         );
+        $this->assertEquals('Nested 2', $bookmark->getTitle());
+        $this->assertEquals('http://nest.ed/2', $bookmark->getUrl());
+        $this->assertEquals('', $bookmark->getDescription());
+        $this->assertFalse($bookmark->isPrivate());
+        $this->assertEquals('tag4', $bookmark->getTagsString());
+        $this->assertEquals('Gt3Uug', $bookmark->getShortUrl());
     }
 
     /**
@@ -302,40 +305,38 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 links imported, 0 links overwritten, 0 links skipped.',
-            NetscapeBookmarkUtils::import([], $files, $this->linkDb, $this->conf, $this->history)
+            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            NetscapeBookmarkUtils::import([], $files, $this->bookmarkService, $this->conf, $this->history)
         );
 
-        $this->assertEquals(2, count($this->linkDb));
-        $this->assertEquals(1, count_private($this->linkDb));
+        $this->assertEquals(2, $this->bookmarkService->count());
+        $this->assertEquals(1, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
 
+        $bookmark = $this->bookmarkService->findByUrl('https://private.tld');
+        $this->assertEquals(0, $bookmark->getId());
         $this->assertEquals(
-            array(
-                'id' => 0,
-                // Old link - UTC+4 (note that TZ in the import file is ignored).
-                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20001010_135536'),
-                'title' => 'Secret stuff',
-                'url' => 'https://private.tld',
-                'description' => "Super-secret stuff you're not supposed to know about",
-                'private' => 1,
-                'tags' => 'private secret',
-                'shorturl' => 'EokDtA',
-            ),
-            $this->linkDb->getLinkFromUrl('https://private.tld')
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20001010_135536'),
+            $bookmark->getCreated()
         );
+        $this->assertEquals('Secret stuff', $bookmark->getTitle());
+        $this->assertEquals('https://private.tld', $bookmark->getUrl());
+        $this->assertEquals('Super-secret stuff you\'re not supposed to know about', $bookmark->getDescription());
+        $this->assertTrue($bookmark->isPrivate());
+        $this->assertEquals('private secret', $bookmark->getTagsString());
+        $this->assertEquals('EokDtA', $bookmark->getShortUrl());
+
+        $bookmark = $this->bookmarkService->findByUrl('http://public.tld');
+        $this->assertEquals(1, $bookmark->getId());
         $this->assertEquals(
-            array(
-                'id' => 1,
-                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160225_235548'),
-                'title' => 'Public stuff',
-                'url' => 'http://public.tld',
-                'description' => '',
-                'private' => 0,
-                'tags' => 'public hello world',
-                'shorturl' => 'Er9ddA',
-            ),
-            $this->linkDb->getLinkFromUrl('http://public.tld')
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20160225_235548'),
+            $bookmark->getCreated()
         );
+        $this->assertEquals('Public stuff', $bookmark->getTitle());
+        $this->assertEquals('http://public.tld', $bookmark->getUrl());
+        $this->assertEquals('', $bookmark->getDescription());
+        $this->assertFalse($bookmark->isPrivate());
+        $this->assertEquals('public hello world', $bookmark->getTagsString());
+        $this->assertEquals('Er9ddA', $bookmark->getShortUrl());
     }
 
     /**
@@ -347,43 +348,42 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 links imported, 0 links overwritten, 0 links skipped.',
-            NetscapeBookmarkUtils::import($post, $files, $this->linkDb, $this->conf, $this->history)
+            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            NetscapeBookmarkUtils::import($post, $files, $this->bookmarkService, $this->conf, $this->history)
         );
-        $this->assertEquals(2, count($this->linkDb));
-        $this->assertEquals(1, count_private($this->linkDb));
 
+        $this->assertEquals(2, $this->bookmarkService->count());
+        $this->assertEquals(1, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
+
+        $bookmark = $this->bookmarkService->findByUrl('https://private.tld');
+        $this->assertEquals(0, $bookmark->getId());
         $this->assertEquals(
-            array(
-                'id' => 0,
-                // Note that TZ in the import file is ignored.
-                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20001010_135536'),
-                'title' => 'Secret stuff',
-                'url' => 'https://private.tld',
-                'description' => "Super-secret stuff you're not supposed to know about",
-                'private' => 1,
-                'tags' => 'private secret',
-                'shorturl' => 'EokDtA',
-            ),
-            $this->linkDb->getLinkFromUrl('https://private.tld')
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20001010_135536'),
+            $bookmark->getCreated()
         );
+        $this->assertEquals('Secret stuff', $bookmark->getTitle());
+        $this->assertEquals('https://private.tld', $bookmark->getUrl());
+        $this->assertEquals('Super-secret stuff you\'re not supposed to know about', $bookmark->getDescription());
+        $this->assertTrue($bookmark->isPrivate());
+        $this->assertEquals('private secret', $bookmark->getTagsString());
+        $this->assertEquals('EokDtA', $bookmark->getShortUrl());
+
+        $bookmark = $this->bookmarkService->findByUrl('http://public.tld');
+        $this->assertEquals(1, $bookmark->getId());
         $this->assertEquals(
-            array(
-                'id' => 1,
-                'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160225_235548'),
-                'title' => 'Public stuff',
-                'url' => 'http://public.tld',
-                'description' => '',
-                'private' => 0,
-                'tags' => 'public hello world',
-                'shorturl' => 'Er9ddA',
-            ),
-            $this->linkDb->getLinkFromUrl('http://public.tld')
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20160225_235548'),
+            $bookmark->getCreated()
         );
+        $this->assertEquals('Public stuff', $bookmark->getTitle());
+        $this->assertEquals('http://public.tld', $bookmark->getUrl());
+        $this->assertEquals('', $bookmark->getDescription());
+        $this->assertFalse($bookmark->isPrivate());
+        $this->assertEquals('public hello world', $bookmark->getTagsString());
+        $this->assertEquals('Er9ddA', $bookmark->getShortUrl());
     }
 
     /**
-     * Import links as public
+     * Import bookmarks as public
      */
     public function testImportAsPublic()
     {
@@ -391,23 +391,17 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 links imported, 0 links overwritten, 0 links skipped.',
-            NetscapeBookmarkUtils::import($post, $files, $this->linkDb, $this->conf, $this->history)
+            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            NetscapeBookmarkUtils::import($post, $files, $this->bookmarkService, $this->conf, $this->history)
         );
-        $this->assertEquals(2, count($this->linkDb));
-        $this->assertEquals(0, count_private($this->linkDb));
-        $this->assertEquals(
-            0,
-            $this->linkDb[0]['private']
-        );
-        $this->assertEquals(
-            0,
-            $this->linkDb[1]['private']
-        );
+        $this->assertEquals(2, $this->bookmarkService->count());
+        $this->assertEquals(0, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
+        $this->assertFalse($this->bookmarkService->get(0)->isPrivate());
+        $this->assertFalse($this->bookmarkService->get(1)->isPrivate());
     }
 
     /**
-     * Import links as private
+     * Import bookmarks as private
      */
     public function testImportAsPrivate()
     {
@@ -415,45 +409,34 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 links imported, 0 links overwritten, 0 links skipped.',
-            NetscapeBookmarkUtils::import($post, $files, $this->linkDb, $this->conf, $this->history)
+            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            NetscapeBookmarkUtils::import($post, $files, $this->bookmarkService, $this->conf, $this->history)
         );
-        $this->assertEquals(2, count($this->linkDb));
-        $this->assertEquals(2, count_private($this->linkDb));
-        $this->assertEquals(
-            1,
-            $this->linkDb['0']['private']
-        );
-        $this->assertEquals(
-            1,
-            $this->linkDb['1']['private']
-        );
+        $this->assertEquals(2, $this->bookmarkService->count());
+        $this->assertEquals(2, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
+        $this->assertTrue($this->bookmarkService->get(0)->isPrivate());
+        $this->assertTrue($this->bookmarkService->get(1)->isPrivate());
     }
 
     /**
-     * Overwrite private links so they become public
+     * Overwrite private bookmarks so they become public
      */
     public function testOverwriteAsPublic()
     {
         $files = file2array('netscape_basic.htm');
 
-        // import links as private
+        // import bookmarks as private
         $post = array('privacy' => 'private');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 links imported, 0 links overwritten, 0 links skipped.',
-            NetscapeBookmarkUtils::import($post, $files, $this->linkDb, $this->conf, $this->history)
+            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            NetscapeBookmarkUtils::import($post, $files, $this->bookmarkService, $this->conf, $this->history)
         );
-        $this->assertEquals(2, count($this->linkDb));
-        $this->assertEquals(2, count_private($this->linkDb));
-        $this->assertEquals(
-            1,
-            $this->linkDb[0]['private']
-        );
-        $this->assertEquals(
-            1,
-            $this->linkDb[1]['private']
-        );
+        $this->assertEquals(2, $this->bookmarkService->count());
+        $this->assertEquals(2, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
+        $this->assertTrue($this->bookmarkService->get(0)->isPrivate());
+        $this->assertTrue($this->bookmarkService->get(1)->isPrivate());
+
         // re-import as public, enable overwriting
         $post = array(
             'privacy' => 'public',
@@ -461,45 +444,33 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 links imported, 2 links overwritten, 0 links skipped.',
-            NetscapeBookmarkUtils::import($post, $files, $this->linkDb, $this->conf, $this->history)
+            .' 2 bookmarks imported, 2 bookmarks overwritten, 0 bookmarks skipped.',
+            NetscapeBookmarkUtils::import($post, $files, $this->bookmarkService, $this->conf, $this->history)
         );
-        $this->assertEquals(2, count($this->linkDb));
-        $this->assertEquals(0, count_private($this->linkDb));
-        $this->assertEquals(
-            0,
-            $this->linkDb[0]['private']
-        );
-        $this->assertEquals(
-            0,
-            $this->linkDb[1]['private']
-        );
+        $this->assertEquals(2, $this->bookmarkService->count());
+        $this->assertEquals(0, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
+        $this->assertFalse($this->bookmarkService->get(0)->isPrivate());
+        $this->assertFalse($this->bookmarkService->get(1)->isPrivate());
     }
 
     /**
-     * Overwrite public links so they become private
+     * Overwrite public bookmarks so they become private
      */
     public function testOverwriteAsPrivate()
     {
         $files = file2array('netscape_basic.htm');
 
-        // import links as public
+        // import bookmarks as public
         $post = array('privacy' => 'public');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 links imported, 0 links overwritten, 0 links skipped.',
-            NetscapeBookmarkUtils::import($post, $files, $this->linkDb, $this->conf, $this->history)
+            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            NetscapeBookmarkUtils::import($post, $files, $this->bookmarkService, $this->conf, $this->history)
         );
-        $this->assertEquals(2, count($this->linkDb));
-        $this->assertEquals(0, count_private($this->linkDb));
-        $this->assertEquals(
-            0,
-            $this->linkDb['0']['private']
-        );
-        $this->assertEquals(
-            0,
-            $this->linkDb['1']['private']
-        );
+        $this->assertEquals(2, $this->bookmarkService->count());
+        $this->assertEquals(0, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
+        $this->assertFalse($this->bookmarkService->get(0)->isPrivate());
+        $this->assertFalse($this->bookmarkService->get(1)->isPrivate());
 
         // re-import as private, enable overwriting
         $post = array(
@@ -508,23 +479,17 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 links imported, 2 links overwritten, 0 links skipped.',
-            NetscapeBookmarkUtils::import($post, $files, $this->linkDb, $this->conf, $this->history)
+            .' 2 bookmarks imported, 2 bookmarks overwritten, 0 bookmarks skipped.',
+            NetscapeBookmarkUtils::import($post, $files, $this->bookmarkService, $this->conf, $this->history)
         );
-        $this->assertEquals(2, count($this->linkDb));
-        $this->assertEquals(2, count_private($this->linkDb));
-        $this->assertEquals(
-            1,
-            $this->linkDb['0']['private']
-        );
-        $this->assertEquals(
-            1,
-            $this->linkDb['1']['private']
-        );
+        $this->assertEquals(2, $this->bookmarkService->count());
+        $this->assertEquals(2, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
+        $this->assertTrue($this->bookmarkService->get(0)->isPrivate());
+        $this->assertTrue($this->bookmarkService->get(1)->isPrivate());
     }
 
     /**
-     * Attept to import the same links twice without enabling overwriting
+     * Attept to import the same bookmarks twice without enabling overwriting
      */
     public function testSkipOverwrite()
     {
@@ -532,21 +497,21 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 links imported, 0 links overwritten, 0 links skipped.',
-            NetscapeBookmarkUtils::import($post, $files, $this->linkDb, $this->conf, $this->history)
+            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            NetscapeBookmarkUtils::import($post, $files, $this->bookmarkService, $this->conf, $this->history)
         );
-        $this->assertEquals(2, count($this->linkDb));
-        $this->assertEquals(0, count_private($this->linkDb));
+        $this->assertEquals(2, $this->bookmarkService->count());
+        $this->assertEquals(0, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
 
         // re-import as private, DO NOT enable overwriting
         $post = array('privacy' => 'private');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 0 links imported, 0 links overwritten, 2 links skipped.',
-            NetscapeBookmarkUtils::import($post, $files, $this->linkDb, $this->conf, $this->history)
+            .' 0 bookmarks imported, 0 bookmarks overwritten, 2 bookmarks skipped.',
+            NetscapeBookmarkUtils::import($post, $files, $this->bookmarkService, $this->conf, $this->history)
         );
-        $this->assertEquals(2, count($this->linkDb));
-        $this->assertEquals(0, count_private($this->linkDb));
+        $this->assertEquals(2, $this->bookmarkService->count());
+        $this->assertEquals(0, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
     }
 
     /**
@@ -561,19 +526,13 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 links imported, 0 links overwritten, 0 links skipped.',
-            NetscapeBookmarkUtils::import($post, $files, $this->linkDb, $this->conf, $this->history)
+            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            NetscapeBookmarkUtils::import($post, $files, $this->bookmarkService, $this->conf, $this->history)
         );
-        $this->assertEquals(2, count($this->linkDb));
-        $this->assertEquals(0, count_private($this->linkDb));
-        $this->assertEquals(
-            'tag1 tag2 tag3 private secret',
-            $this->linkDb['0']['tags']
-        );
-        $this->assertEquals(
-            'tag1 tag2 tag3 public hello world',
-            $this->linkDb['1']['tags']
-        );
+        $this->assertEquals(2, $this->bookmarkService->count());
+        $this->assertEquals(0, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
+        $this->assertEquals('tag1 tag2 tag3 private secret', $this->bookmarkService->get(0)->getTagsString());
+        $this->assertEquals('tag1 tag2 tag3 public hello world', $this->bookmarkService->get(1)->getTagsString());
     }
 
     /**
@@ -588,18 +547,18 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 links imported, 0 links overwritten, 0 links skipped.',
-            NetscapeBookmarkUtils::import($post, $files, $this->linkDb, $this->conf, $this->history)
+            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            NetscapeBookmarkUtils::import($post, $files, $this->bookmarkService, $this->conf, $this->history)
         );
-        $this->assertEquals(2, count($this->linkDb));
-        $this->assertEquals(0, count_private($this->linkDb));
+        $this->assertEquals(2, $this->bookmarkService->count());
+        $this->assertEquals(0, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
         $this->assertEquals(
             'tag1&amp; tag2 &quot;tag3&quot; private secret',
-            $this->linkDb['0']['tags']
+            $this->bookmarkService->get(0)->getTagsString()
         );
         $this->assertEquals(
             'tag1&amp; tag2 &quot;tag3&quot; public hello world',
-            $this->linkDb['1']['tags']
+            $this->bookmarkService->get(1)->getTagsString()
         );
     }
 
@@ -613,23 +572,14 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
         $files = file2array('same_date.htm');
         $this->assertStringMatchesFormat(
             'File same_date.htm (453 bytes) was successfully processed in %d seconds:'
-            .' 3 links imported, 0 links overwritten, 0 links skipped.',
-            NetscapeBookmarkUtils::import(array(), $files, $this->linkDb, $this->conf, $this->history)
+            .' 3 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            NetscapeBookmarkUtils::import(array(), $files, $this->bookmarkService, $this->conf, $this->history)
         );
-        $this->assertEquals(3, count($this->linkDb));
-        $this->assertEquals(0, count_private($this->linkDb));
-        $this->assertEquals(
-            0,
-            $this->linkDb[0]['id']
-        );
-        $this->assertEquals(
-            1,
-            $this->linkDb[1]['id']
-        );
-        $this->assertEquals(
-            2,
-            $this->linkDb[2]['id']
-        );
+        $this->assertEquals(3, $this->bookmarkService->count());
+        $this->assertEquals(0, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
+        $this->assertEquals(0, $this->bookmarkService->get(0)->getId());
+        $this->assertEquals(1, $this->bookmarkService->get(1)->getId());
+        $this->assertEquals(2, $this->bookmarkService->get(2)->getId());
     }
 
     public function testImportCreateUpdateHistory()
@@ -639,14 +589,14 @@ class BookmarkImportTest extends \PHPUnit\Framework\TestCase
             'overwrite' => 'true',
         ];
         $files = file2array('netscape_basic.htm');
-        NetscapeBookmarkUtils::import($post, $files, $this->linkDb, $this->conf, $this->history);
+        NetscapeBookmarkUtils::import($post, $files, $this->bookmarkService, $this->conf, $this->history);
         $history = $this->history->getHistory();
         $this->assertEquals(1, count($history));
         $this->assertEquals(History::IMPORT, $history[0]['event']);
         $this->assertTrue(new DateTime('-5 seconds') < $history[0]['datetime']);
 
         // re-import as private, enable overwriting
-        NetscapeBookmarkUtils::import($post, $files, $this->linkDb, $this->conf, $this->history);
+        NetscapeBookmarkUtils::import($post, $files, $this->bookmarkService, $this->conf, $this->history);
         $history = $this->history->getHistory();
         $this->assertEquals(2, count($history));
         $this->assertEquals(History::IMPORT, $history[0]['event']);

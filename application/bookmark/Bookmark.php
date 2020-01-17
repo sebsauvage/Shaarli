@@ -65,8 +65,8 @@ class Bookmark
         $this->url = $data['url'];
         $this->title = $data['title'];
         $this->description = $data['description'];
-        $this->thumbnail = ! empty($data['thumbnail']) ? $data['thumbnail'] : null;
-        $this->sticky = ! empty($data['sticky']) ? $data['sticky'] : false;
+        $this->thumbnail = isset($data['thumbnail']) ? $data['thumbnail'] : null;
+        $this->sticky = isset($data['sticky']) ? $data['sticky'] : false;
         $this->created = $data['created'];
         if (is_array($data['tags'])) {
             $this->tags = $data['tags'];

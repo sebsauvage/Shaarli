@@ -41,12 +41,12 @@
         "foo": "bar"
     },
     "resource": {
-        "datastore": "tests\/utils\/config\/datastore.php",
+        "datastore": "sandbox/datastore.php",
         "data_dir": "sandbox\/",
         "raintpl_tpl": "tpl\/",
         "config": "data\/config.php",
         "ban_file": "data\/ipbans.php",
-        "updates": "data\/updates.txt",
+        "updates": "sandbox/updates.txt",
         "log": "data\/log.txt",
         "update_check": "data\/lastupdatecheck.txt",
         "history": "data\/history.php",
@@ -59,7 +59,7 @@
         "WALLABAG_VERSION": 1
     },
     "dev": {
-        "debug": true
+        "debug": false
     },
     "updates": {
         "check_updates": false,

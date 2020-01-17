@@ -1,8 +1,10 @@
 <?php
 namespace Shaarli\Api\Controllers;
 
+use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
+use Shaarli\History;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -38,9 +40,9 @@ class GetTagsTest extends \PHPUnit\Framework\TestCase
     protected $container;
 
     /**
-     * @var LinkDB instance.
+     * @var BookmarkFileService instance.
      */
-    protected $linkDB;
+    protected $bookmarkService;
 
     /**
      * @var Tags controller instance.
@@ -53,18 +55,21 @@ class GetTagsTest extends \PHPUnit\Framework\TestCase
     const NB_FIELDS_TAG = 2;
 
     /**
-     * Before every test, instantiate a new Api with its config, plugins and links.
+     * Before every test, instantiate a new Api with its config, plugins and bookmarks.
      */
     public function setUp()
     {
         $this->conf = new ConfigManager('tests/utils/config/configJson');
+        $this->conf->set('resource.datastore', self::$testDatastore);
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
+        $history = new History('sandbox/history.php');
+
+        $this->bookmarkService = new BookmarkFileService($this->conf, $history, true);
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->linkDB = new LinkDB(self::$testDatastore, true, false);
-        $this->container['db'] = $this->linkDB;
+        $this->container['db'] = $this->bookmarkService;
         $this->container['history'] = null;
 
         $this->controller = new Tags($this->container);
@@ -83,7 +88,7 @@ class GetTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTagsAll()
     {
-        $tags = $this->linkDB->linksCountPerTag();
+        $tags = $this->bookmarkService->bookmarksCountPerTag();
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
         ]);
@@ -136,7 +141,7 @@ class GetTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTagsLimitAll()
     {
-        $tags = $this->linkDB->linksCountPerTag();
+        $tags = $this->bookmarkService->bookmarksCountPerTag();
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
             'QUERY_STRING' => 'limit=all'
@@ -170,7 +175,7 @@ class GetTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTagsVisibilityPrivate()
     {
-        $tags = $this->linkDB->linksCountPerTag([], 'private');
+        $tags = $this->bookmarkService->bookmarksCountPerTag([], 'private');
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
             'QUERY_STRING' => 'visibility=private'
@@ -190,7 +195,7 @@ class GetTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTagsVisibilityPublic()
     {
-        $tags = $this->linkDB->linksCountPerTag([], 'public');
+        $tags = $this->bookmarkService->bookmarksCountPerTag([], 'public');
         $env = Environment::mock(
             [
                 'REQUEST_METHOD' => 'GET',

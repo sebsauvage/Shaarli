@@ -80,7 +80,8 @@ locale_test_%:
 		--testsuite language-$(firstword $(subst _, ,$*))
 
 all_tests: test locale_test_de_DE locale_test_en_US locale_test_fr_FR
-	@$(BIN)/phpcov merge --html coverage coverage
+	@# --The current version is not compatible with PHP 7.2
+	@#$(BIN)/phpcov merge --html coverage coverage
 	@# --text doesn't work with phpunit 4.* (v5 requires PHP 5.6)
 	@#$(BIN)/phpcov merge --text coverage/txt coverage
 

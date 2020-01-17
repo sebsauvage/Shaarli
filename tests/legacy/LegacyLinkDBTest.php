@@ -3,12 +3,13 @@
  * Link datastore tests
  */
 
-namespace Shaarli\Bookmark;
+namespace Shaarli\Legacy;
 
 use DateTime;
 use ReferenceLinkDB;
 use ReflectionClass;
 use Shaarli;
+use Shaarli\Bookmark\Bookmark;
 
 require_once 'application/feed/Cache.php';
 require_once 'application/Utils.php';
@@ -16,9 +17,9 @@ require_once 'tests/utils/ReferenceLinkDB.php';
 
 
 /**
- * Unitary tests for LinkDB
+ * Unitary tests for LegacyLinkDBTest
  */
-class LinkDBTest extends \PHPUnit\Framework\TestCase
+class LegacyLinkDBTest extends \PHPUnit\Framework\TestCase
 {
     // datastore to test write operations
     protected static $testDatastore = 'sandbox/datastore.php';
@@ -29,19 +30,19 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     protected static $refDB = null;
 
     /**
-     * @var LinkDB public LinkDB instance.
+     * @var LegacyLinkDB public LinkDB instance.
      */
     protected static $publicLinkDB = null;
 
     /**
-     * @var LinkDB private LinkDB instance.
+     * @var LegacyLinkDB private LinkDB instance.
      */
     protected static $privateLinkDB = null;
 
     /**
      * Instantiates public and private LinkDBs with test data
      *
-     * The reference datastore contains public and private links that
+     * The reference datastore contains public and private bookmarks that
      * will be used to test LinkDB's methods:
      *  - access filtering (public/private),
      *  - link searches:
@@ -58,11 +59,10 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
             unlink(self::$testDatastore);
         }
 
-        self::$refDB = new ReferenceLinkDB();
+        self::$refDB = new ReferenceLinkDB(true);
         self::$refDB->write(self::$testDatastore);
-
-        self::$publicLinkDB = new LinkDB(self::$testDatastore, false, false);
-        self::$privateLinkDB = new LinkDB(self::$testDatastore, true, false);
+        self::$publicLinkDB = new LegacyLinkDB(self::$testDatastore, false, false);
+        self::$privateLinkDB = new LegacyLinkDB(self::$testDatastore, true, false);
     }
 
     /**
@@ -74,7 +74,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
      */
     protected static function getMethod($name)
     {
-        $class = new ReflectionClass('Shaarli\Bookmark\LinkDB');
+        $class = new ReflectionClass('Shaarli\Legacy\LegacyLinkDB');
         $method = $class->getMethod($name);
         $method->setAccessible(true);
         return $method;
@@ -85,7 +85,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructLoggedIn()
     {
-        new LinkDB(self::$testDatastore, true, false);
+        new LegacyLinkDB(self::$testDatastore, true, false);
         $this->assertFileExists(self::$testDatastore);
     }
 
@@ -94,7 +94,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructLoggedOut()
     {
-        new LinkDB(self::$testDatastore, false, false);
+        new LegacyLinkDB(self::$testDatastore, false, false);
         $this->assertFileExists(self::$testDatastore);
     }
 
@@ -106,7 +106,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructDatastoreNotWriteable()
     {
-        new LinkDB('null/store.db', false, false);
+        new LegacyLinkDB('null/store.db', false, false);
     }
 
     /**
@@ -114,7 +114,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheckDBNew()
     {
-        $linkDB = new LinkDB(self::$testDatastore, false, false);
+        $linkDB = new LegacyLinkDB(self::$testDatastore, false, false);
         unlink(self::$testDatastore);
         $this->assertFileNotExists(self::$testDatastore);
 
@@ -131,7 +131,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheckDBLoad()
     {
-        $linkDB = new LinkDB(self::$testDatastore, false, false);
+        $linkDB = new LegacyLinkDB(self::$testDatastore, false, false);
         $datastoreSize = filesize(self::$testDatastore);
         $this->assertGreaterThan(0, $datastoreSize);
 
@@ -151,13 +151,13 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     public function testReadEmptyDB()
     {
         file_put_contents(self::$testDatastore, '<?php /* S7QysKquBQA= */ ?>');
-        $emptyDB = new LinkDB(self::$testDatastore, false, false);
+        $emptyDB = new LegacyLinkDB(self::$testDatastore, false, false);
         $this->assertEquals(0, sizeof($emptyDB));
         $this->assertEquals(0, count($emptyDB));
     }
 
     /**
-     * Load public links from the DB
+     * Load public bookmarks from the DB
      */
     public function testReadPublicDB()
     {
@@ -168,7 +168,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Load public and private links from the DB
+     * Load public and private bookmarks from the DB
      */
     public function testReadPrivateDB()
     {
@@ -179,11 +179,11 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Save the links to the DB
+     * Save the bookmarks to the DB
      */
     public function testSave()
     {
-        $testDB = new LinkDB(self::$testDatastore, true, false);
+        $testDB = new LegacyLinkDB(self::$testDatastore, true, false);
         $dbSize = sizeof($testDB);
 
         $link = array(
@@ -192,18 +192,18 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
             'url' => 'http://dum.my',
             'description' => 'One more',
             'private' => 0,
-            'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20150518_190000'),
+            'created' => DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150518_190000'),
             'tags' => 'unit test'
         );
         $testDB[$link['id']] = $link;
         $testDB->save('tests');
 
-        $testDB = new LinkDB(self::$testDatastore, true, false);
+        $testDB = new LegacyLinkDB(self::$testDatastore, true, false);
         $this->assertEquals($dbSize + 1, sizeof($testDB));
     }
 
     /**
-     * Count existing links
+     * Count existing bookmarks
      */
     public function testCount()
     {
@@ -218,11 +218,11 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Count existing links - public links hidden
+     * Count existing bookmarks - public bookmarks hidden
      */
     public function testCountHiddenPublic()
     {
-        $linkDB = new LinkDB(self::$testDatastore, false, true);
+        $linkDB = new LegacyLinkDB(self::$testDatastore, false, true);
 
         $this->assertEquals(
             0,
@@ -235,7 +235,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * List the days for which links have been posted
+     * List the days for which bookmarks have been posted
      */
     public function testDays()
     {
@@ -422,7 +422,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     /**
      * Test filterHash() with an invalid smallhash.
      *
-     * @expectedException \Shaarli\Bookmark\Exception\LinkNotFoundException
+     * @expectedException \Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testFilterHashInValid1()
     {
@@ -433,7 +433,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     /**
      * Test filterHash() with an empty smallhash.
      *
-     * @expectedException \Shaarli\Bookmark\Exception\LinkNotFoundException
+     * @expectedException \Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testFilterHashInValid()
     {
@@ -462,12 +462,12 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test rename tag with a valid value present in multiple links
+     * Test rename tag with a valid value present in multiple bookmarks
      */
     public function testRenameTagMultiple()
     {
         self::$refDB->write(self::$testDatastore);
-        $linkDB = new LinkDB(self::$testDatastore, true, false);
+        $linkDB = new LegacyLinkDB(self::$testDatastore, true, false);
 
         $res = $linkDB->renameTag('cartoon', 'Taz');
         $this->assertEquals(3, count($res));
@@ -482,7 +482,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     public function testRenameTagCaseSensitive()
     {
         self::$refDB->write(self::$testDatastore);
-        $linkDB = new LinkDB(self::$testDatastore, true, false);
+        $linkDB = new LegacyLinkDB(self::$testDatastore, true, false);
 
         $res = $linkDB->renameTag('sTuff', 'Taz');
         $this->assertEquals(1, count($res));
@@ -494,7 +494,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenameTagInvalid()
     {
-        $linkDB = new LinkDB(self::$testDatastore, false, false);
+        $linkDB = new LegacyLinkDB(self::$testDatastore, false, false);
 
         $this->assertFalse($linkDB->renameTag('', 'test'));
         $this->assertFalse($linkDB->renameTag('', ''));
@@ -509,7 +509,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     public function testDeleteTag()
     {
         self::$refDB->write(self::$testDatastore);
-        $linkDB = new LinkDB(self::$testDatastore, true, false);
+        $linkDB = new LegacyLinkDB(self::$testDatastore, true, false);
 
         $res = $linkDB->renameTag('cartoon', null);
         $this->assertEquals(3, count($res));
@@ -624,7 +624,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
     {
         $nextId = 43;
         $creation = DateTime::createFromFormat('Ymd_His', '20190807_130444');
-        $linkDB = new LinkDB(self::$testDatastore, true, false);
+        $linkDB = new LegacyLinkDB(self::$testDatastore, true, false);
         for ($i = 0; $i < 4; ++$i) {
             $linkDB[$nextId + $i] = [
                 'id' => $nextId + $i,
@@ -639,7 +639,7 @@ class LinkDBTest extends \PHPUnit\Framework\TestCase
         // Check 4 new links 4 times
         for ($i = 0; $i < 4; ++$i) {
             $linkDB->save('tests');
-            $linkDB = new LinkDB(self::$testDatastore, true, false);
+            $linkDB = new LegacyLinkDB(self::$testDatastore, true, false);
             $count = 3;
             foreach ($linkDB as $link) {
                 if ($link['sticky'] === true) {

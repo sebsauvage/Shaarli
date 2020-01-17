@@ -1,7 +1,10 @@
 <?php
 namespace Shaarli\Api\Controllers;
 
+use PHPUnit\Framework\TestCase;
+use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Config\ConfigManager;
+use Shaarli\History;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -14,7 +17,7 @@ use Slim\Http\Response;
  *
  * @package Api\Controllers
  */
-class InfoTest extends \PHPUnit\Framework\TestCase
+class InfoTest extends TestCase
 {
     /**
      * @var string datastore to test write operations
@@ -42,17 +45,20 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * Before every test, instantiate a new Api with its config, plugins and links.
+     * Before every test, instantiate a new Api with its config, plugins and bookmarks.
      */
     public function setUp()
     {
-        $this->conf = new ConfigManager('tests/utils/config/configJson.json.php');
+        $this->conf = new ConfigManager('tests/utils/config/configJson');
+        $this->conf->set('resource.datastore', self::$testDatastore);
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
 
+        $history = new History('sandbox/history.php');
+
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->container['db'] = new \Shaarli\Bookmark\LinkDB(self::$testDatastore, true, false);
+        $this->container['db'] = new BookmarkFileService($this->conf, $history, true);
         $this->container['history'] = null;
 
         $this->controller = new Info($this->container);
@@ -84,11 +90,11 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2, $data['private_counter']);
         $this->assertEquals('Shaarli', $data['settings']['title']);
         $this->assertEquals('?', $data['settings']['header_link']);
-        $this->assertEquals('UTC', $data['settings']['timezone']);
+        $this->assertEquals('Europe/Paris', $data['settings']['timezone']);
         $this->assertEquals(ConfigManager::$DEFAULT_PLUGINS, $data['settings']['enabled_plugins']);
-        $this->assertEquals(false, $data['settings']['default_private_links']);
+        $this->assertEquals(true, $data['settings']['default_private_links']);
 
-        $title = 'My links';
+        $title = 'My bookmarks';
         $headerLink = 'http://shaarli.tld';
         $timezone = 'Europe/Paris';
         $enabledPlugins = array('foo', 'bar');

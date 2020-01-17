@@ -24,7 +24,7 @@ class PluginArchiveorgTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test render_linklist hook on external links.
+     * Test render_linklist hook on external bookmarks.
      */
     public function testArchiveorgLinklistOnExternalLinks()
     {
@@ -54,7 +54,7 @@ class PluginArchiveorgTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test render_linklist hook on internal links.
+     * Test render_linklist hook on internal bookmarks.
      */
     public function testArchiveorgLinklistOnInternalLinks()
     {

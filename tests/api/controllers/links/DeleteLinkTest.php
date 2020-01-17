@@ -3,7 +3,7 @@
 
 namespace Shaarli\Api\Controllers;
 
-use Shaarli\Bookmark\LinkDB;
+use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 use Slim\Container;
@@ -34,9 +34,9 @@ class DeleteLinkTest extends \PHPUnit\Framework\TestCase
     protected $refDB = null;
 
     /**
-     * @var LinkDB instance.
+     * @var BookmarkFileService instance.
      */
-    protected $linkDB;
+    protected $bookmarkService;
 
     /**
      * @var HistoryController instance.
@@ -54,20 +54,22 @@ class DeleteLinkTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * Before each test, instantiate a new Api with its config, plugins and links.
+     * Before each test, instantiate a new Api with its config, plugins and bookmarks.
      */
     public function setUp()
     {
         $this->conf = new ConfigManager('tests/utils/config/configJson');
+        $this->conf->set('resource.datastore', self::$testDatastore);
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
-        $this->linkDB = new LinkDB(self::$testDatastore, true, false);
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
         $this->history = new History(self::$testHistory);
+        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, true);
+
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->container['db'] = $this->linkDB;
+        $this->container['db'] = $this->bookmarkService;
         $this->container['history'] = $this->history;
 
         $this->controller = new Links($this->container);
@@ -88,7 +90,7 @@ class DeleteLinkTest extends \PHPUnit\Framework\TestCase
     public function testDeleteLinkValid()
     {
         $id = '41';
-        $this->assertTrue(isset($this->linkDB[$id]));
+        $this->assertTrue($this->bookmarkService->exists($id));
         $env = Environment::mock([
             'REQUEST_METHOD' => 'DELETE',
         ]);
@@ -98,8 +100,8 @@ class DeleteLinkTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(204, $response->getStatusCode());
         $this->assertEmpty((string) $response->getBody());
 
-        $this->linkDB = new LinkDB(self::$testDatastore, true, false);
-        $this->assertFalse(isset($this->linkDB[$id]));
+        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, true);
+        $this->assertFalse($this->bookmarkService->exists($id));
 
         $historyEntry = $this->history->getHistory()[0];
         $this->assertEquals(History::DELETED, $historyEntry['event']);
@@ -117,7 +119,7 @@ class DeleteLinkTest extends \PHPUnit\Framework\TestCase
     public function testDeleteLink404()
     {
         $id = -1;
-        $this->assertFalse(isset($this->linkDB[$id]));
+        $this->assertFalse($this->bookmarkService->exists($id));
         $env = Environment::mock([
             'REQUEST_METHOD' => 'DELETE',
         ]);

@@ -76,7 +76,7 @@ class ReferenceHistory
     }
 
     /**
-     * Returns the number of links in the reference data
+     * Returns the number of bookmarks in the reference data
      */
     public function count()
     {

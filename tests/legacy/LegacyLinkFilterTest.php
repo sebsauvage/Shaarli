@@ -4,18 +4,20 @@ namespace Shaarli\Bookmark;
 
 use Exception;
 use ReferenceLinkDB;
+use Shaarli\Legacy\LegacyLinkDB;
+use Shaarli\Legacy\LegacyLinkFilter;
 
 /**
- * Class LinkFilterTest.
+ * Class LegacyLinkFilterTest.
  */
-class LinkFilterTest extends \PHPUnit\Framework\TestCase
+class LegacyLinkFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string Test datastore path.
      */
     protected static $testDatastore = 'sandbox/datastore.php';
     /**
-     * @var LinkFilter instance.
+     * @var BookmarkFilter instance.
      */
     protected static $linkFilter;
 
@@ -25,7 +27,7 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
     protected static $refDB;
 
     /**
-     * @var LinkDB instance
+     * @var LegacyLinkDB instance
      */
     protected static $linkDB;
 
@@ -34,10 +36,10 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$refDB = new ReferenceLinkDB();
+        self::$refDB = new ReferenceLinkDB(true);
         self::$refDB->write(self::$testDatastore);
-        self::$linkDB = new LinkDB(self::$testDatastore, true, false);
-        self::$linkFilter = new LinkFilter(self::$linkDB);
+        self::$linkDB = new LegacyLinkDB(self::$testDatastore, true, false);
+        self::$linkFilter = new LegacyLinkFilter(self::$linkDB);
     }
 
     /**
@@ -74,14 +76,14 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             ReferenceLinkDB::$NB_LINKS_TOTAL,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, ''))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TAG, ''))
         );
 
         $this->assertEquals(
             self::$refDB->countUntaggedLinks(),
             count(
                 self::$linkFilter->filter(
-                    LinkFilter::$FILTER_TAG,
+                    LegacyLinkFilter::$FILTER_TAG,
                     /*$request=*/
                     '',
                     /*$casesensitive=*/
@@ -96,89 +98,89 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             ReferenceLinkDB::$NB_LINKS_TOTAL,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, ''))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, ''))
         );
     }
 
     /**
-     * Filter links using a tag
+     * Filter bookmarks using a tag
      */
     public function testFilterOneTag()
     {
         $this->assertEquals(
             4,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'web', false))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TAG, 'web', false))
         );
 
         $this->assertEquals(
             4,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'web', false, 'all'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TAG, 'web', false, 'all'))
         );
 
         $this->assertEquals(
             4,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'web', false, 'default-blabla'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TAG, 'web', false, 'default-blabla'))
         );
 
         // Private only.
         $this->assertEquals(
             1,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'web', false, 'private'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TAG, 'web', false, 'private'))
         );
 
         // Public only.
         $this->assertEquals(
             3,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'web', false, 'public'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TAG, 'web', false, 'public'))
         );
     }
 
     /**
-     * Filter links using a tag - case-sensitive
+     * Filter bookmarks using a tag - case-sensitive
      */
     public function testFilterCaseSensitiveTag()
     {
         $this->assertEquals(
             0,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'mercurial', true))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TAG, 'mercurial', true))
         );
 
         $this->assertEquals(
             1,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'Mercurial', true))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TAG, 'Mercurial', true))
         );
     }
 
     /**
-     * Filter links using a tag combination
+     * Filter bookmarks using a tag combination
      */
     public function testFilterMultipleTags()
     {
         $this->assertEquals(
             2,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'dev cartoon', false))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TAG, 'dev cartoon', false))
         );
     }
 
     /**
-     * Filter links using a non-existent tag
+     * Filter bookmarks using a non-existent tag
      */
     public function testFilterUnknownTag()
     {
         $this->assertEquals(
             0,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'null', false))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TAG, 'null', false))
         );
     }
 
     /**
-     * Return links for a given day
+     * Return bookmarks for a given day
      */
     public function testFilterDay()
     {
         $this->assertEquals(
             4,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_DAY, '20121206'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_DAY, '20121206'))
         );
     }
 
@@ -189,7 +191,7 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             0,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_DAY, '19700101'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_DAY, '19700101'))
         );
     }
 
@@ -200,7 +202,7 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilterInvalidDayWithChars()
     {
-        self::$linkFilter->filter(LinkFilter::$FILTER_DAY, 'Rainy day, dream away');
+        self::$linkFilter->filter(LegacyLinkFilter::$FILTER_DAY, 'Rainy day, dream away');
     }
 
     /**
@@ -210,7 +212,7 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilterInvalidDayDigits()
     {
-        self::$linkFilter->filter(LinkFilter::$FILTER_DAY, '20');
+        self::$linkFilter->filter(LegacyLinkFilter::$FILTER_DAY, '20');
     }
 
     /**
@@ -218,7 +220,7 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilterSmallHash()
     {
-        $links = self::$linkFilter->filter(LinkFilter::$FILTER_HASH, 'IuWvgA');
+        $links = self::$linkFilter->filter(LegacyLinkFilter::$FILTER_HASH, 'IuWvgA');
 
         $this->assertEquals(
             1,
@@ -234,11 +236,11 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
     /**
      * No link for this hash
      *
-     * @expectedException \Shaarli\Bookmark\Exception\LinkNotFoundException
+     * @expectedException \Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testFilterUnknownSmallHash()
     {
-        self::$linkFilter->filter(LinkFilter::$FILTER_HASH, 'Iblaah');
+        self::$linkFilter->filter(LegacyLinkFilter::$FILTER_HASH, 'Iblaah');
     }
 
     /**
@@ -248,7 +250,7 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             0,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'azertyuiop'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'azertyuiop'))
         );
     }
 
@@ -259,12 +261,12 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             2,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'ars.userfriendly.org'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'ars.userfriendly.org'))
         );
 
         $this->assertEquals(
             2,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'ars org'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'ars org'))
         );
     }
 
@@ -276,21 +278,21 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
         // use miscellaneous cases
         $this->assertEquals(
             2,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'userfriendly -'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'userfriendly -'))
         );
         $this->assertEquals(
             2,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'UserFriendly -'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'UserFriendly -'))
         );
         $this->assertEquals(
             2,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'uSeRFrIendlY -'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'uSeRFrIendlY -'))
         );
 
         // use miscellaneous case and offset
         $this->assertEquals(
             2,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'RFrIendL'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'RFrIendL'))
         );
     }
 
@@ -301,17 +303,17 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             1,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'publishing media'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'publishing media'))
         );
 
         $this->assertEquals(
             1,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'mercurial w3c'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'mercurial w3c'))
         );
 
         $this->assertEquals(
             3,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, '"free software"'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, '"free software"'))
         );
     }
 
@@ -322,29 +324,29 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             6,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'web'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'web'))
         );
 
         $this->assertEquals(
             6,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'web', 'all'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'web', 'all'))
         );
 
         $this->assertEquals(
             6,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'web', 'bla'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'web', 'bla'))
         );
 
         // Private only.
         $this->assertEquals(
             1,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'web', false, 'private'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'web', false, 'private'))
         );
 
         // Public only.
         $this->assertEquals(
             5,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'web', false, 'public'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'web', false, 'public'))
         );
     }
 
@@ -355,7 +357,7 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             3,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'free software'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'free software'))
         );
     }
 
@@ -366,12 +368,12 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             1,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, 'free -gnu'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, 'free -gnu'))
         );
 
         $this->assertEquals(
             ReferenceLinkDB::$NB_LINKS_TOTAL - 1,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TEXT, '-revolution'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TEXT, '-revolution'))
         );
     }
 
@@ -383,7 +385,7 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             2,
             count(self::$linkFilter->filter(
-                LinkFilter::$FILTER_TEXT,
+                LegacyLinkFilter::$FILTER_TEXT,
                 '"Free Software " stallman "read this" @website stuff'
             ))
         );
@@ -391,7 +393,7 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             1,
             count(self::$linkFilter->filter(
-                LinkFilter::$FILTER_TEXT,
+                LegacyLinkFilter::$FILTER_TEXT,
                 '"free software " stallman "read this" -beard @website stuff'
             ))
         );
@@ -405,7 +407,7 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             0,
             count(self::$linkFilter->filter(
-                LinkFilter::$FILTER_TEXT,
+                LegacyLinkFilter::$FILTER_TEXT,
                 '"designer naming"'
             ))
         );
@@ -413,7 +415,7 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             0,
             count(self::$linkFilter->filter(
-                LinkFilter::$FILTER_TEXT,
+                LegacyLinkFilter::$FILTER_TEXT,
                 '"designernaming"'
             ))
         );
@@ -426,12 +428,12 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             1,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, 'gnu -free'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TAG, 'gnu -free'))
         );
 
         $this->assertEquals(
             ReferenceLinkDB::$NB_LINKS_TOTAL - 1,
-            count(self::$linkFilter->filter(LinkFilter::$FILTER_TAG, '-free'))
+            count(self::$linkFilter->filter(LegacyLinkFilter::$FILTER_TAG, '-free'))
         );
     }
 
@@ -445,42 +447,42 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             1,
             count(self::$linkFilter->filter(
-                LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT,
+                LegacyLinkFilter::$FILTER_TAG | LegacyLinkFilter::$FILTER_TEXT,
                 array($tags, $terms)
             ))
         );
         $this->assertEquals(
             2,
             count(self::$linkFilter->filter(
-                LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT,
+                LegacyLinkFilter::$FILTER_TAG | LegacyLinkFilter::$FILTER_TEXT,
                 array('', $terms)
             ))
         );
         $this->assertEquals(
             1,
             count(self::$linkFilter->filter(
-                LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT,
+                LegacyLinkFilter::$FILTER_TAG | LegacyLinkFilter::$FILTER_TEXT,
                 array(false, 'PSR-2')
             ))
         );
         $this->assertEquals(
             1,
             count(self::$linkFilter->filter(
-                LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT,
+                LegacyLinkFilter::$FILTER_TAG | LegacyLinkFilter::$FILTER_TEXT,
                 array($tags, '')
             ))
         );
         $this->assertEquals(
             ReferenceLinkDB::$NB_LINKS_TOTAL,
             count(self::$linkFilter->filter(
-                LinkFilter::$FILTER_TAG | LinkFilter::$FILTER_TEXT,
+                LegacyLinkFilter::$FILTER_TAG | LegacyLinkFilter::$FILTER_TEXT,
                 ''
             ))
         );
     }
 
     /**
-     * Filter links by #hashtag.
+     * Filter bookmarks by #hashtag.
      */
     public function testFilterByHashtag()
     {
@@ -488,7 +490,7 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             3,
             count(self::$linkFilter->filter(
-                LinkFilter::$FILTER_TAG,
+                LegacyLinkFilter::$FILTER_TAG,
                 $hashtag
             ))
         );
@@ -497,7 +499,7 @@ class LinkFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             1,
             count(self::$linkFilter->filter(
-                LinkFilter::$FILTER_TAG,
+                LegacyLinkFilter::$FILTER_TAG,
                 $hashtag,
                 false,
                 'private'

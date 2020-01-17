@@ -39,11 +39,11 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * Before every test, instantiate a new Api with its config, plugins and links.
+     * Before every test, instantiate a new Api with its config, plugins and bookmarks.
      */
     public function setUp()
     {
-        $this->conf = new ConfigManager('tests/utils/config/configJson.json.php');
+        $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->refHistory = new \ReferenceHistory();
         $this->refHistory->write(self::$testHistory);
         $this->container = new Container();
