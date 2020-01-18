@@ -2,36 +2,30 @@
 <html>
 <head>{include="includes"}</head>
 <body
-{if="$user_can_login"}
-  {if="empty($username)"}
-    onload="document.loginform.login.focus();"
-  {else}
-    onload="document.loginform.password.focus();"
-  {/if}
+{if="empty($username)"}
+  onload="document.loginform.login.focus();"
+{else}
+  onload="document.loginform.password.focus();"
 {/if}>
 <div id="pageheader">
   {include="page.header"}
 
   <div id="headerform">
-    {if="!$user_can_login"}
-      You have been banned from login after too many failed attempts. Try later.
-    {else}
-      <form method="post" name="loginform">
-        <label for="login">Login: <input type="text" id="login" name="login" tabindex="1"
-           {if="!empty($username)"}value="{$username}"{/if}>
-        </label>
-        <label for="password">Password: <input type="password" id="password" name="password" tabindex="2">
-        </label>
-        <input type="submit" value="Login" class="bigbutton" tabindex="4">
-        <label for="longlastingsession">
-          <input type="checkbox" name="longlastingsession"
-                 id="longlastingsession" tabindex="3"
-                 {if="$remember_user_default"}checked="checked"{/if}>
-          Stay signed in (Do not check on public computers)</label>
-        <input type="hidden" name="token" value="{$token}">
-        {if="$returnurl"}<input type="hidden" name="returnurl" value="{$returnurl}">{/if}
-      </form>
-    {/if}
+    <form method="post" name="loginform">
+      <label for="login">Login: <input type="text" id="login" name="login" tabindex="1"
+         {if="!empty($username)"}value="{$username}"{/if}>
+      </label>
+      <label for="password">Password: <input type="password" id="password" name="password" tabindex="2">
+      </label>
+      <input type="submit" value="Login" class="bigbutton" tabindex="4">
+      <label for="longlastingsession">
+        <input type="checkbox" name="longlastingsession"
+               id="longlastingsession" tabindex="3"
+               {if="$remember_user_default"}checked="checked"{/if}>
+        Stay signed in (Do not check on public computers)</label>
+      <input type="hidden" name="token" value="{$token}">
+      {if="$returnurl"}<input type="hidden" name="returnurl" value="{$returnurl}">{/if}
+    </form>
   </div>
 </div>
 

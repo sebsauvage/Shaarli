@@ -1236,8 +1236,19 @@ form {
   color: $dark-grey;
 }
 
-.page404-container {
+.pageError-container {
   color: $dark-grey;
+
+  h2 {
+    margin: 70px 0 25px 0;
+  }
+
+  pre {
+    text-align: left;
+    margin: 0 20%;
+    padding: 20px 0;
+    line-height: 0.7em;
+  }
 }
 
 // EDIT LINK

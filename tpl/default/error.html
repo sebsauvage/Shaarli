@@ -7,9 +7,15 @@
 <div id="pageheader">
   {include="page.header"}
 <div id="pageError" class="pageError-container center">
-  <h2>{'Sorry, nothing to see here.'|t}</h2>
+  <h2>{$message}</h2>
+
+  {if="!empty($stacktrace)"}
+      <pre>
+        {$stacktrace}
+      </pre>
+  {/if}
+
   <img src="img/sad_star.png" alt="">
-  <p>{$error_message}</p>
 </div>
 {include="page.footer"}
 </body>

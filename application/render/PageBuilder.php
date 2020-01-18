@@ -200,6 +200,23 @@ class PageBuilder
     }
 
     /**
+     * Render a specific page as string (using a template file).
+     * e.g. $pb->render('picwall');
+     *
+     * @param string $page Template filename (without extension).
+     *
+     * @return string Processed template content
+     */
+    public function render(string $page): string
+    {
+        if ($this->tpl === false) {
+            $this->initialize();
+        }
+
+        return $this->tpl->draw($page, true);
+    }
+
+    /**
      * Render a 404 page (uses the template : tpl/404.tpl)
      * usage: $PAGE->render404('The link was deleted')
      *

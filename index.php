@@ -61,29 +61,31 @@ require_once 'application/FileUtils.php';
 require_once 'application/TimeZone.php';
 require_once 'application/Utils.php';
 
-use \Shaarli\ApplicationUtils;
-use Shaarli\Bookmark\BookmarkServiceInterface;
-use \Shaarli\Bookmark\Exception\BookmarkNotFoundException;
+use Shaarli\ApplicationUtils;
 use Shaarli\Bookmark\Bookmark;
-use Shaarli\Bookmark\BookmarkFilter;
 use Shaarli\Bookmark\BookmarkFileService;
-use \Shaarli\Config\ConfigManager;
-use \Shaarli\Feed\CachedPage;
-use \Shaarli\Feed\FeedBuilder;
+use Shaarli\Bookmark\BookmarkFilter;
+use Shaarli\Bookmark\BookmarkServiceInterface;
+use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
+use Shaarli\Config\ConfigManager;
+use Shaarli\Container\ContainerBuilder;
+use Shaarli\Feed\CachedPage;
+use Shaarli\Feed\FeedBuilder;
 use Shaarli\Formatter\BookmarkMarkdownFormatter;
 use Shaarli\Formatter\FormatterFactory;
-use \Shaarli\History;
-use \Shaarli\Languages;
-use \Shaarli\Netscape\NetscapeBookmarkUtils;
-use \Shaarli\Plugin\PluginManager;
-use \Shaarli\Render\PageBuilder;
-use \Shaarli\Render\ThemeUtils;
-use \Shaarli\Router;
-use \Shaarli\Security\LoginManager;
-use \Shaarli\Security\SessionManager;
-use \Shaarli\Thumbnailer;
-use \Shaarli\Updater\Updater;
-use \Shaarli\Updater\UpdaterUtils;
+use Shaarli\History;
+use Shaarli\Languages;
+use Shaarli\Netscape\NetscapeBookmarkUtils;
+use Shaarli\Plugin\PluginManager;
+use Shaarli\Render\PageBuilder;
+use Shaarli\Render\ThemeUtils;
+use Shaarli\Router;
+use Shaarli\Security\LoginManager;
+use Shaarli\Security\SessionManager;
+use Shaarli\Thumbnailer;
+use Shaarli\Updater\Updater;
+use Shaarli\Updater\UpdaterUtils;
+use Slim\App;
 
 // Ensure the PHP version is supported
 try {
@@ -594,19 +596,7 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
 
     // -------- Display login form.
     if ($targetPage == Router::$PAGE_LOGIN) {
-        if ($conf->get('security.open_shaarli')) {
-            header('Location: ?');
-            exit;
-        }  // No need to login for open Shaarli
-        if (isset($_GET['username'])) {
-            $PAGE->assign('username', escape($_GET['username']));
-        }
-        $PAGE->assign('returnurl', (isset($_SERVER['HTTP_REFERER']) ? escape($_SERVER['HTTP_REFERER']):''));
-        // add default state of the 'remember me' checkbox
-        $PAGE->assign('remember_user_default', $conf->get('privacy.remember_user_default'));
-        $PAGE->assign('user_can_login', $loginManager->canLogin($_SERVER));
-        $PAGE->assign('pagetitle', t('Login') .' - '. $conf->get('general.title', 'Shaarli'));
-        $PAGE->renderPage('loginform');
+        header('Location: ./login');
         exit;
     }
     // -------- User wants to logout.
@@ -1930,11 +1920,9 @@ if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=
     exit;
 }
 
-$container = new \Slim\Container();
-$container['conf'] = $conf;
-$container['plugins'] = $pluginManager;
-$container['history'] = $history;
-$app = new \Slim\App($container);
+$containerBuilder = new ContainerBuilder($conf, $sessionManager, $loginManager);
+$container = $containerBuilder->build();
+$app = new App($container);
 
 // REST API routes
 $app->group('/api/v1', function () {
@@ -1952,6 +1940,10 @@ $app->group('/api/v1', function () {
 
     $this->get('/history', '\Shaarli\Api\Controllers\HistoryController:getHistory')->setName('getHistory');
 })->add('\Shaarli\Api\ApiMiddleware');
+
+$app->group('', function () {
+    $this->get('/login', '\Shaarli\Front\Controller\LoginController:index')->setName('login');
+})->add('\Shaarli\Front\ShaarliMiddleware');
 
 $response = $app->run(true);
 

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include="includes"}
+</head>
+<body>
+<div id="pageheader">
+    {include="page.header"}
+</div>
+<div class="error-container">
+    <h1>Error</h1>
+    <p>{$message}</p>
+
+    {if="!empty($stacktrace)"}
+        <br>
+        <pre>
+            {$stacktrace}
+        </pre>
+    {/if}
+
+    <p>Would you mind <a href="?">clicking here</a>?</p>
+</div>
+{include="page.footer"}
+</body>
+</html>
