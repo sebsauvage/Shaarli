@@ -41,6 +41,9 @@ See [Theming](Theming) for a list of community-contributed themes, and an instal
 - [Shaarlier for Android](https://github.com/dimtion/Shaarlier) - Android application to simply add links directly into your Shaarli
 - [Stakali for Android](https://stakali.toneiv.eu) - Stakali is a personal bookmark manager which synchronizes with Shaarli 
 
+### Desktop Apps
+- [Ulauncher Extension](https://github.com/sebw/ulauncher-shaarli) - Ulauncher is an an application launcher for Linux, this extension allows research in your Shaarli
+
 ### Browser addons
 - [Shaarli Firefox Extension](https://github.com/ikipatang/shaarli-web-extension) - toolbar button to share your current tab with Shaarli.
 - [Shaarli Chrome Extension](https://github.com/octplane/Shiny-Shaarli) - toolbar button to share your current tab with Shaarli.
