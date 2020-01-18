@@ -41,7 +41,7 @@ class HistoryController extends ApiController
             throw new ApiBadParametersException('Invalid offset');
         }
 
-        // limit parameter is either a number of links or 'all' for everything.
+        // limit parameter is either a number of bookmarks or 'all' for everything.
         $limit = $request->getParam('limit');
         if (empty($limit)) {
             $limit = count($history);

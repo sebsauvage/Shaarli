@@ -3,6 +3,8 @@
 
 namespace Shaarli\Api\Controllers;
 
+use Shaarli\Bookmark\Bookmark;
+use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 use Slim\Container;
@@ -33,6 +35,11 @@ class PutLinkTest extends \PHPUnit\Framework\TestCase
     protected $refDB = null;
 
     /**
+     * @var BookmarkFileService instance.
+     */
+    protected $bookmarkService;
+
+    /**
      * @var HistoryController instance.
      */
     protected $history;
@@ -53,22 +60,23 @@ class PutLinkTest extends \PHPUnit\Framework\TestCase
     const NB_FIELDS_LINK = 9;
 
     /**
-     * Before every test, instantiate a new Api with its config, plugins and links.
+     * Before every test, instantiate a new Api with its config, plugins and bookmarks.
      */
     public function setUp()
     {
-        $this->conf = new ConfigManager('tests/utils/config/configJson.json.php');
+        $this->conf = new ConfigManager('tests/utils/config/configJson');
+        $this->conf->set('resource.datastore', self::$testDatastore);
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
-
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
         $this->history = new History(self::$testHistory);
+        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, true);
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->container['db'] = new \Shaarli\Bookmark\LinkDB(self::$testDatastore, true, false);
-        $this->container['history'] = new History(self::$testHistory);
+        $this->container['db'] = $this->bookmarkService;
+        $this->container['history'] = $this->history;
 
         $this->controller = new Links($this->container);
 
@@ -110,7 +118,7 @@ class PutLinkTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('?WDWyig', $data['title']);
         $this->assertEquals('', $data['description']);
         $this->assertEquals([], $data['tags']);
-        $this->assertEquals(false, $data['private']);
+        $this->assertEquals(true, $data['private']);
         $this->assertEquals(
             \DateTime::createFromFormat('Ymd_His', '20150310_114651'),
             \DateTime::createFromFormat(\DateTime::ATOM, $data['created'])
@@ -199,11 +207,11 @@ class PutLinkTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['gnu', 'media', 'web', '.hidden', 'hashtag'], $data['tags']);
         $this->assertEquals(false, $data['private']);
         $this->assertEquals(
-            \DateTime::createFromFormat(\Shaarli\Bookmark\LinkDB::LINK_DATE_FORMAT, '20130614_184135'),
+            \DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20130614_184135'),
             \DateTime::createFromFormat(\DateTime::ATOM, $data['created'])
         );
         $this->assertEquals(
-            \DateTime::createFromFormat(\Shaarli\Bookmark\LinkDB::LINK_DATE_FORMAT, '20130615_184230'),
+            \DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20130615_184230'),
             \DateTime::createFromFormat(\DateTime::ATOM, $data['updated'])
         );
     }

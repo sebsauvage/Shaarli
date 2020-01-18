@@ -11,7 +11,7 @@ use Slim\Http\Response;
 /**
  * Class Links
  *
- * REST API Controller: all services related to links collection.
+ * REST API Controller: all services related to bookmarks collection.
  *
  * @package Api\Controllers
  * @see http://shaarli.github.io/api-documentation/#links-links-collection
@@ -19,12 +19,12 @@ use Slim\Http\Response;
 class Links extends ApiController
 {
     /**
-     * @var int Number of links returned if no limit is provided.
+     * @var int Number of bookmarks returned if no limit is provided.
      */
     public static $DEFAULT_LIMIT = 20;
 
     /**
-     * Retrieve a list of links, allowing different filters.
+     * Retrieve a list of bookmarks, allowing different filters.
      *
      * @param Request  $request  Slim request.
      * @param Response $response Slim response.
@@ -36,33 +36,32 @@ class Links extends ApiController
     public function getLinks($request, $response)
     {
         $private = $request->getParam('visibility');
-        $links = $this->linkDb->filterSearch(
+        $bookmarks = $this->bookmarkService->search(
             [
                 'searchtags' => $request->getParam('searchtags', ''),
                 'searchterm' => $request->getParam('searchterm', ''),
             ],
-            false,
             $private
         );
 
-        // Return links from the {offset}th link, starting from 0.
+        // Return bookmarks from the {offset}th link, starting from 0.
         $offset = $request->getParam('offset');
         if (! empty($offset) && ! ctype_digit($offset)) {
             throw new ApiBadParametersException('Invalid offset');
         }
         $offset = ! empty($offset) ? intval($offset) : 0;
-        if ($offset > count($links)) {
+        if ($offset > count($bookmarks)) {
             return $response->withJson([], 200, $this->jsonStyle);
         }
 
-        // limit parameter is either a number of links or 'all' for everything.
+        // limit parameter is either a number of bookmarks or 'all' for everything.
         $limit = $request->getParam('limit');
         if (empty($limit)) {
             $limit = self::$DEFAULT_LIMIT;
         } elseif (ctype_digit($limit)) {
             $limit = intval($limit);
         } elseif ($limit === 'all') {
-            $limit = count($links);
+            $limit = count($bookmarks);
         } else {
             throw new ApiBadParametersException('Invalid limit');
         }
@@ -72,12 +71,12 @@ class Links extends ApiController
 
         $out = [];
         $index = 0;
-        foreach ($links as $link) {
+        foreach ($bookmarks as $bookmark) {
             if (count($out) >= $limit) {
                 break;
             }
             if ($index++ >= $offset) {
-                $out[] = ApiUtils::formatLink($link, $indexUrl);
+                $out[] = ApiUtils::formatLink($bookmark, $indexUrl);
             }
         }
 
@@ -97,11 +96,11 @@ class Links extends ApiController
      */
     public function getLink($request, $response, $args)
     {
-        if (!isset($this->linkDb[$args['id']])) {
+        if (!$this->bookmarkService->exists($args['id'])) {
             throw new ApiLinkNotFoundException();
         }
         $index = index_url($this->ci['environment']);
-        $out = ApiUtils::formatLink($this->linkDb[$args['id']], $index);
+        $out = ApiUtils::formatLink($this->bookmarkService->get($args['id']), $index);
 
         return $response->withJson($out, 200, $this->jsonStyle);
     }
@@ -117,9 +116,11 @@ class Links extends ApiController
     public function postLink($request, $response)
     {
         $data = $request->getParsedBody();
-        $link = ApiUtils::buildLinkFromRequest($data, $this->conf->get('privacy.default_private_links'));
+        $bookmark = ApiUtils::buildLinkFromRequest($data, $this->conf->get('privacy.default_private_links'));
         // duplicate by URL, return 409 Conflict
-        if (! empty($link['url']) && ! empty($dup = $this->linkDb->getLinkFromUrl($link['url']))) {
+        if (! empty($bookmark->getUrl())
+            && ! empty($dup = $this->bookmarkService->findByUrl($bookmark->getUrl()))
+        ) {
             return $response->withJson(
                 ApiUtils::formatLink($dup, index_url($this->ci['environment'])),
                 409,
@@ -127,23 +128,9 @@ class Links extends ApiController
             );
         }
 
-        $link['id'] = $this->linkDb->getNextId();
-        $link['shorturl'] = link_small_hash($link['created'], $link['id']);
-
-        // note: general relative URL
-        if (empty($link['url'])) {
-            $link['url'] = '?' . $link['shorturl'];
-        }
-
-        if (empty($link['title'])) {
-            $link['title'] = $link['url'];
-        }
-
-        $this->linkDb[$link['id']] = $link;
-        $this->linkDb->save($this->conf->get('resource.page_cache'));
-        $this->history->addLink($link);
-        $out = ApiUtils::formatLink($link, index_url($this->ci['environment']));
-        $redirect = $this->ci->router->relativePathFor('getLink', ['id' => $link['id']]);
+        $this->bookmarkService->add($bookmark);
+        $out = ApiUtils::formatLink($bookmark, index_url($this->ci['environment']));
+        $redirect = $this->ci->router->relativePathFor('getLink', ['id' => $bookmark->getId()]);
         return $response->withAddedHeader('Location', $redirect)
                         ->withJson($out, 201, $this->jsonStyle);
     }
@@ -161,18 +148,18 @@ class Links extends ApiController
      */
     public function putLink($request, $response, $args)
     {
-        if (! isset($this->linkDb[$args['id']])) {
+        if (! $this->bookmarkService->exists($args['id'])) {
             throw new ApiLinkNotFoundException();
         }
 
         $index = index_url($this->ci['environment']);
         $data = $request->getParsedBody();
 
-        $requestLink = ApiUtils::buildLinkFromRequest($data, $this->conf->get('privacy.default_private_links'));
+        $requestBookmark = ApiUtils::buildLinkFromRequest($data, $this->conf->get('privacy.default_private_links'));
         // duplicate URL on a different link, return 409 Conflict
-        if (! empty($requestLink['url'])
-            && ! empty($dup = $this->linkDb->getLinkFromUrl($requestLink['url']))
-            && $dup['id'] != $args['id']
+        if (! empty($requestBookmark->getUrl())
+            && ! empty($dup = $this->bookmarkService->findByUrl($requestBookmark->getUrl()))
+            && $dup->getId() != $args['id']
         ) {
             return $response->withJson(
                 ApiUtils::formatLink($dup, $index),
@@ -181,13 +168,11 @@ class Links extends ApiController
             );
         }
 
-        $responseLink = $this->linkDb[$args['id']];
-        $responseLink = ApiUtils::updateLink($responseLink, $requestLink);
-        $this->linkDb[$responseLink['id']] = $responseLink;
-        $this->linkDb->save($this->conf->get('resource.page_cache'));
-        $this->history->updateLink($responseLink);
+        $responseBookmark = $this->bookmarkService->get($args['id']);
+        $responseBookmark = ApiUtils::updateLink($responseBookmark, $requestBookmark);
+        $this->bookmarkService->set($responseBookmark);
 
-        $out = ApiUtils::formatLink($responseLink, $index);
+        $out = ApiUtils::formatLink($responseBookmark, $index);
         return $response->withJson($out, 200, $this->jsonStyle);
     }
 
@@ -204,13 +189,11 @@ class Links extends ApiController
      */
     public function deleteLink($request, $response, $args)
     {
-        if (! isset($this->linkDb[$args['id']])) {
+        if (! $this->bookmarkService->exists($args['id'])) {
             throw new ApiLinkNotFoundException();
         }
-        $link = $this->linkDb[$args['id']];
-        unset($this->linkDb[(int) $args['id']]);
-        $this->linkDb->save($this->conf->get('resource.page_cache'));
-        $this->history->deleteLink($link);
+        $bookmark = $this->bookmarkService->get($args['id']);
+        $this->bookmarkService->remove($bookmark);
 
         return $response->withStatus(204);
     }

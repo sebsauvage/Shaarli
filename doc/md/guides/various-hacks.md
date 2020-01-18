@@ -17,14 +17,6 @@ Alternatively, you can transform to JSON format (and pretty-print if you have `j
 php -r 'print(json_encode(unserialize(gzinflate(base64_decode(preg_replace("!.*/\* (.+) \*/.*!", "$1", file_get_contents("data/datastore.php")))))));' | jq .
 ```
 
-### Changing the timestamp for a shaare
-
-- Look for `<input type="hidden" name="lf_linkdate" value="{$link.linkdate}">` in `tpl/editlink.tpl` (line 14)
-- Replace `type="hidden"` with `type="text"` from this line
-- A new date/time field becomes available in the edit/new link dialog.
-- You can set the timestamp manually by entering it in the format `YYYMMDD_HHMMS`.
-
-
 ### See also
 
 - [Add a new custom field to shaares (example patch)](https://gist.github.com/nodiscc/8b0194921f059d7b9ad89a581ecd482c)

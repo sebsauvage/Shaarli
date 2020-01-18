@@ -2,7 +2,7 @@
 
 namespace Shaarli\Api\Controllers;
 
-use Shaarli\Bookmark\LinkDB;
+use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
 use Slim\Container;
 
@@ -26,9 +26,9 @@ abstract class ApiController
     protected $conf;
 
     /**
-     * @var LinkDB
+     * @var BookmarkServiceInterface
      */
-    protected $linkDb;
+    protected $bookmarkService;
 
     /**
      * @var HistoryController
@@ -51,7 +51,7 @@ abstract class ApiController
     {
         $this->ci = $ci;
         $this->conf = $ci->get('conf');
-        $this->linkDb = $ci->get('db');
+        $this->bookmarkService = $ci->get('db');
         $this->history = $ci->get('history');
         if ($this->conf->get('dev.debug', false)) {
             $this->jsonStyle = JSON_PRETTY_PRINT;

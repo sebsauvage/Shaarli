@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "arthurhoaro/web-thumbnailer",
-            "version": "v2.0.0",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ArthurHoaro/web-thumbnailer.git",
-                "reference": "609a495277ad3e478738d4b8dd522f9cc50c9faa"
+                "reference": "4aa27a1b54b9823341fedd7ca2dcfb11a6b3186a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ArthurHoaro/web-thumbnailer/zipball/609a495277ad3e478738d4b8dd522f9cc50c9faa",
-                "reference": "609a495277ad3e478738d4b8dd522f9cc50c9faa",
+                "url": "https://api.github.com/repos/ArthurHoaro/web-thumbnailer/zipball/4aa27a1b54b9823341fedd7ca2dcfb11a6b3186a",
+                "reference": "4aa27a1b54b9823341fedd7ca2dcfb11a6b3186a",
                 "shasum": ""
             },
             "require": {
@@ -49,7 +49,7 @@
                 }
             ],
             "description": "PHP library which will retrieve a thumbnail for any given URL",
-            "time": "2019-08-10T11:33:13+00:00"
+            "time": "2020-01-17T19:42:49+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -786,16 +786,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.9.4",
+            "version": "1.9.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "579bb7356d91f9456ccd505f24ca8b667966a0a7"
+                "reference": "b2c28789e80a97badd14145fda39b545d83ca3ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/579bb7356d91f9456ccd505f24ca8b667966a0a7",
-                "reference": "579bb7356d91f9456ccd505f24ca8b667966a0a7",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/b2c28789e80a97badd14145fda39b545d83ca3ef",
+                "reference": "b2c28789e80a97badd14145fda39b545d83ca3ef",
                 "shasum": ""
             },
             "require": {
@@ -830,7 +830,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2019-12-15T19:12:40+00:00"
+            "time": "2020-01-17T21:11:47+00:00"
         },
         {
             "name": "phar-io/manifest",

@@ -7,8 +7,10 @@ use DateTimeZone;
 use Exception;
 use Katzgrau\KLogger\Logger;
 use Psr\Log\LogLevel;
-use Shaarli\Bookmark\LinkDB;
+use Shaarli\Bookmark\Bookmark;
+use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
+use Shaarli\Formatter\BookmarkFormatter;
 use Shaarli\History;
 use Shaarli\NetscapeBookmarkParser\NetscapeBookmarkParser;
 
@@ -20,41 +22,39 @@ class NetscapeBookmarkUtils
 {
 
     /**
-     * Filters links and adds Netscape-formatted fields
+     * Filters bookmarks and adds Netscape-formatted fields
      *
      * Added fields:
      * - timestamp  link addition date, using the Unix epoch format
      * - taglist    comma-separated tag list
      *
-     * @param LinkDB $linkDb         Link datastore
-     * @param string $selection      Which links to export: (all|private|public)
-     * @param bool   $prependNoteUrl Prepend note permalinks with the server's URL
-     * @param string $indexUrl       Absolute URL of the Shaarli index page
+     * @param BookmarkServiceInterface $bookmarkService Link datastore
+     * @param BookmarkFormatter        $formatter       instance
+     * @param string                   $selection       Which bookmarks to export: (all|private|public)
+     * @param bool                     $prependNoteUrl  Prepend note permalinks with the server's URL
+     * @param string                   $indexUrl        Absolute URL of the Shaarli index page
      *
-     * @throws Exception Invalid export selection
+     * @return array The bookmarks to be exported, with additional fields
+     *@throws Exception Invalid export selection
      *
-     * @return array The links to be exported, with additional fields
      */
-    public static function filterAndFormat($linkDb, $selection, $prependNoteUrl, $indexUrl)
-    {
+    public static function filterAndFormat(
+        $bookmarkService,
+        $formatter,
+        $selection,
+        $prependNoteUrl,
+        $indexUrl
+    ) {
         // see tpl/export.html for possible values
         if (!in_array($selection, array('all', 'public', 'private'))) {
             throw new Exception(t('Invalid export selection:') . ' "' . $selection . '"');
         }
 
         $bookmarkLinks = array();
-        foreach ($linkDb as $link) {
-            if ($link['private'] != 0 && $selection == 'public') {
-                continue;
-            }
-            if ($link['private'] == 0 && $selection == 'private') {
-                continue;
-            }
-            $date = $link['created'];
-            $link['timestamp'] = $date->getTimestamp();
-            $link['taglist'] = str_replace(' ', ',', $link['tags']);
-
-            if (is_note($link['url']) && $prependNoteUrl) {
+        foreach ($bookmarkService->search([], $selection) as $bookmark) {
+            $link = $formatter->format($bookmark);
+            $link['taglist'] = implode(',', $bookmark->getTags());
+            if ($bookmark->isNote() && $prependNoteUrl) {
                 $link['url'] = $indexUrl . $link['url'];
             }
 
@@ -69,9 +69,9 @@ class NetscapeBookmarkUtils
      *
      * @param string $filename       name of the file to import
      * @param int    $filesize       size of the file to import
-     * @param int    $importCount    how many links were imported
-     * @param int    $overwriteCount how many links were overwritten
-     * @param int    $skipCount      how many links were skipped
+     * @param int    $importCount    how many bookmarks were imported
+     * @param int    $overwriteCount how many bookmarks were overwritten
+     * @param int    $skipCount      how many bookmarks were skipped
      * @param int    $duration       how many seconds did the import take
      *
      * @return string Summary of the bookmark import status
@@ -91,7 +91,7 @@ class NetscapeBookmarkUtils
             $status .= vsprintf(
                 t(
                     'was successfully processed in %d seconds: '
-                    . '%d links imported, %d links overwritten, %d links skipped.'
+                    . '%d bookmarks imported, %d bookmarks overwritten, %d bookmarks skipped.'
                 ),
                 [$duration, $importCount, $overwriteCount, $skipCount]
             );
@@ -102,15 +102,15 @@ class NetscapeBookmarkUtils
     /**
      * Imports Web bookmarks from an uploaded Netscape bookmark dump
      *
-     * @param array         $post    Server $_POST parameters
-     * @param array         $files   Server $_FILES parameters
-     * @param LinkDB        $linkDb  Loaded LinkDB instance
-     * @param ConfigManager $conf    instance
-     * @param History       $history History instance
+     * @param array                    $post            Server $_POST parameters
+     * @param array                    $files           Server $_FILES parameters
+     * @param BookmarkServiceInterface $bookmarkService Loaded LinkDB instance
+     * @param ConfigManager            $conf            instance
+     * @param History                  $history         History instance
      *
      * @return string Summary of the bookmark import status
      */
-    public static function import($post, $files, $linkDb, $conf, $history)
+    public static function import($post, $files, $bookmarkService, $conf, $history)
     {
         $start = time();
         $filename = $files['filetoupload']['name'];
@@ -121,10 +121,10 @@ class NetscapeBookmarkUtils
             return self::importStatus($filename, $filesize);
         }
 
-        // Overwrite existing links?
+        // Overwrite existing bookmarks?
         $overwrite = !empty($post['overwrite']);
 
-        // Add tags to all imported links?
+        // Add tags to all imported bookmarks?
         if (empty($post['default_tags'])) {
             $defaultTags = array();
         } else {
@@ -134,7 +134,7 @@ class NetscapeBookmarkUtils
             );
         }
 
-        // links are imported as public by default
+        // bookmarks are imported as public by default
         $defaultPrivacy = 0;
 
         $parser = new NetscapeBookmarkParser(
@@ -164,22 +164,18 @@ class NetscapeBookmarkUtils
                 // use value from the imported file
                 $private = $bkm['pub'] == '1' ? 0 : 1;
             } elseif ($post['privacy'] == 'private') {
-                // all imported links are private
+                // all imported bookmarks are private
                 $private = 1;
             } elseif ($post['privacy'] == 'public') {
-                // all imported links are public
+                // all imported bookmarks are public
                 $private = 0;
             }
 
-            $newLink = array(
-                'title' => $bkm['title'],
-                'url' => $bkm['uri'],
-                'description' => $bkm['note'],
-                'private' => $private,
-                'tags' => $bkm['tags']
-            );
-
-            $existingLink = $linkDb->getLinkFromUrl($bkm['uri']);
+            $link = $bookmarkService->findByUrl($bkm['uri']);
+            $existingLink = $link !== null;
+            if (! $existingLink) {
+                $link = new Bookmark();
+            }
 
             if ($existingLink !== false) {
                 if ($overwrite === false) {
@@ -188,28 +184,25 @@ class NetscapeBookmarkUtils
                     continue;
                 }
 
-                // Overwrite an existing link, keep its date
-                $newLink['id'] = $existingLink['id'];
-                $newLink['created'] = $existingLink['created'];
-                $newLink['updated'] = new DateTime();
-                $newLink['shorturl'] = $existingLink['shorturl'];
-                $linkDb[$existingLink['id']] = $newLink;
-                $importCount++;
+                $link->setUpdated(new DateTime());
                 $overwriteCount++;
-                continue;
+            } else {
+                $newLinkDate = new DateTime('@' . strval($bkm['time']));
+                $newLinkDate->setTimezone(new DateTimeZone(date_default_timezone_get()));
+                $link->setCreated($newLinkDate);
             }
 
-            // Add a new link - @ used for UNIX timestamps
-            $newLinkDate = new DateTime('@' . strval($bkm['time']));
-            $newLinkDate->setTimezone(new DateTimeZone(date_default_timezone_get()));
-            $newLink['created'] = $newLinkDate;
-            $newLink['id'] = $linkDb->getNextId();
-            $newLink['shorturl'] = link_small_hash($newLink['created'], $newLink['id']);
-            $linkDb[$newLink['id']] = $newLink;
+            $link->setTitle($bkm['title']);
+            $link->setUrl($bkm['uri'], $conf->get('security.allowed_protocols'));
+            $link->setDescription($bkm['note']);
+            $link->setPrivate($private);
+            $link->setTagsString($bkm['tags']);
+
+            $bookmarkService->addOrSet($link, false);
             $importCount++;
         }
 
-        $linkDb->save($conf->get('resource.page_cache'));
+        $bookmarkService->save();
         $history->importLinks();
 
         $duration = time() - $start;

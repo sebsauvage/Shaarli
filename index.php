@@ -35,9 +35,6 @@ ini_set('upload_max_filesize', '16M');
 
 // See all error except warnings
 error_reporting(E_ALL^E_WARNING);
-// See all errors (for debugging only)
-//error_reporting(-1);
-
 
 // 3rd-party libraries
 if (! file_exists(__DIR__ . '/vendor/autoload.php')) {
@@ -65,11 +62,15 @@ require_once 'application/TimeZone.php';
 require_once 'application/Utils.php';
 
 use \Shaarli\ApplicationUtils;
-use \Shaarli\Bookmark\Exception\LinkNotFoundException;
-use \Shaarli\Bookmark\LinkDB;
+use Shaarli\Bookmark\BookmarkServiceInterface;
+use \Shaarli\Bookmark\Exception\BookmarkNotFoundException;
+use Shaarli\Bookmark\Bookmark;
+use Shaarli\Bookmark\BookmarkFilter;
+use Shaarli\Bookmark\BookmarkFileService;
 use \Shaarli\Config\ConfigManager;
 use \Shaarli\Feed\CachedPage;
 use \Shaarli\Feed\FeedBuilder;
+use Shaarli\Formatter\FormatterFactory;
 use \Shaarli\History;
 use \Shaarli\Languages;
 use \Shaarli\Netscape\NetscapeBookmarkUtils;
@@ -81,6 +82,7 @@ use \Shaarli\Security\LoginManager;
 use \Shaarli\Security\SessionManager;
 use \Shaarli\Thumbnailer;
 use \Shaarli\Updater\Updater;
+use \Shaarli\Updater\UpdaterUtils;
 
 // Ensure the PHP version is supported
 try {
@@ -122,6 +124,17 @@ if (isset($_COOKIE['shaarli']) && !SessionManager::checkId($_COOKIE['shaarli']))
 }
 
 $conf = new ConfigManager();
+
+// In dev mode, throw exception on any warning
+if ($conf->get('dev.debug', false)) {
+    // See all errors (for debugging only)
+    error_reporting(-1);
+
+    set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontext) {
+        throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+    });
+}
+
 $sessionManager = new SessionManager($_SESSION, $conf);
 $loginManager = new LoginManager($conf, $sessionManager);
 $loginManager->generateStaySignedInToken($_SERVER['REMOTE_ADDR']);
@@ -140,7 +153,7 @@ if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
 new Languages(setlocale(LC_MESSAGES, 0), $conf);
 
 $conf->setEmpty('general.timezone', date_default_timezone_get());
-$conf->setEmpty('general.title', t('Shared links on '). escape(index_url($_SERVER)));
+$conf->setEmpty('general.title', t('Shared bookmarks on '). escape(index_url($_SERVER)));
 RainTPL::$tpl_dir = $conf->get('resource.raintpl_tpl').'/'.$conf->get('resource.theme').'/'; // template directory
 RainTPL::$cache_dir = $conf->get('resource.raintpl_tmp'); // cache directory
 
@@ -283,14 +296,15 @@ if (!isset($_SESSION['tokens'])) {
 }
 
 /**
- * Daily RSS feed: 1 RSS entry per day giving all the links on that day.
- * Gives the last 7 days (which have links).
+ * Daily RSS feed: 1 RSS entry per day giving all the bookmarks on that day.
+ * Gives the last 7 days (which have bookmarks).
  * This RSS feed cannot be filtered.
  *
- * @param ConfigManager $conf         Configuration Manager instance
- * @param LoginManager  $loginManager LoginManager instance
+ * @param BookmarkServiceInterface $bookmarkService
+ * @param ConfigManager            $conf            Configuration Manager instance
+ * @param LoginManager             $loginManager    LoginManager instance
  */
-function showDailyRSS($conf, $loginManager)
+function showDailyRSS($bookmarkService, $conf, $loginManager)
 {
     // Cache system
     $query = $_SERVER['QUERY_STRING'];
@@ -305,28 +319,20 @@ function showDailyRSS($conf, $loginManager)
         exit;
     }
 
-    // If cached was not found (or not usable), then read the database and build the response:
-    // Read links from database (and filter private links if used it not logged in).
-    $LINKSDB = new LinkDB(
-        $conf->get('resource.datastore'),
-        $loginManager->isLoggedIn(),
-        $conf->get('privacy.hide_public_links')
-    );
-
-    /* Some Shaarlies may have very few links, so we need to look
+    /* Some Shaarlies may have very few bookmarks, so we need to look
        back in time until we have enough days ($nb_of_days).
     */
     $nb_of_days = 7; // We take 7 days.
     $today = date('Ymd');
     $days = array();
 
-    foreach ($LINKSDB as $link) {
-        $day = $link['created']->format('Ymd'); // Extract day (without time)
+    foreach ($bookmarkService->search() as $bookmark) {
+        $day = $bookmark->getCreated()->format('Ymd'); // Extract day (without time)
         if (strcmp($day, $today) < 0) {
             if (empty($days[$day])) {
                 $days[$day] = array();
             }
-            $days[$day][] = $link;
+            $days[$day][] = $bookmark;
         }
 
         if (count($days) > $nb_of_days) {
@@ -341,30 +347,38 @@ function showDailyRSS($conf, $loginManager)
     echo '<channel>';
     echo '<title>Daily - '. $conf->get('general.title') . '</title>';
     echo '<link>'. $pageaddr .'</link>';
-    echo '<description>Daily shared links</description>';
+    echo '<description>Daily shared bookmarks</description>';
     echo '<language>en-en</language>';
     echo '<copyright>'. $pageaddr .'</copyright>'. PHP_EOL;
 
+    $factory = new FormatterFactory($conf);
+    $formatter = $factory->getFormatter();
+    $formatter->addContextData('index_url', index_url($_SERVER));
     // For each day.
-    foreach ($days as $day => $links) {
-        $dayDate = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $day.'_000000');
+    /** @var Bookmark[] $bookmarks */
+    foreach ($days as $day => $bookmarks) {
+        $formattedBookmarks = [];
+        $dayDate = DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, $day.'_000000');
         $absurl = escape(index_url($_SERVER).'?do=daily&day='.$day);  // Absolute URL of the corresponding "Daily" page.
 
         // We pre-format some fields for proper output.
-        foreach ($links as &$link) {
-            $link['formatedDescription'] = format_description($link['description']);
-            $link['timestamp'] = $link['created']->getTimestamp();
-            if (is_note($link['url'])) {
-                $link['url'] = index_url($_SERVER) . $link['url'];  // make permalink URL absolute
+        foreach ($bookmarks as $key => $bookmark) {
+            $formattedBookmarks[$key] = $formatter->format($bookmark);
+            // This page is a bit specific, we need raw description to calculate the length
+            $formattedBookmarks[$key]['formatedDescription'] = $formattedBookmarks[$key]['description'];
+            $formattedBookmarks[$key]['description'] = $bookmark->getDescription();
+
+            if ($bookmark->isNote()) {
+                $link['url'] = index_url($_SERVER) . $bookmark->getUrl();  // make permalink URL absolute
             }
         }
 
         // Then build the HTML for this day:
-        $tpl = new RainTPL;
+        $tpl = new RainTPL();
         $tpl->assign('title', $conf->get('general.title'));
         $tpl->assign('daydate', $dayDate->getTimestamp());
         $tpl->assign('absurl', $absurl);
-        $tpl->assign('links', $links);
+        $tpl->assign('links', $formattedBookmarks);
         $tpl->assign('rssdate', escape($dayDate->format(DateTime::RSS)));
         $tpl->assign('hide_timestamps', $conf->get('privacy.hide_timestamps', false));
         $tpl->assign('index_url', $pageaddr);
@@ -382,13 +396,13 @@ function showDailyRSS($conf, $loginManager)
 /**
  * Show the 'Daily' page.
  *
- * @param PageBuilder   $pageBuilder   Template engine wrapper.
- * @param LinkDB        $LINKSDB       LinkDB instance.
- * @param ConfigManager $conf          Configuration Manager instance.
- * @param PluginManager $pluginManager Plugin Manager instance.
- * @param LoginManager  $loginManager  Login Manager instance
+ * @param PageBuilder              $pageBuilder     Template engine wrapper.
+ * @param BookmarkServiceInterface $bookmarkService instance.
+ * @param ConfigManager            $conf            Configuration Manager instance.
+ * @param PluginManager            $pluginManager   Plugin Manager instance.
+ * @param LoginManager             $loginManager    Login Manager instance
  */
-function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
+function showDaily($pageBuilder, $bookmarkService, $conf, $pluginManager, $loginManager)
 {
     if (isset($_GET['day'])) {
         $day = $_GET['day'];
@@ -402,10 +416,10 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
         $pageBuilder->assign('dayDesc', t('Today'));
     }
 
-    $days = $LINKSDB->days();
+    $days = $bookmarkService->days();
     $i = array_search($day, $days);
     if ($i === false && count($days)) {
-        // no links for day, but at least one day with links
+        // no bookmarks for day, but at least one day with bookmarks
         $i = count($days) - 1;
         $day = $days[$i];
     }
@@ -414,29 +428,30 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
 
     if ($i !== false) {
         if ($i >= 1) {
-             $previousday=$days[$i - 1];
+             $previousday = $days[$i - 1];
         }
         if ($i < count($days) - 1) {
             $nextday = $days[$i + 1];
         }
     }
     try {
-        $linksToDisplay = $LINKSDB->filterDay($day);
+        $linksToDisplay = $bookmarkService->filterDay($day);
     } catch (Exception $exc) {
         error_log($exc);
-        $linksToDisplay = array();
+        $linksToDisplay = [];
     }
 
+    $factory = new FormatterFactory($conf);
+    $formatter = $factory->getFormatter();
     // We pre-format some fields for proper output.
-    foreach ($linksToDisplay as $key => $link) {
-        $taglist = explode(' ', $link['tags']);
-        uasort($taglist, 'strcasecmp');
-        $linksToDisplay[$key]['taglist']=$taglist;
-        $linksToDisplay[$key]['formatedDescription'] = format_description($link['description']);
-        $linksToDisplay[$key]['timestamp'] =  $link['created']->getTimestamp();
+    foreach ($linksToDisplay as $key => $bookmark) {
+        $linksToDisplay[$key] = $formatter->format($bookmark);
+        // This page is a bit specific, we need raw description to calculate the length
+        $linksToDisplay[$key]['formatedDescription'] = $linksToDisplay[$key]['description'];
+        $linksToDisplay[$key]['description'] = $bookmark->getDescription();
     }
 
-    $dayDate = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $day.'_000000');
+    $dayDate = DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, $day.'_000000');
     $data = array(
         'pagetitle' => $conf->get('general.title') .' - '. format_date($dayDate, false),
         'linksToDisplay' => $linksToDisplay,
@@ -457,19 +472,19 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
     */
     $columns = array(array(), array(), array()); // Entries to display, for each column.
     $fill = array(0, 0, 0);  // Rough estimate of columns fill.
-    foreach ($data['linksToDisplay'] as $key => $link) {
+    foreach ($data['linksToDisplay'] as $key => $bookmark) {
         // Roughly estimate length of entry (by counting characters)
         // Title: 30 chars = 1 line. 1 line is 30 pixels height.
         // Description: 836 characters gives roughly 342 pixel height.
         // This is not perfect, but it's usually OK.
-        $length = strlen($link['title']) + (342 * strlen($link['description'])) / 836;
-        if (! empty($link['thumbnail'])) {
+        $length = strlen($bookmark['title']) + (342 * strlen($bookmark['description'])) / 836;
+        if (! empty($bookmark['thumbnail'])) {
             $length += 100; // 1 thumbnails roughly takes 100 pixels height.
         }
         // Then put in column which is the less filled:
         $smallest = min($fill); // find smallest value in array.
         $index = array_search($smallest, $fill); // find index of this smallest value.
-        array_push($columns[$index], $link); // Put entry in this column.
+        array_push($columns[$index], $bookmark); // Put entry in this column.
         $fill[$index] += $length;
     }
 
@@ -487,40 +502,39 @@ function showDaily($pageBuilder, $LINKSDB, $conf, $pluginManager, $loginManager)
 /**
  * Renders the linklist
  *
- * @param pageBuilder   $PAGE    pageBuilder instance.
- * @param LinkDB        $LINKSDB LinkDB instance.
- * @param ConfigManager $conf    Configuration Manager instance.
- * @param PluginManager $pluginManager Plugin Manager instance.
+ * @param pageBuilder              $PAGE          pageBuilder instance.
+ * @param BookmarkServiceInterface $linkDb        instance.
+ * @param ConfigManager            $conf          Configuration Manager instance.
+ * @param PluginManager            $pluginManager Plugin Manager instance.
  */
-function showLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
+function showLinkList($PAGE, $linkDb, $conf, $pluginManager, $loginManager)
 {
-    buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager);
+    buildLinkList($PAGE, $linkDb, $conf, $pluginManager, $loginManager);
     $PAGE->renderPage('linklist');
 }
 
 /**
  * Render HTML page (according to URL parameters and user rights)
  *
- * @param ConfigManager  $conf           Configuration Manager instance.
- * @param PluginManager  $pluginManager  Plugin Manager instance,
- * @param LinkDB         $LINKSDB
- * @param History        $history        instance
- * @param SessionManager $sessionManager SessionManager instance
- * @param LoginManager   $loginManager   LoginManager instance
+ * @param ConfigManager            $conf           Configuration Manager instance.
+ * @param PluginManager            $pluginManager  Plugin Manager instance,
+ * @param BookmarkServiceInterface $bookmarkService
+ * @param History                  $history        instance
+ * @param SessionManager           $sessionManager SessionManager instance
+ * @param LoginManager             $loginManager   LoginManager instance
  */
-function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, $loginManager)
+function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionManager, $loginManager)
 {
     $updater = new Updater(
-        read_updates_file($conf->get('resource.updates')),
-        $LINKSDB,
+        UpdaterUtils::read_updates_file($conf->get('resource.updates')),
+        $bookmarkService,
         $conf,
-        $loginManager->isLoggedIn(),
-        $_SESSION
+        $loginManager->isLoggedIn()
     );
     try {
         $newUpdates = $updater->update();
         if (! empty($newUpdates)) {
-            write_updates_file(
+            UpdaterUtils::write_updates_file(
                 $conf->get('resource.updates'),
                 $updater->getDoneUpdates()
             );
@@ -529,9 +543,9 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         die($e->getMessage());
     }
 
-    $PAGE = new PageBuilder($conf, $_SESSION, $LINKSDB, $sessionManager->generateToken(), $loginManager->isLoggedIn());
-    $PAGE->assign('linkcount', count($LINKSDB));
-    $PAGE->assign('privateLinkcount', count_private($LINKSDB));
+    $PAGE = new PageBuilder($conf, $_SESSION, $bookmarkService, $sessionManager->generateToken(), $loginManager->isLoggedIn());
+    $PAGE->assign('linkcount', $bookmarkService->count(BookmarkFilter::$ALL));
+    $PAGE->assign('privateLinkcount', $bookmarkService->count(BookmarkFilter::$PRIVATE));
     $PAGE->assign('plugin_errors', $pluginManager->getErrors());
 
     // Determine which page will be rendered.
@@ -611,26 +625,27 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         }
 
         // Optionally filter the results:
-        $links = $LINKSDB->filterSearch($_GET);
-        $linksToDisplay = array();
+        $links = $bookmarkService->search($_GET);
+        $linksToDisplay = [];
 
-        // Get only links which have a thumbnail.
+        // Get only bookmarks which have a thumbnail.
         // Note: we do not retrieve thumbnails here, the request is too heavy.
+        $factory = new FormatterFactory($conf);
+        $formatter = $factory->getFormatter();
         foreach ($links as $key => $link) {
-            if (isset($link['thumbnail']) && $link['thumbnail'] !== false) {
-                $linksToDisplay[] = $link; // Add to array.
+            if ($link->getThumbnail() !== false) {
+                $linksToDisplay[] = $formatter->format($link);
             }
         }
 
-        $data = array(
+        $data = [
             'linksToDisplay' => $linksToDisplay,
-        );
-        $pluginManager->executeHooks('render_picwall', $data, array('loggedin' => $loginManager->isLoggedIn()));
+        ];
+        $pluginManager->executeHooks('render_picwall', $data, ['loggedin' => $loginManager->isLoggedIn()]);
 
         foreach ($data as $key => $value) {
             $PAGE->assign($key, $value);
         }
-
 
         $PAGE->renderPage('picwall');
         exit;
@@ -640,7 +655,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     if ($targetPage == Router::$PAGE_TAGCLOUD) {
         $visibility = ! empty($_SESSION['visibility']) ? $_SESSION['visibility'] : '';
         $filteringTags = isset($_GET['searchtags']) ? explode(' ', $_GET['searchtags']) : [];
-        $tags = $LINKSDB->linksCountPerTag($filteringTags, $visibility);
+        $tags = $bookmarkService->bookmarksCountPerTag($filteringTags, $visibility);
 
         // We sort tags alphabetically, then choose a font size according to count.
         // First, find max value.
@@ -687,7 +702,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     if ($targetPage == Router::$PAGE_TAGLIST) {
         $visibility = ! empty($_SESSION['visibility']) ? $_SESSION['visibility'] : '';
         $filteringTags = isset($_GET['searchtags']) ? explode(' ', $_GET['searchtags']) : [];
-        $tags = $LINKSDB->linksCountPerTag($filteringTags, $visibility);
+        $tags = $bookmarkService->bookmarksCountPerTag($filteringTags, $visibility);
         foreach ($filteringTags as $tag) {
             if (array_key_exists($tag, $tags)) {
                 unset($tags[$tag]);
@@ -717,7 +732,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
 
     // Daily page.
     if ($targetPage == Router::$PAGE_DAILY) {
-        showDaily($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager);
+        showDaily($PAGE, $bookmarkService, $conf, $pluginManager, $loginManager);
     }
 
     // ATOM and RSS feed.
@@ -738,8 +753,16 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             exit;
         }
 
+        $factory = new FormatterFactory($conf);
         // Generate data.
-        $feedGenerator = new FeedBuilder($LINKSDB, $feedType, $_SERVER, $_GET, $loginManager->isLoggedIn());
+        $feedGenerator = new FeedBuilder(
+            $bookmarkService,
+            $factory->getFormatter(),
+            $feedType,
+            $_SERVER,
+            $_GET,
+            $loginManager->isLoggedIn()
+        );
         $feedGenerator->setLocale(strtolower(setlocale(LC_COLLATE, 0)));
         $feedGenerator->setHideDates($conf->get('privacy.hide_timestamps') && !$loginManager->isLoggedIn());
         $feedGenerator->setUsePermalinks(isset($_GET['permalinks']) || !$conf->get('feed.rss_permalinks'));
@@ -845,7 +868,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         exit;
     }
 
-    // -------- User wants to change the number of links per page (linksperpage=...)
+    // -------- User wants to change the number of bookmarks per page (linksperpage=...)
     if (isset($_GET['linksperpage'])) {
         if (is_numeric($_GET['linksperpage'])) {
             $_SESSION['LINKS_PER_PAGE']=abs(intval($_GET['linksperpage']));
@@ -860,19 +883,19 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         exit;
     }
 
-    // -------- User wants to see only private links (toggle)
+    // -------- User wants to see only private bookmarks (toggle)
     if (isset($_GET['visibility'])) {
         if ($_GET['visibility'] === 'private') {
             // Visibility not set or not already private, set private, otherwise reset it
             if (empty($_SESSION['visibility']) || $_SESSION['visibility'] !== 'private') {
-                // See only private links
+                // See only private bookmarks
                 $_SESSION['visibility'] = 'private';
             } else {
                 unset($_SESSION['visibility']);
             }
         } elseif ($_GET['visibility'] === 'public') {
             if (empty($_SESSION['visibility']) || $_SESSION['visibility'] !== 'public') {
-                // See only public links
+                // See only public bookmarks
                 $_SESSION['visibility'] = 'public';
             } else {
                 unset($_SESSION['visibility']);
@@ -888,7 +911,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         exit;
     }
 
-    // -------- User wants to see only untagged links (toggle)
+    // -------- User wants to see only untagged bookmarks (toggle)
     if (isset($_GET['untaggedonly'])) {
         $_SESSION['untaggedonly'] = empty($_SESSION['untaggedonly']);
 
@@ -916,7 +939,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             exit;
         }
 
-        showLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager);
+        showLinkList($PAGE, $bookmarkService, $conf, $pluginManager, $loginManager);
         if (isset($_GET['edit_link'])) {
             header('Location: ?do=login&edit_link='. escape($_GET['edit_link']));
             exit;
@@ -1022,7 +1045,11 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $conf->set('privacy.hide_public_links', !empty($_POST['hidePublicLinks']));
             $conf->set('api.enabled', !empty($_POST['enableApi']));
             $conf->set('api.secret', escape($_POST['apiSecret']));
-            $conf->set('translation.language', escape($_POST['language']));
+            $conf->set('formatter', escape($_POST['formatter']));
+
+            if (! empty($_POST['language'])) {
+                $conf->set('translation.language', escape($_POST['language']));
+            }
 
             $thumbnailsMode = extension_loaded('gd') ? $_POST['enableThumbnails'] : Thumbnailer::MODE_NONE;
             if ($thumbnailsMode !== Thumbnailer::MODE_NONE
@@ -1056,6 +1083,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $PAGE->assign('title', $conf->get('general.title'));
             $PAGE->assign('theme', $conf->get('resource.theme'));
             $PAGE->assign('theme_available', ThemeUtils::getThemes($conf->get('resource.raintpl_tpl')));
+            $PAGE->assign('formatter_available', ['default', 'markdown']);
             list($continents, $cities) = generateTimeZoneData(
                 timezone_identifiers_list(),
                 $conf->get('general.timezone')
@@ -1093,17 +1121,25 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         }
 
         $toTag = isset($_POST['totag']) ? escape($_POST['totag']) : null;
-        $alteredLinks = $LINKSDB->renameTag(escape($_POST['fromtag']), $toTag);
-        $LINKSDB->save($conf->get('resource.page_cache'));
-        foreach ($alteredLinks as $link) {
-            $history->updateLink($link);
+        $fromTag = escape($_POST['fromtag']);
+        $count = 0;
+        $bookmarks = $bookmarkService->search(['searchtags' => $fromTag], BookmarkFilter::$ALL, true);
+        foreach ($bookmarks as $bookmark) {
+            if ($toTag) {
+                $bookmark->renameTag($fromTag, $toTag);
+            } else {
+                $bookmark->deleteTag($fromTag);
+            }
+            $bookmarkService->set($bookmark, false);
+            $history->updateLink($bookmark);
+            $count++;
         }
+        $bookmarkService->save();
         $delete = empty($_POST['totag']);
         $redirect = $delete ? 'do=changetag' : 'searchtags='. urlencode(escape($_POST['totag']));
-        $count = count($alteredLinks);
         $alert = $delete
-            ? sprintf(t('The tag was removed from %d link.', 'The tag was removed from %d links.', $count), $count)
-            : sprintf(t('The tag was renamed in %d link.', 'The tag was renamed in %d links.', $count), $count);
+            ? sprintf(t('The tag was removed from %d link.', 'The tag was removed from %d bookmarks.', $count), $count)
+            : sprintf(t('The tag was renamed in %d link.', 'The tag was renamed in %d bookmarks.', $count), $count);
         echo '<script>alert("'. $alert .'");document.location=\'?'. $redirect .'\';</script>';
         exit;
     }
@@ -1123,69 +1159,37 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         }
 
         // lf_id should only be present if the link exists.
-        $id = isset($_POST['lf_id']) ? intval(escape($_POST['lf_id'])) : $LINKSDB->getNextId();
-        $link['id'] = $id;
-        // Linkdate is kept here to:
-        //   - use the same permalink for notes as they're displayed when creating them
-        //   - let users hack creation date of their posts
-        //     See: https://shaarli.readthedocs.io/en/master/guides/various-hacks/#changing-the-timestamp-for-a-shaare
-        $linkdate = escape($_POST['lf_linkdate']);
-        $link['created'] = DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $linkdate);
-        if (isset($LINKSDB[$id])) {
+        $id = isset($_POST['lf_id']) ? intval(escape($_POST['lf_id'])) : null;
+        if ($id && $bookmarkService->exists($id)) {
             // Edit
-            $link['updated'] = new DateTime();
-            $link['shorturl'] = $LINKSDB[$id]['shorturl'];
-            $link['sticky'] = isset($LINKSDB[$id]['sticky']) ? $LINKSDB[$id]['sticky'] : false;
-            $new = false;
+            $bookmark = $bookmarkService->get($id);
         } else {
             // New link
-            $link['updated'] = null;
-            $link['shorturl'] = link_small_hash($link['created'], $id);
-            $link['sticky'] = false;
-            $new = true;
+            $bookmark = new Bookmark();
         }
 
-        // Remove multiple spaces.
-        $tags = trim(preg_replace('/\s\s+/', ' ', $_POST['lf_tags']));
-        // Remove first '-' char in tags.
-        $tags = preg_replace('/(^| )\-/', '$1', $tags);
-        // Remove duplicates.
-        $tags = implode(' ', array_unique(explode(' ', $tags)));
-
-        if (empty(trim($_POST['lf_url']))) {
-            $_POST['lf_url'] = '?' . smallHash($linkdate . $id);
-        }
-        $url = whitelist_protocols(trim($_POST['lf_url']), $conf->get('security.allowed_protocols'));
-
-        $link = array_merge($link, [
-            'title' => trim($_POST['lf_title']),
-            'url' => $url,
-            'description' => $_POST['lf_description'],
-            'private' => (isset($_POST['lf_private']) ? 1 : 0),
-            'tags' => str_replace(',', ' ', $tags),
-        ]);
-
-        // If title is empty, use the URL as title.
-        if ($link['title'] == '') {
-            $link['title'] = $link['url'];
-        }
+        $bookmark->setTitle($_POST['lf_title']);
+        $bookmark->setDescription($_POST['lf_description']);
+        $bookmark->setUrl($_POST['lf_url'], $conf->get('security.allowed_protocols'));
+        $bookmark->setPrivate(isset($_POST['lf_private']));
+        $bookmark->setTagsString($_POST['lf_tags']);
 
         if ($conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE
-            && ! is_note($link['url'])
+            && ! $bookmark->isNote()
         ) {
             $thumbnailer = new Thumbnailer($conf);
-            $link['thumbnail'] = $thumbnailer->get($url);
+            $bookmark->setThumbnail($thumbnailer->get($bookmark->getUrl()));
         }
+        $bookmarkService->addOrSet($bookmark, false);
 
-        $pluginManager->executeHooks('save_link', $link);
+        // To preserve backward compatibility with 3rd parties, plugins still use arrays
+        $factory = new FormatterFactory($conf);
+        $formatter = $factory->getFormatter('raw');
+        $data = $formatter->format($bookmark);
+        $pluginManager->executeHooks('save_link', $data);
 
-        $LINKSDB[$id] = $link;
-        $LINKSDB->save($conf->get('resource.page_cache'));
-        if ($new) {
-            $history->addLink($link);
-        } else {
-            $history->updateLink($link);
-        }
+        $bookmark->fromArray($data);
+        $bookmarkService->set($bookmark);
 
         // If we are called from the bookmarklet, we must close the popup:
         if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) {
@@ -1196,29 +1200,9 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         $returnurl = !empty($_POST['returnurl']) ? $_POST['returnurl'] : '?';
         $location = generateLocation($returnurl, $_SERVER['HTTP_HOST'], array('addlink', 'post', 'edit_link'));
         // Scroll to the link which has been edited.
-        $location .= '#' . $link['shorturl'];
+        $location .= '#' . $bookmark->getShortUrl();
         // After saving the link, redirect to the page the user was on.
         header('Location: '. $location);
-        exit;
-    }
-
-    // -------- User clicked the "Cancel" button when editing a link.
-    if (isset($_POST['cancel_edit'])) {
-        $id = isset($_POST['lf_id']) ? (int) escape($_POST['lf_id']) : false;
-        if (! isset($LINKSDB[$id])) {
-            header('Location: ?');
-        }
-        // If we are called from the bookmarklet, we must close the popup:
-        if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) {
-            echo '<script>self.close();</script>';
-            exit;
-        }
-        $link = $LINKSDB[$id];
-        $returnurl = ( isset($_POST['returnurl']) ? $_POST['returnurl'] : '?' );
-        // Scroll to the link which has been edited.
-        $returnurl .= '#'. $link['shorturl'];
-        $returnurl = generateLocation($returnurl, $_SERVER['HTTP_HOST'], array('addlink', 'post', 'edit_link'));
-        header('Location: '.$returnurl); // After canceling, redirect to the page the user was on.
         exit;
     }
 
@@ -1231,23 +1215,31 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         $ids = trim($_GET['lf_linkdate']);
         if (strpos($ids, ' ') !== false) {
             // multiple, space-separated ids provided
-            $ids = array_values(array_filter(preg_split('/\s+/', escape($ids))));
+            $ids = array_values(array_filter(
+                preg_split('/\s+/', escape($ids)),
+                function ($item) {
+                    return $item !== '';
+                }
+            ));
         } else {
             // only a single id provided
+            $shortUrl = $bookmarkService->get($ids)->getShortUrl();
             $ids = [$ids];
         }
         // assert at least one id is given
         if (!count($ids)) {
             die('no id provided');
         }
+        $factory = new FormatterFactory($conf);
+        $formatter = $factory->getFormatter('raw');
         foreach ($ids as $id) {
             $id = (int) escape($id);
-            $link = $LINKSDB[$id];
-            $pluginManager->executeHooks('delete_link', $link);
-            $history->deleteLink($link);
-            unset($LINKSDB[$id]);
+            $bookmark = $bookmarkService->get($id);
+            $data = $formatter->format($bookmark);
+            $pluginManager->executeHooks('delete_link', $data);
+            $bookmarkService->remove($bookmark, false);
         }
-        $LINKSDB->save($conf->get('resource.page_cache')); // save to disk
+        $bookmarkService->save();
 
         // If we are called from the bookmarklet, we must close the popup:
         if (isset($_GET['source']) && ($_GET['source']=='bookmarklet' || $_GET['source']=='firefoxsocialapi')) {
@@ -1261,7 +1253,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             $location = generateLocation(
                 $_SERVER['HTTP_REFERER'],
                 $_SERVER['HTTP_HOST'],
-                ['delete_link', 'edit_link', $link['shorturl']]
+                ['delete_link', 'edit_link', ! empty($shortUrl) ? $shortUrl : null]
             );
         }
 
@@ -1294,14 +1286,21 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         } else {
             $private = $_GET['newVisibility'] === 'private';
         }
+        $factory = new FormatterFactory($conf);
+        $formatter = $factory->getFormatter('raw');
         foreach ($ids as $id) {
             $id = (int) escape($id);
-            $link = $LINKSDB[$id];
-            $link['private'] = $private;
-            $pluginManager->executeHooks('save_link', $link);
-            $LINKSDB[$id] = $link;
+            $bookmark = $bookmarkService->get($id);
+            $bookmark->setPrivate($private);
+
+            // To preserve backward compatibility with 3rd parties, plugins still use arrays
+            $data = $formatter->format($bookmark);
+            $pluginManager->executeHooks('save_link', $data);
+            $bookmark->fromArray($data);
+
+            $bookmarkService->set($bookmark);
         }
-        $LINKSDB->save($conf->get('resource.page_cache')); // save to disk
+        $bookmarkService->save();
 
         $location = '?';
         if (isset($_SERVER['HTTP_REFERER'])) {
@@ -1317,17 +1316,22 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     // -------- User clicked the "EDIT" button on a link: Display link edit form.
     if (isset($_GET['edit_link'])) {
         $id = (int) escape($_GET['edit_link']);
-        $link = $LINKSDB[$id];  // Read database
-        if (!$link) {
+        try {
+            $link = $bookmarkService->get($id);  // Read database
+        } catch (BookmarkNotFoundException $e) {
+            // Link not found in database.
             header('Location: ?');
             exit;
-        } // Link not found in database.
-        $link['linkdate'] = $link['created']->format(LinkDB::LINK_DATE_FORMAT);
+        }
+
+        $factory = new FormatterFactory($conf);
+        $formatter = $factory->getFormatter('raw');
+        $formattedLink = $formatter->format($link);
         $data = array(
-            'link' => $link,
+            'link' => $formattedLink,
             'link_is_new' => false,
             'http_referer' => (isset($_SERVER['HTTP_REFERER']) ? escape($_SERVER['HTTP_REFERER']) : ''),
-            'tags' => $LINKSDB->linksCountPerTag(),
+            'tags' => $bookmarkService->bookmarksCountPerTag(),
         );
         $pluginManager->executeHooks('render_editlink', $data);
 
@@ -1346,10 +1350,9 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
 
         $link_is_new = false;
         // Check if URL is not already in database (in this case, we will edit the existing link)
-        $link = $LINKSDB->getLinkFromUrl($url);
-        if (! $link) {
+        $bookmark = $bookmarkService->findByUrl($url);
+        if (! $bookmark) {
             $link_is_new = true;
-            $linkdate = strval(date(LinkDB::LINK_DATE_FORMAT));
             // Get title if it was provided in URL (by the bookmarklet).
             $title = empty($_GET['title']) ? '' : escape($_GET['title']);
             // Get description if it was provided in URL (by the bookmarklet). [Bronco added that]
@@ -1375,32 +1378,32 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             }
 
             if ($url == '') {
-                $url = '?' . smallHash($linkdate . $LINKSDB->getNextId());
                 $title = $conf->get('general.default_note_title', t('Note: '));
             }
             $url = escape($url);
             $title = escape($title);
 
-            $link = array(
-                'linkdate' => $linkdate,
+            $link = [
                 'title' => $title,
                 'url' => $url,
                 'description' => $description,
                 'tags' => $tags,
                 'private' => $private,
-            );
+            ];
         } else {
-            $link['linkdate'] = $link['created']->format(LinkDB::LINK_DATE_FORMAT);
+            $factory = new FormatterFactory($conf);
+        $formatter = $factory->getFormatter('raw');
+            $link = $formatter->format($bookmark);
         }
 
-        $data = array(
+        $data = [
             'link' => $link,
             'link_is_new' => $link_is_new,
             'http_referer' => (isset($_SERVER['HTTP_REFERER']) ? escape($_SERVER['HTTP_REFERER']) : ''),
             'source' => (isset($_GET['source']) ? $_GET['source'] : ''),
-            'tags' => $LINKSDB->linksCountPerTag(),
+            'tags' => $bookmarkService->bookmarksCountPerTag(),
             'default_private_links' => $conf->get('privacy.default_private_links', false),
-        );
+        ];
         $pluginManager->executeHooks('render_editlink', $data);
 
         foreach ($data as $key => $value) {
@@ -1413,7 +1416,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     }
 
     if ($targetPage == Router::$PAGE_PINLINK) {
-        if (! isset($_GET['id']) || empty($LINKSDB[$_GET['id']])) {
+        if (! isset($_GET['id']) || !$bookmarkService->exists($_GET['id'])) {
             // FIXME! Use a proper error system.
             $msg = t('Invalid link ID provided');
             echo '<script>alert("'. $msg .'");document.location=\''. index_url($_SERVER) .'\';</script>';
@@ -1423,16 +1426,15 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             die('Wrong token.');
         }
 
-        $link = $LINKSDB[$_GET['id']];
-        $link['sticky'] = ! $link['sticky'];
-        $LINKSDB[(int) $_GET['id']] = $link;
-        $LINKSDB->save($conf->get('resource.page_cache'));
+        $link = $bookmarkService->get($_GET['id']);
+        $link->setSticky(! $link->isSticky());
+        $bookmarkService->set($link);
         header('Location: '.index_url($_SERVER));
         exit;
     }
 
     if ($targetPage == Router::$PAGE_EXPORT) {
-        // Export links as a Netscape Bookmarks file
+        // Export bookmarks as a Netscape Bookmarks file
 
         if (empty($_GET['selection'])) {
             $PAGE->assign('pagetitle', t('Export') .' - '. $conf->get('general.title', 'Shaarli'));
@@ -1449,10 +1451,13 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         }
 
         try {
+            $factory = new FormatterFactory($conf);
+            $formatter = $factory->getFormatter('raw');
             $PAGE->assign(
                 'links',
                 NetscapeBookmarkUtils::filterAndFormat(
-                    $LINKSDB,
+                    $bookmarkService,
+                    $formatter,
                     $selection,
                     $prependNoteUrl,
                     index_url($_SERVER)
@@ -1467,7 +1472,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         header('Content-Type: text/html; charset=utf-8');
         header(
             'Content-disposition: attachment; filename=bookmarks_'
-            .$selection.'_'.$now->format(LinkDB::LINK_DATE_FORMAT).'.html'
+            .$selection.'_'.$now->format(Bookmark::LINK_DATE_FORMAT).'.html'
         );
         $PAGE->assign('date', $now->format(DateTime::RFC822));
         $PAGE->assign('eol', PHP_EOL);
@@ -1521,7 +1526,7 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
         $status = NetscapeBookmarkUtils::import(
             $_POST,
             $_FILES,
-            $LINKSDB,
+            $bookmarkService,
             $conf,
             $history
         );
@@ -1592,19 +1597,19 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
     // Get a fresh token
     if ($targetPage == Router::$GET_TOKEN) {
         header('Content-Type:text/plain');
-        echo $sessionManager->generateToken($conf);
+        echo $sessionManager->generateToken();
         exit;
     }
 
     // -------- Thumbnails Update
     if ($targetPage == Router::$PAGE_THUMBS_UPDATE) {
         $ids = [];
-        foreach ($LINKSDB as $link) {
+        foreach ($bookmarkService->search() as $bookmark) {
             // A note or not HTTP(S)
-            if (is_note($link['url']) || ! startsWith(strtolower($link['url']), 'http')) {
+            if ($bookmark->isNote() || ! startsWith(strtolower($bookmark->getUrl()), 'http')) {
                 continue;
             }
-            $ids[] = $link['id'];
+            $ids[] = $bookmark->getId();
         }
         $PAGE->assign('ids', $ids);
         $PAGE->assign('pagetitle', t('Thumbnails update') .' - '. $conf->get('general.title', 'Shaarli'));
@@ -1619,37 +1624,40 @@ function renderPage($conf, $pluginManager, $LINKSDB, $history, $sessionManager, 
             exit;
         }
         $id = (int) $_POST['id'];
-        if (empty($LINKSDB[$id])) {
+        if (! $bookmarkService->exists($id)) {
             http_response_code(404);
             exit;
         }
         $thumbnailer = new Thumbnailer($conf);
-        $link = $LINKSDB[$id];
-        $link['thumbnail'] = $thumbnailer->get($link['url']);
-        $LINKSDB[$id] = $link;
-        $LINKSDB->save($conf->get('resource.page_cache'));
+        $bookmark = $bookmarkService->get($id);
+        $bookmark->setThumbnail($thumbnailer->get($bookmark->getUrl()));
+        $bookmarkService->set($bookmark);
 
-        echo json_encode($link);
+        $factory = new FormatterFactory($conf);
+        echo json_encode($factory->getFormatter('raw')->format($bookmark));
         exit;
     }
 
-    // -------- Otherwise, simply display search form and links:
-    showLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager);
+    // -------- Otherwise, simply display search form and bookmarks:
+    showLinkList($PAGE, $bookmarkService, $conf, $pluginManager, $loginManager);
     exit;
 }
 
 /**
- * Template for the list of links (<div id="linklist">)
+ * Template for the list of bookmarks (<div id="linklist">)
  * This function fills all the necessary fields in the $PAGE for the template 'linklist.html'
  *
- * @param pageBuilder   $PAGE          pageBuilder instance.
- * @param LinkDB        $LINKSDB       LinkDB instance.
- * @param ConfigManager $conf          Configuration Manager instance.
- * @param PluginManager $pluginManager Plugin Manager instance.
- * @param LoginManager  $loginManager  LoginManager instance
+ * @param pageBuilder              $PAGE          pageBuilder instance.
+ * @param BookmarkServiceInterface $linkDb        LinkDB instance.
+ * @param ConfigManager            $conf          Configuration Manager instance.
+ * @param PluginManager            $pluginManager Plugin Manager instance.
+ * @param LoginManager             $loginManager  LoginManager instance
  */
-function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
+function buildLinkList($PAGE, $linkDb, $conf, $pluginManager, $loginManager)
 {
+    $factory = new FormatterFactory($conf);
+    $formatter = $factory->getFormatter();
+
     // Used in templates
     if (isset($_GET['searchtags'])) {
         if (! empty($_GET['searchtags'])) {
@@ -1666,19 +1674,19 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
     if (! empty($_SERVER['QUERY_STRING'])
         && preg_match('/^[a-zA-Z0-9-_@]{6}($|&|#)/', $_SERVER['QUERY_STRING'])) {
         try {
-            $linksToDisplay = $LINKSDB->filterHash($_SERVER['QUERY_STRING']);
-        } catch (LinkNotFoundException $e) {
+            $linksToDisplay = $linkDb->findByHash($_SERVER['QUERY_STRING']);
+        } catch (BookmarkNotFoundException $e) {
             $PAGE->render404($e->getMessage());
             exit;
         }
     } else {
-        // Filter links according search parameters.
+        // Filter bookmarks according search parameters.
         $visibility = ! empty($_SESSION['visibility']) ? $_SESSION['visibility'] : '';
         $request = [
             'searchtags' => $searchtags,
             'searchterm' => $searchterm,
         ];
-        $linksToDisplay = $LINKSDB->filterSearch($request, false, $visibility, !empty($_SESSION['untaggedonly']));
+        $linksToDisplay = $linkDb->search($request, $visibility, false, !empty($_SESSION['untaggedonly']));
     }
 
     // ---- Handle paging.
@@ -1704,36 +1712,26 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
 
     $linkDisp = array();
     while ($i<$end && $i<count($keys)) {
-        $link = $linksToDisplay[$keys[$i]];
-        $link['description'] = format_description($link['description']);
-        $classLi =  ($i % 2) != 0 ? '' : 'publicLinkHightLight';
-        $link['class'] = $link['private'] == 0 ? $classLi : 'private';
-        $link['timestamp'] = $link['created']->getTimestamp();
-        if (! empty($link['updated'])) {
-            $link['updated_timestamp'] = $link['updated']->getTimestamp();
-        } else {
-            $link['updated_timestamp'] = '';
-        }
-        $taglist = preg_split('/\s+/', $link['tags'], -1, PREG_SPLIT_NO_EMPTY);
-        uasort($taglist, 'strcasecmp');
-        $link['taglist'] = $taglist;
+        $link = $formatter->format($linksToDisplay[$keys[$i]]);
 
         // Logged in, thumbnails enabled, not a note,
         // and (never retrieved yet or no valid cache file)
-        if ($loginManager->isLoggedIn() && $thumbnailsEnabled && $link['url'][0] != '?'
-            && (! isset($link['thumbnail']) || ($link['thumbnail'] !== false && ! is_file($link['thumbnail'])))
+        if ($loginManager->isLoggedIn()
+            && $thumbnailsEnabled
+            && !$linksToDisplay[$keys[$i]]->isNote()
+            && $linksToDisplay[$keys[$i]]->getThumbnail() !== false
+            && ! is_file($linksToDisplay[$keys[$i]]->getThumbnail())
         ) {
-            $elem = $LINKSDB[$keys[$i]];
-            $elem['thumbnail'] = $thumbnailer->get($link['url']);
-            $LINKSDB[$keys[$i]] = $elem;
+            $linksToDisplay[$keys[$i]]->setThumbnail($thumbnailer->get($link['url']));
+            $linkDb->set($linksToDisplay[$keys[$i]], false);
             $updateDB = true;
-            $link['thumbnail'] = $elem['thumbnail'];
+            $link['thumbnail'] = $linksToDisplay[$keys[$i]]->getThumbnail();
         }
 
         // Check for both signs of a note: starting with ? and 7 chars long.
-        if ($link['url'][0] === '?' && strlen($link['url']) === 7) {
-            $link['url'] = index_url($_SERVER) . $link['url'];
-        }
+//        if ($link['url'][0] === '?' && strlen($link['url']) === 7) {
+//            $link['url'] = index_url($_SERVER) . $link['url'];
+//        }
 
         $linkDisp[$keys[$i]] = $link;
         $i++;
@@ -1741,7 +1739,7 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
 
     // If we retrieved new thumbnails, we update the database.
     if (!empty($updateDB)) {
-        $LINKSDB->save($conf->get('resource.page_cache'));
+        $linkDb->save();
     }
 
     // Compute paging navigation
@@ -1771,7 +1769,7 @@ function buildLinkList($PAGE, $LINKSDB, $conf, $pluginManager, $loginManager)
 
     // If there is only a single link, we change on-the-fly the title of the page.
     if (count($linksToDisplay) == 1) {
-        $data['pagetitle'] = $linksToDisplay[$keys[0]]['title'] .' - '. $conf->get('general.title');
+        $data['pagetitle'] = $linksToDisplay[$keys[0]]->getTitle() .' - '. $conf->get('general.title');
     } elseif (! empty($searchterm) || ! empty($searchtags)) {
         $data['pagetitle'] = t('Search: ');
         $data['pagetitle'] .= ! empty($searchterm) ? $searchterm .' ' : '';
@@ -1856,7 +1854,7 @@ function install($conf, $sessionManager, $loginManager)
         if (!empty($_POST['title'])) {
             $conf->set('general.title', escape($_POST['title']));
         } else {
-            $conf->set('general.title', 'Shared links on '.escape(index_url($_SERVER)));
+            $conf->set('general.title', 'Shared bookmarks on '.escape(index_url($_SERVER)));
         }
         $conf->set('translation.language', escape($_POST['language']));
         $conf->set('updates.check_updates', !empty($_POST['updateCheck']));
@@ -1881,9 +1879,16 @@ function install($conf, $sessionManager, $loginManager)
             echo '<script>alert("'. $e->getMessage() .'");document.location=\'?\';</script>';
             exit;
         }
+
+        $history = new History($conf->get('resource.history'));
+        $bookmarkService = new BookmarkFileService($conf, $history, true);
+        if ($bookmarkService->count() === 0) {
+            $bookmarkService->initialize();
+        }
+
         echo '<script>alert('
             .'"Shaarli is now configured. '
-            .'Please enter your login/password and start shaaring your links!"'
+            .'Please enter your login/password and start shaaring your bookmarks!"'
             .');document.location=\'?do=login\';</script>';
         exit;
     }
@@ -1897,11 +1902,6 @@ function install($conf, $sessionManager, $loginManager)
     exit;
 }
 
-if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=dailyrss')) {
-    showDailyRSS($conf, $loginManager);
-    exit;
-}
-
 if (!isset($_SESSION['LINKS_PER_PAGE'])) {
     $_SESSION['LINKS_PER_PAGE'] = $conf->get('general.links_per_page', 20);
 }
@@ -1912,11 +1912,12 @@ try {
     die($e->getMessage());
 }
 
-$linkDb = new LinkDB(
-    $conf->get('resource.datastore'),
-    $loginManager->isLoggedIn(),
-    $conf->get('privacy.hide_public_links')
-);
+$linkDb = new BookmarkFileService($conf, $history, $loginManager->isLoggedIn());
+
+if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=dailyrss')) {
+    showDailyRSS($linkDb, $conf, $loginManager);
+    exit;
+}
 
 $container = new \Slim\Container();
 $container['conf'] = $conf;
@@ -1927,11 +1928,11 @@ $app = new \Slim\App($container);
 // REST API routes
 $app->group('/api/v1', function () {
     $this->get('/info', '\Shaarli\Api\Controllers\Info:getInfo')->setName('getInfo');
-    $this->get('/links', '\Shaarli\Api\Controllers\Links:getLinks')->setName('getLinks');
-    $this->get('/links/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:getLink')->setName('getLink');
-    $this->post('/links', '\Shaarli\Api\Controllers\Links:postLink')->setName('postLink');
-    $this->put('/links/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:putLink')->setName('putLink');
-    $this->delete('/links/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:deleteLink')->setName('deleteLink');
+    $this->get('/bookmarks', '\Shaarli\Api\Controllers\Links:getLinks')->setName('getLinks');
+    $this->get('/bookmarks/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:getLink')->setName('getLink');
+    $this->post('/bookmarks', '\Shaarli\Api\Controllers\Links:postLink')->setName('postLink');
+    $this->put('/bookmarks/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:putLink')->setName('putLink');
+    $this->delete('/bookmarks/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:deleteLink')->setName('deleteLink');
 
     $this->get('/tags', '\Shaarli\Api\Controllers\Tags:getTags')->setName('getTags');
     $this->get('/tags/{tagName:[\w]+}', '\Shaarli\Api\Controllers\Tags:getTag')->setName('getTag');

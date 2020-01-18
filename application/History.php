@@ -3,6 +3,7 @@ namespace Shaarli;
 
 use DateTime;
 use Exception;
+use Shaarli\Bookmark\Bookmark;
 
 /**
  * Class History
@@ -20,7 +21,7 @@ use Exception;
  *   - UPDATED: link updated
  *   - DELETED: link deleted
  *   - SETTINGS: the settings have been updated through the UI.
- *   - IMPORT: bulk links import
+ *   - IMPORT: bulk bookmarks import
  *
  * Note: new events are put at the beginning of the file and history array.
  */
@@ -96,31 +97,31 @@ class History
     /**
      * Add Event: new link.
      *
-     * @param array $link Link data.
+     * @param Bookmark $link Link data.
      */
     public function addLink($link)
     {
-        $this->addEvent(self::CREATED, $link['id']);
+        $this->addEvent(self::CREATED, $link->getId());
     }
 
     /**
      * Add Event: update existing link.
      *
-     * @param array $link Link data.
+     * @param Bookmark $link Link data.
      */
     public function updateLink($link)
     {
-        $this->addEvent(self::UPDATED, $link['id']);
+        $this->addEvent(self::UPDATED, $link->getId());
     }
 
     /**
      * Add Event: delete existing link.
      *
-     * @param array $link Link data.
+     * @param Bookmark $link Link data.
      */
     public function deleteLink($link)
     {
-        $this->addEvent(self::DELETED, $link['id']);
+        $this->addEvent(self::DELETED, $link->getId());
     }
 
     /**
@@ -134,7 +135,7 @@ class History
     /**
      * Add Event: bulk import.
      *
-     * Note: we don't store links add/update one by one since it can have a huge impact on performances.
+     * Note: we don't store bookmarks add/update one by one since it can have a huge impact on performances.
      */
     public function importLinks()
     {

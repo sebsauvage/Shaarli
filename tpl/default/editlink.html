@@ -11,7 +11,6 @@
       <h2 class="window-title">
         {if="!$link_is_new"}{'Edit Shaare'|t}{else}{'New Shaare'|t}{/if}
       </h2>
-      <input type="hidden" name="lf_linkdate" value="{$link.linkdate}">
       {if="isset($link.id)"}
         <input type="hidden" name="lf_id" value="{$link.id}">
       {/if}
@@ -20,7 +19,7 @@
         <label for="lf_url">{'URL'|t}</label>
       </div>
       <div>
-        <input type="text" name="lf_url" id="lf_url" value="{$link.url}" class="lf_input autofocus">
+        <input type="text" name="lf_url" id="lf_url" value="{$link.url}" class="lf_input">
       </div>
       <div>
       <label for="lf_title">{'Title'|t}</label>
@@ -49,6 +48,15 @@
         {/if}>
         &nbsp;<label for="lf_private">{'Private'|t}</label>
       </div>
+
+      {if="$formatter==='markdown'"}
+        <div class="md_help">
+          {'Description will be rendered with'|t}
+          <a href="http://daringfireball.net/projects/markdown/syntax" title="{'Markdown syntax documentation'|t}">
+            {'Markdown syntax'|t}
+          </a>.
+        </div>
+      {/if}
 
       <div id="editlink-plugins">
         {loop="$edit_link_plugin"}

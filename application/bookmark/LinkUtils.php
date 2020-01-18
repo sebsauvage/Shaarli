@@ -1,6 +1,6 @@
 <?php
 
-use Shaarli\Bookmark\LinkDB;
+use Shaarli\Bookmark\Bookmark;
 
 /**
  * Get cURL callback function for CURLOPT_WRITEFUNCTION
@@ -188,30 +188,11 @@ function html_extract_tag($tag, $html)
 }
 
 /**
- * Count private links in given linklist.
- *
- * @param array|Countable $links Linklist.
- *
- * @return int Number of private links.
- */
-function count_private($links)
-{
-    $cpt = 0;
-    foreach ($links as $link) {
-        if ($link['private']) {
-            $cpt += 1;
-        }
-    }
-
-    return $cpt;
-}
-
-/**
- * In a string, converts URLs to clickable links.
+ * In a string, converts URLs to clickable bookmarks.
  *
  * @param string $text       input string.
  *
- * @return string returns $text with all links converted to HTML links.
+ * @return string returns $text with all bookmarks converted to HTML bookmarks.
  *
  * @see Function inspired from http://www.php.net/manual/en/function.preg-replace.php#85722
  */
@@ -279,7 +260,7 @@ function format_description($description, $indexUrl = '')
  */
 function link_small_hash($date, $id)
 {
-    return smallHash($date->format(LinkDB::LINK_DATE_FORMAT) . $id);
+    return smallHash($date->format(Bookmark::LINK_DATE_FORMAT) . $id);
 }
 
 /**

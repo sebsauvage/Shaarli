@@ -2,6 +2,7 @@
 namespace Shaarli\Api;
 
 use Shaarli\Config\ConfigManager;
+use Shaarli\History;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -40,18 +41,21 @@ class ApiMiddlewareTest extends \PHPUnit\Framework\TestCase
     protected $container;
 
     /**
-     * Before every test, instantiate a new Api with its config, plugins and links.
+     * Before every test, instantiate a new Api with its config, plugins and bookmarks.
      */
     public function setUp()
     {
-        $this->conf = new ConfigManager('tests/utils/config/configJson.json.php');
+        $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->conf->set('api.secret', 'NapoleonWasALizard');
 
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
 
+        $history = new History('sandbox/history.php');
+
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
+        $this->container['history'] = $history;
     }
 
     /**

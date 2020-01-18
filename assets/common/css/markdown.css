@@ -140,7 +140,7 @@
     -webkit-hyphens: none;
     -moz-hyphens: none;
     -ms-hyphens: none;
-    hyphens: none;  
+    hyphens: none;
 }
 
 .markdown :not(pre) code {
@@ -155,7 +155,7 @@
 }
 
 /*
- Remove header links style
+ Remove header bookmarks style
  */
 #pageheader .md_help a {
     color: lightgray;

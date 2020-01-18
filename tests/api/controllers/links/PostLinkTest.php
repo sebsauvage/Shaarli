@@ -3,6 +3,8 @@
 namespace Shaarli\Api\Controllers;
 
 use PHPUnit\Framework\TestCase;
+use Shaarli\Bookmark\Bookmark;
+use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 use Slim\Container;
@@ -41,6 +43,11 @@ class PostLinkTest extends TestCase
     protected $refDB = null;
 
     /**
+     * @var BookmarkFileService instance.
+     */
+    protected $bookmarkService;
+
+    /**
      * @var HistoryController instance.
      */
     protected $history;
@@ -61,29 +68,30 @@ class PostLinkTest extends TestCase
     const NB_FIELDS_LINK = 9;
 
     /**
-     * Before every test, instantiate a new Api with its config, plugins and links.
+     * Before every test, instantiate a new Api with its config, plugins and bookmarks.
      */
     public function setUp()
     {
-        $this->conf = new ConfigManager('tests/utils/config/configJson.json.php');
+        $this->conf = new ConfigManager('tests/utils/config/configJson');
+        $this->conf->set('resource.datastore', self::$testDatastore);
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
-
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
         $this->history = new History(self::$testHistory);
+        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, true);
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->container['db'] = new \Shaarli\Bookmark\LinkDB(self::$testDatastore, true, false);
-        $this->container['history'] = new History(self::$testHistory);
+        $this->container['db'] = $this->bookmarkService;
+        $this->container['history'] = $this->history;
 
         $this->controller = new Links($this->container);
 
         $mock = $this->createMock(Router::class);
         $mock->expects($this->any())
              ->method('relativePathFor')
-             ->willReturn('api/v1/links/1');
+             ->willReturn('api/v1/bookmarks/1');
 
         // affect @property-read... seems to work
         $this->controller->getCi()->router = $mock;
@@ -118,7 +126,7 @@ class PostLinkTest extends TestCase
 
         $response = $this->controller->postLink($request, new Response());
         $this->assertEquals(201, $response->getStatusCode());
-        $this->assertEquals('api/v1/links/1', $response->getHeader('Location')[0]);
+        $this->assertEquals('api/v1/bookmarks/1', $response->getHeader('Location')[0]);
         $data = json_decode((string) $response->getBody(), true);
         $this->assertEquals(self::NB_FIELDS_LINK, count($data));
         $this->assertEquals(43, $data['id']);
@@ -127,7 +135,7 @@ class PostLinkTest extends TestCase
         $this->assertEquals('?' . $data['shorturl'], $data['title']);
         $this->assertEquals('', $data['description']);
         $this->assertEquals([], $data['tags']);
-        $this->assertEquals(false, $data['private']);
+        $this->assertEquals(true, $data['private']);
         $this->assertTrue(
             new \DateTime('5 seconds ago') < \DateTime::createFromFormat(\DateTime::ATOM, $data['created'])
         );
@@ -163,7 +171,7 @@ class PostLinkTest extends TestCase
         $response = $this->controller->postLink($request, new Response());
 
         $this->assertEquals(201, $response->getStatusCode());
-        $this->assertEquals('api/v1/links/1', $response->getHeader('Location')[0]);
+        $this->assertEquals('api/v1/bookmarks/1', $response->getHeader('Location')[0]);
         $data = json_decode((string) $response->getBody(), true);
         $this->assertEquals(self::NB_FIELDS_LINK, count($data));
         $this->assertEquals(43, $data['id']);
@@ -211,11 +219,11 @@ class PostLinkTest extends TestCase
         $this->assertEquals(['gnu', 'media', 'web', '.hidden', 'hashtag'], $data['tags']);
         $this->assertEquals(false, $data['private']);
         $this->assertEquals(
-            \DateTime::createFromFormat(\Shaarli\Bookmark\LinkDB::LINK_DATE_FORMAT, '20130614_184135'),
+            \DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20130614_184135'),
             \DateTime::createFromFormat(\DateTime::ATOM, $data['created'])
         );
         $this->assertEquals(
-            \DateTime::createFromFormat(\Shaarli\Bookmark\LinkDB::LINK_DATE_FORMAT, '20130615_184230'),
+            \DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20130615_184230'),
             \DateTime::createFromFormat(\DateTime::ATOM, $data['updated'])
         );
     }

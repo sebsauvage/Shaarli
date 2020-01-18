@@ -389,6 +389,8 @@ class ConfigManager
         $this->setEmpty('translation.extensions', []);
 
         $this->setEmpty('plugins', array());
+
+        $this->setEmpty('formatter', 'markdown');
     }
 
     /**

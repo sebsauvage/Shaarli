@@ -2,6 +2,7 @@
 namespace Shaarli\Api;
 
 use Shaarli\Api\Exceptions\ApiAuthorizationException;
+use Shaarli\Bookmark\Bookmark;
 use Shaarli\Http\Base64Url;
 
 /**
@@ -54,28 +55,28 @@ class ApiUtils
     /**
      * Format a Link for the REST API.
      *
-     * @param array  $link     Link data read from the datastore.
-     * @param string $indexUrl Shaarli's index URL (used for relative URL).
+     * @param Bookmark $bookmark Bookmark data read from the datastore.
+     * @param string   $indexUrl Shaarli's index URL (used for relative URL).
      *
      * @return array Link data formatted for the REST API.
      */
-    public static function formatLink($link, $indexUrl)
+    public static function formatLink($bookmark, $indexUrl)
     {
-        $out['id'] = $link['id'];
+        $out['id'] = $bookmark->getId();
         // Not an internal link
-        if (! is_note($link['url'])) {
-            $out['url'] = $link['url'];
+        if (! $bookmark->isNote()) {
+            $out['url'] = $bookmark->getUrl();
         } else {
-            $out['url'] = $indexUrl . $link['url'];
+            $out['url'] = $indexUrl . $bookmark->getUrl();
         }
-        $out['shorturl'] = $link['shorturl'];
-        $out['title'] = $link['title'];
-        $out['description'] = $link['description'];
-        $out['tags'] = preg_split('/\s+/', $link['tags'], -1, PREG_SPLIT_NO_EMPTY);
-        $out['private'] = $link['private'] == true;
-        $out['created'] = $link['created']->format(\DateTime::ATOM);
-        if (! empty($link['updated'])) {
-            $out['updated'] = $link['updated']->format(\DateTime::ATOM);
+        $out['shorturl'] = $bookmark->getShortUrl();
+        $out['title'] = $bookmark->getTitle();
+        $out['description'] = $bookmark->getDescription();
+        $out['tags'] = $bookmark->getTags();
+        $out['private'] = $bookmark->isPrivate();
+        $out['created'] = $bookmark->getCreated()->format(\DateTime::ATOM);
+        if (! empty($bookmark->getUpdated())) {
+            $out['updated'] = $bookmark->getUpdated()->format(\DateTime::ATOM);
         } else {
             $out['updated'] = '';
         }
@@ -83,7 +84,7 @@ class ApiUtils
     }
 
     /**
-     * Convert a link given through a request, to a valid link for LinkDB.
+     * Convert a link given through a request, to a valid Bookmark for the datastore.
      *
      * If no URL is provided, it will generate a local note URL.
      * If no title is provided, it will use the URL as title.
@@ -91,50 +92,42 @@ class ApiUtils
      * @param array  $input          Request Link.
      * @param bool   $defaultPrivate Request Link.
      *
-     * @return array Formatted link.
+     * @return Bookmark instance.
      */
     public static function buildLinkFromRequest($input, $defaultPrivate)
     {
-        $input['url'] = ! empty($input['url']) ? cleanup_url($input['url']) : '';
+        $bookmark = new Bookmark();
+        $url = ! empty($input['url']) ? cleanup_url($input['url']) : '';
         if (isset($input['private'])) {
             $private = filter_var($input['private'], FILTER_VALIDATE_BOOLEAN);
         } else {
             $private = $defaultPrivate;
         }
 
-        $link = [
-            'title'         => ! empty($input['title']) ? $input['title'] : $input['url'],
-            'url'           => $input['url'],
-            'description'   => ! empty($input['description']) ? $input['description'] : '',
-            'tags'          => ! empty($input['tags']) ? implode(' ', $input['tags']) : '',
-            'private'       => $private,
-            'created'       => new \DateTime(),
-        ];
-        return $link;
+        $bookmark->setTitle(! empty($input['title']) ? $input['title'] : '');
+        $bookmark->setUrl($url);
+        $bookmark->setDescription(! empty($input['description']) ? $input['description'] : '');
+        $bookmark->setTags(! empty($input['tags']) ? $input['tags'] : []);
+        $bookmark->setPrivate($private);
+
+        return $bookmark;
     }
 
     /**
      * Update link fields using an updated link object.
      *
-     * @param array $oldLink data
-     * @param array $newLink data
+     * @param Bookmark $oldLink data
+     * @param Bookmark $newLink data
      *
-     * @return array $oldLink updated with $newLink values
+     * @return Bookmark $oldLink updated with $newLink values
      */
     public static function updateLink($oldLink, $newLink)
     {
-        foreach (['title', 'url', 'description', 'tags', 'private'] as $field) {
-            $oldLink[$field] = $newLink[$field];
-        }
-        $oldLink['updated'] = new \DateTime();
-
-        if (empty($oldLink['url'])) {
-            $oldLink['url'] = '?' . $oldLink['shorturl'];
-        }
-
-        if (empty($oldLink['title'])) {
-            $oldLink['title'] = $oldLink['url'];
-        }
+        $oldLink->setTitle($newLink->getTitle());
+        $oldLink->setUrl($newLink->getUrl());
+        $oldLink->setDescription($newLink->getDescription());
+        $oldLink->setTags($newLink->getTags());
+        $oldLink->setPrivate($newLink->isPrivate());
 
         return $oldLink;
     }
@@ -143,7 +136,7 @@ class ApiUtils
      * Format a Tag for the REST API.
      *
      * @param string $tag         Tag name
-     * @param int    $occurrences Number of links using this tag
+     * @param int    $occurrences Number of bookmarks using this tag
      *
      * @return array Link data formatted for the REST API.
      */

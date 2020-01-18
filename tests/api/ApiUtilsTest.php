@@ -2,6 +2,7 @@
 
 namespace Shaarli\Api;
 
+use Shaarli\Bookmark\Bookmark;
 use Shaarli\Http\Base64Url;
 
 /**
@@ -212,7 +213,7 @@ class ApiUtilsTest extends \PHPUnit\Framework\TestCase
     public function testFormatLinkComplete()
     {
         $indexUrl = 'https://domain.tld/sub/';
-        $link = [
+        $data = [
             'id' => 12,
             'url' => 'http://lol.lol',
             'shorturl' => 'abc',
@@ -223,6 +224,8 @@ class ApiUtilsTest extends \PHPUnit\Framework\TestCase
             'created' => \DateTime::createFromFormat('Ymd_His', '20170107_160102'),
             'updated' => \DateTime::createFromFormat('Ymd_His', '20170107_160612'),
         ];
+        $bookmark = new Bookmark();
+        $bookmark->fromArray($data);
 
         $expected = [
             'id' => 12,
@@ -236,7 +239,7 @@ class ApiUtilsTest extends \PHPUnit\Framework\TestCase
             'updated' => '2017-01-07T16:06:12+00:00',
         ];
 
-        $this->assertEquals($expected, ApiUtils::formatLink($link, $indexUrl));
+        $this->assertEquals($expected, ApiUtils::formatLink($bookmark, $indexUrl));
     }
 
     /**
@@ -245,7 +248,7 @@ class ApiUtilsTest extends \PHPUnit\Framework\TestCase
     public function testFormatLinkMinimalNote()
     {
         $indexUrl = 'https://domain.tld/sub/';
-        $link = [
+        $data = [
             'id' => 12,
             'url' => '?abc',
             'shorturl' => 'abc',
@@ -255,6 +258,8 @@ class ApiUtilsTest extends \PHPUnit\Framework\TestCase
             'private' => '',
             'created' => \DateTime::createFromFormat('Ymd_His', '20170107_160102'),
         ];
+        $bookmark = new Bookmark();
+        $bookmark->fromArray($data);
 
         $expected = [
             'id' => 12,
@@ -268,7 +273,7 @@ class ApiUtilsTest extends \PHPUnit\Framework\TestCase
             'updated' => '',
         ];
 
-        $this->assertEquals($expected, ApiUtils::formatLink($link, $indexUrl));
+        $this->assertEquals($expected, ApiUtils::formatLink($bookmark, $indexUrl));
     }
 
     /**
@@ -277,7 +282,7 @@ class ApiUtilsTest extends \PHPUnit\Framework\TestCase
     public function testUpdateLink()
     {
         $created = \DateTime::createFromFormat('Ymd_His', '20170107_160102');
-        $old = [
+        $data = [
             'id' => 12,
             'url' => '?abc',
             'shorturl' => 'abc',
@@ -287,8 +292,10 @@ class ApiUtilsTest extends \PHPUnit\Framework\TestCase
             'private' => '',
             'created' => $created,
         ];
+        $old = new Bookmark();
+        $old->fromArray($data);
 
-        $new = [
+        $data = [
             'id' => 13,
             'shorturl' => 'nope',
             'url' => 'http://somewhere.else',
@@ -299,17 +306,18 @@ class ApiUtilsTest extends \PHPUnit\Framework\TestCase
             'created' => 'creation',
             'updated' => 'updation',
         ];
+        $new = new Bookmark();
+        $new->fromArray($data);
 
         $result = ApiUtils::updateLink($old, $new);
-        $this->assertEquals(12, $result['id']);
-        $this->assertEquals('http://somewhere.else', $result['url']);
-        $this->assertEquals('abc', $result['shorturl']);
-        $this->assertEquals('Le Cid', $result['title']);
-        $this->assertEquals('Percé jusques au fond du cœur [...]', $result['description']);
-        $this->assertEquals('corneille rodrigue', $result['tags']);
-        $this->assertEquals(true, $result['private']);
-        $this->assertEquals($created, $result['created']);
-        $this->assertTrue(new \DateTime('5 seconds ago') < $result['updated']);
+        $this->assertEquals(12, $result->getId());
+        $this->assertEquals('http://somewhere.else', $result->getUrl());
+        $this->assertEquals('abc', $result->getShortUrl());
+        $this->assertEquals('Le Cid', $result->getTitle());
+        $this->assertEquals('Percé jusques au fond du cœur [...]', $result->getDescription());
+        $this->assertEquals('corneille rodrigue', $result->getTagsString());
+        $this->assertEquals(true, $result->isPrivate());
+        $this->assertEquals($created, $result->getCreated());
     }
 
     /**
@@ -318,7 +326,7 @@ class ApiUtilsTest extends \PHPUnit\Framework\TestCase
     public function testUpdateLinkMinimal()
     {
         $created = \DateTime::createFromFormat('Ymd_His', '20170107_160102');
-        $old = [
+        $data = [
             'id' => 12,
             'url' => '?abc',
             'shorturl' => 'abc',
@@ -328,24 +336,19 @@ class ApiUtilsTest extends \PHPUnit\Framework\TestCase
             'private' => true,
             'created' => $created,
         ];
+        $old = new Bookmark();
+        $old->fromArray($data);
 
-        $new = [
-            'url' => '',
-            'title' => '',
-            'description' => '',
-            'tags' => '',
-            'private' => false,
-        ];
+        $new = new Bookmark();
 
         $result = ApiUtils::updateLink($old, $new);
-        $this->assertEquals(12, $result['id']);
-        $this->assertEquals('?abc', $result['url']);
-        $this->assertEquals('abc', $result['shorturl']);
-        $this->assertEquals('?abc', $result['title']);
-        $this->assertEquals('', $result['description']);
-        $this->assertEquals('', $result['tags']);
-        $this->assertEquals(false, $result['private']);
-        $this->assertEquals($created, $result['created']);
-        $this->assertTrue(new \DateTime('5 seconds ago') < $result['updated']);
+        $this->assertEquals(12, $result->getId());
+        $this->assertEquals('', $result->getUrl());
+        $this->assertEquals('abc', $result->getShortUrl());
+        $this->assertEquals('', $result->getTitle());
+        $this->assertEquals('', $result->getDescription());
+        $this->assertEquals('', $result->getTagsString());
+        $this->assertEquals(false, $result->isPrivate());
+        $this->assertEquals($created, $result->getCreated());
     }
 }

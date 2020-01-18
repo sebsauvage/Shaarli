@@ -2,7 +2,7 @@
 namespace Shaarli\Plugin\Isso;
 
 use DateTime;
-use Shaarli\Bookmark\LinkDB;
+use Shaarli\Bookmark\Bookmark;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Plugin\PluginManager;
 
@@ -60,7 +60,7 @@ class PluginIssoTest extends \PHPUnit\Framework\TestCase
                 array(
                     'id' => 12,
                     'url' => $str,
-                    'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $date),
+                    'created' => DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, $date),
                 )
             )
         );
@@ -85,7 +85,7 @@ class PluginIssoTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test isso plugin when multiple links are displayed (shouldn't be displayed).
+     * Test isso plugin when multiple bookmarks are displayed (shouldn't be displayed).
      */
     public function testIssoMultipleLinks()
     {
@@ -102,13 +102,13 @@ class PluginIssoTest extends \PHPUnit\Framework\TestCase
                     'id' => 12,
                     'url' => $str,
                     'shorturl' => $short1 = 'abcd',
-                    'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $date1),
+                    'created' => DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, $date1),
                 ),
                 array(
                     'id' => 13,
                     'url' => $str . '2',
                     'shorturl' => $short2 = 'efgh',
-                    'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $date2),
+                    'created' => DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, $date2),
                 ),
             )
         );
@@ -136,7 +136,7 @@ class PluginIssoTest extends \PHPUnit\Framework\TestCase
                     'id' => 12,
                     'url' => $str,
                     'shorturl' => $short1 = 'abcd',
-                    'created' => DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, $date),
+                    'created' => DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, $date),
                 )
             ),
             'search_term' => $str

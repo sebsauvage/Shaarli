@@ -1,30 +1,39 @@
 <?php
 
-use Shaarli\Bookmark\LinkDB;
+use Shaarli\Bookmark\Bookmark;
+use Shaarli\Bookmark\BookmarkArray;
 
 /**
- * Populates a reference datastore to test LinkDB
+ * Populates a reference datastore to test Bookmark
  */
 class ReferenceLinkDB
 {
     public static $NB_LINKS_TOTAL = 11;
 
-    private $_links = array();
+    private $bookmarks = array();
     private $_publicCount = 0;
     private $_privateCount = 0;
 
+    private $isLegacy;
+
     /**
      * Populates the test DB with reference data
+     *
+     * @param bool $isLegacy Use links as array instead of Bookmark object
      */
-    public function __construct()
+    public function __construct($isLegacy = false)
     {
+        $this->isLegacy = $isLegacy;
+        if (! $this->isLegacy) {
+            $this->bookmarks = new BookmarkArray();
+        }
         $this->addLink(
             11,
             'Pined older',
             '?PCRizQ',
             'This is an older pinned link',
             0,
-            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20100309_101010'),
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20100309_101010'),
             '',
             null,
             'PCRizQ',
@@ -37,7 +46,7 @@ class ReferenceLinkDB
             '?0gCTjQ',
             'This is a pinned link',
             0,
-            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121207_152312'),
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20121207_152312'),
             '',
             null,
             '0gCTjQ',
@@ -50,7 +59,7 @@ class ReferenceLinkDB
             '?WDWyig',
             'Stallman has a beard and is part of the Free Software Foundation (or not). Seriously, read this. #hashtag',
             0,
-            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20150310_114651'),
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114651'),
             'sTuff',
             null,
             'WDWyig'
@@ -60,9 +69,9 @@ class ReferenceLinkDB
             42,
             'Note: I have a big ID but an old date',
             '?WDWyig',
-            'Used to test links reordering.',
+            'Used to test bookmarks reordering.',
             0,
-            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20100310_101010'),
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20100310_101010'),
             'ut'
         );
 
@@ -72,7 +81,7 @@ class ReferenceLinkDB
             'http://www.php-fig.org/psr/psr-2/',
             'This guide extends and expands on PSR-1, the basic coding standard.',
             0,
-            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_152312'),
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20121206_152312'),
             ''
         );
 
@@ -82,9 +91,9 @@ class ReferenceLinkDB
             'https://static.fsf.org/nosvn/faif-2.0.pdf',
             'Richard Stallman and the Free Software Revolution. Read this. #hashtag',
             0,
-            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20150310_114633'),
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114633'),
             'free gnu software stallman -exclude stuff hashtag',
-            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20160803_093033')
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20160803_093033')
         );
 
         $this->addLink(
@@ -93,9 +102,9 @@ class ReferenceLinkDB
             'http://mediagoblin.org/',
             'A free software media publishing platform #hashtagOther',
             0,
-            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20130614_184135'),
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20130614_184135'),
             'gnu media web .hidden hashtag',
-            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20130615_184230'),
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20130615_184230'),
             'IuWvgA'
         );
 
@@ -105,7 +114,7 @@ class ReferenceLinkDB
             'https://dvcs.w3.org/hg/markup-validator/summary',
             'Mercurial repository for the W3C Validator #private',
             1,
-            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20141125_084734'),
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20141125_084734'),
             'css html w3c web Mercurial'
         );
 
@@ -115,7 +124,7 @@ class ReferenceLinkDB
             'http://ars.userfriendly.org/cartoons/?id=20121206',
             'Naming conventions... #private',
             0,
-            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_142300'),
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20121206_142300'),
             'dev cartoon web'
         );
 
@@ -125,7 +134,7 @@ class ReferenceLinkDB
             'http://ars.userfriendly.org/cartoons/?id=20010306',
             'Tropical printing',
             0,
-            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_172539'),
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20121206_172539'),
             'samba cartoon web'
         );
 
@@ -135,7 +144,7 @@ class ReferenceLinkDB
             'http://geek-and-poke.com/',
             '',
             1,
-            DateTime::createFromFormat(LinkDB::LINK_DATE_FORMAT, '20121206_182539'),
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20121206_182539'),
             'dev cartoon tag1  tag2   tag3  tag4   '
         );
     }
@@ -164,10 +173,15 @@ class ReferenceLinkDB
             'tags' => $tags,
             'created' => $date,
             'updated' => $updated,
-            'shorturl' => $shorturl ? $shorturl : smallHash($date->format(LinkDB::LINK_DATE_FORMAT) . $id),
+            'shorturl' => $shorturl ? $shorturl : smallHash($date->format(Bookmark::LINK_DATE_FORMAT) . $id),
             'sticky' => $pinned
         );
-        $this->_links[$id] = $link;
+        if (! $this->isLegacy) {
+            $bookmark = new Bookmark();
+            $this->bookmarks[$id] = $bookmark->fromArray($link);
+        } else {
+            $this->bookmarks[$id] = $link;
+        }
 
         if ($private) {
             $this->_privateCount++;
@@ -184,37 +198,38 @@ class ReferenceLinkDB
         $this->reorder();
         file_put_contents(
             $filename,
-            '<?php /* '.base64_encode(gzdeflate(serialize($this->_links))).' */ ?>'
+            '<?php /* '.base64_encode(gzdeflate(serialize($this->bookmarks))).' */ ?>'
         );
     }
 
     /**
      * Reorder links by creation date (newest first).
      *
-     * Also update the urls and ids mapping arrays.
-     *
      * @param string $order ASC|DESC
      */
     public function reorder($order = 'DESC')
     {
-        // backward compatibility: ignore reorder if the the `created` field doesn't exist
-        if (! isset(array_values($this->_links)[0]['created'])) {
-            return;
-        }
-
-        $order = $order === 'ASC' ? -1 : 1;
-        // Reorder array by dates.
-        usort($this->_links, function ($a, $b) use ($order) {
-            if (isset($a['sticky']) && isset($b['sticky']) && $a['sticky'] !== $b['sticky']) {
-                return $a['sticky'] ? -1 : 1;
+        if (! $this->isLegacy) {
+            $this->bookmarks->reorder($order);
+        } else {
+            $order = $order === 'ASC' ? -1 : 1;
+            // backward compatibility: ignore reorder if the the `created` field doesn't exist
+            if (! isset(array_values($this->bookmarks)[0]['created'])) {
+                return;
             }
 
-            return $a['created'] < $b['created'] ? 1 * $order : -1 * $order;
-        });
+            usort($this->bookmarks, function ($a, $b) use ($order) {
+                if (isset($a['sticky']) && isset($b['sticky']) && $a['sticky'] !== $b['sticky']) {
+                    return $a['sticky'] ? -1 : 1;
+                }
+
+                return $a['created'] < $b['created'] ? 1 * $order : -1 * $order;
+            });
+        }
     }
 
     /**
-     * Returns the number of links in the reference data
+     * Returns the number of bookmarks in the reference data
      */
     public function countLinks()
     {
@@ -222,7 +237,7 @@ class ReferenceLinkDB
     }
 
     /**
-     * Returns the number of public links in the reference data
+     * Returns the number of public bookmarks in the reference data
      */
     public function countPublicLinks()
     {
@@ -230,7 +245,7 @@ class ReferenceLinkDB
     }
 
     /**
-     * Returns the number of private links in the reference data
+     * Returns the number of private bookmarks in the reference data
      */
     public function countPrivateLinks()
     {
@@ -238,14 +253,20 @@ class ReferenceLinkDB
     }
 
     /**
-     * Returns the number of links without tag
+     * Returns the number of bookmarks without tag
      */
     public function countUntaggedLinks()
     {
         $cpt = 0;
-        foreach ($this->_links as $link) {
-            if (empty($link['tags'])) {
-                ++$cpt;
+        foreach ($this->bookmarks as $link) {
+            if (! $this->isLegacy) {
+                if (empty($link->getTags())) {
+                    ++$cpt;
+                }
+            } else {
+                if (empty($link['tags'])) {
+                    ++$cpt;
+                }
             }
         }
         return $cpt;
@@ -254,16 +275,16 @@ class ReferenceLinkDB
     public function getLinks()
     {
         $this->reorder();
-        return $this->_links;
+        return $this->bookmarks;
     }
 
     /**
      * Setter to override link creation.
      *
-     * @param array $links List of links.
+     * @param array $links List of bookmarks.
      */
     public function setLinks($links)
     {
-        $this->_links = $links;
+        $this->bookmarks = $links;
     }
 }

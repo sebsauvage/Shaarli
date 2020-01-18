@@ -33,6 +33,19 @@
       </tr>
 
       <tr>
+        <td><b>Description formatter:</b></td>
+        <td>
+          <select name="formatter" id="formatter">
+            {loop="$formatter_available"}
+              <option value="{$value}" {if="$value===$formatter"}selected{/if}>
+                {$value|ucfirst}
+              </option>
+            {/loop}
+          </select>
+        </td>
+      </tr>
+
+      <tr>
         <td><b>Timezone:</b></td>
         <td>
           <select id="continent" name="continent">

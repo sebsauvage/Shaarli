@@ -5,6 +5,7 @@ namespace Shaarli\Api\Controllers;
 use Shaarli\Api\ApiUtils;
 use Shaarli\Api\Exceptions\ApiBadParametersException;
 use Shaarli\Api\Exceptions\ApiTagNotFoundException;
+use Shaarli\Bookmark\BookmarkFilter;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -18,7 +19,7 @@ use Slim\Http\Response;
 class Tags extends ApiController
 {
     /**
-     * @var int Number of links returned if no limit is provided.
+     * @var int Number of bookmarks returned if no limit is provided.
      */
     public static $DEFAULT_LIMIT = 'all';
 
@@ -35,7 +36,7 @@ class Tags extends ApiController
     public function getTags($request, $response)
     {
         $visibility = $request->getParam('visibility');
-        $tags = $this->linkDb->linksCountPerTag([], $visibility);
+        $tags = $this->bookmarkService->bookmarksCountPerTag([], $visibility);
 
         // Return tags from the {offset}th tag, starting from 0.
         $offset = $request->getParam('offset');
@@ -47,7 +48,7 @@ class Tags extends ApiController
             return $response->withJson([], 200, $this->jsonStyle);
         }
 
-        // limit parameter is either a number of links or 'all' for everything.
+        // limit parameter is either a number of bookmarks or 'all' for everything.
         $limit = $request->getParam('limit');
         if (empty($limit)) {
             $limit = self::$DEFAULT_LIMIT;
@@ -87,7 +88,7 @@ class Tags extends ApiController
      */
     public function getTag($request, $response, $args)
     {
-        $tags = $this->linkDb->linksCountPerTag();
+        $tags = $this->bookmarkService->bookmarksCountPerTag();
         if (!isset($tags[$args['tagName']])) {
             throw new ApiTagNotFoundException();
         }
@@ -111,7 +112,7 @@ class Tags extends ApiController
      */
     public function putTag($request, $response, $args)
     {
-        $tags = $this->linkDb->linksCountPerTag();
+        $tags = $this->bookmarkService->bookmarksCountPerTag();
         if (! isset($tags[$args['tagName']])) {
             throw new ApiTagNotFoundException();
         }
@@ -121,13 +122,19 @@ class Tags extends ApiController
             throw new ApiBadParametersException('New tag name is required in the request body');
         }
 
-        $updated = $this->linkDb->renameTag($args['tagName'], $data['name']);
-        $this->linkDb->save($this->conf->get('resource.page_cache'));
-        foreach ($updated as $link) {
-            $this->history->updateLink($link);
+        $bookmarks = $this->bookmarkService->search(
+            ['searchtags' => $args['tagName']],
+            BookmarkFilter::$ALL,
+            true
+        );
+        foreach ($bookmarks as $bookmark) {
+            $bookmark->renameTag($args['tagName'], $data['name']);
+            $this->bookmarkService->set($bookmark, false);
+            $this->history->updateLink($bookmark);
         }
+        $this->bookmarkService->save();
 
-        $tags = $this->linkDb->linksCountPerTag();
+        $tags = $this->bookmarkService->bookmarksCountPerTag();
         $out = ApiUtils::formatTag($data['name'], $tags[$data['name']]);
         return $response->withJson($out, 200, $this->jsonStyle);
     }
@@ -145,15 +152,22 @@ class Tags extends ApiController
      */
     public function deleteTag($request, $response, $args)
     {
-        $tags = $this->linkDb->linksCountPerTag();
+        $tags = $this->bookmarkService->bookmarksCountPerTag();
         if (! isset($tags[$args['tagName']])) {
             throw new ApiTagNotFoundException();
         }
-        $updated = $this->linkDb->renameTag($args['tagName'], null);
-        $this->linkDb->save($this->conf->get('resource.page_cache'));
-        foreach ($updated as $link) {
-            $this->history->updateLink($link);
+
+        $bookmarks = $this->bookmarkService->search(
+            ['searchtags' => $args['tagName']],
+            BookmarkFilter::$ALL,
+            true
+        );
+        foreach ($bookmarks as $bookmark) {
+            $bookmark->deleteTag($args['tagName']);
+            $this->bookmarkService->set($bookmark, false);
+            $this->history->updateLink($bookmark);
         }
+        $this->bookmarkService->save();
 
         return $response->withStatus(204);
     }

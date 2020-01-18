@@ -24,7 +24,7 @@ class ConfigJsonTest extends \PHPUnit\Framework\TestCase
         $conf = $this->configIO->read('tests/utils/config/configJson.json.php');
         $this->assertEquals('root', $conf['credentials']['login']);
         $this->assertEquals('lala', $conf['redirector']['url']);
-        $this->assertEquals('tests/utils/config/datastore.php', $conf['resource']['datastore']);
+        $this->assertEquals('sandbox/datastore.php', $conf['resource']['datastore']);
         $this->assertEquals('1', $conf['plugins']['WALLABAG_VERSION']);
     }
 

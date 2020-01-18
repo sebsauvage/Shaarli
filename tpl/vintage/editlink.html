@@ -26,7 +26,16 @@
             <input type="text" name="lf_tags" id="lf_tags" value="{$link.tags}" class="lf_input"
                 data-list="{loop="$tags"}{$key}, {/loop}" data-multiple autocomplete="off" ><br>
 
-            {loop="$edit_link_plugin"}
+          {if="$formatter==='markdown'"}
+            <div class="md_help">
+              {'Description will be rendered with'|t}
+              <a href="http://daringfireball.net/projects/markdown/syntax" title="{'Markdown syntax documentation'|t}">
+                {'Markdown syntax'|t}
+              </a>.
+            </div>
+          {/if}
+
+          {loop="$edit_link_plugin"}
                 {$value}
             {/loop}
 
@@ -38,7 +47,6 @@
             &nbsp;<label for="lf_private"><i>Private</i></label><br><br>
             {/if}
             <input type="submit" value="Save" name="save_edit" class="bigbutton">
-            <input type="submit" value="Cancel" name="cancel_edit" class="bigbutton">
             {if="!$link_is_new && isset($link.id)"}
               <a href="?delete_link&amp;lf_linkdate={$link.id}&amp;token={$token}"
                  name="delete_link" class="bigbutton"

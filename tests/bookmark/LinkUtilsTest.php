@@ -389,15 +389,6 @@ class LinkUtilsTest extends TestCase
     }
 
     /**
-     * Test count_private.
-     */
-    public function testCountPrivateLinks()
-    {
-        $refDB = new ReferenceLinkDB();
-        $this->assertEquals($refDB->countPrivateLinks(), count_private($refDB->getLinks()));
-    }
-
-    /**
      * Test text2clickable.
      */
     public function testText2clickable()
