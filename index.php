@@ -1681,7 +1681,7 @@ function buildLinkList($PAGE, $linkDb, $conf, $pluginManager, $loginManager)
         }
     } else {
         // Filter bookmarks according search parameters.
-        $visibility = ! empty($_SESSION['visibility']) ? $_SESSION['visibility'] : '';
+        $visibility = ! empty($_SESSION['visibility']) ? $_SESSION['visibility'] : null;
         $request = [
             'searchtags' => $searchtags,
             'searchterm' => $searchterm,
