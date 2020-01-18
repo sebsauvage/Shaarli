@@ -16,14 +16,19 @@ class FormatterFactory
     /** @var ConfigManager instance */
     protected $conf;
 
+    /** @var bool */
+    protected $isLoggedIn;
+
     /**
      * FormatterFactory constructor.
      *
      * @param ConfigManager $conf
+     * @param bool          $isLoggedIn
      */
-    public function __construct(ConfigManager $conf)
+    public function __construct(ConfigManager $conf, bool $isLoggedIn)
     {
         $this->conf = $conf;
+        $this->isLoggedIn = $isLoggedIn;
     }
 
     /**
@@ -33,7 +38,7 @@ class FormatterFactory
      *
      * @return BookmarkFormatter instance.
      */
-    public function getFormatter($type = null)
+    public function getFormatter(string $type = null)
     {
         $type = $type ? $type : $this->conf->get('formatter', 'default');
         $className = '\\Shaarli\\Formatter\\Bookmark'. ucfirst($type) .'Formatter';
@@ -41,6 +46,6 @@ class FormatterFactory
             $className = '\\Shaarli\\Formatter\\BookmarkDefaultFormatter';
         }
 
-        return new $className($this->conf);
+        return new $className($this->conf, $this->isLoggedIn);
     }
 }

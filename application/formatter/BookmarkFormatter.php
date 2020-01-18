@@ -20,6 +20,9 @@ abstract class BookmarkFormatter
      */
     protected $conf;
 
+    /** @var bool */
+    protected $isLoggedIn;
+
     /**
      * @var array Additional parameters than can be used for specific formatting
      *            e.g. index_url for Feed formatting
@@ -30,9 +33,10 @@ abstract class BookmarkFormatter
      * LinkDefaultFormatter constructor.
      * @param ConfigManager $conf
      */
-    public function __construct(ConfigManager $conf)
+    public function __construct(ConfigManager $conf, bool $isLoggedIn)
     {
         $this->conf = $conf;
+        $this->isLoggedIn = $isLoggedIn;
     }
 
     /**
@@ -172,7 +176,7 @@ abstract class BookmarkFormatter
      */
     protected function formatTagList($bookmark)
     {
-        return $bookmark->getTags();
+        return $this->filterTagList($bookmark->getTags());
     }
 
     /**
@@ -184,7 +188,7 @@ abstract class BookmarkFormatter
      */
     protected function formatTagString($bookmark)
     {
-        return implode(' ', $bookmark->getTags());
+        return implode(' ', $this->formatTagList($bookmark));
     }
 
     /**
@@ -252,5 +256,30 @@ abstract class BookmarkFormatter
             return $bookmark->getUpdated()->getTimestamp();
         }
         return 0;
+    }
+
+    /**
+     * Format tag list, e.g. remove private tags if the user is not logged in.
+     *
+     * @param array $tags
+     *
+     * @return array
+     */
+    protected function filterTagList(array $tags): array
+    {
+        if ($this->isLoggedIn === true) {
+            return $tags;
+        }
+
+        $out = [];
+        foreach ($tags as $tag) {
+            if (strpos($tag, '.') === 0) {
+                continue;
+            }
+
+            $out[] = $tag;
+        }
+
+        return $out;
     }
 }

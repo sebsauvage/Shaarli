@@ -51,7 +51,7 @@ class FeedBuilderTest extends \PHPUnit\Framework\TestCase
         $refLinkDB = new \ReferenceLinkDB();
         $refLinkDB->write(self::$testDatastore);
         $history = new History('sandbox/history.php');
-        $factory = new FormatterFactory($conf);
+        $factory = new FormatterFactory($conf, true);
         self::$formatter = $factory->getFormatter();
         self::$bookmarkService = new BookmarkFileService($conf, $history, true);
 

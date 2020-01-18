@@ -46,7 +46,7 @@ class BookmarkExportTest extends \PHPUnit\Framework\TestCase
         self::$refDb->write(self::$testDatastore);
         $history = new History('sandbox/history.php');
         self::$bookmarkService = new BookmarkFileService($conf, $history, true);
-        $factory = new FormatterFactory($conf);
+        $factory = new FormatterFactory($conf, true);
         self::$formatter = $factory->getFormatter('raw');
     }
 

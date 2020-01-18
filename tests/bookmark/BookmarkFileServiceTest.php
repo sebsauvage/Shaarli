@@ -12,6 +12,7 @@ use ReflectionClass;
 use Shaarli;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Config\ConfigManager;
+use Shaarli\Formatter\BookmarkMarkdownFormatter;
 use Shaarli\History;
 
 /**
@@ -1021,6 +1022,46 @@ class BookmarkFileServiceTest extends TestCase
             'tag4' => 1,
         ];
         $tags = $this->privateLinkDB->bookmarksCountPerTag(['dev'], 'private');
+
+        $this->assertEquals($expected, $tags, var_export($tags, true));
+    }
+
+    /**
+     * Test linksCountPerTag public tags with filter.
+     * Equal occurrences should be sorted alphabetically.
+     */
+    public function testCountTagsNoMarkdown()
+    {
+        $expected = [
+            'cartoon' => 3,
+            'dev' => 2,
+            'tag1' => 1,
+            'tag2' => 1,
+            'tag3' => 1,
+            'tag4' => 1,
+            'web' => 4,
+            'gnu' => 2,
+            'hashtag' => 2,
+            'sTuff' => 2,
+            '-exclude' => 1,
+            '.hidden' => 1,
+            'Mercurial' => 1,
+            'css' => 1,
+            'free' => 1,
+            'html' => 1,
+            'media' => 1,
+            'newTagToCount' => 1,
+            'samba' => 1,
+            'software' => 1,
+            'stallman' => 1,
+            'ut' => 1,
+            'w3c' => 1,
+        ];
+        $bookmark = new Bookmark();
+        $bookmark->setTags(['newTagToCount', BookmarkMarkdownFormatter::NO_MD_TAG]);
+        $this->privateLinkDB->add($bookmark);
+
+        $tags = $this->privateLinkDB->bookmarksCountPerTag();
 
         $this->assertEquals($expected, $tags, var_export($tags, true));
     }

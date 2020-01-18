@@ -70,6 +70,7 @@ use Shaarli\Bookmark\BookmarkFileService;
 use \Shaarli\Config\ConfigManager;
 use \Shaarli\Feed\CachedPage;
 use \Shaarli\Feed\FeedBuilder;
+use Shaarli\Formatter\BookmarkMarkdownFormatter;
 use Shaarli\Formatter\FormatterFactory;
 use \Shaarli\History;
 use \Shaarli\Languages;
@@ -351,7 +352,7 @@ function showDailyRSS($bookmarkService, $conf, $loginManager)
     echo '<language>en-en</language>';
     echo '<copyright>'. $pageaddr .'</copyright>'. PHP_EOL;
 
-    $factory = new FormatterFactory($conf);
+    $factory = new FormatterFactory($conf, $loginManager->isLoggedIn());
     $formatter = $factory->getFormatter();
     $formatter->addContextData('index_url', index_url($_SERVER));
     // For each day.
@@ -441,7 +442,7 @@ function showDaily($pageBuilder, $bookmarkService, $conf, $pluginManager, $login
         $linksToDisplay = [];
     }
 
-    $factory = new FormatterFactory($conf);
+    $factory = new FormatterFactory($conf, $loginManager->isLoggedIn());
     $formatter = $factory->getFormatter();
     // We pre-format some fields for proper output.
     foreach ($linksToDisplay as $key => $bookmark) {
@@ -630,7 +631,7 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
 
         // Get only bookmarks which have a thumbnail.
         // Note: we do not retrieve thumbnails here, the request is too heavy.
-        $factory = new FormatterFactory($conf);
+        $factory = new FormatterFactory($conf, $loginManager->isLoggedIn());
         $formatter = $factory->getFormatter();
         foreach ($links as $key => $link) {
             if ($link->getThumbnail() !== false) {
@@ -753,7 +754,7 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
             exit;
         }
 
-        $factory = new FormatterFactory($conf);
+        $factory = new FormatterFactory($conf, $loginManager->isLoggedIn());
         // Generate data.
         $feedGenerator = new FeedBuilder(
             $bookmarkService,
@@ -1183,7 +1184,7 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
         $bookmarkService->addOrSet($bookmark, false);
 
         // To preserve backward compatibility with 3rd parties, plugins still use arrays
-        $factory = new FormatterFactory($conf);
+        $factory = new FormatterFactory($conf, $loginManager->isLoggedIn());
         $formatter = $factory->getFormatter('raw');
         $data = $formatter->format($bookmark);
         $pluginManager->executeHooks('save_link', $data);
@@ -1230,7 +1231,7 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
         if (!count($ids)) {
             die('no id provided');
         }
-        $factory = new FormatterFactory($conf);
+        $factory = new FormatterFactory($conf, $loginManager->isLoggedIn());
         $formatter = $factory->getFormatter('raw');
         foreach ($ids as $id) {
             $id = (int) escape($id);
@@ -1286,7 +1287,7 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
         } else {
             $private = $_GET['newVisibility'] === 'private';
         }
-        $factory = new FormatterFactory($conf);
+        $factory = new FormatterFactory($conf, $loginManager->isLoggedIn());
         $formatter = $factory->getFormatter('raw');
         foreach ($ids as $id) {
             $id = (int) escape($id);
@@ -1324,14 +1325,18 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
             exit;
         }
 
-        $factory = new FormatterFactory($conf);
+        $factory = new FormatterFactory($conf, $loginManager->isLoggedIn());
         $formatter = $factory->getFormatter('raw');
         $formattedLink = $formatter->format($link);
+        $tags = $bookmarkService->bookmarksCountPerTag();
+        if ($conf->get('formatter') === 'markdown') {
+            $tags[BookmarkMarkdownFormatter::NO_MD_TAG] = 1;
+        }
         $data = array(
             'link' => $formattedLink,
             'link_is_new' => false,
             'http_referer' => (isset($_SERVER['HTTP_REFERER']) ? escape($_SERVER['HTTP_REFERER']) : ''),
-            'tags' => $bookmarkService->bookmarksCountPerTag(),
+            'tags' => $tags,
         );
         $pluginManager->executeHooks('render_editlink', $data);
 
@@ -1391,17 +1396,21 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
                 'private' => $private,
             ];
         } else {
-            $factory = new FormatterFactory($conf);
-        $formatter = $factory->getFormatter('raw');
+            $factory = new FormatterFactory($conf, $loginManager->isLoggedIn());
+            $formatter = $factory->getFormatter('raw');
             $link = $formatter->format($bookmark);
         }
 
+        $tags = $bookmarkService->bookmarksCountPerTag();
+        if ($conf->get('formatter') === 'markdown') {
+            $tags[BookmarkMarkdownFormatter::NO_MD_TAG] = 1;
+        }
         $data = [
             'link' => $link,
             'link_is_new' => $link_is_new,
             'http_referer' => (isset($_SERVER['HTTP_REFERER']) ? escape($_SERVER['HTTP_REFERER']) : ''),
             'source' => (isset($_GET['source']) ? $_GET['source'] : ''),
-            'tags' => $bookmarkService->bookmarksCountPerTag(),
+            'tags' => $tags,
             'default_private_links' => $conf->get('privacy.default_private_links', false),
         ];
         $pluginManager->executeHooks('render_editlink', $data);
@@ -1451,7 +1460,7 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
         }
 
         try {
-            $factory = new FormatterFactory($conf);
+            $factory = new FormatterFactory($conf, $loginManager->isLoggedIn());
             $formatter = $factory->getFormatter('raw');
             $PAGE->assign(
                 'links',
@@ -1633,7 +1642,7 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
         $bookmark->setThumbnail($thumbnailer->get($bookmark->getUrl()));
         $bookmarkService->set($bookmark);
 
-        $factory = new FormatterFactory($conf);
+        $factory = new FormatterFactory($conf, $loginManager->isLoggedIn());
         echo json_encode($factory->getFormatter('raw')->format($bookmark));
         exit;
     }
@@ -1655,7 +1664,7 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
  */
 function buildLinkList($PAGE, $linkDb, $conf, $pluginManager, $loginManager)
 {
-    $factory = new FormatterFactory($conf);
+    $factory = new FormatterFactory($conf, $loginManager->isLoggedIn());
     $formatter = $factory->getFormatter();
 
     // Used in templates
