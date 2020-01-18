@@ -29,7 +29,7 @@ class BookmarkMarkdownFormatterTest extends TestCase
     {
         copy('tests/utils/config/configJson.json.php', self::$testConf .'.json.php');
         $this->conf = new ConfigManager(self::$testConf);
-        $this->formatter = new BookmarkMarkdownFormatter($this->conf);
+        $this->formatter = new BookmarkMarkdownFormatter($this->conf, true);
     }
 
     /**

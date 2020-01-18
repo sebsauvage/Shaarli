@@ -34,7 +34,7 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
      */
     protected function formatTagList($bookmark)
     {
-        return escape($bookmark->getTags());
+        return escape(parent::formatTagList($bookmark));
     }
 
     /**

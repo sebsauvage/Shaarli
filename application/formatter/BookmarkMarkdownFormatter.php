@@ -36,10 +36,12 @@ class BookmarkMarkdownFormatter extends BookmarkDefaultFormatter
      * LinkMarkdownFormatter constructor.
      *
      * @param ConfigManager $conf instance
+     * @param bool          $isLoggedIn
      */
-    public function __construct(ConfigManager $conf)
+    public function __construct(ConfigManager $conf, bool $isLoggedIn)
     {
-        parent::__construct($conf);
+        parent::__construct($conf, $isLoggedIn);
+
         $this->parsedown = new \Parsedown();
         $this->escape = $conf->get('security.markdown_escape', true);
         $this->allowedProtocols = $conf->get('security.allowed_protocols', []);
@@ -79,7 +81,7 @@ class BookmarkMarkdownFormatter extends BookmarkDefaultFormatter
     protected function formatTagList($bookmark)
     {
         $out = parent::formatTagList($bookmark);
-        if (($pos = array_search(self::NO_MD_TAG, $out)) !== false) {
+        if ($this->isLoggedIn === false && ($pos = array_search(self::NO_MD_TAG, $out)) !== false) {
             unset($out[$pos]);
             return array_values($out);
         }

@@ -29,7 +29,7 @@ class BookmarkDefaultFormatterTest extends TestCase
     {
         copy('tests/utils/config/configJson.json.php', self::$testConf .'.json.php');
         $this->conf = new ConfigManager(self::$testConf);
-        $this->formatter = new BookmarkDefaultFormatter($this->conf);
+        $this->formatter = new BookmarkDefaultFormatter($this->conf, true);
     }
 
     /**
@@ -152,5 +152,26 @@ class BookmarkDefaultFormatterTest extends TestCase
             '#hashtag</a> more text',
             $link['description']
         );
+    }
+
+    /**
+     * Make sure that private tags are properly filtered out when the user is logged out.
+     */
+    public function testFormatTagListRemovePrivate(): void
+    {
+        $this->formatter = new BookmarkDefaultFormatter($this->conf, false);
+
+        $bookmark = new Bookmark();
+        $bookmark->setId($id = 11);
+        $bookmark->setTags($tags = ['bookmark', '.private', 'othertag']);
+
+        $link = $this->formatter->format($bookmark);
+
+        unset($tags[1]);
+        $tags = array_values($tags);
+
+        $this->assertSame(11, $link['id']);
+        $this->assertSame($tags, $link['taglist']);
+        $this->assertSame(implode(' ', $tags), $link['tags']);
     }
 }

@@ -8,6 +8,7 @@ use Exception;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Bookmark\Exception\EmptyDataStoreException;
 use Shaarli\Config\ConfigManager;
+use Shaarli\Formatter\BookmarkMarkdownFormatter;
 use Shaarli\History;
 use Shaarli\Legacy\LegacyLinkDB;
 use Shaarli\Legacy\LegacyUpdater;
@@ -130,7 +131,7 @@ class BookmarkFileService implements BookmarkServiceInterface
         }
 
         if ($visibility === null) {
-            $visibility = $this->isLoggedIn ? 'all' : 'public';
+            $visibility = $this->isLoggedIn ? BookmarkFilter::$ALL : BookmarkFilter::$PUBLIC;
         }
 
         $bookmark = $this->bookmarks[$id];
@@ -287,9 +288,13 @@ class BookmarkFileService implements BookmarkServiceInterface
         $caseMapping = [];
         foreach ($bookmarks as $bookmark) {
             foreach ($bookmark->getTags() as $tag) {
-                if (empty($tag) || (! $this->isLoggedIn && startsWith($tag, '.'))) {
+                if (empty($tag)
+                    || (! $this->isLoggedIn && startsWith($tag, '.'))
+                    || $tag === BookmarkMarkdownFormatter::NO_MD_TAG
+                ) {
                     continue;
                 }
+
                 // The first case found will be displayed.
                 if (!isset($caseMapping[strtolower($tag)])) {
                     $caseMapping[strtolower($tag)] = $tag;
