@@ -18,9 +18,9 @@ $ composer install
 $ composer update
 ```
 
-#### Install and enable Xdebug to generate PHPUnit coverage reports
+#### Install Xdebug
 
-See http://xdebug.org/docs/install
+Xdebug must be installed and enable for PHPUnit to generate coverage reports. See http://xdebug.org/docs/install.
 
 ```bash
 # for Debian-based distributions
@@ -31,6 +31,7 @@ $ pacman -S xdebug
 ```
 
 Then add the following line to `/etc/php/php.ini`:
+
 ```ini
 zend_extension=xdebug.so
 ```
@@ -39,12 +40,7 @@ zend_extension=xdebug.so
 
 Run `make test` and ensure tests return `OK`. If tests return failures, refer to PHPUnit messages and fix your code/tests accordingly.
 
-
-#### Test results and coverage
-
-By default, PHPUnit will run all suitable tests found under the `tests` directory.
-
-Each test has 3 possible outcomes:
+By default, PHPUnit will run all suitable tests found under the `tests` directory. Each test has 3 possible outcomes:
 
 - `.` - success
 - `F` - failure: the test was run but its results are invalid
