@@ -22,12 +22,11 @@ $ composer update
 
 See http://xdebug.org/docs/install
 
-For Debian-based distros:
 ```bash
+# for Debian-based distributions
 $ aptitude install php5-xdebug
-```
-For ArchLinux:
-```bash
+
+# for ArchLinux:
 $ pacman -S xdebug
 ```
 
@@ -38,74 +37,8 @@ zend_extension=xdebug.so
 
 #### Run unit tests
 
-Successful test suite:
-```bash
-$ make test
+Run `make test` and ensure tests return `OK`. If tests return failures, refer to PHPUnit messages and fix your code/tests accordingly.
 
--------
-PHPUNIT
--------
-PHPUnit 4.6.9 by Sebastian Bergmann and contributors.
-
-Configuration read from /home/virtualtam/public_html/shaarli/phpunit.xml
-
-....................................
-
-Time: 759 ms, Memory: 8.25Mb
-
-OK (36 tests, 65 assertions)
-```
-
-Test suite with failures and errors:
-```bash
-$ make test
--------
-PHPUNIT
--------
-PHPUnit 4.6.9 by Sebastian Bergmann and contributors.
-
-Configuration read from /home/virtualtam/public_html/shaarli/phpunit.xml
-
-E..FF...............................
-
-Time: 802 ms, Memory: 8.25Mb
-
-There was 1 error:
-
-1) LinkDBTest::testConstructLoggedIn
-Missing argument 2 for LinkDB::__construct(), called in /home/virtualtam/public_html/shaarli/tests/Link\
-DBTest.php on line 79 and defined
-
-/home/virtualtam/public_html/shaarli/application/LinkDB.php:58
-/home/virtualtam/public_html/shaarli/tests/LinkDBTest.php:79
-
---
-
-There were 2 failures:
-
-1) LinkDBTest::testCheckDBNew
-Failed asserting that two strings are equal.
---- Expected
-+++ Actual
-@@ @@
--'e3edea8ea7bb50be4bcb404df53fbb4546a7156e'
-+'85eab0c610d4f68025f6ed6e6b6b5fabd4b55834'
-
-/home/virtualtam/public_html/shaarli/tests/LinkDBTest.php:121
-
-2) LinkDBTest::testCheckDBLoad
-Failed asserting that two strings are equal.
---- Expected
-+++ Actual
-@@ @@
--'e3edea8ea7bb50be4bcb404df53fbb4546a7156e'
-+'85eab0c610d4f68025f6ed6e6b6b5fabd4b55834'
-
-/home/virtualtam/public_html/shaarli/tests/LinkDBTest.php:133
-
-FAILURES!
-Tests: 36, Assertions: 63, Errors: 1, Failures: 2.
-```
 
 #### Test results and coverage
 
