@@ -24,7 +24,7 @@ Xdebug must be installed and enable for PHPUnit to generate coverage reports. Se
 
 ```bash
 # for Debian-based distributions
-$ aptitude install php5-xdebug
+$ aptitude install php-xdebug
 
 # for ArchLinux:
 $ pacman -S xdebug
