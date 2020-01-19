@@ -51,6 +51,5 @@ pages:
     - Translations: Translations.md
     - Theming: Theming.md
     - Unit tests: Unit-tests.md
-    - Unit tests inside Docker: Unit-tests-Docker.md
 - FAQ: FAQ.md
 - Troubleshooting: Troubleshooting.md
