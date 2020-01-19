@@ -6,24 +6,15 @@ The framework used is [PHPUnit](https://phpunit.de/); it can be installed with [
 
 You can either use:
 
-- a system-wide version, e.g. installed through your distro's package manager
-- a local version, downloadable [here](https://getcomposer.org/download/).
+- a system-wide version, e.g. installed through your distro's package manager (eg. `sudo apt install composer`)
+- a local version, downloadable [here](https://getcomposer.org/download/). To update a local composer installation, run `php composer.phar self-update`
 
-```bash
-# system-wide version
-$ composer install
-$ composer update
-
-# local version
-$ php composer.phar self-update
-$ php composer.phar install
-$ php composer.phar update
-```
 
 #### Install Shaarli dev dependencies
 
 ```bash
 $ cd /path/to/shaarli
+$ composer install
 $ composer update
 ```
 
