@@ -203,7 +203,7 @@ class UtilsTest extends PHPUnit\Framework\TestCase
     public function testGenerateLocationLoop()
     {
         $ref = 'http://localhost/?test';
-        $this->assertEquals('?', generateLocation($ref, 'localhost', array('test')));
+        $this->assertEquals('./?', generateLocation($ref, 'localhost', array('test')));
     }
 
     /**
@@ -212,7 +212,7 @@ class UtilsTest extends PHPUnit\Framework\TestCase
     public function testGenerateLocationOut()
     {
         $ref = 'http://somewebsite.com/?test';
-        $this->assertEquals('?', generateLocation($ref, 'localhost'));
+        $this->assertEquals('./?', generateLocation($ref, 'localhost'));
     }
 
 

@@ -252,7 +252,7 @@ if (isset($_POST['login'])) {
 
         // Optional redirect after login:
         if (isset($_GET['post'])) {
-            $uri = '?post='. urlencode($_GET['post']);
+            $uri = './?post='. urlencode($_GET['post']);
             foreach (array('description', 'source', 'title', 'tags') as $param) {
                 if (!empty($_GET[$param])) {
                     $uri .= '&'.$param.'='.urlencode($_GET[$param]);
@@ -263,22 +263,22 @@ if (isset($_POST['login'])) {
         }
 
         if (isset($_GET['edit_link'])) {
-            header('Location: ?edit_link='. escape($_GET['edit_link']));
+            header('Location: ./?edit_link='. escape($_GET['edit_link']));
             exit;
         }
 
         if (isset($_POST['returnurl'])) {
             // Prevent loops over login screen.
-            if (strpos($_POST['returnurl'], 'do=login') === false) {
+            if (strpos($_POST['returnurl'], '/login') === false) {
                 header('Location: '. generateLocation($_POST['returnurl'], $_SERVER['HTTP_HOST']));
                 exit;
             }
         }
-        header('Location: ?');
+        header('Location: ./?');
         exit;
     } else {
         $loginManager->handleFailedLogin($_SERVER);
-        $redir = '&username='. urlencode($_POST['login']);
+        $redir = '?username='. urlencode($_POST['login']);
         if (isset($_GET['post'])) {
             $redir .= '&post=' . urlencode($_GET['post']);
             foreach (array('description', 'source', 'title', 'tags') as $param) {
@@ -288,7 +288,7 @@ if (isset($_POST['login'])) {
             }
         }
         // Redirect to login screen.
-        echo '<script>alert("'. t("Wrong login/password.") .'");document.location=\'?do=login'.$redir.'\';</script>';
+        echo '<script>alert("'. t("Wrong login/password.") .'");document.location=\'./login'.$redir.'\';</script>';
         exit;
     }
 }
@@ -923,7 +923,7 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
         // Show login screen, then redirect to ?post=...
         if (isset($_GET['post'])) {
             header( // Redirect to login page, then back to post link.
-                'Location: ?do=login&post='.urlencode($_GET['post']).
+                'Location: /login?post='.urlencode($_GET['post']).
                 (!empty($_GET['title'])?'&title='.urlencode($_GET['title']):'').
                 (!empty($_GET['description'])?'&description='.urlencode($_GET['description']):'').
                 (!empty($_GET['tags'])?'&tags='.urlencode($_GET['tags']):'').
@@ -934,7 +934,7 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
 
         showLinkList($PAGE, $bookmarkService, $conf, $pluginManager, $loginManager);
         if (isset($_GET['edit_link'])) {
-            header('Location: ?do=login&edit_link='. escape($_GET['edit_link']));
+            header('Location: /login?edit_link='. escape($_GET['edit_link']));
             exit;
         }
 
@@ -1890,7 +1890,7 @@ function install($conf, $sessionManager, $loginManager)
         echo '<script>alert('
             .'"Shaarli is now configured. '
             .'Please enter your login/password and start shaaring your bookmarks!"'
-            .');document.location=\'?do=login\';</script>';
+            .');document.location=\'./login\';</script>';
         exit;
     }
 

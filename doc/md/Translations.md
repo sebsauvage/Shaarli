@@ -7,8 +7,8 @@ Note that only the `default` theme supports translations.
 
 ### Contributing
 
-We encourage the community to contribute to Shaarli's translation either by improving existing 
-translations or submitting a new language. 
+We encourage the community to contribute to Shaarli's translation either by improving existing
+translations or submitting a new language.
 
 Contributing to the translation does not require development skill.
 
@@ -21,8 +21,8 @@ First, install [Poedit](https://poedit.net/) tool.
 
 Poedit will extract strings to translate from the PHP source code.
 
-**Important**: due to the usage of a template engine, it's important to generate PHP cache files to extract 
-every translatable string. 
+**Important**: due to the usage of a template engine, it's important to generate PHP cache files to extract
+every translatable string.
 
 You can either use [this script](https://gist.github.com/ArthurHoaro/5d0323f758ab2401ef444a53f54e9a07)  (recommended)
 or visit every template page in your browser to generate cache files, while logged in.
@@ -41,7 +41,7 @@ http://<replace_domain>/?do=daily
 http://<replace_domain>/?post
 http://<replace_domain>/?do=export
 http://<replace_domain>/?do=import
-http://<replace_domain>/?do=login
+http://<replace_domain>/login
 http://<replace_domain>/?do=picwall
 http://<replace_domain>/?do=pluginadmin
 http://<replace_domain>/?do=tagcloud
@@ -50,8 +50,8 @@ http://<replace_domain>/?do=taglist
 
 #### Improve existing translation
 
-In Poedit, click on "Edit a Translation", and from Shaarli's directory open 
-`inc/languages/<lang>/LC_MESSAGES/shaarli.po`. 
+In Poedit, click on "Edit a Translation", and from Shaarli's directory open
+`inc/languages/<lang>/LC_MESSAGES/shaarli.po`.
 
 The existing list of translatable strings should have been loaded, then click on the "Update" button.
 
@@ -63,20 +63,20 @@ Save when you're done, then you can submit a pull request containing the updated
 
 #### Add a new language
 
-Open Poedit and select "Create New Translation", then from Shaarli's directory open 
+Open Poedit and select "Create New Translation", then from Shaarli's directory open
 `inc/languages/<lang>/LC_MESSAGES/shaarli.po`.
 
-Then select the language you want to create. 
+Then select the language you want to create.
 
-Click on `File > Save as...`, and save your file in `<shaarli directory>/inc/language/<new language>/LC_MESSAGES/shaarli.po`.  
-`<new language>` here should be the language code respecting the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-2) 
+Click on `File > Save as...`, and save your file in `<shaarli directory>/inc/language/<new language>/LC_MESSAGES/shaarli.po`.
+`<new language>` here should be the language code respecting the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-2)
 format in lowercase (e.g. `de` for German).
 
 Then click on the "Update" button, and you can start to translate every available string.
 
 Save when you're done, then you can submit a pull request containing the new `shaarli.po`.
 
-### Theme translations 
+### Theme translations
 
 Theme translation extensions are loaded automatically if they're present.
 
@@ -85,7 +85,7 @@ As a theme developer, all you have to do is to add the `.po` and `.mo` compiled 
     tpl/<theme name>/language/<lang>/LC_MESSAGES/<theme name>.po
     tpl/<theme name>/language/<lang>/LC_MESSAGES/<theme name>.mo
 
-Where `<lang>` is the ISO 3166-1 alpha-2 language code. 
+Where `<lang>` is the ISO 3166-1 alpha-2 language code.
 Read the following section "Extend Shaarli's translation" to learn how to generate those files.
 
 ### Extend Shaarli's translation
@@ -106,7 +106,7 @@ First, create your translation files tree directory:
 Your `.po` files must be named like your domain. E.g. if your translation domain is `my_theme`, then your file will be
 `my_theme.po`.
 
-Users have to register your extension in their configuration with the parameter 
+Users have to register your extension in their configuration with the parameter
 `translation.extensions.<domain>: <translation files path>`.
 
 Example:
@@ -151,11 +151,11 @@ When you're done, open Poedit and load translation strings from sources:
   1. `File > New`
   2. Choose your language
   3. Save your `PO` file in `<your_module>/languages/<language code>/LC_MESSAGES/my_theme.po`.
-  4. Go to `Catalog > Properties...` 
+  4. Go to `Catalog > Properties...`
   5. Fill the `Translation Properties` tab
   6. Add your source path in the `Sources Paths` tab
   7. In the `Sources Keywords` tab uncheck "Also use default keywords" and add the following lines:
-  
+
 ```
 my_theme_t
 my_theme_t:1,2
