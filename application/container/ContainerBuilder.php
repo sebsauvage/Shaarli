@@ -72,6 +72,10 @@ class ContainerBuilder
             );
         };
 
+        $container['pluginManager'] = function (ShaarliContainer $container): PluginManager {
+            return new PluginManager($container->conf);
+        };
+
         return $container;
     }
 }

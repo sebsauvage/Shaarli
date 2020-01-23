@@ -7,6 +7,7 @@ namespace Shaarli\Container;
 use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
+use Shaarli\Plugin\PluginManager;
 use Shaarli\Render\PageBuilder;
 use Shaarli\Security\LoginManager;
 use Shaarli\Security\SessionManager;
@@ -21,6 +22,7 @@ use Slim\Container;
  * @property History                  $history
  * @property BookmarkServiceInterface $bookmarkService
  * @property PageBuilder              $pageBuilder
+ * @property PluginManager            $pluginManager
  */
 class ShaarliContainer extends Container
 {

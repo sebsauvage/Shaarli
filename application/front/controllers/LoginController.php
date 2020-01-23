@@ -41,6 +41,6 @@ class LoginController extends ShaarliController
             ->assignView('pagetitle', t('Login') .' - '. $this->ci->conf->get('general.title', 'Shaarli'))
         ;
 
-        return $response->write($this->ci->pageBuilder->render('loginform'));
+        return $response->write($this->render('loginform'));
     }
 }

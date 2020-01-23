@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Shaarli\Front\Controller;
 
 use PHPUnit\Framework\TestCase;
+use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Container\ShaarliContainer;
 use Shaarli\Front\Exception\LoginBannedException;
+use Shaarli\Plugin\PluginManager;
 use Shaarli\Render\PageBuilder;
 use Shaarli\Security\LoginManager;
 use Slim\Http\Request;
@@ -37,7 +39,6 @@ class LoginControllerTest extends TestCase
 
         $assignedVariables = [];
         $this->container->pageBuilder
-            ->expects(static::exactly(3))
             ->method('assign')
             ->willReturnCallback(function ($key, $value) use (&$assignedVariables) {
                 $assignedVariables[$key] = $value;
@@ -68,7 +69,6 @@ class LoginControllerTest extends TestCase
 
         $assignedVariables = [];
         $this->container->pageBuilder
-            ->expects(static::exactly(4))
             ->method('assign')
             ->willReturnCallback(function ($key, $value) use (&$assignedVariables) {
                 $assignedVariables[$key] = $value;
@@ -169,5 +169,10 @@ class LoginControllerTest extends TestCase
             })
         ;
         $this->container->pageBuilder = $pageBuilder;
+
+        $pluginManager = $this->createMock(PluginManager::class);
+        $this->container->pluginManager = $pluginManager;
+        $bookmarkService = $this->createMock(BookmarkServiceInterface::class);
+        $this->container->bookmarkService = $bookmarkService;
     }
 }
