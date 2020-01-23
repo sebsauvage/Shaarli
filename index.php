@@ -243,7 +243,9 @@ if (isset($_POST['login'])) {
         }
 
         // Send cookie with the new expiration date to the browser
+        session_destroy();
         session_set_cookie_params($expirationTime, $cookiedir, $_SERVER['SERVER_NAME']);
+        session_start();
         session_regenerate_id(true);
 
         // Optional redirect after login:
