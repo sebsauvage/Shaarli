@@ -1939,11 +1939,11 @@ $app = new \Slim\App($container);
 // REST API routes
 $app->group('/api/v1', function () {
     $this->get('/info', '\Shaarli\Api\Controllers\Info:getInfo')->setName('getInfo');
-    $this->get('/bookmarks', '\Shaarli\Api\Controllers\Links:getLinks')->setName('getLinks');
-    $this->get('/bookmarks/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:getLink')->setName('getLink');
-    $this->post('/bookmarks', '\Shaarli\Api\Controllers\Links:postLink')->setName('postLink');
-    $this->put('/bookmarks/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:putLink')->setName('putLink');
-    $this->delete('/bookmarks/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:deleteLink')->setName('deleteLink');
+    $this->get('/links', '\Shaarli\Api\Controllers\Links:getLinks')->setName('getLinks');
+    $this->get('/links/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:getLink')->setName('getLink');
+    $this->post('/links', '\Shaarli\Api\Controllers\Links:postLink')->setName('postLink');
+    $this->put('/links/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:putLink')->setName('putLink');
+    $this->delete('/links/{id:[\d]+}', '\Shaarli\Api\Controllers\Links:deleteLink')->setName('deleteLink');
 
     $this->get('/tags', '\Shaarli\Api\Controllers\Tags:getTags')->setName('getTags');
     $this->get('/tags/{tagName:[\w]+}', '\Shaarli\Api\Controllers\Tags:getTag')->setName('getTag');
