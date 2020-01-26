@@ -159,7 +159,7 @@ function checkDateFormat($format, $string)
  */
 function generateLocation($referer, $host, $loopTerms = array())
 {
-    $finalReferer = '?';
+    $finalReferer = './?';
 
     // No referer if it contains any value in $loopCriteria.
     foreach (array_filter($loopTerms) as $value) {

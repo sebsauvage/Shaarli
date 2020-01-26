@@ -196,4 +196,10 @@ class SessionManager
         }
         return true;
     }
+
+    /** @return array Local reference to the global $_SESSION array */
+    public function getSession(): array
+    {
+        return $this->session;
+    }
 }

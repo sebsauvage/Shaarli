@@ -61,29 +61,31 @@ require_once 'application/FileUtils.php';
 require_once 'application/TimeZone.php';
 require_once 'application/Utils.php';
 
-use \Shaarli\ApplicationUtils;
-use Shaarli\Bookmark\BookmarkServiceInterface;
-use \Shaarli\Bookmark\Exception\BookmarkNotFoundException;
+use Shaarli\ApplicationUtils;
 use Shaarli\Bookmark\Bookmark;
-use Shaarli\Bookmark\BookmarkFilter;
 use Shaarli\Bookmark\BookmarkFileService;
-use \Shaarli\Config\ConfigManager;
-use \Shaarli\Feed\CachedPage;
-use \Shaarli\Feed\FeedBuilder;
+use Shaarli\Bookmark\BookmarkFilter;
+use Shaarli\Bookmark\BookmarkServiceInterface;
+use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
+use Shaarli\Config\ConfigManager;
+use Shaarli\Container\ContainerBuilder;
+use Shaarli\Feed\CachedPage;
+use Shaarli\Feed\FeedBuilder;
 use Shaarli\Formatter\BookmarkMarkdownFormatter;
 use Shaarli\Formatter\FormatterFactory;
-use \Shaarli\History;
-use \Shaarli\Languages;
-use \Shaarli\Netscape\NetscapeBookmarkUtils;
-use \Shaarli\Plugin\PluginManager;
-use \Shaarli\Render\PageBuilder;
-use \Shaarli\Render\ThemeUtils;
-use \Shaarli\Router;
-use \Shaarli\Security\LoginManager;
-use \Shaarli\Security\SessionManager;
-use \Shaarli\Thumbnailer;
-use \Shaarli\Updater\Updater;
-use \Shaarli\Updater\UpdaterUtils;
+use Shaarli\History;
+use Shaarli\Languages;
+use Shaarli\Netscape\NetscapeBookmarkUtils;
+use Shaarli\Plugin\PluginManager;
+use Shaarli\Render\PageBuilder;
+use Shaarli\Render\ThemeUtils;
+use Shaarli\Router;
+use Shaarli\Security\LoginManager;
+use Shaarli\Security\SessionManager;
+use Shaarli\Thumbnailer;
+use Shaarli\Updater\Updater;
+use Shaarli\Updater\UpdaterUtils;
+use Slim\App;
 
 // Ensure the PHP version is supported
 try {
@@ -250,7 +252,7 @@ if (isset($_POST['login'])) {
 
         // Optional redirect after login:
         if (isset($_GET['post'])) {
-            $uri = '?post='. urlencode($_GET['post']);
+            $uri = './?post='. urlencode($_GET['post']);
             foreach (array('description', 'source', 'title', 'tags') as $param) {
                 if (!empty($_GET[$param])) {
                     $uri .= '&'.$param.'='.urlencode($_GET[$param]);
@@ -261,22 +263,22 @@ if (isset($_POST['login'])) {
         }
 
         if (isset($_GET['edit_link'])) {
-            header('Location: ?edit_link='. escape($_GET['edit_link']));
+            header('Location: ./?edit_link='. escape($_GET['edit_link']));
             exit;
         }
 
         if (isset($_POST['returnurl'])) {
             // Prevent loops over login screen.
-            if (strpos($_POST['returnurl'], 'do=login') === false) {
+            if (strpos($_POST['returnurl'], '/login') === false) {
                 header('Location: '. generateLocation($_POST['returnurl'], $_SERVER['HTTP_HOST']));
                 exit;
             }
         }
-        header('Location: ?');
+        header('Location: ./?');
         exit;
     } else {
         $loginManager->handleFailedLogin($_SERVER);
-        $redir = '&username='. urlencode($_POST['login']);
+        $redir = '?username='. urlencode($_POST['login']);
         if (isset($_GET['post'])) {
             $redir .= '&post=' . urlencode($_GET['post']);
             foreach (array('description', 'source', 'title', 'tags') as $param) {
@@ -286,7 +288,7 @@ if (isset($_POST['login'])) {
             }
         }
         // Redirect to login screen.
-        echo '<script>alert("'. t("Wrong login/password.") .'");document.location=\'?do=login'.$redir.'\';</script>';
+        echo '<script>alert("'. t("Wrong login/password.") .'");document.location=\'./login'.$redir.'\';</script>';
         exit;
     }
 }
@@ -594,19 +596,7 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
 
     // -------- Display login form.
     if ($targetPage == Router::$PAGE_LOGIN) {
-        if ($conf->get('security.open_shaarli')) {
-            header('Location: ?');
-            exit;
-        }  // No need to login for open Shaarli
-        if (isset($_GET['username'])) {
-            $PAGE->assign('username', escape($_GET['username']));
-        }
-        $PAGE->assign('returnurl', (isset($_SERVER['HTTP_REFERER']) ? escape($_SERVER['HTTP_REFERER']):''));
-        // add default state of the 'remember me' checkbox
-        $PAGE->assign('remember_user_default', $conf->get('privacy.remember_user_default'));
-        $PAGE->assign('user_can_login', $loginManager->canLogin($_SERVER));
-        $PAGE->assign('pagetitle', t('Login') .' - '. $conf->get('general.title', 'Shaarli'));
-        $PAGE->renderPage('loginform');
+        header('Location: ./login');
         exit;
     }
     // -------- User wants to logout.
@@ -933,7 +923,7 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
         // Show login screen, then redirect to ?post=...
         if (isset($_GET['post'])) {
             header( // Redirect to login page, then back to post link.
-                'Location: ?do=login&post='.urlencode($_GET['post']).
+                'Location: /login?post='.urlencode($_GET['post']).
                 (!empty($_GET['title'])?'&title='.urlencode($_GET['title']):'').
                 (!empty($_GET['description'])?'&description='.urlencode($_GET['description']):'').
                 (!empty($_GET['tags'])?'&tags='.urlencode($_GET['tags']):'').
@@ -944,7 +934,7 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
 
         showLinkList($PAGE, $bookmarkService, $conf, $pluginManager, $loginManager);
         if (isset($_GET['edit_link'])) {
-            header('Location: ?do=login&edit_link='. escape($_GET['edit_link']));
+            header('Location: /login?edit_link='. escape($_GET['edit_link']));
             exit;
         }
 
@@ -1900,7 +1890,7 @@ function install($conf, $sessionManager, $loginManager)
         echo '<script>alert('
             .'"Shaarli is now configured. '
             .'Please enter your login/password and start shaaring your bookmarks!"'
-            .');document.location=\'?do=login\';</script>';
+            .');document.location=\'./login\';</script>';
         exit;
     }
 
@@ -1930,11 +1920,9 @@ if (isset($_SERVER['QUERY_STRING']) && startsWith($_SERVER['QUERY_STRING'], 'do=
     exit;
 }
 
-$container = new \Slim\Container();
-$container['conf'] = $conf;
-$container['plugins'] = $pluginManager;
-$container['history'] = $history;
-$app = new \Slim\App($container);
+$containerBuilder = new ContainerBuilder($conf, $sessionManager, $loginManager);
+$container = $containerBuilder->build();
+$app = new App($container);
 
 // REST API routes
 $app->group('/api/v1', function () {
@@ -1952,6 +1940,10 @@ $app->group('/api/v1', function () {
 
     $this->get('/history', '\Shaarli\Api\Controllers\HistoryController:getHistory')->setName('getHistory');
 })->add('\Shaarli\Api\ApiMiddleware');
+
+$app->group('', function () {
+    $this->get('/login', '\Shaarli\Front\Controller\LoginController:index')->setName('login');
+})->add('\Shaarli\Front\ShaarliMiddleware');
 
 $response = $app->run(true);
 
