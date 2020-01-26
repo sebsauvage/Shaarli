@@ -659,6 +659,7 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
 
         alphabetical_sort($tags, false, true);
 
+        $logMaxCount = $maxcount > 1 ? log($maxcount, 30) : 1;
         $tagList = array();
         foreach ($tags as $key => $value) {
             if (in_array($key, $filteringTags)) {
@@ -666,8 +667,8 @@ function renderPage($conf, $pluginManager, $bookmarkService, $history, $sessionM
             }
             // Tag font size scaling:
             //   default 15 and 30 logarithm bases affect scaling,
-            //   22 and 6 are arbitrary font sizes for max and min sizes.
-            $size = log($value, 15) / log($maxcount, 30) * 2.2 + 0.8;
+            //   2.2 and 0.8 are arbitrary font sizes in em.
+            $size = log($value, 15) / $logMaxCount * 2.2 + 0.8;
             $tagList[$key] = array(
                 'count' => $value,
                 'size' => number_format($size, 2, '.', ''),
