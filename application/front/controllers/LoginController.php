@@ -22,11 +22,13 @@ class LoginController extends ShaarliController
 {
     public function index(Request $request, Response $response): Response
     {
-        if ($this->ci->loginManager->isLoggedIn() || $this->ci->conf->get('security.open_shaarli', false)) {
+        if ($this->container->loginManager->isLoggedIn()
+            || $this->container->conf->get('security.open_shaarli', false)
+        ) {
             return $response->withRedirect('./');
         }
 
-        $userCanLogin = $this->ci->loginManager->canLogin($request->getServerParams());
+        $userCanLogin = $this->container->loginManager->canLogin($request->getServerParams());
         if ($userCanLogin !== true) {
             throw new LoginBannedException();
         }
@@ -37,8 +39,8 @@ class LoginController extends ShaarliController
 
         $this
             ->assignView('returnurl', escape($request->getServerParam('HTTP_REFERER')))
-            ->assignView('remember_user_default', $this->ci->conf->get('privacy.remember_user_default', true))
-            ->assignView('pagetitle', t('Login') .' - '. $this->ci->conf->get('general.title', 'Shaarli'))
+            ->assignView('remember_user_default', $this->container->conf->get('privacy.remember_user_default', true))
+            ->assignView('pagetitle', t('Login') .' - '. $this->container->conf->get('general.title', 'Shaarli'))
         ;
 
         return $response->write($this->render('loginform'));
