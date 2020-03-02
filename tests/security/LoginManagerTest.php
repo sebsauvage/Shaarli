@@ -314,7 +314,7 @@ class LoginManagerTest extends TestCase
      */
     public function testCheckCredentialsFromLdapWrongLoginAndPassword()
     {
-        $this->coddnfigManager->set('ldap.host', 'dummy');
+        $this->configManager->set('ldap.host', 'dummy');
         $this->assertFalse(
             $this->loginManager->checkCredentialsFromLdap($this->login, $this->password, function() { return null; }, function() { return false; })
         );
