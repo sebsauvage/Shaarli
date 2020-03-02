@@ -78,6 +78,7 @@ class LoginManagerTest extends TestCase
             'security.ban_after' => 2,
             'security.ban_duration' => 3600,
             'security.trusted_proxies' => [$this->trustedProxy],
+            'ldap.host' => '',
         ]);
 
         $this->cookie = [];
@@ -294,6 +295,39 @@ class LoginManagerTest extends TestCase
     {
         $this->assertTrue(
             $this->loginManager->checkCredentials('', '', $this->login, $this->password)
+        );
+    }
+
+    /**
+     * Check user credentials through LDAP - server unreachable
+     */
+    public function testCheckCredentialsFromUnreachableLdap()
+    {
+        $this->configManager->set('ldap.host', 'dummy');
+        $this->assertFalse(
+            $this->loginManager->checkCredentials('', '', $this->login, $this->password)
+        );
+    }
+
+    /**
+     * Check user credentials through LDAP - wrong login and password supplied
+     */
+    public function testCheckCredentialsFromLdapWrongLoginAndPassword()
+    {
+        $this->coddnfigManager->set('ldap.host', 'dummy');
+        $this->assertFalse(
+            $this->loginManager->checkCredentialsFromLdap($this->login, $this->password, function() { return null; }, function() { return false; })
+        );
+    }
+
+    /**
+     * Check user credentials through LDAP - correct login and password supplied
+     */
+    public function testCheckCredentialsFromLdapGoodLoginAndPassword()
+    {
+        $this->configManager->set('ldap.host', 'dummy');
+        $this->assertTrue(
+            $this->loginManager->checkCredentialsFromLdap($this->login, $this->password, function() { return null; }, function() { return true; })
         );
     }
 }

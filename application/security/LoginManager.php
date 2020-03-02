@@ -1,6 +1,7 @@
 <?php
 namespace Shaarli\Security;
 
+use Exception;
 use Shaarli\Config\ConfigManager;
 
 /**
@@ -139,26 +140,71 @@ class LoginManager
      */
     public function checkCredentials($remoteIp, $clientIpId, $login, $password)
     {
-        $hash = sha1($password . $login . $this->configManager->get('credentials.salt'));
-
-        if ($login != $this->configManager->get('credentials.login')
-            || $hash != $this->configManager->get('credentials.hash')
-        ) {
-            logm(
-                $this->configManager->get('resource.log'),
-                $remoteIp,
-                'Login failed for user ' . $login
-            );
+        // Check login matches config
+        if ($login != $this->configManager->get('credentials.login')) {
             return false;
         }
 
-        $this->sessionManager->storeLoginInfo($clientIpId);
+        // Check credentials
+        try {
+            if (($this->configManager->get('ldap.host') != "" && $this->checkCredentialsFromLdap($login, $password))
+                || ($this->configManager->get('ldap.host') == "" && $this->checkCredentialsFromLocalConfig($login, $password))) {
+                    $this->sessionManager->storeLoginInfo($clientIpId);
+                    logm(
+                        $this->configManager->get('resource.log'),
+                        $remoteIp,
+                        'Login successful'
+                    );
+                    return true;
+            }
+        }
+        catch(Exception $exception) {
+            logm(
+                $this->configManager->get('resource.log'),
+                $remoteIp,
+                'Exception while checking credentials: ' . $exception
+            );
+        }
+
         logm(
             $this->configManager->get('resource.log'),
             $remoteIp,
-            'Login successful'
+            'Login failed for user ' . $login
         );
-        return true;
+        return false;
+    }
+
+
+    /**
+     * Check user credentials from local config
+     *
+     * @param string $login      Username
+     * @param string $password   Password
+     *
+     * @return bool true if the provided credentials are valid, false otherwise
+     */
+    public function checkCredentialsFromLocalConfig($login, $password) {
+        $hash = sha1($password . $login . $this->configManager->get('credentials.salt'));
+
+        return $login == $this->configManager->get('credentials.login')
+             && $hash == $this->configManager->get('credentials.hash');
+    }
+
+    /**
+     * Check user credentials are valid through LDAP bind
+     *
+     * @param string $remoteIp   Remote client IP address
+     * @param string $clientIpId Client IP address identifier
+     * @param string $login      Username
+     * @param string $password   Password
+     *
+     * @return bool true if the provided credentials are valid, false otherwise
+     */
+    public function checkCredentialsFromLdap($login, $password, $connect = null, $bind = null)
+    {
+        $connect = $connect ?? function($host) { return ldap_connect($host); };
+        $bind = $bind ?? function($handle, $dn, $password) { return ldap_bind($handle, $dn, $password); };
+        return $bind($connect($this->configManager->get('ldap.host')), sprintf($this->configManager->get('ldap.dn'), $login), $password);
     }
 
     /**

@@ -122,6 +122,11 @@ Must be an associative array: `translation domain => translation path`.
 - **enable_thumbnails**: Enable or disable thumbnail display.  
 - **enable_localcache**: Enable or disable local cache.
 
+### LDAP
+
+- **host**: LDAP host used for user authentication
+- **dn**: user DN template (`sprintf` format, `%s` being replaced by user login)
+
 ## Configuration file example
 
 ```json
@@ -223,6 +228,10 @@ Must be an associative array: `translation domain => translation path`.
         "extensions": {
             "demo": "plugins/demo_plugin/languages/"
         }
+    },
+    "ldap": {
+        "host": "ldap://localhost",
+        "dn": "uid=%s,ou=people,dc=example,dc=org"
     }
 } ?>
 ```
