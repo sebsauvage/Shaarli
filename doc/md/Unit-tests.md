@@ -30,7 +30,7 @@ $ aptitude install php-xdebug
 $ pacman -S xdebug
 ```
 
-Then add the following line to `/etc/php/php.ini`:
+Then add the following line to `/etc/php/<PHP_VERSION>/cli/php.ini`:
 
 ```ini
 zend_extension=xdebug.so
