@@ -2,7 +2,7 @@
 PHP settings are defined in:
 
 - a main configuration file, usually found under `/etc/php/$php_version/php.ini`; some distributions provide different configuration environments, e.g.
-    - `/etc/php/$php_version/php.ini` - used when running console scripts
+    - `/etc/php/$php_version/cli/php.ini` - used when running console scripts
     - `/etc/php/$php_version/apache2/php.ini` - used when a client requests PHP resources from Apache
     - `/etc/php/$php_version/php-fpm.conf` - used when PHP requests are proxied to PHP-FPM
 - additional configuration files/entries, depending on the installed/enabled extensions:
