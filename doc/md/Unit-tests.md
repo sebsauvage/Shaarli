@@ -1,126 +1,45 @@
-### Setup your environment for tests
+The testing framework used is [PHPUnit](https://phpunit.de/); it can be installed with [Composer](https://getcomposer.org/), which is a dependency management tool.
 
-The framework used is [PHPUnit](https://phpunit.de/); it can be installed with [Composer](https://getcomposer.org/), which is a dependency management tool.
+## Setup a testing environment
 
 ### Install composer
 
 You can either use:
 
-- a system-wide version, e.g. installed through your distro's package manager
-- a local version, downloadable [here](https://getcomposer.org/download/).
+- a system-wide version, e.g. installed through your distro's package manager (eg. `sudo apt install composer`)
+- a local version, downloadable [here](https://getcomposer.org/download/). To update a local composer installation, run `php composer.phar self-update`
 
-```bash
-# system-wide version
-$ composer install
-$ composer update
 
-# local version
-$ php composer.phar self-update
-$ php composer.phar install
-$ php composer.phar update
-```
-
-#### Install Shaarli dev dependencies
+### Install Shaarli development dependencies
 
 ```bash
 $ cd /path/to/shaarli
-$ composer update
+$ composer install
 ```
 
-#### Install and enable Xdebug to generate PHPUnit coverage reports
+### Install Xdebug
 
-See http://xdebug.org/docs/install
+Xdebug must be installed and enable for PHPUnit to generate coverage reports. See http://xdebug.org/docs/install.
 
-For Debian-based distros:
 ```bash
-$ aptitude install php5-xdebug
-```
-For ArchLinux:
-```bash
+# for Debian-based distributions
+$ aptitude install php-xdebug
+
+# for ArchLinux:
 $ pacman -S xdebug
 ```
 
-Then add the following line to `/etc/php/php.ini`:
+Then add the following line to `/etc/php/<PHP_VERSION>/cli/php.ini`:
+
 ```ini
 zend_extension=xdebug.so
 ```
 
-#### Run unit tests
+## Run unit tests
 
-Successful test suite:
-```bash
-$ make test
+Run `make test` and ensure tests return `OK`. If tests return failures, refer to PHPUnit messages and fix your code/tests accordingly.
 
--------
-PHPUNIT
--------
-PHPUnit 4.6.9 by Sebastian Bergmann and contributors.
-
-Configuration read from /home/virtualtam/public_html/shaarli/phpunit.xml
-
-....................................
-
-Time: 759 ms, Memory: 8.25Mb
-
-OK (36 tests, 65 assertions)
-```
-
-Test suite with failures and errors:
-```bash
-$ make test
--------
-PHPUNIT
--------
-PHPUnit 4.6.9 by Sebastian Bergmann and contributors.
-
-Configuration read from /home/virtualtam/public_html/shaarli/phpunit.xml
-
-E..FF...............................
-
-Time: 802 ms, Memory: 8.25Mb
-
-There was 1 error:
-
-1) LinkDBTest::testConstructLoggedIn
-Missing argument 2 for LinkDB::__construct(), called in /home/virtualtam/public_html/shaarli/tests/Link\
-DBTest.php on line 79 and defined
-
-/home/virtualtam/public_html/shaarli/application/LinkDB.php:58
-/home/virtualtam/public_html/shaarli/tests/LinkDBTest.php:79
-
---
-
-There were 2 failures:
-
-1) LinkDBTest::testCheckDBNew
-Failed asserting that two strings are equal.
---- Expected
-+++ Actual
-@@ @@
--'e3edea8ea7bb50be4bcb404df53fbb4546a7156e'
-+'85eab0c610d4f68025f6ed6e6b6b5fabd4b55834'
-
-/home/virtualtam/public_html/shaarli/tests/LinkDBTest.php:121
-
-2) LinkDBTest::testCheckDBLoad
-Failed asserting that two strings are equal.
---- Expected
-+++ Actual
-@@ @@
--'e3edea8ea7bb50be4bcb404df53fbb4546a7156e'
-+'85eab0c610d4f68025f6ed6e6b6b5fabd4b55834'
-
-/home/virtualtam/public_html/shaarli/tests/LinkDBTest.php:133
-
-FAILURES!
-Tests: 36, Assertions: 63, Errors: 1, Failures: 2.
-```
-
-#### Test results and coverage
-
-By default, PHPUnit will run all suitable tests found under the `tests` directory.
-
-Each test has 3 possible outcomes:
+By default, PHPUnit will run all suitable tests found under the `tests` directory. Each test has 3 possible outcomes:
 
 - `.` - success
 - `F` - failure: the test was run but its results are invalid
@@ -154,4 +73,47 @@ class BookmarkImportTest extends PHPUnit_Framework_TestCase
 To run all tests annotated with `@group WIP`:
 ```bash
 $ vendor/bin/phpunit --group WIP tests/
+```
+
+### Running tests inside Docker containers
+
+Test Dockerfiles are located under `tests/docker/<distribution>/Dockerfile`,
+and can be used to build Docker images to run Shaarli test suites under common
+Linux environments.
+
+Dockerfiles are provided for the following environments:
+
+- `alpine36` - [Alpine 3.6](https://www.alpinelinux.org/downloads/)
+- `debian8` - [Debian 8 Jessie](https://www.debian.org/DebianJessie) (oldstable)
+- `debian9` - [Debian 9 Stretch](https://wiki.debian.org/DebianStretch) (stable)
+- `ubuntu16` - [Ubuntu 16.04 Xenial Xerus](http://releases.ubuntu.com/16.04/) (LTS)
+
+What's behind the curtains:
+
+- each image provides:
+    - a base Linux OS
+    - Shaarli PHP dependencies (OS packages)
+    - test PHP dependencies (OS packages)
+    - Composer
+- the local workspace is mapped to the container's `/shaarli/` directory,
+- the files are rsync'd so tests are run using a standard Linux user account
+  (running tests as `root` would bypass permission checks and may hide issues)
+- the tests are run inside the container.
+
+To run tests inside a Docker container:
+
+```bash
+# build the Debian 9 Docker image for unit tests
+$ cd /path/to/shaarli
+$ cd tests/docker/debian9
+$ docker build -t shaarli-test:debian9 .
+
+# install/update 3rd-party test dependencies
+$ composer install --prefer-dist
+
+# run tests using the freshly built image
+$ docker run -v $PWD:/shaarli shaarli-test:debian9 docker_test
+
+# run the full test campaign
+$ docker run -v $PWD:/shaarli shaarli-test:debian9 docker_all_tests
 ```

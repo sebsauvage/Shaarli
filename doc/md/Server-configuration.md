@@ -187,7 +187,7 @@ http {
 ```
 
 ```ini
-# /etc/php5/fpm/php.ini
+# /etc/php/<PHP_VERSION>/fpm/php.ini
 
 [...]
 post_max_size = 10M
