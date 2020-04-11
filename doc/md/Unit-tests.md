@@ -15,7 +15,6 @@ You can either use:
 ```bash
 $ cd /path/to/shaarli
 $ composer install
-$ composer update
 ```
 
 ### Install Xdebug
