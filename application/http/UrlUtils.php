@@ -73,7 +73,7 @@ function add_trailing_slash($url)
  */
 function whitelist_protocols($url, $protocols)
 {
-    if (startsWith($url, '?') || startsWith($url, '/')) {
+    if (startsWith($url, '?') || startsWith($url, '/') || startsWith($url, '#')) {
         return $url;
     }
     $protocols = array_merge(['http', 'https'], $protocols);
