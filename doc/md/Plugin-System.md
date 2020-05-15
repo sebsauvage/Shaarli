@@ -40,6 +40,8 @@ This function can be used to create initial data, load default settings, etc. Bu
 
 The plugin system also looks for a `description` variable in the <plugin_name>.meta file, to be displayed in the plugin administration page.
 
+    description="The plugin does this and that."
+
 ### Understanding hooks
 
 A plugin is a set of functions. Each function will be triggered by the plugin system at certain point in Shaarli execution.
