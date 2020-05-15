@@ -18,7 +18,7 @@ The plugin system let you:
 
 First, chose a plugin name, such as `demo_plugin`.
 
-Under `plugin` folder, create a folder named with your plugin name. Then create a <plugin_name>.php file in that folder.
+Under `plugin` folder, create a folder named with your plugin name. Then create a <plugin_name>.meta file and a <plugin_name>.php file in that folder.
 
 You should have the following tree view:
 
@@ -26,16 +26,19 @@ You should have the following tree view:
 | index.php
 | plugins/
 |---| demo_plugin/
+|   |---| demo_plugin.meta
 |   |---| demo_plugin.php
 ```
 
 ### Plugin initialization
 
-At the beginning of Shaarli execution, all enabled plugins are loaded. At this point, the plugin system looks for an `init()` function to execute and run it if it exists. This function must be named this way, and takes the `ConfigManager` as parameter.
+At the beginning of Shaarli execution, all enabled plugins are loaded. At this point, the plugin system looks for an `init()` function in the <plugin_name>.php to execute and run it if it exists. This function must be named this way, and takes the `ConfigManager` as parameter.
 
     <plugin_name>_init($conf)
 
 This function can be used to create initial data, load default settings, etc. But also to set *plugin errors*. If the initialization function returns an array of strings, they will be understand as errors, and displayed in the header to logged in users.
+
+The plugin system also looks for a `description` variable in the <plugin_name>.meta file, to be displayed in the plugin administration page.
 
 ### Understanding hooks
 
