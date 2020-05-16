@@ -82,10 +82,9 @@ A `docker-compose.yml` file can be used to run a persistent/autostarted shaarli 
 
 Shaarli provides configuration file for Docker Compose, that will setup a Shaarli instance, a [Træfik](https://hub.docker.com/_/traefik/) instance with [Let's Encrypt](https://letsencrypt.org/) certificates, a Docker network, and volumes for Shaarli data and Træfik TLS configuration and certificates.
 
-```bash
 Download docker-compose from the [release page](https://docs.docker.com/compose/install/):
 
-```shell
+```bash
 $ sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 $ sudo chmod +x /usr/local/bin/docker-compose
 # create a new directory to store the configuration:
