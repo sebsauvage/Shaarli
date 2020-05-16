@@ -1,96 +1,85 @@
-## Preparation
+# Upgrade and migration
 
-### Note your current version
+## Note your current version
 
 If anything goes wrong, it's important for us to know which version you're upgrading from.
 The current version is present in the `shaarli_version.php` file.
 
-### Backup your data
 
-Shaarli stores all user data under the `data` directory:
+## Backup your data
 
-- `data/config.json.php` (or `data/config.php` for older Shaarli versions) - main configuration file
-- `data/datastore.php` - bookmarked links
-- `data/ipbans.php` - banned IP addresses
-- `data/updates.txt` - contains all automatic update to the configuration and datastore files already run
-
-See [Shaarli configuration](Shaarli-configuration) for more information about Shaarli resources.
-
-It is recommended to backup this repository _before_ starting updating/upgrading Shaarli:
-
-- users with SSH access: copy or archive the directory to a temporary location
-- users with FTP access: download a local copy of your Shaarli installation using your favourite client
-
-### Migrating data from a previous installation
-
-As all user data is kept under `data`, this is the only directory you need to worry about when migrating to a new installation, which corresponds to the following steps:
-
-- backup the `data` directory
-- install or update Shaarli:
-    - fresh installation - see [Download and Installation](Download-and-Installation)
-    - update - see the following sections
-- check or restore the `data` directory
-
-## Recommended : Upgrading from release archives
-
-All tagged revisions can be downloaded as tarballs or ZIP archives from the [releases](https://github.com/shaarli/Shaarli/releases) page.
-
-We recommend that you use the latest release tarball with the `-full` suffix. It contains the dependencies, please read [Download and Installation](Download-and-Installation) for `git` complete instructions.
-
-Once downloaded, extract the archive locally and update your remote installation (e.g. via FTP) -be sure you keep the content of the `data` directory!
-
-If you use translations in gettext mode - meaning you manually changed the default mode -,
-reload your web server.
-
-After upgrading, access your fresh Shaarli installation from a web browser; the configuration and data store will then be automatically updated, and new settings added to `data/config.json.php` (see [Shaarli configuration](Shaarli configuration) for more details).
-
-## Upgrading with Git
-
-### Updating a community Shaarli
-
-If you have installed Shaarli from the [community Git repository](Download#clone-with-git-recommended), simply [pull new changes](https://www.git-scm.com/docs/git-pull) from your local clone:
+Shaarli stores all user data and [configuration](Shaarli-configuration.md) under the `data` directory. [Backup](Backup-and-restore.md) this repository _before_ upgrading Shaarli. You will need to restore it after the following upgrade steps.
 
 ```bash
-$ cd /path/to/shaarli
-$ git pull
-
-From github.com:shaarli/Shaarli
- * branch            master     -> FETCH_HEAD
-Updating ebd67c6..521f0e6
-Fast-forward
- application/Url.php   | 1 +
- shaarli_version.php   | 2 +-
- tests/Url/UrlTest.php | 1 +
- 3 files changed, 3 insertions(+), 1 deletion(-)
+sudo cp -r /var/www/shaarli.mydomain.org/data ~/shaarli-data-backup
 ```
 
-Shaarli >= `v0.8.x`: install/update third-party PHP dependencies using [Composer](https://getcomposer.org/):
+## Upgrading from ZIP archives
+
+If you installed Shaarli from a [release ZIP archive](Installation.md#from-release-zip):
 
 ```bash
-$ composer install --no-dev
+# Download the archive to the server, and extract it
+cd ~
+wget https://github.com/shaarli/Shaarli/releases/download/v0.X.Y/shaarli-v0.X.Y-full.zip
+unzip shaarli-v0.X.Y-full.zip
 
-Loading composer repositories with package information
-Updating dependencies
-  - Installing shaarli/netscape-bookmark-parser (v1.0.1)
-    Downloading: 100%
+# overwrite your Shaarli installation with the new release **All data will be lost, see _Backup your data_ above.**
+sudo rsync -avP --delete Shaarli/ /var/www/shaarli.mydomain.org/
+
+# restore file permissions as described on the installation page
+sudo chown -R root:www-data /var/www/shaarli.mydomain.org
+sudo chmod -R u=rwX /var/www/shaarli.mydomain.org
+sudo chmod -R g+rX /var/www/shaarli.mydomain.org/{index.php,application/,plugins/,inc/}
+sudo chmod -R g+rwX /var/www/shaarli.mydomain.org/{cache/,data/,pagecache/,tmp/}
+
+# restore backups of the data directory
+sudo cp -r ~/shaarli-data-backup/* /var/www/shaarli.mydomain.org/data/
+
+# If you use gettext mode for translations (not the default), reload your web server.
+sudo systemctl restart apache2
+sudo systemctl restart nginx
 ```
 
-Shaarli >= `v0.9.2` supports translations:
+If you don't have shell access (eg. on shared hosting), backup the shaarli data directory, download the ZIP archive locally, extract it, upload it to the server using file transfer, and restore the data directory backup.
+
+Access your fresh Shaarli installation from a web browser; the configuration and data store will then be automatically updated, and new settings added to `data/config.json.php` (see [Shaarli configuration](Shaarli-configuration.md) for more details).
+
+
+## Upgrading from Git
+
+If you have installed Shaarli [from sources](Installation.md#from-sources):
 
 ```bash
-$ make translate
-```
+# pull new changes from your local clone
+cd /var/www/shaarli.mydomain.org/
+sudo git pull
 
-If you use translations in gettext mode, reload your web server.
+# update PHP dependencies (Shaarli >= v0.8)
+sudo composer install --no-dev
 
-Shaarli >= `v0.10.0` manages its front-end dependencies with nodejs. You need to install 
-[yarn](https://yarnpkg.com/lang/en/docs/install/):
+# update translations (Shaarli >= v0.9.2)
+sudo make translate
 
-```bash
-$ make build_frontend
+# If you use translations in gettext mode (not the default), reload your web server.
+sudo systemctl reload apache
+sudo systemctl reload nginx
+
+# update front-end dependencies (Shaarli >= v0.10.0)
+sudo make build_frontend
+
+# restore file permissions as described on the installation page
+sudo chown -R root:www-data /var/www/shaarli.mydomain.org
+sudo chmod -R u=rwX /var/www/shaarli.mydomain.org
+sudo chmod -R g+rX /var/www/shaarli.mydomain.org/{index.php,application/,plugins/,inc/}
+sudo chmod -R g+rwX /var/www/shaarli.mydomain.org/{cache/,data/,pagecache/,tmp/}
 ``` 
 
-### Migrating and upgrading from Sebsauvage's repository
+Access your fresh Shaarli installation from a web browser; the configuration and data store will then be automatically updated, and new settings added to `data/config.json.php` (see [Shaarli configuration](Shaarli-configuration.md) for more details).
+
+---------------------------------------------------------------
+
+## Migrating and upgrading from Sebsauvage's repository
 
 If you have installed Shaarli from [Sebsauvage's original Git repository](https://github.com/sebsauvage/Shaarli), you can use [Git remotes](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes) to update your working copy.
 
@@ -104,7 +93,7 @@ The following guide assumes that:
     - no versioned file has been locally modified
     - no untracked files are present
 
-#### Step 0: show repository information
+### Step 0: show repository information
 
 ```bash
 $ cd /path/to/shaarli
@@ -122,7 +111,7 @@ Your branch is up-to-date with 'origin/master'.
 nothing to commit, working directory clean
 ```
 
-#### Step 1: update Git remotes
+### Step 1: update Git remotes
 
 ```
 $ git remote rename origin sebsauvage
@@ -146,7 +135,7 @@ From https://github.com/shaarli/Shaarli
  * [new tag]         v0.7.0     -> v0.7.0
 ```
 
-#### Step 2: use the stable community branch
+### Step 2: use the stable community branch
 
 ```bash
 $ git checkout origin/stable -b stable
@@ -177,8 +166,7 @@ $ make translate
 
 If you use translations in gettext mode, reload your web server.
 
-Shaarli >= `v0.10.0` manages its front-end dependencies with nodejs. You need to install 
-[yarn](https://yarnpkg.com/lang/en/docs/install/):
+Shaarli >= `v0.10.0` manages its front-end dependencies with nodejs. You need to install [yarn](https://yarnpkg.com/lang/en/docs/install/):
 
 ```bash
 $ make build_frontend
@@ -204,30 +192,14 @@ Writing objects: 100% (3317/3317), done.
 Total 3317 (delta 2050), reused 3301 (delta 2034)to
 ```
 
-#### Step 3: configuration
+### Step 3: configuration
 
 After migrating, access your fresh Shaarli installation from a web browser; the
 configuration will then be automatically updated, and new settings added to
-`data/config.json.php` (see [Shaarli configuration](Shaarli-configuration) for more
+`data/config.json.php` (see [Shaarli configuration](Shaarli-configuration.md) for more
 details).
 
 ## Troubleshooting
 
-If the solutions provided here don't work, please open an issue specifying which version you're upgrading from and to.
+If the solutions provided here don't work, see [Troubleshooting](Troubleshooting.md) and/or open an issue specifying which version you're upgrading from and to.
 
-### You must specify an integer as a key
-
-In `v0.8.1` we changed how link keys are handled (from timestamps to incremental integers).
-Take a look at `data/updates.txt` content.
-
-#### `updates.txt` contains `updateMethodDatastoreIds`
-
-Try to delete it and refresh your page while being logged in.
-
-#### `updates.txt` doesn't exist or doesn't contain `updateMethodDatastoreIds`
-
-1. Create `data/updates.txt` if it doesn't exist
-2. Paste this string in the update file `;updateMethodRenameDashTags;`
-3. Login to Shaarli
-4. Delete the update file
-5. Refresh

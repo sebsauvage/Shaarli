@@ -8,22 +8,21 @@ This uses code from https://zaius.github.io/youtube_playlist/ and is currently o
 
 #### Installation and setup
 
-This is a default Shaarli plugin, you just have to enable it. See https://shaarli.readthedocs.io/en/master/Shaarli-configuration/
+This is a default Shaarli plugin, you just have to enable it. See [Shaarli configuration](../../doc/md/Shaarli-configuration.md).
 
 
 #### Troubleshooting
 
-If your server has [Content Security Policy](http://content-security-policy.com/) headers enabled, this may prevent the script from loading fully. You should relax the CSP in your server settings. Example CSP rule for apache2:
-
-In `/etc/apache2/conf-available/shaarli-csp.conf`:
+If your server has [Content Security Policy](http://content-security-policy.com/) headers enabled, this may prevent the script from loading fully. You should relax the CSP in your server settings. Example CSP rule for apache2: 
 
 ```apache
 <Directory /path/to/shaarli>
+    # Required for playvideos plugin
     Header set Content-Security-Policy "script-src 'self' 'unsafe-inline' https://www.youtube.com https://s.ytimg.com 'unsafe-eval'"
 </Directory>
 ```
 
-Then run `a2enconf shaarli-csp; service apache2 reload`
+You may place the `Header` directive in the `<Directory...` section of your [webserver configuration](../../doc/md/Server-configuration.md)/virtualhost file, or write the above snippet to `/etc/apache2/conf-available/shaarli-csp.conf`; then run `a2enconf shaarli-csp; service apache2 reload`.
 
 ### License
 ```

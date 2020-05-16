@@ -1,126 +1,19 @@
-## Foreword
+# Shaarli configuration
+
+Once your Shaarli instance is installed, the file `data/config.json.php` is generated:
+
+- it contains all settings in JSON format, and can be edited to customize values
+- it defines which [plugins](Plugins.md) are enabled
+- its values override those defined in `index.php`
+- it is wrapped in a PHP comment so that its contents are never served by the web server, regardless of configuration
 
 **Do not edit configuration options in index.php! Your changes would be lost.** 
 
-Once your Shaarli instance is installed, the file `data/config.json.php` is generated:
-* it contains all settings in JSON format, and can be edited to customize values
-* it defines which [plugins](Plugin-System) are enabled
-* its values override those defined in `index.php`
-* it is wrap in a PHP comment to prevent anyone accessing it, regardless of server configuration
+## Tools menu
 
-## File and directory permissions
+Some settings can be configured directly from a web browser by accesing the `Tools` menu. Values are read/written to/from the configuration file.
 
-The server process running Shaarli must have:
-
-- `read` access to the following resources:
-    - PHP scripts: `index.php`, `application/*.php`, `plugins/*.php`
-    - 3rd party PHP and Javascript libraries: `inc/*.php`, `inc/*.js`
-    - static assets:
-        - CSS stylesheets: `inc/*.css`
-        - `images/*`
-    - RainTPL templates: `tpl/*.html`
-- `read`, `write` and `execution` access to the following directories:
-    - `cache` - thumbnail cache
-    - `data` - link data store, configuration options
-    - `pagecache` - Atom/RSS feed cache
-    - `tmp` - RainTPL page cache
-
-On a Linux distribution:
-
-- the web server user will likely be `www` or `http` (for Apache2)
-- it will be a member of a group of the same name: `www:www`, `http:http`
-- to give it access to Shaarli, either:
-    - unzip Shaarli in the default web server location (usually `/var/www/`) and set the web server user as the owner
-    - put users in the same group as the web server, and set the appropriate access rights
-- if you have a domain / subdomain to serve Shaarli, [configure the server](Server-configuration) accordingly
-
-## Configuration
-
-In `data/config.json.php`.
-
-See also [Plugin System](Plugin-System).
-
-### Credentials
- 
-_These settings should not be edited_
-
-- **login**: Login username.  
-- **hash**: Generated password hash.  
-- **salt**: Password salt.
-
-### General
-
-- **title**: Shaarli's instance title.  
-- **header_link**: Link to the homepage.  
-- **links_per_page**: Number of shaares displayed per page.  
-- **timezone**: See [the list of supported timezones](http://php.net/manual/en/timezones.php).  
-- **enabled_plugins**: List of enabled plugins.
-- **default_note_title**: Default title of a new note.
-- **retrieve_description** (boolean): If set to true, for every new links Shaarli will try
-to retrieve the description and keywords from the HTML meta tags.
-
-### Security
-
-- **session_protection_disabled**: Disable session cookie hijacking protection (not recommended). 
-  It might be useful if your IP adress often changes.  
-- **ban_after**: Failed login attempts before being IP banned.  
-- **ban_duration**: IP ban duration in seconds.  
-- **open_shaarli**: Anyone can add a new link while logged out if enabled.  
-- **trusted_proxies**: List of trusted IP which won't be banned after failed login attemps. Useful if Shaarli is behind a reverse proxy.  
-- **allowed_protocols**: List of allowed protocols in shaare URLs or markdown-rendered descriptions. Useful if you want to store `javascript:` links (bookmarklets) in Shaarli (default: `["ftp", "ftps", "magnet"]`).
-
-### Resources
-
-- **data_dir**: Data directory.  
-- **datastore**: Shaarli's links database file path.  
-- **history**: Shaarli's operation history file path.
-- **updates**: File path for the ran updates file.  
-- **log**: Log file path.  
-- **update_check**: Last update check file path.  
-- **raintpl_tpl**: Templates directory.  
-- **raintpl_tmp**: Template engine cache directory.  
-- **thumbnails_cache**: Thumbnails cache directory.  
-- **page_cache**: Shaarli's internal cache directory.  
-- **ban_file**: Banned IP file path.
-
-### Translation
-
-- **language**: translation language (also see [Translations](Translations))
-    - **auto** (default): The translation language is chosen from the browser locale. 
-    It means that the language can be different for 2 different visitors depending on their locale.  
-    - **en**: Use the English translation.
-    - **fr**: Use the French translation.
-- **mode**: 
-    - **auto** or **php** (default): Use the PHP implementation of gettext (slower)
-    - **gettext**: Use PHP builtin gettext extension 
-    (faster, but requires `php-gettext` to be installed and to reload the web server on update)
-- **extension**: Translation extensions for custom themes or plugins. 
-Must be an associative array: `translation domain => translation path`.
-
-### Updates
-
-- **check_updates**: Enable or disable update check to the git repository.  
-- **check_updates_branch**: Git branch used to check updates (e.g. `stable` or `master`).  
-- **check_updates_interval**: Look for new version every N seconds (default: every day).
-
-### Privacy
-
-- **default_private_links**: Check the private checkbox by default for every new link.  
-- **hide_public_links**: All links are hidden while logged out.  
-- **force_login**: if **hide_public_links** and this are set to `true`, all anonymous users are redirected to the login page.
-- **hide_timestamps**: Timestamps are hidden.
-- **remember_user_default**: Default state of the login page's *remember me* checkbox
-    - `true`: checked by default, `false`: unchecked by default
-
-### Feed
-
-- **rss_permalinks**: Enable this to redirect RSS links to Shaarli's permalinks instead of shaared URL.  
-- **show_atom**: Display ATOM feed button.
-
-### Thumbnail
-
-- **enable_thumbnails**: Enable or disable thumbnail display.  
-- **enable_localcache**: Enable or disable local cache.
+![](https://i.imgur.com/boaaibC.png)
 
 ### LDAP
 
@@ -236,9 +129,89 @@ Must be an associative array: `translation domain => translation path`.
 } ?>
 ```
 
-## Additional configuration
+## Settings
 
-The `playvideos` plugin may require that you adapt your server's 
-[Content Security Policy](https://github.com/shaarli/Shaarli/blob/master/plugins/playvideos/README.md#troubleshooting) 
-configuration to work properly.
+### Credentials
+ 
+_These settings should not be edited_
 
+- **login**: Login username.  
+- **hash**: Generated password hash.  
+- **salt**: Password salt.
+
+### General
+
+- **title**: Shaarli's instance title.  
+- **header_link**: Link to the homepage.  
+- **links_per_page**: Number of Shaares displayed per page.  
+- **timezone**: See [the list of supported timezones](http://php.net/manual/en/timezones.php).  
+- **enabled_plugins**: List of enabled plugins.
+- **default_note_title**: Default title of a new note.
+- **retrieve_description** (boolean): If set to true, for every new Shaare Shaarli will try to retrieve the description and keywords from the HTML meta tags.
+
+### Security
+
+- **session_protection_disabled**: Disable session cookie hijacking protection (not recommended). 
+  It might be useful if your IP adress often changes.  
+- **ban_after**: Failed login attempts before being IP banned.  
+- **ban_duration**: IP ban duration in seconds.  
+- **open_shaarli**: Anyone can add a new Shaare while logged out if enabled.  
+- **trusted_proxies**: List of trusted IP which won't be banned after failed login attemps. Useful if Shaarli is behind a reverse proxy.  
+- **allowed_protocols**: List of allowed protocols in shaare URLs or markdown-rendered descriptions. Useful if you want to store `javascript:` links (bookmarklets) in Shaarli (default: `["ftp", "ftps", "magnet"]`).
+
+### Resources
+
+- **data_dir**: Data directory.  
+- **datastore**: Shaarli's Shaares database file path.  
+- **history**: Shaarli's operation history file path.
+- **updates**: File path for the ran updates file.  
+- **log**: Log file path.  
+- **update_check**: Last update check file path.  
+- **raintpl_tpl**: Templates directory.  
+- **raintpl_tmp**: Template engine cache directory.  
+- **thumbnails_cache**: Thumbnails cache directory.  
+- **page_cache**: Shaarli's internal cache directory.  
+- **ban_file**: Banned IP file path.
+
+### Translation
+
+- **language**: translation language (also see [Translations](Translations))
+    - **auto** (default): The translation language is chosen from the browser locale. 
+    It means that the language can be different for 2 different visitors depending on their locale.  
+    - **en**: Use the English translation.
+    - **fr**: Use the French translation.
+- **mode**: 
+    - **auto** or **php** (default): Use the PHP implementation of gettext (slower)
+    - **gettext**: Use PHP builtin gettext extension 
+    (faster, but requires `php-gettext` to be installed and to reload the web server on update)
+- **extension**: Translation extensions for custom themes or plugins. 
+Must be an associative array: `translation domain => translation path`.
+
+### Updates
+
+- **check_updates**: Enable or disable update check to the git repository.  
+- **check_updates_branch**: Git branch used to check updates (e.g. `stable` or `master`).  
+- **check_updates_interval**: Look for new version every N seconds (default: every day).
+
+### Privacy
+
+- **default_private_links**: Check the private checkbox by default for every new Shaare.  
+- **hide_public_links**: All Shaares are hidden while logged out.  
+- **force_login**: if **hide_public_links** and this are set to `true`, all anonymous users are redirected to the login page.
+- **hide_timestamps**: Timestamps are hidden.
+- **remember_user_default**: Default state of the login page's *remember me* checkbox
+    - `true`: checked by default, `false`: unchecked by default
+
+### Feed
+
+- **rss_permalinks**: Enable this to redirect RSS links to Shaarli's permalinks instead of shaared URL.  
+- **show_atom**: Display ATOM feed button.
+
+### Thumbnail
+
+- **enable_thumbnails**: Enable or disable thumbnail display.  
+- **enable_localcache**: Enable or disable local cache.
+
+## Plugins configuration
+
+See [Plugins](Plugins.md)

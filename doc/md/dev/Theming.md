@@ -1,3 +1,5 @@
+# Theming
+
 ## Foreword
 
 There are two ways of customizing how Shaarli looks:

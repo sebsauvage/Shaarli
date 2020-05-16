@@ -1,6 +1,7 @@
-**WORK IN PROGRESS**
+# Versioning
 
-It's important to understand how Shaarli branches work, especially if you're maintaining a 3rd party tools for Shaarli (theme, plugin, etc.), to be sure stay compatible.
+If you're maintaining a 3rd party tool for Shaarli (theme, plugin, etc.), It's important to understand how Shaarli branches work ensure your tool stays compatible.
+
 
 ## `master` branch
 
@@ -11,39 +12,26 @@ Remarks:
 - This branch shouldn't be used for production as it isn't necessary stable.
 - 3rd party aren't required to be compatible with the latest changes.
 - Official plugins, themes and libraries (contained within Shaarli organization repos) must be compatible with the master branch.
-- The version in this branch is always `dev`.
+
 
 ## `v0.x` branch
 
-This `v0.x` branch, points to the latest `v0.x.y` release.
+The `v0.x` branch points to the latest `v0.x.y` release.
 
-Explanation:
+If a major bug affects the original `v0.x.0` release, we may [backport](https://en.wikipedia.org/wiki/Backporting) a fix for this bug from master, to the `v0.x` branch, and create a new bugfix release (eg. `v0.x.1`) from this branch.
 
-When a new version is released, it might contains a major bug which isn't detected right away. For example, a new PHP version is released, containing backward compatibility issue which doesn't work with Shaarli.
+This allows users of the original release to upgrade to the fixed version, without having to upgrade to a completely new minor/major release.
 
-In this case, the issue is fixed in the `master` branch, and the fix is backported the to the `v0.x` branch. Then a new release is made from the `v0.x` branch.
-
-This workflow allow us to fix any major bug detected, without having to release bleeding edge feature too soon.
 
 ## `latest` branch
 
 This branch point the latest release. It recommended to use it to get the latest tested changes.
 
-## `stable` branch
-
-The `stable` branch doesn't contain any major bug, and is one major digit version behind the latest release.
-
-For example, the current latest release is `v0.8.3`, the stable branch is an alias to the latest `v0.7.x` release. When the `v0.9.0` version will be released, the stable will move to the latest `v0.8.x` release.
-
-Remarks:
-
-- Shaarli release pace isn't fast, and the stable branch might be a few months behind the latest release.
 
 ## Releases
 
-Releases are always made from the latest `v0.x` branch.
+For every release, we manually generate a .zip file which contains all Shaarli dependencies, making Shaarli's installation only one step.
 
-Note that for every release, we manually generate a tarball which contains all Shaarli dependencies, making Shaarli's installation only one step.
 
 ## Advices on 3rd party git repos workflow
 
