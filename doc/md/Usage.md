@@ -54,8 +54,9 @@ Shaarli can be used as a minimal blog, notepad, pastebin...: While adding or edi
 - **Exclude text/tags:** Use the `-` operator before a word or tag to exclude Shaares matching this word from search results (`NOT` operator).
 - **Untagged links:** Shaares without tags can be searched by clicking the `untagged` toggle button top left of the Shaares list (only when logged in).
 
-
 Both exclude patterns and exact searches can be combined with normal searches (example `"exact search" term otherterm -notthis "very exact" stuff -notagain`). Only AND (and NOT) search is currrently supported.
+
+Active search terms are displayed on top of the link list. To remove terms/tags from the curent search, click the `x` next to any of them, or simply clear text/tag search fields.
 
 
 ### Tag cloud
