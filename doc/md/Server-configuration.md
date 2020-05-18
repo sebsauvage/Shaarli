@@ -31,6 +31,7 @@ Supported PHP versions:
 
 Version | Status | Shaarli compatibility
 :---:|:---:|:---:
+7.3 | Supported | Yes
 7.2 | Supported | Yes
 7.1 | Supported | Yes
 7.0 | EOL: 2018-12-03 | Yes (up to Shaarli 0.10.x)
