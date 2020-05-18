@@ -77,7 +77,6 @@ sudo systemctl stop apache2
 sudo systemctl stop nginx
 
 # generate initial certificates - Let's Encrypt ACME servers must be able to access your server!
-# (DNS records must be correctly pointing to  it, firewall/NAT on port 80/443 must be open)
 sudo certbot certonly --standalone --noninteractive --agree-tos --email "admin@shaarli.mydomain.org" -d shaarli.mydomain.org
 # this will generate a private key and certificate at /etc/letsencrypt/live/shaarli.mydomain.org/{privkey,fullchain}.pem
 
@@ -150,7 +149,13 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
     SSLEngine             on
     SSLCertificateFile    /etc/letsencrypt/live/shaarli.mydomain.org/fullchain.pem
     SSLCertificateKeyFile /etc/letsencrypt/live/shaarli.mydomain.org/privkey.pem
-    Include /etc/letsencrypt/options-ssl-apache.conf
+
+    # Let's Encrypt settings from https://github.com/certbot/certbot/blob/master/certbot-apache/certbot_apache/_internal/tls_configs/current-options-ssl-apache.conf
+    SSLProtocol             all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
+    SSLCipherSuite          ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384
+    SSLHonorCipherOrder     off
+    SSLSessionTickets       off
+    SSLOptions +StrictRequire
 
     # SSL/TLS configuration (for self-signed certificates)
     #SSLEngine             on
