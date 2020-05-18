@@ -20,6 +20,10 @@ A **domain name** ([DNS record](https://opensource.com/article/17/4/introduction
 
 You can obtain a domain name from a [registrar](https://en.wikipedia.org/wiki/Domain_name_registrar) ([1](https://www.ovh.co.uk/domains), [2](https://www.gandi.net/en/domain)), or from free subdomain providers ([1](https://freedns.afraid.org/)). If you don't have a domain name, please set up a private domain name ([FQDN](ttps://en.wikipedia.org/wiki/Fully_qualified_domain_name)) in your clients' [hosts files](https://en.wikipedia.org/wiki/Hosts_(file)) to access the server (direct access by IP address can result in unexpected behavior).
 
+Setup a **firewall** (using `iptables`, [ufw](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-debian-10), [fireHOL](https://firehol.org/) or any frontend of your choice) to deny all incoming traffic except `tcp/80` and `tcp/443`, which are needed to access the web server (and any other posrts you might need, like SSH). If the server is in a private network behind a NAT, ensure these **ports are forwarded** to the server.
+
+Shaarli makes outbound HTTP/HTTPS connections to websites you bookmark to fetch page information (title, thumbnails), the server must then have access to the Internet as well, and a working DNS resolver.
+
 
 ### PHP
 
