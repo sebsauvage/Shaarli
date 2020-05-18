@@ -215,9 +215,7 @@ See [How to install the Apache web server](https://www.digitalocean.com/communit
 
 ### Nginx
 
-Guide on setting up the Nginx web server: [How to install the Nginx web server](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-debian-10)
-
-You will also need to install the [PHP-FPM](http://php-fpm.org) interpreter as detailed [here](https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mariadb-php-lemp-stack-on-debian-10#step-3-%E2%80%94-installing-php-for-processing). Nginx and PHP-FPM must be running using the same user and group, here we assume the user/group to be `www-data:www-data` but this may vary depending on your Linux distribution.
+This examples uses nginx and the [PHP-FPM](https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mariadb-php-lemp-stack-on-debian-10#step-3-%E2%80%94-installing-php-for-processing) PHP interpreter. Nginx and PHP-FPM must be running using the same user and group, here we assume the user/group to be `www-data:www-data`.
 
 
 ```bash
@@ -310,6 +308,8 @@ sudo ln -s /etc/nginx/sites-available/shaarli.mydomain.org /etc/nginx/sites-enab
 # reload nginx configuration
 sudo systemctl reload nginx
 ```
+
+See [How to install the Nginx web server](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-debian-10) for a complete guide.
 
 
 ## Reverse proxies
