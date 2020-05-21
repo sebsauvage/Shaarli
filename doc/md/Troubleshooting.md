@@ -38,18 +38,21 @@ Shaarli redirections will not work properly. To solve this, assign a local domai
 
 ### Old PHP versions
 
-On **free.fr**: free.fr now supports php 5.6.x([link](http://les.pages.perso.chez.free.fr/migrations/php5v6.io))
-and so support now the tag autocompletion but you have to do the following.
-
-At the root of your webspace create a `sessions` directory and a `.htaccess` file containing:
+- On hosts (such as **free.fr**) which only support PHP 5.6, Shaarli [v0.10.4](https://github.com/shaarli/Shaarli/releases/tag/v0.10.4) is the maximum supported version. At the root of your webspace create a `sessions` directory and a `.htaccess` file containing:
 
 ```xml
 <IfDefine Free>
 php56 1
 </IfDefine>
+<Files ".ht*">
+Order allow,deny
+Deny from all
+Satisfy all
+</Files>
+Options -Indexes
 ```
 
-- If you have an error such as: `Parse error: syntax error, unexpected '=', expecting '(' in /links/index.php on line xxx`, it means that your host is using php4, not php5. Shaarli requires php 5.1. Try changing the file extension to `.php5`
+- If you have an error such as: `Parse error: syntax error, unexpected '=', expecting '(' in /links/index.php on line xxx`, it means that your host is using PHP 4, not PHP 5. Shaarli requires PHP 5.1. Try changing the file extension to `.php5`
 - On **1and1** : If you add the link from the page (and not from the bookmarklet), Shaarli will no be able to get the title of the page. You will have to enter it manually. (Because they have disabled the ability to download a file through HTTP).
 - If you have the error `Warning: file_get_contents() [function.file-get-contents]: URL file-access is disabled in the server configuration in /…/index.php on line xxx`, it means that your host has disabled the ability to fetch a file by HTTP in the php config (Typically in 1and1 hosting). Bad host. Change host. Or comment the following lines:
 
@@ -59,8 +62,10 @@ php56 1
 //if (strpos($status,'200 OK')) $title=html_extract_title($data);
 ```
 
-- On hosts which forbid outgoing HTTP requests (such as free.fr), some thumbnails will not work.
+- On hosts (such as **free.fr**) which forbid outgoing HTTP requests, some thumbnails will not work.
+- On hosts (such as **free.fr**) which limit the number of FTP connections, setup your FTP client accordingly (else some files may be missing after upload).
 - On **lost-oasis**, RSS doesn't work correctly, because of this message at the begining of the RSS/ATOM feed : `<? // tout ce qui est charge ici (generalement des includes et require) est charge en permanence. ?>`. To fix this, remove this message from `php-include/prepend.php`
+
 
 ### Dates are not properly formatted
 
