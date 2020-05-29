@@ -108,3 +108,4 @@ Restore by using the `Import` feature.
 - These exports contain the full data (URL, title, tags, date, description, public/private status of your Shaares)
 - They can also be imported to your web browser bookmarks.
 
+To **import a HTML bookmarks file** exported from your browser, just use the `Import` feature. For each "folder" in the bookmarks you imported, a new tag will be created (for example a bookmark in `Movies > Sci-fi` folder will be tagged `Movies` `Sci-fi`).
