@@ -44,8 +44,9 @@ Required PHP extensions:
 
 Extension | Required? | Usage
 ---|:---:|---
-[`openssl`](http://php.net/manual/en/book.openssl.php) | All | OpenSSL, HTTPS
+[`openssl`](http://php.net/manual/en/book.openssl.php) | requires | OpenSSL, HTTPS
 [`php-json`](http://php.net/manual/en/book.json.php) | required | configuration parsing
+[`php-simplexml`](https://www.php.net/manual/en/book.simplexml.php) | required | REST API (Slim framework)
 [`php-mbstring`](http://php.net/manual/en/book.mbstring.php) | CentOS, Fedora, RHEL, Windows, some hosting providers | multibyte (Unicode) string support
 [`php-gd`](http://php.net/manual/en/book.image.php) | optional | required to use thumbnails
 [`php-intl`](http://php.net/manual/en/book.intl.php) | optional | localized text sorting (e.g. `e->è->f`)
