@@ -25,6 +25,7 @@ See [REST API](REST-API) for a list of official and community clients.
 - [shaarli-descriptor](https://github.com/immanuelfodor/shaarli-descriptor) by [@immanuelfodor](https://github.com/immanuelfodor) - Customize the default height/number of rows of the Description field when editing a Shaare.
 - [urlextern](https://github.com/trailjeep/shaarli-urlextern) by [@trailjeep](https://github.com/trailjeep) - Shaarli plugin to open external links in a new tab/window.
 - [favicons](https://github.com/trailjeep/shaarli-favicons) by [@trailjeep](https://github.com/trailjeep) - Shaarli plugin to add favicon/filetype icons to Shaares.
+- [webhooks](https://gitlab.com/flow.gunso/shaarli-webhooks) by [@flow.gunso](https://gitlab.com/flow.gunso) - Shaarli plugin that enables user-defined callback URL, i.e. webhooks, for specific Shaarli events (link saving, deletion...)
 
 
 ### Third-party themes
