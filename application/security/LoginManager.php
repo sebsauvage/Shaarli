@@ -141,7 +141,7 @@ class LoginManager
     public function checkCredentials($remoteIp, $clientIpId, $login, $password)
     {
         // Check login matches config
-        if ($login != $this->configManager->get('credentials.login')) {
+        if ($login !== $this->configManager->get('credentials.login')) {
             return false;
         }
 
