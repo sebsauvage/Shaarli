@@ -147,8 +147,10 @@ class LoginManager
 
         // Check credentials
         try {
-            if (($this->configManager->get('ldap.host') != "" && $this->checkCredentialsFromLdap($login, $password))
-                || ($this->configManager->get('ldap.host') == "" && $this->checkCredentialsFromLocalConfig($login, $password))) {
+            $useLdapLogin = !empty($this->configManager->get('ldap.host'));
+            if ((false === $useLdapLogin && $this->checkCredentialsFromLocalConfig($login, $password))
+                || (true === $useLdapLogin && $this->checkCredentialsFromLdap($login, $password))
+            ) {
                     $this->sessionManager->storeLoginInfo($clientIpId);
                     logm(
                         $this->configManager->get('resource.log'),
