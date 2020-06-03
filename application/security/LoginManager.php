@@ -206,7 +206,12 @@ class LoginManager
     {
         $connect = $connect ?? function($host) { return ldap_connect($host); };
         $bind = $bind ?? function($handle, $dn, $password) { return ldap_bind($handle, $dn, $password); };
-        return $bind($connect($this->configManager->get('ldap.host')), sprintf($this->configManager->get('ldap.dn'), $login), $password);
+
+        return $bind(
+            $connect($this->configManager->get('ldap.host')),
+            sprintf($this->configManager->get('ldap.dn'), $login), 
+            $password
+        );
     }
 
     /**
