@@ -75,6 +75,9 @@ Some settings can be configured directly from a web browser by accesing the `Too
         "title": "My Shaarli",
         "header_link": "?"
     },
+    "dev": {
+        "debug": false,
+    }
     "extras": {
         "show_atom": false,
         "hide_public_links": false,
