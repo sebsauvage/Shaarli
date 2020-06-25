@@ -204,12 +204,20 @@ class LoginManager
      */
     public function checkCredentialsFromLdap($login, $password, $connect = null, $bind = null)
     {
-        $connect = $connect ?? function($host) { return ldap_connect($host); };
-        $bind = $bind ?? function($handle, $dn, $password) { return ldap_bind($handle, $dn, $password); };
+        $connect = $connect ?? function($host) {
+            $resource = ldap_connect($host);
+
+            ldap_set_option($resource, LDAP_OPT_PROTOCOL_VERSION, 3);
+
+            return $resource;
+        };
+        $bind = $bind ?? function($handle, $dn, $password) {
+            return ldap_bind($handle, $dn, $password);
+        };
 
         return $bind(
             $connect($this->configManager->get('ldap.host')),
-            sprintf($this->configManager->get('ldap.dn'), $login), 
+            sprintf($this->configManager->get('ldap.dn'), $login),
             $password
         );
     }
