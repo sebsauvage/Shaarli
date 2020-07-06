@@ -1,10 +1,13 @@
 <?php
-namespace Shaarli;
+
+namespace Shaarli\Legacy;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for Router
  */
-class RouterTest extends \PHPUnit\Framework\TestCase
+class LegacyRouterTest extends TestCase
 {
     /**
      * Test findPage: login page output.
@@ -15,18 +18,18 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageLoginValid()
     {
         $this->assertEquals(
-            Router::$PAGE_LOGIN,
-            Router::findPage('do=login', array(), false)
+            LegacyRouter::$PAGE_LOGIN,
+            LegacyRouter::findPage('do=login', array(), false)
         );
 
         $this->assertEquals(
-            Router::$PAGE_LOGIN,
-            Router::findPage('do=login', array(), 1)
+            LegacyRouter::$PAGE_LOGIN,
+            LegacyRouter::findPage('do=login', array(), 1)
         );
 
         $this->assertEquals(
-            Router::$PAGE_LOGIN,
-            Router::findPage('do=login&stuff', array(), false)
+            LegacyRouter::$PAGE_LOGIN,
+            LegacyRouter::findPage('do=login&stuff', array(), false)
         );
     }
 
@@ -39,13 +42,13 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageLoginInvalid()
     {
         $this->assertNotEquals(
-            Router::$PAGE_LOGIN,
-            Router::findPage('do=login', array(), true)
+            LegacyRouter::$PAGE_LOGIN,
+            LegacyRouter::findPage('do=login', array(), true)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_LOGIN,
-            Router::findPage('do=other', array(), false)
+            LegacyRouter::$PAGE_LOGIN,
+            LegacyRouter::findPage('do=other', array(), false)
         );
     }
 
@@ -58,13 +61,13 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPagePicwallValid()
     {
         $this->assertEquals(
-            Router::$PAGE_PICWALL,
-            Router::findPage('do=picwall', array(), false)
+            LegacyRouter::$PAGE_PICWALL,
+            LegacyRouter::findPage('do=picwall', array(), false)
         );
 
         $this->assertEquals(
-            Router::$PAGE_PICWALL,
-            Router::findPage('do=picwall', array(), true)
+            LegacyRouter::$PAGE_PICWALL,
+            LegacyRouter::findPage('do=picwall', array(), true)
         );
     }
 
@@ -77,13 +80,13 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPagePicwallInvalid()
     {
         $this->assertEquals(
-            Router::$PAGE_PICWALL,
-            Router::findPage('do=picwall&stuff', array(), false)
+            LegacyRouter::$PAGE_PICWALL,
+            LegacyRouter::findPage('do=picwall&stuff', array(), false)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_PICWALL,
-            Router::findPage('do=other', array(), false)
+            LegacyRouter::$PAGE_PICWALL,
+            LegacyRouter::findPage('do=other', array(), false)
         );
     }
 
@@ -96,18 +99,18 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageTagcloudValid()
     {
         $this->assertEquals(
-            Router::$PAGE_TAGCLOUD,
-            Router::findPage('do=tagcloud', array(), false)
+            LegacyRouter::$PAGE_TAGCLOUD,
+            LegacyRouter::findPage('do=tagcloud', array(), false)
         );
 
         $this->assertEquals(
-            Router::$PAGE_TAGCLOUD,
-            Router::findPage('do=tagcloud', array(), true)
+            LegacyRouter::$PAGE_TAGCLOUD,
+            LegacyRouter::findPage('do=tagcloud', array(), true)
         );
 
         $this->assertEquals(
-            Router::$PAGE_TAGCLOUD,
-            Router::findPage('do=tagcloud&stuff', array(), false)
+            LegacyRouter::$PAGE_TAGCLOUD,
+            LegacyRouter::findPage('do=tagcloud&stuff', array(), false)
         );
     }
 
@@ -120,8 +123,8 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageTagcloudInvalid()
     {
         $this->assertNotEquals(
-            Router::$PAGE_TAGCLOUD,
-            Router::findPage('do=other', array(), false)
+            LegacyRouter::$PAGE_TAGCLOUD,
+            LegacyRouter::findPage('do=other', array(), false)
         );
     }
 
@@ -134,23 +137,23 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageLinklistValid()
     {
         $this->assertEquals(
-            Router::$PAGE_LINKLIST,
-            Router::findPage('', array(), true)
+            LegacyRouter::$PAGE_LINKLIST,
+            LegacyRouter::findPage('', array(), true)
         );
 
         $this->assertEquals(
-            Router::$PAGE_LINKLIST,
-            Router::findPage('whatever', array(), true)
+            LegacyRouter::$PAGE_LINKLIST,
+            LegacyRouter::findPage('whatever', array(), true)
         );
 
         $this->assertEquals(
-            Router::$PAGE_LINKLIST,
-            Router::findPage('whatever', array(), false)
+            LegacyRouter::$PAGE_LINKLIST,
+            LegacyRouter::findPage('whatever', array(), false)
         );
 
         $this->assertEquals(
-            Router::$PAGE_LINKLIST,
-            Router::findPage('do=tools', array(), false)
+            LegacyRouter::$PAGE_LINKLIST,
+            LegacyRouter::findPage('do=tools', array(), false)
         );
     }
 
@@ -163,13 +166,13 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageToolsValid()
     {
         $this->assertEquals(
-            Router::$PAGE_TOOLS,
-            Router::findPage('do=tools', array(), true)
+            LegacyRouter::$PAGE_TOOLS,
+            LegacyRouter::findPage('do=tools', array(), true)
         );
 
         $this->assertEquals(
-            Router::$PAGE_TOOLS,
-            Router::findPage('do=tools&stuff', array(), true)
+            LegacyRouter::$PAGE_TOOLS,
+            LegacyRouter::findPage('do=tools&stuff', array(), true)
         );
     }
 
@@ -182,18 +185,18 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageToolsInvalid()
     {
         $this->assertNotEquals(
-            Router::$PAGE_TOOLS,
-            Router::findPage('do=tools', array(), 1)
+            LegacyRouter::$PAGE_TOOLS,
+            LegacyRouter::findPage('do=tools', array(), 1)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_TOOLS,
-            Router::findPage('do=tools', array(), false)
+            LegacyRouter::$PAGE_TOOLS,
+            LegacyRouter::findPage('do=tools', array(), false)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_TOOLS,
-            Router::findPage('do=other', array(), true)
+            LegacyRouter::$PAGE_TOOLS,
+            LegacyRouter::findPage('do=other', array(), true)
         );
     }
 
@@ -206,12 +209,12 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageChangepasswdValid()
     {
         $this->assertEquals(
-            Router::$PAGE_CHANGEPASSWORD,
-            Router::findPage('do=changepasswd', array(), true)
+            LegacyRouter::$PAGE_CHANGEPASSWORD,
+            LegacyRouter::findPage('do=changepasswd', array(), true)
         );
         $this->assertEquals(
-            Router::$PAGE_CHANGEPASSWORD,
-            Router::findPage('do=changepasswd&stuff', array(), true)
+            LegacyRouter::$PAGE_CHANGEPASSWORD,
+            LegacyRouter::findPage('do=changepasswd&stuff', array(), true)
         );
     }
 
@@ -224,18 +227,18 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageChangepasswdInvalid()
     {
         $this->assertNotEquals(
-            Router::$PAGE_CHANGEPASSWORD,
-            Router::findPage('do=changepasswd', array(), 1)
+            LegacyRouter::$PAGE_CHANGEPASSWORD,
+            LegacyRouter::findPage('do=changepasswd', array(), 1)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_CHANGEPASSWORD,
-            Router::findPage('do=changepasswd', array(), false)
+            LegacyRouter::$PAGE_CHANGEPASSWORD,
+            LegacyRouter::findPage('do=changepasswd', array(), false)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_CHANGEPASSWORD,
-            Router::findPage('do=other', array(), true)
+            LegacyRouter::$PAGE_CHANGEPASSWORD,
+            LegacyRouter::findPage('do=other', array(), true)
         );
     }
     /**
@@ -247,13 +250,13 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageConfigureValid()
     {
         $this->assertEquals(
-            Router::$PAGE_CONFIGURE,
-            Router::findPage('do=configure', array(), true)
+            LegacyRouter::$PAGE_CONFIGURE,
+            LegacyRouter::findPage('do=configure', array(), true)
         );
 
         $this->assertEquals(
-            Router::$PAGE_CONFIGURE,
-            Router::findPage('do=configure&stuff', array(), true)
+            LegacyRouter::$PAGE_CONFIGURE,
+            LegacyRouter::findPage('do=configure&stuff', array(), true)
         );
     }
 
@@ -266,18 +269,18 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageConfigureInvalid()
     {
         $this->assertNotEquals(
-            Router::$PAGE_CONFIGURE,
-            Router::findPage('do=configure', array(), 1)
+            LegacyRouter::$PAGE_CONFIGURE,
+            LegacyRouter::findPage('do=configure', array(), 1)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_CONFIGURE,
-            Router::findPage('do=configure', array(), false)
+            LegacyRouter::$PAGE_CONFIGURE,
+            LegacyRouter::findPage('do=configure', array(), false)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_CONFIGURE,
-            Router::findPage('do=other', array(), true)
+            LegacyRouter::$PAGE_CONFIGURE,
+            LegacyRouter::findPage('do=other', array(), true)
         );
     }
 
@@ -290,13 +293,13 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageChangetagValid()
     {
         $this->assertEquals(
-            Router::$PAGE_CHANGETAG,
-            Router::findPage('do=changetag', array(), true)
+            LegacyRouter::$PAGE_CHANGETAG,
+            LegacyRouter::findPage('do=changetag', array(), true)
         );
 
         $this->assertEquals(
-            Router::$PAGE_CHANGETAG,
-            Router::findPage('do=changetag&stuff', array(), true)
+            LegacyRouter::$PAGE_CHANGETAG,
+            LegacyRouter::findPage('do=changetag&stuff', array(), true)
         );
     }
 
@@ -309,18 +312,18 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageChangetagInvalid()
     {
         $this->assertNotEquals(
-            Router::$PAGE_CHANGETAG,
-            Router::findPage('do=changetag', array(), 1)
+            LegacyRouter::$PAGE_CHANGETAG,
+            LegacyRouter::findPage('do=changetag', array(), 1)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_CHANGETAG,
-            Router::findPage('do=changetag', array(), false)
+            LegacyRouter::$PAGE_CHANGETAG,
+            LegacyRouter::findPage('do=changetag', array(), false)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_CHANGETAG,
-            Router::findPage('do=other', array(), true)
+            LegacyRouter::$PAGE_CHANGETAG,
+            LegacyRouter::findPage('do=other', array(), true)
         );
     }
 
@@ -333,13 +336,13 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageAddlinkValid()
     {
         $this->assertEquals(
-            Router::$PAGE_ADDLINK,
-            Router::findPage('do=addlink', array(), true)
+            LegacyRouter::$PAGE_ADDLINK,
+            LegacyRouter::findPage('do=addlink', array(), true)
         );
 
         $this->assertEquals(
-            Router::$PAGE_ADDLINK,
-            Router::findPage('do=addlink&stuff', array(), true)
+            LegacyRouter::$PAGE_ADDLINK,
+            LegacyRouter::findPage('do=addlink&stuff', array(), true)
         );
     }
 
@@ -352,18 +355,18 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageAddlinkInvalid()
     {
         $this->assertNotEquals(
-            Router::$PAGE_ADDLINK,
-            Router::findPage('do=addlink', array(), 1)
+            LegacyRouter::$PAGE_ADDLINK,
+            LegacyRouter::findPage('do=addlink', array(), 1)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_ADDLINK,
-            Router::findPage('do=addlink', array(), false)
+            LegacyRouter::$PAGE_ADDLINK,
+            LegacyRouter::findPage('do=addlink', array(), false)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_ADDLINK,
-            Router::findPage('do=other', array(), true)
+            LegacyRouter::$PAGE_ADDLINK,
+            LegacyRouter::findPage('do=other', array(), true)
         );
     }
 
@@ -376,13 +379,13 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageExportValid()
     {
         $this->assertEquals(
-            Router::$PAGE_EXPORT,
-            Router::findPage('do=export', array(), true)
+            LegacyRouter::$PAGE_EXPORT,
+            LegacyRouter::findPage('do=export', array(), true)
         );
 
         $this->assertEquals(
-            Router::$PAGE_EXPORT,
-            Router::findPage('do=export&stuff', array(), true)
+            LegacyRouter::$PAGE_EXPORT,
+            LegacyRouter::findPage('do=export&stuff', array(), true)
         );
     }
 
@@ -395,18 +398,18 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageExportInvalid()
     {
         $this->assertNotEquals(
-            Router::$PAGE_EXPORT,
-            Router::findPage('do=export', array(), 1)
+            LegacyRouter::$PAGE_EXPORT,
+            LegacyRouter::findPage('do=export', array(), 1)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_EXPORT,
-            Router::findPage('do=export', array(), false)
+            LegacyRouter::$PAGE_EXPORT,
+            LegacyRouter::findPage('do=export', array(), false)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_EXPORT,
-            Router::findPage('do=other', array(), true)
+            LegacyRouter::$PAGE_EXPORT,
+            LegacyRouter::findPage('do=other', array(), true)
         );
     }
 
@@ -419,13 +422,13 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageImportValid()
     {
         $this->assertEquals(
-            Router::$PAGE_IMPORT,
-            Router::findPage('do=import', array(), true)
+            LegacyRouter::$PAGE_IMPORT,
+            LegacyRouter::findPage('do=import', array(), true)
         );
 
         $this->assertEquals(
-            Router::$PAGE_IMPORT,
-            Router::findPage('do=import&stuff', array(), true)
+            LegacyRouter::$PAGE_IMPORT,
+            LegacyRouter::findPage('do=import&stuff', array(), true)
         );
     }
 
@@ -438,18 +441,18 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageImportInvalid()
     {
         $this->assertNotEquals(
-            Router::$PAGE_IMPORT,
-            Router::findPage('do=import', array(), 1)
+            LegacyRouter::$PAGE_IMPORT,
+            LegacyRouter::findPage('do=import', array(), 1)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_IMPORT,
-            Router::findPage('do=import', array(), false)
+            LegacyRouter::$PAGE_IMPORT,
+            LegacyRouter::findPage('do=import', array(), false)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_IMPORT,
-            Router::findPage('do=other', array(), true)
+            LegacyRouter::$PAGE_IMPORT,
+            LegacyRouter::findPage('do=other', array(), true)
         );
     }
 
@@ -462,24 +465,24 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageEditlinkValid()
     {
         $this->assertEquals(
-            Router::$PAGE_EDITLINK,
-            Router::findPage('whatever', array('edit_link' => 1), true)
+            LegacyRouter::$PAGE_EDITLINK,
+            LegacyRouter::findPage('whatever', array('edit_link' => 1), true)
         );
 
         $this->assertEquals(
-            Router::$PAGE_EDITLINK,
-            Router::findPage('', array('edit_link' => 1), true)
+            LegacyRouter::$PAGE_EDITLINK,
+            LegacyRouter::findPage('', array('edit_link' => 1), true)
         );
 
 
         $this->assertEquals(
-            Router::$PAGE_EDITLINK,
-            Router::findPage('whatever', array('post' => 1), true)
+            LegacyRouter::$PAGE_EDITLINK,
+            LegacyRouter::findPage('whatever', array('post' => 1), true)
         );
 
         $this->assertEquals(
-            Router::$PAGE_EDITLINK,
-            Router::findPage('whatever', array('post' => 1, 'edit_link' => 1), true)
+            LegacyRouter::$PAGE_EDITLINK,
+            LegacyRouter::findPage('whatever', array('post' => 1, 'edit_link' => 1), true)
         );
     }
 
@@ -492,18 +495,18 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     public function testFindPageEditlinkInvalid()
     {
         $this->assertNotEquals(
-            Router::$PAGE_EDITLINK,
-            Router::findPage('whatever', array('edit_link' => 1), false)
+            LegacyRouter::$PAGE_EDITLINK,
+            LegacyRouter::findPage('whatever', array('edit_link' => 1), false)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_EDITLINK,
-            Router::findPage('whatever', array('edit_link' => 1), 1)
+            LegacyRouter::$PAGE_EDITLINK,
+            LegacyRouter::findPage('whatever', array('edit_link' => 1), 1)
         );
 
         $this->assertNotEquals(
-            Router::$PAGE_EDITLINK,
-            Router::findPage('whatever', array(), true)
+            LegacyRouter::$PAGE_EDITLINK,
+            LegacyRouter::findPage('whatever', array(), true)
         );
     }
 }

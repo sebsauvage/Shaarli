@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shaarli\Front\Controller\Admin;
 
 use Shaarli\Bookmark\BookmarkFilter;
+use Shaarli\Render\TemplatePage;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -28,7 +29,7 @@ class ManageTagController extends ShaarliAdminController
             t('Manage tags') .' - '. $this->container->conf->get('general.title', 'Shaarli')
         );
 
-        return $response->write($this->render('changetag'));
+        return $response->write($this->render(TemplatePage::CHANGE_TAG));
     }
 
     /**

@@ -21,7 +21,7 @@ class Updater
     /**
      * @var BookmarkServiceInterface instance.
      */
-    protected $linkServices;
+    protected $bookmarkService;
 
     /**
      * @var ConfigManager $conf Configuration Manager instance.
@@ -49,7 +49,7 @@ class Updater
     public function __construct($doneUpdates, $linkDB, $conf, $isLoggedIn)
     {
         $this->doneUpdates = $doneUpdates;
-        $this->linkServices = $linkDB;
+        $this->bookmarkService = $linkDB;
         $this->conf = $conf;
         $this->isLoggedIn = $isLoggedIn;
 
@@ -68,7 +68,7 @@ class Updater
      */
     public function update()
     {
-        $updatesRan = array();
+        $updatesRan = [];
 
         // If the user isn't logged in, exit without updating.
         if ($this->isLoggedIn !== true) {
@@ -112,6 +112,16 @@ class Updater
         return $this->doneUpdates;
     }
 
+    public function readUpdates(string $updatesFilepath): array
+    {
+        return UpdaterUtils::read_updates_file($updatesFilepath);
+    }
+
+    public function writeUpdates(string $updatesFilepath, array $updates): void
+    {
+        UpdaterUtils::write_updates_file($updatesFilepath, $updates);
+    }
+
     /**
      * With the Slim routing system, default header link should be `./` instead of `?`.
      * Otherwise you can not go back to the home page. Example: `/picture-wall` -> `/picture-wall?` instead of `/`.
@@ -123,6 +133,33 @@ class Updater
             $link = './'. ltrim($link, '?');
 
             $this->conf->set('general.header_link', $link, true, true);
+        }
+
+        return true;
+    }
+
+    /**
+     * With the Slim routing system, note bookmarks URL formatted `?abcdef`
+     * should be replaced with `/shaare/abcdef`
+     */
+    public function updateMethodMigrateExistingNotesUrl(): bool
+    {
+        $updated = false;
+
+        foreach ($this->bookmarkService->search() as $bookmark) {
+            if ($bookmark->isNote()
+                && startsWith($bookmark->getUrl(), '?')
+                && 1 === preg_match('/^\?([a-zA-Z0-9-_@]{6})($|&|#)/', $bookmark->getUrl(), $match)
+            ) {
+                $updated = true;
+                $bookmark = $bookmark->setUrl('/shaare/' . $match[1]);
+
+                $this->bookmarkService->set($bookmark, false);
+            }
+        }
+
+        if ($updated) {
+            $this->bookmarkService->save();
         }
 
         return true;

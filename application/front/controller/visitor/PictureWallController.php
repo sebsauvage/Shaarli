@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shaarli\Front\Controller\Visitor;
 
 use Shaarli\Front\Exception\ThumbnailsDisabledException;
+use Shaarli\Render\TemplatePage;
 use Shaarli\Thumbnailer;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -46,7 +47,7 @@ class PictureWallController extends ShaarliVisitorController
             $this->assignView($key, $value);
         }
 
-        return $response->write($this->render('picwall'));
+        return $response->write($this->render(TemplatePage::PICTURE_WALL));
     }
 
     /**

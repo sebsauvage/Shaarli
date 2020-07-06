@@ -7,6 +7,7 @@ namespace Shaarli\Front\Controller\Admin;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Formatter\BookmarkMarkdownFormatter;
+use Shaarli\Render\TemplatePage;
 use Shaarli\Thumbnailer;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -28,7 +29,7 @@ class ManageShaareController extends ShaarliAdminController
             t('Shaare a new link') .' - '. $this->container->conf->get('general.title', 'Shaarli')
         );
 
-        return $response->write($this->render('addlink'));
+        return $response->write($this->render(TemplatePage::ADDLINK));
     }
 
     /**
@@ -365,7 +366,7 @@ class ManageShaareController extends ShaarliAdminController
             $editLabel . t('Shaare') .' - '. $this->container->conf->get('general.title', 'Shaarli')
         );
 
-        return $response->write($this->render('editlink'));
+        return $response->write($this->render(TemplatePage::EDIT_LINK));
     }
 
     /**

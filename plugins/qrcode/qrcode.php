@@ -6,7 +6,7 @@
  */
 
 use Shaarli\Plugin\PluginManager;
-use Shaarli\Router;
+use Shaarli\Render\TemplatePage;
 
 /**
  * Add qrcode icon to link_plugin when rendering linklist.
@@ -40,7 +40,7 @@ function hook_qrcode_render_linklist($data)
  */
 function hook_qrcode_render_footer($data)
 {
-    if ($data['_PAGE_'] == Router::$PAGE_LINKLIST) {
+    if ($data['_PAGE_'] == TemplatePage::LINKLIST) {
         $data['js_files'][] = PluginManager::$PLUGINS_PATH . '/qrcode/shaarli-qrcode.js';
     }
 
@@ -56,7 +56,7 @@ function hook_qrcode_render_footer($data)
  */
 function hook_qrcode_render_includes($data)
 {
-    if ($data['_PAGE_'] == Router::$PAGE_LINKLIST) {
+    if ($data['_PAGE_'] == TemplatePage::LINKLIST) {
         $data['css_files'][] = PluginManager::$PLUGINS_PATH . '/qrcode/qrcode.css';
     }
 

@@ -7,6 +7,7 @@ namespace Shaarli\Front\Controller\Admin;
 use Shaarli\Container\ShaarliContainer;
 use Shaarli\Front\Exception\OpenShaarliPasswordException;
 use Shaarli\Front\Exception\ShaarliFrontException;
+use Shaarli\Render\TemplatePage;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Throwable;
@@ -33,7 +34,7 @@ class PasswordController extends ShaarliAdminController
      */
     public function index(Request $request, Response $response): Response
     {
-        return $response->write($this->render('changepassword'));
+        return $response->write($this->render(TemplatePage::CHANGE_PASSWORD));
     }
 
     /**
@@ -55,7 +56,7 @@ class PasswordController extends ShaarliAdminController
 
             return $response
                 ->withStatus(400)
-                ->write($this->render('changepassword'))
+                ->write($this->render(TemplatePage::CHANGE_PASSWORD))
             ;
         }
 
@@ -71,7 +72,7 @@ class PasswordController extends ShaarliAdminController
 
             return $response
                 ->withStatus(400)
-                ->write($this->render('changepassword'))
+                ->write($this->render(TemplatePage::CHANGE_PASSWORD))
             ;
         }
 
@@ -95,6 +96,6 @@ class PasswordController extends ShaarliAdminController
 
         $this->saveSuccessMessage(t('Your password has been changed'));
 
-        return $response->write($this->render('changepassword'));
+        return $response->write($this->render(TemplatePage::CHANGE_PASSWORD));
     }
 }

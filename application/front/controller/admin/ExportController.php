@@ -6,6 +6,7 @@ namespace Shaarli\Front\Controller\Admin;
 
 use DateTime;
 use Shaarli\Bookmark\Bookmark;
+use Shaarli\Render\TemplatePage;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -24,7 +25,7 @@ class ExportController extends ShaarliAdminController
     {
         $this->assignView('pagetitle', t('Export') .' - '. $this->container->conf->get('general.title', 'Shaarli'));
 
-        return $response->write($this->render('export'));
+        return $response->write($this->render(TemplatePage::EXPORT));
     }
 
     /**
@@ -74,6 +75,6 @@ class ExportController extends ShaarliAdminController
         $this->assignView('eol', PHP_EOL);
         $this->assignView('selection', $selection);
 
-        return $response->write($this->render('export.bookmarks'));
+        return $response->write($this->render(TemplatePage::NETSCAPE_EXPORT_BOOKMARKS));
     }
 }

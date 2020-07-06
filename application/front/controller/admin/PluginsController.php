@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shaarli\Front\Controller\Admin;
 
 use Exception;
+use Shaarli\Render\TemplatePage;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -44,7 +45,7 @@ class PluginsController extends ShaarliAdminController
             t('Plugin Administration') .' - '. $this->container->conf->get('general.title', 'Shaarli')
         );
 
-        return $response->write($this->render('pluginsadmin'));
+        return $response->write($this->render(TemplatePage::PLUGINS_ADMIN));
     }
 
     /**

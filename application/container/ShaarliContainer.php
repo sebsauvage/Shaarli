@@ -17,15 +17,17 @@ use Shaarli\Render\PageCacheManager;
 use Shaarli\Security\LoginManager;
 use Shaarli\Security\SessionManager;
 use Shaarli\Thumbnailer;
+use Shaarli\Updater\Updater;
 use Slim\Container;
 
 /**
  * Extension of Slim container to document the injected objects.
  *
- * @property string                   $basePath        Shaarli's instance base path (e.g. `/shaarli/`)
+ * @property string                   $basePath             Shaarli's instance base path (e.g. `/shaarli/`)
  * @property BookmarkServiceInterface $bookmarkService
  * @property ConfigManager            $conf
- * @property mixed[]                  $environment     $_SERVER automatically injected by Slim
+ * @property mixed[]                  $environment          $_SERVER automatically injected by Slim
+ * @property callable                 $errorHandler         Overrides default Slim error display
  * @property FeedBuilder              $feedBuilder
  * @property FormatterFactory         $formatterFactory
  * @property History                  $history
@@ -37,6 +39,7 @@ use Slim\Container;
  * @property PluginManager            $pluginManager
  * @property SessionManager           $sessionManager
  * @property Thumbnailer              $thumbnailer
+ * @property Updater                  $updater
  */
 class ShaarliContainer extends Container
 {

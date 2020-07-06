@@ -3,7 +3,7 @@ namespace Shaarli\Plugin\Pubsubhubbub;
 
 use Shaarli\Config\ConfigManager;
 use Shaarli\Plugin\PluginManager;
-use Shaarli\Router;
+use Shaarli\Render\TemplatePage;
 
 require_once 'plugins/pubsubhubbub/pubsubhubbub.php';
 
@@ -34,7 +34,7 @@ class PluginPubsubhubbubTest extends \PHPUnit\Framework\TestCase
         $hub = 'http://domain.hub';
         $conf = new ConfigManager(self::$configFile);
         $conf->set('plugins.PUBSUBHUB_URL', $hub);
-        $data['_PAGE_'] = Router::$PAGE_FEED_RSS;
+        $data['_PAGE_'] = TemplatePage::FEED_RSS;
 
         $data = hook_pubsubhubbub_render_feed($data, $conf);
         $expected = '<atom:link rel="hub" href="'. $hub .'" />';
@@ -49,7 +49,7 @@ class PluginPubsubhubbubTest extends \PHPUnit\Framework\TestCase
         $hub = 'http://domain.hub';
         $conf = new ConfigManager(self::$configFile);
         $conf->set('plugins.PUBSUBHUB_URL', $hub);
-        $data['_PAGE_'] = Router::$PAGE_FEED_ATOM;
+        $data['_PAGE_'] = TemplatePage::FEED_ATOM;
 
         $data = hook_pubsubhubbub_render_feed($data, $conf);
         $expected = '<link rel="hub" href="'. $hub .'" />';

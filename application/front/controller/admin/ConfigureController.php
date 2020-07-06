@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shaarli\Front\Controller\Admin;
 
 use Shaarli\Languages;
+use Shaarli\Render\TemplatePage;
 use Shaarli\Render\ThemeUtils;
 use Shaarli\Thumbnailer;
 use Slim\Http\Request;
@@ -52,7 +53,7 @@ class ConfigureController extends ShaarliAdminController
         $this->assignView('thumbnails_mode', $this->container->conf->get('thumbnails.mode', Thumbnailer::MODE_NONE));
         $this->assignView('pagetitle', t('Configure') .' - '. $this->container->conf->get('general.title', 'Shaarli'));
 
-        return $response->write($this->render('configure'));
+        return $response->write($this->render(TemplatePage::CONFIGURE));
     }
 
     /**

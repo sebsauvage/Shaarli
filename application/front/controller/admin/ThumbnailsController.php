@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shaarli\Front\Controller\Admin;
 
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
+use Shaarli\Render\TemplatePage;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -36,7 +37,7 @@ class ThumbnailsController extends ShaarliAdminController
             t('Thumbnails update') .' - '. $this->container->conf->get('general.title', 'Shaarli')
         );
 
-        return $response->write($this->render('thumbnails'));
+        return $response->write($this->render(TemplatePage::THUMBNAILS));
     }
 
     /**
@@ -60,20 +61,5 @@ class ThumbnailsController extends ShaarliAdminController
         $this->container->bookmarkService->set($bookmark);
 
         return $response->withJson($this->container->formatterFactory->getFormatter('raw')->format($bookmark));
-    }
-
-    /**
-     * @param mixed[] $data Variables passed to the template engine
-     *
-     * @return mixed[] Template data after active plugins render_picwall hook execution.
-     */
-    protected function executeHooks(array $data): array
-    {
-        $this->container->pluginManager->executeHooks(
-            'render_tools',
-            $data
-        );
-
-        return $data;
     }
 }

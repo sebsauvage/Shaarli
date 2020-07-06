@@ -93,7 +93,7 @@ class BookmarkFileService implements BookmarkServiceInterface
             throw new Exception('Not authorized');
         }
 
-        return $bookmark;
+        return $first;
     }
 
     /**

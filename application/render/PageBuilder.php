@@ -70,6 +70,15 @@ class PageBuilder
     }
 
     /**
+     * Reset current state of template rendering.
+     * Mostly useful for error handling. We remove everything, and display the error template.
+     */
+    public function reset(): void
+    {
+        $this->tpl = false;
+    }
+
+    /**
      * Initialize all default tpl tags.
      */
     private function initialize()

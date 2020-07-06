@@ -18,6 +18,8 @@ use Shaarli\Render\PageCacheManager;
 use Shaarli\Security\LoginManager;
 use Shaarli\Security\SessionManager;
 use Shaarli\Thumbnailer;
+use Shaarli\Updater\Updater;
+use Shaarli\Updater\UpdaterUtils;
 
 /**
  * Class ContainerBuilder
@@ -126,6 +128,15 @@ class ContainerBuilder
 
         $container['netscapeBookmarkUtils'] = function (ShaarliContainer $container): NetscapeBookmarkUtils {
             return new NetscapeBookmarkUtils($container->bookmarkService, $container->conf, $container->history);
+        };
+
+        $container['updater'] = function (ShaarliContainer $container): Updater {
+            return new Updater(
+                UpdaterUtils::read_updates_file($container->conf->get('resource.updates')),
+                $container->bookmarkService,
+                $container->conf,
+                $container->loginManager->isLoggedIn()
+            );
         };
 
         return $container;

@@ -1,12 +1,15 @@
 <?php
-namespace Shaarli;
+
+namespace Shaarli\Legacy;
 
 /**
  * Class Router
  *
  * (only displayable pages here)
+ *
+ * @deprecated
  */
-class Router
+class LegacyRouter
 {
     public static $AJAX_THUMB_UPDATE = 'ajax_thumb_update';
 

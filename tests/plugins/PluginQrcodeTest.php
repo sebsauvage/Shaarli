@@ -6,7 +6,7 @@ namespace Shaarli\Plugin\Qrcode;
  */
 
 use Shaarli\Plugin\PluginManager;
-use Shaarli\Router;
+use Shaarli\Render\TemplatePage;
 
 require_once 'plugins/qrcode/qrcode.php';
 
@@ -57,7 +57,7 @@ class PluginQrcodeTest extends \PHPUnit\Framework\TestCase
     {
         $str = 'stuff';
         $data = array($str => $str);
-        $data['_PAGE_'] = Router::$PAGE_LINKLIST;
+        $data['_PAGE_'] = TemplatePage::LINKLIST;
 
         $data = hook_qrcode_render_footer($data);
         $this->assertEquals($str, $data[$str]);

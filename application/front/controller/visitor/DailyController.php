@@ -7,6 +7,7 @@ namespace Shaarli\Front\Controller\Visitor;
 use DateTime;
 use DateTimeImmutable;
 use Shaarli\Bookmark\Bookmark;
+use Shaarli\Render\TemplatePage;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -85,7 +86,7 @@ class DailyController extends ShaarliVisitorController
             t('Daily') .' - '. format_date($dayDate, false) . ' - ' . $mainTitle
         );
 
-        return $response->write($this->render('daily'));
+        return $response->write($this->render(TemplatePage::DAILY));
     }
 
     /**
@@ -152,7 +153,7 @@ class DailyController extends ShaarliVisitorController
         $this->assignView('hide_timestamps', $this->container->conf->get('privacy.hide_timestamps', false));
         $this->assignView('days', $dataPerDay);
 
-        $rssContent = $this->render('dailyrss');
+        $rssContent = $this->render(TemplatePage::DAILY_RSS);
 
         $cache->cache($rssContent);
 

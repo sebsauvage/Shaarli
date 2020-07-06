@@ -25,6 +25,8 @@ class ShaarliMiddleware
 
     /**
      * Middleware execution:
+     *   - run updates
+     *   - if not logged in open shaarli, redirect to login
      *   - execute the controller
      *   - return the response
      *
@@ -36,27 +38,82 @@ class ShaarliMiddleware
      *
      * @return Response response.
      */
-    public function __invoke(Request $request, Response $response, callable $next)
+    public function __invoke(Request $request, Response $response, callable $next): Response
     {
         $this->container->basePath = rtrim($request->getUri()->getBasePath(), '/');
 
         try {
-            $response = $next($request, $response);
+            $this->runUpdates();
+            $this->checkOpenShaarli($request, $response, $next);
+
+            return $next($request, $response);
         } catch (ShaarliFrontException $e) {
+            // Possible functional error
+            $this->container->pageBuilder->reset();
             $this->container->pageBuilder->assign('message', $e->getMessage());
-            if ($this->container->conf->get('dev.debug', false)) {
-                $this->container->pageBuilder->assign(
-                    'stacktrace',
-                    nl2br(get_class($this) .': '. $e->getTraceAsString())
-                );
-            }
 
             $response = $response->withStatus($e->getCode());
-            $response = $response->write($this->container->pageBuilder->render('error'));
+
+            return $response->write($this->container->pageBuilder->render('error'));
         } catch (UnauthorizedException $e) {
             return $response->withRedirect($this->container->basePath . '/login');
+        } catch (\Throwable $e) {
+            // Unknown error encountered
+            $this->container->pageBuilder->reset();
+            if ($this->container->conf->get('dev.debug', false)) {
+                $this->container->pageBuilder->assign('message', $e->getMessage());
+                $this->container->pageBuilder->assign(
+                    'stacktrace',
+                    nl2br(get_class($e) .': '. PHP_EOL . $e->getTraceAsString())
+                );
+            } else {
+                $this->container->pageBuilder->assign('message', t('An unexpected error occurred.'));
+            }
+
+            $response = $response->withStatus(500);
+
+            return $response->write($this->container->pageBuilder->render('error'));
+        }
+    }
+
+    /**
+     * Run the updater for every requests processed while logged in.
+     */
+    protected function runUpdates(): void
+    {
+        if ($this->container->loginManager->isLoggedIn() !== true) {
+            return;
         }
 
-        return $response;
+        $newUpdates = $this->container->updater->update();
+        if (!empty($newUpdates)) {
+            $this->container->updater->writeUpdates(
+                $this->container->conf->get('resource.updates'),
+                $this->container->updater->getDoneUpdates()
+            );
+
+            $this->container->pageCacheManager->invalidateCaches();
+        }
+    }
+
+    /**
+     * Access is denied to most pages with `hide_public_links` + `force_login` settings.
+     */
+    protected function checkOpenShaarli(Request $request, Response $response, callable $next): bool
+    {
+        if (// if the user isn't logged in
+            !$this->container->loginManager->isLoggedIn()
+            // and Shaarli doesn't have public content...
+            && $this->container->conf->get('privacy.hide_public_links')
+            // and is configured to enforce the login
+            && $this->container->conf->get('privacy.force_login')
+            // and the current page isn't already the login page
+            // and the user is not requesting a feed (which would lead to a different content-type as expected)
+            && !in_array($next->getName(), ['login', 'atom', 'rss'], true)
+        ) {
+            throw new UnauthorizedException();
+        }
+
+        return true;
     }
 }

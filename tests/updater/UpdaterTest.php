@@ -2,7 +2,10 @@
 namespace Shaarli\Updater;
 
 use Exception;
+use Shaarli\Bookmark\BookmarkFileService;
+use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
+use Shaarli\History;
 
 require_once 'tests/updater/DummyUpdater.php';
 require_once 'tests/utils/ReferenceLinkDB.php';
@@ -29,6 +32,12 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
      */
     protected $conf;
 
+    /** @var BookmarkServiceInterface */
+    protected $bookmarkService;
+
+    /** @var Updater */
+    protected $updater;
+
     /**
      * Executed before each test.
      */
@@ -36,6 +45,8 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
     {
         copy('tests/utils/config/configJson.json.php', self::$configFile .'.json.php');
         $this->conf = new ConfigManager(self::$configFile);
+        $this->bookmarkService = new BookmarkFileService($this->conf, $this->createMock(History::class), true);
+        $this->updater = new Updater([], $this->bookmarkService, $this->conf, true);
     }
 
     /**
@@ -166,5 +177,13 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
 
         $updater = new DummyUpdater($updates, array(), $this->conf, true);
         $updater->update();
+    }
+
+    public function testUpdateMethodRelativeHomeLinkRename(): void
+    {
+        $this->conf->set('general.header_link', '?');
+        $this->updater->updateMethodRelativeHomeLink();
+
+        static::assertSame();
     }
 }

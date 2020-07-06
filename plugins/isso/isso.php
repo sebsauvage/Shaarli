@@ -6,7 +6,7 @@
 
 use Shaarli\Config\ConfigManager;
 use Shaarli\Plugin\PluginManager;
-use Shaarli\Router;
+use Shaarli\Render\TemplatePage;
 
 /**
  * Display an error everywhere if the plugin is enabled without configuration.
@@ -76,7 +76,7 @@ function hook_isso_render_linklist($data, $conf)
  */
 function hook_isso_render_includes($data)
 {
-    if ($data['_PAGE_'] == Router::$PAGE_LINKLIST) {
+    if ($data['_PAGE_'] == TemplatePage::LINKLIST) {
         $data['css_files'][] = PluginManager::$PLUGINS_PATH . '/isso/isso.css';
     }
 

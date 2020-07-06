@@ -2,7 +2,7 @@
 namespace Shaarli\Plugin\Addlink;
 
 use Shaarli\Plugin\PluginManager;
-use Shaarli\Router;
+use Shaarli\Render\TemplatePage;
 
 require_once 'plugins/addlink_toolbar/addlink_toolbar.php';
 
@@ -26,7 +26,7 @@ class PluginAddlinkTest extends \PHPUnit\Framework\TestCase
     {
         $str = 'stuff';
         $data = array($str => $str);
-        $data['_PAGE_'] = Router::$PAGE_LINKLIST;
+        $data['_PAGE_'] = TemplatePage::LINKLIST;
         $data['_LOGGEDIN_'] = true;
 
         $data = hook_addlink_toolbar_render_header($data);
@@ -48,7 +48,7 @@ class PluginAddlinkTest extends \PHPUnit\Framework\TestCase
     {
         $str = 'stuff';
         $data = array($str => $str);
-        $data['_PAGE_'] = Router::$PAGE_LINKLIST;
+        $data['_PAGE_'] = TemplatePage::LINKLIST;
         $data['_LOGGEDIN_'] = false;
 
         $data = hook_addlink_toolbar_render_header($data);

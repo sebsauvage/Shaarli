@@ -16,7 +16,7 @@
 
 use Shaarli\Config\ConfigManager;
 use Shaarli\Plugin\PluginManager;
-use Shaarli\Router;
+use Shaarli\Render\TemplatePage;
 
 /**
  * In the footer hook, there is a working example of a translation extension for Shaarli.
@@ -74,7 +74,7 @@ function demo_plugin_init($conf)
 function hook_demo_plugin_render_header($data)
 {
     // Only execute when linklist is rendered.
-    if ($data['_PAGE_'] == Router::$PAGE_LINKLIST) {
+    if ($data['_PAGE_'] == TemplatePage::LINKLIST) {
         // If loggedin
         if ($data['_LOGGEDIN_'] === true) {
             /*
@@ -441,9 +441,9 @@ function hook_demo_plugin_delete_link($data)
 function hook_demo_plugin_render_feed($data)
 {
     foreach ($data['links'] as &$link) {
-        if ($data['_PAGE_'] == Router::$PAGE_FEED_ATOM) {
+        if ($data['_PAGE_'] == TemplatePage::FEED_ATOM) {
             $link['description'] .= ' - ATOM Feed' ;
-        } elseif ($data['_PAGE_'] == Router::$PAGE_FEED_RSS) {
+        } elseif ($data['_PAGE_'] == TemplatePage::FEED_RSS) {
             $link['description'] .= ' - RSS Feed';
         }
     }

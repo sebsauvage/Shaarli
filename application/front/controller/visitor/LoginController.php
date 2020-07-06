@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shaarli\Front\Controller\Visitor;
 
 use Shaarli\Front\Exception\LoginBannedException;
+use Shaarli\Render\TemplatePage;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -41,6 +42,6 @@ class LoginController extends ShaarliVisitorController
             ->assignView('pagetitle', t('Login') .' - '. $this->container->conf->get('general.title', 'Shaarli'))
         ;
 
-        return $response->write($this->render('loginform'));
+        return $response->write($this->render(TemplatePage::LOGIN));
     }
 }

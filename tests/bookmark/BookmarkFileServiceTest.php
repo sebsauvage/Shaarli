@@ -892,35 +892,35 @@ class BookmarkFileServiceTest extends TestCase
     public function testFilterHashValid()
     {
         $request = smallHash('20150310_114651');
-        $this->assertEquals(
-            1,
-            count($this->publicLinkDB->findByHash($request))
+        $this->assertSame(
+            $request,
+            $this->publicLinkDB->findByHash($request)->getShortUrl()
         );
         $request = smallHash('20150310_114633' . 8);
-        $this->assertEquals(
-            1,
-            count($this->publicLinkDB->findByHash($request))
+        $this->assertSame(
+            $request,
+            $this->publicLinkDB->findByHash($request)->getShortUrl()
         );
     }
 
     /**
      * Test filterHash() with an invalid smallhash.
-     *
-     * @expectedException \Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testFilterHashInValid1()
     {
+        $this->expectException(BookmarkNotFoundException::class);
+
         $request = 'blabla';
         $this->publicLinkDB->findByHash($request);
     }
 
     /**
      * Test filterHash() with an empty smallhash.
-     *
-     * @expectedException \Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testFilterHashInValid()
     {
+        $this->expectException(BookmarkNotFoundException::class);
+
         $this->publicLinkDB->findByHash('');
     }
 

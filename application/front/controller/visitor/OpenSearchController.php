@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Visitor;
 
+use Shaarli\Render\TemplatePage;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -21,6 +22,6 @@ class OpenSearchController extends ShaarliVisitorController
 
         $this->assignView('serverurl', index_url($this->container->environment));
 
-        return $response->write($this->render('opensearch'));
+        return $response->write($this->render(TemplatePage::OPEN_SEARCH));
     }
 }

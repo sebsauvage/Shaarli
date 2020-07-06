@@ -224,7 +224,7 @@
                     </div>
                   {/if}
                 {/if}
-                <a href="{$base_path}/?{$value.shorturl}" title="{$strPermalink}">
+                <a href="{$base_path}/shaare/{$value.shorturl}" title="{$strPermalink}">
                   {if="!$hide_timestamps || $is_logged_in"}
                     {$updated=$value.updated_timestamp ? $strEdited. format_date($value.updated) : $strPermalink}
                     <span class="linkdate" title="{$updated}">

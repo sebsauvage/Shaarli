@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Admin;
 
+use Shaarli\Render\TemplatePage;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -29,7 +30,7 @@ class ToolsController extends ShaarliAdminController
 
         $this->assignView('pagetitle', t('Tools') .' - '. $this->container->conf->get('general.title', 'Shaarli'));
 
-        return $response->write($this->render('tools'));
+        return $response->write($this->render(TemplatePage::TOOLS));
     }
 
     /**
