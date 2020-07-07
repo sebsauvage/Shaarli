@@ -184,7 +184,7 @@
   </div>
 {/if}
 
-{if="!empty($global_errors) && $is_logged_in"}
+{if="!empty($global_errors)"}
   <div class="pure-g header-alert-message pure-alert pure-alert-error pure-alert-closable" id="shaarli-errors-alert">
   <div class="pure-u-2-24"></div>
     <div class="pure-u-20-24">
@@ -198,7 +198,7 @@
   </div>
 {/if}
 
-{if="!empty($global_warnings) && $is_logged_in"}
+{if="!empty($global_warnings)"}
   <div class="pure-g header-alert-message pure-alert pure-alert-warning pure-alert-closable" id="shaarli-warnings-alert">
     <div class="pure-u-2-24"></div>
     <div class="pure-u-20-24">
@@ -212,7 +212,7 @@
   </div>
 {/if}
 
-{if="!empty($global_successes) && $is_logged_in"}
+{if="!empty($global_successes)"}
   <div class="pure-g header-alert-message new-version-message pure-alert pure-alert-success pure-alert-closable" id="shaarli-success-alert">
     <div class="pure-u-2-24"></div>
     <div class="pure-u-20-24">

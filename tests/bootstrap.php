@@ -18,9 +18,14 @@ require_once 'application/bookmark/LinkUtils.php';
 require_once 'application/Utils.php';
 require_once 'application/http/UrlUtils.php';
 require_once 'application/http/HttpUtils.php';
-require_once 'tests/utils/ReferenceLinkDB.php';
-require_once 'tests/utils/ReferenceHistory.php';
-require_once 'tests/utils/FakeBookmarkService.php';
 require_once 'tests/container/ShaarliTestContainer.php';
 require_once 'tests/front/controller/visitor/FrontControllerMockHelper.php';
 require_once 'tests/front/controller/admin/FrontAdminControllerMockHelper.php';
+require_once 'tests/updater/DummyUpdater.php';
+require_once 'tests/utils/FakeBookmarkService.php';
+require_once 'tests/utils/FakeConfigManager.php';
+require_once 'tests/utils/ReferenceHistory.php';
+require_once 'tests/utils/ReferenceLinkDB.php';
+require_once 'tests/utils/ReferenceSessionIdHashes.php';
+
+\ReferenceSessionIdHashes::genAllHashes();

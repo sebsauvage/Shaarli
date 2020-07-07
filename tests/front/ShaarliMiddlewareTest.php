@@ -19,6 +19,8 @@ use Slim\Http\Uri;
 
 class ShaarliMiddlewareTest extends TestCase
 {
+    protected const TMP_MOCK_FILE = '.tmp';
+
     /** @var ShaarliContainer */
     protected $container;
 
@@ -29,10 +31,19 @@ class ShaarliMiddlewareTest extends TestCase
     {
         $this->container = $this->createMock(ShaarliContainer::class);
 
+        touch(static::TMP_MOCK_FILE);
+
         $this->container->conf = $this->createMock(ConfigManager::class);
+        $this->container->conf->method('getConfigFileExt')->willReturn(static::TMP_MOCK_FILE);
+
         $this->container->loginManager = $this->createMock(LoginManager::class);
 
         $this->middleware = new ShaarliMiddleware($this->container);
+    }
+
+    public function tearDown()
+    {
+        unlink(static::TMP_MOCK_FILE);
     }
 
     /**
@@ -179,6 +190,7 @@ class ShaarliMiddlewareTest extends TestCase
         $this->container->conf->method('get')->willReturnCallback(function (string $key): string {
             return $key;
         });
+        $this->container->conf->method('getConfigFileExt')->willReturn(static::TMP_MOCK_FILE);
 
         $this->container->pageCacheManager = $this->createMock(PageCacheManager::class);
         $this->container->pageCacheManager->expects(static::once())->method('invalidateCaches');

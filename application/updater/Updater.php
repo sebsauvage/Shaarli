@@ -39,6 +39,11 @@ class Updater
     protected $methods;
 
     /**
+     * @var string $basePath Shaarli root directory (from HTTP Request)
+     */
+    protected $basePath = null;
+
+    /**
      * Object constructor.
      *
      * @param array                    $doneUpdates Updates which are already done.
@@ -62,11 +67,13 @@ class Updater
      * Run all new updates.
      * Update methods have to start with 'updateMethod' and return true (on success).
      *
+     * @param string $basePath Shaarli root directory (from HTTP Request)
+     *
      * @return array An array containing ran updates.
      *
      * @throws UpdaterException If something went wrong.
      */
-    public function update()
+    public function update(string $basePath = null)
     {
         $updatesRan = [];
 
@@ -123,16 +130,14 @@ class Updater
     }
 
     /**
-     * With the Slim routing system, default header link should be `./` instead of `?`.
-     * Otherwise you can not go back to the home page. Example: `/picture-wall` -> `/picture-wall?` instead of `/`.
+     * With the Slim routing system, default header link should be `/subfolder/` instead of `?`.
+     * Otherwise you can not go back to the home page.
+     * Example: `/subfolder/picture-wall` -> `/subfolder/picture-wall?` instead of `/subfolder/`.
      */
     public function updateMethodRelativeHomeLink(): bool
     {
-        $link = trim($this->conf->get('general.header_link'));
-        if ($link[0] === '?') {
-            $link = './'. ltrim($link, '?');
-
-            $this->conf->set('general.header_link', $link, true, true);
+        if ('?' === trim($this->conf->get('general.header_link'))) {
+            $this->conf->set('general.header_link', $this->basePath . '/', true, true);
         }
 
         return true;
@@ -152,7 +157,7 @@ class Updater
                 && 1 === preg_match('/^\?([a-zA-Z0-9-_@]{6})($|&|#)/', $bookmark->getUrl(), $match)
             ) {
                 $updated = true;
-                $bookmark = $bookmark->setUrl('/shaare/' . $match[1]);
+                $bookmark = $bookmark->setUrl($this->basePath . '/shaare/' . $match[1]);
 
                 $this->bookmarkService->set($bookmark, false);
             }
@@ -163,5 +168,12 @@ class Updater
         }
 
         return true;
+    }
+
+    public function setBasePath(string $basePath): self
+    {
+        $this->basePath = $basePath;
+
+        return $this;
     }
 }

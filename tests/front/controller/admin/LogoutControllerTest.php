@@ -4,14 +4,8 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Admin;
 
-/** Override PHP builtin setcookie function in the local namespace to mock it... more or less */
-if (!function_exists('Shaarli\Front\Controller\Admin\setcookie')) {
-    function setcookie(string $name, string $value): void {
-        $_COOKIE[$name] = $value;
-    }
-}
-
 use PHPUnit\Framework\TestCase;
+use Shaarli\Security\CookieManager;
 use Shaarli\Security\LoginManager;
 use Shaarli\Security\SessionManager;
 use Slim\Http\Request;
@@ -29,8 +23,6 @@ class LogoutControllerTest extends TestCase
         $this->createContainer();
 
         $this->controller = new LogoutController($this->container);
-
-        setcookie(LoginManager::$STAY_SIGNED_IN_COOKIE, $cookie = 'hi there');
     }
 
     public function testValidControllerInvoke(): void
@@ -43,13 +35,17 @@ class LogoutControllerTest extends TestCase
         $this->container->sessionManager = $this->createMock(SessionManager::class);
         $this->container->sessionManager->expects(static::once())->method('logout');
 
-        static::assertSame('hi there', $_COOKIE[LoginManager::$STAY_SIGNED_IN_COOKIE]);
+        $this->container->cookieManager = $this->createMock(CookieManager::class);
+        $this->container->cookieManager
+            ->expects(static::once())
+            ->method('setCookieParameter')
+            ->with(CookieManager::STAY_SIGNED_IN, 'false', 0, '/subfolder/')
+        ;
 
         $result = $this->controller->index($request, $response);
 
         static::assertInstanceOf(Response::class, $result);
         static::assertSame(302, $result->getStatusCode());
         static::assertSame(['/subfolder/'], $result->getHeader('location'));
-        static::assertSame('false', $_COOKIE[LoginManager::$STAY_SIGNED_IN_COOKIE]);
     }
 }

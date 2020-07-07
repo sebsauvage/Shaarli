@@ -1,12 +1,8 @@
 <?php
-require_once 'tests/utils/FakeConfigManager.php';
 
-// Initialize reference data _before_ PHPUnit starts a session
-require_once 'tests/utils/ReferenceSessionIdHashes.php';
-ReferenceSessionIdHashes::genAllHashes();
+namespace Shaarli\Security;
 
 use PHPUnit\Framework\TestCase;
-use Shaarli\Security\SessionManager;
 
 /**
  * Test coverage for SessionManager
@@ -30,7 +26,7 @@ class SessionManagerTest extends TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$sidHashes = ReferenceSessionIdHashes::getHashes();
+        self::$sidHashes = \ReferenceSessionIdHashes::getHashes();
     }
 
     /**
@@ -38,13 +34,13 @@ class SessionManagerTest extends TestCase
      */
     public function setUp()
     {
-        $this->conf = new FakeConfigManager([
+        $this->conf = new \FakeConfigManager([
             'credentials.login' => 'johndoe',
             'credentials.salt' => 'salt',
             'security.session_protection_disabled' => false,
         ]);
         $this->session = [];
-        $this->sessionManager = new SessionManager($this->session, $this->conf);
+        $this->sessionManager = new SessionManager($this->session, $this->conf, 'session_path');
     }
 
     /**
@@ -69,7 +65,7 @@ class SessionManagerTest extends TestCase
                 $token => 1,
             ],
         ];
-        $sessionManager = new SessionManager($session, $this->conf);
+        $sessionManager = new SessionManager($session, $this->conf, 'session_path');
 
         // check and destroy the token
         $this->assertTrue($sessionManager->checkToken($token));

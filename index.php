@@ -61,13 +61,11 @@ require_once 'application/TimeZone.php';
 require_once 'application/Utils.php';
 
 use Shaarli\ApplicationUtils;
-use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Container\ContainerBuilder;
-use Shaarli\History;
 use Shaarli\Languages;
 use Shaarli\Plugin\PluginManager;
-use Shaarli\Render\PageBuilder;
+use Shaarli\Security\CookieManager;
 use Shaarli\Security\LoginManager;
 use Shaarli\Security\SessionManager;
 use Slim\App;
@@ -118,13 +116,14 @@ if ($conf->get('dev.debug', false)) {
     // See all errors (for debugging only)
     error_reporting(-1);
 
-    set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontext) {
+    set_error_handler(function ($errno, $errstr, $errfile, $errline, array $errcontext) {
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     });
 }
 
-$sessionManager = new SessionManager($_SESSION, $conf);
-$loginManager = new LoginManager($conf, $sessionManager);
+$sessionManager = new SessionManager($_SESSION, $conf, session_save_path());
+$cookieManager = new CookieManager($_COOKIE);
+$loginManager = new LoginManager($conf, $sessionManager, $cookieManager);
 $loginManager->generateStaySignedInToken($_SERVER['REMOTE_ADDR']);
 $clientIpId = client_ip_id($_SERVER);
 
@@ -158,28 +157,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-if (! is_file($conf->getConfigFileExt())) {
-    // Ensure Shaarli has proper access to its resources
-    $errors = ApplicationUtils::checkResourcePermissions($conf);
-
-    if ($errors != array()) {
-        $message = '<p>'. t('Insufficient permissions:') .'</p><ul>';
-
-        foreach ($errors as $error) {
-            $message .= '<li>'.$error.'</li>';
-        }
-        $message .= '</ul>';
-
-        header('Content-Type: text/html; charset=utf-8');
-        echo $message;
-        exit;
-    }
-
-    // Display the installation form if no existing config is found
-    install($conf, $sessionManager, $loginManager);
-}
-
-$loginManager->checkLoginState($_COOKIE, $clientIpId);
+$loginManager->checkLoginState($clientIpId);
 
 // ------------------------------------------------------------------------------------------
 // Process login form: Check if login/password is correct.
@@ -205,7 +183,7 @@ if (isset($_POST['login'])) {
             $expirationTime = $sessionManager->extendSession();
 
             setcookie(
-                $loginManager::$STAY_SIGNED_IN_COOKIE,
+                CookieManager::STAY_SIGNED_IN,
                 $loginManager->getStaySignedInToken(),
                 $expirationTime,
                 WEB_PATH
@@ -271,122 +249,11 @@ if (!isset($_SESSION['tokens'])) {
     $_SESSION['tokens']=array();  // Token are attached to the session.
 }
 
-/**
- * Installation
- * This function should NEVER be called if the file data/config.php exists.
- *
- * @param ConfigManager  $conf           Configuration Manager instance.
- * @param SessionManager $sessionManager SessionManager instance
- * @param LoginManager   $loginManager   LoginManager instance
- */
-function install($conf, $sessionManager, $loginManager)
-{
-    // On free.fr host, make sure the /sessions directory exists, otherwise login will not work.
-    if (endsWith($_SERVER['HTTP_HOST'], '.free.fr') && !is_dir($_SERVER['DOCUMENT_ROOT'].'/sessions')) {
-        mkdir($_SERVER['DOCUMENT_ROOT'].'/sessions', 0705);
-    }
-
-
-    // This part makes sure sessions works correctly.
-    // (Because on some hosts, session.save_path may not be set correctly,
-    // or we may not have write access to it.)
-    if (isset($_GET['test_session'])
-        && ( !isset($_SESSION) || !isset($_SESSION['session_tested']) || $_SESSION['session_tested']!='Working')) {
-        // Step 2: Check if data in session is correct.
-        $msg = t(
-            '<pre>Sessions do not seem to work correctly on your server.<br>'.
-            'Make sure the variable "session.save_path" is set correctly in your PHP config, '.
-            'and that you have write access to it.<br>'.
-            'It currently points to %s.<br>'.
-            'On some browsers, accessing your server via a hostname like \'localhost\' '.
-            'or any custom hostname without a dot causes cookie storage to fail. '.
-            'We recommend accessing your server via it\'s IP address or Fully Qualified Domain Name.<br>'
-        );
-        $msg = sprintf($msg, session_save_path());
-        echo $msg;
-        echo '<br><a href="?">'. t('Click to try again.') .'</a></pre>';
-        die;
-    }
-    if (!isset($_SESSION['session_tested'])) {
-        // Step 1 : Try to store data in session and reload page.
-        $_SESSION['session_tested'] = 'Working';  // Try to set a variable in session.
-        header('Location: '.index_url($_SERVER).'?test_session');  // Redirect to check stored data.
-    }
-    if (isset($_GET['test_session'])) {
-        // Step 3: Sessions are OK. Remove test parameter from URL.
-        header('Location: '.index_url($_SERVER));
-    }
-
-
-    if (!empty($_POST['setlogin']) && !empty($_POST['setpassword'])) {
-        $tz = 'UTC';
-        if (!empty($_POST['continent']) && !empty($_POST['city'])
-            && isTimeZoneValid($_POST['continent'], $_POST['city'])
-        ) {
-            $tz = $_POST['continent'].'/'.$_POST['city'];
-        }
-        $conf->set('general.timezone', $tz);
-        $login = $_POST['setlogin'];
-        $conf->set('credentials.login', $login);
-        $salt = sha1(uniqid('', true) .'_'. mt_rand());
-        $conf->set('credentials.salt', $salt);
-        $conf->set('credentials.hash', sha1($_POST['setpassword'] . $login . $salt));
-        if (!empty($_POST['title'])) {
-            $conf->set('general.title', escape($_POST['title']));
-        } else {
-            $conf->set('general.title', 'Shared bookmarks on '.escape(index_url($_SERVER)));
-        }
-        $conf->set('translation.language', escape($_POST['language']));
-        $conf->set('updates.check_updates', !empty($_POST['updateCheck']));
-        $conf->set('api.enabled', !empty($_POST['enableApi']));
-        $conf->set(
-            'api.secret',
-            generate_api_secret(
-                $conf->get('credentials.login'),
-                $conf->get('credentials.salt')
-            )
-        );
-        try {
-            // Everything is ok, let's create config file.
-            $conf->write($loginManager->isLoggedIn());
-        } catch (Exception $e) {
-            error_log(
-                'ERROR while writing config file after installation.' . PHP_EOL .
-                    $e->getMessage()
-            );
-
-            // TODO: do not handle exceptions/errors in JS.
-            echo '<script>alert("'. $e->getMessage() .'");document.location=\'?\';</script>';
-            exit;
-        }
-
-        $history = new History($conf->get('resource.history'));
-        $bookmarkService = new BookmarkFileService($conf, $history, true);
-        if ($bookmarkService->count() === 0) {
-            $bookmarkService->initialize();
-        }
-
-        echo '<script>alert('
-            .'"Shaarli is now configured. '
-            .'Please enter your login/password and start shaaring your bookmarks!"'
-            .');document.location=\'./login\';</script>';
-        exit;
-    }
-
-    $PAGE = new PageBuilder($conf, $_SESSION, null, $sessionManager->generateToken());
-    list($continents, $cities) = generateTimeZoneData(timezone_identifiers_list(), date_default_timezone_get());
-    $PAGE->assign('continents', $continents);
-    $PAGE->assign('cities', $cities);
-    $PAGE->assign('languages', Languages::getAvailableLanguages());
-    $PAGE->renderPage('install');
-    exit;
-}
-
 if (!isset($_SESSION['LINKS_PER_PAGE'])) {
     $_SESSION['LINKS_PER_PAGE'] = $conf->get('general.links_per_page', 20);
 }
 
-$containerBuilder = new ContainerBuilder($conf, $sessionManager, $loginManager);
+$containerBuilder = new ContainerBuilder($conf, $sessionManager, $cookieManager, $loginManager);
 $container = $containerBuilder->build();
 $app = new App($container);
 
@@ -408,6 +275,10 @@ $app->group('/api/v1', function () {
 })->add('\Shaarli\Api\ApiMiddleware');
 
 $app->group('', function () {
+    $this->get('/install', '\Shaarli\Front\Controller\Visitor\InstallController:index')->setName('displayInstall');
+    $this->get('/install/session-test', '\Shaarli\Front\Controller\Visitor\InstallController:sessionTest');
+    $this->post('/install', '\Shaarli\Front\Controller\Visitor\InstallController:save')->setName('saveInstall');
+
     /* -- PUBLIC --*/
     $this->get('/', '\Shaarli\Front\Controller\Visitor\BookmarkListController:index');
     $this->get('/shaare/{hash}', '\Shaarli\Front\Controller\Visitor\BookmarkListController:permalink');

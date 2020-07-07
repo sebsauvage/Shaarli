@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shaarli\Container;
 
+use http\Cookie;
 use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Feed\FeedBuilder;
@@ -14,6 +15,7 @@ use Shaarli\Netscape\NetscapeBookmarkUtils;
 use Shaarli\Plugin\PluginManager;
 use Shaarli\Render\PageBuilder;
 use Shaarli\Render\PageCacheManager;
+use Shaarli\Security\CookieManager;
 use Shaarli\Security\LoginManager;
 use Shaarli\Security\SessionManager;
 use Shaarli\Thumbnailer;
@@ -25,6 +27,7 @@ use Slim\Container;
  *
  * @property string                   $basePath             Shaarli's instance base path (e.g. `/shaarli/`)
  * @property BookmarkServiceInterface $bookmarkService
+ * @property CookieManager            $cookieManager
  * @property ConfigManager            $conf
  * @property mixed[]                  $environment          $_SERVER automatically injected by Slim
  * @property callable                 $errorHandler         Overrides default Slim error display

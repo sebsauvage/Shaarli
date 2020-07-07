@@ -31,16 +31,21 @@ class SessionManager
     /** @var bool Whether the user should stay signed in (LONG_TIMEOUT) */
     protected $staySignedIn = false;
 
+    /** @var string */
+    protected $savePath;
+
     /**
      * Constructor
      *
-     * @param array         $session The $_SESSION array (reference)
-     * @param ConfigManager $conf    ConfigManager instance
+     * @param array         $session  The $_SESSION array (reference)
+     * @param ConfigManager $conf     ConfigManager instance
+     * @param string        $savePath Session save path returned by builtin function session_save_path()
      */
-    public function __construct(& $session, $conf)
+    public function __construct(&$session, $conf, string $savePath)
     {
         $this->session = &$session;
         $this->conf = $conf;
+        $this->savePath = $savePath;
     }
 
     /**
@@ -248,5 +253,10 @@ class SessionManager
         unset($this->session[$key]);
 
         return $this;
+    }
+
+    public function getSavePath(): string
+    {
+        return $this->savePath;
     }
 }

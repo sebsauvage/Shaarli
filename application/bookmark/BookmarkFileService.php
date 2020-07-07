@@ -46,6 +46,9 @@ class BookmarkFileService implements BookmarkServiceInterface
     /** @var bool true for logged in users. Default value to retrieve private bookmarks. */
     protected $isLoggedIn;
 
+    /** @var bool Allow datastore alteration from not logged in users. */
+    protected $anonymousPermission = false;
+
     /**
      * @inheritDoc
      */
@@ -64,7 +67,7 @@ class BookmarkFileService implements BookmarkServiceInterface
                 $this->bookmarks = $this->bookmarksIO->read();
             } catch (EmptyDataStoreException $e) {
                 $this->bookmarks = new BookmarkArray();
-                if ($isLoggedIn) {
+                if ($this->isLoggedIn) {
                     $this->save();
                 }
             }
@@ -154,7 +157,7 @@ class BookmarkFileService implements BookmarkServiceInterface
      */
     public function set($bookmark, $save = true)
     {
-        if ($this->isLoggedIn !== true) {
+        if (true !== $this->isLoggedIn && true !== $this->anonymousPermission) {
             throw new Exception(t('You\'re not authorized to alter the datastore'));
         }
         if (! $bookmark instanceof Bookmark) {
@@ -179,7 +182,7 @@ class BookmarkFileService implements BookmarkServiceInterface
      */
     public function add($bookmark, $save = true)
     {
-        if ($this->isLoggedIn !== true) {
+        if (true !== $this->isLoggedIn && true !== $this->anonymousPermission) {
             throw new Exception(t('You\'re not authorized to alter the datastore'));
         }
         if (! $bookmark instanceof Bookmark) {
@@ -204,7 +207,7 @@ class BookmarkFileService implements BookmarkServiceInterface
      */
     public function addOrSet($bookmark, $save = true)
     {
-        if ($this->isLoggedIn !== true) {
+        if (true !== $this->isLoggedIn && true !== $this->anonymousPermission) {
             throw new Exception(t('You\'re not authorized to alter the datastore'));
         }
         if (! $bookmark instanceof Bookmark) {
@@ -221,7 +224,7 @@ class BookmarkFileService implements BookmarkServiceInterface
      */
     public function remove($bookmark, $save = true)
     {
-        if ($this->isLoggedIn !== true) {
+        if (true !== $this->isLoggedIn && true !== $this->anonymousPermission) {
             throw new Exception(t('You\'re not authorized to alter the datastore'));
         }
         if (! $bookmark instanceof Bookmark) {
@@ -274,10 +277,11 @@ class BookmarkFileService implements BookmarkServiceInterface
      */
     public function save()
     {
-        if (!$this->isLoggedIn) {
+        if (true !== $this->isLoggedIn && true !== $this->anonymousPermission) {
             // TODO: raise an Exception instead
             die('You are not authorized to change the database.');
         }
+
         $this->bookmarks->reorder();
         $this->bookmarksIO->write($this->bookmarks);
         $this->pageCacheManager->invalidateCaches();
@@ -355,6 +359,16 @@ class BookmarkFileService implements BookmarkServiceInterface
     {
         $initializer = new BookmarkInitializer($this);
         $initializer->initialize();
+    }
+
+    public function enableAnonymousPermission(): void
+    {
+        $this->anonymousPermission = true;
+    }
+
+    public function disableAnonymousPermission(): void
+    {
+        $this->anonymousPermission = false;
     }
 
     /**

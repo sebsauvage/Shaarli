@@ -15,6 +15,7 @@ use Shaarli\Netscape\NetscapeBookmarkUtils;
 use Shaarli\Plugin\PluginManager;
 use Shaarli\Render\PageBuilder;
 use Shaarli\Render\PageCacheManager;
+use Shaarli\Security\CookieManager;
 use Shaarli\Security\LoginManager;
 use Shaarli\Security\SessionManager;
 use Shaarli\Thumbnailer;
@@ -38,6 +39,9 @@ class ContainerBuilder
     /** @var SessionManager */
     protected $session;
 
+    /** @var CookieManager */
+    protected $cookieManager;
+
     /** @var LoginManager */
     protected $login;
 
@@ -47,11 +51,13 @@ class ContainerBuilder
     public function __construct(
         ConfigManager $conf,
         SessionManager $session,
+        CookieManager $cookieManager,
         LoginManager $login
     ) {
         $this->conf = $conf;
         $this->session = $session;
         $this->login = $login;
+        $this->cookieManager = $cookieManager;
     }
 
     public function build(): ShaarliContainer
@@ -60,6 +66,7 @@ class ContainerBuilder
 
         $container['conf'] = $this->conf;
         $container['sessionManager'] = $this->session;
+        $container['cookieManager'] = $this->cookieManager;
         $container['loginManager'] = $this->login;
         $container['basePath'] = $this->basePath;
 

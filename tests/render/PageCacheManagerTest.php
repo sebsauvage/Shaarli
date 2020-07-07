@@ -1,14 +1,13 @@
 <?php
+
 /**
  * Cache tests
  */
+
 namespace Shaarli\Render;
 
 use PHPUnit\Framework\TestCase;
 use Shaarli\Security\SessionManager;
-
-// required to access $_SESSION array
-session_start();
 
 /**
  * Unitary tests for cached pages

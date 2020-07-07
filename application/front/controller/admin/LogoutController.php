@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Admin;
 
+use Shaarli\Security\CookieManager;
 use Shaarli\Security\LoginManager;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -20,9 +21,12 @@ class LogoutController extends ShaarliAdminController
     {
         $this->container->pageCacheManager->invalidateCaches();
         $this->container->sessionManager->logout();
-
-        // TODO: switch to a simple Cookie manager allowing to check the session, and create mocks.
-        setcookie(LoginManager::$STAY_SIGNED_IN_COOKIE, 'false', 0, $this->container->basePath . '/');
+        $this->container->cookieManager->setCookieParameter(
+            CookieManager::STAY_SIGNED_IN,
+            'false',
+            0,
+            $this->container->basePath . '/'
+        );
 
         return $this->redirect($response, '/');
     }
