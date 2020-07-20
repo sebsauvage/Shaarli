@@ -1,5 +1,4 @@
-sudo: false
-dist: trusty
+dist: bionic
 
 matrix:
   include:
