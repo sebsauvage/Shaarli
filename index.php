@@ -160,89 +160,6 @@ header("Pragma: no-cache");
 $loginManager->checkLoginState($clientIpId);
 
 // ------------------------------------------------------------------------------------------
-// Process login form: Check if login/password is correct.
-if (isset($_POST['login'])) {
-    if (! $loginManager->canLogin($_SERVER)) {
-        die(t('I said: NO. You are banned for the moment. Go away.'));
-    }
-    if (isset($_POST['password'])
-        && $sessionManager->checkToken($_POST['token'])
-        && $loginManager->checkCredentials($_SERVER['REMOTE_ADDR'], $clientIpId, $_POST['login'], $_POST['password'])
-    ) {
-        $loginManager->handleSuccessfulLogin($_SERVER);
-
-        $cookiedir = '';
-        if (dirname($_SERVER['SCRIPT_NAME']) != '/') {
-            // Note: Never forget the trailing slash on the cookie path!
-            $cookiedir = dirname($_SERVER["SCRIPT_NAME"]) . '/';
-        }
-
-        if (!empty($_POST['longlastingsession'])) {
-            // Keep the session cookie even after the browser closes
-            $sessionManager->setStaySignedIn(true);
-            $expirationTime = $sessionManager->extendSession();
-
-            setcookie(
-                CookieManager::STAY_SIGNED_IN,
-                $loginManager->getStaySignedInToken(),
-                $expirationTime,
-                WEB_PATH
-            );
-        } else {
-            // Standard session expiration (=when browser closes)
-            $expirationTime = 0;
-        }
-
-        // Send cookie with the new expiration date to the browser
-        session_destroy();
-        session_set_cookie_params($expirationTime, $cookiedir, $_SERVER['SERVER_NAME']);
-        session_start();
-        session_regenerate_id(true);
-
-        // Optional redirect after login:
-        if (isset($_GET['post'])) {
-            $uri = './?post='. urlencode($_GET['post']);
-            foreach (array('description', 'source', 'title', 'tags') as $param) {
-                if (!empty($_GET[$param])) {
-                    $uri .= '&'.$param.'='.urlencode($_GET[$param]);
-                }
-            }
-            header('Location: '. $uri);
-            exit;
-        }
-
-        if (isset($_GET['edit_link'])) {
-            header('Location: ./?edit_link='. escape($_GET['edit_link']));
-            exit;
-        }
-
-        if (isset($_POST['returnurl'])) {
-            // Prevent loops over login screen.
-            if (strpos($_POST['returnurl'], '/login') === false) {
-                header('Location: '. generateLocation($_POST['returnurl'], $_SERVER['HTTP_HOST']));
-                exit;
-            }
-        }
-        header('Location: ./?');
-        exit;
-    } else {
-        $loginManager->handleFailedLogin($_SERVER);
-        $redir = '?username='. urlencode($_POST['login']);
-        if (isset($_GET['post'])) {
-            $redir .= '&post=' . urlencode($_GET['post']);
-            foreach (array('description', 'source', 'title', 'tags') as $param) {
-                if (!empty($_GET[$param])) {
-                    $redir .= '&' . $param . '=' . urlencode($_GET[$param]);
-                }
-            }
-        }
-        // Redirect to login screen.
-        echo '<script>alert("'. t("Wrong login/password.") .'");document.location=\'./login'.$redir.'\';</script>';
-        exit;
-    }
-}
-
-// ------------------------------------------------------------------------------------------
 // Token management for XSRF protection
 // Token should be used in any form which acts on data (create,update,delete,import...).
 if (!isset($_SESSION['tokens'])) {
@@ -283,6 +200,7 @@ $app->group('', function () {
     $this->get('/', '\Shaarli\Front\Controller\Visitor\BookmarkListController:index');
     $this->get('/shaare/{hash}', '\Shaarli\Front\Controller\Visitor\BookmarkListController:permalink');
     $this->get('/login', '\Shaarli\Front\Controller\Visitor\LoginController:index')->setName('login');
+    $this->post('/login', '\Shaarli\Front\Controller\Visitor\LoginController:login')->setName('processLogin');
     $this->get('/picture-wall', '\Shaarli\Front\Controller\Visitor\PictureWallController:index');
     $this->get('/tags/cloud', '\Shaarli\Front\Controller\Visitor\TagCloudController:cloud');
     $this->get('/tags/list', '\Shaarli\Front\Controller\Visitor\TagCloudController:list');

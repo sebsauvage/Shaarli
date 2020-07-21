@@ -38,6 +38,8 @@ class ShaarliMiddlewareTest extends TestCase
 
         $this->container->loginManager = $this->createMock(LoginManager::class);
 
+        $this->container->environment = ['REQUEST_URI' => 'http://shaarli/subfolder/path'];
+
         $this->middleware = new ShaarliMiddleware($this->container);
     }
 
@@ -127,7 +129,10 @@ class ShaarliMiddlewareTest extends TestCase
         $result = $this->middleware->__invoke($request, $response, $controller);
 
         static::assertSame(302, $result->getStatusCode());
-        static::assertSame('/subfolder/login', $result->getHeader('location')[0]);
+        static::assertSame(
+            '/subfolder/login?returnurl=' . urlencode('http://shaarli/subfolder/path'),
+            $result->getHeader('location')[0]
+        );
     }
 
     /**

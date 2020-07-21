@@ -259,4 +259,34 @@ class SessionManager
     {
         return $this->savePath;
     }
+
+    /*
+     * Next public functions wrapping native PHP session API.
+     */
+
+    public function destroy(): bool
+    {
+        $this->session = [];
+
+        return session_destroy();
+    }
+
+    public function start(): bool
+    {
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            $this->destroy();
+        }
+
+        return session_start();
+    }
+
+    public function cookieParameters(int $lifeTime, string $path, string $domain): bool
+    {
+        return session_set_cookie_params($lifeTime, $path, $domain);
+    }
+
+    public function regenerateId(bool $deleteOldSession = false): bool
+    {
+        return session_regenerate_id($deleteOldSession);
+    }
 }

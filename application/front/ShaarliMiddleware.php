@@ -62,7 +62,9 @@ class ShaarliMiddleware
 
             return $response->write($this->container->pageBuilder->render('error'));
         } catch (UnauthorizedException $e) {
-            return $response->withRedirect($this->container->basePath . '/login');
+            $returnUrl = urlencode($this->container->environment['REQUEST_URI']);
+
+            return $response->withRedirect($this->container->basePath . '/login?returnurl=' . $returnUrl);
         } catch (\Throwable $e) {
             // Unknown error encountered
             $this->container->pageBuilder->reset();
