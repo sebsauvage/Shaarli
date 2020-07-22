@@ -49,6 +49,20 @@ class SessionManager
     }
 
     /**
+     * Initialize XSRF token and links per page session variables.
+     */
+    public function initialize(): void
+    {
+        if (!isset($this->session['tokens'])) {
+            $this->session['tokens'] = [];
+        }
+
+        if (!isset($this->session['LINKS_PER_PAGE'])) {
+            $this->session['LINKS_PER_PAGE'] = $this->conf->get('general.links_per_page', 20);
+        }
+    }
+
+    /**
      * Define whether the user should stay signed in across browser sessions
      *
      * @param bool $staySignedIn Keep the user signed in

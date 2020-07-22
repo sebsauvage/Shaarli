@@ -158,10 +158,6 @@ class PageBuilder
      */
     protected function finalize(): void
     {
-        //FIXME - DEV _ REMOVE ME
-        $this->assign('base_path', '/Shaarli');
-        $this->assign('asset_path', '/Shaarli/tpl/default');
-
         // TODO: use the SessionManager
         $messageKeys = [
             SessionManager::KEY_SUCCESS_MESSAGES,
@@ -247,21 +243,5 @@ class PageBuilder
         $this->finalize();
 
         return $this->tpl->draw($page, true);
-    }
-
-    /**
-     * Render a 404 page (uses the template : tpl/404.tpl)
-     * usage: $PAGE->render404('The link was deleted')
-     *
-     * @param string $message A message to display what is not found
-     */
-    public function render404($message = '')
-    {
-        if (empty($message)) {
-            $message = t('The page you are trying to reach does not exist or has been deleted.');
-        }
-        header($_SERVER['SERVER_PROTOCOL'] . ' ' . t('404 Not Found'));
-        $this->tpl->assign('error_message', $message);
-        $this->renderPage('404');
     }
 }
