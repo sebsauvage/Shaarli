@@ -75,7 +75,7 @@ class PluginsController extends ShaarliAdminController
             $this->saveSuccessMessage(t('Setting successfully saved.'));
         } catch (Exception $e) {
             $this->saveErrorMessage(
-                t('ERROR while saving plugin configuration: ') . PHP_EOL . $e->getMessage()
+                t('Error while saving plugin configuration: ') . PHP_EOL . $e->getMessage()
             );
         }
 
