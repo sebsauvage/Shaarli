@@ -128,13 +128,14 @@ class InstallController extends ShaarliVisitorController
                 $this->container->conf->get('credentials.salt')
             )
         );
+        $this->container->conf->set('general.header_link', $this->container->basePath);
 
         try {
             // Everything is ok, let's create config file.
             $this->container->conf->write($this->container->loginManager->isLoggedIn());
         } catch (\Exception $e) {
-            $this->assignView('message', $e->getMessage());
-            $this->assignView('stacktrace', $e->getTraceAsString());
+            $this->assignView('message', t('Error while writing config file after configuration update.'));
+            $this->assignView('stacktrace', $e->getMessage() . PHP_EOL . $e->getTraceAsString());
 
             return $response->write($this->render('error'));
         }
@@ -155,18 +156,14 @@ class InstallController extends ShaarliVisitorController
     {
         // Ensure Shaarli has proper access to its resources
         $errors = ApplicationUtils::checkResourcePermissions($this->container->conf);
-
         if (empty($errors)) {
             return true;
         }
 
-        // FIXME! Do not insert HTML here.
-        $message = '<p>'. t('Insufficient permissions:') .'</p><ul>';
-
+        $message = t('Insufficient permissions:') . PHP_EOL;
         foreach ($errors as $error) {
-            $message .= '<li>'.$error.'</li>';
+            $message .= PHP_EOL . $error;
         }
-        $message .= '</ul>';
 
         throw new ResourcePermissionException($message);
     }

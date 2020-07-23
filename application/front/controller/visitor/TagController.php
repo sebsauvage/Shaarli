@@ -11,8 +11,6 @@ use Slim\Http\Response;
  * Class TagController
  *
  * Slim controller handle tags.
- *
- * TODO: check redirections with new helper
  */
 class TagController extends ShaarliVisitorController
 {

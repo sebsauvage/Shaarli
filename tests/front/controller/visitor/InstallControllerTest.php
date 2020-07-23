@@ -189,6 +189,7 @@ class InstallControllerTest extends TestCase
             'updates.check_updates' => true,
             'api.enabled' => true,
             'api.secret' => '_NOT_EMPTY',
+            'general.header_link' => '/subfolder',
         ];
 
         $request = $this->createMock(Request::class);

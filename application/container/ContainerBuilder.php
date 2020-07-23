@@ -99,7 +99,6 @@ class ContainerBuilder
         $container['pluginManager'] = function (ShaarliContainer $container): PluginManager {
             $pluginManager = new PluginManager($container->conf);
 
-            // FIXME! Configuration is already injected
             $pluginManager->load($container->conf->get('general.enabled_plugins'));
 
             return $pluginManager;

@@ -162,7 +162,7 @@ class PluginsControllerTest extends TestCase
             ->method('setSessionParameter')
             ->with(
                 SessionManager::KEY_ERROR_MESSAGES,
-                ['ERROR while saving plugin configuration: ' . PHP_EOL . $message]
+                ['Error while saving plugin configuration: ' . PHP_EOL . $message]
             )
         ;
 

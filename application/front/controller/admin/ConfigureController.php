@@ -98,10 +98,10 @@ class ConfigureController extends ShaarliAdminController
         if ($thumbnailsMode !== Thumbnailer::MODE_NONE
             && $thumbnailsMode !== $this->container->conf->get('thumbnails.mode', Thumbnailer::MODE_NONE)
         ) {
-            $this->saveWarningMessage(t(
-                'You have enabled or changed thumbnails mode. '
-                .'<a href="'. $this->container->basePath .'/admin/thumbnails">Please synchronize them</a>.'
-            ));
+            $this->saveWarningMessage(
+                t('You have enabled or changed thumbnails mode.') .
+                '<a href="'. $this->container->basePath .'/admin/thumbnails">' . t('Please synchronize them.') .'</a>'
+            );
         }
         $this->container->conf->set('thumbnails.mode', $thumbnailsMode);
 
@@ -110,8 +110,13 @@ class ConfigureController extends ShaarliAdminController
             $this->container->history->updateSettings();
             $this->container->pageCacheManager->invalidateCaches();
         } catch (Throwable $e) {
-            // TODO: translation + stacktrace
-            $this->saveErrorMessage('ERROR while writing config file after configuration update.');
+            $this->assignView('message', t('Error while writing config file after configuration update.'));
+
+            if ($this->container->conf->get('dev.debug', false)) {
+                $this->assignView('stacktrace', $e->getMessage() . PHP_EOL . $e->getTraceAsString());
+            }
+
+            return $response->write($this->render('error'));
         }
 
         $this->saveSuccessMessage(t('Configuration was saved.'));

@@ -56,7 +56,7 @@ class ShaarliMiddleware
         } catch (ShaarliFrontException $e) {
             // Possible functional error
             $this->container->pageBuilder->reset();
-            $this->container->pageBuilder->assign('message', $e->getMessage());
+            $this->container->pageBuilder->assign('message', nl2br($e->getMessage()));
 
             $response = $response->withStatus($e->getCode());
 

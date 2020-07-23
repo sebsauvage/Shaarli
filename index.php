@@ -28,7 +28,6 @@ require_once __DIR__ . '/init.php';
 use Shaarli\Config\ConfigManager;
 use Shaarli\Container\ContainerBuilder;
 use Shaarli\Languages;
-use Shaarli\Plugin\PluginManager;
 use Shaarli\Security\CookieManager;
 use Shaarli\Security\LoginManager;
 use Shaarli\Security\SessionManager;
@@ -64,9 +63,6 @@ $conf->setEmpty('general.title', t('Shared bookmarks on '). escape(index_url($_S
 
 RainTPL::$tpl_dir = $conf->get('resource.raintpl_tpl').'/'.$conf->get('resource.theme').'/'; // template directory
 RainTPL::$cache_dir = $conf->get('resource.raintpl_tmp'); // cache directory
-
-$pluginManager = new PluginManager($conf);
-$pluginManager->load($conf->get('general.enabled_plugins'));
 
 date_default_timezone_set($conf->get('general.timezone', 'UTC'));
 
