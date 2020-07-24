@@ -101,7 +101,7 @@
 
 <main id="content" class="container" role="main">
   <div id="search" class="subheader-form searchform-block header-search">
-    <form method="GET" class="pure-form searchform" name="searchform">
+    <form method="GET" class="pure-form searchform" name="searchform" action="{$base_path}/">
       <input type="text" id="searchform_value" name="searchterm" aria-label="{'Search text'|t}" placeholder="{'Search text'|t}"
              {if="!empty($search_term)"}
              value="{$search_term}"
