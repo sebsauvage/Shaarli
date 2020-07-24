@@ -128,7 +128,7 @@ class InstallController extends ShaarliVisitorController
                 $this->container->conf->get('credentials.salt')
             )
         );
-        $this->container->conf->set('general.header_link', $this->container->basePath);
+        $this->container->conf->set('general.header_link', $this->container->basePath . '/');
 
         try {
             // Everything is ok, let's create config file.
@@ -149,7 +149,7 @@ class InstallController extends ShaarliVisitorController
             [t('Shaarli is now configured. Please login and start shaaring your bookmarks!')]
         );
 
-        return $this->redirect($response, '/');
+        return $this->redirect($response, '/login');
     }
 
     protected function checkPermissions(): bool

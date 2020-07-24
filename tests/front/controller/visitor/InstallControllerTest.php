@@ -236,7 +236,7 @@ class InstallControllerTest extends TestCase
         $result = $this->controller->save($request, $response);
 
         static::assertSame(302, $result->getStatusCode());
-        static::assertSame('/subfolder/', $result->getHeader('location')[0]);
+        static::assertSame('/subfolder/login', $result->getHeader('location')[0]);
     }
 
     /**
@@ -257,7 +257,7 @@ class InstallControllerTest extends TestCase
         $result = $this->controller->save($request, $response);
 
         static::assertSame(302, $result->getStatusCode());
-        static::assertSame('/subfolder/', $result->getHeader('location')[0]);
+        static::assertSame('/subfolder/login', $result->getHeader('location')[0]);
 
         static::assertSame('UTC', $confSettings['general.timezone']);
         static::assertSame('Shared bookmarks on http://shaarli', $confSettings['general.title']);
