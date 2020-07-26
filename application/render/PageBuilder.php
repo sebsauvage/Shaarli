@@ -3,6 +3,7 @@
 namespace Shaarli\Render;
 
 use Exception;
+use exceptions\MissingBasePathException;
 use RainTPL;
 use Shaarli\ApplicationUtils;
 use Shaarli\Bookmark\BookmarkServiceInterface;
@@ -156,7 +157,7 @@ class PageBuilder
      * Affect variable after controller processing.
      * Used for alert messages.
      */
-    protected function finalize(): void
+    protected function finalize(string $basePath): void
     {
         // TODO: use the SessionManager
         $messageKeys = [
@@ -170,6 +171,14 @@ class PageBuilder
                 unset($_SESSION[$messageKey]);
             }
         }
+
+        $this->assign('base_path', $basePath);
+        $this->assign(
+            'asset_path',
+            $basePath . '/' .
+            rtrim($this->conf->get('resource.raintpl_tpl', 'tpl'), '/') . '/' .
+            $this->conf->get('resource.theme', 'default')
+        );
     }
 
     /**
@@ -210,23 +219,6 @@ class PageBuilder
     }
 
     /**
-     * Render a specific page (using a template file).
-     * e.g. $pb->renderPage('picwall');
-     *
-     * @param string $page Template filename (without extension).
-     */
-    public function renderPage($page)
-    {
-        if ($this->tpl === false) {
-            $this->initialize();
-        }
-
-        $this->finalize();
-
-        $this->tpl->draw($page);
-    }
-
-    /**
      * Render a specific page as string (using a template file).
      * e.g. $pb->render('picwall');
      *
@@ -234,13 +226,13 @@ class PageBuilder
      *
      * @return string Processed template content
      */
-    public function render(string $page): string
+    public function render(string $page, string $basePath): string
     {
         if ($this->tpl === false) {
             $this->initialize();
         }
 
-        $this->finalize();
+        $this->finalize($basePath);
 
         return $this->tpl->draw($page, true);
     }

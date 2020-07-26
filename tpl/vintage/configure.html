@@ -4,7 +4,7 @@
 <body onload="document.configform.title.focus();">
 <div id="pageheader">
   {include="page.header"}
-  <form method="POST" action="#" name="configform" id="configform">
+  <form method="POST" action="{$base_path}/admin/configure" name="configform" id="configform">
     <input type="hidden" name="token" value="{$token}">
     <table id="configuration_table">
 

@@ -71,10 +71,8 @@ class TagCloudController extends ShaarliVisitorController
             'search_tags' => $searchTags,
             'tags' => $tags,
         ];
-        $data = $this->executeHooks('tag' . $type, $data);
-        foreach ($data as $key => $value) {
-            $this->assignView($key, $value);
-        }
+        $this->executePageHooks('render_tag' . $type, $data, 'tag.' . $type);
+        $this->assignAllView($data);
 
         $searchTags = !empty($searchTags) ? $searchTags .' - ' : '';
         $this->assignView(
@@ -82,7 +80,7 @@ class TagCloudController extends ShaarliVisitorController
             $searchTags . t('Tag '. $type) .' - '. $this->container->conf->get('general.title', 'Shaarli')
         );
 
-        return $response->write($this->render('tag.'. $type));
+        return $response->write($this->render('tag.' . $type));
     }
 
     /**
@@ -111,21 +109,5 @@ class TagCloudController extends ShaarliVisitorController
         }
 
         return $tagList;
-    }
-
-    /**
-     * @param mixed[] $data Template data
-     *
-     * @return mixed[] Template data after active plugins hook execution.
-     */
-    protected function executeHooks(string $template, array $data): array
-    {
-        $this->container->pluginManager->executeHooks(
-            'render_'. $template,
-            $data,
-            ['loggedin' => $this->container->loginManager->isLoggedIn()]
-        );
-
-        return $data;
     }
 }

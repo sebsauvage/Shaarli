@@ -7,6 +7,7 @@ namespace Shaarli\Front\Controller\Admin;
 use PHPUnit\Framework\TestCase;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Front\Exception\WrongTokenException;
+use Shaarli\Plugin\PluginManager;
 use Shaarli\Security\SessionManager;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -14,6 +15,8 @@ use Slim\Http\Response;
 class PluginsControllerTest extends TestCase
 {
     use FrontAdminControllerMockHelper;
+
+    const PLUGIN_NAMES = ['plugin1', 'plugin2', 'plugin3', 'plugin4'];
 
     /** @var PluginsController */
     protected $controller;
@@ -23,6 +26,17 @@ class PluginsControllerTest extends TestCase
         $this->createContainer();
 
         $this->controller = new PluginsController($this->container);
+
+        mkdir($path = __DIR__ . '/folder');
+        PluginManager::$PLUGINS_PATH = $path;
+        array_map(function (string $plugin) use ($path) { touch($path . '/' . $plugin); }, static::PLUGIN_NAMES);
+    }
+
+    public function tearDown()
+    {
+        $path = __DIR__ . '/folder';
+        array_map(function (string $plugin) use ($path) { unlink($path . '/' . $plugin); }, static::PLUGIN_NAMES);
+        rmdir($path);
     }
 
     /**

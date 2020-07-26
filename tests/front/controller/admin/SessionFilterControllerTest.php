@@ -23,7 +23,7 @@ class SessionFilterControllerTest extends TestCase
 
         $this->controller = new SessionFilterController($this->container);
     }
-    
+
     /**
      * Visibility - Default call for private filter while logged in without current value
      */

@@ -5,7 +5,7 @@
 <body onload="document.changetag.fromtag.focus();">
 <div id="pageheader">
 	{include="page.header"}
-	<form method="POST" action="" name="changetag" id="changetag">
+	<form method="POST" action="{$base_path}/admin/tags" name="changetag" id="changetag">
         <input type="hidden" name="token" value="{$token}">
         <div>
             <label for="fromtag">Tag:</label>

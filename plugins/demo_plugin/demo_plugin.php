@@ -118,7 +118,7 @@ function hook_demo_plugin_render_header($data)
         $form = array(
             'attr' => array(
                 'method' => 'GET',
-                'action' => '?',
+                'action' => $data['_BASE_PATH_'] . '/',
                 'class' => 'addform',
             ),
             'inputs' => array(

@@ -72,13 +72,11 @@ class DailyController extends ShaarliVisitorController
         ];
 
         // Hooks are called before column construction so that plugins don't have to deal with columns.
-        $data = $this->executeHooks($data);
+        $this->executePageHooks('render_daily', $data, TemplatePage::DAILY);
 
         $data['cols'] = $this->calculateColumns($data['linksToDisplay']);
 
-        foreach ($data as $key => $value) {
-            $this->assignView($key, $value);
-        }
+        $this->assignAllView($data);
 
         $mainTitle = $this->container->conf->get('general.title', 'Shaarli');
         $this->assignView(
@@ -189,21 +187,5 @@ class DailyController extends ShaarliVisitorController
         }
 
         return $columns;
-    }
-
-    /**
-     * @param mixed[] $data Variables passed to the template engine
-     *
-     * @return mixed[] Template data after active plugins render_picwall hook execution.
-     */
-    protected function executeHooks(array $data): array
-    {
-        $this->container->pluginManager->executeHooks(
-            'render_daily',
-            $data,
-            ['loggedin' => $this->container->loginManager->isLoggedIn()]
-        );
-
-        return $data;
     }
 }

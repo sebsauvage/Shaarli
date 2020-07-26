@@ -45,12 +45,14 @@ function hook_wallabag_render_linklist($data, $conf)
     $wallabagHtml = file_get_contents(PluginManager::$PLUGINS_PATH . '/wallabag/wallabag.html');
 
     $linkTitle = t('Save to wallabag');
+    $path = ($data['_BASE_PATH_'] ?? '') . '/' . PluginManager::$PLUGINS_PATH;
+
     foreach ($data['links'] as &$value) {
         $wallabag = sprintf(
             $wallabagHtml,
             $wallabagInstance->getWallabagUrl(),
             urlencode($value['url']),
-            PluginManager::$PLUGINS_PATH,
+            $path,
             $linkTitle
         );
         $value['link_plugin'][] = $wallabag;

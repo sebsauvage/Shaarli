@@ -46,7 +46,7 @@ class FeedController extends ShaarliVisitorController
 
         $data = $this->container->feedBuilder->buildData($feedType, $request->getParams());
 
-        $data = $this->executeHooks($data, $feedType);
+        $this->executePageHooks('render_feed', $data, $feedType);
         $this->assignAllView($data);
 
         $content = $this->render('feed.'. $feedType);
@@ -54,24 +54,5 @@ class FeedController extends ShaarliVisitorController
         $cache->cache($content);
 
         return $response->write($content);
-    }
-
-    /**
-     * @param mixed[] $data Template data
-     *
-     * @return mixed[] Template data after active plugins hook execution.
-     */
-    protected function executeHooks(array $data, string $feedType): array
-    {
-        $this->container->pluginManager->executeHooks(
-            'render_feed',
-            $data,
-            [
-                'loggedin' => $this->container->loginManager->isLoggedIn(),
-                'target' => $feedType,
-            ]
-        );
-
-        return $data;
     }
 }

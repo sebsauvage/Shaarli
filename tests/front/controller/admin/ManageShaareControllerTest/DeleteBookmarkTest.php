@@ -59,8 +59,12 @@ class DeleteBookmarkTest extends TestCase
             ->with('raw')
             ->willReturnCallback(function () use ($bookmark): BookmarkFormatter {
                 $formatter = $this->createMock(BookmarkFormatter::class);
-
-                $formatter->expects(static::once())->method('format')->with($bookmark);
+                $formatter
+                    ->expects(static::once())
+                    ->method('format')
+                    ->with($bookmark)
+                    ->willReturn(['formatted' => $bookmark])
+                ;
 
                 return $formatter;
             })
@@ -70,7 +74,7 @@ class DeleteBookmarkTest extends TestCase
         $this->container->pluginManager
             ->expects(static::once())
             ->method('executeHooks')
-            ->with('delete_link')
+            ->with('delete_link', ['formatted' => $bookmark])
         ;
 
         $result = $this->controller->deleteBookmark($request, $response);
@@ -128,6 +132,9 @@ class DeleteBookmarkTest extends TestCase
                     ->method('format')
                     ->withConsecutive(...array_map(function (Bookmark $bookmark): array {
                         return [$bookmark];
+                    }, $bookmarks))
+                    ->willReturnOnConsecutiveCalls(...array_map(function (Bookmark $bookmark): array {
+                        return ['formatted' => $bookmark];
                     }, $bookmarks))
                 ;
 
@@ -254,6 +261,9 @@ class DeleteBookmarkTest extends TestCase
                     ->withConsecutive(...array_map(function (Bookmark $bookmark): array {
                         return [$bookmark];
                     }, $bookmarks))
+                    ->willReturnOnConsecutiveCalls(...array_map(function (Bookmark $bookmark): array {
+                        return ['formatted' => $bookmark];
+                    }, $bookmarks))
                 ;
 
                 return $formatter;
@@ -350,7 +360,12 @@ class DeleteBookmarkTest extends TestCase
         $this->container->formatterFactory
             ->expects(static::once())
             ->method('getFormatter')
-            ->willReturn($this->createMock(BookmarkFormatter::class))
+            ->willReturnCallback(function (): BookmarkFormatter {
+                $formatter = $this->createMock(BookmarkFormatter::class);
+                $formatter->method('format')->willReturn(['formatted']);
+
+                return $formatter;
+            })
         ;
 
         $result = $this->controller->deleteBookmark($request, $response);

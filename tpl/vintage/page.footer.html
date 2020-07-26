@@ -30,5 +30,7 @@
 {/if}
 
 {loop="$plugins_footer.js_files"}
-	<script src="{$value}#"></script>
+	<script src="{$base_path}/{$value}#"></script>
 {/loop}
+
+<input type="hidden" name="js_base_path" value="{$base_path}" />

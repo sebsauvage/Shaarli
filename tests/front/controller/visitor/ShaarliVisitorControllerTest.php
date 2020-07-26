@@ -96,8 +96,6 @@ class ShaarliVisitorControllerTest extends TestCase
         static::assertSame(10, $this->assignedValues['linkcount']);
         static::assertSame(5, $this->assignedValues['privateLinkcount']);
         static::assertSame(['error'], $this->assignedValues['plugin_errors']);
-        static::assertSame('/subfolder', $this->assignedValues['base_path']);
-        static::assertSame('/subfolder/tpl/default', $this->assignedValues['asset_path']);
 
         static::assertSame('templateName', $this->assignedValues['plugins_includes']['render_includes']['target']);
         static::assertTrue($this->assignedValues['plugins_includes']['render_includes']['loggedin']);

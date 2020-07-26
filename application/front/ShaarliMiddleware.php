@@ -60,7 +60,7 @@ class ShaarliMiddleware
 
             $response = $response->withStatus($e->getCode());
 
-            return $response->write($this->container->pageBuilder->render('error'));
+            return $response->write($this->container->pageBuilder->render('error', $this->container->basePath));
         } catch (UnauthorizedException $e) {
             $returnUrl = urlencode($this->container->environment['REQUEST_URI']);
 
@@ -80,7 +80,7 @@ class ShaarliMiddleware
 
             $response = $response->withStatus(500);
 
-            return $response->write($this->container->pageBuilder->render('error'));
+            return $response->write($this->container->pageBuilder->render('error', $this->container->basePath));
         }
     }
 

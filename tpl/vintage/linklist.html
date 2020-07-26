@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link type="text/css" rel="stylesheet" href="inc/awesomplete.css#" />
     {include="includes"}
 </head>
 <body>
@@ -84,7 +83,7 @@
                 <div class="thumbnail">
                     <a href="{$value.real_url}">
                         {ignore}RainTPL hack: put the 2 src on two different line to avoid path replace bug{/ignore}
-                        <img data-src="{$value.thumbnail}#" class="b-lazy"
+                        <img data-src="{$base_path}/{$value.thumbnail}#" class="b-lazy"
                              src=""
                              alt="thumbnail" width="{$thumbnails_width}" height="{$thumbnails_height}" />
                     </a>
@@ -93,17 +92,16 @@
             <div class="linkcontainer">
                 {if="$is_logged_in"}
                     <div class="linkeditbuttons">
-                        <form method="GET" class="buttoneditform">
-                            <input type="hidden" name="edit_link" value="{$value.id}">
-                            <input type="image" alt="Edit" src="{$asset_path}/img/edit_icon.png#" title="Edit" class="button_edit">
-                        </form><br>
-                        <form method="GET" class="buttoneditform">
-                            <input type="hidden" name="lf_linkdate" value="{$value.id}">
-                            <input type="hidden" name="token" value="{$token}">
-                            <input type="hidden" name="delete_link">
-                            <input type="image" alt="Delete" src="{$asset_path}/img/delete_icon.png#" title="Delete"
-                                   class="button_delete" onClick="return confirmDeleteLink();">
-                        </form>
+                        <a href="{$base_path}/admin/shaare/{$value.id}" title="Edit" class="button_edit">
+                            <img src="{$asset_path}/img/edit_icon.png#">
+                        </a>
+                        <br>
+                        <a href="{$base_path}/admin/shaare/delete?id={$value.id}&amp;token={$token}" label="Delete"
+                           onClick="return confirmDeleteLink();"
+                           class="button_delete"
+                        >
+                            <img src="{$asset_path}/img/delete_icon.png#">
+                        </a>
                     </div>
                 {/if}
                 <span class="linktitle">
@@ -114,7 +112,7 @@
                 {if="!$hide_timestamps || $is_logged_in"}
                     {$updated=$value.updated_timestamp ? 'Edited: '. format_date($value.updated) : 'Permalink'}
                     <span class="linkdate" title="Permalink">
-                        <a href="{$base_path}/?{$value.shorturl}">
+                        <a href="{$base_path}/shaare/{$value.shorturl}">
                             <span title="{$updated}">
                                 {$value.created|format_date}
                                 {if="$value.updated_timestamp"}*{/if}
@@ -123,7 +121,7 @@
                         </a> -
                     </span>
                 {else}
-                    <span class="linkdate" title="Short link here"><a href="{$base_path}/?{$value.shorturl}">permalink</a> - </span>
+                    <span class="linkdate" title="Short link here"><a href="{$base_path}/shaare/{$value.shorturl}">permalink</a> - </span>
                 {/if}
 
                 {loop="$value.link_plugin"}

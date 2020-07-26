@@ -22,7 +22,7 @@ class ToolsController extends ShaarliAdminController
             'sslenabled' => is_https($this->container->environment),
         ];
 
-        $data = $this->executeHooks($data);
+        $this->executePageHooks('render_tools', $data, TemplatePage::TOOLS);
 
         foreach ($data as $key => $value) {
             $this->assignView($key, $value);
@@ -31,20 +31,5 @@ class ToolsController extends ShaarliAdminController
         $this->assignView('pagetitle', t('Tools') .' - '. $this->container->conf->get('general.title', 'Shaarli'));
 
         return $response->write($this->render(TemplatePage::TOOLS));
-    }
-
-    /**
-     * @param mixed[] $data Variables passed to the template engine
-     *
-     * @return mixed[] Template data after active plugins render_picwall hook execution.
-     */
-    protected function executeHooks(array $data): array
-    {
-        $this->container->pluginManager->executeHooks(
-            'render_tools',
-            $data
-        );
-
-        return $data;
     }
 }

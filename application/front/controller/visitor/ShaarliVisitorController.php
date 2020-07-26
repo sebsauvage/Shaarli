@@ -60,22 +60,9 @@ abstract class ShaarliVisitorController
         $this->assignView('privateLinkcount', $this->container->bookmarkService->count(BookmarkFilter::$PRIVATE));
         $this->assignView('plugin_errors', $this->container->pluginManager->getErrors());
 
-        /*
-         * Define base path (if Shaarli is installed in a domain's subfolder, e.g. `/shaarli`)
-         * and the asset path (subfolder/tpl/default for default theme).
-         * These MUST be used to create an internal link or to include an asset in templates.
-         */
-        $this->assignView('base_path', $this->container->basePath);
-        $this->assignView(
-            'asset_path',
-            $this->container->basePath . '/' .
-            rtrim($this->container->conf->get('resource.raintpl_tpl', 'tpl'), '/') . '/' .
-            $this->container->conf->get('resource.theme', 'default')
-        );
-
         $this->executeDefaultHooks($template);
 
-        return $this->container->pageBuilder->render($template);
+        return $this->container->pageBuilder->render($template, $this->container->basePath);
     }
 
     /**
@@ -97,11 +84,27 @@ abstract class ShaarliVisitorController
                 $pluginData,
                 [
                     'target' => $template,
-                    'loggedin' => $this->container->loginManager->isLoggedIn()
+                    'loggedin' => $this->container->loginManager->isLoggedIn(),
+                    'basePath' => $this->container->basePath,
                 ]
             );
             $this->assignView('plugins_' . $name, $pluginData);
         }
+    }
+
+    protected function executePageHooks(string $hook, array &$data, string $template = null): void
+    {
+        $params = [
+            'target' => $template,
+            'loggedin' => $this->container->loginManager->isLoggedIn(),
+            'basePath' => $this->container->basePath,
+        ];
+
+        $this->container->pluginManager->executeHooks(
+            $hook,
+            $data,
+            $params
+        );
     }
 
     /**

@@ -152,7 +152,7 @@ class ManageShaareController extends ShaarliAdminController
         // To preserve backward compatibility with 3rd parties, plugins still use arrays
         $formatter = $this->container->formatterFactory->getFormatter('raw');
         $data = $formatter->format($bookmark);
-        $data = $this->executeHooks('save_link', $data);
+        $this->executePageHooks('save_link', $data);
 
         $bookmark->fromArray($data);
         $this->container->bookmarkService->set($bookmark);
@@ -211,7 +211,7 @@ class ManageShaareController extends ShaarliAdminController
             }
 
             $data = $formatter->format($bookmark);
-            $this->container->pluginManager->executeHooks('delete_link', $data);
+            $this->executePageHooks('delete_link', $data);
             $this->container->bookmarkService->remove($bookmark, false);
             ++ $count;
         }
@@ -283,7 +283,7 @@ class ManageShaareController extends ShaarliAdminController
 
             // To preserve backward compatibility with 3rd parties, plugins still use arrays
             $data = $formatter->format($bookmark);
-            $this->container->pluginManager->executeHooks('save_link', $data);
+            $this->executePageHooks('save_link', $data);
             $bookmark->fromArray($data);
 
             $this->container->bookmarkService->set($bookmark, false);
@@ -325,7 +325,7 @@ class ManageShaareController extends ShaarliAdminController
 
         // To preserve backward compatibility with 3rd parties, plugins still use arrays
         $data = $formatter->format($bookmark);
-        $this->container->pluginManager->executeHooks('save_link', $data);
+        $this->executePageHooks('save_link', $data);
         $bookmark->fromArray($data);
 
         $this->container->bookmarkService->set($bookmark);
@@ -354,7 +354,7 @@ class ManageShaareController extends ShaarliAdminController
             'default_private_links' => $this->container->conf->get('privacy.default_private_links', false),
         ];
 
-        $data = $this->executeHooks('render_editlink', $data);
+        $this->executePageHooks('render_editlink', $data, TemplatePage::EDIT_LINK);
 
         foreach ($data as $key => $value) {
             $this->assignView($key, $value);
@@ -367,20 +367,5 @@ class ManageShaareController extends ShaarliAdminController
         );
 
         return $response->write($this->render(TemplatePage::EDIT_LINK));
-    }
-
-    /**
-     * @param mixed[] $data Variables passed to the template engine
-     *
-     * @return mixed[] Template data after active plugins render_picwall hook execution.
-     */
-    protected function executeHooks(string $hook, array $data): array
-    {
-        $this->container->pluginManager->executeHooks(
-            $hook,
-            $data
-        );
-
-        return $data;
     }
 }

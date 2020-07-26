@@ -42,30 +42,13 @@ class PictureWallController extends ShaarliVisitorController
             }
         }
 
-        $data = $this->executeHooks($linksToDisplay);
+        $data = ['linksToDisplay' => $linksToDisplay];
+        $this->executePageHooks('render_picwall', $data, TemplatePage::PICTURE_WALL);
+
         foreach ($data as $key => $value) {
             $this->assignView($key, $value);
         }
 
         return $response->write($this->render(TemplatePage::PICTURE_WALL));
-    }
-
-    /**
-     * @param mixed[] $linksToDisplay List of formatted bookmarks
-     *
-     * @return mixed[] Template data after active plugins render_picwall hook execution.
-     */
-    protected function executeHooks(array $linksToDisplay): array
-    {
-        $data = [
-            'linksToDisplay' => $linksToDisplay,
-        ];
-        $this->container->pluginManager->executeHooks(
-            'render_picwall',
-            $data,
-            ['loggedin' => $this->container->loginManager->isLoggedIn()]
-        );
-
-        return $data;
     }
 }

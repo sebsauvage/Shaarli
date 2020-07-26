@@ -19,11 +19,12 @@ function hook_qrcode_render_linklist($data)
 {
     $qrcode_html = file_get_contents(PluginManager::$PLUGINS_PATH . '/qrcode/qrcode.html');
 
+    $path = ($data['_BASE_PATH_'] ?? '') . '/' . PluginManager::$PLUGINS_PATH;
     foreach ($data['links'] as &$value) {
         $qrcode = sprintf(
             $qrcode_html,
             $value['url'],
-            PluginManager::$PLUGINS_PATH
+            $path
         );
         $value['link_plugin'][] = $qrcode;
     }
@@ -41,7 +42,7 @@ function hook_qrcode_render_linklist($data)
 function hook_qrcode_render_footer($data)
 {
     if ($data['_PAGE_'] == TemplatePage::LINKLIST) {
-        $data['js_files'][] = PluginManager::$PLUGINS_PATH . '/qrcode/shaarli-qrcode.js';
+        $data['js_files'][] =  PluginManager::$PLUGINS_PATH . '/qrcode/shaarli-qrcode.js';
     }
 
     return $data;

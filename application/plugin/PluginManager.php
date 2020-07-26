@@ -108,6 +108,10 @@ class PluginManager
             $data['_LOGGEDIN_'] = $params['loggedin'];
         }
 
+        if (isset($params['basePath'])) {
+            $data['_BASE_PATH_'] = $params['basePath'];
+        }
+
         foreach ($this->loadedPlugins as $plugin) {
             $hookFunction = $this->buildHookName($hook, $plugin);
 

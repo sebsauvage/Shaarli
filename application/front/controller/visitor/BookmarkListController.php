@@ -124,7 +124,7 @@ class BookmarkListController extends ShaarliVisitorController
 
         $data['pagetitle'] = ($data['pagetitle'] ?? '') . $this->container->conf->get('general.title', 'Shaarli');
 
-        $this->executeHooks($data);
+        $this->executePageHooks('render_linklist', $data, TemplatePage::LINKLIST);
         $this->assignAllView($data);
 
         return $response->write($this->render(TemplatePage::LINKLIST));
@@ -153,7 +153,7 @@ class BookmarkListController extends ShaarliVisitorController
             ]
         );
 
-        $this->executeHooks($data);
+        $this->executePageHooks('render_linklist', $data, TemplatePage::LINKLIST);
         $this->assignAllView($data);
 
         return $response->write($this->render(TemplatePage::LINKLIST));
@@ -180,18 +180,6 @@ class BookmarkListController extends ShaarliVisitorController
         }
 
         return false;
-    }
-
-    /**
-     * @param mixed[] $data Template vars to process in plugins, passed as reference.
-     */
-    protected function executeHooks(array &$data): void
-    {
-        $this->container->pluginManager->executeHooks(
-            'render_linklist',
-            $data,
-            ['loggedin' => $this->container->loginManager->isLoggedIn()]
-        );
     }
 
     /**

@@ -58,7 +58,7 @@ class PluginsController extends ShaarliAdminController
         try {
             $parameters = $request->getParams() ?? [];
 
-            $this->executeHooks($parameters);
+            $this->executePageHooks('save_plugin_parameters', $parameters);
 
             if (isset($parameters['parameters_form'])) {
                 unset($parameters['parameters_form']);
@@ -80,20 +80,5 @@ class PluginsController extends ShaarliAdminController
         }
 
         return $this->redirect($response, '/admin/plugins');
-    }
-
-    /**
-     * @param mixed[] $data Variables passed to the template engine
-     *
-     * @return mixed[] Template data after active plugins render_picwall hook execution.
-     */
-    protected function executeHooks(array $data): array
-    {
-        $this->container->pluginManager->executeHooks(
-            'save_plugin_parameters',
-            $data
-        );
-
-        return $data;
     }
 }

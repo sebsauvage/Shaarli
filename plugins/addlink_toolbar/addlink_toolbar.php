@@ -20,7 +20,7 @@ function hook_addlink_toolbar_render_header($data)
         $form = array(
             'attr' => array(
                 'method' => 'GET',
-                'action' => '',
+                'action' => $data['_BASE_PATH_'] . '/admin/shaare',
                 'name'   => 'addform',
                 'class'  => 'addform',
             ),

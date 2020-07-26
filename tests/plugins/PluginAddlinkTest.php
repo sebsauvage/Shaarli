@@ -28,6 +28,7 @@ class PluginAddlinkTest extends \PHPUnit\Framework\TestCase
         $data = array($str => $str);
         $data['_PAGE_'] = TemplatePage::LINKLIST;
         $data['_LOGGEDIN_'] = true;
+        $data['_BASE_PATH_'] = '/subfolder';
 
         $data = hook_addlink_toolbar_render_header($data);
         $this->assertEquals($str, $data[$str]);
@@ -36,6 +37,8 @@ class PluginAddlinkTest extends \PHPUnit\Framework\TestCase
         $data = array($str => $str);
         $data['_PAGE_'] = $str;
         $data['_LOGGEDIN_'] = true;
+        $data['_BASE_PATH_'] = '/subfolder';
+
         $data = hook_addlink_toolbar_render_header($data);
         $this->assertEquals($str, $data[$str]);
         $this->assertArrayNotHasKey('fields_toolbar', $data);
@@ -50,6 +53,7 @@ class PluginAddlinkTest extends \PHPUnit\Framework\TestCase
         $data = array($str => $str);
         $data['_PAGE_'] = TemplatePage::LINKLIST;
         $data['_LOGGEDIN_'] = false;
+        $data['_BASE_PATH_'] = '/subfolder';
 
         $data = hook_addlink_toolbar_render_header($data);
         $this->assertEquals($str, $data[$str]);
