@@ -91,7 +91,7 @@ class LoginController extends ShaarliVisitorController
         // Force referer from given return URL
         $this->container->environment['HTTP_REFERER'] = $request->getParam('returnurl');
 
-        return $this->redirectFromReferer($request, $response, ['login']);
+        return $this->redirectFromReferer($request, $response, ['login', 'install']);
     }
 
     /**
