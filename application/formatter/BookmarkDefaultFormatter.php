@@ -50,7 +50,7 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
      */
     public function formatUrl($bookmark)
     {
-        if ($bookmark->isNote() && !empty($this->contextData['index_url'])) {
+        if ($bookmark->isNote() && isset($this->contextData['index_url'])) {
             return rtrim($this->contextData['index_url'], '/') . '/' . escape(ltrim($bookmark->getUrl(), '/'));
         }
 
@@ -63,11 +63,11 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
     protected function formatRealUrl($bookmark)
     {
         if ($bookmark->isNote()) {
-            if (!empty($this->contextData['index_url'])) {
+            if (isset($this->contextData['index_url'])) {
                 $prefix = rtrim($this->contextData['index_url'], '/') . '/';
             }
 
-            if (!empty($this->contextData['base_path'])) {
+            if (isset($this->contextData['base_path'])) {
                 $prefix = rtrim($this->contextData['base_path'], '/') . '/';
             }
 
