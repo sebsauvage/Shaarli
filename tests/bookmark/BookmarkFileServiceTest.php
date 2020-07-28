@@ -200,7 +200,7 @@ class BookmarkFileServiceTest extends TestCase
 
         $bookmark = $this->privateLinkDB->get(43);
         $this->assertEquals(43, $bookmark->getId());
-        $this->assertRegExp('/\?[\w\-]{6}/', $bookmark->getUrl());
+        $this->assertRegExp('#/shaare/[\w\-]{6}#', $bookmark->getUrl());
         $this->assertRegExp('/[\w\-]{6}/', $bookmark->getShortUrl());
         $this->assertEquals($bookmark->getUrl(), $bookmark->getTitle());
         $this->assertEmpty($bookmark->getDescription());
@@ -216,7 +216,7 @@ class BookmarkFileServiceTest extends TestCase
 
         $bookmark = $this->privateLinkDB->get(43);
         $this->assertEquals(43, $bookmark->getId());
-        $this->assertRegExp('/\?[\w\-]{6}/', $bookmark->getUrl());
+        $this->assertRegExp('#/shaare/[\w\-]{6}#', $bookmark->getUrl());
         $this->assertRegExp('/[\w\-]{6}/', $bookmark->getShortUrl());
         $this->assertEquals($bookmark->getUrl(), $bookmark->getTitle());
         $this->assertEmpty($bookmark->getDescription());

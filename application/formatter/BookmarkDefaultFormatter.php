@@ -50,11 +50,10 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
      */
     public function formatUrl($bookmark)
     {
-        if (! empty($this->contextData['index_url']) && (
-            startsWith($bookmark->getUrl(), '?') || startsWith($bookmark->getUrl(), '/')
-        )) {
-            return $this->contextData['index_url'] . escape($bookmark->getUrl());
+        if ($bookmark->isNote() && !empty($this->contextData['index_url'])) {
+            return rtrim($this->contextData['index_url'], '/') . '/' . escape(ltrim($bookmark->getUrl(), '/'));
         }
+
         return escape($bookmark->getUrl());
     }
 
@@ -63,11 +62,18 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
      */
     protected function formatRealUrl($bookmark)
     {
-        if (! empty($this->contextData['index_url']) && (
-                startsWith($bookmark->getUrl(), '?') || startsWith($bookmark->getUrl(), '/')
-            )) {
-            return $this->contextData['index_url'] . escape($bookmark->getUrl());
+        if ($bookmark->isNote()) {
+            if (!empty($this->contextData['index_url'])) {
+                $prefix = rtrim($this->contextData['index_url'], '/') . '/';
+            }
+
+            if (!empty($this->contextData['base_path'])) {
+                $prefix = rtrim($this->contextData['base_path'], '/') . '/';
+            }
+
+            return escape($prefix ?? '') . escape(ltrim($bookmark->getUrl(), '/'));
         }
+
         return escape($bookmark->getUrl());
     }
 

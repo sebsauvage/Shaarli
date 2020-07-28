@@ -114,8 +114,8 @@ class PutLinkTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(self::NB_FIELDS_LINK, count($data));
         $this->assertEquals($id, $data['id']);
         $this->assertEquals('WDWyig', $data['shorturl']);
-        $this->assertEquals('http://domain.tld/?WDWyig', $data['url']);
-        $this->assertEquals('?WDWyig', $data['title']);
+        $this->assertEquals('http://domain.tld/shaare/WDWyig', $data['url']);
+        $this->assertEquals('/shaare/WDWyig', $data['title']);
         $this->assertEquals('', $data['description']);
         $this->assertEquals([], $data['tags']);
         $this->assertEquals(true, $data['private']);

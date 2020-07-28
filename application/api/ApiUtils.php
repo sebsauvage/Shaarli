@@ -67,7 +67,7 @@ class ApiUtils
         if (! $bookmark->isNote()) {
             $out['url'] = $bookmark->getUrl();
         } else {
-            $out['url'] = $indexUrl . $bookmark->getUrl();
+            $out['url'] = rtrim($indexUrl, '/') . '/' . ltrim($bookmark->getUrl(), '/');
         }
         $out['shorturl'] = $bookmark->getShortUrl();
         $out['title'] = $bookmark->getTitle();

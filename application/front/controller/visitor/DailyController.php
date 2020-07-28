@@ -54,6 +54,7 @@ class DailyController extends ShaarliVisitorController
         }
 
         $formatter = $this->container->formatterFactory->getFormatter();
+        $formatter->addContextData('base_path', $this->container->basePath);
         // We pre-format some fields for proper output.
         foreach ($linksToDisplay as $key => $bookmark) {
             $linksToDisplay[$key] = $formatter->format($bookmark);

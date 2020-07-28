@@ -68,7 +68,7 @@ class NetscapeBookmarkUtils
             $link = $formatter->format($bookmark);
             $link['taglist'] = implode(',', $bookmark->getTags());
             if ($bookmark->isNote() && $prependNoteUrl) {
-                $link['url'] = $indexUrl . $link['url'];
+                $link['url'] = rtrim($indexUrl, '/') . '/' . ltrim($link['url'], '/');
             }
 
             $bookmarkLinks[] = $link;

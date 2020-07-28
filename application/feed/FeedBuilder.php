@@ -174,7 +174,7 @@ class FeedBuilder
     protected function buildItem(string $feedType, $link, $pageaddr)
     {
         $data = $this->formatter->format($link);
-        $data['guid'] = $pageaddr . '?' . $data['shorturl'];
+        $data['guid'] = rtrim($pageaddr, '/') . '/shaare/' . $data['shorturl'];
         if ($this->usePermalinks === true) {
             $permalink = '<a href="'. $data['url'] .'" title="'. t('Direct link') .'">'. t('Direct link') .'</a>';
         } else {

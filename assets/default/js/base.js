@@ -26,11 +26,15 @@ function findParent(element, tagName, attributes) {
  * Ajax request to refresh the CSRF token.
  */
 function refreshToken(basePath) {
+  console.log('refresh');
   const xhr = new XMLHttpRequest();
   xhr.open('GET', `${basePath}/admin/token`);
   xhr.onload = () => {
-    const token = document.getElementById('token');
-    token.setAttribute('value', xhr.responseText);
+    const elements = document.querySelectorAll('input[name="token"]');
+    [...elements].forEach((element) => {
+      console.log(element);
+      element.setAttribute('value', xhr.responseText);
+    });
   };
   xhr.send();
 }

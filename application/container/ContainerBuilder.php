@@ -105,7 +105,10 @@ class ContainerBuilder
         };
 
         $container['formatterFactory'] = function (ShaarliContainer $container): FormatterFactory {
-            return new FormatterFactory($container->conf, $container->loginManager->isLoggedIn());
+            return new FormatterFactory(
+                $container->conf,
+                $container->loginManager->isLoggedIn()
+            );
         };
 
         $container['pageCacheManager'] = function (ShaarliContainer $container): PageCacheManager {

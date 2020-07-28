@@ -106,7 +106,7 @@ class Bookmark
             throw new InvalidBookmarkException($this);
         }
         if (empty($this->url)) {
-            $this->url = '?'. $this->shortUrl;
+            $this->url = '/shaare/'. $this->shortUrl;
         }
         if (empty($this->title)) {
             $this->title = $this->url;
@@ -406,7 +406,7 @@ class Bookmark
     public function isNote()
     {
         // We check empty value to get a valid result if the link has not been saved yet
-        return empty($this->url) || $this->url[0] === '?';
+        return empty($this->url) || startsWith($this->url, '/shaare/') || $this->url[0] === '?';
     }
 
     /**

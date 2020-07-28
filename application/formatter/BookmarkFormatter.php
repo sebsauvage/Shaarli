@@ -3,8 +3,8 @@
 namespace Shaarli\Formatter;
 
 use DateTime;
-use Shaarli\Config\ConfigManager;
 use Shaarli\Bookmark\Bookmark;
+use Shaarli\Config\ConfigManager;
 
 /**
  * Class BookmarkFormatter
@@ -80,6 +80,8 @@ abstract class BookmarkFormatter
     public function addContextData($key, $value)
     {
         $this->contextData[$key] = $value;
+
+        return $this;
     }
 
     /**
@@ -128,7 +130,7 @@ abstract class BookmarkFormatter
      */
     protected function formatRealUrl($bookmark)
     {
-        return $bookmark->getUrl();
+        return $this->formatUrl($bookmark);
     }
 
     /**

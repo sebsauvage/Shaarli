@@ -32,6 +32,7 @@ class BookmarkListController extends ShaarliVisitorController
         }
 
         $formatter = $this->container->formatterFactory->getFormatter();
+        $formatter->addContextData('base_path', $this->container->basePath);
 
         $searchTags = escape(normalize_spaces($request->getParam('searchtags') ?? ''));
         $searchTerm = escape(normalize_spaces($request->getParam('searchterm') ?? ''));;
@@ -145,11 +146,14 @@ class BookmarkListController extends ShaarliVisitorController
 
         $this->updateThumbnail($bookmark);
 
+        $formatter = $this->container->formatterFactory->getFormatter();
+        $formatter->addContextData('base_path', $this->container->basePath);
+
         $data = array_merge(
             $this->initializeTemplateVars(),
             [
                 'pagetitle' => $bookmark->getTitle() .' - '. $this->container->conf->get('general.title', 'Shaarli'),
-                'links' => [$this->container->formatterFactory->getFormatter()->format($bookmark)],
+                'links' => [$formatter->format($bookmark)],
             ]
         );
 
