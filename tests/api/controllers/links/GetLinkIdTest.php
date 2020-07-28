@@ -102,7 +102,7 @@ class GetLinkIdTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($id, $data['id']);
 
         // Check link elements
-        $this->assertEquals('http://domain.tld/?WDWyig', $data['url']);
+        $this->assertEquals('http://domain.tld/shaare/WDWyig', $data['url']);
         $this->assertEquals('WDWyig', $data['shorturl']);
         $this->assertEquals('Link title: @website', $data['title']);
         $this->assertEquals(

@@ -30,7 +30,7 @@ class ReferenceLinkDB
         $this->addLink(
             11,
             'Pined older',
-            '?PCRizQ',
+            '/shaare/PCRizQ',
             'This is an older pinned link',
             0,
             DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20100309_101010'),
@@ -43,7 +43,7 @@ class ReferenceLinkDB
         $this->addLink(
             10,
             'Pined',
-            '?0gCTjQ',
+            '/shaare/0gCTjQ',
             'This is a pinned link',
             0,
             DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20121207_152312'),
@@ -56,7 +56,7 @@ class ReferenceLinkDB
         $this->addLink(
             41,
             'Link title: @website',
-            '?WDWyig',
+            '/shaare/WDWyig',
             'Stallman has a beard and is part of the Free Software Foundation (or not). Seriously, read this. #hashtag',
             0,
             DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114651'),
@@ -68,7 +68,7 @@ class ReferenceLinkDB
         $this->addLink(
             42,
             'Note: I have a big ID but an old date',
-            '?WDWyig',
+            '/shaare/WDWyig',
             'Used to test bookmarks reordering.',
             0,
             DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20100310_101010'),

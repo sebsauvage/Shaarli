@@ -157,7 +157,7 @@ class Updater
                 && 1 === preg_match('/^\?([a-zA-Z0-9-_@]{6})($|&|#)/', $bookmark->getUrl(), $match)
             ) {
                 $updated = true;
-                $bookmark = $bookmark->setUrl($this->basePath . '/shaare/' . $match[1]);
+                $bookmark = $bookmark->setUrl('/shaare/' . $match[1]);
 
                 $this->bookmarkService->set($bookmark, false);
             }

@@ -340,7 +340,7 @@ class BookmarkFileServiceTest extends TestCase
 
         $bookmark = $this->privateLinkDB->get(42);
         $this->assertEquals(42, $bookmark->getId());
-        $this->assertEquals('?WDWyig', $bookmark->getUrl());
+        $this->assertEquals('/shaare/WDWyig', $bookmark->getUrl());
         $this->assertEquals('1eYJ1Q', $bookmark->getShortUrl());
         $this->assertEquals('Note: I have a big ID but an old date', $bookmark->getTitle());
         $this->assertEquals('Used to test bookmarks reordering.', $bookmark->getDescription());
@@ -359,7 +359,7 @@ class BookmarkFileServiceTest extends TestCase
 
         $bookmark = $this->privateLinkDB->get(42);
         $this->assertEquals(42, $bookmark->getId());
-        $this->assertEquals('?WDWyig', $bookmark->getUrl());
+        $this->assertEquals('/shaare/WDWyig', $bookmark->getUrl());
         $this->assertEquals('1eYJ1Q', $bookmark->getShortUrl());
         $this->assertEquals('Note: I have a big ID but an old date', $bookmark->getTitle());
         $this->assertEquals('Used to test bookmarks reordering.', $bookmark->getDescription());

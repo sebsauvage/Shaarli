@@ -2,6 +2,7 @@
 namespace Shaarli\Updater;
 
 use Exception;
+use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
@@ -12,7 +13,7 @@ use Shaarli\History;
  * Class UpdaterTest.
  * Runs unit tests against the updater class.
  */
-class UpdaterTest extends \PHPUnit\Framework\TestCase
+class UpdaterTest extends TestCase
 {
     /**
      * @var string Path to test datastore.
@@ -194,7 +195,6 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
 
     public function testUpdateMethodRelativeHomeLinkDoNotRename(): void
     {
-        $this->updater->setBasePath('/subfolder');
         $this->conf->set('general.header_link', '~/my-blog');
 
         $this->updater->updateMethodRelativeHomeLink();
@@ -204,8 +204,6 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
 
     public function testUpdateMethodMigrateExistingNotesUrl(): void
     {
-        $this->updater->setBasePath('/subfolder');
-
         $this->updater->updateMethodMigrateExistingNotesUrl();
 
         static::assertSame($this->refDB->getLinks()[0]->getUrl(), $this->bookmarkService->get(0)->getUrl());
@@ -215,9 +213,9 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
         static::assertSame($this->refDB->getLinks()[7]->getUrl(), $this->bookmarkService->get(7)->getUrl());
         static::assertSame($this->refDB->getLinks()[8]->getUrl(), $this->bookmarkService->get(8)->getUrl());
         static::assertSame($this->refDB->getLinks()[9]->getUrl(), $this->bookmarkService->get(9)->getUrl());
-        static::assertSame('/subfolder/shaare/WDWyig', $this->bookmarkService->get(42)->getUrl());
-        static::assertSame('/subfolder/shaare/WDWyig', $this->bookmarkService->get(41)->getUrl());
-        static::assertSame('/subfolder/shaare/0gCTjQ', $this->bookmarkService->get(10)->getUrl());
-        static::assertSame('/subfolder/shaare/PCRizQ', $this->bookmarkService->get(11)->getUrl());
+        static::assertSame('/shaare/WDWyig', $this->bookmarkService->get(42)->getUrl());
+        static::assertSame('/shaare/WDWyig', $this->bookmarkService->get(41)->getUrl());
+        static::assertSame('/shaare/0gCTjQ', $this->bookmarkService->get(10)->getUrl());
+        static::assertSame('/shaare/PCRizQ', $this->bookmarkService->get(11)->getUrl());
     }
 }

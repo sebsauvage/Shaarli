@@ -177,7 +177,7 @@ class BookmarkExportTest extends TestCase
             ''
         );
         $this->assertEquals(
-            '?WDWyig',
+            '/shaare/WDWyig',
             $links[2]['url']
         );
     }
@@ -195,7 +195,7 @@ class BookmarkExportTest extends TestCase
             $indexUrl
         );
         $this->assertEquals(
-            $indexUrl . '?WDWyig',
+            $indexUrl . 'shaare/WDWyig',
             $links[2]['url']
         );
     }

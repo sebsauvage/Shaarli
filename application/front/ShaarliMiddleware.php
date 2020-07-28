@@ -93,6 +93,7 @@ class ShaarliMiddleware
             return;
         }
 
+        $this->container->updater->setBasePath($this->container->basePath);
         $newUpdates = $this->container->updater->update();
         if (!empty($newUpdates)) {
             $this->container->updater->writeUpdates(
