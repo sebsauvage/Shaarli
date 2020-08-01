@@ -37,7 +37,7 @@ class Bookmark
     /** @var array List of bookmark's tags */
     protected $tags;
 
-    /** @var string Thumbnail's URL - false if no thumbnail could be found */
+    /** @var string|bool|null Thumbnail's URL - initialized at null, false if no thumbnail could be found */
     protected $thumbnail;
 
     /** @var bool Set to true if the bookmark is set as sticky */
@@ -347,7 +347,7 @@ class Bookmark
     /**
      * Get the Thumbnail.
      *
-     * @return string|bool|null
+     * @return string|bool|null Thumbnail's URL - initialized at null, false if no thumbnail could be found
      */
     public function getThumbnail()
     {
@@ -357,7 +357,7 @@ class Bookmark
     /**
      * Set the Thumbnail.
      *
-     * @param string|bool $thumbnail
+     * @param string|bool $thumbnail Thumbnail's URL - false if no thumbnail could be found
      *
      * @return Bookmark
      */
