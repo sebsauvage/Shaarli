@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Shaarli\Front\Controller\Visitor;
 
 use Shaarli\ApplicationUtils;
-use Shaarli\Bookmark\BookmarkFilter;
 use Shaarli\Container\ShaarliContainer;
 use Shaarli\Front\Exception\AlreadyInstalledException;
 use Shaarli\Front\Exception\ResourcePermissionException;
@@ -138,10 +137,6 @@ class InstallController extends ShaarliVisitorController
             $this->assignView('stacktrace', $e->getMessage() . PHP_EOL . $e->getTraceAsString());
 
             return $response->write($this->render('error'));
-        }
-
-        if ($this->container->bookmarkService->count(BookmarkFilter::$ALL) === 0) {
-            $this->container->bookmarkService->initialize();
         }
 
         $this->container->sessionManager->setSessionParameter(

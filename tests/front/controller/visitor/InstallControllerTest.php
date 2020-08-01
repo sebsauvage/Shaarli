@@ -224,9 +224,6 @@ class InstallControllerTest extends TestCase
         ;
         $this->container->conf->expects(static::once())->method('write');
 
-        $this->container->bookmarkService->expects(static::once())->method('count')->willReturn(0);
-        $this->container->bookmarkService->expects(static::once())->method('initialize');
-
         $this->container->sessionManager
             ->expects(static::once())
             ->method('setSessionParameter')

@@ -2,6 +2,7 @@
 
 namespace Shaarli\Bookmark;
 
+use Shaarli\Bookmark\Exception\DatastoreNotInitializedException;
 use Shaarli\Bookmark\Exception\EmptyDataStoreException;
 use Shaarli\Bookmark\Exception\NotWritableDataStoreException;
 use Shaarli\Config\ConfigManager;
@@ -52,13 +53,14 @@ class BookmarkIO
      *
      * @return BookmarkArray instance
      *
-     * @throws NotWritableDataStoreException Data couldn't be loaded
-     * @throws EmptyDataStoreException       Datastore doesn't exist
+     * @throws NotWritableDataStoreException    Data couldn't be loaded
+     * @throws EmptyDataStoreException          Datastore file exists but does not contain any bookmark
+     * @throws DatastoreNotInitializedException File does not exists
      */
     public function read()
     {
         if (! file_exists($this->datastore)) {
-            throw new EmptyDataStoreException();
+            throw new DatastoreNotInitializedException();
         }
 
         if (!is_writable($this->datastore)) {

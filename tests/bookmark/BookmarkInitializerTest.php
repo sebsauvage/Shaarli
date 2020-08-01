@@ -3,7 +3,6 @@
 namespace Shaarli\Bookmark;
 
 use PHPUnit\Framework\TestCase;
-use ReferenceLinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 
@@ -54,9 +53,9 @@ class BookmarkInitializerTest extends TestCase
     }
 
     /**
-     * Test initialize() with an empty data store.
+     * Test initialize() with a data store containing bookmarks.
      */
-    public function testInitializeEmptyDataStore()
+    public function testInitializeNotEmptyDataStore(): void
     {
         $refDB = new \ReferenceLinkDB();
         $refDB->write(self::$testDatastore);
@@ -79,6 +78,8 @@ class BookmarkInitializerTest extends TestCase
         );
         $this->assertFalse($bookmark->isPrivate());
 
+        $this->bookmarkService->save();
+
         // Reload from file
         $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, true);
         $this->assertEquals($refDB->countLinks() + 2, $this->bookmarkService->count());
@@ -97,10 +98,13 @@ class BookmarkInitializerTest extends TestCase
     }
 
     /**
-     * Test initialize() with a data store containing bookmarks.
+     * Test initialize() with an a non existent datastore file .
      */
-    public function testInitializeNotEmptyDataStore()
+    public function testInitializeNonExistentDataStore(): void
     {
+        $this->conf->set('resource.datastore', static::$testDatastore . '_empty');
+        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, true);
+
         $this->initializer->initialize();
 
         $this->assertEquals(2, $this->bookmarkService->count());

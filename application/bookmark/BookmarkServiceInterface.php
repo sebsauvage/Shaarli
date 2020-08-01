@@ -6,7 +6,6 @@ namespace Shaarli\Bookmark;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Bookmark\Exception\NotWritableDataStoreException;
 use Shaarli\Config\ConfigManager;
-use Shaarli\Exceptions\IOException;
 use Shaarli\History;
 
 /**
@@ -177,17 +176,4 @@ interface BookmarkServiceInterface
      * Creates the default database after a fresh install.
      */
     public function initialize();
-
-    /**
-     * Allow to write the datastore from anonymous session (not logged in).
-     *
-     * This covers a few specific use cases, such as datastore initialization,
-     * but it should be used carefully as it can lead to security issues.
-     */
-    public function enableAnonymousPermission();
-
-    /**
-     * Disable anonymous permission.
-     */
-    public function disableAnonymousPermission();
 }
