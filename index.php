@@ -95,39 +95,41 @@ $app->group('', function () {
     $this->get('/add-tag/{newTag}', '\Shaarli\Front\Controller\Visitor\TagController:addTag');
     $this->get('/remove-tag/{tag}', '\Shaarli\Front\Controller\Visitor\TagController:removeTag');
     $this->get('/links-per-page', '\Shaarli\Front\Controller\Visitor\PublicSessionFilterController:linksPerPage');
+    $this->get('/untagged-only', '\Shaarli\Front\Controller\Admin\PublicSessionFilterController:untaggedOnly');
+})->add('\Shaarli\Front\ShaarliMiddleware');
 
-    /* -- LOGGED IN -- */
+$app->group('/admin', function () {
     $this->get('/logout', '\Shaarli\Front\Controller\Admin\LogoutController:index');
-    $this->get('/admin/tools', '\Shaarli\Front\Controller\Admin\ToolsController:index');
-    $this->get('/admin/password', '\Shaarli\Front\Controller\Admin\PasswordController:index');
-    $this->post('/admin/password', '\Shaarli\Front\Controller\Admin\PasswordController:change');
-    $this->get('/admin/configure', '\Shaarli\Front\Controller\Admin\ConfigureController:index');
-    $this->post('/admin/configure', '\Shaarli\Front\Controller\Admin\ConfigureController:save');
-    $this->get('/admin/tags', '\Shaarli\Front\Controller\Admin\ManageTagController:index');
-    $this->post('/admin/tags', '\Shaarli\Front\Controller\Admin\ManageTagController:save');
-    $this->get('/admin/add-shaare', '\Shaarli\Front\Controller\Admin\ManageShaareController:addShaare');
-    $this->get('/admin/shaare', '\Shaarli\Front\Controller\Admin\ManageShaareController:displayCreateForm');
-    $this->get('/admin/shaare/{id:[0-9]+}', '\Shaarli\Front\Controller\Admin\ManageShaareController:displayEditForm');
-    $this->post('/admin/shaare', '\Shaarli\Front\Controller\Admin\ManageShaareController:save');
-    $this->get('/admin/shaare/delete', '\Shaarli\Front\Controller\Admin\ManageShaareController:deleteBookmark');
-    $this->get('/admin/shaare/visibility', '\Shaarli\Front\Controller\Admin\ManageShaareController:changeVisibility');
-    $this->get('/admin/shaare/{id:[0-9]+}/pin', '\Shaarli\Front\Controller\Admin\ManageShaareController:pinBookmark');
+    $this->get('/tools', '\Shaarli\Front\Controller\Admin\ToolsController:index');
+    $this->get('/password', '\Shaarli\Front\Controller\Admin\PasswordController:index');
+    $this->post('/password', '\Shaarli\Front\Controller\Admin\PasswordController:change');
+    $this->get('/configure', '\Shaarli\Front\Controller\Admin\ConfigureController:index');
+    $this->post('/configure', '\Shaarli\Front\Controller\Admin\ConfigureController:save');
+    $this->get('/tags', '\Shaarli\Front\Controller\Admin\ManageTagController:index');
+    $this->post('/tags', '\Shaarli\Front\Controller\Admin\ManageTagController:save');
+    $this->get('/add-shaare', '\Shaarli\Front\Controller\Admin\ManageShaareController:addShaare');
+    $this->get('/shaare', '\Shaarli\Front\Controller\Admin\ManageShaareController:displayCreateForm');
+    $this->get('/shaare/{id:[0-9]+}', '\Shaarli\Front\Controller\Admin\ManageShaareController:displayEditForm');
+    $this->post('/shaare', '\Shaarli\Front\Controller\Admin\ManageShaareController:save');
+    $this->get('/shaare/delete', '\Shaarli\Front\Controller\Admin\ManageShaareController:deleteBookmark');
+    $this->get('/shaare/visibility', '\Shaarli\Front\Controller\Admin\ManageShaareController:changeVisibility');
+    $this->get('/shaare/{id:[0-9]+}/pin', '\Shaarli\Front\Controller\Admin\ManageShaareController:pinBookmark');
     $this->patch(
-        '/admin/shaare/{id:[0-9]+}/update-thumbnail',
+        '/shaare/{id:[0-9]+}/update-thumbnail',
         '\Shaarli\Front\Controller\Admin\ThumbnailsController:ajaxUpdate'
     );
-    $this->get('/admin/export', '\Shaarli\Front\Controller\Admin\ExportController:index');
-    $this->post('/admin/export', '\Shaarli\Front\Controller\Admin\ExportController:export');
-    $this->get('/admin/import', '\Shaarli\Front\Controller\Admin\ImportController:index');
-    $this->post('/admin/import', '\Shaarli\Front\Controller\Admin\ImportController:import');
-    $this->get('/admin/plugins', '\Shaarli\Front\Controller\Admin\PluginsController:index');
-    $this->post('/admin/plugins', '\Shaarli\Front\Controller\Admin\PluginsController:save');
-    $this->get('/admin/token', '\Shaarli\Front\Controller\Admin\TokenController:getToken');
-    $this->get('/admin/thumbnails', '\Shaarli\Front\Controller\Admin\ThumbnailsController:index');
+    $this->get('/export', '\Shaarli\Front\Controller\Admin\ExportController:index');
+    $this->post('/export', '\Shaarli\Front\Controller\Admin\ExportController:export');
+    $this->get('/import', '\Shaarli\Front\Controller\Admin\ImportController:index');
+    $this->post('/import', '\Shaarli\Front\Controller\Admin\ImportController:import');
+    $this->get('/plugins', '\Shaarli\Front\Controller\Admin\PluginsController:index');
+    $this->post('/plugins', '\Shaarli\Front\Controller\Admin\PluginsController:save');
+    $this->get('/token', '\Shaarli\Front\Controller\Admin\TokenController:getToken');
+    $this->get('/thumbnails', '\Shaarli\Front\Controller\Admin\ThumbnailsController:index');
 
     $this->get('/visibility/{visibility}', '\Shaarli\Front\Controller\Admin\SessionFilterController:visibility');
-    $this->get('/untagged-only', '\Shaarli\Front\Controller\Admin\SessionFilterController:untaggedOnly');
-})->add('\Shaarli\Front\ShaarliMiddleware');
+})->add('\Shaarli\Front\ShaarliAdminMiddleware');
+
 
 // REST API routes
 $app->group('/api/v1', function () {

@@ -67,7 +67,7 @@ class LegacyController extends ShaarliVisitorController
     /** Legacy route: ?do=logout */
     protected function logout(Request $request, Response $response): Response
     {
-        return $this->redirect($response, '/logout');
+        return $this->redirect($response, '/admin/logout');
     }
 
     /** Legacy route: ?do=picwall */

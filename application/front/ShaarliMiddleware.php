@@ -40,7 +40,7 @@ class ShaarliMiddleware
      */
     public function __invoke(Request $request, Response $response, callable $next): Response
     {
-        $this->container->basePath = rtrim($request->getUri()->getBasePath(), '/');
+        $this->initBasePath($request);
 
         try {
             if (!is_file($this->container->conf->getConfigFileExt())
@@ -124,5 +124,15 @@ class ShaarliMiddleware
         }
 
         return true;
+    }
+
+    /**
+     * Initialize the URL base path if it hasn't been defined yet.
+     */
+    protected function initBasePath(Request $request): void
+    {
+        if (null === $this->container->basePath) {
+            $this->container->basePath = rtrim($request->getUri()->getBasePath(), '/');
+        }
     }
 }

@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Shaarli\Front\Controller\Admin;
 
 use PHPUnit\Framework\TestCase;
-use Shaarli\Front\Exception\UnauthorizedException;
 use Shaarli\Front\Exception\WrongTokenException;
-use Shaarli\Security\LoginManager;
 use Shaarli\Security\SessionManager;
 use Slim\Http\Request;
 
@@ -50,19 +48,6 @@ class ShaarliAdminControllerTest extends TestCase
                 parent::saveErrorMessage($message);
             }
         };
-    }
-
-    /**
-     * Creating an instance of an admin controller while logged out should raise an exception.
-     */
-    public function testInstantiateWhileLoggedOut(): void
-    {
-        $this->expectException(UnauthorizedException::class);
-
-        $this->container->loginManager = $this->createMock(LoginManager::class);
-        $this->container->loginManager->method('isLoggedIn')->willReturn(false);
-
-        $this->controller = new class($this->container) extends ShaarliAdminController {};
     }
 
     /**

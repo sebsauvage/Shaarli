@@ -6,10 +6,10 @@
           {'Filters'|t}
         </span>
         {if="$is_logged_in"}
-        <a href="{$base_path}/visibility/private" aria-label="{'Only display private links'|t}" title="{'Only display private links'|t}"
+        <a href="{$base_path}/admin/visibility/private" aria-label="{'Only display private links'|t}" title="{'Only display private links'|t}"
            class="{if="$visibility==='private'"}filter-on{else}filter-off{/if}"
         ><i class="fa fa-user-secret" aria-hidden="true"></i></a>
-        <a href="{$base_path}/visibility/public" aria-label="{'Only display public links'|t}" title="{'Only display public links'|t}"
+        <a href="{$base_path}/admin/visibility/public" aria-label="{'Only display public links'|t}" title="{'Only display public links'|t}"
            class="{if="$visibility==='public'"}filter-on{else}filter-off{/if}"
         ><i class="fa fa-globe" aria-hidden="true"></i></a>
         {/if}

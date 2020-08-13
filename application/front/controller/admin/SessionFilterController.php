@@ -17,7 +17,7 @@ use Slim\Http\Response;
 class SessionFilterController extends ShaarliAdminController
 {
     /**
-     * GET /visibility: allows to display only public or only private bookmarks in linklist
+     * GET /admin/visibility: allows to display only public or only private bookmarks in linklist
      */
     public function visibility(Request $request, Response $response, array $args): Response
     {
@@ -46,16 +46,5 @@ class SessionFilterController extends ShaarliAdminController
         return $this->redirectFromReferer($request, $response, ['visibility']);
     }
 
-    /**
-     * GET /untagged-only: allows to display only bookmarks without any tag
-     */
-    public function untaggedOnly(Request $request, Response $response): Response
-    {
-        $this->container->sessionManager->setSessionParameter(
-            SessionManager::KEY_UNTAGGED_ONLY,
-            empty($this->container->sessionManager->getSessionParameter(SessionManager::KEY_UNTAGGED_ONLY))
-        );
 
-        return $this->redirectFromReferer($request, $response, ['untaggedonly', 'untagged-only']);
-    }
 }

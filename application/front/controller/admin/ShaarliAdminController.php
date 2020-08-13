@@ -22,15 +22,6 @@ use Slim\Http\Request;
  */
 abstract class ShaarliAdminController extends ShaarliVisitorController
 {
-    public function __construct(ShaarliContainer $container)
-    {
-        parent::__construct($container);
-
-        if (true !== $this->container->loginManager->isLoggedIn()) {
-            throw new UnauthorizedException();
-        }
-    }
-
     /**
      * Any persistent action to the config or data store must check the XSRF token validity.
      */

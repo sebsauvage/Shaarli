@@ -43,7 +43,7 @@ class ShaarliMiddlewareTest extends TestCase
         $this->middleware = new ShaarliMiddleware($this->container);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unlink(static::TMP_MOCK_FILE);
     }
