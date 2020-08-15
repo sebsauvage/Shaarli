@@ -50,20 +50,14 @@ $ rsync -avP /home/me/Shaarli/ /var/www/shaarli.mydomain.org/
 Regardless of the installation method, appropriate [file permissions](dev/Development.md#directory-structure) must be set:
 
 ```bash
-# by default, deny access to everything to the web server
 sudo chown -R root:www-data /var/www/shaarli.mydomain.org
-sudo chmod -R u=rwX /var/www/shaarli.mydomain.org
-# allow read-only access to these files/directories
-sudo chmod -R g+rX /var/www/shaarli.mydomain.org/{index.php,application/,plugins/,inc/}
-# allow read/write access to these directories
+sudo chmod -R g+rX /var/www/shaarli.mydomain.org
 sudo chmod -R g+rwX /var/www/shaarli.mydomain.org/{cache/,data/,pagecache/,tmp/}
 ```
-
 
 ## Using Docker
 
 [See the documentation](Docker.md)
-
 
 
 ## Finish Installation
