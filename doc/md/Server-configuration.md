@@ -1,7 +1,5 @@
 # Server configuration
 
-
-
 ## Requirements
 
 ### Operating system and web server
@@ -24,6 +22,7 @@ Setup a **firewall** (using `iptables`, [ufw](https://www.digitalocean.com/commu
 
 Shaarli makes outbound HTTP/HTTPS connections to websites you bookmark to fetch page information (title, thumbnails), the server must then have access to the Internet as well, and a working DNS resolver.
 
+--------------------------------------------------------------------------------
 
 ### PHP
 

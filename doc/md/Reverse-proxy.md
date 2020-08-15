@@ -17,8 +17,17 @@ See also [proxy-related](https://github.com/shaarli/Shaarli/issues?utf8=%E2%9C%9
 ```apache
 <VirtualHost *:80>
     ServerName shaarli.mydomain.org
-    # Redirect HTTP to HTTPS
-    Redirect permanent / https://shaarli.mydomain.org
+    DocumentRoot /var/www/shaarli.mydomain.org/
+
+    # Redirect HTTP requests to HTTPS, except Let's Encrypt ACME challenge requests
+    RewriteEngine on
+    RewriteRule ^.well-known/acme-challenge/ - [L]
+    RewriteCond %{HTTP_HOST} =shaarli.mydomain.org
+    RewriteRule  ^ https://shaarli.mydomain.org%{REQUEST_URI} [END,NE,R=permanent]
+    # If you are using mod_md, use this instead
+    #MDCertificateAgreement accepted
+    #MDContactEmail admin@shaarli.mydomain.org
+    #MDPrivateKeys RSA 4096
 </VirtualHost>
 
 <VirtualHost *:443>
@@ -27,10 +36,6 @@ See also [proxy-related](https://github.com/shaarli/Shaarli/issues?utf8=%E2%9C%9
     SSLEngine on
     SSLCertificateFile    /path/to/certificate
     SSLCertificateKeyFile /path/to/private/key
-
-    LogLevel warn
-    ErrorLog  /var/log/apache2/error.log
-    CustomLog /var/log/apache2/access.log combined
 
     # let the proxied shaarli server/container know HTTPS URLs should be served
     RequestHeader set X-Forwarded-Proto "https"
