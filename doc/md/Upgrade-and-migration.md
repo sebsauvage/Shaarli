@@ -29,8 +29,7 @@ sudo rsync -avP --delete Shaarli/ /var/www/shaarli.mydomain.org/
 
 # restore file permissions as described on the installation page
 sudo chown -R root:www-data /var/www/shaarli.mydomain.org
-sudo chmod -R u=rwX /var/www/shaarli.mydomain.org
-sudo chmod -R g+rX /var/www/shaarli.mydomain.org/{index.php,application/,plugins/,inc/}
+sudo chmod -R g+rX /var/www/shaarli.mydomain.org
 sudo chmod -R g+rwX /var/www/shaarli.mydomain.org/{cache/,data/,pagecache/,tmp/}
 
 # restore backups of the data directory
@@ -70,8 +69,7 @@ sudo make build_frontend
 
 # restore file permissions as described on the installation page
 sudo chown -R root:www-data /var/www/shaarli.mydomain.org
-sudo chmod -R u=rwX /var/www/shaarli.mydomain.org
-sudo chmod -R g+rX /var/www/shaarli.mydomain.org/{index.php,application/,plugins/,inc/}
+sudo chmod -R g+rX /var/www/shaarli.mydomain.org
 sudo chmod -R g+rwX /var/www/shaarli.mydomain.org/{cache/,data/,pagecache/,tmp/}
 ``` 
 
