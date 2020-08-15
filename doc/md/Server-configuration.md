@@ -122,12 +122,6 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
     ServerName shaarli.mydomain.org
     DocumentRoot /var/www/shaarli.mydomain.org/
 
-    # Log level. Possible values include: debug, info, notice, warn, error, crit, alert, emerg.
-    LogLevel  warn
-    # Log file locations
-    ErrorLog /var/log/apache2/error.log
-    CustomLog /var/log/apache2/access.log combined
-
     # Redirect HTTP requests to HTTPS
     RewriteEngine on
     RewriteRule ^.well-known/acme-challenge/ - [L]
@@ -139,12 +133,6 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
 <VirtualHost *:443>
     ServerName   shaarli.mydomain.org
     DocumentRoot /var/www/shaarli.mydomain.org/
-
-    # Log level. Possible values include: debug, info, notice, warn, error, crit, alert, emerg.
-    LogLevel  warn
-    # Log file locations
-    ErrorLog  /var/log/apache2/error.log
-    CustomLog /var/log/apache2/access.log combined
 
     # SSL/TLS configuration (for Let's Encrypt certificates)
     SSLEngine             on
