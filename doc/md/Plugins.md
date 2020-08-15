@@ -37,23 +37,7 @@ This is important in case plugins depend on each other. Read plugins READMEs for
 
 ## Configuration file
 
-Enabled plugins are stored in your [Configuration file](Shaarli-configuration), under the array:
-
-```php
-$GLOBALS['config']['ENABLED_PLUGINS']
-```
-
-You can edit them manually here. For example:
-
-```php
-$GLOBALS['config']['ENABLED_PLUGINS'] = array(
-    'qrcode',
-    'archiveorg',
-    'wallabag',
-    'markdown',
-);
-```
-
+Enabled plugins are stored in your [Configuration file](Shaarli-configuration).
 
 ## Usage
 
