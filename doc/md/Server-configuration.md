@@ -160,8 +160,7 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
     <Directory /var/www/shaarli.mydomain.org/>
         # Required for .htaccess support
         AllowOverride All
-        Order allow,deny
-        Allow from all
+        Require all granted
     </Directory>
 
     <LocationMatch "/\.">
