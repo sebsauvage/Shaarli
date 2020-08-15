@@ -60,6 +60,8 @@ Some [plugins](Plugins.md) may require additional configuration.
 
 We recommend setting up [HTTPS](https://en.wikipedia.org/wiki/HTTPS) on your webserver for secure communication between clients and the server.
 
+### Let's Encrypt
+
 For public-facing web servers this can be done using free SSL/TLS certificates from [Let's Encrypt](https://en.wikipedia.org/wiki/Let's_Encrypt), a non-profit certificate authority provididing free certificates.
 
  - [How to secure Apache with Let's Encrypt](https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-debian-10)
@@ -86,6 +88,10 @@ sudo certbot certonly --standalone --noninteractive --agree-tos --email "admin@s
 sudo systemctl start apache2
 sudo systemctl start nginx
 ```
+
+On apache `2.4.43+`, you can also delegate LE certificate management to [mod_md](https://httpd.apache.org/docs/2.4/mod/mod_md.html) [[1](https://www.cyberciti.biz/faq/how-to-secure-apache-with-mod_md-lets-encrypt-on-ubuntu-20-04-lts/)] in which case you don't need certbot and manual SSL configuration in virtualhosts.
+
+### Self-signed
 
 If you don't want to rely on a certificate authority, or the server can only be accessed from your own network, you can also generate self-signed certificates. Not that this will generate security warnings in web browsers/clients trying to access Shaarli:
 
@@ -135,10 +141,10 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
     DocumentRoot /var/www/shaarli.mydomain.org/
 
     # SSL/TLS configuration (for Let's Encrypt certificates)
+    # If certificates were acquired from certbot standalone
     SSLEngine             on
     SSLCertificateFile    /etc/letsencrypt/live/shaarli.mydomain.org/fullchain.pem
     SSLCertificateKeyFile /etc/letsencrypt/live/shaarli.mydomain.org/privkey.pem
-
     # Let's Encrypt settings from https://github.com/certbot/certbot/blob/master/certbot-apache/certbot_apache/_internal/tls_configs/current-options-ssl-apache.conf
     SSLProtocol             all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
     SSLCipherSuite          ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384
