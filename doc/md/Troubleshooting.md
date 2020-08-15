@@ -176,6 +176,16 @@ Under Opera, you can't drag'n drop the button: You have to right-click on it and
 - A new date/time field becomes available in the edit/new Shaare dialog.
 - You can set the timestamp manually by entering it in the format `YYYMMDD_HHMMS`.
 
+### Clearing Shaarli caches
+
+For debugging purposes:
+
+```bash
+# clear raintpl cache and temporary files
+find /var/www/links/cache/ /var/www/links/pagecache/ /var/www/links/tmp/ -type f -exec rm -v '{}' \;
+# if you have a php accelerator such as php-apcu, restart the webserver
+sudo systemctl restart apache2
+```
 
 -------------------------------------------------------
 

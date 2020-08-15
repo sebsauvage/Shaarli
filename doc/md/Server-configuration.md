@@ -202,6 +202,7 @@ systemctl restart apache
 
 See [How to install the Apache web server](https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-debian-10) for a complete guide.
 
+
 ### Nginx
 
 This examples uses nginx and the [PHP-FPM](https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mariadb-php-lemp-stack-on-debian-10#step-3-%E2%80%94-installing-php-for-processing) PHP interpreter. Nginx and PHP-FPM must be running using the same user and group, here we assume the user/group to be `www-data:www-data`.
