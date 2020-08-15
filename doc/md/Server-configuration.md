@@ -96,11 +96,10 @@ If you don't want to rely on a certificate authority, or the server can only be 
 
 ## Examples
 
-The following examples assume a Debian-based operating system is installed. On other distributions you may have to adapt details such as package installation procedures, configuration file locations, and webserver username/group (`www-data` or `httpd` are common values).
-
-In these examples we assume the document root for your web server/virtualhost is at `/var/www/shaarli.mydomain.org/`:
+The following examples assume a Debian-based operating system is installed. On other distributions you may have to adapt details such as package installation procedures, configuration file locations, and webserver username/group (`www-data` or `httpd` are common values). In these examples we assume the document root for your web server/virtualhost is at `/var/www/shaarli.mydomain.org/`:
 
 ```bash
+# create the document root
 sudo mkdir -p /var/www/shaarli.mydomain.org/
 ```
 
