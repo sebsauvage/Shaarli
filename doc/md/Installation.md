@@ -7,8 +7,8 @@ Once your server is [configured](Server-configuration.md), install Shaarli:
 To install Shaarli, simply place the files from the latest [release .zip archive](https://github.com/shaarli/Shaarli/releases) under your webserver's document root (directly at the document root, or in a subdirectory). Download the **shaarli-vX.X.X-full** archive to include dependencies.
 
 ```bash
-wget https://github.com/shaarli/Shaarli/releases/download/v0.10.4/shaarli-v0.10.4-full.zip
-unzip shaarli-v0.10.4-full.zip
+wget https://github.com/shaarli/Shaarli/releases/download/v0.11.1/shaarli-v0.11.1-full.zip
+unzip shaarli-v0.11.1-full.zip
 sudo rsync -avP Shaarli/ /var/www/shaarli.mydomain.org/
 ```
 
