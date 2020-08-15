@@ -77,7 +77,8 @@ sudo apt install certbot
 sudo systemctl stop apache2
 sudo systemctl stop nginx
 
-# generate initial certificates - Let's Encrypt ACME servers must be able to access your server!
+# generate initial certificates
+# Let's Encrypt ACME servers must be able to access your server! port forwarding and firewall must be properly configured
 sudo certbot certonly --standalone --noninteractive --agree-tos --email "admin@shaarli.mydomain.org" -d shaarli.mydomain.org
 # this will generate a private key and certificate at /etc/letsencrypt/live/shaarli.mydomain.org/{privkey,fullchain}.pem
 
