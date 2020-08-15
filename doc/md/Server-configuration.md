@@ -402,6 +402,8 @@ maxretry = 3
 bantime = -1
 ```
 
+Then restart the service: `sudo systemctl restart fail2ban`
+
 #### References
 
 - [Apache/PHP - error log per VirtualHost - StackOverflow](http://stackoverflow.com/q/176)
