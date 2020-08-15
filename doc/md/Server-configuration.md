@@ -128,20 +128,22 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
     ServerName shaarli.mydomain.org
     DocumentRoot /var/www/shaarli.mydomain.org/
 
-    # Redirect HTTP requests to HTTPS
+    # Redirect HTTP requests to HTTPS, except Let's Encrypt ACME challenge requests
     RewriteEngine on
     RewriteRule ^.well-known/acme-challenge/ - [L]
-    # except for Let's Encrypt ACME challenge requests
     RewriteCond %{HTTP_HOST} =shaarli.mydomain.org
     RewriteRule  ^ https://shaarli.mydomain.org%{REQUEST_URI} [END,NE,R=permanent]
+    # If you are using mod_md, use this instead
+    #MDCertificateAgreement accepted
+    #MDContactEmail admin@shaarli.mydomain.org
+    #MDPrivateKeys RSA 4096
 </VirtualHost>
 
 <VirtualHost *:443>
     ServerName   shaarli.mydomain.org
     DocumentRoot /var/www/shaarli.mydomain.org/
 
-    # SSL/TLS configuration (for Let's Encrypt certificates)
-    # If certificates were acquired from certbot standalone
+    # SSL/TLS configuration for Let's Encrypt certificates acquired with certbot standalone
     SSLEngine             on
     SSLCertificateFile    /etc/letsencrypt/live/shaarli.mydomain.org/fullchain.pem
     SSLCertificateKeyFile /etc/letsencrypt/live/shaarli.mydomain.org/privkey.pem
@@ -151,6 +153,9 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
     SSLHonorCipherOrder     off
     SSLSessionTickets       off
     SSLOptions +StrictRequire
+
+    # SSL/TLS configuration for Let's Encrypt certificates acquired with mod_md
+    #MDomain shaarli.mydomain.org
 
     # SSL/TLS configuration (for self-signed certificates)
     #SSLEngine             on
