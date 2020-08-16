@@ -216,7 +216,7 @@ sudo a2enmod headers
 # sudo a2enmod version
 
 # restart the apache service
-systemctl restart apache
+sudo systemctl restart apache2
 ```
 
 See [How to install the Apache web server](https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-debian-10) for a complete guide.
