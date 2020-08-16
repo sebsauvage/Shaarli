@@ -198,7 +198,7 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
 
 ```bash
 # Enable the virtualhost
-sudo a2ensite shaarli
+sudo a2ensite shaarli.mydomain.org
 
 # mod_ssl must be enabled to use TLS/SSL certificates
 # https://httpd.apache.org/docs/current/mod/mod_ssl.html
