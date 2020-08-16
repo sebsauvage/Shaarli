@@ -111,7 +111,7 @@ If you don't want to rely on a certificate authority, or the server can only be 
 The following examples assume a Debian-based operating system is installed. On other distributions you may have to adapt details such as package installation procedures, configuration file locations, and webserver username/group (`www-data` or `httpd` are common values). In these examples we assume the document root for your web server/virtualhost is at `/var/www/shaarli.mydomain.org/`:
 
 ```bash
-# create the document root
+# create the document root (replace with your own domain name)
 sudo mkdir -p /var/www/shaarli.mydomain.org/
 ```
 
@@ -125,7 +125,7 @@ You can install Shaarli at the root of your virtualhost, or in a subdirectory as
 sudo apt update
 sudo apt install apache2 libapache2-mod-php php-json php-mbstring php-gd php-intl php-curl php-gettext
 
-# Edit the virtualhost configuration file with your favorite editor
+# Edit the virtualhost configuration file with your favorite editor (replace the example domain name)
 sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
 ```
 
