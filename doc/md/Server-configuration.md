@@ -208,6 +208,9 @@ sudo a2enmod ssl
 # https://httpd.apache.org/docs/current/mod/mod_rewrite.html
 sudo a2enmod rewrite
 
+# mod_headers must be enabled to set custom headers from the server config
+sudo a2enmod headers
+
 # mod_version must only be enabled if you use Apache 2.2 or lower
 # https://httpd.apache.org/docs/current/mod/mod_version.html
 # sudo a2enmod version
