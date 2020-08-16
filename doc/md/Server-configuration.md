@@ -22,6 +22,13 @@ Setup a **firewall** (using `iptables`, [ufw](https://www.digitalocean.com/commu
 
 Shaarli makes outbound HTTP/HTTPS connections to websites you bookmark to fetch page information (title, thumbnails), the server must then have access to the Internet as well, and a working DNS resolver.
 
+
+### Screencast
+
+Here is a screencast of the installation procedure
+
+[![asciicast](https://asciinema.org/a/z3RXxcJIRgWk0jM2ws6EnUFgO.svg)](https://asciinema.org/a/z3RXxcJIRgWk0jM2ws6EnUFgO)
+
 --------------------------------------------------------------------------------
 
 ### PHP
