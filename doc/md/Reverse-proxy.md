@@ -19,23 +19,38 @@ See also [proxy-related](https://github.com/shaarli/Shaarli/issues?utf8=%E2%9C%9
     ServerName shaarli.mydomain.org
     DocumentRoot /var/www/shaarli.mydomain.org/
 
+    # For SSL/TLS certificates acquired with certbot or self-signed certificates
     # Redirect HTTP requests to HTTPS, except Let's Encrypt ACME challenge requests
     RewriteEngine on
     RewriteRule ^.well-known/acme-challenge/ - [L]
     RewriteCond %{HTTP_HOST} =shaarli.mydomain.org
     RewriteRule  ^ https://shaarli.mydomain.org%{REQUEST_URI} [END,NE,R=permanent]
-    # If you are using mod_md, use this instead
-    #MDCertificateAgreement accepted
-    #MDContactEmail admin@shaarli.mydomain.org
-    #MDPrivateKeys RSA 4096
 </VirtualHost>
+
+# SSL/TLS configuration for Let's Encrypt certificates managed with mod_md
+#MDomain shaarli.mydomain.org
+#MDCertificateAgreement accepted
+#MDContactEmail admin@shaarli.mydomain.org
+#MDPrivateKeys RSA 4096
 
 <VirtualHost *:443>
     ServerName shaarli.mydomain.org
 
-    SSLEngine on
-    SSLCertificateFile    /path/to/certificate
-    SSLCertificateKeyFile /path/to/private/key
+    # SSL/TLS configuration for Let's Encrypt certificates acquired with certbot standalone
+    SSLEngine             on
+    SSLCertificateFile    /etc/letsencrypt/live/shaarli.mydomain.org/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/shaarli.mydomain.org/privkey.pem
+    # Let's Encrypt settings from https://github.com/certbot/certbot/blob/master/certbot-apache/certbot_apache/_internal/tls_configs/current-options-ssl-apache.conf
+    SSLProtocol             all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
+    SSLCipherSuite          ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384
+    SSLHonorCipherOrder     off
+    SSLSessionTickets       off
+    SSLOptions +StrictRequire
+
+    # SSL/TLS configuration for self-signed certificates
+    #SSLEngine             on
+    #SSLCertificateFile    /etc/ssl/certs/ssl-cert-snakeoil.pem
+    #SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
 
     # let the proxied shaarli server/container know HTTPS URLs should be served
     RequestHeader set X-Forwarded-Proto "https"
@@ -75,6 +90,7 @@ backend shaarli
     server shaarli1 127.0.0.1:10080
 ```
 
+- [HAProxy documentation](https://cbonte.github.io/haproxy-dconv/)
 
 ## Nginx
 
@@ -119,3 +135,8 @@ http {
 }
 ```
 
+## References
+
+- [`X-Forwarded-Proto`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto)
+- [`X-Forwarded-Host`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Host)
+- [`X-Forwarded-For`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)

@@ -4,11 +4,14 @@
 
 ### Operating system and web server
 
-Shaarli can be hosted on dedicated/virtual servers, or shared hosting. The smallest DigitalOcean VPS (Droplet with 1 CPU, 1 GiB RAM and 25 GiB SSD) costs about $5/month and will run any Shaarli installation without problems.
+Shaarli can be hosted on dedicated/virtual servers, or shared hosting.
 
 You need write access to the Shaarli installation directory - you should have received instructions from your hosting provider on how to connect to the server using SSH (or FTP for shared hosts).
 
 Examples in this documentation are given for [Debian](https://www.debian.org/), a GNU/Linux distribution widely used in server environments. Please adapt them to your specific Linux distribution.
+
+A $5/month VPS (1 CPU, 1 GiB RAM and 25 GiB SSD) will run any Shaarli installation without problems. Some hosting providers: [DigitalOcean](https://www.digitalocean.com/) ([1](https://www.digitalocean.com/docs/droplets/overview/), [2](https://www.digitalocean.com/pricing/), [3](https://www.digitalocean.com/docs/droplets/how-to/create/), [4](https://www.digitalocean.com/docs/droplets/how-to/add-ssh-keys/), [5](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-debian-8), [6](https://www.digitalocean.com/community/tutorials/an-introduction-to-securing-your-linux-vps)), [Gandi](https://www.gandi.net/en), [OVH](https://www.ovh.co.uk/), [RackSpace](https://www.rackspace.com/), etc.
+
 
 ### Network and domain name
 
@@ -61,10 +64,16 @@ Extension | Required? | Usage
 
 Some [plugins](Plugins.md) may require additional configuration.
 
+- [PHP: Supported versions](http://php.net/supported-versions.php)
+- [PHP: Unsupported versions (EOL/End-of-life)](http://php.net/eol.php)
+- [PHP 7 Changelog](http://php.net/ChangeLog-7.php)
+- [PHP 5 Changelog](http://php.net/ChangeLog-5.php)
+- [PHP: Bugs](https://bugs.php.net/)
+
 
 ## SSL/TLS (HTTPS)
 
-We recommend setting up [HTTPS](https://en.wikipedia.org/wiki/HTTPS) on your webserver for secure communication between clients and the server.
+We recommend setting up [HTTPS](https://en.wikipedia.org/wiki/HTTPS) (SSL/[TLS](https://en.wikipedia.org/wiki/Transport_Layer_Security)) on your webserver for secure communication between clients and the server.
 
 ### Let's Encrypt
 
@@ -103,6 +112,8 @@ If you don't want to rely on a certificate authority, or the server can only be 
 
 - [How To Create a Self-Signed SSL Certificate for Apache](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-on-debian-10)
 - [How To Create a Self-Signed SSL Certificate for Nginx](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-nginx-on-debian-10)
+- [How to Create Self-Signed SSL Certificates with OpenSSL](http://www.xenocafe.com/tutorials/linux/centos/openssl/self_signed_certificates/index.php)
+- [How do I create my own Certificate Authority?](https://workaround.org/certificate-authority)
 
 --------------------------------------------------------------------------------
 
@@ -134,16 +145,19 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
     ServerName shaarli.mydomain.org
     DocumentRoot /var/www/shaarli.mydomain.org/
 
+    # For SSL/TLS certificates acquired with certbot or self-signed certificates
     # Redirect HTTP requests to HTTPS, except Let's Encrypt ACME challenge requests
     RewriteEngine on
     RewriteRule ^.well-known/acme-challenge/ - [L]
     RewriteCond %{HTTP_HOST} =shaarli.mydomain.org
     RewriteRule  ^ https://shaarli.mydomain.org%{REQUEST_URI} [END,NE,R=permanent]
-    # If you are using mod_md, use this instead
-    #MDCertificateAgreement accepted
-    #MDContactEmail admin@shaarli.mydomain.org
-    #MDPrivateKeys RSA 4096
 </VirtualHost>
+
+# SSL/TLS configuration for Let's Encrypt certificates managed with mod_md
+#MDomain shaarli.mydomain.org
+#MDCertificateAgreement accepted
+#MDContactEmail admin@shaarli.mydomain.org
+#MDPrivateKeys RSA 4096
 
 <VirtualHost *:443>
     ServerName   shaarli.mydomain.org
@@ -160,10 +174,7 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
     SSLSessionTickets       off
     SSLOptions +StrictRequire
 
-    # SSL/TLS configuration for Let's Encrypt certificates acquired with mod_md
-    #MDomain shaarli.mydomain.org
-
-    # SSL/TLS configuration (for self-signed certificates)
+    # SSL/TLS configuration for self-signed certificates
     #SSLEngine             on
     #SSLCertificateFile    /etc/ssl/certs/ssl-cert-snakeoil.pem
     #SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
@@ -219,7 +230,13 @@ sudo a2enmod headers
 sudo systemctl restart apache2
 ```
 
-See [How to install the Apache web server](https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-debian-10) for a complete guide.
+- [How to install the Apache web server](https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-debian-10)
+- [Apache/PHP - error log per VirtualHost - StackOverflow](http://stackoverflow.com/q/176)
+- [Apache - PHP: php_value vs php_admin_value and the use of php_flag explained](https://ma.ttias.be/php-php_value-vs-php_admin_value-and-the-use-of-php_flag-explained/)
+- [Server-side TLS (Apache) - Mozilla](https://wiki.mozilla.org/Security/Server_Side_TLS#Apache)
+- [Apache 2.4 documentation](https://httpd.apache.org/docs/2.4/)
+- [Apache mod_proxy](https://httpd.apache.org/docs/2.4/mod/mod_proxy.html)
+- [Apache Reverse Proxy Request Headers](https://httpd.apache.org/docs/2.4/mod/mod_proxy.html#x-headers)
 
 
 ### Nginx
@@ -326,7 +343,14 @@ sudo ln -s /etc/nginx/sites-available/shaarli.mydomain.org /etc/nginx/sites-enab
 sudo systemctl reload nginx
 ```
 
-See [How to install the Nginx web server](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-debian-10) for a complete guide.
+- [How to install the Nginx web server](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-debian-10)
+- [Nginx Beginner's guide](http://nginx.org/en/docs/beginners_guide.html)
+- [Nginx documentation](https://nginx.org/en/docs/)
+- [Nginx ngx_http_fastcgi_module](http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html)
+- [Nginx Pitfalls](http://wiki.nginx.org/Pitfalls)
+- [Nginx PHP configuration examples - Karl Blessing](http://kbeezie.com/nginx-configuration-examples/)
+- [Server-side TLS (Nginx) - Mozilla](https://wiki.mozilla.org/Security/Server_Side_TLS#Nginx)
+
 
 
 ## Reverse proxies
@@ -413,33 +437,7 @@ bantime = -1
 
 Then restart the service: `sudo systemctl restart fail2ban`
 
-#### References
 
-- [Apache/PHP - error log per VirtualHost - StackOverflow](http://stackoverflow.com/q/176)
-- [Apache - PHP: php_value vs php_admin_value and the use of php_flag explained](https://ma.ttias.be/php-php_value-vs-php_admin_value-and-the-use-of-php_flag-explained/)
-- [Server-side TLS (Apache) - Mozilla](https://wiki.mozilla.org/Security/Server_Side_TLS#Apache)
-- [Nginx Beginner's guide](http://nginx.org/en/docs/beginners_guide.html)
-- [Nginx ngx_http_fastcgi_module](http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html)
-- [Nginx Pitfalls](http://wiki.nginx.org/Pitfalls)
-- [Nginx PHP configuration examples - Karl Blessing](http://kbeezie.com/nginx-configuration-examples/)
-- [Apache 2.4 documentation](https://httpd.apache.org/docs/2.4/)
-- [Apache mod_proxy](https://httpd.apache.org/docs/2.4/mod/mod_proxy.html)
-- [Apache Reverse Proxy Request Headers](https://httpd.apache.org/docs/2.4/mod/mod_proxy.html#x-headers)
-- [HAProxy documentation](https://cbonte.github.io/haproxy-dconv/)
-- [Nginx documentation](https://nginx.org/en/docs/)
-- [`X-Forwarded-Proto`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto)
-- [`X-Forwarded-Host`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Host)
-- [`X-Forwarded-For`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)
-- [Server-side TLS (Nginx) - Mozilla](https://wiki.mozilla.org/Security/Server_Side_TLS#Nginx)
-- [How to Create Self-Signed SSL Certificates with OpenSSL](http://www.xenocafe.com/tutorials/linux/centos/openssl/self_signed_certificates/index.php)
-- [How do I create my own Certificate Authority?](https://workaround.org/certificate-authority)
-- [Travis configuration](https://github.com/shaarli/Shaarli/blob/master/.travis.yml)
-- [PHP: Supported versions](http://php.net/supported-versions.php)
-- [PHP: Unsupported versions (EOL/End-of-life)](http://php.net/eol.php)
-- [PHP 7 Changelog](http://php.net/ChangeLog-7.php)
-- [PHP 5 Changelog](http://php.net/ChangeLog-5.php)
-- [PHP: Bugs](https://bugs.php.net/)
-- [Transport Layer Security](https://en.wikipedia.org/wiki/Transport_Layer_Security)
-- Hosting providers: [DigitalOcean](https://www.digitalocean.com/) ([1](https://www.digitalocean.com/docs/droplets/overview/), [2](https://www.digitalocean.com/pricing/), [3](https://www.digitalocean.com/docs/droplets/how-to/create/), [How to Add SSH Keys to Droplets](https://www.digitalocean.com/docs/droplets/how-to/add-ssh-keys/), [4](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-debian-8), [5](https://www.digitalocean.com/community/tutorials/an-introduction-to-securing-your-linux-vps)), [Gandi](https://www.gandi.net/en), [OVH](https://www.ovh.co.uk/), [RackSpace](https://www.rackspace.com/), etc.
+## What next?
 
-
+[Shaarli installation](Installation.md)
