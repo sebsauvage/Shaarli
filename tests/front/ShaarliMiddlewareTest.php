@@ -74,7 +74,8 @@ class ShaarliMiddlewareTest extends TestCase
     }
 
     /**
-     * Test middleware execution with controller throwing a known front exception
+     * Test middleware execution with controller throwing a known front exception.
+     * The exception should be thrown to be later handled by the error handler.
      */
     public function testMiddlewareExecutionWithFrontException(): void
     {
@@ -99,16 +100,14 @@ class ShaarliMiddlewareTest extends TestCase
         });
         $this->container->pageBuilder = $pageBuilder;
 
-        /** @var Response $result */
-        $result = $this->middleware->__invoke($request, $response, $controller);
+        $this->expectException(LoginBannedException::class);
 
-        static::assertInstanceOf(Response::class, $result);
-        static::assertSame(401, $result->getStatusCode());
-        static::assertContains('error', (string) $result->getBody());
+        $this->middleware->__invoke($request, $response, $controller);
     }
 
     /**
      * Test middleware execution with controller throwing a not authorized exception
+     * The middle should send a redirection response to the login page.
      */
     public function testMiddlewareExecutionWithUnauthorizedException(): void
     {
@@ -136,9 +135,10 @@ class ShaarliMiddlewareTest extends TestCase
     }
 
     /**
-     * Test middleware execution with controller throwing a not authorized exception
+     * Test middleware execution with controller throwing a not authorized exception.
+     * The exception should be thrown to be later handled by the error handler.
      */
-    public function testMiddlewareExecutionWithServerExceptionWith(): void
+    public function testMiddlewareExecutionWithServerException(): void
     {
         $request = $this->createMock(Request::class);
         $request->method('getUri')->willReturnCallback(function (): Uri {
@@ -148,9 +148,11 @@ class ShaarliMiddlewareTest extends TestCase
             return $uri;
         });
 
+        $dummyException = new class() extends \Exception {};
+
         $response = new Response();
-        $controller = function (): void {
-            throw new \Exception();
+        $controller = function () use ($dummyException): void {
+            throw $dummyException;
         };
 
         $parameters = [];
@@ -165,12 +167,9 @@ class ShaarliMiddlewareTest extends TestCase
             })
         ;
 
-        /** @var Response $result */
-        $result = $this->middleware->__invoke($request, $response, $controller);
+        $this->expectException(get_class($dummyException));
 
-        static::assertSame(500, $result->getStatusCode());
-        static::assertContains('error', (string) $result->getBody());
-        static::assertSame('An unexpected error occurred.', $parameters['message']);
+        $this->middleware->__invoke($request, $response, $controller);
     }
 
     public function testMiddlewareExecutionWithUpdates(): void

@@ -9,6 +9,7 @@ use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Feed\FeedBuilder;
 use Shaarli\Formatter\FormatterFactory;
+use Shaarli\Front\Controller\Visitor\ErrorController;
 use Shaarli\History;
 use Shaarli\Http\HttpAccess;
 use Shaarli\Netscape\NetscapeBookmarkUtils;
@@ -146,6 +147,10 @@ class ContainerBuilder
                 $container->conf,
                 $container->loginManager->isLoggedIn()
             );
+        };
+
+        $container['errorHandler'] = function (ShaarliContainer $container): ErrorController {
+            return new ErrorController($container);
         };
 
         return $container;

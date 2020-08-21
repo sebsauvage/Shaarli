@@ -3,7 +3,6 @@
 namespace Shaarli\Front;
 
 use Shaarli\Container\ShaarliContainer;
-use Shaarli\Front\Exception\ShaarliFrontException;
 use Shaarli\Front\Exception\UnauthorizedException;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -53,35 +52,12 @@ class ShaarliMiddleware
             $this->checkOpenShaarli($request, $response, $next);
 
             return $next($request, $response);
-        } catch (ShaarliFrontException $e) {
-            // Possible functional error
-            $this->container->pageBuilder->reset();
-            $this->container->pageBuilder->assign('message', nl2br($e->getMessage()));
-
-            $response = $response->withStatus($e->getCode());
-
-            return $response->write($this->container->pageBuilder->render('error', $this->container->basePath));
         } catch (UnauthorizedException $e) {
             $returnUrl = urlencode($this->container->environment['REQUEST_URI']);
 
             return $response->withRedirect($this->container->basePath . '/login?returnurl=' . $returnUrl);
-        } catch (\Throwable $e) {
-            // Unknown error encountered
-            $this->container->pageBuilder->reset();
-            if ($this->container->conf->get('dev.debug', false)) {
-                $this->container->pageBuilder->assign('message', $e->getMessage());
-                $this->container->pageBuilder->assign(
-                    'stacktrace',
-                    nl2br(get_class($e) .': '. PHP_EOL . $e->getTraceAsString())
-                );
-            } else {
-                $this->container->pageBuilder->assign('message', t('An unexpected error occurred.'));
-            }
-
-            $response = $response->withStatus(500);
-
-            return $response->write($this->container->pageBuilder->render('error', $this->container->basePath));
         }
+        // Other exceptions are handled by ErrorController
     }
 
     /**
