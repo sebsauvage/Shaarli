@@ -17,7 +17,6 @@ See also [proxy-related](https://github.com/shaarli/Shaarli/issues?utf8=%E2%9C%9
 ```apache
 <VirtualHost *:80>
     ServerName shaarli.mydomain.org
-    DocumentRoot /var/www/shaarli.mydomain.org/
 
     # For SSL/TLS certificates acquired with certbot or self-signed certificates
     # Redirect HTTP requests to HTTPS, except Let's Encrypt ACME challenge requests
