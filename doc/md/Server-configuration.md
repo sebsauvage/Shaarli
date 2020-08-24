@@ -263,7 +263,10 @@ server {
 }
 
 server {
-    listen       443 ssl;
+    # ipv4 listening port/protocol
+    listen       443 ssl http2;
+    # ipv6 listening port/protocol
+    listen           [::]:443 ssl http2;
     server_name  shaarli.mydomain.org;
     root         /var/www/shaarli.mydomain.org;
 
