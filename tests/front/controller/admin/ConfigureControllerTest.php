@@ -51,7 +51,7 @@ class ConfigureControllerTest extends TestCase
         static::assertSame('general.title', $assignedVariables['title']);
         static::assertSame('resource.theme', $assignedVariables['theme']);
         static::assertEmpty($assignedVariables['theme_available']);
-        static::assertSame(['default', 'markdown'], $assignedVariables['formatter_available']);
+        static::assertSame(['default', 'markdown', 'markdownExtra'], $assignedVariables['formatter_available']);
         static::assertNotEmpty($assignedVariables['continents']);
         static::assertNotEmpty($assignedVariables['cities']);
         static::assertSame('general.retrieve_description', $assignedVariables['retrieve_description']);

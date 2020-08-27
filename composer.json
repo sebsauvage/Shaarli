@@ -10,6 +10,7 @@
     },
     "keywords": ["bookmark", "link", "share", "web"],
     "config": {
+        "sort-packages": true,
         "platform": {
             "php": "7.1.29"
         }
@@ -18,12 +19,13 @@
         "php": ">=7.1",
         "ext-json": "*",
         "ext-zlib": "*",
-        "shaarli/netscape-bookmark-parser": "^2.1",
-        "erusev/parsedown": "^1.6",
-        "slim/slim": "^3.0",
         "arthurhoaro/web-thumbnailer": "^2.0",
+        "erusev/parsedown": "^1.6",
+        "erusev/parsedown-extra": "^0.8.1",
+        "gettext/gettext": "^4.4",
         "pubsubhubbub/publisher": "dev-master",
-        "gettext/gettext": "^4.4"
+        "shaarli/netscape-bookmark-parser": "^2.1",
+        "slim/slim": "^3.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
