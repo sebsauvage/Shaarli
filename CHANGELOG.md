@@ -4,6 +4,66 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v0.12.0](https://github.com/shaarli/Shaarli/releases/tag/v0.12.0-beta) - UNRELEASED [beta 2020-08-27]
+
+**Save you `data/` folder before updating!**
+
+This is a beta version containing major changes, including new URLs for Shaarli and datastore format update.
+Be aware that by using a beta version you might encounter bugs, and that 3rd party themes or plugins might not be compatible.
+
+### Added
+- Thumbnailer: add soundcloud.com to list of common media domains
+- Markdown rendering is now integrated into Shaarli core
+- Add autofocus on tag cloud filter input
+- Japanese translations
+- Support for local anchor URL (startting with `#`)
+- LDAP authentication
+- Encapsulated PageCacheManager
+- Docs:
+  - add screenshots of all pages
+  - section about mkdocs
+  - Ulauncher extension
+- CI: run against PHP 7.4
+
+### Changed
+- Introduce Bookmark object and Service layer
+  - Save bookmark as objects in the datastore
+  - Handle bookmark as objects across the whole codebase (except templates and plugins)
+- Process all Shaarli page through Slim controller, with proper URL rewriting (see #1516)
+- ATOM feed: use instance name as author name instead of URL
+- Updated French translation
+- Docs:
+  - Troubleshooting page rewritten
+  - Updated unit tests page
+  - Updated Server security page
+
+### Fixed
+- Undefined index: thumbnail in daily page
+- Undefined index: thumbnail on OpenGraph headers
+- Undefined index: updated on linklist
+- Make sure that bookmark sort is consistent, even with equal timestamps
+- Code PHP version check as requirement bumped to PHP 7.1
+- Thumbnail images lazy loading
+- Markdown plugin: fix RSS feed direct link reverse
+- Fix RSS permalink included in Markdown bloc
+- Demo plugin: multiple typos
+- Makefile target for releases
+- Makefile target for html documentation
+- Session cookie setting being set while session is active
+- Deprecated use of implode
+- Division by zero in tag cloud
+- CI: deprecated linux distribution and sudo directive
+- Docker build: gcc is no longer included in python alpine image
+- Docs:
+  - Outdated Docker documentation for stable branch
+  - Outdated links
+  - Plugin description in meta files
+
+### Removed
+- Markdown plugin
+- Docs:
+  - emojione & twemoji removed
+
 ## [v0.11.1](https://github.com/shaarli/Shaarli/releases/tag/v0.11.1) - 2019-08-03
 
 Release to fix broken Docker build on the latest version.
