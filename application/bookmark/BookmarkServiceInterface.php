@@ -6,7 +6,6 @@ namespace Shaarli\Bookmark;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Bookmark\Exception\NotWritableDataStoreException;
 use Shaarli\Config\ConfigManager;
-use Shaarli\Exceptions\IOException;
 use Shaarli\History;
 
 /**

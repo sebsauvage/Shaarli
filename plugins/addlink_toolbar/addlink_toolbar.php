@@ -5,7 +5,7 @@
  * Adds the addlink input on the linklist page.
  */
 
-use Shaarli\Router;
+use Shaarli\Render\TemplatePage;
 
 /**
  * When linklist is displayed, add play videos to header's toolbar.
@@ -16,11 +16,11 @@ use Shaarli\Router;
  */
 function hook_addlink_toolbar_render_header($data)
 {
-    if ($data['_PAGE_'] == Router::$PAGE_LINKLIST && $data['_LOGGEDIN_'] === true) {
+    if ($data['_PAGE_'] == TemplatePage::LINKLIST && $data['_LOGGEDIN_'] === true) {
         $form = array(
             'attr' => array(
                 'method' => 'GET',
-                'action' => '',
+                'action' => $data['_BASE_PATH_'] . '/admin/shaare',
                 'name'   => 'addform',
                 'class'  => 'addform',
             ),

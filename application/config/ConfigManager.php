@@ -3,6 +3,7 @@ namespace Shaarli\Config;
 
 use Shaarli\Config\Exception\MissingFieldConfigException;
 use Shaarli\Config\Exception\UnauthorizedConfigException;
+use Shaarli\Thumbnailer;
 
 /**
  * Class ConfigManager
@@ -361,7 +362,7 @@ class ConfigManager
         $this->setEmpty('security.open_shaarli', false);
         $this->setEmpty('security.allowed_protocols', ['ftp', 'ftps', 'magnet']);
 
-        $this->setEmpty('general.header_link', '?');
+        $this->setEmpty('general.header_link', '/');
         $this->setEmpty('general.links_per_page', 20);
         $this->setEmpty('general.enabled_plugins', self::$DEFAULT_PLUGINS);
         $this->setEmpty('general.default_note_title', 'Note: ');
@@ -381,6 +382,7 @@ class ConfigManager
         // default state of the 'remember me' checkbox of the login form
         $this->setEmpty('privacy.remember_user_default', true);
 
+        $this->setEmpty('thumbnails.mode', Thumbnailer::MODE_ALL);
         $this->setEmpty('thumbnails.width', '125');
         $this->setEmpty('thumbnails.height', '90');
 

@@ -3,7 +3,7 @@
 namespace Shaarli\Front;
 
 use Shaarli\Container\ShaarliContainer;
-use Shaarli\Front\Exception\ShaarliException;
+use Shaarli\Front\Exception\UnauthorizedException;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -24,6 +24,8 @@ class ShaarliMiddleware
 
     /**
      * Middleware execution:
+     *   - run updates
+     *   - if not logged in open shaarli, redirect to login
      *   - execute the controller
      *   - return the response
      *
@@ -35,23 +37,78 @@ class ShaarliMiddleware
      *
      * @return Response response.
      */
-    public function __invoke(Request $request, Response $response, callable $next)
+    public function __invoke(Request $request, Response $response, callable $next): Response
     {
+        $this->initBasePath($request);
+
         try {
-            $response = $next($request, $response);
-        } catch (ShaarliException $e) {
-            $this->container->pageBuilder->assign('message', $e->getMessage());
-            if ($this->container->conf->get('dev.debug', false)) {
-                $this->container->pageBuilder->assign(
-                    'stacktrace',
-                    nl2br(get_class($this) .': '. $e->getTraceAsString())
-                );
+            if (!is_file($this->container->conf->getConfigFileExt())
+                && !in_array($next->getName(), ['displayInstall', 'saveInstall'], true)
+            ) {
+                return $response->withRedirect($this->container->basePath . '/install');
             }
 
-            $response = $response->withStatus($e->getCode());
-            $response = $response->write($this->container->pageBuilder->render('error'));
+            $this->runUpdates();
+            $this->checkOpenShaarli($request, $response, $next);
+
+            return $next($request, $response);
+        } catch (UnauthorizedException $e) {
+            $returnUrl = urlencode($this->container->environment['REQUEST_URI']);
+
+            return $response->withRedirect($this->container->basePath . '/login?returnurl=' . $returnUrl);
+        }
+        // Other exceptions are handled by ErrorController
+    }
+
+    /**
+     * Run the updater for every requests processed while logged in.
+     */
+    protected function runUpdates(): void
+    {
+        if ($this->container->loginManager->isLoggedIn() !== true) {
+            return;
         }
 
-        return $response;
+        $this->container->updater->setBasePath($this->container->basePath);
+        $newUpdates = $this->container->updater->update();
+        if (!empty($newUpdates)) {
+            $this->container->updater->writeUpdates(
+                $this->container->conf->get('resource.updates'),
+                $this->container->updater->getDoneUpdates()
+            );
+
+            $this->container->pageCacheManager->invalidateCaches();
+        }
+    }
+
+    /**
+     * Access is denied to most pages with `hide_public_links` + `force_login` settings.
+     */
+    protected function checkOpenShaarli(Request $request, Response $response, callable $next): bool
+    {
+        if (// if the user isn't logged in
+            !$this->container->loginManager->isLoggedIn()
+            // and Shaarli doesn't have public content...
+            && $this->container->conf->get('privacy.hide_public_links')
+            // and is configured to enforce the login
+            && $this->container->conf->get('privacy.force_login')
+            // and the current page isn't already the login page
+            // and the user is not requesting a feed (which would lead to a different content-type as expected)
+            && !in_array($next->getName(), ['login', 'atom', 'rss'], true)
+        ) {
+            throw new UnauthorizedException();
+        }
+
+        return true;
+    }
+
+    /**
+     * Initialize the URL base path if it hasn't been defined yet.
+     */
+    protected function initBasePath(Request $request): void
+    {
+        if (null === $this->container->basePath) {
+            $this->container->basePath = rtrim($request->getUri()->getBasePath(), '/');
+        }
     }
 }

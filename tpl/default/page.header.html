@@ -21,24 +21,24 @@
         </li>
         {if="$is_logged_in || $openshaarli"}
           <li class="pure-menu-item">
-            <a href="?do=addlink" class="pure-menu-link" id="shaarli-menu-shaare">
+            <a href="{$base_path}/admin/add-shaare" class="pure-menu-link" id="shaarli-menu-shaare">
               <i class="fa fa-plus" aria-hidden="true"></i> {'Shaare'|t}
             </a>
           </li>
           <li class="pure-menu-item" id="shaarli-menu-tools">
-            <a href="?do=tools" class="pure-menu-link">{'Tools'|t}</a>
+            <a href="{$base_path}/admin/tools" class="pure-menu-link">{'Tools'|t}</a>
           </li>
         {/if}
         <li class="pure-menu-item" id="shaarli-menu-tags">
-          <a href="?do=tagcloud" class="pure-menu-link">{'Tag cloud'|t}</a>
+          <a href="{$base_path}/tags/cloud" class="pure-menu-link">{'Tag cloud'|t}</a>
         </li>
         {if="$thumbnails_enabled"}
           <li class="pure-menu-item" id="shaarli-menu-picwall">
-            <a href="?do=picwall{$searchcrits}" class="pure-menu-link">{'Picture wall'|t}</a>
+            <a href="{$base_path}/picture-wall?{function="ltrim($searchcrits, '&')"}" class="pure-menu-link">{'Picture wall'|t}</a>
           </li>
         {/if}
         <li class="pure-menu-item" id="shaarli-menu-daily">
-          <a href="?do=daily" class="pure-menu-link">{'Daily'|t}</a>
+          <a href="{$base_path}/daily" class="pure-menu-link">{'Daily'|t}</a>
         </li>
         {loop="$plugins_header.buttons_toolbar"}
           <li class="pure-menu-item shaarli-menu-plugin">
@@ -52,15 +52,15 @@
           </li>
         {/loop}
         <li class="pure-menu-item pure-u-lg-0 shaarli-menu-mobile" id="shaarli-menu-mobile-rss">
-            <a href="?do={$feed_type}{$searchcrits}" class="pure-menu-link">{'RSS Feed'|t}</a>
+            <a href="{$base_path}/feed/{$feed_type}?{$searchcrits}" class="pure-menu-link">{'RSS Feed'|t}</a>
         </li>
         {if="$is_logged_in"}
           <li class="pure-menu-item pure-u-lg-0 shaarli-menu-mobile" id="shaarli-menu-mobile-logout">
-            <a href="?do=logout" class="pure-menu-link">{'Logout'|t}</a>
+            <a href="{$base_path}/admin/logout" class="pure-menu-link">{'Logout'|t}</a>
           </li>
         {else}
           <li class="pure-menu-item pure-u-lg-0 shaarli-menu-mobile" id="shaarli-menu-mobile-login">
-            <a href="/login" class="pure-menu-link">{'Login'|t}</a>
+            <a href="{$base_path}/login" class="pure-menu-link">{'Login'|t}</a>
           </li>
         {/if}
       </ul>
@@ -74,13 +74,13 @@
             </a>
           </li>
           <li class="pure-menu-item" id="shaarli-menu-desktop-rss">
-            <a href="?do={$feed_type}{$searchcrits}" class="pure-menu-link" title="{'RSS Feed'|t}" aria-label="{'RSS Feed'|t}">
+            <a href="{$base_path}/feed/{$feed_type}?{$searchcrits}" class="pure-menu-link" title="{'RSS Feed'|t}" aria-label="{'RSS Feed'|t}">
               <i class="fa fa-rss" aria-hidden="true"></i>
             </a>
           </li>
           {if="!$is_logged_in"}
             <li class="pure-menu-item" id="shaarli-menu-desktop-login">
-              <a href="/login" class="pure-menu-link"
+              <a href="{$base_path}/login" class="pure-menu-link"
                  data-open-id="header-login-form"
                  id="login-button" aria-label="{'Login'|t}" title="{'Login'|t}">
                 <i class="fa fa-user" aria-hidden="true"></i>
@@ -88,7 +88,7 @@
             </li>
           {else}
             <li class="pure-menu-item" id="shaarli-menu-desktop-logout">
-              <a href="?do=logout" class="pure-menu-link" aria-label="{'Logout'|t}" title="{'Logout'|t}">
+              <a href="{$base_path}/admin/logout" class="pure-menu-link" aria-label="{'Logout'|t}" title="{'Logout'|t}">
                 <i class="fa fa-sign-out" aria-hidden="true"></i>
               </a>
             </li>
@@ -101,7 +101,7 @@
 
 <main id="content" class="container" role="main">
   <div id="search" class="subheader-form searchform-block header-search">
-    <form method="GET" class="pure-form searchform" name="searchform">
+    <form method="GET" class="pure-form searchform" name="searchform" action="{$base_path}/">
       <input type="text" id="searchform_value" name="searchterm" aria-label="{'Search text'|t}" placeholder="{'Search text'|t}"
              {if="!empty($search_term)"}
              value="{$search_term}"
@@ -184,12 +184,40 @@
   </div>
 {/if}
 
-{if="!empty($global_warnings) && $is_logged_in"}
-  <div class="pure-g pure-alert pure-alert-warning pure-alert-closable" id="shaarli-warnings-alert">
+{if="!empty($global_errors)"}
+  <div class="pure-g header-alert-message pure-alert pure-alert-error pure-alert-closable" id="shaarli-errors-alert">
+  <div class="pure-u-2-24"></div>
+    <div class="pure-u-20-24">
+      {loop="$global_errors"}
+        <p>{$value}</p>
+      {/loop}
+    </div>
+    <div class="pure-u-2-24">
+      <i class="fa fa-times pure-alert-close"></i>
+    </div>
+  </div>
+{/if}
+
+{if="!empty($global_warnings)"}
+  <div class="pure-g header-alert-message pure-alert pure-alert-warning pure-alert-closable" id="shaarli-warnings-alert">
     <div class="pure-u-2-24"></div>
     <div class="pure-u-20-24">
       {loop="global_warnings"}
         <p>{$value}</p>
+      {/loop}
+    </div>
+    <div class="pure-u-2-24">
+      <i class="fa fa-times pure-alert-close"></i>
+    </div>
+  </div>
+{/if}
+
+{if="!empty($global_successes)"}
+  <div class="pure-g header-alert-message new-version-message pure-alert pure-alert-success pure-alert-closable" id="shaarli-success-alert">
+    <div class="pure-u-2-24"></div>
+    <div class="pure-u-20-24">
+      {loop="$global_successes"}
+      <p>{$value}</p>
       {/loop}
     </div>
     <div class="pure-u-2-24">

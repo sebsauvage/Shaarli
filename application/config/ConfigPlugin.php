@@ -1,6 +1,7 @@
 <?php
 
 use Shaarli\Config\Exception\PluginConfigOrderException;
+use Shaarli\Plugin\PluginManager;
 
 /**
  * Plugin configuration helper functions.
@@ -19,6 +20,20 @@ use Shaarli\Config\Exception\PluginConfigOrderException;
  */
 function save_plugin_config($formData)
 {
+    // We can only save existing plugins
+    $directories = str_replace(
+        PluginManager::$PLUGINS_PATH . '/',
+        '',
+        glob(PluginManager::$PLUGINS_PATH . '/*')
+    );
+    $formData = array_filter(
+        $formData,
+        function ($value, string $key) use ($directories) {
+            return startsWith($key, 'order') || in_array($key, $directories);
+        },
+        ARRAY_FILTER_USE_BOTH
+    );
+
     // Make sure there are no duplicates in orders.
     if (!validate_plugin_order($formData)) {
         throw new PluginConfigOrderException();
@@ -69,7 +84,7 @@ function validate_plugin_order($formData)
     $orders = array();
     foreach ($formData as $key => $value) {
         // No duplicate order allowed.
-        if (in_array($value, $orders)) {
+        if (in_array($value, $orders, true)) {
             return false;
         }
 

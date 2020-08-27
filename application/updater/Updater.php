@@ -2,8 +2,8 @@
 
 namespace Shaarli\Updater;
 
-use Shaarli\Config\ConfigManager;
 use Shaarli\Bookmark\BookmarkServiceInterface;
+use Shaarli\Config\ConfigManager;
 use Shaarli\Updater\Exception\UpdaterException;
 
 /**
@@ -21,7 +21,7 @@ class Updater
     /**
      * @var BookmarkServiceInterface instance.
      */
-    protected $linkServices;
+    protected $bookmarkService;
 
     /**
      * @var ConfigManager $conf Configuration Manager instance.
@@ -39,6 +39,11 @@ class Updater
     protected $methods;
 
     /**
+     * @var string $basePath Shaarli root directory (from HTTP Request)
+     */
+    protected $basePath = null;
+
+    /**
      * Object constructor.
      *
      * @param array                    $doneUpdates Updates which are already done.
@@ -49,7 +54,7 @@ class Updater
     public function __construct($doneUpdates, $linkDB, $conf, $isLoggedIn)
     {
         $this->doneUpdates = $doneUpdates;
-        $this->linkServices = $linkDB;
+        $this->bookmarkService = $linkDB;
         $this->conf = $conf;
         $this->isLoggedIn = $isLoggedIn;
 
@@ -62,13 +67,15 @@ class Updater
      * Run all new updates.
      * Update methods have to start with 'updateMethod' and return true (on success).
      *
+     * @param string $basePath Shaarli root directory (from HTTP Request)
+     *
      * @return array An array containing ran updates.
      *
      * @throws UpdaterException If something went wrong.
      */
-    public function update()
+    public function update(string $basePath = null)
     {
-        $updatesRan = array();
+        $updatesRan = [];
 
         // If the user isn't logged in, exit without updating.
         if ($this->isLoggedIn !== true) {
@@ -110,5 +117,63 @@ class Updater
     public function getDoneUpdates()
     {
         return $this->doneUpdates;
+    }
+
+    public function readUpdates(string $updatesFilepath): array
+    {
+        return UpdaterUtils::read_updates_file($updatesFilepath);
+    }
+
+    public function writeUpdates(string $updatesFilepath, array $updates): void
+    {
+        UpdaterUtils::write_updates_file($updatesFilepath, $updates);
+    }
+
+    /**
+     * With the Slim routing system, default header link should be `/subfolder/` instead of `?`.
+     * Otherwise you can not go back to the home page.
+     * Example: `/subfolder/picture-wall` -> `/subfolder/picture-wall?` instead of `/subfolder/`.
+     */
+    public function updateMethodRelativeHomeLink(): bool
+    {
+        if ('?' === trim($this->conf->get('general.header_link'))) {
+            $this->conf->set('general.header_link', $this->basePath . '/', true, true);
+        }
+
+        return true;
+    }
+
+    /**
+     * With the Slim routing system, note bookmarks URL formatted `?abcdef`
+     * should be replaced with `/shaare/abcdef`
+     */
+    public function updateMethodMigrateExistingNotesUrl(): bool
+    {
+        $updated = false;
+
+        foreach ($this->bookmarkService->search() as $bookmark) {
+            if ($bookmark->isNote()
+                && startsWith($bookmark->getUrl(), '?')
+                && 1 === preg_match('/^\?([a-zA-Z0-9-_@]{6})($|&|#)/', $bookmark->getUrl(), $match)
+            ) {
+                $updated = true;
+                $bookmark = $bookmark->setUrl('/shaare/' . $match[1]);
+
+                $this->bookmarkService->set($bookmark, false);
+            }
+        }
+
+        if ($updated) {
+            $this->bookmarkService->save();
+        }
+
+        return true;
+    }
+
+    public function setBasePath(string $basePath): self
+    {
+        $this->basePath = $basePath;
+
+        return $this;
     }
 }

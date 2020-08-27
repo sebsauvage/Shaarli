@@ -131,7 +131,7 @@ If it's still not working, please [open an issue](https://github.com/shaarli/Sha
 | ------------- |:-------------:|
 | [render_header](#render_header) | Allow plugin to add content in page headers. |
 | [render_includes](#render_includes) | Allow plugin to include their own CSS files. |
-| [render_footer](#render_footer) | Allow plugin to add content in page footer and include their own JS files. | 
+| [render_footer](#render_footer) | Allow plugin to add content in page footer and include their own JS files. |
 | [render_linklist](#render_linklist) | It allows to add content at the begining and end of the page, after every link displayed and to alter link data. |
 | [render_editlink](#render_editlink) |  Allow to add fields in the form, or display elements. |
 | [render_tools](#render_tools) |  Allow to add content at the end of the page. |
@@ -515,7 +515,7 @@ Otherwise, you can use your own JS as long as this field is send by the form:
 
 ### Placeholder system
 
-In order to make plugins work with every custom themes, you need to add variable placeholder in your templates. 
+In order to make plugins work with every custom themes, you need to add variable placeholder in your templates.
 
 It's a RainTPL loop like this:
 
@@ -537,7 +537,7 @@ At the end of the menu:
 
 At the end of file, before clearing floating blocks:
 
-    {if="!empty($plugin_errors) && isLoggedIn()"}
+    {if="!empty($plugin_errors) && $is_logged_in"}
         <ul class="errors">
             {loop="plugin_errors"}
                 <li>{$value}</li>

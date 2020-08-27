@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>{include="includes"}
-    <link type="text/css" rel="stylesheet" href="inc/awesomplete.css#" />
 </head>
 <body
 {if="$link.title==''"}onload="document.linkform.lf_title.focus();"
 {elseif="$link.description==''"}onload="document.linkform.lf_description.focus();"
 {else}onload="document.linkform.lf_tags.focus();"{/if} >
 <div id="pageheader">
-    {if="$source !== 'firefoxsocialapi'"}
     {include="page.header"}
-    {else}
     <div id="shaarli_title"><a href="{$titleLink}">{$shaarlititle}</a></div>
-    {/if}
     <div id="editlinkform">
-        <form method="post" name="linkform">
+        <form method="post" name="linkform" action="{$base_path}/admin/shaare">
             <input type="hidden" name="lf_linkdate" value="{$link.linkdate}">
           {if="isset($link.id)"}
 	          <input type="hidden" name="lf_id" value="{$link.id}">
@@ -48,19 +44,18 @@
             {/if}
             <input type="submit" value="Save" name="save_edit" class="bigbutton">
             {if="!$link_is_new && isset($link.id)"}
-              <a href="?delete_link&amp;lf_linkdate={$link.id}&amp;token={$token}"
+              <a href="{$base_path}/admin/shaare/delete?id={$link.id}&amp;token={$token}"
                  name="delete_link" class="bigbutton"
                  onClick="return confirmDeleteLink();">
                 {'Delete'|t}
               </a>
             {/if}
             <input type="hidden" name="token" value="{$token}">
+            <input type="hidden" name="source" value="{$source}">
             {if="$http_referer"}<input type="hidden" name="returnurl" value="{$http_referer}">{/if}
         </form>
     </div>
 </div>
-{if="$source !== 'firefoxsocialapi'"}
 {include="page.footer"}
-{/if}
 </body>
 </html>

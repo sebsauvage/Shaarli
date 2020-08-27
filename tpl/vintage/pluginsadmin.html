@@ -16,7 +16,7 @@
 </noscript>
 
 <div id="pluginsadmin">
-  <form action="?do=save_pluginadmin" method="POST">
+  <form action="{$base_path}/admin/plugins" method="POST">
     <section id="enabled_plugins">
       <h1>Enabled Plugins</h1>
 
@@ -86,9 +86,10 @@
         <input type="submit" value="Save"/>
       </div>
     </section>
+    <input type="hidden" name="token" value="{$token}">
   </form>
 
-  <form action="?do=save_pluginadmin" method="POST">
+  <form action="{$base_path}/admin/plugins" method="POST">
     <section id="plugin_parameters">
       <h1>Enabled Plugin Parameters</h1>
 
@@ -124,6 +125,7 @@
         </div>
       </div>
     </section>
+    <input type="hidden" name="token" value="{$token}">
   </form>
 
 </div>

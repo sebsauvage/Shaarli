@@ -109,7 +109,7 @@ class GetLinksTest extends \PHPUnit\Framework\TestCase
 
         // Check first element fields
         $first = $data[2];
-        $this->assertEquals('http://domain.tld/?WDWyig', $first['url']);
+        $this->assertEquals('http://domain.tld/shaare/WDWyig', $first['url']);
         $this->assertEquals('WDWyig', $first['shorturl']);
         $this->assertEquals('Link title: @website', $first['title']);
         $this->assertEquals(

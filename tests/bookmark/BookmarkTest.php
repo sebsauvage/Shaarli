@@ -124,8 +124,8 @@ class BookmarkTest extends TestCase
         $this->assertEquals(1, $bookmark->getId());
         $this->assertEquals('abc', $bookmark->getShortUrl());
         $this->assertEquals($date, $bookmark->getCreated());
-        $this->assertEquals('?abc', $bookmark->getUrl());
-        $this->assertEquals('?abc', $bookmark->getTitle());
+        $this->assertEquals('/shaare/abc', $bookmark->getUrl());
+        $this->assertEquals('/shaare/abc', $bookmark->getTitle());
         $this->assertEquals('', $bookmark->getDescription());
         $this->assertEquals([], $bookmark->getTags());
         $this->assertEquals('', $bookmark->getTagsString());

@@ -32,20 +32,20 @@ Here is a list :
 ```
 http://<replace_domain>/
 http://<replace_domain>/?nonope
-http://<replace_domain>/?do=addlink
-http://<replace_domain>/?do=changepasswd
-http://<replace_domain>/?do=changetag
-http://<replace_domain>/?do=configure
-http://<replace_domain>/?do=tools
-http://<replace_domain>/?do=daily
-http://<replace_domain>/?post
-http://<replace_domain>/?do=export
-http://<replace_domain>/?do=import
+http://<replace_domain>/admin/add-shaare
+http://<replace_domain>/admin/password
+http://<replace_domain>/admin/tags
+http://<replace_domain>/admin/configure
+http://<replace_domain>/admin/tools
+http://<replace_domain>/daily
+http://<replace_domain>/admin/shaare
+http://<replace_domain>/admin/export
+http://<replace_domain>/admin/import
 http://<replace_domain>/login
-http://<replace_domain>/?do=picwall
-http://<replace_domain>/?do=pluginadmin
-http://<replace_domain>/?do=tagcloud
-http://<replace_domain>/?do=taglist
+http://<replace_domain>/picture-wall
+http://<replace_domain>/admin/plugins
+http://<replace_domain>/tags/cloud
+http://<replace_domain>/tags/list
 ```
 
 #### Improve existing translation

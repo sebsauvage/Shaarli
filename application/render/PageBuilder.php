@@ -3,10 +3,12 @@
 namespace Shaarli\Render;
 
 use Exception;
+use exceptions\MissingBasePathException;
 use RainTPL;
 use Shaarli\ApplicationUtils;
 use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
+use Shaarli\Security\SessionManager;
 use Shaarli\Thumbnailer;
 
 /**
@@ -66,6 +68,15 @@ class PageBuilder
         $this->bookmarkService = $linkDB;
         $this->token = $token;
         $this->isLoggedIn = $isLoggedIn;
+    }
+
+    /**
+     * Reset current state of template rendering.
+     * Mostly useful for error handling. We remove everything, and display the error template.
+     */
+    public function reset(): void
+    {
+        $this->tpl = false;
     }
 
     /**
@@ -136,15 +147,38 @@ class PageBuilder
         $this->tpl->assign('thumbnails_width', $this->conf->get('thumbnails.width'));
         $this->tpl->assign('thumbnails_height', $this->conf->get('thumbnails.height'));
 
-        if (!empty($_SESSION['warnings'])) {
-            $this->tpl->assign('global_warnings', $_SESSION['warnings']);
-            unset($_SESSION['warnings']);
-        }
-
         $this->tpl->assign('formatter', $this->conf->get('formatter', 'default'));
 
         // To be removed with a proper theme configuration.
         $this->tpl->assign('conf', $this->conf);
+    }
+
+    /**
+     * Affect variable after controller processing.
+     * Used for alert messages.
+     */
+    protected function finalize(string $basePath): void
+    {
+        // TODO: use the SessionManager
+        $messageKeys = [
+            SessionManager::KEY_SUCCESS_MESSAGES,
+            SessionManager::KEY_WARNING_MESSAGES,
+            SessionManager::KEY_ERROR_MESSAGES
+        ];
+        foreach ($messageKeys as $messageKey) {
+            if (!empty($_SESSION[$messageKey])) {
+                $this->tpl->assign('global_' . $messageKey, $_SESSION[$messageKey]);
+                unset($_SESSION[$messageKey]);
+            }
+        }
+
+        $this->assign('base_path', $basePath);
+        $this->assign(
+            'asset_path',
+            $basePath . '/' .
+            rtrim($this->conf->get('resource.raintpl_tpl', 'tpl'), '/') . '/' .
+            $this->conf->get('resource.theme', 'default')
+        );
     }
 
     /**
@@ -185,21 +219,6 @@ class PageBuilder
     }
 
     /**
-     * Render a specific page (using a template file).
-     * e.g. $pb->renderPage('picwall');
-     *
-     * @param string $page Template filename (without extension).
-     */
-    public function renderPage($page)
-    {
-        if ($this->tpl === false) {
-            $this->initialize();
-        }
-
-        $this->tpl->draw($page);
-    }
-
-    /**
      * Render a specific page as string (using a template file).
      * e.g. $pb->render('picwall');
      *
@@ -207,28 +226,14 @@ class PageBuilder
      *
      * @return string Processed template content
      */
-    public function render(string $page): string
+    public function render(string $page, string $basePath): string
     {
         if ($this->tpl === false) {
             $this->initialize();
         }
 
-        return $this->tpl->draw($page, true);
-    }
+        $this->finalize($basePath);
 
-    /**
-     * Render a 404 page (uses the template : tpl/404.tpl)
-     * usage: $PAGE->render404('The link was deleted')
-     *
-     * @param string $message A message to display what is not found
-     */
-    public function render404($message = '')
-    {
-        if (empty($message)) {
-            $message = t('The page you are trying to reach does not exist or has been deleted.');
-        }
-        header($_SERVER['SERVER_PROTOCOL'] . ' ' . t('404 Not Found'));
-        $this->tpl->assign('error_message', $message);
-        $this->renderPage('404');
+        return $this->tpl->draw($page, true);
     }
 }

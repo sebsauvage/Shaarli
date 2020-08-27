@@ -13,7 +13,7 @@ use pubsubhubbub\publisher\Publisher;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Feed\FeedBuilder;
 use Shaarli\Plugin\PluginManager;
-use Shaarli\Router;
+use Shaarli\Render\TemplatePage;
 
 /**
  * Plugin init function - set the hub to the default appspot one.
@@ -41,7 +41,7 @@ function pubsubhubbub_init($conf)
  */
 function hook_pubsubhubbub_render_feed($data, $conf)
 {
-    $feedType = $data['_PAGE_'] == Router::$PAGE_FEED_RSS ? FeedBuilder::$FEED_RSS : FeedBuilder::$FEED_ATOM;
+    $feedType = $data['_PAGE_'] == TemplatePage::FEED_RSS ? FeedBuilder::$FEED_RSS : FeedBuilder::$FEED_ATOM;
     $template = file_get_contents(PluginManager::$PLUGINS_PATH . '/pubsubhubbub/hub.'. $feedType .'.xml');
     $data['feed_plugins_header'][] = sprintf($template, $conf->get('plugins.PUBSUBHUB_URL'));
 
@@ -60,8 +60,8 @@ function hook_pubsubhubbub_render_feed($data, $conf)
 function hook_pubsubhubbub_save_link($data, $conf)
 {
     $feeds = array(
-        index_url($_SERVER) .'?do=atom',
-        index_url($_SERVER) .'?do=rss',
+        index_url($_SERVER) .'feed/atom',
+        index_url($_SERVER) .'feed/rss',
     );
 
     $httpPost = function_exists('curl_version') ? false : 'nocurl_http_post';

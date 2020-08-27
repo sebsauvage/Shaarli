@@ -131,8 +131,8 @@ class PostLinkTest extends TestCase
         $this->assertEquals(self::NB_FIELDS_LINK, count($data));
         $this->assertEquals(43, $data['id']);
         $this->assertRegExp('/[\w_-]{6}/', $data['shorturl']);
-        $this->assertEquals('http://domain.tld/?' . $data['shorturl'], $data['url']);
-        $this->assertEquals('?' . $data['shorturl'], $data['title']);
+        $this->assertEquals('http://domain.tld/shaare/' . $data['shorturl'], $data['url']);
+        $this->assertEquals('/shaare/' . $data['shorturl'], $data['title']);
         $this->assertEquals('', $data['description']);
         $this->assertEquals([], $data['tags']);
         $this->assertEquals(true, $data['private']);

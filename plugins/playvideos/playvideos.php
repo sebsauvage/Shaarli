@@ -7,7 +7,7 @@
  */
 
 use Shaarli\Plugin\PluginManager;
-use Shaarli\Router;
+use Shaarli\Render\TemplatePage;
 
 /**
  * When linklist is displayed, add play videos to header's toolbar.
@@ -18,7 +18,7 @@ use Shaarli\Router;
  */
 function hook_playvideos_render_header($data)
 {
-    if ($data['_PAGE_'] == Router::$PAGE_LINKLIST) {
+    if ($data['_PAGE_'] == TemplatePage::LINKLIST) {
         $playvideo = array(
             'attr' => array(
                 'href' => '#',
@@ -42,7 +42,7 @@ function hook_playvideos_render_header($data)
  */
 function hook_playvideos_render_footer($data)
 {
-    if ($data['_PAGE_'] == Router::$PAGE_LINKLIST) {
+    if ($data['_PAGE_'] == TemplatePage::LINKLIST) {
         $data['js_files'][] = PluginManager::$PLUGINS_PATH . '/playvideos/jquery-1.11.2.min.js';
         $data['js_files'][] = PluginManager::$PLUGINS_PATH . '/playvideos/youtube_playlist.js';
     }

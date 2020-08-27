@@ -25,12 +25,16 @@ function findParent(element, tagName, attributes) {
 /**
  * Ajax request to refresh the CSRF token.
  */
-function refreshToken() {
+function refreshToken(basePath) {
+  console.log('refresh');
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', '?do=token');
+  xhr.open('GET', `${basePath}/admin/token`);
   xhr.onload = () => {
-    const token = document.getElementById('token');
-    token.setAttribute('value', xhr.responseText);
+    const elements = document.querySelectorAll('input[name="token"]');
+    [...elements].forEach((element) => {
+      console.log(element);
+      element.setAttribute('value', xhr.responseText);
+    });
   };
   xhr.send();
 }
@@ -215,6 +219,8 @@ function init(description) {
 }
 
 (() => {
+  const basePath = document.querySelector('input[name="js_base_path"]').value;
+
   /**
    * Handle responsive menu.
    * Source: http://purecss.io/layouts/tucked-menu-vertical/
@@ -461,7 +467,7 @@ function init(description) {
       });
 
       if (window.confirm(message)) {
-        window.location = `?delete_link&lf_linkdate=${ids.join('+')}&token=${token.value}`;
+        window.location = `${basePath}/admin/shaare/delete?id=${ids.join('+')}&token=${token.value}`;
       }
     });
   }
@@ -483,7 +489,8 @@ function init(description) {
         });
 
         const ids = links.map(item => item.id);
-        window.location = `?change_visibility&token=${token.value}&newVisibility=${visibility}&ids=${ids.join('+')}`;
+        window.location =
+          `${basePath}/admin/shaare/visibility?token=${token.value}&newVisibility=${visibility}&id=${ids.join('+')}`;
       });
     });
   }
@@ -546,7 +553,7 @@ function init(description) {
       const refreshedToken = document.getElementById('token').value;
       const fromtag = block.getAttribute('data-tag');
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', '?do=changetag');
+      xhr.open('POST', `${basePath}/admin/tags`);
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       xhr.onload = () => {
         if (xhr.status !== 200) {
@@ -558,8 +565,12 @@ function init(description) {
           input.setAttribute('value', totag);
           findParent(input, 'div', { class: 'rename-tag-form' }).style.display = 'none';
           block.querySelector('a.tag-link').innerHTML = htmlEntities(totag);
-          block.querySelector('a.tag-link').setAttribute('href', `?searchtags=${encodeURIComponent(totag)}`);
-          block.querySelector('a.rename-tag').setAttribute('href', `?do=changetag&fromtag=${encodeURIComponent(totag)}`);
+          block
+            .querySelector('a.tag-link')
+            .setAttribute('href', `${basePath}/?searchtags=${encodeURIComponent(totag)}`);
+          block
+            .querySelector('a.rename-tag')
+            .setAttribute('href', `${basePath}/admin/tags?fromtag=${encodeURIComponent(totag)}`);
 
           // Refresh awesomplete values
           existingTags = existingTags.map(tag => (tag === fromtag ? totag : tag));
@@ -567,7 +578,7 @@ function init(description) {
         }
       };
       xhr.send(`renametag=1&fromtag=${encodeURIComponent(fromtag)}&totag=${encodeURIComponent(totag)}&token=${refreshedToken}`);
-      refreshToken();
+      refreshToken(basePath);
     });
   });
 
@@ -593,13 +604,13 @@ function init(description) {
 
       if (confirm(`Are you sure you want to delete the tag "${tag}"?`)) {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', '?do=changetag');
+        xhr.open('POST', `${basePath}/admin/tags`);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = () => {
           block.remove();
         };
         xhr.send(encodeURI(`deletetag=1&fromtag=${tag}&token=${refreshedToken}`));
-        refreshToken();
+        refreshToken(basePath);
 
         existingTags = existingTags.filter(tagItem => tagItem !== tag);
         awesomepletes = updateAwesompleteList('.rename-tag-input', existingTags, awesomepletes);

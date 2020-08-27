@@ -6,12 +6,14 @@ namespace Shaarli\Bookmark;
 
 use Exception;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
+use Shaarli\Bookmark\Exception\DatastoreNotInitializedException;
 use Shaarli\Bookmark\Exception\EmptyDataStoreException;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Formatter\BookmarkMarkdownFormatter;
 use Shaarli\History;
 use Shaarli\Legacy\LegacyLinkDB;
 use Shaarli\Legacy\LegacyUpdater;
+use Shaarli\Render\PageCacheManager;
 use Shaarli\Updater\UpdaterUtils;
 
 /**
@@ -39,6 +41,9 @@ class BookmarkFileService implements BookmarkServiceInterface
     /** @var History instance */
     protected $history;
 
+    /** @var PageCacheManager instance */
+    protected $pageCacheManager;
+
     /** @var bool true for logged in users. Default value to retrieve private bookmarks. */
     protected $isLoggedIn;
 
@@ -49,6 +54,7 @@ class BookmarkFileService implements BookmarkServiceInterface
     {
         $this->conf = $conf;
         $this->history = $history;
+        $this->pageCacheManager = new PageCacheManager($this->conf->get('resource.page_cache'), $isLoggedIn);
         $this->bookmarksIO = new BookmarkIO($this->conf);
         $this->isLoggedIn = $isLoggedIn;
 
@@ -57,10 +63,16 @@ class BookmarkFileService implements BookmarkServiceInterface
         } else {
             try {
                 $this->bookmarks = $this->bookmarksIO->read();
-            } catch (EmptyDataStoreException $e) {
+            } catch (EmptyDataStoreException|DatastoreNotInitializedException $e) {
                 $this->bookmarks = new BookmarkArray();
-                if ($isLoggedIn) {
-                    $this->save();
+
+                if ($this->isLoggedIn) {
+                    // Datastore file does not exists, we initialize it with default bookmarks.
+                    if ($e instanceof DatastoreNotInitializedException) {
+                        $this->initialize();
+                    } else {
+                        $this->save();
+                    }
                 }
             }
 
@@ -88,7 +100,7 @@ class BookmarkFileService implements BookmarkServiceInterface
             throw new Exception('Not authorized');
         }
 
-        return $bookmark;
+        return $first;
     }
 
     /**
@@ -149,7 +161,7 @@ class BookmarkFileService implements BookmarkServiceInterface
      */
     public function set($bookmark, $save = true)
     {
-        if ($this->isLoggedIn !== true) {
+        if (true !== $this->isLoggedIn) {
             throw new Exception(t('You\'re not authorized to alter the datastore'));
         }
         if (! $bookmark instanceof Bookmark) {
@@ -174,7 +186,7 @@ class BookmarkFileService implements BookmarkServiceInterface
      */
     public function add($bookmark, $save = true)
     {
-        if ($this->isLoggedIn !== true) {
+        if (true !== $this->isLoggedIn) {
             throw new Exception(t('You\'re not authorized to alter the datastore'));
         }
         if (! $bookmark instanceof Bookmark) {
@@ -199,7 +211,7 @@ class BookmarkFileService implements BookmarkServiceInterface
      */
     public function addOrSet($bookmark, $save = true)
     {
-        if ($this->isLoggedIn !== true) {
+        if (true !== $this->isLoggedIn) {
             throw new Exception(t('You\'re not authorized to alter the datastore'));
         }
         if (! $bookmark instanceof Bookmark) {
@@ -216,7 +228,7 @@ class BookmarkFileService implements BookmarkServiceInterface
      */
     public function remove($bookmark, $save = true)
     {
-        if ($this->isLoggedIn !== true) {
+        if (true !== $this->isLoggedIn) {
             throw new Exception(t('You\'re not authorized to alter the datastore'));
         }
         if (! $bookmark instanceof Bookmark) {
@@ -269,13 +281,14 @@ class BookmarkFileService implements BookmarkServiceInterface
      */
     public function save()
     {
-        if (!$this->isLoggedIn) {
+        if (true !== $this->isLoggedIn) {
             // TODO: raise an Exception instead
             die('You are not authorized to change the database.');
         }
+
         $this->bookmarks->reorder();
         $this->bookmarksIO->write($this->bookmarks);
-        invalidateCaches($this->conf->get('resource.page_cache'));
+        $this->pageCacheManager->invalidateCaches();
     }
 
     /**
@@ -291,6 +304,7 @@ class BookmarkFileService implements BookmarkServiceInterface
                 if (empty($tag)
                     || (! $this->isLoggedIn && startsWith($tag, '.'))
                     || $tag === BookmarkMarkdownFormatter::NO_MD_TAG
+                    || in_array($tag, $filteringTags, true)
                 ) {
                     continue;
                 }
@@ -349,6 +363,10 @@ class BookmarkFileService implements BookmarkServiceInterface
     {
         $initializer = new BookmarkInitializer($this);
         $initializer->initialize();
+
+        if (true === $this->isLoggedIn) {
+            $this->save();
+        }
     }
 
     /**

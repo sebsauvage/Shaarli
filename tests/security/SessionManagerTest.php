@@ -1,12 +1,8 @@
 <?php
-require_once 'tests/utils/FakeConfigManager.php';
 
-// Initialize reference data _before_ PHPUnit starts a session
-require_once 'tests/utils/ReferenceSessionIdHashes.php';
-ReferenceSessionIdHashes::genAllHashes();
+namespace Shaarli\Security;
 
 use PHPUnit\Framework\TestCase;
-use Shaarli\Security\SessionManager;
 
 /**
  * Test coverage for SessionManager
@@ -30,7 +26,7 @@ class SessionManagerTest extends TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$sidHashes = ReferenceSessionIdHashes::getHashes();
+        self::$sidHashes = \ReferenceSessionIdHashes::getHashes();
     }
 
     /**
@@ -38,13 +34,13 @@ class SessionManagerTest extends TestCase
      */
     public function setUp()
     {
-        $this->conf = new FakeConfigManager([
+        $this->conf = new \FakeConfigManager([
             'credentials.login' => 'johndoe',
             'credentials.salt' => 'salt',
             'security.session_protection_disabled' => false,
         ]);
         $this->session = [];
-        $this->sessionManager = new SessionManager($this->session, $this->conf);
+        $this->sessionManager = new SessionManager($this->session, $this->conf, 'session_path');
     }
 
     /**
@@ -69,7 +65,7 @@ class SessionManagerTest extends TestCase
                 $token => 1,
             ],
         ];
-        $sessionManager = new SessionManager($session, $this->conf);
+        $sessionManager = new SessionManager($session, $this->conf, 'session_path');
 
         // check and destroy the token
         $this->assertTrue($sessionManager->checkToken($token));
@@ -268,5 +264,62 @@ class SessionManagerTest extends TestCase
     {
         $this->session['ip'] = 'ip_id_one';
         $this->assertTrue($this->sessionManager->hasClientIpChanged('ip_id_two'));
+    }
+
+    /**
+     * Test creating an entry in the session array
+     */
+    public function testSetSessionParameterCreate(): void
+    {
+        $this->sessionManager->setSessionParameter('abc', 'def');
+
+        static::assertSame('def', $this->session['abc']);
+    }
+
+    /**
+     * Test updating an entry in the session array
+     */
+    public function testSetSessionParameterUpdate(): void
+    {
+        $this->session['abc'] = 'ghi';
+
+        $this->sessionManager->setSessionParameter('abc', 'def');
+
+        static::assertSame('def', $this->session['abc']);
+    }
+
+    /**
+     * Test updating an entry in the session array with null value
+     */
+    public function testSetSessionParameterUpdateNull(): void
+    {
+        $this->session['abc'] = 'ghi';
+
+        $this->sessionManager->setSessionParameter('abc', null);
+
+        static::assertArrayHasKey('abc', $this->session);
+        static::assertNull($this->session['abc']);
+    }
+
+    /**
+     * Test deleting an existing entry in the session array
+     */
+    public function testDeleteSessionParameter(): void
+    {
+        $this->session['abc'] = 'def';
+
+        $this->sessionManager->deleteSessionParameter('abc');
+
+        static::assertArrayNotHasKey('abc', $this->session);
+    }
+
+    /**
+     * Test deleting a non existent entry in the session array
+     */
+    public function testDeleteSessionParameterNotExisting(): void
+    {
+        $this->sessionManager->deleteSessionParameter('abc');
+
+        static::assertArrayNotHasKey('abc', $this->session);
     }
 }

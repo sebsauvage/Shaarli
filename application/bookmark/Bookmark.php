@@ -3,6 +3,7 @@
 namespace Shaarli\Bookmark;
 
 use DateTime;
+use DateTimeInterface;
 use Shaarli\Bookmark\Exception\InvalidBookmarkException;
 
 /**
@@ -36,16 +37,16 @@ class Bookmark
     /** @var array List of bookmark's tags */
     protected $tags;
 
-    /** @var string Thumbnail's URL - false if no thumbnail could be found */
+    /** @var string|bool|null Thumbnail's URL - initialized at null, false if no thumbnail could be found */
     protected $thumbnail;
 
     /** @var bool Set to true if the bookmark is set as sticky */
     protected $sticky;
 
-    /** @var DateTime Creation datetime */
+    /** @var DateTimeInterface Creation datetime */
     protected $created;
 
-    /** @var DateTime Update datetime */
+    /** @var DateTimeInterface datetime */
     protected $updated;
 
     /** @var bool True if the bookmark can only be seen while logged in */
@@ -100,12 +101,12 @@ class Bookmark
             || ! is_int($this->id)
             || empty($this->shortUrl)
             || empty($this->created)
-            || ! $this->created instanceof DateTime
+            || ! $this->created instanceof DateTimeInterface
         ) {
             throw new InvalidBookmarkException($this);
         }
         if (empty($this->url)) {
-            $this->url = '?'. $this->shortUrl;
+            $this->url = '/shaare/'. $this->shortUrl;
         }
         if (empty($this->title)) {
             $this->title = $this->url;
@@ -188,7 +189,7 @@ class Bookmark
     /**
      * Get the Created.
      *
-     * @return DateTime
+     * @return DateTimeInterface
      */
     public function getCreated()
     {
@@ -198,7 +199,7 @@ class Bookmark
     /**
      * Get the Updated.
      *
-     * @return DateTime
+     * @return DateTimeInterface
      */
     public function getUpdated()
     {
@@ -270,7 +271,7 @@ class Bookmark
      * Set the Created.
      * Note: you shouldn't set this manually except for special cases (like bookmark import)
      *
-     * @param DateTime $created
+     * @param DateTimeInterface $created
      *
      * @return Bookmark
      */
@@ -284,7 +285,7 @@ class Bookmark
     /**
      * Set the Updated.
      *
-     * @param DateTime $updated
+     * @param DateTimeInterface $updated
      *
      * @return Bookmark
      */
@@ -346,7 +347,7 @@ class Bookmark
     /**
      * Get the Thumbnail.
      *
-     * @return string|bool
+     * @return string|bool|null Thumbnail's URL - initialized at null, false if no thumbnail could be found
      */
     public function getThumbnail()
     {
@@ -356,7 +357,7 @@ class Bookmark
     /**
      * Set the Thumbnail.
      *
-     * @param string|bool $thumbnail
+     * @param string|bool $thumbnail Thumbnail's URL - false if no thumbnail could be found
      *
      * @return Bookmark
      */
@@ -405,7 +406,7 @@ class Bookmark
     public function isNote()
     {
         // We check empty value to get a valid result if the link has not been saved yet
-        return empty($this->url) || $this->url[0] === '?';
+        return empty($this->url) || startsWith($this->url, '/shaare/') || $this->url[0] === '?';
     }
 
     /**

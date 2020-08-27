@@ -16,7 +16,7 @@ class PluginManager
      *
      * @var array $authorizedPlugins
      */
-    private $authorizedPlugins;
+    private $authorizedPlugins = [];
 
     /**
      * List of loaded plugins.
@@ -106,6 +106,10 @@ class PluginManager
 
         if (isset($params['loggedin'])) {
             $data['_LOGGEDIN_'] = $params['loggedin'];
+        }
+
+        if (isset($params['basePath'])) {
+            $data['_BASE_PATH_'] = $params['basePath'];
         }
 
         foreach ($this->loadedPlugins as $plugin) {

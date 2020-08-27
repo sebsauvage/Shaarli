@@ -8,6 +8,14 @@ use Shaarli\Config\ConfigManager;
  */
 class SessionManager
 {
+    public const KEY_LINKS_PER_PAGE = 'LINKS_PER_PAGE';
+    public const KEY_VISIBILITY = 'visibility';
+    public const KEY_UNTAGGED_ONLY = 'untaggedonly';
+
+    public const KEY_SUCCESS_MESSAGES = 'successes';
+    public const KEY_WARNING_MESSAGES = 'warnings';
+    public const KEY_ERROR_MESSAGES = 'errors';
+
     /** @var int Session expiration timeout, in seconds */
     public static $SHORT_TIMEOUT = 3600;    // 1 hour
 
@@ -23,16 +31,35 @@ class SessionManager
     /** @var bool Whether the user should stay signed in (LONG_TIMEOUT) */
     protected $staySignedIn = false;
 
+    /** @var string */
+    protected $savePath;
+
     /**
      * Constructor
      *
-     * @param array         $session The $_SESSION array (reference)
-     * @param ConfigManager $conf    ConfigManager instance
+     * @param array         $session  The $_SESSION array (reference)
+     * @param ConfigManager $conf     ConfigManager instance
+     * @param string        $savePath Session save path returned by builtin function session_save_path()
      */
-    public function __construct(& $session, $conf)
+    public function __construct(&$session, $conf, string $savePath)
     {
         $this->session = &$session;
         $this->conf = $conf;
+        $this->savePath = $savePath;
+    }
+
+    /**
+     * Initialize XSRF token and links per page session variables.
+     */
+    public function initialize(): void
+    {
+        if (!isset($this->session['tokens'])) {
+            $this->session['tokens'] = [];
+        }
+
+        if (!isset($this->session['LINKS_PER_PAGE'])) {
+            $this->session['LINKS_PER_PAGE'] = $this->conf->get('general.links_per_page', 20);
+        }
     }
 
     /**
@@ -201,5 +228,79 @@ class SessionManager
     public function getSession(): array
     {
         return $this->session;
+    }
+
+    /**
+     * @param mixed $default value which will be returned if the $key is undefined
+     *
+     * @return mixed Content stored in session
+     */
+    public function getSessionParameter(string $key, $default = null)
+    {
+        return $this->session[$key] ?? $default;
+    }
+
+    /**
+     * Store a variable in user session.
+     *
+     * @param string $key   Session key
+     * @param mixed  $value Session value to store
+     *
+     * @return $this
+     */
+    public function setSessionParameter(string $key, $value): self
+    {
+        $this->session[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Store a variable in user session.
+     *
+     * @param string $key   Session key
+     *
+     * @return $this
+     */
+    public function deleteSessionParameter(string $key): self
+    {
+        unset($this->session[$key]);
+
+        return $this;
+    }
+
+    public function getSavePath(): string
+    {
+        return $this->savePath;
+    }
+
+    /*
+     * Next public functions wrapping native PHP session API.
+     */
+
+    public function destroy(): bool
+    {
+        $this->session = [];
+
+        return session_destroy();
+    }
+
+    public function start(): bool
+    {
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            $this->destroy();
+        }
+
+        return session_start();
+    }
+
+    public function cookieParameters(int $lifeTime, string $path, string $domain): bool
+    {
+        return session_set_cookie_params($lifeTime, $path, $domain);
+    }
+
+    public function regenerateId(bool $deleteOldSession = false): bool
+    {
+        return session_regenerate_id($deleteOldSession);
     }
 }

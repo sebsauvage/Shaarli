@@ -2,6 +2,7 @@
 namespace Shaarli\Config;
 
 use Shaarli\Config\Exception\PluginConfigOrderException;
+use Shaarli\Plugin\PluginManager;
 
 require_once 'application/config/ConfigPlugin.php';
 
@@ -17,23 +18,30 @@ class ConfigPluginTest extends \PHPUnit\Framework\TestCase
      */
     public function testSavePluginConfigValid()
     {
-        $data = array(
+        $data = [
             'order_plugin1' => 2,   // no plugin related
             'plugin2' => 0,         // new - at the end
             'plugin3' => 0,         // 2nd
             'order_plugin3' => 8,
             'plugin4' => 0,         // 1st
             'order_plugin4' => 5,
-        );
+        ];
 
-        $expected = array(
+        $expected = [
             'plugin3',
             'plugin4',
             'plugin2',
-        );
+        ];
+
+        mkdir($path = __DIR__ . '/folder');
+        PluginManager::$PLUGINS_PATH = $path;
+        array_map(function (string $plugin) use ($path) { touch($path . '/' . $plugin); }, $expected);
 
         $out = save_plugin_config($data);
         $this->assertEquals($expected, $out);
+
+        array_map(function (string $plugin) use ($path) { unlink($path . '/' . $plugin); }, $expected);
+        rmdir($path);
     }
 
     /**

@@ -200,7 +200,7 @@ class BookmarkFileServiceTest extends TestCase
 
         $bookmark = $this->privateLinkDB->get(43);
         $this->assertEquals(43, $bookmark->getId());
-        $this->assertRegExp('/\?[\w\-]{6}/', $bookmark->getUrl());
+        $this->assertRegExp('#/shaare/[\w\-]{6}#', $bookmark->getUrl());
         $this->assertRegExp('/[\w\-]{6}/', $bookmark->getShortUrl());
         $this->assertEquals($bookmark->getUrl(), $bookmark->getTitle());
         $this->assertEmpty($bookmark->getDescription());
@@ -216,7 +216,7 @@ class BookmarkFileServiceTest extends TestCase
 
         $bookmark = $this->privateLinkDB->get(43);
         $this->assertEquals(43, $bookmark->getId());
-        $this->assertRegExp('/\?[\w\-]{6}/', $bookmark->getUrl());
+        $this->assertRegExp('#/shaare/[\w\-]{6}#', $bookmark->getUrl());
         $this->assertRegExp('/[\w\-]{6}/', $bookmark->getShortUrl());
         $this->assertEquals($bookmark->getUrl(), $bookmark->getTitle());
         $this->assertEmpty($bookmark->getDescription());
@@ -340,7 +340,7 @@ class BookmarkFileServiceTest extends TestCase
 
         $bookmark = $this->privateLinkDB->get(42);
         $this->assertEquals(42, $bookmark->getId());
-        $this->assertEquals('?WDWyig', $bookmark->getUrl());
+        $this->assertEquals('/shaare/WDWyig', $bookmark->getUrl());
         $this->assertEquals('1eYJ1Q', $bookmark->getShortUrl());
         $this->assertEquals('Note: I have a big ID but an old date', $bookmark->getTitle());
         $this->assertEquals('Used to test bookmarks reordering.', $bookmark->getDescription());
@@ -359,7 +359,7 @@ class BookmarkFileServiceTest extends TestCase
 
         $bookmark = $this->privateLinkDB->get(42);
         $this->assertEquals(42, $bookmark->getId());
-        $this->assertEquals('?WDWyig', $bookmark->getUrl());
+        $this->assertEquals('/shaare/WDWyig', $bookmark->getUrl());
         $this->assertEquals('1eYJ1Q', $bookmark->getShortUrl());
         $this->assertEquals('Note: I have a big ID but an old date', $bookmark->getTitle());
         $this->assertEquals('Used to test bookmarks reordering.', $bookmark->getDescription());
@@ -816,7 +816,6 @@ class BookmarkFileServiceTest extends TestCase
         );
         $this->assertEquals(
             [
-                'web' => 4,
                 'cartoon' => 2,
                 'gnu' => 1,
                 'dev' => 1,
@@ -833,7 +832,6 @@ class BookmarkFileServiceTest extends TestCase
         );
         $this->assertEquals(
             [
-                'web' => 1,
                 'html' => 1,
                 'w3c' => 1,
                 'css' => 1,
@@ -894,35 +892,35 @@ class BookmarkFileServiceTest extends TestCase
     public function testFilterHashValid()
     {
         $request = smallHash('20150310_114651');
-        $this->assertEquals(
-            1,
-            count($this->publicLinkDB->findByHash($request))
+        $this->assertSame(
+            $request,
+            $this->publicLinkDB->findByHash($request)->getShortUrl()
         );
         $request = smallHash('20150310_114633' . 8);
-        $this->assertEquals(
-            1,
-            count($this->publicLinkDB->findByHash($request))
+        $this->assertSame(
+            $request,
+            $this->publicLinkDB->findByHash($request)->getShortUrl()
         );
     }
 
     /**
      * Test filterHash() with an invalid smallhash.
-     *
-     * @expectedException \Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testFilterHashInValid1()
     {
+        $this->expectException(BookmarkNotFoundException::class);
+
         $request = 'blabla';
         $this->publicLinkDB->findByHash($request);
     }
 
     /**
      * Test filterHash() with an empty smallhash.
-     *
-     * @expectedException \Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testFilterHashInValid()
     {
+        $this->expectException(BookmarkNotFoundException::class);
+
         $this->publicLinkDB->findByHash('');
     }
 
@@ -968,7 +966,6 @@ class BookmarkFileServiceTest extends TestCase
     public function testCountLinkPerTagAllWithFilter()
     {
         $expected = [
-            'gnu' => 2,
             'hashtag' => 2,
             '-exclude' => 1,
             '.hidden' => 1,
@@ -991,7 +988,6 @@ class BookmarkFileServiceTest extends TestCase
     public function testCountLinkPerTagPublicWithFilter()
     {
         $expected = [
-            'gnu' => 2,
             'hashtag' => 2,
             '-exclude' => 1,
             '.hidden' => 1,
@@ -1015,7 +1011,6 @@ class BookmarkFileServiceTest extends TestCase
     {
         $expected = [
             'cartoon' => 1,
-            'dev' => 1,
             'tag1' => 1,
             'tag2' => 1,
             'tag3' => 1,

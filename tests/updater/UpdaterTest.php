@@ -2,17 +2,18 @@
 namespace Shaarli\Updater;
 
 use Exception;
+use PHPUnit\Framework\TestCase;
+use Shaarli\Bookmark\BookmarkFileService;
+use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
+use Shaarli\History;
 
-require_once 'tests/updater/DummyUpdater.php';
-require_once 'tests/utils/ReferenceLinkDB.php';
-require_once 'inc/rain.tpl.class.php';
 
 /**
  * Class UpdaterTest.
  * Runs unit tests against the updater class.
  */
-class UpdaterTest extends \PHPUnit\Framework\TestCase
+class UpdaterTest extends TestCase
 {
     /**
      * @var string Path to test datastore.
@@ -29,13 +30,27 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
      */
     protected $conf;
 
+    /** @var BookmarkServiceInterface */
+    protected $bookmarkService;
+
+    /** @var \ReferenceLinkDB */
+    protected $refDB;
+
+    /** @var Updater */
+    protected $updater;
+
     /**
      * Executed before each test.
      */
     public function setUp()
     {
+        $this->refDB = new \ReferenceLinkDB();
+        $this->refDB->write(self::$testDatastore);
+
         copy('tests/utils/config/configJson.json.php', self::$configFile .'.json.php');
         $this->conf = new ConfigManager(self::$configFile);
+        $this->bookmarkService = new BookmarkFileService($this->conf, $this->createMock(History::class), true);
+        $this->updater = new Updater([], $this->bookmarkService, $this->conf, true);
     }
 
     /**
@@ -166,5 +181,41 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
 
         $updater = new DummyUpdater($updates, array(), $this->conf, true);
         $updater->update();
+    }
+
+    public function testUpdateMethodRelativeHomeLinkRename(): void
+    {
+        $this->updater->setBasePath('/subfolder');
+        $this->conf->set('general.header_link', '?');
+
+        $this->updater->updateMethodRelativeHomeLink();
+
+        static::assertSame('/subfolder/', $this->conf->get('general.header_link'));
+    }
+
+    public function testUpdateMethodRelativeHomeLinkDoNotRename(): void
+    {
+        $this->conf->set('general.header_link', '~/my-blog');
+
+        $this->updater->updateMethodRelativeHomeLink();
+
+        static::assertSame('~/my-blog', $this->conf->get('general.header_link'));
+    }
+
+    public function testUpdateMethodMigrateExistingNotesUrl(): void
+    {
+        $this->updater->updateMethodMigrateExistingNotesUrl();
+
+        static::assertSame($this->refDB->getLinks()[0]->getUrl(), $this->bookmarkService->get(0)->getUrl());
+        static::assertSame($this->refDB->getLinks()[1]->getUrl(), $this->bookmarkService->get(1)->getUrl());
+        static::assertSame($this->refDB->getLinks()[4]->getUrl(), $this->bookmarkService->get(4)->getUrl());
+        static::assertSame($this->refDB->getLinks()[6]->getUrl(), $this->bookmarkService->get(6)->getUrl());
+        static::assertSame($this->refDB->getLinks()[7]->getUrl(), $this->bookmarkService->get(7)->getUrl());
+        static::assertSame($this->refDB->getLinks()[8]->getUrl(), $this->bookmarkService->get(8)->getUrl());
+        static::assertSame($this->refDB->getLinks()[9]->getUrl(), $this->bookmarkService->get(9)->getUrl());
+        static::assertSame('/shaare/WDWyig', $this->bookmarkService->get(42)->getUrl());
+        static::assertSame('/shaare/WDWyig', $this->bookmarkService->get(41)->getUrl());
+        static::assertSame('/shaare/0gCTjQ', $this->bookmarkService->get(10)->getUrl());
+        static::assertSame('/shaare/PCRizQ', $this->bookmarkService->get(11)->getUrl());
     }
 }
