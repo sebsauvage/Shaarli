@@ -152,6 +152,9 @@ class ContainerBuilder
         $container['errorHandler'] = function (ShaarliContainer $container): ErrorController {
             return new ErrorController($container);
         };
+        $container['phpErrorHandler'] = function (ShaarliContainer $container): ErrorController {
+            return new ErrorController($container);
+        };
 
         return $container;
     }

@@ -9,6 +9,7 @@ use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Feed\FeedBuilder;
 use Shaarli\Formatter\FormatterFactory;
+use Shaarli\Front\Controller\Visitor\ErrorController;
 use Shaarli\History;
 use Shaarli\Http\HttpAccess;
 use Shaarli\Netscape\NetscapeBookmarkUtils;
@@ -20,6 +21,7 @@ use Shaarli\Security\LoginManager;
 use Shaarli\Security\SessionManager;
 use Shaarli\Thumbnailer;
 use Shaarli\Updater\Updater;
+use Slim\Http\Environment;
 
 class ContainerBuilderTest extends TestCase
 {
@@ -59,20 +61,23 @@ class ContainerBuilderTest extends TestCase
     {
         $container = $this->containerBuilder->build();
 
-        static::assertInstanceOf(ConfigManager::class, $container->conf);
-        static::assertInstanceOf(SessionManager::class, $container->sessionManager);
-        static::assertInstanceOf(CookieManager::class, $container->cookieManager);
-        static::assertInstanceOf(LoginManager::class, $container->loginManager);
-        static::assertInstanceOf(History::class, $container->history);
         static::assertInstanceOf(BookmarkServiceInterface::class, $container->bookmarkService);
-        static::assertInstanceOf(PageBuilder::class, $container->pageBuilder);
-        static::assertInstanceOf(PluginManager::class, $container->pluginManager);
-        static::assertInstanceOf(FormatterFactory::class, $container->formatterFactory);
-        static::assertInstanceOf(PageCacheManager::class, $container->pageCacheManager);
+        static::assertInstanceOf(CookieManager::class, $container->cookieManager);
+        static::assertInstanceOf(ConfigManager::class, $container->conf);
+        static::assertInstanceOf(ErrorController::class, $container->errorHandler);
+        static::assertInstanceOf(Environment::class, $container->environment);
         static::assertInstanceOf(FeedBuilder::class, $container->feedBuilder);
-        static::assertInstanceOf(Thumbnailer::class, $container->thumbnailer);
+        static::assertInstanceOf(FormatterFactory::class, $container->formatterFactory);
+        static::assertInstanceOf(History::class, $container->history);
         static::assertInstanceOf(HttpAccess::class, $container->httpAccess);
+        static::assertInstanceOf(LoginManager::class, $container->loginManager);
         static::assertInstanceOf(NetscapeBookmarkUtils::class, $container->netscapeBookmarkUtils);
+        static::assertInstanceOf(PageBuilder::class, $container->pageBuilder);
+        static::assertInstanceOf(PageCacheManager::class, $container->pageCacheManager);
+        static::assertInstanceOf(ErrorController::class, $container->phpErrorHandler);
+        static::assertInstanceOf(PluginManager::class, $container->pluginManager);
+        static::assertInstanceOf(SessionManager::class, $container->sessionManager);
+        static::assertInstanceOf(Thumbnailer::class, $container->thumbnailer);
         static::assertInstanceOf(Updater::class, $container->updater);
 
         // Set by the middleware

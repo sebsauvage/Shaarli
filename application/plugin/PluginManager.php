@@ -116,7 +116,12 @@ class PluginManager
             $hookFunction = $this->buildHookName($hook, $plugin);
 
             if (function_exists($hookFunction)) {
-                $data = call_user_func($hookFunction, $data, $this->conf);
+                try {
+                    $data = call_user_func($hookFunction, $data, $this->conf);
+                } catch (\Throwable $e) {
+                    $error = $plugin . t(' [plugin incompatibility]: ') . $e->getMessage();
+                    $this->errors = array_unique(array_merge($this->errors, [$error]));
+                }
             }
         }
     }

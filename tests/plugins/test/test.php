@@ -19,3 +19,8 @@ function hook_test_random($data)
 
     return $data;
 }
+
+function hook_test_error()
+{
+    new Unknown();
+}

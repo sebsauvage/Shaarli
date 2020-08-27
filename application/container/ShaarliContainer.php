@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Shaarli\Container;
 
-use http\Cookie;
 use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Feed\FeedBuilder;
@@ -30,7 +29,7 @@ use Slim\Container;
  * @property CookieManager            $cookieManager
  * @property ConfigManager            $conf
  * @property mixed[]                  $environment          $_SERVER automatically injected by Slim
- * @property callable                 $errorHandler         Overrides default Slim error display
+ * @property callable                 $errorHandler         Overrides default Slim exception display
  * @property FeedBuilder              $feedBuilder
  * @property FormatterFactory         $formatterFactory
  * @property History                  $history
@@ -39,6 +38,7 @@ use Slim\Container;
  * @property NetscapeBookmarkUtils    $netscapeBookmarkUtils
  * @property PageBuilder              $pageBuilder
  * @property PageCacheManager         $pageCacheManager
+ * @property callable                 $phpErrorHandler      Overrides default Slim PHP error display
  * @property PluginManager            $pluginManager
  * @property SessionManager           $sessionManager
  * @property Thumbnailer              $thumbnailer
