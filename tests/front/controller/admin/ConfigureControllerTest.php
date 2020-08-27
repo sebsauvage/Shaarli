@@ -62,7 +62,7 @@ class ConfigureControllerTest extends TestCase
         static::assertSame('privacy.hide_public_links', $assignedVariables['hide_public_links']);
         static::assertSame('api.enabled', $assignedVariables['api_enabled']);
         static::assertSame('api.secret', $assignedVariables['api_secret']);
-        static::assertCount(4, $assignedVariables['languages']);
+        static::assertCount(5, $assignedVariables['languages']);
         static::assertArrayHasKey('gd_enabled', $assignedVariables);
         static::assertSame('thumbnails.mode', $assignedVariables['thumbnails_mode']);
     }
