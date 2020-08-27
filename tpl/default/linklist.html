@@ -272,7 +272,17 @@
                     <i class="fa fa-trash" aria-hidden="true"></i>
                   </a>
                   &middot;
-                  <a href="{$base_path}/admin/shaare/{$value.id}" aria-label="{$strEdit}" title="{$strEdit}"><i class="fa fa-pencil-square-o edit-link" aria-hidden="true"></i></a>
+                  <a href="{$base_path}/admin/shaare/{$value.id}" aria-label="{$strEdit}" title="{$strEdit}">
+                    <i class="fa fa-pencil-square-o edit-link" aria-hidden="true"></i>
+                  </a>
+                  &middot;
+                  <a href="{$base_path}/admin/shaare/{$value.id}/pin?token={$token}"
+                     aria-label="{$strToggleSticky}"
+                     title="{$strToggleSticky}"
+                     class="pin-link {if="$value.sticky"}pinned-link{/if}"
+                  >
+                    <i class="fa fa-thumb-tack" aria-hidden="true"></i>
+                  </a>
                 {/if}
               </div>
             </div>
