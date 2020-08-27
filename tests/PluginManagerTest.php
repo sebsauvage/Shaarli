@@ -25,7 +25,7 @@ class PluginManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected $pluginManager;
 
-    public function setUp()
+    public function setUp(): void
     {
         $conf = new ConfigManager('');
         $this->pluginManager = new PluginManager($conf);
@@ -33,10 +33,8 @@ class PluginManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test plugin loading and hook execution.
-     *
-     * @return void
      */
-    public function testPlugin()
+    public function testPlugin(): void
     {
         PluginManager::$PLUGINS_PATH = self::$pluginPath;
         $this->pluginManager->load(array(self::$pluginName));
@@ -57,9 +55,28 @@ class PluginManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test plugin loading and hook execution with an error: raise an incompatibility error.
+     */
+    public function testPluginWithPhpError(): void
+    {
+        PluginManager::$PLUGINS_PATH = self::$pluginPath;
+        $this->pluginManager->load(array(self::$pluginName));
+
+        $this->assertTrue(function_exists('hook_test_error'));
+
+        $data = [];
+        $this->pluginManager->executeHooks('error', $data);
+
+        $this->assertSame(
+            'test [plugin incompatibility]: Class \'Unknown\' not found',
+            $this->pluginManager->getErrors()[0]
+        );
+    }
+
+    /**
      * Test missing plugin loading.
      */
-    public function testPluginNotFound()
+    public function testPluginNotFound(): void
     {
         $this->pluginManager->load(array());
         $this->pluginManager->load(array('nope', 'renope'));
@@ -69,7 +86,7 @@ class PluginManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test plugin metadata loading.
      */
-    public function testGetPluginsMeta()
+    public function testGetPluginsMeta(): void
     {
         PluginManager::$PLUGINS_PATH = self::$pluginPath;
         $this->pluginManager->load(array(self::$pluginName));

@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2020-07-23 17:11+0200\n"
-"PO-Revision-Date: 2020-07-23 17:12+0200\n"
+"POT-Creation-Date: 2020-08-27 12:01+0200\n"
+"PO-Revision-Date: 2020-08-27 12:02+0200\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.3\n"
 "X-Poedit-Basepath: ../../../..\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -103,36 +103,36 @@ msgstr "Mo"
 msgid "GiB"
 msgstr "Go"
 
-#: application/bookmark/BookmarkFileService.php:161
-#: application/bookmark/BookmarkFileService.php:186
-#: application/bookmark/BookmarkFileService.php:211
-#: application/bookmark/BookmarkFileService.php:228
+#: application/bookmark/BookmarkFileService.php:165
+#: application/bookmark/BookmarkFileService.php:190
+#: application/bookmark/BookmarkFileService.php:215
+#: application/bookmark/BookmarkFileService.php:232
 msgid "You're not authorized to alter the datastore"
 msgstr "Vous n'êtes pas autorisé à modifier les données"
 
-#: application/bookmark/BookmarkFileService.php:164
-#: application/bookmark/BookmarkFileService.php:189
-#: application/bookmark/BookmarkFileService.php:231
+#: application/bookmark/BookmarkFileService.php:168
+#: application/bookmark/BookmarkFileService.php:193
+#: application/bookmark/BookmarkFileService.php:235
 msgid "Provided data is invalid"
 msgstr "Les informations fournies ne sont pas valides"
 
-#: application/bookmark/BookmarkFileService.php:192
+#: application/bookmark/BookmarkFileService.php:196
 msgid "This bookmarks already exists"
 msgstr "Ce marque-page existe déjà."
 
-#: application/bookmark/BookmarkInitializer.php:40
+#: application/bookmark/BookmarkInitializer.php:37
 #: application/legacy/LegacyLinkDB.php:266
 msgid "My secret stuff... - Pastebin.com"
 msgstr "Mes trucs secrets... - Pastebin.com"
 
-#: application/bookmark/BookmarkInitializer.php:42
+#: application/bookmark/BookmarkInitializer.php:39
 #: application/legacy/LegacyLinkDB.php:268
 msgid "Shhhh! I'm a private link only YOU can see. You can delete me too."
 msgstr ""
 "Pssst ! Je suis un lien privé que VOUS êtes le seul à voir. Vous pouvez me "
 "supprimer aussi."
 
-#: application/bookmark/BookmarkInitializer.php:48
+#: application/bookmark/BookmarkInitializer.php:45
 #: application/legacy/LegacyLinkDB.php:246
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:49
@@ -144,7 +144,7 @@ msgstr ""
 "Le gestionnaire de marque-pages personnel, minimaliste, et sans base de "
 "données"
 
-#: application/bookmark/BookmarkInitializer.php:51
+#: application/bookmark/BookmarkInitializer.php:48
 #: application/legacy/LegacyLinkDB.php:249
 msgid ""
 "Welcome to Shaarli! This is your first public bookmark. To edit or delete "
@@ -210,10 +210,6 @@ msgstr "Liens directs"
 msgid "Permalink"
 msgstr "Permalien"
 
-#: application/front/ShaarliMiddleware.php:78
-msgid "An unexpected error occurred."
-msgstr "Une erreur inattendue s'est produite."
-
 #: application/front/controller/admin/ConfigureController.php:54
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
 msgid "Configure"
@@ -230,7 +226,7 @@ msgid "Please synchronize them."
 msgstr "Merci de les synchroniser."
 
 #: application/front/controller/admin/ConfigureController.php:113
-#: application/front/controller/visitor/InstallController.php:137
+#: application/front/controller/visitor/InstallController.php:136
 msgid "Error while writing config file after configuration update."
 msgstr ""
 "Une erreur s'est produite lors de la sauvegarde du fichier de configuration."
@@ -373,7 +369,7 @@ msgstr "Mise à jour des miniatures"
 msgid "Tools"
 msgstr "Outils"
 
-#: application/front/controller/visitor/BookmarkListController.php:114
+#: application/front/controller/visitor/BookmarkListController.php:115
 msgid "Search: "
 msgstr "Recherche : "
 
@@ -385,13 +381,17 @@ msgstr "Aujourd'hui"
 msgid "Yesterday"
 msgstr "Hier"
 
-#: application/front/controller/visitor/DailyController.php:86
+#: application/front/controller/visitor/DailyController.php:85
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:48
 msgid "Daily"
 msgstr "Quotidien"
 
-#: application/front/controller/visitor/InstallController.php:74
+#: application/front/controller/visitor/ErrorController.php:36
+msgid "An unexpected error occurred."
+msgstr "Une erreur inattendue s'est produite."
+
+#: application/front/controller/visitor/InstallController.php:73
 #, php-format
 msgid ""
 "<pre>Sessions do not seem to work correctly on your server.<br>Make sure the "
@@ -410,14 +410,14 @@ msgstr ""
 "des cookies. Nous vous recommandons d'accéder à votre serveur depuis son "
 "adresse IP ou un <em>Fully Qualified Domain Name</em>.<br>"
 
-#: application/front/controller/visitor/InstallController.php:149
+#: application/front/controller/visitor/InstallController.php:144
 msgid ""
 "Shaarli is now configured. Please login and start shaaring your bookmarks!"
 msgstr ""
 "Shaarli est maintenant configuré. Vous pouvez vous connecter et commencez à "
 "shaare vos liens !"
 
-#: application/front/controller/visitor/InstallController.php:163
+#: application/front/controller/visitor/InstallController.php:158
 msgid "Insufficient permissions:"
 msgstr "Permissions insuffisantes :"
 
@@ -441,7 +441,7 @@ msgstr "Nom d'utilisateur ou mot de passe incorrect(s)."
 msgid "Picture wall"
 msgstr "Mur d'images"
 
-#: application/front/controller/visitor/TagCloudController.php:82
+#: application/front/controller/visitor/TagCloudController.php:80
 #, fuzzy
 #| msgid "Tag list"
 msgid "Tag "
@@ -519,6 +519,10 @@ msgstr ""
 "a été importé avec succès en %d secondes : %d liens importés, %d liens "
 "écrasés, %d liens ignorés."
 
+#: application/plugin/PluginManager.php:122
+msgid " [plugin incompatibility]: "
+msgstr " [incompatibilité de l'extension] : "
+
 #: application/plugin/exception/PluginFileNotFoundException.php:21
 #, php-format
 msgid "Plugin \"%s\" files not found."
@@ -550,11 +554,11 @@ msgstr "Shaare"
 msgid "Adds the addlink input on the linklist page."
 msgstr "Ajoute le formulaire d'ajout de liens sur la page principale."
 
-#: plugins/archiveorg/archiveorg.php:25
+#: plugins/archiveorg/archiveorg.php:26
 msgid "View on archive.org"
 msgstr "Voir sur archive.org"
 
-#: plugins/archiveorg/archiveorg.php:38
+#: plugins/archiveorg/archiveorg.php:39
 msgid "For each link, add an Archive.org icon."
 msgstr "Pour chaque lien, ajoute une icône pour Archive.org."
 
@@ -674,7 +678,7 @@ msgstr "Mauvaise réponse du hub %s"
 msgid "Enable PubSubHubbub feed publishing."
 msgstr "Active la publication de flux vers PubSubHubbub."
 
-#: plugins/qrcode/qrcode.php:72 plugins/wallabag/wallabag.php:68
+#: plugins/qrcode/qrcode.php:73 plugins/wallabag/wallabag.php:70
 msgid "For each link, add a QRCode icon."
 msgstr "Pour chaque lien, ajouter une icône de QRCode."
 
@@ -690,11 +694,11 @@ msgstr ""
 msgid "Save to wallabag"
 msgstr "Sauvegarder dans Wallabag"
 
-#: plugins/wallabag/wallabag.php:69
+#: plugins/wallabag/wallabag.php:71
 msgid "Wallabag API URL"
 msgstr "URL de l'API Wallabag"
 
-#: plugins/wallabag/wallabag.php:70
+#: plugins/wallabag/wallabag.php:72
 msgid "Wallabag API version (1 or 2)"
 msgstr "Version de l'API Wallabag (1 ou 2)"
 

@@ -58,9 +58,10 @@ abstract class ShaarliVisitorController
     {
         $this->assignView('linkcount', $this->container->bookmarkService->count(BookmarkFilter::$ALL));
         $this->assignView('privateLinkcount', $this->container->bookmarkService->count(BookmarkFilter::$PRIVATE));
-        $this->assignView('plugin_errors', $this->container->pluginManager->getErrors());
 
         $this->executeDefaultHooks($template);
+
+        $this->assignView('plugin_errors', $this->container->pluginManager->getErrors());
 
         return $this->container->pageBuilder->render($template, $this->container->basePath);
     }
