@@ -160,6 +160,8 @@ class PostLinkTest extends TestCase
             'description' => 'shaare description',
             'tags' => ['one', 'two'],
             'private' => true,
+            'created' => '2015-05-05T12:30:00+03:00',
+            'updated' => '2016-06-05T14:32:10+03:00',
         ];
         $env = Environment::mock([
             'REQUEST_METHOD' => 'POST',
@@ -181,10 +183,8 @@ class PostLinkTest extends TestCase
         $this->assertEquals($link['description'], $data['description']);
         $this->assertEquals($link['tags'], $data['tags']);
         $this->assertEquals(true, $data['private']);
-        $this->assertTrue(
-            new \DateTime('2 seconds ago') < \DateTime::createFromFormat(\DateTime::ATOM, $data['created'])
-        );
-        $this->assertEquals('', $data['updated']);
+        $this->assertSame($link['created'], $data['created']);
+        $this->assertSame($link['updated'], $data['updated']);
     }
 
     /**

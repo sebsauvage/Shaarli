@@ -94,7 +94,7 @@ class ApiUtils
      *
      * @return Bookmark instance.
      */
-    public static function buildLinkFromRequest($input, $defaultPrivate)
+    public static function buildBookmarkFromRequest($input, $defaultPrivate): Bookmark
     {
         $bookmark = new Bookmark();
         $url = ! empty($input['url']) ? cleanup_url($input['url']) : '';
@@ -109,6 +109,15 @@ class ApiUtils
         $bookmark->setDescription(! empty($input['description']) ? $input['description'] : '');
         $bookmark->setTags(! empty($input['tags']) ? $input['tags'] : []);
         $bookmark->setPrivate($private);
+
+        $created = \DateTime::createFromFormat(\DateTime::ATOM, $input['created'] ?? '');
+        if ($created instanceof \DateTimeInterface) {
+            $bookmark->setCreated($created);
+        }
+        $updated = \DateTime::createFromFormat(\DateTime::ATOM, $input['updated'] ?? '');
+        if ($updated instanceof \DateTimeInterface) {
+            $bookmark->setUpdated($updated);
+        }
 
         return $bookmark;
     }
