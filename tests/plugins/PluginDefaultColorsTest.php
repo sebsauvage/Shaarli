@@ -2,7 +2,6 @@
 
 namespace Shaarli\Plugin\DefaultColors;
 
-use DateTime;
 use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
@@ -57,6 +56,8 @@ class PluginDefaultColorsTest extends TestCase
         $conf->set('plugins.DEFAULT_COLORS_BACKGROUND', 'value');
         $errors = default_colors_init($conf);
         $this->assertEmpty($errors);
+
+        $this->assertFileExists($file = 'sandbox/default_colors/default_colors.css');
     }
 
     /**
@@ -72,9 +73,9 @@ class PluginDefaultColorsTest extends TestCase
     /**
      * Test the save plugin parameters hook with all colors specified.
      */
-    public function testSavePluginParametersAll()
+    public function testGenerateCssFile()
     {
-        $post = [
+        $params = [
             'other1' => true,
             'DEFAULT_COLORS_MAIN' => 'blue',
             'DEFAULT_COLORS_BACKGROUND' => 'pink',
@@ -82,7 +83,7 @@ class PluginDefaultColorsTest extends TestCase
             'DEFAULT_COLORS_DARK_MAIN' => 'green',
         ];
 
-        hook_default_colors_save_plugin_parameters($post);
+        default_colors_generate_css_file($params);
         $this->assertFileExists($file = 'sandbox/default_colors/default_colors.css');
         $content = file_get_contents($file);
         $expected = ':root {
@@ -98,16 +99,16 @@ class PluginDefaultColorsTest extends TestCase
     /**
      * Test the save plugin parameters hook with only one color specified.
      */
-    public function testSavePluginParametersSingle()
+    public function testGenerateCssFileSingle()
     {
-        $post = [
+        $params = [
             'other1' => true,
             'DEFAULT_COLORS_BACKGROUND' => 'pink',
             'other2' => ['yep'],
             'DEFAULT_COLORS_DARK_MAIN' => '',
         ];
 
-        hook_default_colors_save_plugin_parameters($post);
+        default_colors_generate_css_file($params);
         $this->assertFileExists($file = 'sandbox/default_colors/default_colors.css');
         $content = file_get_contents($file);
         $expected = ':root {
@@ -121,9 +122,9 @@ class PluginDefaultColorsTest extends TestCase
     /**
      * Test the save plugin parameters hook with no color specified.
      */
-    public function testSavePluginParametersNone()
+    public function testGenerateCssFileNone()
     {
-        hook_default_colors_save_plugin_parameters([]);
+        default_colors_generate_css_file([]);
         $this->assertFileNotExists($file = 'sandbox/default_colors/default_colors.css');
     }
 

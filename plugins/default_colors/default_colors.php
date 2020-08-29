@@ -15,6 +15,8 @@ const DEFAULT_COLORS_PLACEHOLDERS = [
     'DEFAULT_COLORS_DARK_MAIN',
 ];
 
+const DEFAULT_COLORS_CSS_FILE = '/default_colors/default_colors.css';
+
 /**
  * Display an error if the plugin is active a no color is configured.
  *
@@ -24,41 +26,24 @@ const DEFAULT_COLORS_PLACEHOLDERS = [
  */
 function default_colors_init($conf)
 {
-    $params = '';
+    $params = [];
     foreach (DEFAULT_COLORS_PLACEHOLDERS as $placeholder) {
-        $params .= trim($conf->get('plugins.'. $placeholder, ''));
+        $value = trim($conf->get('plugins.'. $placeholder, ''));
+        if (strlen($value) > 0) {
+            $params[$placeholder] = $value;
+        }
     }
 
     if (empty($params)) {
         $error = t('Default colors plugin error: '.
             'This plugin is active and no custom color is configured.');
-        return array($error);
-    }
-}
-
-/**
- * When plugin parameters are saved, we regenerate the custom CSS file with provided settings.
- *
- * @param array $data $_POST array
- *
- * @return array Updated $_POST array
- */
-function hook_default_colors_save_plugin_parameters($data)
-{
-    $file = PluginManager::$PLUGINS_PATH . '/default_colors/default_colors.css';
-    $template = file_get_contents(PluginManager::$PLUGINS_PATH . '/default_colors/default_colors.css.template');
-    $content = '';
-    foreach (DEFAULT_COLORS_PLACEHOLDERS as $rule) {
-        $content .= ! empty($data[$rule])
-            ? default_colors_format_css_rule($data, $rule) .';'. PHP_EOL
-            : '';
+        return [$error];
     }
 
-    if (! empty($content)) {
-        file_put_contents($file, sprintf($template, $content));
+    // Colors are defined but the custom CSS file does not exist -> generate it
+    if (!file_exists(PluginManager::$PLUGINS_PATH . DEFAULT_COLORS_CSS_FILE)) {
+        default_colors_generate_css_file($params);
     }
-
-    return $data;
 }
 
 /**
@@ -76,6 +61,27 @@ function hook_default_colors_render_includes($data)
     }
 
     return $data;
+}
+
+/**
+ * Regenerate the custom CSS file with provided settings.
+ *
+ * @param array $params Plugin configuration (CSS rules)
+ */
+function default_colors_generate_css_file($params): void
+{
+    $file = PluginManager::$PLUGINS_PATH . '/default_colors/default_colors.css';
+    $template = file_get_contents(PluginManager::$PLUGINS_PATH . '/default_colors/default_colors.css.template');
+    $content = '';
+    foreach (DEFAULT_COLORS_PLACEHOLDERS as $rule) {
+        $content .= !empty($params[$rule])
+            ? default_colors_format_css_rule($params, $rule) .';'. PHP_EOL
+            : '';
+    }
+
+    if (! empty($content)) {
+        file_put_contents($file, sprintf($template, $content));
+    }
 }
 
 /**
