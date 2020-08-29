@@ -618,6 +618,11 @@ body,
     color: $dark-grey;
   }
 
+  a.selected {
+    background: var(--main-color);
+    color: $white;
+  }
+
   input {
     &[type='text'] {
       @extend %linksperpage-button;

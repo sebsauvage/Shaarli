@@ -53,11 +53,16 @@
 
     <div class="linksperpage pure-u-1-3">
       <div class="pure-u-0 pure-u-lg-visible">{'Links per page'|t}</div>
-      <a href="{$base_path}/links-per-page?nb=20">20</a>
-      <a href="{$base_path}/links-per-page?nb=50">50</a>
-      <a href="{$base_path}/links-per-page?nb=100">100</a>
+      <a href="{$base_path}/links-per-page?nb=20"
+			{if="$links_per_page == 20"}class="selected"{/if}>20</a>
+      <a href="{$base_path}/links-per-page?nb=50"
+			{if="$links_per_page == 50"}class="selected"{/if}>50</a>
+      <a href="{$base_path}/links-per-page?nb=100"
+			{if="$links_per_page == 100"}class="selected"{/if}>100</a>
       <form method="GET" class="pure-u-0 pure-u-lg-visible" action="{$base_path}/links-per-page">
-        <input type="text" name="nb" placeholder="133">
+        <input type="text" name="nb" placeholder="133"
+			{if="$links_per_page != 20 && $links_per_page != 50 && $links_per_page != 100"}
+				value="{$links_per_page}"{/if}>
       </form>
       <a href="#" class="filter-off fold-all pure-u-0 pure-u-lg-visible" aria-label="{'Fold all'|t}" title="{'Fold all'|t}">
         <i class="fa fa-chevron-up" aria-hidden="true"></i>
