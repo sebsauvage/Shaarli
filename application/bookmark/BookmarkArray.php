@@ -234,16 +234,17 @@ class BookmarkArray implements \Iterator, \Countable, \ArrayAccess
      *
      * Also update the urls and ids mapping arrays.
      *
-     * @param string $order ASC|DESC
+     * @param string $order        ASC|DESC
+     * @param bool   $ignoreSticky If set to true, sticky bookmarks won't be first
      */
-    public function reorder($order = 'DESC')
+    public function reorder(string $order = 'DESC', bool $ignoreSticky = false): void
     {
         $order = $order === 'ASC' ? -1 : 1;
         // Reorder array by dates.
-        usort($this->bookmarks, function ($a, $b) use ($order) {
+        usort($this->bookmarks, function ($a, $b) use ($order, $ignoreSticky) {
             /** @var $a Bookmark */
             /** @var $b Bookmark */
-            if ($a->isSticky() !== $b->isSticky()) {
+            if (false === $ignoreSticky && $a->isSticky() !== $b->isSticky()) {
                 return $a->isSticky() ? -1 : 1;
             }
             return $a->getCreated() < $b->getCreated() ? 1 * $order : -1 * $order;

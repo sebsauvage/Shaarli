@@ -87,7 +87,7 @@ class FeedBuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(ReferenceLinkDB::$NB_LINKS_TOTAL, count($data['links']));
 
         // Test first not pinned link (note link)
-        $link = $data['links'][array_keys($data['links'])[2]];
+        $link = $data['links'][array_keys($data['links'])[0]];
         $this->assertEquals(41, $link['id']);
         $this->assertEquals(DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114651'), $link['created']);
         $this->assertEquals('http://host.tld/shaare/WDWyig', $link['guid']);
@@ -128,7 +128,7 @@ class FeedBuilderTest extends \PHPUnit\Framework\TestCase
         $data = $feedBuilder->buildData(FeedBuilder::$FEED_ATOM, null);
         $this->assertEquals(ReferenceLinkDB::$NB_LINKS_TOTAL, count($data['links']));
         $this->assertRegExp('/2016-08-03T09:30:33\+\d{2}:\d{2}/', $data['last_update']);
-        $link = $data['links'][array_keys($data['links'])[2]];
+        $link = $data['links'][array_keys($data['links'])[0]];
         $this->assertRegExp('/2015-03-10T11:46:51\+\d{2}:\d{2}/', $link['pub_iso_date']);
         $this->assertRegExp('/2016-08-03T09:30:33\+\d{2}:\d{2}/', $data['links'][8]['up_iso_date']);
     }
@@ -173,7 +173,7 @@ class FeedBuilderTest extends \PHPUnit\Framework\TestCase
         $feedBuilder->setLocale(self::$LOCALE);
         $data = $feedBuilder->buildData(FeedBuilder::$FEED_ATOM, $criteria);
         $this->assertEquals(3, count($data['links']));
-        $link = $data['links'][array_keys($data['links'])[2]];
+        $link = $data['links'][array_keys($data['links'])[0]];
         $this->assertEquals(41, $link['id']);
         $this->assertEquals(DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114651'), $link['created']);
     }
@@ -195,7 +195,7 @@ class FeedBuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(ReferenceLinkDB::$NB_LINKS_TOTAL, count($data['links']));
         $this->assertTrue($data['usepermalinks']);
         // First link is a permalink
-        $link = $data['links'][array_keys($data['links'])[2]];
+        $link = $data['links'][array_keys($data['links'])[0]];
         $this->assertEquals(41, $link['id']);
         $this->assertEquals(DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114651'), $link['created']);
         $this->assertEquals('http://host.tld/shaare/WDWyig', $link['guid']);
@@ -203,7 +203,7 @@ class FeedBuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('Direct link', $link['description']);
         $this->assertContains('http://host.tld/shaare/WDWyig', $link['description']);
         // Second link is a direct link
-        $link = $data['links'][array_keys($data['links'])[3]];
+        $link = $data['links'][array_keys($data['links'])[1]];
         $this->assertEquals(8, $link['id']);
         $this->assertEquals(DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114633'), $link['created']);
         $this->assertEquals('http://host.tld/shaare/RttfEw', $link['guid']);
@@ -270,7 +270,7 @@ class FeedBuilderTest extends \PHPUnit\Framework\TestCase
         );
 
         // Test first link (note link)
-        $link = $data['links'][array_keys($data['links'])[2]];
+        $link = $data['links'][array_keys($data['links'])[0]];
         $this->assertEquals('http://host.tld:8080/~user/shaarli/shaare/WDWyig', $link['guid']);
         $this->assertEquals('http://host.tld:8080/~user/shaarli/shaare/WDWyig', $link['url']);
         $this->assertContains('http://host.tld:8080/~user/shaarli/./add-tag/hashtag', $link['description']);
