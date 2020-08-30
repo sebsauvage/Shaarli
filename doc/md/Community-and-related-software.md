@@ -13,8 +13,10 @@ See [REST API](REST-API) for a list of official and community clients.
 ### Third party plugins
 
 - [autosave](https://github.com/kalvn/shaarli-plugin-autosave) by [@kalvn](https://github.com/kalvn): Automatically saves data when editing a Shaare to avoid any loss in case of crash or unexpected shutdown.
-- [code Coloration](https://github.com/ArthurHoaro/code-coloration) by [@ArthurHoaro](https://github.com/ArthurHoaro): client side code syntax highlighter.
+- [code-coloration](https://github.com/ArthurHoaro/code-coloration) by [@ArthurHoaro](https://github.com/ArthurHoaro): client side code syntax highlighter.
+- [custom-css](https://github.com/immanuelfodor/shaarli-custom-css) by [@immanuelfodor](https://github.com/immanuelfodor) - Customize the look and feel of the UI with custom CSS rules
 - [disqus](https://github.com/kalvn/shaarli-plugin-disqus) by [@kalvn](https://github.com/kalvn): Adds Disqus comment system to your Shaarli.
+- [emojione](https://github.com/immanuelfodor/emojione) by [@immanuelfodor](https://github.com/immanuelfodor) - Resurrected fork of the original emojione project
 - [favicons](https://github.com/trailjeep/shaarli-favicons) by [@trailjeep](https://github.com/trailjeep) - Shaarli plugin to add favicon/filetype icons to Shaares.
 - [google analytics](https://github.com/ericjuden/Shaarli-Google-Analytics-Plugin) by [@ericjuden](http://github.com/ericjuden): Adds Google Analytics tracking support
 - [launch](https://github.com/ArthurHoaro/launch-plugin) - Launch Plugin is a plugin designed to enhance and customize Launch Theme for Shaarli.
