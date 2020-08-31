@@ -183,7 +183,6 @@ class SessionManager
             unset($this->session['expires_on']);
             unset($this->session['username']);
             unset($this->session['visibility']);
-            unset($this->session['untaggedonly']);
         }
     }
 
