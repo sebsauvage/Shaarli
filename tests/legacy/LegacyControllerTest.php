@@ -94,6 +94,8 @@ class LegacyControllerTest extends TestCase
             ['opensearch', [], '/open-search', true],
             ['dailyrss', [], '/daily-rss', false],
             ['dailyrss', [], '/daily-rss', true],
+            ['configure', [], '/login?returnurl=/subfolder/admin/configure', false],
+            ['configure', [], '/admin/configure', true],
         ];
     }
 }

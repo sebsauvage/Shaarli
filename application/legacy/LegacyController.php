@@ -132,4 +132,21 @@ class LegacyController extends ShaarliVisitorController
 
         return $this->redirect($response, '/feed/' . $feedType . $parameters);
     }
+
+    /** Legacy route: ?do=configure */
+    protected function configure(Request $request, Response $response): Response
+    {
+        $route = '/admin/configure';
+
+        if (!$this->container->loginManager->isLoggedIn()) {
+            return $this->redirect($response, '/login?returnurl=' . $this->getBasePath() . $route);
+        }
+
+        return $this->redirect($response, $route);
+    }
+
+    protected function getBasePath(): string
+    {
+        return $this->container->basePath ?: '';
+    }
 }
