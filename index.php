@@ -95,7 +95,7 @@ $app->group('', function () {
     $this->get('/add-tag/{newTag}', '\Shaarli\Front\Controller\Visitor\TagController:addTag');
     $this->get('/remove-tag/{tag}', '\Shaarli\Front\Controller\Visitor\TagController:removeTag');
     $this->get('/links-per-page', '\Shaarli\Front\Controller\Visitor\PublicSessionFilterController:linksPerPage');
-    $this->get('/untagged-only', '\Shaarli\Front\Controller\Admin\PublicSessionFilterController:untaggedOnly');
+    $this->get('/untagged-only', '\Shaarli\Front\Controller\Visitor\PublicSessionFilterController:untaggedOnly');
 })->add('\Shaarli\Front\ShaarliMiddleware');
 
 $app->group('/admin', function () {
