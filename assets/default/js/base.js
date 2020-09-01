@@ -25,16 +25,18 @@ function findParent(element, tagName, attributes) {
 /**
  * Ajax request to refresh the CSRF token.
  */
-function refreshToken(basePath) {
-  console.log('refresh');
+function refreshToken(basePath, callback) {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', `${basePath}/admin/token`);
   xhr.onload = () => {
     const elements = document.querySelectorAll('input[name="token"]');
     [...elements].forEach((element) => {
-      console.log(element);
       element.setAttribute('value', xhr.responseText);
     });
+
+    if (callback) {
+      callback(xhr.response);
+    }
   };
   xhr.send();
 }
@@ -622,4 +624,15 @@ function init(description) {
   [...autocompleteFields].forEach((autocompleteField) => {
     awesomepletes.push(createAwesompleteInstance(autocompleteField));
   });
+
+  const exportForm = document.querySelector('#exportform');
+  if (exportForm != null) {
+    exportForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      refreshToken(basePath, () => {
+        event.target.submit();
+      });
+    });
+  }
 })();
