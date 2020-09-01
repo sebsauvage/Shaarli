@@ -66,11 +66,11 @@ class LegacyControllerTest extends TestCase
     {
         return [
             ['post', [], '/admin/shaare', true],
-            ['post', [], '/login', false],
+            ['post', [], '/login?returnurl=/admin/shaare', false],
             ['post', ['title' => 'test'], '/admin/shaare?title=test', true],
-            ['post', ['title' => 'test'], '/login?title=test', false],
+            ['post', ['title' => 'test'], '/login?returnurl=/admin/shaare?title=test', false],
             ['addlink', [], '/admin/add-shaare', true],
-            ['addlink', [], '/login', false],
+            ['addlink', [], '/login?returnurl=/admin/add-shaare', false],
             ['login', [], '/login', true],
             ['login', [], '/login', false],
             ['logout', [], '/admin/logout', true],

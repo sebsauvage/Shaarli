@@ -42,7 +42,7 @@ class LegacyController extends ShaarliVisitorController
         $parameters = count($request->getQueryParams()) > 0 ? '?' . http_build_query($request->getQueryParams()) : '';
 
         if (!$this->container->loginManager->isLoggedIn()) {
-            return $this->redirect($response, '/login' . $parameters);
+            return $this->redirect($response, '/login?returnurl=/admin/shaare' . $parameters);
         }
 
         return $this->redirect($response, '/admin/shaare' . $parameters);
@@ -52,7 +52,7 @@ class LegacyController extends ShaarliVisitorController
     protected function addlink(Request $request, Response $response): Response
     {
         if (!$this->container->loginManager->isLoggedIn()) {
-            return $this->redirect($response, '/login');
+            return $this->redirect($response, '/login?returnurl=/admin/add-shaare');
         }
 
         return $this->redirect($response, '/admin/add-shaare');
@@ -61,7 +61,9 @@ class LegacyController extends ShaarliVisitorController
     /** Legacy route: ?do=login */
     protected function login(Request $request, Response $response): Response
     {
-        return $this->redirect($response, '/login');
+        $returnurl = $request->getQueryParam('returnurl');
+
+        return $this->redirect($response, '/login' . ($returnurl ? '?returnurl=' . $returnurl : ''));
     }
 
     /** Legacy route: ?do=logout */
