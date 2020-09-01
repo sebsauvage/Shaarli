@@ -78,16 +78,14 @@ abstract class ShaarliVisitorController
             'footer',
         ];
 
+        $parameters = $this->buildPluginParameters($template);
+
         foreach ($common_hooks as $name) {
             $pluginData = [];
             $this->container->pluginManager->executeHooks(
                 'render_' . $name,
                 $pluginData,
-                [
-                    'target' => $template,
-                    'loggedin' => $this->container->loginManager->isLoggedIn(),
-                    'basePath' => $this->container->basePath,
-                ]
+                $parameters
             );
             $this->assignView('plugins_' . $name, $pluginData);
         }
@@ -95,17 +93,21 @@ abstract class ShaarliVisitorController
 
     protected function executePageHooks(string $hook, array &$data, string $template = null): void
     {
-        $params = [
-            'target' => $template,
-            'loggedin' => $this->container->loginManager->isLoggedIn(),
-            'basePath' => $this->container->basePath,
-        ];
-
         $this->container->pluginManager->executeHooks(
             $hook,
             $data,
-            $params
+            $this->buildPluginParameters($template)
         );
+    }
+
+    protected function buildPluginParameters(?string $template): array
+    {
+        return [
+            'target' => $template,
+            'loggedin' => $this->container->loginManager->isLoggedIn(),
+            'basePath' => $this->container->basePath,
+            'bookmarkService' => $this->container->bookmarkService
+        ];
     }
 
     /**

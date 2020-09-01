@@ -73,6 +73,26 @@ Every hook function has a `$data` parameter. Its content differs for each hooks.
 
     return $data;
 
+#### Special data
+
+Special additional data are passed to every hook through the
+`$data` parameter to give you access to additional context, and services.
+
+Complete list:
+
+  * `_PAGE_` (string): if the current hook is used to render a template, its name is passed through this additional parameter.
+  * `_LOGGEDIN_` (bool): whether the user is logged in or not.
+  * `_BASE_PATH_` (string): if Shaarli instance is hosted under a subfolder, contains the subfolder path to `index.php` (e.g. `https://domain.tld/shaarli/` -> `/shaarli/`).
+  * `_BOOKMARK_SERVICE_` (`BookmarkServiceInterface`): bookmark service instance, for advanced usage.
+
+Example:
+
+```php
+if ($data['_PAGE_'] === TemplatePage::LINKLIST && $data['LOGGEDIN'] === true) {
+    // Do something for logged in users when the link list is rendered
+}
+```
+
 #### Filling templates placeholder
 
 Template placeholders are displayed in template in specific places.
@@ -95,7 +115,7 @@ When a page is displayed, every variable send to the template engine is passed t
 
 The data contained by this array can be altered before template rendering.
 
-For exemple, in linklist, it is possible to alter every title:
+For example, in linklist, it is possible to alter every title:
 
 ```php
 // mind the reference if you want $data to be altered
@@ -156,8 +176,7 @@ Allow plugin to add content in page headers.
 
 `$data` is an array containing:
 
-- `_PAGE_`: current target page (eg: `linklist`, `picwall`, etc.).
-- `_LOGGEDIN_`: true if user is logged in, false otherwise.
+  - [Special data](#special-data)
 
 ##### Template placeholders
 
@@ -185,8 +204,7 @@ Allow plugin to include their own CSS files.
 
 `$data` is an array containing:
 
-- `_PAGE_`: current target page (eg: `linklist`, `picwall`, etc.).
-- `_LOGGEDIN_`: true if user is logged in, false otherwise.
+  - [Special data](#special-data)
 
 ##### Template placeholders
 
@@ -208,8 +226,7 @@ Allow plugin to add content in page footer and include their own JS files.
 
 `$data` is an array containing:
 
-- `_PAGE_`: current target page (eg: `linklist`, `picwall`, etc.).
-- `_LOGGEDIN_`: true if user is logged in, false otherwise.
+  - [Special data](#special-data)
 
 ##### Template placeholders
 
@@ -236,8 +253,8 @@ It allows to add content at the begining and end of the page, after every link d
 
 `$data` is an array containing:
 
-- `_LOGGEDIN_`: true if user is logged in, false otherwise.
-- All templates data, including links.
+  - All templates data, including links.
+  - [Special data](#special-data)
 
 ##### Template placeholders
 
@@ -271,7 +288,8 @@ Allow to add fields in the form, or display elements.
 
 `$data` is an array containing:
 
-- All templates data.
+  - All templates data.
+  - [Special data](#special-data)
 
 ##### Template placeholders
 
@@ -293,7 +311,8 @@ Allow to add content at the end of the page.
 
 `$data` is an array containing:
 
-- All templates data.
+  - All templates data.
+  - [Special data](#special-data)
 
 ##### Template placeholders
 
@@ -315,8 +334,8 @@ Allow to add content at the top and bottom of the page.
 
 `$data` is an array containing:
 
-- `_LOGGEDIN_`: true if user is logged in, false otherwise.
-- All templates data.
+  - All templates data.
+  - [Special data](#special-data)
 
 ##### Template placeholders
 
@@ -339,8 +358,8 @@ Allow to add content at the top and bottom of the page.
 
 `$data` is an array containing:
 
-- `_LOGGEDIN_`: true if user is logged in, false otherwise.
-- All templates data.
+  - All templates data.
+  - [Special data](#special-data)
 
 ##### Template placeholders
 
@@ -368,8 +387,8 @@ Allow to add content at the top and bottom of the page.
 
 `$data` is an array containing:
 
-- `_LOGGEDIN_`: true if user is logged in, false otherwise.
-- All templates data.
+  - All templates data.
+  - [Special data](#special-data)
 
 ##### Template placeholders
 
@@ -394,8 +413,8 @@ Allow to add content at the top and bottom of the page, the bottom of each link 
 
 `$data` is an array containing:
 
-- `_LOGGEDIN_`: true if user is logged in, false otherwise.
-- All templates data, including links.
+  - All templates data, including links.
+  - [Special data](#special-data)
 
 ##### Template placeholders
 
@@ -420,9 +439,8 @@ Allow to add tags in the feed, either in the header or for each items. Items (li
 
 `$data` is an array containing:
 
-- `_LOGGEDIN_`: true if user is logged in, false otherwise.
-- `_PAGE_`: containing either `rss` or `atom`.
-- All templates data, including links.
+  - All templates data, including links.
+  - [Special data](#special-data)
 
 ##### Template placeholders
 
@@ -456,6 +474,8 @@ Allow to alter the link being saved in the datastore.
 - created
 - updated
 
+Also [special data](#special-data).
+
 
 #### delete_link
 
@@ -465,7 +485,7 @@ Allow to execute any action before the link is actually removed from the datasto
 
 ##### Data
 
-`$data` is an array containing the link being saved:
+`$data` is an array containing the link being deleted:
 
 - id
 - title
@@ -477,6 +497,7 @@ Allow to execute any action before the link is actually removed from the datasto
 - created
 - updated
 
+Also [special data](#special-data).
 
 #### save_plugin_parameters
 
@@ -492,6 +513,7 @@ For example it is used to update the CSS file of the `default_colors` plugins.
 So if the plugin has a parameter called `MYPLUGIN_PARAMETER`,
 the array will contain an entry with `MYPLUGIN_PARAMETER` as a key.
 
+Also [special data](#special-data).
 
 ## Guide for template designer
 

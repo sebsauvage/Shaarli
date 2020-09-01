@@ -112,6 +112,10 @@ class PluginManager
             $data['_BASE_PATH_'] = $params['basePath'];
         }
 
+        if (isset($params['bookmarkService'])) {
+            $data['_BOOKMARK_SERVICE_'] = $params['bookmarkService'];
+        }
+
         foreach ($this->loadedPlugins as $plugin) {
             $hookFunction = $this->buildHookName($hook, $plugin);
 
