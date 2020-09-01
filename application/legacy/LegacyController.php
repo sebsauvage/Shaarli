@@ -40,30 +40,33 @@ class LegacyController extends ShaarliVisitorController
     public function post(Request $request, Response $response): Response
     {
         $parameters = count($request->getQueryParams()) > 0 ? '?' . http_build_query($request->getQueryParams()) : '';
+        $route = '/admin/shaare';
 
         if (!$this->container->loginManager->isLoggedIn()) {
-            return $this->redirect($response, '/login?returnurl=/admin/shaare' . $parameters);
+            return $this->redirect($response, '/login?returnurl='. $this->getBasePath() . $route . $parameters);
         }
 
-        return $this->redirect($response, '/admin/shaare' . $parameters);
+        return $this->redirect($response, $route . $parameters);
     }
 
     /** Legacy route: ?addlink= */
     protected function addlink(Request $request, Response $response): Response
     {
+        $route = '/admin/add-shaare';
+
         if (!$this->container->loginManager->isLoggedIn()) {
-            return $this->redirect($response, '/login?returnurl=/admin/add-shaare');
+            return $this->redirect($response, '/login?returnurl=' . $this->getBasePath() . $route);
         }
 
-        return $this->redirect($response, '/admin/add-shaare');
+        return $this->redirect($response, $route);
     }
 
     /** Legacy route: ?do=login */
     protected function login(Request $request, Response $response): Response
     {
-        $returnurl = $request->getQueryParam('returnurl');
+        $returnUrl = $request->getQueryParam('returnurl');
 
-        return $this->redirect($response, '/login' . ($returnurl ? '?returnurl=' . $returnurl : ''));
+        return $this->redirect($response, '/login' . ($returnUrl ? '?returnurl=' . $returnUrl : ''));
     }
 
     /** Legacy route: ?do=logout */
