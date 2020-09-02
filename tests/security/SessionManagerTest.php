@@ -207,15 +207,16 @@ class SessionManagerTest extends TestCase
             'expires_on' => time() + 1000,
             'username' => 'johndoe',
             'visibility' => 'public',
-            'untaggedonly' => false,
+            'untaggedonly' => true,
         ];
         $this->sessionManager->logout();
 
-        $this->assertFalse(isset($this->session['ip']));
-        $this->assertFalse(isset($this->session['expires_on']));
-        $this->assertFalse(isset($this->session['username']));
-        $this->assertFalse(isset($this->session['visibility']));
-        $this->assertFalse(isset($this->session['untaggedonly']));
+        $this->assertArrayNotHasKey('ip', $this->session);
+        $this->assertArrayNotHasKey('expires_on', $this->session);
+        $this->assertArrayNotHasKey('username', $this->session);
+        $this->assertArrayNotHasKey('visibility', $this->session);
+        $this->assertArrayHasKey('untaggedonly', $this->session);
+        $this->assertTrue($this->session['untaggedonly']);
     }
 
     /**
