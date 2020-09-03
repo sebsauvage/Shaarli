@@ -46,10 +46,10 @@ class FeedController extends ShaarliVisitorController
 
         $data = $this->container->feedBuilder->buildData($feedType, $request->getParams());
 
-        $this->executePageHooks('render_feed', $data, $feedType);
+        $this->executePageHooks('render_feed', $data, 'feed.' . $feedType);
         $this->assignAllView($data);
 
-        $content = $this->render('feed.'. $feedType);
+        $content = $this->render('feed.' . $feedType);
 
         $cache->cache($content);
 

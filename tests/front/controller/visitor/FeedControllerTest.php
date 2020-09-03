@@ -52,7 +52,7 @@ class FeedControllerTest extends TestCase
                 static::assertSame('data', $data['content']);
 
                 static::assertArrayHasKey('loggedin', $param);
-                static::assertSame('rss', $param['target']);
+                static::assertSame('feed.rss', $param['target']);
             })
         ;
 
@@ -91,7 +91,7 @@ class FeedControllerTest extends TestCase
                 static::assertSame('data', $data['content']);
 
                 static::assertArrayHasKey('loggedin', $param);
-                static::assertSame('atom', $param['target']);
+                static::assertSame('feed.atom', $param['target']);
             })
         ;
 
@@ -131,7 +131,7 @@ class FeedControllerTest extends TestCase
                 static::assertSame('data', $data['content']);
 
                 static::assertArrayHasKey('loggedin', $param);
-                static::assertSame('atom', $param['target']);
+                static::assertSame('feed.atom', $param['target']);
             })
         ;
 
