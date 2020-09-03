@@ -114,8 +114,13 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function search($request = [], $visibility = null, $caseSensitive = false, $untaggedOnly = false)
-    {
+    public function search(
+        $request = [],
+        $visibility = null,
+        $caseSensitive = false,
+        $untaggedOnly = false,
+        bool $ignoreSticky = false
+    ) {
         if ($visibility === null) {
             $visibility = $this->isLoggedIn ? BookmarkFilter::$ALL : BookmarkFilter::$PUBLIC;
         }
@@ -123,6 +128,10 @@ class BookmarkFileService implements BookmarkServiceInterface
         // Filter bookmark database according to parameters.
         $searchtags = isset($request['searchtags']) ? $request['searchtags'] : '';
         $searchterm = isset($request['searchterm']) ? $request['searchterm'] : '';
+
+        if ($ignoreSticky) {
+            $this->bookmarks->reorder('DESC', true);
+        }
 
         return $this->bookmarkFilter->filter(
             BookmarkFilter::$FILTER_TAG | BookmarkFilter::$FILTER_TEXT,

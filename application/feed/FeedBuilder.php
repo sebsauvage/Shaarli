@@ -102,7 +102,7 @@ class FeedBuilder
         }
 
         // Optionally filter the results:
-        $linksToDisplay = $this->linkDB->search($userInput);
+        $linksToDisplay = $this->linkDB->search($userInput, null, false, false, true);
 
         $nblinksToDisplay = $this->getNbLinks(count($linksToDisplay), $userInput);
 

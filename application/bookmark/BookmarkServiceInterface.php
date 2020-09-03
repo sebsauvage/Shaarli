@@ -49,10 +49,17 @@ interface BookmarkServiceInterface
      * @param string $visibility
      * @param bool   $caseSensitive
      * @param bool   $untaggedOnly
+     * @param bool   $ignoreSticky
      *
      * @return Bookmark[]
      */
-    public function search($request = [], $visibility = null, $caseSensitive = false, $untaggedOnly = false);
+    public function search(
+        $request = [],
+        $visibility = null,
+        $caseSensitive = false,
+        $untaggedOnly = false,
+        bool $ignoreSticky = false
+    );
 
     /**
      * Get a single bookmark by its ID.
