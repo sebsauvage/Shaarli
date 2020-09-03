@@ -149,6 +149,8 @@ class PageBuilder
 
         $this->tpl->assign('formatter', $this->conf->get('formatter', 'default'));
 
+        $this->tpl->assign('links_per_page', $this->session['LINKS_PER_PAGE']);
+
         // To be removed with a proper theme configuration.
         $this->tpl->assign('conf', $this->conf);
     }

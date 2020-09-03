@@ -616,6 +616,11 @@ body,
     padding: 5px;
     text-decoration: none;
     color: $dark-grey;
+
+    &.selected {
+      background: var(--main-color);
+      color: $white;
+     }
   }
 
   input {
