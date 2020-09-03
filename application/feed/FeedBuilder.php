@@ -122,9 +122,9 @@ class FeedBuilder
         $data['language'] = $this->getTypeLanguage($feedType);
         $data['last_update'] = $this->getLatestDateFormatted($feedType);
         $data['show_dates'] = !$this->hideDates || $this->isLoggedIn;
-        // Remove leading slash from REQUEST_URI.
-        $data['self_link'] = escape(server_url($this->serverInfo))
-            . escape($this->serverInfo['REQUEST_URI']);
+        // Remove leading path from REQUEST_URI (already contained in $pageaddr).
+        $requestUri = preg_replace('#(.*?/)(feed.*)#', '$2', escape($this->serverInfo['REQUEST_URI']));
+        $data['self_link'] = $pageaddr . $requestUri;
         $data['index_url'] = $pageaddr;
         $data['usepermalinks'] = $this->usePermalinks === true;
         $data['links'] = $linkDisplayed;

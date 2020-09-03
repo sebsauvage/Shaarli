@@ -35,6 +35,9 @@ use Slim\App;
 
 $conf = new ConfigManager();
 
+// Manually override root URL for complex server configurations
+define('SHAARLI_ROOT_URL', $conf->get('general.root_url', null));
+
 // In dev mode, throw exception on any warning
 if ($conf->get('dev.debug', false)) {
     // See all errors (for debugging only)

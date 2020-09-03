@@ -369,7 +369,11 @@ function server_url($server)
  */
 function index_url($server)
 {
-    $scriptname = $server['SCRIPT_NAME'] ?? '';
+    if (defined('SHAARLI_ROOT_URL') && null !== SHAARLI_ROOT_URL) {
+        return rtrim(SHAARLI_ROOT_URL, '/') . '/';
+    }
+
+    $scriptname = !empty($server['SCRIPT_NAME']) ? $server['SCRIPT_NAME'] : '/';
     if (endsWith($scriptname, 'index.php')) {
         $scriptname = substr($scriptname, 0, -9);
     }
@@ -392,7 +396,7 @@ function page_url($server)
         $scriptname = substr($scriptname, 0, -9);
     }
 
-    $route = ltrim($server['REQUEST_URI'] ?? '', $scriptname);
+    $route = preg_replace('@^' . $scriptname . '@', '', $server['REQUEST_URI'] ?? '');
     if (! empty($server['QUERY_STRING'])) {
         return index_url($server) . $route . '?' . $server['QUERY_STRING'];
     }
