@@ -4,33 +4,45 @@
 
 ## Install Docker
 
-Install [Docker](https://www.docker.com/), by following the instructions relevant to your OS / distribution, and start the service. For example on [Debian](https://docs.docker.com/engine/install/debian/):
+Install [Docker](https://docs.docker.com/engine/install/), by following the instructions relevant to your OS / distribution, and start the service. For example on [Debian](https://docs.docker.com/engine/install/debian/):
 
 ```bash
 # update your package lists
-$ sudo apt update
+sudo apt update
 # remove old versions
-$ sudo apt-get remove docker docker-engine docker.io containerd runc
+sudo apt-get remove docker docker-engine docker.io containerd runc
 # install requirements
-$ sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
 # add docker's GPG signing key
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
 # add the repository
-$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
 # install docker engine
-$ sudo apt-get update
-$ sudo apt-get install docker-ce docker-ce-cli containerd.io
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+# Start and enable Docker service
+sudo systemctl enable docker && sudo systemctl start docker
 # verify that Docker is properly configured
-root@stretch-shaarli-02:~$ docker run hello-world
+sudo docker run hello-world
 ```
 
+In order to run Docker commands as a non-root user, you must add the `docker` group to this user:
+
+```bash
+# Add docker group as secondary group
+sudo usermod -aG docker your-user
+# Reboot or logout
+# Then verify that Docker is properly configured, as "your-user"
+docker run hello-world
+```
 
 ## Get and run a Shaarli image
 
-Shaarli images are available on [DockerHub](https://hub.docker.com/r/shaarli/shaarli/):
+Shaarli images are available on [DockerHub](https://hub.docker.com/r/shaarli/shaarli/) `shaarli/shaarli`:
 
-- `latest`: latest branch
-- `master`: master branch
+- `latest`: latest branch (last release)
+- `stable`: stable branch (last release in previous major version)
+- `master`: master branch (development branch)
 
 These images are built automatically on DockerHub and rely on:
 
@@ -39,6 +51,8 @@ These images are built automatically on DockerHub and rely on:
 - [Nginx](http://nginx.org/)
 
 Additional Dockerfiles are provided for the `arm32v7` platform, relying on [Linuxserver.io Alpine armhf images](https://hub.docker.com/r/lsiobase/alpine.armhf/). These images must be built using [`docker build`](https://docs.docker.com/engine/reference/commandline/build/) on an `arm32v7` machine or using an emulator such as [qemu](https://resin.io/blog/building-arm-containers-on-any-x86-machine-even-dockerhub/).
+
+Here is an example of how to run Shaarli latest image using Docker:
 
 ```bash
 # download the 'latest' image from dockerhub
@@ -60,7 +74,7 @@ docker run --detach \
            --rm \
            --volume shaarli-data:/var/www/shaarli/data \
            --volume shaarli-cache:/var/www/shaarli/cache \
-           shaarli/shaarli
+           shaarli/shaarli:latest
 
 # verify that the container is running
 docker ps | grep myshaarli
@@ -74,23 +88,30 @@ docker ps -a | grep myshaarli # verify th container has been destroyed
 
 ```
 
+After running `docker run` command, your Shaarli instance should be available on the host machine at [localhost:8000](http://localhost:8000). In order to access your instance through a reverse proxy, we recommend using our [Docker Compose](#docker-compose) build.
+
 ## Docker Compose
 
 A [Compose file](https://docs.docker.com/compose/compose-file/) is a common format for defining and running multi-container Docker applications.
 
 A `docker-compose.yml` file can be used to run a persistent/autostarted shaarli service using [Docker Compose](https://docs.docker.com/compose/) or in a [Docker stack](https://docs.docker.com/engine/reference/commandline/stack_deploy/).
 
-Shaarli provides configuration file for Docker Compose, that will setup a Shaarli instance, a [Træfik](https://hub.docker.com/_/traefik/) instance with [Let's Encrypt](https://letsencrypt.org/) certificates, a Docker network, and volumes for Shaarli data and Træfik TLS configuration and certificates.
+Shaarli provides configuration file for Docker Compose, that will setup a Shaarli instance, a [Træfik](https://containo.us/traefik/) instance (reverse proxy) with [Let's Encrypt](https://letsencrypt.org/) certificates, a Docker network, and volumes for Shaarli data and Træfik TLS configuration and certificates.
 
 Download docker-compose from the [release page](https://docs.docker.com/compose/install/):
 
 ```bash
 $ sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 $ sudo chmod +x /usr/local/bin/docker-compose
+```
+
+To run Shaarli container and its reverse proxy, you can execute the following commands:
+
+```bash
 # create a new directory to store the configuration:
 $ mkdir shaarli && cd shaarli
-# Download the current version of Shaarli's docker-compose.yml
-$ curl -L https://raw.githubusercontent.com/shaarli/Shaarli/master/docker-compose.yml -o docker-compose.yml
+# Download the latest version of Shaarli's docker-compose.yml
+$ curl -L https://raw.githubusercontent.com/shaarli/Shaarli/latest/docker-compose.yml -o docker-compose.yml
 # Create the .env file and fill in your VPS and domain information
 # (replace <MY_SHAARLI_DOMAIN> and <MY_CONTACT_EMAIL> with your actual information)
 $ echo 'SHAARLI_VIRTUAL_HOST=shaarli.mydomain.org' > .env
@@ -101,9 +122,9 @@ $ docker-compose pull
 $ docker-compose up -d
 ```
 
+After a few seconds, you should be able to access your Shaarli instance at [https://shaarli.mydomain.org](https://shaarli.mydomain.org) (replace your own domain name).
 
-
-### Running dockerized Shaarli as a systemd service
+## Running dockerized Shaarli as a systemd service
 
 It is possible to start a dockerized Shaarli instance as a systemd service (systemd is the service management tool on several distributions). After installing Docker, use the following steps to run your shaarli container Shaarli to run on system start.
 
@@ -154,9 +175,9 @@ journalctl -f
 
 ```bash
 # pull/update an image
-$ docker pull shaarli:release
+$ docker pull shaarli/shaarli:release
 # run a container from an image
-$ docker run shaarli:latest
+$ docker run shaarli/shaarli:latest
 # list available images
 $ docker images ls
 # list running containers
