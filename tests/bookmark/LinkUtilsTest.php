@@ -81,7 +81,77 @@ class LinkUtilsTest extends TestCase
     public function testHtmlExtractExistentNameTag()
     {
         $description = 'Bob and Alice share cookies.';
+
+        // Simple one line
         $html = '<html><meta>stuff2</meta><meta name="description" content="' . $description . '"/></html>';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // Simple OpenGraph
+        $html = '<meta property="og:description" content="' . $description . '">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // Simple reversed OpenGraph
+        $html = '<meta content="' . $description . '" property="og:description">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // ItemProp OpenGraph
+        $html = '<meta itemprop="og:description" content="' . $description . '">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // OpenGraph without quotes
+        $html = '<meta property=og:description content="' . $description . '">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // OpenGraph reversed without quotes
+        $html = '<meta content="' . $description . '" property=og:description>';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // OpenGraph with noise
+        $html = '<meta tag1="content1" property="og:description" tag2="content2" content="' .
+            $description . '" tag3="content3">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // OpenGraph reversed with noise
+        $html = '<meta tag1="content1" content="' . $description . '" ' .
+            'tag3="content3" tag2="content2" property="og:description">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // OpenGraph multiple properties start
+        $html = '<meta property="unrelated og:description" content="' . $description . '">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // OpenGraph multiple properties end
+        $html = '<meta property="og:description unrelated" content="' . $description . '">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // OpenGraph multiple properties both end
+        $html = '<meta property="og:unrelated1 og:description og:unrelated2" content="' . $description . '">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // OpenGraph multiple properties both end with noise
+        $html = '<meta tag1="content1" property="og:unrelated1 og:description og:unrelated2" '.
+            'tag2="content2" content="' . $description . '" tag3="content3">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // OpenGraph reversed multiple properties start
+        $html = '<meta content="' . $description . '" property="unrelated og:description">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // OpenGraph reversed multiple properties end
+        $html = '<meta content="' . $description . '" property="og:description unrelated">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // OpenGraph reversed multiple properties both end
+        $html = '<meta content="' . $description . '" property="og:unrelated1 og:description og:unrelated2">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // OpenGraph reversed multiple properties both end with noise
+        $html = '<meta tag1="content1" content="' . $description . '" tag2="content2" '.
+            'property="og:unrelated1 og:description og:unrelated2" tag3="content3">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        // Suggestion from #1375
+        $html = '<meta property="og:description" name="description" content="' . $description . '">';
         $this->assertEquals($description, html_extract_tag('description', $html));
     }
 
@@ -91,6 +161,25 @@ class LinkUtilsTest extends TestCase
     public function testHtmlExtractNonExistentNameTag()
     {
         $html = '<html><meta>stuff2</meta><meta name="image" content="img"/></html>';
+        $this->assertFalse(html_extract_tag('description', $html));
+
+        // Partial meta tag
+        $html = '<meta content="Brief description">';
+        $this->assertFalse(html_extract_tag('description', $html));
+
+        $html = '<meta property="og:description">';
+        $this->assertFalse(html_extract_tag('description', $html));
+
+        $html = '<meta tag1="content1" property="og:description">';
+        $this->assertFalse(html_extract_tag('description', $html));
+
+        $html = '<meta property="og:description" tag1="content1">';
+        $this->assertFalse(html_extract_tag('description', $html));
+
+        $html = '<meta tag1="content1" content="Brief description">';
+        $this->assertFalse(html_extract_tag('description', $html));
+
+        $html = '<meta content="Brief description" tag1="content1">';
         $this->assertFalse(html_extract_tag('description', $html));
     }
 
