@@ -39,12 +39,22 @@ class LegacyController extends ShaarliVisitorController
     /** Legacy route: ?post= */
     public function post(Request $request, Response $response): Response
     {
-        $parameters = count($request->getQueryParams()) > 0 ? '?' . http_build_query($request->getQueryParams()) : '';
         $route = '/admin/shaare';
+        $buildParameters = function (?array $parameters, bool $encode) {
+            if ($encode) {
+                $parameters = array_map('urlencode', $parameters);
+            }
+
+            return count($parameters) > 0 ? '?' . http_build_query($parameters) : '';
+        };
+
 
         if (!$this->container->loginManager->isLoggedIn()) {
+            $parameters = $buildParameters($request->getQueryParams(), true);
             return $this->redirect($response, '/login?returnurl='. $this->getBasePath() . $route . $parameters);
         }
+
+        $parameters = $buildParameters($request->getQueryParams(), false);
 
         return $this->redirect($response, $route . $parameters);
     }
