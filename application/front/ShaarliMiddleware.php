@@ -94,7 +94,7 @@ class ShaarliMiddleware
             && $this->container->conf->get('privacy.force_login')
             // and the current page isn't already the login page
             // and the user is not requesting a feed (which would lead to a different content-type as expected)
-            && !in_array($next->getName(), ['login', 'atom', 'rss'], true)
+            && !in_array($next->getName(), ['login', 'processLogin', 'atom', 'rss'], true)
         ) {
             throw new UnauthorizedException();
         }
