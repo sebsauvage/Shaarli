@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class ToolsControllerTestControllerTest extends TestCase
+class ToolsControllerTest extends TestCase
 {
     use FrontAdminControllerMockHelper;
 
@@ -41,7 +41,7 @@ class ToolsControllerTestControllerTest extends TestCase
 
         static::assertSame(200, $result->getStatusCode());
         static::assertSame('tools', (string) $result->getBody());
-        static::assertSame('https://shaarli', $assignedVariables['pageabsaddr']);
+        static::assertSame('https://shaarli/', $assignedVariables['pageabsaddr']);
         static::assertTrue($assignedVariables['sslenabled']);
     }
 
@@ -63,7 +63,7 @@ class ToolsControllerTestControllerTest extends TestCase
 
         static::assertSame(200, $result->getStatusCode());
         static::assertSame('tools', (string) $result->getBody());
-        static::assertSame('http://shaarli', $assignedVariables['pageabsaddr']);
+        static::assertSame('http://shaarli/', $assignedVariables['pageabsaddr']);
         static::assertFalse($assignedVariables['sslenabled']);
     }
 }

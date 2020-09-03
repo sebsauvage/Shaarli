@@ -3,6 +3,7 @@
 namespace Shaarli\Feed;
 
 use DateTime;
+use PHPUnit\Framework\TestCase;
 use ReferenceLinkDB;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\BookmarkFileService;
@@ -16,7 +17,7 @@ use Shaarli\History;
  *
  * Unit tests for FeedBuilder.
  */
-class FeedBuilderTest extends \PHPUnit\Framework\TestCase
+class FeedBuilderTest extends TestCase
 {
     /**
      * @var string locale Basque (Spain).
@@ -44,7 +45,7 @@ class FeedBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * Called before every test method.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $conf = new ConfigManager('tests/utils/config/configJson');
         $conf->set('resource.datastore', self::$testDatastore);
@@ -60,7 +61,7 @@ class FeedBuilderTest extends \PHPUnit\Framework\TestCase
             'SERVER_NAME' => 'host.tld',
             'SERVER_PORT' => '80',
             'SCRIPT_NAME' => '/index.php',
-            'REQUEST_URI' => '/index.php?do=feed',
+            'REQUEST_URI' => '/feed/atom',
         );
     }
 
@@ -81,7 +82,7 @@ class FeedBuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(self::$RSS_LANGUAGE, $data['language']);
         $this->assertRegExp('/Wed, 03 Aug 2016 09:30:33 \+\d{4}/', $data['last_update']);
         $this->assertEquals(true, $data['show_dates']);
-        $this->assertEquals('http://host.tld/index.php?do=feed', $data['self_link']);
+        $this->assertEquals('http://host.tld/feed/atom', $data['self_link']);
         $this->assertEquals('http://host.tld/', $data['index_url']);
         $this->assertFalse($data['usepermalinks']);
         $this->assertEquals(ReferenceLinkDB::$NB_LINKS_TOTAL, count($data['links']));
@@ -253,7 +254,7 @@ class FeedBuilderTest extends \PHPUnit\Framework\TestCase
             'SERVER_NAME' => 'host.tld',
             'SERVER_PORT' => '8080',
             'SCRIPT_NAME' => '/~user/shaarli/index.php',
-            'REQUEST_URI' => '/~user/shaarli/index.php?do=feed',
+            'REQUEST_URI' => '/~user/shaarli/feed/atom',
         );
         $feedBuilder = new FeedBuilder(
             self::$bookmarkService,
@@ -265,7 +266,7 @@ class FeedBuilderTest extends \PHPUnit\Framework\TestCase
         $data = $feedBuilder->buildData(FeedBuilder::$FEED_ATOM, null);
 
         $this->assertEquals(
-            'http://host.tld:8080/~user/shaarli/index.php?do=feed',
+            'http://host.tld:8080/~user/shaarli/feed/atom',
             $data['self_link']
         );
 

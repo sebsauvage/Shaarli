@@ -392,8 +392,8 @@ class DailyControllerTest extends TestCase
         static::assertStringContainsString('application/rss', $result->getHeader('Content-Type')[0]);
         static::assertSame('dailyrss', (string) $result->getBody());
         static::assertSame('Shaarli', $assignedVariables['title']);
-        static::assertSame('http://shaarli', $assignedVariables['index_url']);
-        static::assertSame('http://shaarli/daily-rss', $assignedVariables['page_url']);
+        static::assertSame('http://shaarli/subfolder/', $assignedVariables['index_url']);
+        static::assertSame('http://shaarli/subfolder/daily-rss', $assignedVariables['page_url']);
         static::assertFalse($assignedVariables['hide_timestamps']);
         static::assertCount(2, $assignedVariables['days']);
 
@@ -402,7 +402,7 @@ class DailyControllerTest extends TestCase
         static::assertEquals($dates[0], $day['date']);
         static::assertSame($dates[0]->format(\DateTime::RSS), $day['date_rss']);
         static::assertSame(format_date($dates[0], false), $day['date_human']);
-        static::assertSame('http://shaarli/daily?day='. $dates[0]->format('Ymd'), $day['absolute_url']);
+        static::assertSame('http://shaarli/subfolder/daily?day='. $dates[0]->format('Ymd'), $day['absolute_url']);
         static::assertCount(1, $day['links']);
         static::assertSame(1, $day['links'][0]['id']);
         static::assertSame('http://domain.tld/1', $day['links'][0]['url']);
@@ -413,7 +413,7 @@ class DailyControllerTest extends TestCase
         static::assertEquals($dates[1], $day['date']);
         static::assertSame($dates[1]->format(\DateTime::RSS), $day['date_rss']);
         static::assertSame(format_date($dates[1], false), $day['date_human']);
-        static::assertSame('http://shaarli/daily?day='. $dates[1]->format('Ymd'), $day['absolute_url']);
+        static::assertSame('http://shaarli/subfolder/daily?day='. $dates[1]->format('Ymd'), $day['absolute_url']);
         static::assertCount(2, $day['links']);
 
         static::assertSame(2, $day['links'][0]['id']);
@@ -468,8 +468,8 @@ class DailyControllerTest extends TestCase
         static::assertStringContainsString('application/rss', $result->getHeader('Content-Type')[0]);
         static::assertSame('dailyrss', (string) $result->getBody());
         static::assertSame('Shaarli', $assignedVariables['title']);
-        static::assertSame('http://shaarli', $assignedVariables['index_url']);
-        static::assertSame('http://shaarli/daily-rss', $assignedVariables['page_url']);
+        static::assertSame('http://shaarli/subfolder/', $assignedVariables['index_url']);
+        static::assertSame('http://shaarli/subfolder/daily-rss', $assignedVariables['page_url']);
         static::assertFalse($assignedVariables['hide_timestamps']);
         static::assertCount(0, $assignedVariables['days']);
     }

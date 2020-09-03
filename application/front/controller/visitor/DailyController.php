@@ -132,7 +132,7 @@ class DailyController extends ShaarliVisitorController
                 'date' => $dayDatetime,
                 'date_rss' => $dayDatetime->format(DateTime::RSS),
                 'date_human' => format_date($dayDatetime, false, true),
-                'absolute_url' => $indexUrl . '/daily?day=' . $day,
+                'absolute_url' => $indexUrl . 'daily?day=' . $day,
                 'links' => [],
             ];
 

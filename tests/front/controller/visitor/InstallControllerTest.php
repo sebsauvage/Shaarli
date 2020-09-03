@@ -257,6 +257,39 @@ class InstallControllerTest extends TestCase
         static::assertSame('/subfolder/login', $result->getHeader('location')[0]);
 
         static::assertSame('UTC', $confSettings['general.timezone']);
-        static::assertSame('Shared bookmarks on http://shaarli', $confSettings['general.title']);
+        static::assertSame('Shared bookmarks on http://shaarli/subfolder/', $confSettings['general.title']);
+    }
+
+    /**
+     * Same test  as testSaveInstallDefaultValues() but for an instance install in root directory.
+     */
+    public function testSaveInstallDefaultValuesWithoutSubfolder(): void
+    {
+        $confSettings = [];
+
+        $this->container->environment = [
+            'SERVER_NAME' => 'shaarli',
+            'SERVER_PORT' => '80',
+            'REQUEST_URI' => '/install',
+            'REMOTE_ADDR' => '1.2.3.4',
+            'SCRIPT_NAME' => '/index.php',
+        ];
+
+        $this->container->basePath = '';
+
+        $request = $this->createMock(Request::class);
+        $response = new Response();
+
+        $this->container->conf->method('set')->willReturnCallback(function (string $key, $value) use (&$confSettings) {
+            $confSettings[$key] = $value;
+        });
+
+        $result = $this->controller->save($request, $response);
+
+        static::assertSame(302, $result->getStatusCode());
+        static::assertSame('/login', $result->getHeader('location')[0]);
+
+        static::assertSame('UTC', $confSettings['general.timezone']);
+        static::assertSame('Shared bookmarks on http://shaarli/', $confSettings['general.title']);
     }
 }

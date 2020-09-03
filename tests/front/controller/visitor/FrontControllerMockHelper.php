@@ -79,8 +79,9 @@ trait FrontControllerMockHelper
         $this->container->environment = [
             'SERVER_NAME' => 'shaarli',
             'SERVER_PORT' => '80',
-            'REQUEST_URI' => '/daily-rss',
+            'REQUEST_URI' => '/subfolder/daily-rss',
             'REMOTE_ADDR' => '1.2.3.4',
+            'SCRIPT_NAME' => '/subfolder/index.php',
         ];
 
         $this->container->basePath = '/subfolder';
