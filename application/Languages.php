@@ -179,9 +179,10 @@ class Languages
     {
         return [
             'auto' => t('Automatic'),
+            'de' => t('German'),
             'en' => t('English'),
             'fr' => t('French'),
-            'de' => t('German'),
+            'jp' => t('Japanese'),
         ];
     }
 }
