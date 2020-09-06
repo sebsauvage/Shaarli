@@ -6,7 +6,6 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use ReferenceLinkDB;
 use Shaarli\Config\ConfigManager;
-use Shaarli\Formatter\FormatterFactory;
 use Shaarli\History;
 
 /**
@@ -36,7 +35,7 @@ class BookmarkFilterTest extends TestCase
     /**
      * Instantiate linkFilter with ReferenceLinkDB data.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $conf = new ConfigManager('tests/utils/config/configJson');
         $conf->set('resource.datastore', self::$testDatastore);
@@ -186,6 +185,17 @@ class BookmarkFilterTest extends TestCase
         $this->assertEquals(
             4,
             count(self::$linkFilter->filter(BookmarkFilter::$FILTER_DAY, '20121206'))
+        );
+    }
+
+    /**
+     * Return bookmarks for a given day
+     */
+    public function testFilterDayRestrictedVisibility(): void
+    {
+        $this->assertEquals(
+            3,
+            count(self::$linkFilter->filter(BookmarkFilter::$FILTER_DAY, '20121206', false, BookmarkFilter::$PUBLIC))
         );
     }
 

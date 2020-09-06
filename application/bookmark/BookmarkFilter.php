@@ -115,7 +115,7 @@ class BookmarkFilter
                     return $this->filterTags($request, $casesensitive, $visibility);
                 }
             case self::$FILTER_DAY:
-                return $this->filterDay($request);
+                return $this->filterDay($request, $visibility);
             default:
                 return $this->noFilter($visibility);
         }
@@ -425,21 +425,26 @@ class BookmarkFilter
      *  print_r($mydb->filterDay('20120125'));
      *
      * @param string $day day to filter.
-     *
+     * @param string $visibility return only all/private/public bookmarks.
+
      * @return array all link matching given day.
      *
      * @throws Exception if date format is invalid.
      */
-    public function filterDay($day)
+    public function filterDay($day, $visibility)
     {
         if (!checkDateFormat('Ymd', $day)) {
             throw new Exception('Invalid date format');
         }
 
         $filtered = [];
-        foreach ($this->bookmarks as $key => $l) {
-            if ($l->getCreated()->format('Ymd') == $day) {
-                $filtered[$key] = $l;
+        foreach ($this->bookmarks as $key => $bookmark) {
+            if ($visibility === static::$PUBLIC && $bookmark->isPrivate()) {
+                continue;
+            }
+
+            if ($bookmark->getCreated()->format('Ymd') == $day) {
+                $filtered[$key] = $bookmark;
             }
         }
 
