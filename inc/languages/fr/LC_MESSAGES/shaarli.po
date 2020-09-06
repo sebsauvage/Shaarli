@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2020-08-27 12:01+0200\n"
-"PO-Revision-Date: 2020-08-27 12:02+0200\n"
+"POT-Creation-Date: 2020-09-10 16:06+0200\n"
+"PO-Revision-Date: 2020-09-10 16:07+0200\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -60,16 +60,20 @@ msgid "Automatic"
 msgstr "Automatique"
 
 #: application/Languages.php:182
+msgid "German"
+msgstr "Allemand"
+
+#: application/Languages.php:183
 msgid "English"
 msgstr "Anglais"
 
-#: application/Languages.php:183
+#: application/Languages.php:184
 msgid "French"
 msgstr "Français"
 
-#: application/Languages.php:184
-msgid "German"
-msgstr "Allemand"
+#: application/Languages.php:185
+msgid "Japanese"
+msgstr "Japonais"
 
 #: application/Thumbnailer.php:62
 msgid ""
@@ -103,36 +107,119 @@ msgstr "Mo"
 msgid "GiB"
 msgstr "Go"
 
-#: application/bookmark/BookmarkFileService.php:165
-#: application/bookmark/BookmarkFileService.php:190
-#: application/bookmark/BookmarkFileService.php:215
-#: application/bookmark/BookmarkFileService.php:232
+#: application/bookmark/BookmarkFileService.php:174
+#: application/bookmark/BookmarkFileService.php:199
+#: application/bookmark/BookmarkFileService.php:224
+#: application/bookmark/BookmarkFileService.php:241
 msgid "You're not authorized to alter the datastore"
 msgstr "Vous n'êtes pas autorisé à modifier les données"
 
-#: application/bookmark/BookmarkFileService.php:168
-#: application/bookmark/BookmarkFileService.php:193
-#: application/bookmark/BookmarkFileService.php:235
+#: application/bookmark/BookmarkFileService.php:177
+#: application/bookmark/BookmarkFileService.php:202
+#: application/bookmark/BookmarkFileService.php:244
 msgid "Provided data is invalid"
 msgstr "Les informations fournies ne sont pas valides"
 
-#: application/bookmark/BookmarkFileService.php:196
+#: application/bookmark/BookmarkFileService.php:205
 msgid "This bookmarks already exists"
 msgstr "Ce marque-page existe déjà."
 
 #: application/bookmark/BookmarkInitializer.php:37
-#: application/legacy/LegacyLinkDB.php:266
-msgid "My secret stuff... - Pastebin.com"
-msgstr "Mes trucs secrets... - Pastebin.com"
+msgid "(private bookmark with thumbnail demo)"
+msgstr "(marque page privé avec une miniature)"
 
-#: application/bookmark/BookmarkInitializer.php:39
-#: application/legacy/LegacyLinkDB.php:268
-msgid "Shhhh! I'm a private link only YOU can see. You can delete me too."
+#: application/bookmark/BookmarkInitializer.php:40
+msgid ""
+"Shaarli will automatically pick up the thumbnail for links to a variety of "
+"websites.\n"
+"\n"
+"Explore your new Shaarli instance by trying out controls and menus.\n"
+"Visit the project on [Github](https://github.com/shaarli/Shaarli) or [the "
+"documentation](https://shaarli.readthedocs.io/en/master/) to learn more "
+"about Shaarli.\n"
+"\n"
+"Now you can edit or delete the default shaares.\n"
 msgstr ""
-"Pssst ! Je suis un lien privé que VOUS êtes le seul à voir. Vous pouvez me "
-"supprimer aussi."
+"Shaarli récupérera automatiquement la miniature associée au liens pour de "
+"nombreux sites web.\n"
+"\n"
+"Explorez votre nouvelle instance de Shaarli en essayant les différents "
+"contrôles et menus.\n"
+"Visitez le projet sur [Github](https://github.com/shaarli/Shaarli) ou [la "
+"documentation](https://shaarli.readthedocs.io/en/master/) pour en apprendre "
+"plus sur Shaarli.\n"
+"\n"
+"Maintenant, vous pouvez modifier ou supprimer les shaares créés par défaut.\n"
 
-#: application/bookmark/BookmarkInitializer.php:45
+#: application/bookmark/BookmarkInitializer.php:53
+msgid "Note: Shaare descriptions"
+msgstr "Note : Description des Shaares"
+
+#: application/bookmark/BookmarkInitializer.php:55
+msgid ""
+"Adding a shaare without entering a URL creates a text-only \"note\" post "
+"such as this one.\n"
+"This note is private, so you are the only one able to see it while logged "
+"in.\n"
+"\n"
+"You can use this to keep notes, post articles, code snippets, and much "
+"more.\n"
+"\n"
+"The Markdown formatting setting allows you to format your notes and bookmark "
+"description:\n"
+"\n"
+"### Title headings\n"
+"\n"
+"#### Multiple headings levels\n"
+"  * bullet lists\n"
+"  * _italic_ text\n"
+"  * **bold** text\n"
+"  * ~~strike through~~ text\n"
+"  * `code` blocks\n"
+"  * images\n"
+"  * [links](https://en.wikipedia.org/wiki/Markdown)\n"
+"\n"
+"Markdown also supports tables:\n"
+"\n"
+"| Name    | Type      | Color  | Qty   |\n"
+"| ------- | --------- | ------ | ----- |\n"
+"| Orange  | Fruit     | Orange | 126   |\n"
+"| Apple   | Fruit     | Any    | 62    |\n"
+"| Lemon   | Fruit     | Yellow | 30    |\n"
+"| Carrot  | Vegetable | Red    | 14    |\n"
+msgstr ""
+"Ajouter un shaare sans préciser d'URL créé une « note » textuelle, telle que "
+"celle-ci.\n"
+"Cette note est privée, donc vous êtes seul à pouvoir la voir lorsque vous "
+"êtes connecté.\n"
+"\n"
+"Vous pouvez utiliser cette fonctionnalité pour prendre des notes, publier "
+"des articles, des extraits de code, et bien plus.\n"
+"\n"
+"L'option du formatage par Markdown vous permet de formater vos description "
+"de notes et marque-pages :\n"
+"\n"
+"### Titre d'en-tête\n"
+"\n"
+"#### Sur plusieurs niveaux\n"
+"  * liste à puce\n"
+"  * texte en _italique_\n"
+"  * texte en **gras**\n"
+"  * texte ~~barré~~\n"
+"  * blocs de `code`\n"
+"  * images\n"
+"  * [liens](https://en.wikipedia.org/wiki/Markdown)\n"
+"\n"
+"Markdown supporte aussi les tableaux :\n"
+"\n"
+"| Nom    | Type      | Couleur  | Qte   |\n"
+"| ------- | --------- | ------ | ----- |\n"
+"| Orange  | Fruit     | Orange | 126   |\n"
+"| Pomme   | Fruit     | Multiple    | 62    |\n"
+"| Citron   | Fruit     | Jaune | 30    |\n"
+"| Carotte  | Légume | Orange    | 14    |\n"
+
+#: application/bookmark/BookmarkInitializer.php:89
 #: application/legacy/LegacyLinkDB.php:246
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:49
@@ -144,26 +231,54 @@ msgstr ""
 "Le gestionnaire de marque-pages personnel, minimaliste, et sans base de "
 "données"
 
-#: application/bookmark/BookmarkInitializer.php:48
-#: application/legacy/LegacyLinkDB.php:249
+#: application/bookmark/BookmarkInitializer.php:92
 msgid ""
-"Welcome to Shaarli! This is your first public bookmark. To edit or delete "
-"me, you must first login.\n"
+"Welcome to Shaarli!\n"
 "\n"
-"To learn how to use Shaarli, consult the link \"Documentation\" at the "
-"bottom of this page.\n"
+"Shaarli allows you to bookmark your favorite pages, and share them with "
+"others or store them privately.\n"
+"You can add a description to your bookmarks, such as this one, and tag "
+"them.\n"
 "\n"
-"You use the community supported version of the original Shaarli project, by "
-"Sebastien Sauvage."
+"Create a new shaare by clicking the `+Shaare` button, or using any of the "
+"recommended tools (browser extension, mobile app, bookmarklet, REST API, "
+"etc.).\n"
+"\n"
+"You can easily retrieve your links, even with thousands of them, using the "
+"internal search engine, or search through tags (e.g. this Shaare is tagged "
+"with `shaarli` and `help`).\n"
+"Hashtags such as #shaarli #help are also supported.\n"
+"You can also filter the available [RSS feed](/feed/atom) and picture wall by "
+"tag or plaintext search.\n"
+"\n"
+"We hope that you will enjoy using Shaarli, maintained with ❤️ by the "
+"community!\n"
+"Feel free to open [an issue](https://github.com/shaarli/Shaarli/issues) if "
+"you have a suggestion or encounter an issue.\n"
 msgstr ""
-"Bienvenue sur Shaarli ! Ceci est votre premier marque-page public. Pour me "
-"modifier ou me supprimer, vous devez d'abord vous connecter.\n"
+"Bienvenue sur Shaarli !\n"
 "\n"
-"Pour apprendre à utiliser Shaarli, consultez le lien « Documentation » en "
-"bas de page.\n"
+"Shaarli vous permet de sauvegarder des marque-pages de vos pages favorites, "
+"et de les partager avec d'autres, ou de les enregistrer en privé.\n"
+"Vous pouvez ajouter une description à vos marque-pages, comme celle-ci, et y "
+"ajouter des tags.\n"
 "\n"
-"Vous utilisez la version supportée par la communauté du projet original "
-"Shaarli de Sébastien Sauvage."
+"Créez un nouveau shaare en cliquant sur le bouton `+Shaare`, ou en utilisant "
+"l'un des outils recommandés (extension de navigateur, application mobile, "
+"bookmarklet, REST API, etc.).\n"
+"\n"
+"Vous pouvez facilement retrouver vos liens, même parmi des milliers, en "
+"utilisant le moteur de recherche interne, ou en filtrant par tags (par "
+"exemple ce Shaare est taggé avec `shaarli` et `help`).\n"
+"Les hashtags comme #shaarli #help sont aussi supportés.\n"
+"Vous pouvez aussi filtrer les [flux RSS](/feed/atom) et [mur d'images]() par "
+"tag ou par texte brut.\n"
+"\n"
+"Nous espérons que vous apprécierez utiliser Shaarli, maintenu avec ❤️ par la "
+"communauté !\n"
+"N'hésitez pas à ouvrir [un ticket (en)](https://github.com/shaarli/Shaarli/"
+"issues) si vous avez une suggestion ou si vous rencontrez un problème.\n"
+" \n"
 
 #: application/bookmark/exception/BookmarkNotFoundException.php:13
 msgid "The link you are trying to reach does not exist or has been deleted."
@@ -489,6 +604,36 @@ msgstr "Vous devez utiliser un entier comme clé."
 msgid "Array offset and link ID must be equal."
 msgstr "La clé du tableau et l'ID du lien doivent être identiques."
 
+#: application/legacy/LegacyLinkDB.php:249
+msgid ""
+"Welcome to Shaarli! This is your first public bookmark. To edit or delete "
+"me, you must first login.\n"
+"\n"
+"To learn how to use Shaarli, consult the link \"Documentation\" at the "
+"bottom of this page.\n"
+"\n"
+"You use the community supported version of the original Shaarli project, by "
+"Sebastien Sauvage."
+msgstr ""
+"Bienvenue sur Shaarli ! Ceci est votre premier marque-page public. Pour me "
+"modifier ou me supprimer, vous devez d'abord vous connecter.\n"
+"\n"
+"Pour apprendre à utiliser Shaarli, consultez le lien « Documentation » en "
+"bas de page.\n"
+"\n"
+"Vous utilisez la version supportée par la communauté du projet original "
+"Shaarli de Sébastien Sauvage."
+
+#: application/legacy/LegacyLinkDB.php:266
+msgid "My secret stuff... - Pastebin.com"
+msgstr "Mes trucs secrets... - Pastebin.com"
+
+#: application/legacy/LegacyLinkDB.php:268
+msgid "Shhhh! I'm a private link only YOU can see. You can delete me too."
+msgstr ""
+"Pssst ! Je suis un lien privé que VOUS êtes le seul à voir. Vous pouvez me "
+"supprimer aussi."
+
 #: application/legacy/LegacyUpdater.php:104
 msgid "Couldn't retrieve updater class methods."
 msgstr "Impossible de récupérer les méthodes de la classe Updater."
@@ -562,7 +707,7 @@ msgstr "Voir sur archive.org"
 msgid "For each link, add an Archive.org icon."
 msgstr "Pour chaque lien, ajoute une icône pour Archive.org."
 
-#: plugins/default_colors/default_colors.php:33
+#: plugins/default_colors/default_colors.php:38
 msgid ""
 "Default colors plugin error: This plugin is active and no custom color is "
 "configured."
@@ -570,21 +715,21 @@ msgstr ""
 "Erreur du plugin default colors : ce plugin est actif et aucune couleur "
 "n'est configurée."
 
-#: plugins/default_colors/default_colors.php:107
+#: plugins/default_colors/default_colors.php:113
 msgid "Override default theme colors. Use any CSS valid color."
 msgstr ""
 "Remplacer les couleurs du thème par défaut. Utiliser n'importe quelle "
 "couleur CSS valide."
 
-#: plugins/default_colors/default_colors.php:108
+#: plugins/default_colors/default_colors.php:114
 msgid "Main color (navbar green)"
 msgstr "Couleur principale (vert de la barre de navigation)"
 
-#: plugins/default_colors/default_colors.php:109
+#: plugins/default_colors/default_colors.php:115
 msgid "Background color (light grey)"
 msgstr "Couleur de fond (gris léger)"
 
-#: plugins/default_colors/default_colors.php:110
+#: plugins/default_colors/default_colors.php:116
 msgid "Dark main color (e.g. visited links)"
 msgstr "Couleur principale sombre (ex : les liens visités)"
 
@@ -1168,23 +1313,23 @@ msgstr "Changer statut épinglé"
 msgid "Sticky"
 msgstr "Épinglé"
 
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:7
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:7
+#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:5
+#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:5
 msgid "Filters"
 msgstr "Filtres"
 
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:12
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:12
+#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:10
+#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:10
 msgid "Only display private links"
 msgstr "Afficher uniquement les liens privés"
 
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:15
+#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
+#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:13
 msgid "Only display public links"
 msgstr "Afficher uniquement les liens publics"
 
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:20
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:20
+#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:18
+#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:18
 msgid "Filter untagged links"
 msgstr "Filtrer par liens privés"
 
@@ -1193,17 +1338,17 @@ msgstr "Filtrer par liens privés"
 msgid "Select all"
 msgstr "Tout sélectionner"
 
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:27
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:79
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:27
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:79
+#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
+#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:89
+#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:29
+#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:89
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:44
 #: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:44
 msgid "Fold all"
 msgstr "Replier tout"
 
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:72
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:72
+#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:76
+#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:76
 msgid "Links per page"
 msgstr "Liens par page"
 
@@ -1429,32 +1574,24 @@ msgid "Rename or delete a tag in all links"
 msgstr "Renommer ou supprimer un tag dans tous les liens"
 
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
-#, fuzzy
-#| msgid ""
-#| "Import Netscape HTML bookmarks (as exported from Firefox, Chrome, Opera, "
-#| "delicious…)"
 msgid ""
 "Import Netscape HTML bookmarks (as exported from Firefox, Chrome, Opera, "
 "delicious...)"
 msgstr ""
 "Importer des marques pages au format Netscape HTML (comme exportés depuis "
-"Firefox, Chrome, Opera, delicious…)"
+"Firefox, Chrome, Opera, delicious...)"
 
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
 msgid "Import links"
 msgstr "Importer des liens"
 
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:47
-#, fuzzy
-#| msgid ""
-#| "Export Netscape HTML bookmarks (which can be imported in Firefox, Chrome, "
-#| "Opera, delicious…)"
 msgid ""
 "Export Netscape HTML bookmarks (which can be imported in Firefox, Chrome, "
 "Opera, delicious...)"
 msgstr ""
 "Exporter les marques pages au format Netscape HTML (comme exportés depuis "
-"Firefox, Chrome, Opera, delicious…)"
+"Firefox, Chrome, Opera, delicious...)"
 
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
 msgid "Export database"

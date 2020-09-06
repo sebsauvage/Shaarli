@@ -37,7 +37,7 @@ class BookmarkInitializerTest extends TestCase
     /**
      * Initialize an empty BookmarkFileService
      */
-    public function setUp()
+    public function setUp(): void
     {
         if (file_exists(self::$testDatastore)) {
             unlink(self::$testDatastore);
@@ -64,17 +64,26 @@ class BookmarkInitializerTest extends TestCase
 
         $this->initializer->initialize();
 
-        $this->assertEquals($refDB->countLinks() + 2, $this->bookmarkService->count());
+        $this->assertEquals($refDB->countLinks() + 3, $this->bookmarkService->count());
+
         $bookmark = $this->bookmarkService->get(43);
-        $this->assertEquals(43, $bookmark->getId());
-        $this->assertEquals('My secret stuff... - Pastebin.com', $bookmark->getTitle());
+        $this->assertStringStartsWith(
+            'Shaarli will automatically pick up the thumbnail for links to a variety of websites.',
+            $bookmark->getDescription()
+        );
         $this->assertTrue($bookmark->isPrivate());
 
         $bookmark = $this->bookmarkService->get(44);
-        $this->assertEquals(44, $bookmark->getId());
-        $this->assertEquals(
-            'The personal, minimalist, super-fast, database free, bookmarking service',
-            $bookmark->getTitle()
+        $this->assertStringStartsWith(
+            'Adding a shaare without entering a URL creates a text-only "note" post such as this one.',
+            $bookmark->getDescription()
+        );
+        $this->assertTrue($bookmark->isPrivate());
+
+        $bookmark = $this->bookmarkService->get(45);
+        $this->assertStringStartsWith(
+            'Welcome to Shaarli!',
+            $bookmark->getDescription()
         );
         $this->assertFalse($bookmark->isPrivate());
 
@@ -82,17 +91,26 @@ class BookmarkInitializerTest extends TestCase
 
         // Reload from file
         $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, true);
-        $this->assertEquals($refDB->countLinks() + 2, $this->bookmarkService->count());
+        $this->assertEquals($refDB->countLinks() + 3, $this->bookmarkService->count());
+
         $bookmark = $this->bookmarkService->get(43);
-        $this->assertEquals(43, $bookmark->getId());
-        $this->assertEquals('My secret stuff... - Pastebin.com', $bookmark->getTitle());
+        $this->assertStringStartsWith(
+            'Shaarli will automatically pick up the thumbnail for links to a variety of websites.',
+            $bookmark->getDescription()
+        );
         $this->assertTrue($bookmark->isPrivate());
 
         $bookmark = $this->bookmarkService->get(44);
-        $this->assertEquals(44, $bookmark->getId());
-        $this->assertEquals(
-            'The personal, minimalist, super-fast, database free, bookmarking service',
-            $bookmark->getTitle()
+        $this->assertStringStartsWith(
+            'Adding a shaare without entering a URL creates a text-only "note" post such as this one.',
+            $bookmark->getDescription()
+        );
+        $this->assertTrue($bookmark->isPrivate());
+
+        $bookmark = $this->bookmarkService->get(45);
+        $this->assertStringStartsWith(
+            'Welcome to Shaarli!',
+            $bookmark->getDescription()
         );
         $this->assertFalse($bookmark->isPrivate());
     }
@@ -107,17 +125,25 @@ class BookmarkInitializerTest extends TestCase
 
         $this->initializer->initialize();
 
-        $this->assertEquals(2, $this->bookmarkService->count());
+        $this->assertEquals(3, $this->bookmarkService->count());
         $bookmark = $this->bookmarkService->get(0);
-        $this->assertEquals(0, $bookmark->getId());
-        $this->assertEquals('My secret stuff... - Pastebin.com', $bookmark->getTitle());
+        $this->assertStringStartsWith(
+            'Shaarli will automatically pick up the thumbnail for links to a variety of websites.',
+            $bookmark->getDescription()
+        );
         $this->assertTrue($bookmark->isPrivate());
 
         $bookmark = $this->bookmarkService->get(1);
-        $this->assertEquals(1, $bookmark->getId());
-        $this->assertEquals(
-            'The personal, minimalist, super-fast, database free, bookmarking service',
-            $bookmark->getTitle()
+        $this->assertStringStartsWith(
+            'Adding a shaare without entering a URL creates a text-only "note" post such as this one.',
+            $bookmark->getDescription()
+        );
+        $this->assertTrue($bookmark->isPrivate());
+
+        $bookmark = $this->bookmarkService->get(2);
+        $this->assertStringStartsWith(
+            'Welcome to Shaarli!',
+            $bookmark->getDescription()
         );
         $this->assertFalse($bookmark->isPrivate());
     }
