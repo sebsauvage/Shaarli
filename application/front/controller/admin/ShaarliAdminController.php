@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Admin;
 
-use Shaarli\Container\ShaarliContainer;
 use Shaarli\Front\Controller\Visitor\ShaarliVisitorController;
-use Shaarli\Front\Exception\UnauthorizedException;
 use Shaarli\Front\Exception\WrongTokenException;
 use Shaarli\Security\SessionManager;
 use Slim\Http\Request;
