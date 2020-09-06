@@ -1062,6 +1062,36 @@ class BookmarkFileServiceTest extends TestCase
     }
 
     /**
+     * Test filterDay while logged in
+     */
+    public function testFilterDayLoggedIn(): void
+    {
+        $bookmarks = $this->privateLinkDB->filterDay('20121206');
+        $expectedIds = [4, 9, 1, 0];
+
+        static::assertCount(4, $bookmarks);
+        foreach ($bookmarks as $bookmark) {
+            $i = ($i ?? -1) + 1;
+            static::assertSame($expectedIds[$i], $bookmark->getId());
+        }
+    }
+
+    /**
+     * Test filterDay while logged out
+     */
+    public function testFilterDayLoggedOut(): void
+    {
+        $bookmarks = $this->publicLinkDB->filterDay('20121206');
+        $expectedIds = [4, 9, 1];
+
+        static::assertCount(3, $bookmarks);
+        foreach ($bookmarks as $bookmark) {
+            $i = ($i ?? -1) + 1;
+            static::assertSame($expectedIds[$i], $bookmark->getId());
+        }
+    }
+
+    /**
      * Allows to test LinkDB's private methods
      *
      * @see

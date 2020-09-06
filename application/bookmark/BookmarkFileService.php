@@ -362,7 +362,9 @@ class BookmarkFileService implements BookmarkServiceInterface
      */
     public function filterDay($request)
     {
-        return $this->bookmarkFilter->filter(BookmarkFilter::$FILTER_DAY, $request);
+        $visibility = $this->isLoggedIn ? BookmarkFilter::$ALL : BookmarkFilter::$PUBLIC;
+
+        return $this->bookmarkFilter->filter(BookmarkFilter::$FILTER_DAY, $request, false, $visibility);
     }
 
     /**
