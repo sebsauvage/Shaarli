@@ -100,20 +100,17 @@ class PluginManager
      */
     public function executeHooks($hook, &$data, $params = array())
     {
-        if (!empty($params['target'])) {
-            $data['_PAGE_'] = $params['target'];
-        }
+        $metadataParameters = [
+            'target' => '_PAGE_',
+            'loggedin' => '_LOGGEDIN_',
+            'basePath' => '_BASE_PATH_',
+            'bookmarkService' => '_BOOKMARK_SERVICE_',
+        ];
 
-        if (isset($params['loggedin'])) {
-            $data['_LOGGEDIN_'] = $params['loggedin'];
-        }
-
-        if (isset($params['basePath'])) {
-            $data['_BASE_PATH_'] = $params['basePath'];
-        }
-
-        if (isset($params['bookmarkService'])) {
-            $data['_BOOKMARK_SERVICE_'] = $params['bookmarkService'];
+        foreach ($metadataParameters as $parameter => $metaKey) {
+            if (array_key_exists($parameter, $params)) {
+                $data[$metaKey] = $params[$parameter];
+            }
         }
 
         foreach ($this->loadedPlugins as $plugin) {
@@ -127,6 +124,10 @@ class PluginManager
                     $this->errors = array_unique(array_merge($this->errors, [$error]));
                 }
             }
+        }
+
+        foreach ($metadataParameters as $metaKey) {
+            unset($data[$metaKey]);
         }
     }
 

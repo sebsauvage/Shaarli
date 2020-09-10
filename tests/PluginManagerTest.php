@@ -41,17 +41,31 @@ class PluginManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue(function_exists('hook_test_random'));
 
-        $data = array(0 => 'woot');
+        $data = [0 => 'woot'];
         $this->pluginManager->executeHooks('random', $data);
-        $this->assertEquals('woot', $data[1]);
 
-        $data = array(0 => 'woot');
+        static::assertCount(2, $data);
+        static::assertSame('woot', $data[1]);
+
+        $data = [0 => 'woot'];
         $this->pluginManager->executeHooks('random', $data, array('target' => 'test'));
-        $this->assertEquals('page test', $data[1]);
 
-        $data = array(0 => 'woot');
+        static::assertCount(2, $data);
+        static::assertSame('page test', $data[1]);
+
+        $data = [0 => 'woot'];
         $this->pluginManager->executeHooks('random', $data, array('loggedin' => true));
-        $this->assertEquals('loggedin', $data[1]);
+
+        static::assertCount(2, $data);
+        static::assertEquals('loggedin', $data[1]);
+
+        $data = [0 => 'woot'];
+        $this->pluginManager->executeHooks('random', $data, array('loggedin' => null));
+
+        static::assertCount(3, $data);
+        static::assertEquals('loggedin', $data[1]);
+        static::assertArrayHasKey(2, $data);
+        static::assertNull($data[2]);
     }
 
     /**
@@ -78,8 +92,8 @@ class PluginManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testPluginNotFound(): void
     {
-        $this->pluginManager->load(array());
-        $this->pluginManager->load(array('nope', 'renope'));
+        $this->pluginManager->load([]);
+        $this->pluginManager->load(['nope', 'renope']);
         $this->addToAssertionCount(1);
     }
 
@@ -89,18 +103,18 @@ class PluginManagerTest extends \PHPUnit\Framework\TestCase
     public function testGetPluginsMeta(): void
     {
         PluginManager::$PLUGINS_PATH = self::$pluginPath;
-        $this->pluginManager->load(array(self::$pluginName));
+        $this->pluginManager->load([self::$pluginName]);
 
-        $expectedParameters = array(
-            'pop' => array(
+        $expectedParameters = [
+            'pop' => [
                 'value' => '',
                 'desc'  => 'pop description',
-            ),
-            'hip' => array(
+            ],
+            'hip' => [
                 'value' => '',
                 'desc' => '',
-            ),
-        );
+            ],
+        ];
         $meta = $this->pluginManager->getPluginsMeta();
         $this->assertEquals('test plugin', $meta[self::$pluginName]['description']);
         $this->assertEquals($expectedParameters, $meta[self::$pluginName]['parameters']);
