@@ -10,6 +10,7 @@ use Shaarli\Config\ConfigManager;
 use Shaarli\Feed\FeedBuilder;
 use Shaarli\Formatter\FormatterFactory;
 use Shaarli\Front\Controller\Visitor\ErrorController;
+use Shaarli\Front\Controller\Visitor\ErrorNotFoundController;
 use Shaarli\History;
 use Shaarli\Http\HttpAccess;
 use Shaarli\Netscape\NetscapeBookmarkUtils;
@@ -149,6 +150,9 @@ class ContainerBuilder
             );
         };
 
+        $container['notFoundHandler'] = function (ShaarliContainer $container): ErrorNotFoundController {
+            return new ErrorNotFoundController($container);
+        };
         $container['errorHandler'] = function (ShaarliContainer $container): ErrorController {
             return new ErrorController($container);
         };

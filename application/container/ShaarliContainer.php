@@ -24,21 +24,22 @@ use Slim\Container;
 /**
  * Extension of Slim container to document the injected objects.
  *
- * @property string                   $basePath             Shaarli's instance base path (e.g. `/shaarli/`)
+ * @property string                   $basePath              Shaarli's instance base path (e.g. `/shaarli/`)
  * @property BookmarkServiceInterface $bookmarkService
  * @property CookieManager            $cookieManager
  * @property ConfigManager            $conf
- * @property mixed[]                  $environment          $_SERVER automatically injected by Slim
- * @property callable                 $errorHandler         Overrides default Slim exception display
+ * @property mixed[]                  $environment           $_SERVER automatically injected by Slim
+ * @property callable                 $errorHandler          Overrides default Slim exception display
  * @property FeedBuilder              $feedBuilder
  * @property FormatterFactory         $formatterFactory
  * @property History                  $history
  * @property HttpAccess               $httpAccess
  * @property LoginManager             $loginManager
  * @property NetscapeBookmarkUtils    $netscapeBookmarkUtils
+ * @property callable                 $notFoundHandler       Overrides default Slim exception display
  * @property PageBuilder              $pageBuilder
  * @property PageCacheManager         $pageCacheManager
- * @property callable                 $phpErrorHandler      Overrides default Slim PHP error display
+ * @property callable                 $phpErrorHandler       Overrides default Slim PHP error display
  * @property PluginManager            $pluginManager
  * @property SessionManager           $sessionManager
  * @property Thumbnailer              $thumbnailer
