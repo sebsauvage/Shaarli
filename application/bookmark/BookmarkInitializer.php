@@ -34,25 +34,77 @@ class BookmarkInitializer
     public function initialize()
     {
         $bookmark = new Bookmark();
-        $bookmark->setTitle(t('My secret stuff... - Pastebin.com'));
-        $bookmark->setUrl('http://sebsauvage.net/paste/?8434b27936c09649#bR7XsXhoTiLcqCpQbmOpBi3rq2zzQUC5hBI7ZT1O3x8=');
-        $bookmark->setDescription(t('Shhhh! I\'m a private link only YOU can see. You can delete me too.'));
-        $bookmark->setTagsString('secretstuff');
+        $bookmark->setTitle('quicksilver (loop) on Vimeo ' . t('(private bookmark with thumbnail demo)'));
+        $bookmark->setUrl('https://vimeo.com/153493904');
+        $bookmark->setDescription(t(
+'Shaarli will automatically pick up the thumbnail for links to a variety of websites.
+
+Explore your new Shaarli instance by trying out controls and menus.
+Visit the project on [Github](https://github.com/shaarli/Shaarli) or [the documentation](https://shaarli.readthedocs.io/en/master/) to learn more about Shaarli.
+
+Now you can edit or delete the default shaares.
+'
+        ));
+        $bookmark->setTagsString('shaarli help thumbnail');
         $bookmark->setPrivate(true);
         $this->bookmarkService->add($bookmark, false);
 
         $bookmark = new Bookmark();
-        $bookmark->setTitle(t('The personal, minimalist, super-fast, database free, bookmarking service'));
-        $bookmark->setUrl('https://shaarli.readthedocs.io', []);
+        $bookmark->setTitle(t('Note: Shaare descriptions'));
         $bookmark->setDescription(t(
-            'Welcome to Shaarli! This is your first public bookmark. '
-            . 'To edit or delete me, you must first login.
+'Adding a shaare without entering a URL creates a text-only "note" post such as this one.
+This note is private, so you are the only one able to see it while logged in.
 
-To learn how to use Shaarli, consult the link "Documentation" at the bottom of this page.
+You can use this to keep notes, post articles, code snippets, and much more.
 
-You use the community supported version of the original Shaarli project, by Sebastien Sauvage.'
+The Markdown formatting setting allows you to format your notes and bookmark description:
+
+### Title headings
+
+#### Multiple headings levels
+  * bullet lists
+  * _italic_ text
+  * **bold** text
+  * ~~strike through~~ text
+  * `code` blocks
+  * images
+  * [links](https://en.wikipedia.org/wiki/Markdown)
+
+Markdown also supports tables:
+
+| Name    | Type      | Color  | Qty   |
+| ------- | --------- | ------ | ----- |
+| Orange  | Fruit     | Orange | 126   |
+| Apple   | Fruit     | Any    | 62    |
+| Lemon   | Fruit     | Yellow | 30    |
+| Carrot  | Vegetable | Red    | 14    |
+'
         ));
-        $bookmark->setTagsString('opensource software');
+        $bookmark->setTagsString('shaarli help');
+        $bookmark->setPrivate(true);
+        $this->bookmarkService->add($bookmark, false);
+
+        $bookmark = new Bookmark();
+        $bookmark->setTitle(
+            'Shaarli - ' . t('The personal, minimalist, super-fast, database free, bookmarking service')
+        );
+        $bookmark->setDescription(t(
+'Welcome to Shaarli!
+
+Shaarli allows you to bookmark your favorite pages, and share them with others or store them privately.
+You can add a description to your bookmarks, such as this one, and tag them.
+
+Create a new shaare by clicking the `+Shaare` button, or using any of the recommended tools (browser extension, mobile app, bookmarklet, REST API, etc.).
+
+You can easily retrieve your links, even with thousands of them, using the internal search engine, or search through tags (e.g. this Shaare is tagged with `shaarli` and `help`).
+Hashtags such as #shaarli #help are also supported.
+You can also filter the available [RSS feed](/feed/atom) and picture wall by tag or plaintext search.
+
+We hope that you will enjoy using Shaarli, maintained with ❤️ by the community!
+Feel free to open [an issue](https://github.com/shaarli/Shaarli/issues) if you have a suggestion or encounter an issue.
+'
+        ));
+        $bookmark->setTagsString('shaarli help');
         $this->bookmarkService->add($bookmark, false);
     }
 }

@@ -615,14 +615,18 @@ class BookmarkFileServiceTest extends TestCase
     {
         $dbSize = $this->privateLinkDB->count();
         $this->privateLinkDB->initialize();
-        $this->assertEquals($dbSize + 2, $this->privateLinkDB->count());
-        $this->assertEquals(
-            'My secret stuff... - Pastebin.com',
-            $this->privateLinkDB->get(43)->getTitle()
+        $this->assertEquals($dbSize + 3, $this->privateLinkDB->count());
+        $this->assertStringStartsWith(
+            'Shaarli will automatically pick up the thumbnail for links to a variety of websites.',
+            $this->privateLinkDB->get(43)->getDescription()
         );
-        $this->assertEquals(
-            'The personal, minimalist, super-fast, database free, bookmarking service',
-            $this->privateLinkDB->get(44)->getTitle()
+        $this->assertStringStartsWith(
+            'Adding a shaare without entering a URL creates a text-only "note" post such as this one.',
+            $this->privateLinkDB->get(44)->getDescription()
+        );
+        $this->assertStringStartsWith(
+            'Welcome to Shaarli!',
+            $this->privateLinkDB->get(45)->getDescription()
         );
     }
 
