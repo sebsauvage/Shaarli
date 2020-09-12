@@ -2,19 +2,17 @@
 
 The personal, minimalist, super-fast, database free, bookmarking service.
 
-Do you want to share the links you discover?
-Shaarli is a minimalist bookmark manager and link sharing service that you can install on your own server.
-It is designed to be personal (single-user), fast and handy.
-
-<!-- TODO screenshots -->
+Do you want to share the links you discover? Shaarli is a minimalist bookmark manager and link sharing service that you can install on your own server. It is designed to be personal (single-user), fast and handy.
 
 Visit the pages in the sidebar to find information on how to setup, use, configure, tweak and troubleshoot Shaarli.
 
-
 * [GitHub project page](https://github.com/shaarli/Shaarli)
-* [Online documentation](https://shaarli.readthedocs.io/)
-* [Latest releases](https://github.com/shaarli/Shaarli/releases)
+* [Documentation](https://shaarli.readthedocs.io/)
 * [Changelog](https://github.com/shaarli/Shaarli/blob/master/CHANGELOG.md)
+
+
+[![](https://i.imgur.com/8wEBRSG.png)](https://i.imgur.com/WWPfSj0.png) [![](https://i.imgur.com/93PpLLs.png)](https://i.imgur.com/V09kAQt.png) [![](https://i.imgur.com/rrsjWYy.png)](https://i.imgur.com/TZzGHMs.png) [![](https://i.imgur.com/8iRzHfe.png)](https://i.imgur.com/sfJJ6NT.png) [![](https://i.imgur.com/GjZGvIh.png)](https://i.imgur.com/QsedIuJ.png) [![](https://i.imgur.com/TFZ9PEq.png)](https://i.imgur.com/KdtF8Ll.png) [![](https://i.imgur.com/uICDOle.png)](https://i.imgur.com/27wYsbC.png) [![](https://i.imgur.com/tVvD3gH.png)](https://i.imgur.com/zGF4d6L.jpg)
+
 
 
 ## Demo
@@ -25,101 +23,80 @@ It runs the latest development version of Shaarli and is updated/reset daily.
 Login: `demo`; Password: `demo`
 
 
+## Getting started
+
+- [Configure your server](Server-configuration.md)
+- [Install Shaarli](Installation.md)
+- Or install Shaarli using [Docker](Docker.md)
+
+
 ## Features
 
 Shaarli can be used:
 
-- to share, comment and save interesting links and news
+- to share, comment and save interesting links
 - to bookmark useful/frequent links and share them between computers
 - as a minimal blog/microblog/writing platform
-- as a read-it-later list
-- to draft and save articles/posts/ideas
-- to keep notes, documentation and code snippets
-- as a shared clipboard/notepad/pastebin between machines
-- as a todo list
-- to store media playlists
-- to keep extracts/comments from webpages that may disappear.
-- to keep track of ongoing discussions
-- to feed other blogs, aggregators, social networks... using RSS feeds
+- as a read-it-later/todo list
+- as a notepad to draft and save articles/posts/ideas
+- as a knowledge base to keep notes, documentation and code snippets
+- as a shared clipboard/notepad/pastebin between computers
+- as playlist manager for online media
+- to feed other blogs, aggregators, social networks...
 
 ### Edit, view and search your links
 
-- Minimalist design
-- FAST
-- Customizable link titles and descriptions
-- Tags to organize your links (features tag autocompletion, renaming, merging and deletion)
-- Search by tag or using the full-text search
-- Public and private links (visible only to logged-in users)
-- Unique permalinks for easy reference
-- Paginated link list (with image and video thumbnails)
-- Tag cloud and list views
-- Picture wall: image and video thumbnails view (with lazy loading)
-- ATOM and RSS feeds (can also be filtered using tags or text search)
-- Daily: newspaper-like daily digest (and daily RSS feed)
-- URL cleanup: automatic removal of `?utm_source=...`, `fb=...`
-- Extensible through [plugins](https://shaarli.readthedocs.io/en/master/Plugins/#plugin-usage)
+- Editable URL, title, description, tags, private/public status for all your [Shaares](Usage.md)
+- [Tags](Usage.md#tags) to organize your Shaares
+- [Search](Usage.md#search) in all fields
+- Unique [permalinks](Usage.md#permalinks) for easy reference
+- Paginated Shaares list view (with image and video thumbnails)
+- [Tag cloud/list](Usage#tag-cloud) views
+- [Picture wall](Usage#picture-wall)/thumbnails view (with lazy loading)
+- [ATOM and RSS feeds](Usage.md#rss-feeds) (can also be filtered using tags or text search)
+- [Daily](Usage.md#daily): newspaper-like daily digest (and daily RSS feed)
+- URL cleanup: automatic removal of `?utm_source=...`, `fb=...` tracking parameters
+- Extensible through [plugins](Plugins.md)
+- Easily extensible by any client using the [REST API](REST-API.md) exposed by Shaarli
+- Bookmarklet and [other tools](Community-and-related-software.md) to share links in one click
+- Responsive/support for mobile browsers, degrades gracefully with Javascript disabled
+
 
 ### Easy setup
 
-- Dead-simple installation: drop the files, open the page
-- Links are stored in a file (no database required, easy backup: simply copy the datastore file)
-- Import and export links as Netscape bookmarks compatible with most Web browsers
-
-### Accessibility
-
-- Bookmarklet and other tools to share links in one click
-- Support for mobile browsers
-- Degrades gracefully with Javascript disabled
-- Easy page customization through HTML/CSS/RainTPL
-
-### Security
-
-- Discreet pop-up notification when a new release is available
-- Bruteforce protection on the login form
-- Protected against [XSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery) and session cookie hijacking
-
-<!-- TODO Limitations -->
-
-### REST API
-
-- Easily extensible by any client using the REST API exposed by Shaarli ([API documentation](http://shaarli.github.io/api-documentation/)).
+- Dead-simple [installation](Installation.md): drop the files on your server, open the page
+- Shaares are stored in a file (no database required, easy [backup](Backup-and-restore.md))
+- [Configurable](Shaarli-configuration.md) from dialog and configuration file
+- Extensible through third-party [plugins and themes](Community-and-related-software.md)
 
 
+### Fast
 
-## Screenshots
-
-[![](https://i.imgur.com/8wEBRSG.png)](https://i.imgur.com/WWPfSj0.png) [![](https://i.imgur.com/rrsjWYy.png)](https://i.imgur.com/TZzGHMs.png) [![](https://i.imgur.com/uICDOle.png)](https://i.imgur.com/27wYsbC.png) [![](https://i.imgur.com/KNvFGVB.png)](https://i.imgur.com/0f5faqw.png) [![](https://i.imgur.com/tVvD3gH.png)](https://i.imgur.com/zGF4d6L.jpg) [![](https://i.imgur.com/8iRzHfe.png)](https://i.imgur.com/sfJJ6NT.png) [![](https://i.imgur.com/GjZGvIh.png)](https://i.imgur.com/QsedIuJ.png) [![](https://i.imgur.com/TFZ9PEq.png)](https://i.imgur.com/KdtF8Ll.png) [![](https://i.imgur.com/IvlqXXK.png)](https://i.imgur.com/boaaibC.png) [![](https://i.imgur.com/nlETouG.png)](https://i.imgur.com/Ib9O7n3.png)
-
+- Fast! Small datastore file, write-once/read-many, served most of the time from OS disk caches (no disk I/O)
+- Stays fast with even tens of thousands shaares!
 
 
+### Self-hosted
+
+- Shaarli is an alternative to commercial services such as StumbleUpon, Delicio.us, Diigo...
+- The data is yours, [import and export](Usage#import-export) it to HTML bookmarksformat compatible with most web browser, and from a variety of formats
+- Shaarli does not send any telemetry/metrics/private information to developers
+- Shaarli is Free and Open-Source software, inspect and change how the program works in the [source code](https://github.com/shaarli/Shaarli)
+- Built-in [Security](dev/Development.md#security) features to help you protect your Shaarli instance
 
 
 ## About
 
-### Shaarli community fork
+This [community fork](https://github.com/shaarli/Shaarli) of the original [Shaarli](https://github.com/sebsauvage/Shaarli/) project by [Sébastien Sauvage](http://sebsauvage.net/) (now [unmaintained](https://github.com/sebsauvage/Shaarli/issues/191)) has carried on the work to provide [many patches](https://github.com/shaarli/Shaarli/compare/sebsauvage:master...master) for [bug fixes and enhancements](https://github.com/shaarli/Shaarli/issues?q=is%3Aclosed+) in this repository, and will keep maintaining the project for the foreseeable future, while keeping Shaarli simple and efficient.
 
-This friendly fork is maintained by the Shaarli community at <https://github.com/shaarli/Shaarli>
-
-This is a community fork of the original [Shaarli](https://github.com/sebsauvage/Shaarli/) project by [Sébastien Sauvage](http://sebsauvage.net/).
-
-The original project is currently unmaintained, and the developer [has informed us](https://github.com/sebsauvage/Shaarli/issues/191) that he would have no time to work on Shaarli in the near future.
-
-The Shaarli community has carried on the work to provide [many
-patches](https://github.com/shaarli/Shaarli/compare/sebsauvage:master...master) for
-[bug fixes and enhancements](https://github.com/shaarli/Shaarli/issues?q=is%3Aclosed+)
-in this repository, and will keep maintaining the project for the foreseeable
-future, while keeping Shaarli simple and efficient.
+The original Shaarli instance is still available [here](https://sebsauvage.net/links/) (+25000 shaares!)
 
 
 ### Contributing and getting help
 
-Feedback is very appreciated!
+Feedback is very appreciated! Feel free to propose solutions to existing problems, help us improve the documentation and translations, and submit pull requests :-)
 
-- If you have any questions or ideas, please join the [chat](https://gitter.im/shaarli/Shaarli) (also reachable via [IRC](https://irc.gitter.im/)), post them in our [general discussion](https://github.com/shaarli/Shaarli/issues/308) or read the current [issues](https://github.com/shaarli/Shaarli/issues).
-- Have a look at the open [issues](https://github.com/shaarli/Shaarli/issues) and [pull requests](https://github.com/shaarli/Shaarli/pulls)
-- If you would like a feature added to Shaarli, check the issues labeled [`feature`](https://github.com/shaarli/Shaarli/labels/feature), [`enhancement`](https://github.com/shaarli/Shaarli/labels/enhancement), and [`plugin`](https://github.com/shaarli/Shaarli/labels/plugin).
-- If you've found a bug, please create a [new issue](https://github.com/shaarli/Shaarli/issues/new).
-- Feel free to propose solutions to existing problems, help us improve the documentation and translations, and submit pull requests :-)
+See [Support](Troubleshooting.md#support) to get in touch with the Shaarli community.
 
 
 ### License

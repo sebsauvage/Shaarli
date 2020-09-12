@@ -7,86 +7,79 @@ Note that only the `default` theme supports translations.
 
 ### Contributing
 
-We encourage the community to contribute to Shaarli's translation either by improving existing
-translations or submitting a new language.
+We encourage the community to contribute to Shaarli translations, either by improving existing translations or submitting a new language.
 
-Contributing to the translation does not require development skill.
+Contributing to the translation does not require software development knowledge.
 
-Please submit a pull request with the `.po` file updated/created. Note that the compiled file (`.mo`)
-is not stored on the repository, and is generated during the release process.
+Please submit a pull request with the `.po` file updated/created. Note that the compiled file (`.mo`) is not stored on the repository, and is generated during the release process.
+
 
 ### How to
 
-First, install [Poedit](https://poedit.net/) tool.
+Install [Poedit](https://poedit.net/) (used to extract strings to translate from the PHP source code, and generate `.po` files).
 
-Poedit will extract strings to translate from the PHP source code.
-
-**Important**: due to the usage of a template engine, it's important to generate PHP cache files to extract
-every translatable string.
-
-You can either use [this script](https://gist.github.com/ArthurHoaro/5d0323f758ab2401ef444a53f54e9a07)  (recommended)
-or visit every template page in your browser to generate cache files, while logged in.
-
-Here is a list :
+Due to the usage of a template engine, it's important to generate PHP cache files to extract every translatable string. You can either use [this script](https://gist.github.com/ArthurHoaro/5d0323f758ab2401ef444a53f54e9a07) (recommended) or visit every template page in your browser to generate cache files, while logged in. Here is a list :
 
 ```
 http://<replace_domain>/
+http://<replace_domain>/login
+http://<replace_domain>/daily
+http://<replace_domain>/tags/cloud
+http://<replace_domain>/tags/list
+http://<replace_domain>/picture-wall
 http://<replace_domain>/?nonope
 http://<replace_domain>/admin/add-shaare
 http://<replace_domain>/admin/password
 http://<replace_domain>/admin/tags
 http://<replace_domain>/admin/configure
 http://<replace_domain>/admin/tools
-http://<replace_domain>/daily
 http://<replace_domain>/admin/shaare
 http://<replace_domain>/admin/export
 http://<replace_domain>/admin/import
-http://<replace_domain>/login
-http://<replace_domain>/picture-wall
 http://<replace_domain>/admin/plugins
-http://<replace_domain>/tags/cloud
-http://<replace_domain>/tags/list
 ```
 
-#### Improve existing translation
 
-In Poedit, click on "Edit a Translation", and from Shaarli's directory open
-`inc/languages/<lang>/LC_MESSAGES/shaarli.po`.
+#### Improve existing translations
 
-The existing list of translatable strings should have been loaded, then click on the "Update" button.
-
-You can start editing the translation.
+- In Poedit, click on "Edit a Translation
+- Open `inc/languages/<lang>/LC_MESSAGES/shaarli.po` under Shaarli's directory
+- The existing list of translatable strings should load
+- Click on the "Update" button.
+- Start editing translations.
 
 ![poedit-screenshot](images/poedit-1.jpg)
 
 Save when you're done, then you can submit a pull request containing the updated `shaarli.po`.
 
+
 #### Add a new language
 
-Open Poedit and select "Create New Translation", then from Shaarli's directory open
-`inc/languages/<lang>/LC_MESSAGES/shaarli.po`.
-
-Then select the language you want to create.
-
-Click on `File > Save as...`, and save your file in `<shaarli directory>/inc/language/<new language>/LC_MESSAGES/shaarli.po`.
-`<new language>` here should be the language code respecting the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-2)
-format in lowercase (e.g. `de` for German).
-
-Then click on the "Update" button, and you can start to translate every available string.
+- In Poedit select "Create New Translation"
+- Open `inc/languages/<lang>/LC_MESSAGES/shaarli.po` under Shaarli's directory
+- Select the language you want to create.
+- Click on `File > Save as...`, save your file in `<shaarli directory>/inc/language/<new language>/LC_MESSAGES/shaarli.po` (`<new language>` here should be the language code respecting the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-2) format in lowercase - e.g. `de` for German)
+- Click on the "Update" button
+- Start editing translations.
 
 Save when you're done, then you can submit a pull request containing the new `shaarli.po`.
 
+
 ### Theme translations
 
-Theme translation extensions are loaded automatically if they're present.
+[Theme](Theming) translation extensions are loaded automatically if they're present.
 
 As a theme developer, all you have to do is to add the `.po` and `.mo` compiled file like this:
 
-    tpl/<theme name>/language/<lang>/LC_MESSAGES/<theme name>.po
-    tpl/<theme name>/language/<lang>/LC_MESSAGES/<theme name>.mo
+```
+tpl/<theme name>/language/<lang>/LC_MESSAGES/<theme name>.po
+tpl/<theme name>/language/<lang>/LC_MESSAGES/<theme name>.mo
+```
 
 Where `<lang>` is the ISO 3166-1 alpha-2 language code.
+
 Read the following section "Extend Shaarli's translation" to learn how to generate those files.
+
 
 ### Extend Shaarli's translation
 

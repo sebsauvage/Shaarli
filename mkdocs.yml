@@ -15,41 +15,25 @@ site_dir: doc/html
 pages:
 - Home: index.md
 - Setup:
-    - Download and Installation: Download-and-Installation.md
-    - Upgrade and migration: Upgrade-and-migration.md
     - Server configuration: Server-configuration.md
-    - Server security: Server-security.md
+    - Installation: Installation.md
+    - Docker: Docker.md
+    - Reverse Proxy: Reverse-proxy.md
+    - Backup and restore: Backup-and-restore.md
     - Shaarli configuration: Shaarli-configuration.md
     - Plugins: Plugins.md
-- Docker:
-    - Docker 101: docker/docker-101.md
-    - Shaarli images: docker/shaarli-images.md
-    - Reverse proxy configuration: docker/reverse-proxy-configuration.md
-    - Docker resources: docker/resources.md
+    - Upgrade and migration: Upgrade-and-migration.md
 - Usage:
-    - Browsing and searching: Browsing-and-searching.md
-    - Sharing content: Sharing-content.md
-    - RSS feeds: RSS-feeds.md
+    - Usage: Usage.md
     - REST API: REST-API.md
-    - Community & Related software: Community-&-Related-software.md
-- Guides:
-    - Install Shaarli on Debian 9 with Docker: guides/install-shaarli-with-debian9-and-docker.md
-    - Backup, restore, import and export: guides/backup-restore-import-export.md
-    - Various hacks: guides/various-hacks.md
+    - Community and Related software: Community-and-related-software.md
 - Development:
-    - Development guidelines: Development-guidelines.md
-    - Continuous integration tools: Continuous-integration-tools.md
-    - GnuPG signature: GnuPG-signature.md
-    - Directory structure: Directory-structure.md
-    - Link Structure: Link-structure.md
-    - 3rd party libraries: 3rd-party-libraries.md
-    - Plugin System: Plugin-System.md
-    - Release Shaarli: Release-Shaarli.md
-    - Versioning and Branches: Versioning-and-Branches.md
-    - Security: Security.md
-    - Static analysis: Static-analysis.md
-    - Translations: Translations.md
-    - Theming: Theming.md
-    - Unit tests: Unit-tests.md
-- FAQ: FAQ.md
+    - Development: dev/Development.md
+    - Versioning: dev/Versioning.md
+    - GnuPG signature: dev/GnuPG-signature.md
+    - Plugin System: dev/Plugin-system.md
+    - Translations: dev/Translations.md
+    - Release Shaarli: dev/Release-Shaarli.md
+    - Theming: dev/Theming.md
+    - Unit tests: dev/Unit-tests.md
 - Troubleshooting: Troubleshooting.md

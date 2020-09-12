@@ -2,6 +2,7 @@ dist: bionic
 
 matrix:
   include:
+    # jobs for each supported php version
     - language: php
       php: 7.4
     - language: php
@@ -10,23 +11,22 @@ matrix:
       php: 7.2
     - language: php
       php: 7.1
+    # jobs for frontend builds
     - language: node_js
       node_js: 8
       cache:
         yarn: true
         directories:
           - $HOME/.cache/yarn
-
       install:
         - yarn install
-
       before_script:
         - PATH=${PATH//:\.\/node_modules\/\.bin/}
-
       script:
-        - yarn run build # Just to be sure that the build isn't broken
-        - make eslint
-        - make sasslint
+        - yarn run build # verify successful frontend builds
+        - make eslint # javascript static analysis
+        - make sasslint # linter for SASS syntax
+    # jobs for documentation builds
     - language: python
       python: 3.6
       cache:
@@ -42,6 +42,7 @@ cache:
     - $HOME/.composer/cache
 
 install:
+  # install/update composer and php dependencies
   - composer install --prefer-dist
 
 before_script:

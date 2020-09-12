@@ -7,6 +7,7 @@ RewriteEngine On
 RewriteRule ^(.git|doxygen|vendor) - [F]
 
 # Forward the "Authorization" HTTP header
+# fixes JWT token not correctly forwarded on some Apache/FastCGI setups
 RewriteCond %{HTTP:Authorization} ^(.*)
 RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
 
