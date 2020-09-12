@@ -10,6 +10,7 @@ use Shaarli\Config\ConfigManager;
 use Shaarli\Feed\FeedBuilder;
 use Shaarli\Formatter\FormatterFactory;
 use Shaarli\Front\Controller\Visitor\ErrorController;
+use Shaarli\Front\Controller\Visitor\ErrorNotFoundController;
 use Shaarli\History;
 use Shaarli\Http\HttpAccess;
 use Shaarli\Netscape\NetscapeBookmarkUtils;
@@ -75,6 +76,7 @@ class ContainerBuilderTest extends TestCase
         static::assertInstanceOf(PageBuilder::class, $container->pageBuilder);
         static::assertInstanceOf(PageCacheManager::class, $container->pageCacheManager);
         static::assertInstanceOf(ErrorController::class, $container->phpErrorHandler);
+        static::assertInstanceOf(ErrorNotFoundController::class, $container->notFoundHandler);
         static::assertInstanceOf(PluginManager::class, $container->pluginManager);
         static::assertInstanceOf(SessionManager::class, $container->sessionManager);
         static::assertInstanceOf(Thumbnailer::class, $container->thumbnailer);

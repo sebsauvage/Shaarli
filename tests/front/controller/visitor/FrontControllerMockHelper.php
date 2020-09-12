@@ -94,7 +94,6 @@ trait FrontControllerMockHelper
     protected function assignTemplateVars(array &$variables): void
     {
         $this->container->pageBuilder
-            ->expects(static::atLeastOnce())
             ->method('assign')
             ->willReturnCallback(function ($key, $value) use (&$variables) {
                 $variables[$key] = $value;
