@@ -32,7 +32,7 @@ class PluginsControllerTest extends TestCase
         array_map(function (string $plugin) use ($path) { touch($path . '/' . $plugin); }, static::PLUGIN_NAMES);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $path = __DIR__ . '/folder';
         array_map(function (string $plugin) use ($path) { unlink($path . '/' . $plugin); }, static::PLUGIN_NAMES);
@@ -125,6 +125,7 @@ class PluginsControllerTest extends TestCase
             'parameters_form' => true,
             'parameter1' => 'blip',
             'parameter2' => 'blop',
+            'token' => 'this parameter should not be saved'
         ];
 
         $request = $this->createMock(Request::class);
@@ -143,7 +144,7 @@ class PluginsControllerTest extends TestCase
             ->with('save_plugin_parameters', $parameters)
         ;
         $this->container->conf
-            ->expects(static::atLeastOnce())
+            ->expects(static::exactly(2))
             ->method('set')
             ->withConsecutive(['plugins.parameter1', 'blip'], ['plugins.parameter2', 'blop'])
         ;

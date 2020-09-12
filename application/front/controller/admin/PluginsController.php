@@ -62,6 +62,7 @@ class PluginsController extends ShaarliAdminController
 
             if (isset($parameters['parameters_form'])) {
                 unset($parameters['parameters_form']);
+                unset($parameters['token']);
                 foreach ($parameters as $param => $value) {
                     $this->container->conf->set('plugins.'. $param, escape($value));
                 }
