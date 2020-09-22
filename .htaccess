@@ -16,23 +16,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [QSA,L]
 
-<Limit GET POST PUT DELETE OPTIONS>
-  <IfModule version_module>
-    <IfVersion >= 2.4>
-       Require all granted
-    </IfVersion>
-    <IfVersion < 2.4>
-       Allow from all
-       Deny from none
-    </IfVersion>
-  </IfModule>
-
-  <IfModule !version_module>
-    Require all granted
-  </IfModule>
-</Limit>
-
-<LimitExcept GET POST PUT DELETE OPTIONS>
+<LimitExcept GET POST PUT DELETE PATCH OPTIONS>
   <IfModule version_module>
     <IfVersion >= 2.4>
        Require all denied
