@@ -10,7 +10,7 @@ import Awesomplete from 'awesomplete';
  * @returns Found element or null.
  */
 function findParent(element, tagName, attributes) {
-  const parentMatch = key => attributes[key] !== '' && element.getAttribute(key).indexOf(attributes[key]) !== -1;
+  const parentMatch = (key) => attributes[key] !== '' && element.getAttribute(key).indexOf(attributes[key]) !== -1;
   while (element) {
     if (element.tagName.toLowerCase() === tagName) {
       if (Object.keys(attributes).find(parentMatch)) {
@@ -101,7 +101,7 @@ function updateAwesompleteList(selector, tags, instances) {
  * @see http://stackoverflow.com/questions/18749591/encode-html-entities-in-javascript
  */
 function htmlEntities(str) {
-  return str.replace(/[\u00A0-\u9999<>&]/gim, i => `&#${i.charCodeAt(0)};`);
+  return str.replace(/[\u00A0-\u9999<>&]/gim, (i) => `&#${i.charCodeAt(0)};`);
 }
 
 /**
@@ -194,8 +194,8 @@ function removeClass(element, classname) {
 function init(description) {
   function resize() {
     /* Fix jumpy resizing: https://stackoverflow.com/a/18262927/1484919 */
-    const scrollTop = window.pageYOffset ||
-      (document.documentElement || document.body.parentNode || document.body).scrollTop;
+    const scrollTop = window.pageYOffset
+      || (document.documentElement || document.body.parentNode || document.body).scrollTop;
 
     description.style.height = 'auto';
     description.style.height = `${description.scrollHeight + 10}px`;
@@ -490,9 +490,10 @@ function init(description) {
           });
         });
 
-        const ids = links.map(item => item.id);
-        window.location =
-          `${basePath}/admin/shaare/visibility?token=${token.value}&newVisibility=${visibility}&id=${ids.join('+')}`;
+        const ids = links.map((item) => item.id);
+        window.location = (
+          `${basePath}/admin/shaare/visibility?token=${token.value}&newVisibility=${visibility}&id=${ids.join('+')}`
+        );
       });
     });
   }
@@ -575,7 +576,7 @@ function init(description) {
             .setAttribute('href', `${basePath}/admin/tags?fromtag=${encodeURIComponent(totag)}`);
 
           // Refresh awesomplete values
-          existingTags = existingTags.map(tag => (tag === fromtag ? totag : tag));
+          existingTags = existingTags.map((tag) => (tag === fromtag ? totag : tag));
           awesomepletes = updateAwesompleteList('.rename-tag-input', existingTags, awesomepletes);
         }
       };
@@ -614,7 +615,7 @@ function init(description) {
         xhr.send(encodeURI(`deletetag=1&fromtag=${tag}&token=${refreshedToken}`));
         refreshToken(basePath);
 
-        existingTags = existingTags.filter(tagItem => tagItem !== tag);
+        existingTags = existingTags.filter((tagItem) => tagItem !== tag);
         awesomepletes = updateAwesompleteList('.rename-tag-input', existingTags, awesomepletes);
       }
     });
