@@ -169,7 +169,7 @@ class ManageShaareController extends ShaarliAdminController
         return $this->redirectFromReferer(
             $request,
             $response,
-            ['add-shaare', 'shaare'], ['addlink', 'post', 'edit_link'],
+            ['/admin/add-shaare', '/admin/shaare'], ['addlink', 'post', 'edit_link'],
             $bookmark->getShortUrl()
         );
     }
