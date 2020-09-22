@@ -43,7 +43,7 @@ class SaveBookmarkTest extends TestCase
             'lf_description' => 'Provided description.',
             'lf_tags' => 'abc def',
             'lf_private' => '1',
-            'returnurl' => 'http://shaarli.tld/subfolder/admin/add-shaare'
+            'returnurl' => 'http://shaarli/subfolder/admin/add-shaare'
         ];
 
         $request = $this->createMock(Request::class);
@@ -124,7 +124,7 @@ class SaveBookmarkTest extends TestCase
             'lf_description' => 'Provided description.',
             'lf_tags' => 'abc def',
             'lf_private' => '1',
-            'returnurl' => 'http://shaarli.tld/subfolder/?page=2'
+            'returnurl' => 'http://shaarli/subfolder/?page=2'
         ];
 
         $request = $this->createMock(Request::class);

@@ -110,7 +110,7 @@ class ShaarliVisitorControllerTest extends TestCase
      */
     public function testRedirectFromRefererDefault(): void
     {
-        $this->container->environment['HTTP_REFERER'] = 'http://shaarli.tld/subfolder/controller?query=param&other=2';
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/controller?query=param&other=2';
 
         $response = new Response();
 
@@ -125,7 +125,7 @@ class ShaarliVisitorControllerTest extends TestCase
      */
     public function testRedirectFromRefererWithUnmatchedLoopTerm(): void
     {
-        $this->container->environment['HTTP_REFERER'] = 'http://shaarli.tld/subfolder/controller?query=param&other=2';
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/controller?query=param&other=2';
 
         $response = new Response();
 
@@ -140,7 +140,7 @@ class ShaarliVisitorControllerTest extends TestCase
      */
     public function testRedirectFromRefererWithMatchingLoopTermInPath(): void
     {
-        $this->container->environment['HTTP_REFERER'] = 'http://shaarli.tld/subfolder/controller?query=param&other=2';
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/controller?query=param&other=2';
 
         $response = new Response();
 
@@ -155,7 +155,7 @@ class ShaarliVisitorControllerTest extends TestCase
      */
     public function testRedirectFromRefererWithMatchingLoopTermInQueryParam(): void
     {
-        $this->container->environment['HTTP_REFERER'] = 'http://shaarli.tld/subfolder/controller?query=param&other=2';
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/controller?query=param&other=2';
 
         $response = new Response();
 
@@ -171,7 +171,7 @@ class ShaarliVisitorControllerTest extends TestCase
      */
     public function testRedirectFromRefererWithMatchingLoopTermInQueryValue(): void
     {
-        $this->container->environment['HTTP_REFERER'] = 'http://shaarli.tld/subfolder/controller?query=param&other=2';
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/controller?query=param&other=2';
 
         $response = new Response();
 
@@ -187,7 +187,7 @@ class ShaarliVisitorControllerTest extends TestCase
      */
     public function testRedirectFromRefererWithLoopTermInDomain(): void
     {
-        $this->container->environment['HTTP_REFERER'] = 'http://shaarli.tld/subfolder/controller?query=param&other=2';
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/controller?query=param&other=2';
 
         $response = new Response();
 
@@ -203,7 +203,7 @@ class ShaarliVisitorControllerTest extends TestCase
      */
     public function testRedirectFromRefererWithMatchingClearedParam(): void
     {
-        $this->container->environment['HTTP_REFERER'] = 'http://shaarli.tld/subfolder/controller?query=param&other=2';
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/controller?query=param&other=2';
 
         $response = new Response();
 
@@ -211,5 +211,36 @@ class ShaarliVisitorControllerTest extends TestCase
 
         static::assertSame(302, $result->getStatusCode());
         static::assertSame(['/subfolder/controller?other=2'], $result->getHeader('location'));
+    }
+
+    /**
+     * Test redirectFromReferer() - From another domain -> we ignore the given referrer.
+     */
+    public function testRedirectExternalReferer(): void
+    {
+        $this->container->environment['HTTP_REFERER'] = 'http://other.domain.tld/controller?query=param&other=2';
+
+        $response = new Response();
+
+        $result = $this->controller->redirectFromReferer($this->request, $response, ['query'], ['query']);
+
+        static::assertSame(302, $result->getStatusCode());
+        static::assertSame(['/subfolder/'], $result->getHeader('location'));
+    }
+
+    /**
+     * Test redirectFromReferer() - From another domain -> we ignore the given referrer.
+     */
+    public function testRedirectExternalRefererExplicitDomainName(): void
+    {
+        $this->container->environment['SERVER_NAME'] = 'my.shaarli.tld';
+        $this->container->environment['HTTP_REFERER'] = 'http://your.shaarli.tld/controller?query=param&other=2';
+
+        $response = new Response();
+
+        $result = $this->controller->redirectFromReferer($this->request, $response, ['query'], ['query']);
+
+        static::assertSame(302, $result->getStatusCode());
+        static::assertSame(['/subfolder/'], $result->getHeader('location'));
     }
 }

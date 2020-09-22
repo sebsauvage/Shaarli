@@ -31,7 +31,7 @@ class SessionFilterControllerTest extends TestCase
     {
         $arg = ['visibility' => 'private'];
 
-        $this->container->environment = ['HTTP_REFERER' => 'http://shaarli/subfolder/controller/?searchtag=abc'];
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/controller/?searchtag=abc';
 
         $this->container->loginManager->method('isLoggedIn')->willReturn(true);
         $this->container->sessionManager
@@ -57,7 +57,7 @@ class SessionFilterControllerTest extends TestCase
     {
         $arg = ['visibility' => 'private'];
 
-        $this->container->environment = ['HTTP_REFERER' => 'http://shaarli/subfolder/controller/?searchtag=abc'];
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/controller/?searchtag=abc';
 
         $this->container->loginManager->method('isLoggedIn')->willReturn(true);
         $this->container->sessionManager
@@ -121,7 +121,7 @@ class SessionFilterControllerTest extends TestCase
     {
         $arg = ['visibility' => 'test'];
 
-        $this->container->environment = ['HTTP_REFERER' => 'http://shaarli/subfolder/controller/?searchtag=abc'];
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/controller/?searchtag=abc';
 
         $this->container->loginManager->method('isLoggedIn')->willReturn(true);
         $this->container->sessionManager
@@ -151,7 +151,7 @@ class SessionFilterControllerTest extends TestCase
     {
         $arg = ['visibility' => 'test'];
 
-        $this->container->environment = ['HTTP_REFERER' => 'http://shaarli/subfolder/controller/?searchtag=abc'];
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/controller/?searchtag=abc';
 
         $this->container->loginManager = $this->createMock(LoginManager::class);
         $this->container->loginManager->method('isLoggedIn')->willReturn(false);
