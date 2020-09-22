@@ -28,7 +28,7 @@ class ApiAuthorizationException extends ApiException
      */
     public function setMessage($message)
     {
-        $original = $this->debug === true ? ': '. $this->getMessage() : '';
+        $original = $this->debug === true ? ': ' . $this->getMessage() : '';
         $this->message = $message . $original;
     }
 }

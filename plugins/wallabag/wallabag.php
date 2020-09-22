@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Wallabag plugin
  */
@@ -18,9 +19,9 @@ function wallabag_init($conf)
 {
     $wallabagUrl = $conf->get('plugins.WALLABAG_URL');
     if (empty($wallabagUrl)) {
-        $error = t('Wallabag plugin error: '.
+        $error = t('Wallabag plugin error: ' .
             'Please define the "WALLABAG_URL" setting in the plugin administration page.');
-        return array($error);
+        return [$error];
     }
     $conf->setEmpty('plugins.WALLABAG_URL', '2');
 }

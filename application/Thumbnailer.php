@@ -60,7 +60,7 @@ class Thumbnailer
             // TODO: create a proper error handling system able to catch exceptions...
             die(t(
                 'php-gd extension must be loaded to use thumbnails. '
-                .'Thumbnails are now disabled. Please reload the page.'
+                . 'Thumbnails are now disabled. Please reload the page.'
             ));
         }
 
@@ -81,7 +81,8 @@ class Thumbnailer
      */
     public function get($url)
     {
-        if ($this->conf->get('thumbnails.mode') === self::MODE_COMMON
+        if (
+            $this->conf->get('thumbnails.mode') === self::MODE_COMMON
             && ! $this->isCommonMediaOrImage($url)
         ) {
             return false;

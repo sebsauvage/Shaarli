@@ -35,7 +35,8 @@ class BookmarkListController extends ShaarliVisitorController
         $formatter->addContextData('base_path', $this->container->basePath);
 
         $searchTags = normalize_spaces($request->getParam('searchtags') ?? '');
-        $searchTerm = escape(normalize_spaces($request->getParam('searchterm') ?? ''));;
+        $searchTerm = escape(normalize_spaces($request->getParam('searchterm') ?? ''));
+        ;
 
         // Filter bookmarks according search parameters.
         $visibility = $this->container->sessionManager->getSessionParameter('visibility');
@@ -160,7 +161,7 @@ class BookmarkListController extends ShaarliVisitorController
         $data = array_merge(
             $this->initializeTemplateVars(),
             [
-                'pagetitle' => $bookmark->getTitle() .' - '. $this->container->conf->get('general.title', 'Shaarli'),
+                'pagetitle' => $bookmark->getTitle() . ' - ' . $this->container->conf->get('general.title', 'Shaarli'),
                 'links' => [$formatter->format($bookmark)],
             ]
         );
@@ -185,7 +186,8 @@ class BookmarkListController extends ShaarliVisitorController
             $bookmark->setThumbnail(null);
 
             // Requires an update, not async retrieval, thumbnails enabled
-            if ($bookmark->shouldUpdateThumbnail()
+            if (
+                $bookmark->shouldUpdateThumbnail()
                 && true !== $this->container->conf->get('general.enable_async_metadata', true)
                 && $this->container->conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE
             ) {

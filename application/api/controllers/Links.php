@@ -119,7 +119,8 @@ class Links extends ApiController
         $data = (array) ($request->getParsedBody() ?? []);
         $bookmark = ApiUtils::buildBookmarkFromRequest($data, $this->conf->get('privacy.default_private_links'));
         // duplicate by URL, return 409 Conflict
-        if (! empty($bookmark->getUrl())
+        if (
+            ! empty($bookmark->getUrl())
             && ! empty($dup = $this->bookmarkService->findByUrl($bookmark->getUrl()))
         ) {
             return $response->withJson(
@@ -159,7 +160,8 @@ class Links extends ApiController
 
         $requestBookmark = ApiUtils::buildBookmarkFromRequest($data, $this->conf->get('privacy.default_private_links'));
         // duplicate URL on a different link, return 409 Conflict
-        if (! empty($requestBookmark->getUrl())
+        if (
+            ! empty($requestBookmark->getUrl())
             && ! empty($dup = $this->bookmarkService->findByUrl($requestBookmark->getUrl()))
             && $dup->getId() != $id
         ) {

@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Security;
 
 use Shaarli\Config\ConfigManager;
@@ -79,7 +80,7 @@ class SessionManager
      */
     public function generateToken()
     {
-        $token = sha1(uniqid('', true) .'_'. mt_rand() . $this->conf->get('credentials.salt'));
+        $token = sha1(uniqid('', true) . '_' . mt_rand() . $this->conf->get('credentials.salt'));
         $this->session['tokens'][$token] = 1;
         return $token;
     }

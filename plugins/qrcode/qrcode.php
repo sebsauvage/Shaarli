@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin qrcode
  * Add QRCode containing URL for each links.

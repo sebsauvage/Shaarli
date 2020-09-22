@@ -17,26 +17,26 @@ use Shaarli\Render\TemplatePage;
 function hook_addlink_toolbar_render_header($data)
 {
     if ($data['_PAGE_'] == TemplatePage::LINKLIST && $data['_LOGGEDIN_'] === true) {
-        $form = array(
-            'attr' => array(
+        $form = [
+            'attr' => [
                 'method' => 'GET',
                 'action' => $data['_BASE_PATH_'] . '/admin/shaare',
                 'name'   => 'addform',
                 'class'  => 'addform',
-            ),
-            'inputs' => array(
-                array(
+            ],
+            'inputs' => [
+                [
                     'type' => 'text',
                     'name' => 'post',
                     'placeholder' => t('URI'),
-                ),
-                array(
+                ],
+                [
                     'type' => 'submit',
                     'value' => t('Add link'),
                     'class' => 'bigbutton',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $data['fields_toolbar'][] = $form;
     }
 

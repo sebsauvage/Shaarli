@@ -71,7 +71,7 @@ class BookmarkMarkdownFormatter extends BookmarkDefaultFormatter
         $processedDescription = $this->replaceTokens($processedDescription);
 
         if (!empty($processedDescription)) {
-            $processedDescription = '<div class="markdown">'. $processedDescription . '</div>';
+            $processedDescription = '<div class="markdown">' . $processedDescription . '</div>';
         }
 
         return $processedDescription;
@@ -110,7 +110,7 @@ class BookmarkMarkdownFormatter extends BookmarkDefaultFormatter
             function ($match) use ($allowedProtocols, $indexUrl) {
                 $link = startsWith($match[1], '?') || startsWith($match[1], '/') ? $indexUrl : '';
                 $link .= whitelist_protocols($match[1], $allowedProtocols);
-                return ']('. $link.')';
+                return '](' . $link . ')';
             },
             $description
         );
@@ -137,7 +137,7 @@ class BookmarkMarkdownFormatter extends BookmarkDefaultFormatter
          * \p{Mn} - any non marking space (accents, umlauts, etc)
          */
         $regex = '/(^|\s)#([\p{Pc}\p{N}\p{L}\p{Mn}]+)/mui';
-        $replacement = '$1[#$2]('. $indexUrl .'./add-tag/$2)';
+        $replacement = '$1[#$2](' . $indexUrl . './add-tag/$2)';
 
         $descriptionLines = explode(PHP_EOL, $description);
         $descriptionOut = '';
@@ -178,17 +178,17 @@ class BookmarkMarkdownFormatter extends BookmarkDefaultFormatter
      */
     protected function sanitizeHtml($description)
     {
-        $escapeTags = array(
+        $escapeTags = [
             'script',
             'style',
             'link',
             'iframe',
             'frameset',
             'frame',
-        );
+        ];
         foreach ($escapeTags as $tag) {
             $description = preg_replace_callback(
-                '#<\s*'. $tag .'[^>]*>(.*</\s*'. $tag .'[^>]*>)?#is',
+                '#<\s*' . $tag . '[^>]*>(.*</\s*' . $tag . '[^>]*>)?#is',
                 function ($match) {
                     return escape($match[0]);
                 },

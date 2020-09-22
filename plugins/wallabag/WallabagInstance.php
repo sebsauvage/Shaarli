@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Plugin\Wallabag;
 
 /**
@@ -11,20 +12,20 @@ class WallabagInstance
      *          - key: version ID, must match plugin settings.
      *          - value: version name.
      */
-    private static $wallabagVersions = array(
+    private static $wallabagVersions = [
         1 => '1.x',
         2 => '2.x',
-    );
+    ];
 
     /**
      * @var array Static reference to WB endpoint according to the API version.
      *          - key: version name.
      *          - value: endpoint.
      */
-    private static $wallabagEndpoints = array(
+    private static $wallabagEndpoints = [
         '1.x' => '?plainurl=',
         '2.x' => 'bookmarklet?url=',
-    );
+    ];
 
     /**
      * @var string Wallabag user instance URL.

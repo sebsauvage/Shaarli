@@ -23,7 +23,7 @@ class ShaareAddController extends ShaarliAdminController
 
         $this->assignView(
             'pagetitle',
-            t('Shaare a new link') .' - '. $this->container->conf->get('general.title', 'Shaarli')
+            t('Shaare a new link') . ' - ' . $this->container->conf->get('general.title', 'Shaarli')
         );
         $this->assignView('tags', $tags);
         $this->assignView('default_private_links', $this->container->conf->get('privacy.default_private_links', false));

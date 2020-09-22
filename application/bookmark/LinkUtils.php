@@ -67,14 +67,15 @@ function html_extract_tag($tag, $html)
     $propertiesKey = ['property', 'name', 'itemprop'];
     $properties = implode('|', $propertiesKey);
     // We need a OR here to accept either 'property=og:noquote' or 'property="og:unrelated og:my-tag"'
-    $orCondition  = '["\']?(?:og:)?'. $tag .'["\']?|["\'][^\'"]*?(?:og:)?' . $tag . '[^\'"]*?[\'"]';
+    $orCondition  = '["\']?(?:og:)?' . $tag . '["\']?|["\'][^\'"]*?(?:og:)?' . $tag . '[^\'"]*?[\'"]';
     // Try to retrieve OpenGraph tag.
-    $ogRegex = '#<meta[^>]+(?:'. $properties .')=(?:'. $orCondition .')[^>]*content=(["\'])([^\1]*?)\1.*?>#';
+    $ogRegex = '#<meta[^>]+(?:' . $properties . ')=(?:' . $orCondition . ')[^>]*content=(["\'])([^\1]*?)\1.*?>#';
     // If the attributes are not in the order property => content (e.g. Github)
     // New regex to keep this readable... more or less.
-    $ogRegexReverse = '#<meta[^>]+content=(["\'])([^\1]*?)\1[^>]+(?:'. $properties .')=(?:'. $orCondition .').*?>#';
+    $ogRegexReverse = '#<meta[^>]+content=(["\'])([^\1]*?)\1[^>]+(?:' . $properties . ')=(?:' . $orCondition . ').*?>#';
 
-    if (preg_match($ogRegex, $html, $matches) > 0
+    if (
+        preg_match($ogRegex, $html, $matches) > 0
         || preg_match($ogRegexReverse, $html, $matches) > 0
     ) {
         return $matches[2];
@@ -116,7 +117,7 @@ function hashtag_autolink($description, $indexUrl = '')
      * \p{Mn} - any non marking space (accents, umlauts, etc)
      */
     $regex = '/(^|\s)#([\p{Pc}\p{N}\p{L}\p{Mn}]+)/mui';
-    $replacement = '$1<a href="'. $indexUrl .'./add-tag/$2" title="Hashtag $2">#$2</a>';
+    $replacement = '$1<a href="' . $indexUrl . './add-tag/$2" title="Hashtag $2">#$2</a>';
     return preg_replace($regex, $replacement, $description);
 }
 

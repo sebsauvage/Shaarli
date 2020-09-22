@@ -39,8 +39,8 @@ function save_plugin_config($formData)
         throw new PluginConfigOrderException();
     }
 
-    $plugins = array();
-    $newEnabledPlugins = array();
+    $plugins = [];
+    $newEnabledPlugins = [];
     foreach ($formData as $key => $data) {
         if (startsWith($key, 'order')) {
             continue;
@@ -62,7 +62,7 @@ function save_plugin_config($formData)
         throw new PluginConfigOrderException();
     }
 
-    $finalPlugins = array();
+    $finalPlugins = [];
     // Make plugins order continuous.
     foreach ($plugins as $plugin) {
         $finalPlugins[] = $plugin;
@@ -81,7 +81,7 @@ function save_plugin_config($formData)
  */
 function validate_plugin_order($formData)
 {
-    $orders = array();
+    $orders = [];
     foreach ($formData as $key => $value) {
         // No duplicate order allowed.
         if (in_array($value, $orders, true)) {

@@ -19,7 +19,7 @@ class UpdaterUtils
                 return explode(';', $content);
             }
         }
-        return array();
+        return [];
     }
 
     /**
@@ -38,7 +38,7 @@ class UpdaterUtils
 
         $res = file_put_contents($updatesFilepath, implode(';', $updates));
         if ($res === false) {
-            throw new \Exception('Unable to write updates in '. $updatesFilepath . '.');
+            throw new \Exception('Unable to write updates in ' . $updatesFilepath . '.');
         }
     }
 }

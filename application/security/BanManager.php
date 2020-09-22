@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Shaarli\Security;
 
 use Psr\Log\LoggerInterface;
@@ -47,7 +46,8 @@ class BanManager
      * @param string          $banFile        Path to the file containing IP bans and failures
      * @param LoggerInterface $logger         PSR-3 logger to save login attempts in log directory
      */
-    public function __construct($trustedProxies, $nbAttempts, $banDuration, $banFile, LoggerInterface $logger) {
+    public function __construct($trustedProxies, $nbAttempts, $banDuration, $banFile, LoggerInterface $logger)
+    {
         $this->trustedProxies = $trustedProxies;
         $this->nbAttempts = $nbAttempts;
         $this->banDuration = $banDuration;
@@ -80,7 +80,7 @@ class BanManager
 
         if ($this->failures[$ip] >= $this->nbAttempts) {
             $this->bans[$ip] = time() + $this->banDuration;
-            $this->logger->info(format_log('IP address banned from login: '. $ip, $ip));
+            $this->logger->info(format_log('IP address banned from login: ' . $ip, $ip));
         }
         $this->writeBanFile();
     }
@@ -136,7 +136,7 @@ class BanManager
             unset($this->failures[$ip]);
         }
         unset($this->bans[$ip]);
-        $this->logger->info(format_log('Ban lifted for: '. $ip, $ip));
+        $this->logger->info(format_log('Ban lifted for: ' . $ip, $ip));
 
         $this->writeBanFile();
         return false;

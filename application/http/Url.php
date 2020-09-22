@@ -17,7 +17,7 @@ namespace Shaarli\Http;
  */
 class Url
 {
-    private static $annoyingQueryParams = array(
+    private static $annoyingQueryParams = [
         // Facebook
         'action_object_map=',
         'action_ref_map=',
@@ -37,15 +37,15 @@ class Url
 
         // Other
         'campaign_'
-    );
+    ];
 
-    private static $annoyingFragments = array(
+    private static $annoyingFragments = [
         // ATInternet
         'xtor=RSS-',
 
         // Misc.
         'tk.rss_all'
-    );
+    ];
 
     /*
      * URL parts represented as an array
@@ -120,7 +120,7 @@ class Url
         foreach (self::$annoyingQueryParams as $annoying) {
             foreach ($queryParams as $param) {
                 if (startsWith($param, $annoying)) {
-                    $queryParams = array_diff($queryParams, array($param));
+                    $queryParams = array_diff($queryParams, [$param]);
                     continue;
                 }
             }

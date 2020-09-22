@@ -59,11 +59,11 @@ class NetscapeBookmarkUtils
         $indexUrl
     ) {
         // see tpl/export.html for possible values
-        if (!in_array($selection, array('all', 'public', 'private'))) {
+        if (!in_array($selection, ['all', 'public', 'private'])) {
             throw new Exception(t('Invalid export selection:') . ' "' . $selection . '"');
         }
 
-        $bookmarkLinks = array();
+        $bookmarkLinks = [];
         foreach ($this->bookmarkService->search([], $selection) as $bookmark) {
             $link = $formatter->format($bookmark);
             $link['taglist'] = implode(',', $bookmark->getTags());

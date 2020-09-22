@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Api;
 
 use Shaarli\Api\Exceptions\ApiAuthorizationException;
@@ -27,7 +28,7 @@ class ApiUtils
             throw new ApiAuthorizationException('Malformed JWT token');
         }
 
-        $genSign = Base64Url::encode(hash_hmac('sha512', $parts[0] .'.'. $parts[1], $secret, true));
+        $genSign = Base64Url::encode(hash_hmac('sha512', $parts[0] . '.' . $parts[1], $secret, true));
         if ($parts[2] != $genSign) {
             throw new ApiAuthorizationException('Invalid JWT signature');
         }
@@ -42,7 +43,8 @@ class ApiUtils
             throw new ApiAuthorizationException('Invalid JWT payload');
         }
 
-        if (empty($payload->iat)
+        if (
+            empty($payload->iat)
             || $payload->iat > time()
             || time() - $payload->iat > ApiMiddleware::$TOKEN_DURATION
         ) {

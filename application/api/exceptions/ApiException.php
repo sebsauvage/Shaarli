@@ -44,7 +44,7 @@ abstract class ApiException extends \Exception
         }
         return [
             'message' => $this->getMessage(),
-            'stacktrace' => get_class($this) .': '. $this->getTraceAsString()
+            'stacktrace' => get_class($this) . ': ' . $this->getTraceAsString()
         ];
     }
 

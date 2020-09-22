@@ -48,7 +48,7 @@ function get_http_response(
     $cleanUrl = $urlObj->idnToAscii();
 
     if (!filter_var($cleanUrl, FILTER_VALIDATE_URL) || !$urlObj->isHttp()) {
-        return array(array(0 => 'Invalid HTTP UrlUtils'), false);
+        return [[0 => 'Invalid HTTP UrlUtils'], false];
     }
 
     $userAgent =
@@ -71,7 +71,7 @@ function get_http_response(
 
     $ch = curl_init($cleanUrl);
     if ($ch === false) {
-        return array(array(0 => 'curl_init() error'), false);
+        return [[0 => 'curl_init() error'], false];
     }
 
     // General cURL settings
@@ -82,7 +82,7 @@ function get_http_response(
     curl_setopt(
         $ch,
         CURLOPT_HTTPHEADER,
-        array('Accept-Language: ' . $acceptLanguage)
+        ['Accept-Language: ' . $acceptLanguage]
     );
     curl_setopt($ch, CURLOPT_MAXREDIRS, $maxRedirs);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -90,7 +90,7 @@ function get_http_response(
     curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
 
     // Max download size management
-    curl_setopt($ch, CURLOPT_BUFFERSIZE, 1024*16);
+    curl_setopt($ch, CURLOPT_BUFFERSIZE, 1024 * 16);
     curl_setopt($ch, CURLOPT_NOPROGRESS, false);
     if (is_callable($curlHeaderFunction)) {
         curl_setopt($ch, CURLOPT_HEADERFUNCTION, $curlHeaderFunction);
@@ -122,9 +122,9 @@ function get_http_response(
              * Removing this would require updating
              * GetHttpUrlTest::testGetInvalidRemoteUrl()
              */
-            return array(false, false);
+            return [false, false];
         }
-        return array(array(0 => 'curl_exec() error: ' . $errorStr), false);
+        return [[0 => 'curl_exec() error: ' . $errorStr], false];
     }
 
     // Formatting output like the fallback method
@@ -135,7 +135,7 @@ function get_http_response(
     $rawHeadersLastRedir = end($rawHeadersArrayRedirs);
 
     $content = substr($response, $headSize);
-    $headers = array();
+    $headers = [];
     foreach (preg_split('~[\r\n]+~', $rawHeadersLastRedir) as $line) {
         if (empty($line) || ctype_space($line)) {
             continue;
@@ -146,7 +146,7 @@ function get_http_response(
             $value = $splitLine[1];
             if (array_key_exists($key, $headers)) {
                 if (!is_array($headers[$key])) {
-                    $headers[$key] = array(0 => $headers[$key]);
+                    $headers[$key] = [0 => $headers[$key]];
                 }
                 $headers[$key][] = $value;
             } else {
@@ -157,7 +157,7 @@ function get_http_response(
         }
     }
 
-    return array($headers, $content);
+    return [$headers, $content];
 }
 
 /**
@@ -188,15 +188,15 @@ function get_http_response_fallback(
     $acceptLanguage,
     $maxRedr
 ) {
-    $options = array(
-        'http' => array(
+    $options = [
+        'http' => [
             'method' => 'GET',
             'timeout' => $timeout,
             'user_agent' => $userAgent,
             'header' => "Accept: */*\r\n"
                 . 'Accept-Language: ' . $acceptLanguage
-        )
-    );
+        ]
+    ];
 
     stream_context_set_default($options);
     list($headers, $finalUrl) = get_redirected_headers($cleanUrl, $maxRedr);
@@ -207,7 +207,7 @@ function get_http_response_fallback(
     }
 
     if (! $headers) {
-        return array($headers, false);
+        return [$headers, false];
     }
 
     try {
@@ -215,10 +215,10 @@ function get_http_response_fallback(
         $context = stream_context_create($options);
         $content = file_get_contents($finalUrl, false, $context, -1, $maxBytes);
     } catch (Exception $exc) {
-        return array(array(0 => 'HTTP Error'), $exc->getMessage());
+        return [[0 => 'HTTP Error'], $exc->getMessage()];
     }
 
-    return array($headers, $content);
+    return [$headers, $content];
 }
 
 /**
@@ -237,10 +237,12 @@ function get_redirected_headers($url, $redirectionLimit = 3)
     }
 
     // Headers found, redirection found, and limit not reached.
-    if ($redirectionLimit-- > 0
+    if (
+        $redirectionLimit-- > 0
         && !empty($headers)
         && (strpos($headers[0], '301') !== false || strpos($headers[0], '302') !== false)
-        && !empty($headers['Location'])) {
+        && !empty($headers['Location'])
+    ) {
         $redirection = is_array($headers['Location']) ? end($headers['Location']) : $headers['Location'];
         if ($redirection != $url) {
             $redirection = getAbsoluteUrl($url, $redirection);
@@ -248,7 +250,7 @@ function get_redirected_headers($url, $redirectionLimit = 3)
         }
     }
 
-    return array($headers, $url);
+    return [$headers, $url];
 }
 
 /**
@@ -270,7 +272,7 @@ function getAbsoluteUrl($originalUrl, $newUrl)
     }
 
     $parts = parse_url($originalUrl);
-    $final = $parts['scheme'] .'://'. $parts['host'];
+    $final = $parts['scheme'] . '://' . $parts['host'];
     $final .= (!empty($parts['port'])) ? $parts['port'] : '';
     $final .= '/';
     if ($newUrl[0] != '/') {
@@ -323,7 +325,8 @@ function server_url($server)
                 $scheme = 'https';
             }
 
-            if (($scheme == 'http' && $port != '80')
+            if (
+                ($scheme == 'http' && $port != '80')
                 || ($scheme == 'https' && $port != '443')
             ) {
                 $port = ':' . $port;
@@ -344,22 +347,26 @@ function server_url($server)
             $host = $server['SERVER_NAME'];
         }
 
-        return $scheme.'://'.$host.$port;
+        return $scheme . '://' . $host . $port;
     }
 
     // SSL detection
-    if ((! empty($server['HTTPS']) && strtolower($server['HTTPS']) == 'on')
-        || (isset($server['SERVER_PORT']) && $server['SERVER_PORT'] == '443')) {
+    if (
+        (! empty($server['HTTPS']) && strtolower($server['HTTPS']) == 'on')
+        || (isset($server['SERVER_PORT']) && $server['SERVER_PORT'] == '443')
+    ) {
         $scheme = 'https';
     }
 
     // Do not append standard port values
-    if (($scheme == 'http' && $server['SERVER_PORT'] != '80')
-        || ($scheme == 'https' && $server['SERVER_PORT'] != '443')) {
-        $port = ':'.$server['SERVER_PORT'];
+    if (
+        ($scheme == 'http' && $server['SERVER_PORT'] != '80')
+        || ($scheme == 'https' && $server['SERVER_PORT'] != '443')
+    ) {
+        $port = ':' . $server['SERVER_PORT'];
     }
 
-    return $scheme.'://'.$server['SERVER_NAME'].$port;
+    return $scheme . '://' . $server['SERVER_NAME'] . $port;
 }
 
 /**
@@ -567,7 +574,10 @@ function get_curl_download_callback(
      *
      * @return int|bool length of $data or false if we need to stop the download
      */
-    return function ($ch, $data) use (
+    return function (
+        $ch,
+        $data
+    ) use (
         $retrieveDescription,
         $tagsSeparator,
         &$charset,
@@ -601,7 +611,7 @@ function get_curl_download_callback(
                 $foundChunk = $currentChunk;
                 // Keywords use the format tag1, tag2 multiple words, tag
                 // So we split the result with `,`, then if a tag contains the separator we replace it by `-`.
-                $keywords = tags_array2str(array_map(function(string $keyword) use ($tagsSeparator): string {
+                $keywords = tags_array2str(array_map(function (string $keyword) use ($tagsSeparator): string {
                     return tags_array2str(tags_str2array($keyword, $tagsSeparator), '-');
                 }, tags_str2array($keywords, ',')), $tagsSeparator);
             }
@@ -611,7 +621,8 @@ function get_curl_download_callback(
         // If we already found either the title, description or keywords,
         // it's highly unlikely that we'll found the other metas further than
         // in the same chunk of data or the next one. So we also stop the download after that.
-        if ((!empty($responseCode) && !empty($contentType) && !empty($charset)) && $foundChunk !== null
+        if (
+            (!empty($responseCode) && !empty($contentType) && !empty($charset)) && $foundChunk !== null
             && (! $retrieveDescription
                 || $foundChunk < $currentChunk
                 || (!empty($title) && !empty($description) && !empty($keywords))

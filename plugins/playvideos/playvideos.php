@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin PlayVideos
  *
@@ -19,14 +20,14 @@ use Shaarli\Render\TemplatePage;
 function hook_playvideos_render_header($data)
 {
     if ($data['_PAGE_'] == TemplatePage::LINKLIST) {
-        $playvideo = array(
-            'attr' => array(
+        $playvideo = [
+            'attr' => [
                 'href' => '#',
                 'title' => t('Video player'),
                 'id' => 'playvideos',
-            ),
-            'html' => '► '. t('Play Videos')
-        );
+            ],
+            'html' => '► ' . t('Play Videos')
+        ];
         $data['buttons_toolbar'][] = $playvideo;
     }
 

@@ -32,7 +32,7 @@ class ManageTagController extends ShaarliAdminController
         $this->assignView('tags_separator', $separator);
         $this->assignView(
             'pagetitle',
-            t('Manage tags') .' - '. $this->container->conf->get('general.title', 'Shaarli')
+            t('Manage tags') . ' - ' . $this->container->conf->get('general.title', 'Shaarli')
         );
 
         return $response->write($this->render(TemplatePage::CHANGE_TAG));
@@ -87,7 +87,7 @@ class ManageTagController extends ShaarliAdminController
 
         $this->saveSuccessMessage($alert);
 
-        $redirect = true === $isDelete ? '/admin/tags' : '/?searchtags='. urlencode($toTag);
+        $redirect = true === $isDelete ? '/admin/tags' : '/?searchtags=' . urlencode($toTag);
 
         return $this->redirect($response, $redirect);
     }

@@ -150,7 +150,7 @@ class BookmarkFilter
             return $this->bookmarks;
         }
 
-        $out = array();
+        $out = [];
         foreach ($this->bookmarks as $key => $value) {
             if ($value->isPrivate() && $visibility === 'private') {
                 $out[$key] = $value;
@@ -395,7 +395,7 @@ class BookmarkFilter
             $search = $link->getTagsString($tagsSeparator);
             if (strlen(trim($link->getDescription())) && strpos($link->getDescription(), '#') !== false) {
                 // description given and at least one possible tag found
-                $descTags = array();
+                $descTags = [];
                 // find all tags in the form of #tag in the description
                 preg_match_all(
                     '/(?<![' . self::$HASHTAG_CHARS . '])#([' . self::$HASHTAG_CHARS . ']+?)\b/sm',
@@ -552,10 +552,10 @@ class BookmarkFilter
     protected function buildFullTextSearchableLink(Bookmark $link, array &$lengths): string
     {
         $tagString = $link->getTagsString($this->conf->get('general.tags_separator', ' '));
-        $content  = mb_convert_case($link->getTitle(), MB_CASE_LOWER, 'UTF-8') .'\\';
-        $content .= mb_convert_case($link->getDescription(), MB_CASE_LOWER, 'UTF-8') .'\\';
-        $content .= mb_convert_case($link->getUrl(), MB_CASE_LOWER, 'UTF-8') .'\\';
-        $content .= mb_convert_case($tagString, MB_CASE_LOWER, 'UTF-8') .'\\';
+        $content  = mb_convert_case($link->getTitle(), MB_CASE_LOWER, 'UTF-8') . '\\';
+        $content .= mb_convert_case($link->getDescription(), MB_CASE_LOWER, 'UTF-8') . '\\';
+        $content .= mb_convert_case($link->getUrl(), MB_CASE_LOWER, 'UTF-8') . '\\';
+        $content .= mb_convert_case($tagString, MB_CASE_LOWER, 'UTF-8') . '\\';
 
         $lengths['title'] = ['start' => 0, 'end' => mb_strlen($link->getTitle())];
         $nextField = $lengths['title']['end'] + 1;
