@@ -5,12 +5,14 @@
 
 namespace Shaarli\Http;
 
+use PHPUnit\Framework\TestCase;
+
 require_once 'application/http/HttpUtils.php';
 
 /**
  * Unitary tests for index_url()
  */
-class IndexUrlTest extends \PHPUnit\Framework\TestCase
+class IndexUrlTest extends TestCase
 {
     /**
      * If on the main page, remove "index.php" from the URL resource
@@ -99,6 +101,38 @@ class IndexUrlTest extends \PHPUnit\Framework\TestCase
                     'SERVER_PORT' => '80',
                     'SCRIPT_NAME' => '/admin/index.php',
                     'REQUEST_URI' => '/admin/picture-wall',
+                )
+            )
+        );
+    }
+
+    /**
+     * The route is stored in REQUEST_URI and subfolder
+     */
+    public function testPageUrlWithRouteUnderSubfolder()
+    {
+        $this->assertEquals(
+            'http://host.tld/subfolder/picture-wall',
+            page_url(
+                array(
+                    'HTTPS' => 'Off',
+                    'SERVER_NAME' => 'host.tld',
+                    'SERVER_PORT' => '80',
+                    'SCRIPT_NAME' => '/subfolder/index.php',
+                    'REQUEST_URI' => '/subfolder/picture-wall',
+                )
+            )
+        );
+
+        $this->assertEquals(
+            'http://host.tld/subfolder/admin/picture-wall',
+            page_url(
+                array(
+                    'HTTPS' => 'Off',
+                    'SERVER_NAME' => 'host.tld',
+                    'SERVER_PORT' => '80',
+                    'SCRIPT_NAME' => '/subfolder/admin/index.php',
+                    'REQUEST_URI' => '/subfolder/admin/picture-wall',
                 )
             )
         );

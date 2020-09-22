@@ -39,6 +39,6 @@ class OpenSearchControllerTest extends TestCase
             $result->getHeader('Content-Type')[0]
         );
         static::assertSame('opensearch', (string) $result->getBody());
-        static::assertSame('http://shaarli', $assignedVariables['serverurl']);
+        static::assertSame('http://shaarli/subfolder/', $assignedVariables['serverurl']);
     }
 }

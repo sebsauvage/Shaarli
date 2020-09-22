@@ -84,7 +84,7 @@ class ExportControllerTest extends TestCase
                     static::assertInstanceOf(BookmarkRawFormatter::class, $formatter);
                     static::assertSame($parameters['selection'], $selection);
                     static::assertTrue($prependNoteUrl);
-                    static::assertSame('http://shaarli', $indexUrl);
+                    static::assertSame('http://shaarli/subfolder/', $indexUrl);
 
                     return $bookmarks;
                 }

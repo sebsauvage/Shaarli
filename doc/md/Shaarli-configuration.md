@@ -7,7 +7,7 @@ Once your Shaarli instance is installed, the file `data/config.json.php` is gene
 - its values override those defined in `index.php`
 - it is wrapped in a PHP comment so that its contents are never served by the web server, regardless of configuration
 
-**Do not edit configuration options in index.php! Your changes would be lost.** 
+**Do not edit configuration options in index.php! Your changes would be lost.**
 
 ## Tools menu
 
@@ -135,71 +135,72 @@ Some settings can be configured directly from a web browser by accesing the `Too
 ## Settings
 
 ### Credentials
- 
+
 _These settings should not be edited_
 
-- **login**: Login username.  
-- **hash**: Generated password hash.  
+- **login**: Login username.
+- **hash**: Generated password hash.
 - **salt**: Password salt.
 
 ### General
 
-- **title**: Shaarli's instance title.  
-- **header_link**: Link to the homepage.  
-- **links_per_page**: Number of Shaares displayed per page.  
-- **timezone**: See [the list of supported timezones](http://php.net/manual/en/timezones.php).  
+- **title**: Shaarli's instance title.
+- **header_link**: Link to the homepage.
+- **links_per_page**: Number of Shaares displayed per page.
+- **timezone**: See [the list of supported timezones](http://php.net/manual/en/timezones.php).
 - **enabled_plugins**: List of enabled plugins.
 - **default_note_title**: Default title of a new note.
 - **retrieve_description** (boolean): If set to true, for every new Shaare Shaarli will try to retrieve the description and keywords from the HTML meta tags.
+- **root_url**: Overrides automatic discovery of Shaarli instance's URL (e.g.) `https://sub.domain.tld/shaarli-folder/`.
 
 ### Security
 
-- **session_protection_disabled**: Disable session cookie hijacking protection (not recommended). 
-  It might be useful if your IP adress often changes.  
-- **ban_after**: Failed login attempts before being IP banned.  
-- **ban_duration**: IP ban duration in seconds.  
-- **open_shaarli**: Anyone can add a new Shaare while logged out if enabled.  
-- **trusted_proxies**: List of trusted IP which won't be banned after failed login attemps. Useful if Shaarli is behind a reverse proxy.  
+- **session_protection_disabled**: Disable session cookie hijacking protection (not recommended).
+  It might be useful if your IP adress often changes.
+- **ban_after**: Failed login attempts before being IP banned.
+- **ban_duration**: IP ban duration in seconds.
+- **open_shaarli**: Anyone can add a new Shaare while logged out if enabled.
+- **trusted_proxies**: List of trusted IP which won't be banned after failed login attemps. Useful if Shaarli is behind a reverse proxy.
 - **allowed_protocols**: List of allowed protocols in shaare URLs or markdown-rendered descriptions. Useful if you want to store `javascript:` links (bookmarklets) in Shaarli (default: `["ftp", "ftps", "magnet"]`).
 
 ### Resources
 
-- **data_dir**: Data directory.  
-- **datastore**: Shaarli's Shaares database file path.  
+- **data_dir**: Data directory.
+- **datastore**: Shaarli's Shaares database file path.
 - **history**: Shaarli's operation history file path.
-- **updates**: File path for the ran updates file.  
-- **log**: Log file path.  
-- **update_check**: Last update check file path.  
-- **raintpl_tpl**: Templates directory.  
-- **raintpl_tmp**: Template engine cache directory.  
-- **thumbnails_cache**: Thumbnails cache directory.  
-- **page_cache**: Shaarli's internal cache directory.  
+- **updates**: File path for the ran updates file.
+- **log**: Log file path.
+- **update_check**: Last update check file path.
+- **raintpl_tpl**: Templates directory.
+- **raintpl_tmp**: Template engine cache directory.
+- **thumbnails_cache**: Thumbnails cache directory.
+- **page_cache**: Shaarli's internal cache directory.
 - **ban_file**: Banned IP file path.
 
 ### Translation
 
 - **language**: translation language (also see [Translations](Translations))
-    - **auto** (default): The translation language is chosen from the browser locale. 
-    It means that the language can be different for 2 different visitors depending on their locale.  
+    - **auto** (default): The translation language is chosen from the browser locale.
+    It means that the language can be different for 2 different visitors depending on their locale.
     - **en**: Use the English translation.
     - **fr**: Use the French translation.
-- **mode**: 
+- **mode**:
     - **auto** or **php** (default): Use the PHP implementation of gettext (slower)
-    - **gettext**: Use PHP builtin gettext extension 
+    - **gettext**: Use PHP builtin gettext extension
     (faster, but requires `php-gettext` to be installed and to reload the web server on update)
-- **extension**: Translation extensions for custom themes or plugins. 
+- **extension**: Translation extensions for custom themes or plugins.
 Must be an associative array: `translation domain => translation path`.
 
 ### Updates
 
-- **check_updates**: Enable or disable update check to the git repository.  
-- **check_updates_branch**: Git branch used to check updates (e.g. `stable` or `master`).  
+- **check_updates**: Enable or disable update check to the git repository.
+- **check_updates_branch**: Git branch used to check updates (e.g. `stable` or `master`).
 - **check_updates_interval**: Look for new version every N seconds (default: every day).
 
 ### Privacy
 
-- **default_private_links**: Check the private checkbox by default for every new Shaare.  
-- **hide_public_links**: All Shaares are hidden while logged out.  
+- **default_private_links**: Check the private checkbox by default for every new Shaare.
+- **hide_public_links**: All Shaares are hidden while logged out.
 - **force_login**: if **hide_public_links** and this are set to `true`, all anonymous users are redirected to the login page.
 - **hide_timestamps**: Timestamps are hidden.
 - **remember_user_default**: Default state of the login page's *remember me* checkbox
@@ -207,12 +208,12 @@ Must be an associative array: `translation domain => translation path`.
 
 ### Feed
 
-- **rss_permalinks**: Enable this to redirect RSS links to Shaarli's permalinks instead of shaared URL.  
+- **rss_permalinks**: Enable this to redirect RSS links to Shaarli's permalinks instead of shaared URL.
 - **show_atom**: Display ATOM feed button.
 
 ### Thumbnail
 
-- **enable_thumbnails**: Enable or disable thumbnail display.  
+- **enable_thumbnails**: Enable or disable thumbnail display.
 - **enable_localcache**: Enable or disable local cache.
 
 ## Plugins configuration
