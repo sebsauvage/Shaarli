@@ -32,6 +32,6 @@
         </form>
     </div>
     {if="$previous_page_url"} <a href="{$previous_page_url}" class="paging_older">&#x25C4;Older</a> {/if}
-    <div class="paging_current">page {$page_current} / {$page_max} </div>
+    {if="$page_max>1"}<div class="paging_current">page {$page_current} / {$page_max} </div>{/if}
     {if="$next_page_url"} <a href="{$next_page_url}" class="paging_newer">Newer&#x25BA;</a> {/if}
 </div>

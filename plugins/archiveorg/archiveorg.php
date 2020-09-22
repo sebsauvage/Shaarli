@@ -20,10 +20,12 @@ function hook_archiveorg_render_linklist($data)
     $path = ($data['_BASE_PATH_'] ?? '') . '/' . PluginManager::$PLUGINS_PATH;
 
     foreach ($data['links'] as &$value) {
-        if ($value['private'] && preg_match('/^\?[a-zA-Z0-9-_@]{6}($|&|#)/', $value['real_url'])) {
+        $isNote = startsWith($value['real_url'], '/shaare/');
+        if ($value['private'] && $isNote) {
             continue;
         }
-        $archive = sprintf($archive_html, $value['url'], $path, t('View on archive.org'));
+        $url = $isNote ? rtrim(index_url($_SERVER), '/') . $value['real_url'] : $value['real_url'];
+        $archive = sprintf($archive_html, $url, $path, t('View on archive.org'));
         $value['link_plugin'][] = $archive;
     }
 
