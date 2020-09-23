@@ -69,20 +69,22 @@ pre {
   font-family: 'Roboto';
   font-weight: 400;
   font-style: normal;
-  src: local('Roboto'),
-  local('Roboto-Regular'),
-  url('../fonts/Roboto-Regular.woff2') format('woff2'),
-  url('../fonts/Roboto-Regular.woff') format('woff');
+  src:
+    local('Roboto'),
+    local('Roboto-Regular'),
+    url('../fonts/Roboto-Regular.woff2') format('woff2'),
+    url('../fonts/Roboto-Regular.woff') format('woff');
 }
 
 @font-face {
   font-family: 'Roboto';
   font-weight: 700;
   font-style: normal;
-  src: local('Roboto'),
-  local('Roboto-Bold'),
-  url('../fonts/Roboto-Bold.woff2') format('woff2'),
-  url('../fonts/Roboto-Bold.woff') format('woff');
+  src:
+    local('Roboto'),
+    local('Roboto-Bold'),
+    url('../fonts/Roboto-Bold.woff2') format('woff2'),
+    url('../fonts/Roboto-Bold.woff') format('woff');
 }
 
 body,
@@ -375,7 +377,7 @@ body,
 }
 
 @media screen and (max-width: 64em) {
-  .header-search ,
+  .header-search,
   .header-search * {
     visibility: hidden;
   }
@@ -554,7 +556,6 @@ body,
   color: $dark-grey;
   font-size: .9em;
 
-
   a {
     display: inline-block;
     margin: 3px 0;
@@ -620,7 +621,7 @@ body,
     &.selected {
       background: var(--main-color);
       color: $white;
-     }
+    }
   }
 
   input {
@@ -1609,13 +1610,14 @@ form {
 
   > div {
     border-radius: 10px;
-    background: repeating-linear-gradient(
-      -45deg,
-      $almost-white,
-      $almost-white 6px,
-      var(--background-color) 6px,
-      var(--background-color) 12px
-    );
+    background:
+      repeating-linear-gradient(
+        -45deg,
+        $almost-white,
+        $almost-white 6px,
+        var(--background-color) 6px,
+        var(--background-color) 12px
+      );
     width: 0%;
     height: 10px;
   }

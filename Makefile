@@ -174,4 +174,4 @@ eslint:
 
 ### Run CSSLint check against Shaarli's SCSS files
 sasslint:
-	@yarn run sass-lint -c .dev/.sasslintrc 'assets/default/scss/*.scss' -v -q
+	@yarn run stylelint --config .dev/.stylelintrc.js 'assets/default/scss/*.scss'
