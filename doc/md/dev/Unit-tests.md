@@ -10,21 +10,16 @@ You can either use:
 - a local version, downloadable [here](https://getcomposer.org/download/).
 
 ```bash
-# system-wide version
-$ composer install
-$ composer update
-
-# local version
-$ php composer.phar self-update
-$ php composer.phar install
-$ php composer.phar update
+# for Debian-based distros
+sudo apt install composer
 ```
+
 
 ## Install Shaarli dev dependencies
 
 ```bash
 $ cd /path/to/shaarli
-$ composer update
+$ make composer_dependencies_dev
 ```
 
 ## Install and enable Xdebug to generate PHPUnit coverage reports
@@ -34,7 +29,7 @@ $ composer update
 
 ```bash
 # for Debian-based distros:
-sudo aptitude install php5-xdebug
+sudo apt install php-xdebug
 
 # for ArchLinux:
 pacman -S xdebug
