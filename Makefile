@@ -3,7 +3,7 @@
 
 BIN = vendor/bin
 
-all: static_analysis_summary check_permissions test
+all: check_permissions test
 
 ##
 # Docker test adapter
