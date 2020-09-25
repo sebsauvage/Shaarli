@@ -142,6 +142,13 @@ abstract class ShaarliVisitorController
 
         if (null !== $referer) {
             $currentUrl = parse_url($referer);
+            // If the referer is not related to Shaarli instance, redirect to default
+            if (isset($currentUrl['host'])
+                && strpos(index_url($this->container->environment), $currentUrl['host']) === false
+            ) {
+                return $response->withRedirect($defaultPath);
+            }
+
             parse_str($currentUrl['query'] ?? '', $params);
             $path = $currentUrl['path'] ?? $defaultPath;
         } else {

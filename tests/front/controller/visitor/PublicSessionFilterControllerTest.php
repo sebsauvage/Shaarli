@@ -28,7 +28,7 @@ class PublicSessionFilterControllerTest extends TestCase
      */
     public function testLinksPerPage(): void
     {
-        $this->container->environment = ['HTTP_REFERER' => 'http://shaarli/subfolder/controller/?searchtag=abc'];
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/controller/?searchtag=abc';
 
         $request = $this->createMock(Request::class);
         $request->method('getParam')->with('nb')->willReturn('8');
@@ -74,7 +74,7 @@ class PublicSessionFilterControllerTest extends TestCase
      */
     public function testUntaggedOnly(): void
     {
-        $this->container->environment = ['HTTP_REFERER' => 'http://shaarli/subfolder/controller/?searchtag=abc'];
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/controller/?searchtag=abc';
 
         $request = $this->createMock(Request::class);
         $response = new Response();
@@ -97,7 +97,7 @@ class PublicSessionFilterControllerTest extends TestCase
      */
     public function testUntaggedOnlyToggleOff(): void
     {
-        $this->container->environment = ['HTTP_REFERER' => 'http://shaarli/subfolder/controller/?searchtag=abc'];
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/controller/?searchtag=abc';
 
         $request = $this->createMock(Request::class);
         $response = new Response();
