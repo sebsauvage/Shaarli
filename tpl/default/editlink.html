@@ -12,6 +12,8 @@
           action="{$base_path}/admin/shaare"
           class="page-form pure-u-lg-3-5 pure-u-22-24 page-form page-form-light"
     >
+      {$asyncLoadClass=$link_is_new && $async_metadata && empty($link.title) ? 'loading-input' : ''}
+
       <h2 class="window-title">
         {if="!$link_is_new"}{'Edit Shaare'|t}{else}{'New Shaare'|t}{/if}
       </h2>
@@ -28,21 +30,32 @@
       <div>
       <label for="lf_title">{'Title'|t}</label>
       </div>
-      <div>
-        <input type="text" name="lf_title" id="lf_title" value="{$link.title}" class="lf_input autofocus">
+      <div class="{$asyncLoadClass}">
+        <input type="text" name="lf_title" id="lf_title" value="{$link.title}"
+         class="lf_input {if="!$async_metadata"}autofocus{/if}"
+        >
+        <div class="icon-container">
+          <i class="loader"></i>
+        </div>
       </div>
       <div>
         <label for="lf_description">{'Description'|t}</label>
       </div>
-      <div>
+      <div class="{if="$retrieve_description"}{$asyncLoadClass}{/if}">
         <textarea name="lf_description" id="lf_description" class="autofocus">{$link.description}</textarea>
+        <div class="icon-container">
+          <i class="loader"></i>
+        </div>
       </div>
       <div>
         <label for="lf_tags">{'Tags'|t}</label>
       </div>
-      <div>
+      <div class="{if="$retrieve_description"}{$asyncLoadClass}{/if}">
         <input type="text" name="lf_tags" id="lf_tags" value="{$link.tags}" class="lf_input autofocus"
           data-list="{loop="$tags"}{$key}, {/loop}" data-multiple data-autofirst autocomplete="off" >
+        <div class="icon-container">
+          <i class="loader"></i>
+        </div>
       </div>
 
       <div>
@@ -88,5 +101,6 @@
     </form>
   </div>
   {include="page.footer"}
+  {if="$link_is_new && $async_metadata"}<script src="{$asset_path}/js/metadata.min.js?v={$version_hash}#"></script>{/if}
 </body>
 </html>

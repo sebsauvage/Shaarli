@@ -129,7 +129,7 @@ $app->group('/admin', function () {
     $this->post('/plugins', '\Shaarli\Front\Controller\Admin\PluginsController:save');
     $this->get('/token', '\Shaarli\Front\Controller\Admin\TokenController:getToken');
     $this->get('/thumbnails', '\Shaarli\Front\Controller\Admin\ThumbnailsController:index');
-
+    $this->get('/metadata', '\Shaarli\Front\Controller\Admin\MetadataController:ajaxRetrieveTitle');
     $this->get('/visibility/{visibility}', '\Shaarli\Front\Controller\Admin\SessionFilterController:visibility');
 })->add('\Shaarli\Front\ShaarliAdminMiddleware');
 

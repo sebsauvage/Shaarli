@@ -150,6 +150,7 @@ _These settings should not be edited_
 - **timezone**: See [the list of supported timezones](http://php.net/manual/en/timezones.php).
 - **enabled_plugins**: List of enabled plugins.
 - **default_note_title**: Default title of a new note.
+- **enable_async_metadata** (boolean): Retrieve external bookmark metadata asynchronously to prevent bookmark creation slowdown.
 - **retrieve_description** (boolean): If set to true, for every new Shaare Shaarli will try to retrieve the description and keywords from the HTML meta tags.
 - **root_url**: Overrides automatic discovery of Shaarli instance's URL (e.g.) `https://sub.domain.tld/shaarli-folder/`.
 

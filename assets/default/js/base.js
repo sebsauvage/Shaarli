@@ -1,4 +1,5 @@
 import Awesomplete from 'awesomplete';
+import he from 'he';
 
 /**
  * Find a parent element according to its tag and its attributes
@@ -93,15 +94,6 @@ function updateAwesompleteList(selector, tags, instances) {
     });
   }
   return instances;
-}
-
-/**
- * html_entities in JS
- *
- * @see http://stackoverflow.com/questions/18749591/encode-html-entities-in-javascript
- */
-function htmlEntities(str) {
-  return str.replace(/[\u00A0-\u9999<>&]/gim, (i) => `&#${i.charCodeAt(0)};`);
 }
 
 /**
@@ -569,7 +561,7 @@ function init(description) {
           input.setAttribute('name', totag);
           input.setAttribute('value', totag);
           findParent(input, 'div', { class: 'rename-tag-form' }).style.display = 'none';
-          block.querySelector('a.tag-link').innerHTML = htmlEntities(totag);
+          block.querySelector('a.tag-link').innerHTML = he.encode(totag);
           block
             .querySelector('a.tag-link')
             .setAttribute('href', `${basePath}/?searchtags=${encodeURIComponent(totag)}`);
