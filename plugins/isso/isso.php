@@ -49,7 +49,7 @@ function hook_isso_render_linklist($data, $conf)
         $isso = sprintf($issoHtml, $issoUrl, $issoUrl, $link['id'], $link['id']);
         $data['plugin_end_zone'][] = $isso;
     } else {
-        $button = '<span><a href="?%s#isso-thread">';
+        $button = '<span><a href="'. ($data['_BASE_PATH_'] ?? '') . '/shaare/%s#isso-thread">';
         // For the default theme we use a FontAwesome icon which is better than an image
         if ($conf->get('resource.theme') === 'default') {
             $button .= '<i class="linklist-plugin-icon fa fa-comment"></i>';

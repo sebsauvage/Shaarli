@@ -139,6 +139,20 @@ Each file contain two keys:
 
 > Note: In PHP, `parse_ini_file()` seems to want strings to be between by quotes `"` in the ini file.
 
+### Understanding relative paths
+
+Because Shaarli is a self-hosted tool, an instance can either be installed at the root directory, or under a subfolder.
+This means that you can *never* use absolute paths (eg `/plugins/mything/file.png`).
+
+If a file needs to be included in server end, use simple relative path:
+`PluginManager::$PLUGINS_PATH . '/mything/template.html'`.
+
+If it needs to be included in front end side (e.g. an image),
+the relative path must be prefixed with special data `_BASE_PATH_`:
+`($data['_BASE_PATH_'] ?? '') . '/' . PluginManager::$PLUGINS_PATH . '/mything/picture.png`.
+
+Note that special placeholders for CSS and JS files (respectively `css_files` and `js_files`) are already prefixed
+with the base path in template files.
 
 ### It's not working!
 
