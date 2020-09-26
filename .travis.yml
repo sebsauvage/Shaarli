@@ -43,7 +43,7 @@ cache:
 
 install:
   # install/update composer and php dependencies
-  - composer install --prefer-dist
+  - composer update --ignore-platform-reqs
 
 before_script:
   - PATH=${PATH//:\.\/node_modules\/\.bin/}
