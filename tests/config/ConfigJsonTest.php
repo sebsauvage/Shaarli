@@ -11,7 +11,7 @@ class ConfigJsonTest extends \PHPUnit\Framework\TestCase
      */
     protected $configIO;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->configIO = new ConfigJson();
     }

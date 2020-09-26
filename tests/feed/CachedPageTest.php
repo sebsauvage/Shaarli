@@ -17,7 +17,7 @@ class CachedPageTest extends \PHPUnit\Framework\TestCase
     /**
      * Create the cache directory if needed
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (!is_dir(self::$testCacheDir)) {
             mkdir(self::$testCacheDir);
@@ -28,7 +28,7 @@ class CachedPageTest extends \PHPUnit\Framework\TestCase
     /**
      * Reset the page cache
      */
-    public function setUp()
+    protected function setUp(): void
     {
         if (file_exists(self::$filename)) {
             unlink(self::$filename);

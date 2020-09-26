@@ -47,7 +47,7 @@ class InfoTest extends TestCase
     /**
      * Before every test, instantiate a new Api with its config, plugins and bookmarks.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->conf->set('resource.datastore', self::$testDatastore);
@@ -67,7 +67,7 @@ class InfoTest extends TestCase
     /**
      * After every test, remove the test datastore.
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         @unlink(self::$testDatastore);
     }

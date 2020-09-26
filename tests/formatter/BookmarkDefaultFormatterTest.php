@@ -25,7 +25,7 @@ class BookmarkDefaultFormatterTest extends TestCase
     /**
      * Initialize formatter instance.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         copy('tests/utils/config/configJson.json.php', self::$testConf .'.json.php');
         $this->conf = new ConfigManager(self::$testConf);

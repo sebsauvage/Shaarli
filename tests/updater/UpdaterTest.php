@@ -42,7 +42,7 @@ class UpdaterTest extends TestCase
     /**
      * Executed before each test.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);

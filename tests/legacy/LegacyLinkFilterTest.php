@@ -34,7 +34,7 @@ class LegacyLinkFilterTest extends \PHPUnit\Framework\TestCase
     /**
      * Instantiate linkFilter with ReferenceLinkDB data.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$refDB = new ReferenceLinkDB(true);
         self::$refDB->write(self::$testDatastore);

@@ -40,7 +40,7 @@ class LegacyUpdaterTest extends \PHPUnit\Framework\TestCase
     /**
      * Executed before each test.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         copy('tests/utils/config/configJson.json.php', self::$configFile .'.json.php');
         $this->conf = new ConfigManager(self::$configFile);
@@ -754,7 +754,7 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
         if (isset($_SESSION['warnings'])) {
             unset($_SESSION['warnings']);
         }
-        
+
         $updater = new LegacyUpdater([], [], $this->conf, true, $_SESSION);
         $this->assertTrue($updater->updateMethodWebThumbnailer());
         $this->assertFalse($this->conf->exists('thumbnail'));

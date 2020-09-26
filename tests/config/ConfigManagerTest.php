@@ -14,7 +14,7 @@ class ConfigManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected $conf;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->conf = new ConfigManager('tests/utils/config/configJson');
     }

@@ -54,7 +54,7 @@ class BookmarkExportTest extends TestCase
     /**
      * Instantiate reference data
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         static::$conf = new ConfigManager('tests/utils/config/configJson');
         static::$conf->set('resource.datastore', static::$testDatastore);

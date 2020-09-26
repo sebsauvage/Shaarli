@@ -16,7 +16,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Delete history file.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         if (file_exists(self::$historyFilePath)) {
             unlink(self::$historyFilePath);

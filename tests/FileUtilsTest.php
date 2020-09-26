@@ -19,7 +19,7 @@ class FileUtilsTest extends \PHPUnit\Framework\TestCase
     /**
      * Delete test file after every test.
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         @unlink(self::$file);
     }

@@ -66,7 +66,7 @@ class BookmarkFileServiceTest extends TestCase
      *
      * Resets test data for each test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (file_exists(self::$testDatastore)) {
             unlink(self::$testDatastore);

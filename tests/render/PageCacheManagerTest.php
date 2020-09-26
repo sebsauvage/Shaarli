@@ -29,7 +29,7 @@ class PageCacheManagerTest extends TestCase
     /**
      * Populate the cache with dummy files
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->cacheManager = new PageCacheManager(static::$testCacheDir, true);
 
@@ -48,7 +48,7 @@ class PageCacheManagerTest extends TestCase
     /**
      * Remove dummycache folder after each tests.
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         array_map('unlink', glob(self::$testCacheDir . '/*'));
         rmdir(self::$testCacheDir);

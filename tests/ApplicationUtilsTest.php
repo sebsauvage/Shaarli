@@ -17,7 +17,7 @@ class ApplicationUtilsTest extends \PHPUnit\Framework\TestCase
     /**
      * Reset test data for each test
      */
-    public function setUp()
+    protected function setUp(): void
     {
         FakeApplicationUtils::$VERSION_CODE = '';
         if (file_exists(self::$testUpdateFile)) {
@@ -28,7 +28,7 @@ class ApplicationUtilsTest extends \PHPUnit\Framework\TestCase
     /**
      * Remove test version file if it exists
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (is_file('sandbox/version.php')) {
             unlink('sandbox/version.php');

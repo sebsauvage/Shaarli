@@ -56,7 +56,7 @@ class DeleteLinkTest extends \PHPUnit\Framework\TestCase
     /**
      * Before each test, instantiate a new Api with its config, plugins and bookmarks.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->conf->set('resource.datastore', self::$testDatastore);
@@ -78,7 +78,7 @@ class DeleteLinkTest extends \PHPUnit\Framework\TestCase
     /**
      * After each test, remove the test datastore.
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         @unlink(self::$testDatastore);
         @unlink(self::$testHistory);

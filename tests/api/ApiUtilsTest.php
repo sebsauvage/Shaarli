@@ -13,7 +13,7 @@ class ApiUtilsTest extends \PHPUnit\Framework\TestCase
     /**
      * Force the timezone for ISO datetimes.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         date_default_timezone_set('UTC');
     }
