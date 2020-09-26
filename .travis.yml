@@ -43,7 +43,8 @@ cache:
 
 install:
   # install/update composer and php dependencies
-  - composer update --ignore-platform-reqs
+  - composer config --unset platform && composer config platform.php $TRAVIS_PHP_VERSION
+  - composer update
 
 before_script:
   - PATH=${PATH//:\.\/node_modules\/\.bin/}
