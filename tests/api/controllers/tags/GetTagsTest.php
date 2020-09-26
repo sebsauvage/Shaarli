@@ -1,6 +1,7 @@
 <?php
 namespace Shaarli\Api\Controllers;
 
+use malkusch\lock\mutex\NoMutex;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
@@ -59,13 +60,14 @@ class GetTagsTest extends \Shaarli\TestCase
      */
     protected function setUp(): void
     {
+        $mutex = new NoMutex();
         $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->conf->set('resource.datastore', self::$testDatastore);
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
         $history = new History('sandbox/history.php');
 
-        $this->bookmarkService = new BookmarkFileService($this->conf, $history, true);
+        $this->bookmarkService = new BookmarkFileService($this->conf, $history, $mutex, true);
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;

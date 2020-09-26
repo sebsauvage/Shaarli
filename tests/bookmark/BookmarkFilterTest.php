@@ -3,6 +3,7 @@
 namespace Shaarli\Bookmark;
 
 use Exception;
+use malkusch\lock\mutex\NoMutex;
 use ReferenceLinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
@@ -37,12 +38,13 @@ class BookmarkFilterTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        $mutex = new NoMutex();
         $conf = new ConfigManager('tests/utils/config/configJson');
         $conf->set('resource.datastore', self::$testDatastore);
         self::$refDB = new \ReferenceLinkDB();
         self::$refDB->write(self::$testDatastore);
         $history = new History('sandbox/history.php');
-        self::$bookmarkService = new \FakeBookmarkService($conf, $history, true);
+        self::$bookmarkService = new \FakeBookmarkService($conf, $history, $mutex, true);
         self::$linkFilter = new BookmarkFilter(self::$bookmarkService->getBookmarks());
     }
 

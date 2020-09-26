@@ -2,6 +2,7 @@
 
 namespace Shaarli\Netscape;
 
+use malkusch\lock\mutex\NoMutex;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Formatter\BookmarkFormatter;
@@ -56,12 +57,13 @@ class BookmarkExportTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        $mutex = new NoMutex();
         static::$conf = new ConfigManager('tests/utils/config/configJson');
         static::$conf->set('resource.datastore', static::$testDatastore);
         static::$refDb = new \ReferenceLinkDB();
         static::$refDb->write(static::$testDatastore);
         static::$history = new History('sandbox/history.php');
-        static::$bookmarkService = new BookmarkFileService(static::$conf, static::$history, true);
+        static::$bookmarkService = new BookmarkFileService(static::$conf, static::$history, $mutex, true);
         $factory = new FormatterFactory(static::$conf, true);
         static::$formatter = $factory->getFormatter('raw');
     }

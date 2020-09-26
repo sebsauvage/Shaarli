@@ -5,6 +5,7 @@ namespace Shaarli\Bookmark;
 
 
 use Exception;
+use malkusch\lock\mutex\Mutex;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Bookmark\Exception\DatastoreNotInitializedException;
 use Shaarli\Bookmark\Exception\EmptyDataStoreException;
@@ -47,15 +48,19 @@ class BookmarkFileService implements BookmarkServiceInterface
     /** @var bool true for logged in users. Default value to retrieve private bookmarks. */
     protected $isLoggedIn;
 
+    /** @var Mutex */
+    protected $mutex;
+
     /**
      * @inheritDoc
      */
-    public function __construct(ConfigManager $conf, History $history, $isLoggedIn)
+    public function __construct(ConfigManager $conf, History $history, Mutex $mutex, $isLoggedIn)
     {
         $this->conf = $conf;
         $this->history = $history;
+        $this->mutex = $mutex;
         $this->pageCacheManager = new PageCacheManager($this->conf->get('resource.page_cache'), $isLoggedIn);
-        $this->bookmarksIO = new BookmarkIO($this->conf);
+        $this->bookmarksIO = new BookmarkIO($this->conf, $this->mutex);
         $this->isLoggedIn = $isLoggedIn;
 
         if (!$this->isLoggedIn && $this->conf->get('privacy.hide_public_links', false)) {

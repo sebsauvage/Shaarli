@@ -3,6 +3,7 @@
 
 namespace Shaarli\Api\Controllers;
 
+use malkusch\lock\mutex\NoMutex;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Config\ConfigManager;
@@ -64,6 +65,7 @@ class PutLinkTest extends \Shaarli\TestCase
      */
     protected function setUp(): void
     {
+        $mutex = new NoMutex();
         $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->conf->set('resource.datastore', self::$testDatastore);
         $this->refDB = new \ReferenceLinkDB();
@@ -71,7 +73,7 @@ class PutLinkTest extends \Shaarli\TestCase
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
         $this->history = new History(self::$testHistory);
-        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, true);
+        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, $mutex, true);
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;

@@ -1,6 +1,7 @@
 <?php
 namespace Shaarli\Api;
 
+use malkusch\lock\mutex\FlockMutex;
 use Shaarli\Api\Exceptions\ApiAuthorizationException;
 use Shaarli\Api\Exceptions\ApiException;
 use Shaarli\Bookmark\BookmarkFileService;
@@ -143,6 +144,7 @@ class ApiMiddleware
         $linkDb = new BookmarkFileService(
             $conf,
             $this->container->get('history'),
+            new FlockMutex(fopen(SHAARLI_MUTEX_FILE, 'r'), 2),
             true
         );
         $this->container['db'] = $linkDb;
