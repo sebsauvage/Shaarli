@@ -43,6 +43,19 @@ class LinkUtilsTest extends TestCase
     }
 
     /**
+     * Test headers_extract_charset() when the charset is found with odd quotes.
+     */
+    public function testHeadersExtractExistentCharsetWithQuotes()
+    {
+        $charset = 'x-MacCroatian';
+        $headers = 'text/html; charset="' . $charset . '"otherstuff="test"';
+        $this->assertEquals(strtolower($charset), header_extract_charset($headers));
+
+        $headers = 'text/html; charset=\'' . $charset . '\'otherstuff="test"';
+        $this->assertEquals(strtolower($charset), header_extract_charset($headers));
+    }
+
+    /**
      * Test headers_extract_charset() when the charset is not found.
      */
     public function testHeadersExtractNonExistentCharset()

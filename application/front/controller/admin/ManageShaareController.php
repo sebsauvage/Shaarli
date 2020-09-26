@@ -69,7 +69,7 @@ class ManageShaareController extends ShaarliAdminController
                         $retrieveDescription
                     )
                 );
-                if (! empty($title) && strtolower($charset) !== 'utf-8') {
+                if (! empty($title) && strtolower($charset) !== 'utf-8' && mb_check_encoding($charset)) {
                     $title = mb_convert_encoding($title, 'utf-8', $charset);
                 }
             }
