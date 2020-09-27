@@ -145,10 +145,11 @@ class ApplicationUtilsTest extends \PHPUnit\Framework\TestCase
     /**
      * Test update checks - invalid Git branch
      * @expectedException              Exception
-     * @expectedExceptionMessageRegExp /Invalid branch selected for updates/
      */
     public function testCheckUpdateInvalidGitBranch()
     {
+        $this->expectExceptionMessageRegExp('/Invalid branch selected for updates/');
+
         ApplicationUtils::checkUpdate('', 'null', 0, true, true, 'unstable');
     }
 
@@ -261,20 +262,22 @@ class ApplicationUtilsTest extends \PHPUnit\Framework\TestCase
     /**
      * Check a unsupported PHP version
      * @expectedException              Exception
-     * @expectedExceptionMessageRegExp /Your PHP version is obsolete/
      */
     public function testCheckSupportedPHPVersion51()
     {
+        $this->expectExceptionMessageRegExp('/Your PHP version is obsolete/');
+
         $this->assertTrue(ApplicationUtils::checkPHPVersion('5.3', '5.1.0'));
     }
 
     /**
      * Check another unsupported PHP version
      * @expectedException              Exception
-     * @expectedExceptionMessageRegExp /Your PHP version is obsolete/
      */
     public function testCheckSupportedPHPVersion52()
     {
+        $this->expectExceptionMessageRegExp('/Your PHP version is obsolete/');
+
         $this->assertTrue(ApplicationUtils::checkPHPVersion('5.3', '5.2'));
     }
 

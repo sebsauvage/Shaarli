@@ -134,11 +134,11 @@ class BookmarkFileServiceTest extends TestCase
 
     /**
      * Test get() method for an undefined bookmark
-     *
-     * @expectedException Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testGetUndefined()
     {
+        $this->expectException(\Shaarli\Bookmark\Exception\BookmarkNotFoundException::class);
+
         $this->privateLinkDB->get(666);
     }
 
@@ -230,13 +230,13 @@ class BookmarkFileServiceTest extends TestCase
 
     /**
      * Test add() method for a bookmark without any field set and without writing the data store
-     *
-     * @expectedExceptionMessage Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testAddMinimalNoWrite()
     {
+        $this->expectException(\Shaarli\Bookmark\Exception\BookmarkNotFoundException::class);
+
         $bookmark = new Bookmark();
-        $this->privateLinkDB->add($bookmark);
+        $this->privateLinkDB->add($bookmark, false);
 
         $bookmark = $this->privateLinkDB->get(43);
         $this->assertEquals(43, $bookmark->getId());
@@ -249,34 +249,34 @@ class BookmarkFileServiceTest extends TestCase
 
     /**
      * Test add() method while logged out
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage You're not authorized to alter the datastore
      */
     public function testAddLoggedOut()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('You\'re not authorized to alter the datastore');
+
         $this->publicLinkDB->add(new Bookmark());
     }
 
     /**
      * Test add() method with an entry which is not a bookmark instance
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Provided data is invalid
      */
     public function testAddNotABookmark()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Provided data is invalid');
+
         $this->privateLinkDB->add(['title' => 'hi!']);
     }
 
     /**
      * Test add() method with a Bookmark already containing an ID
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage This bookmarks already exists
      */
     public function testAddWithId()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('This bookmarks already exists');
+
         $bookmark = new Bookmark();
         $bookmark->setId(43);
         $this->privateLinkDB->add($bookmark);
@@ -397,44 +397,44 @@ class BookmarkFileServiceTest extends TestCase
 
     /**
      * Test set() method while logged out
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage You're not authorized to alter the datastore
      */
     public function testSetLoggedOut()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('You\'re not authorized to alter the datastore');
+
         $this->publicLinkDB->set(new Bookmark());
     }
 
     /**
      * Test set() method with an entry which is not a bookmark instance
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Provided data is invalid
      */
     public function testSetNotABookmark()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Provided data is invalid');
+
         $this->privateLinkDB->set(['title' => 'hi!']);
     }
 
     /**
      * Test set() method with a Bookmark without an ID defined.
-     *
-     * @expectedException Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testSetWithoutId()
     {
+        $this->expectException(\Shaarli\Bookmark\Exception\BookmarkNotFoundException::class);
+
         $bookmark = new Bookmark();
         $this->privateLinkDB->set($bookmark);
     }
 
     /**
      * Test set() method with a Bookmark with an unknow ID
-     *
-     * @expectedException Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testSetWithUnknownId()
     {
+        $this->expectException(\Shaarli\Bookmark\Exception\BookmarkNotFoundException::class);
+
         $bookmark = new Bookmark();
         $bookmark->setId(666);
         $this->privateLinkDB->set($bookmark);
@@ -481,23 +481,23 @@ class BookmarkFileServiceTest extends TestCase
 
     /**
      * Test addOrSet() method while logged out
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage You're not authorized to alter the datastore
      */
     public function testAddOrSetLoggedOut()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('You\'re not authorized to alter the datastore');
+
         $this->publicLinkDB->addOrSet(new Bookmark());
     }
 
     /**
      * Test addOrSet() method with an entry which is not a bookmark instance
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Provided data is invalid
      */
     public function testAddOrSetNotABookmark()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Provided data is invalid');
+
         $this->privateLinkDB->addOrSet(['title' => 'hi!']);
     }
 
@@ -524,11 +524,11 @@ class BookmarkFileServiceTest extends TestCase
 
     /**
      * Test remove() method with an existing Bookmark
-     *
-     * @expectedException Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testRemoveExisting()
     {
+        $this->expectException(\Shaarli\Bookmark\Exception\BookmarkNotFoundException::class);
+
         $bookmark = $this->privateLinkDB->get(42);
         $this->privateLinkDB->remove($bookmark);
 
@@ -548,34 +548,34 @@ class BookmarkFileServiceTest extends TestCase
 
     /**
      * Test remove() method while logged out
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage You're not authorized to alter the datastore
      */
     public function testRemoveLoggedOut()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('You\'re not authorized to alter the datastore');
+
         $bookmark = $this->privateLinkDB->get(42);
         $this->publicLinkDB->remove($bookmark);
     }
 
     /**
      * Test remove() method with an entry which is not a bookmark instance
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Provided data is invalid
      */
     public function testRemoveNotABookmark()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Provided data is invalid');
+
         $this->privateLinkDB->remove(['title' => 'hi!']);
     }
 
     /**
      * Test remove() method with a Bookmark with an unknown ID
-     *
-     * @expectedException Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testRemoveWithUnknownId()
     {
+        $this->expectException(\Shaarli\Bookmark\Exception\BookmarkNotFoundException::class);
+
         $bookmark = new Bookmark();
         $bookmark->setId(666);
         $this->privateLinkDB->remove($bookmark);
@@ -635,15 +635,15 @@ class BookmarkFileServiceTest extends TestCase
      * to make sure that nothing have been broken in the migration process.
      * They mostly cover search/filters. Some of them might be redundant with the previous ones.
      */
-
     /**
      * Attempt to instantiate a LinkDB whereas the datastore is not writable
      *
      * @expectedException              Shaarli\Bookmark\Exception\NotWritableDataStoreException
-     * @expectedExceptionMessageRegExp #Couldn't load data from the data store file "null".*#
      */
     public function testConstructDatastoreNotWriteable()
     {
+        $this->expectExceptionMessageRegExp('#Couldn\'t load data from the data store file "null".*#');
+
         $conf = new ConfigManager('tests/utils/config/configJson');
         $conf->set('resource.datastore', 'null/store.db');
         new BookmarkFileService($conf, $this->history, true);

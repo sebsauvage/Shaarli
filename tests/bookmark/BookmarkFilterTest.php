@@ -213,20 +213,22 @@ class BookmarkFilterTest extends TestCase
     /**
      * Use an invalid date format
      * @expectedException              Exception
-     * @expectedExceptionMessageRegExp /Invalid date format/
      */
     public function testFilterInvalidDayWithChars()
     {
+        $this->expectExceptionMessageRegExp('/Invalid date format/');
+
         self::$linkFilter->filter(BookmarkFilter::$FILTER_DAY, 'Rainy day, dream away');
     }
 
     /**
      * Use an invalid date format
      * @expectedException              Exception
-     * @expectedExceptionMessageRegExp /Invalid date format/
      */
     public function testFilterInvalidDayDigits()
     {
+        $this->expectExceptionMessageRegExp('/Invalid date format/');
+
         self::$linkFilter->filter(BookmarkFilter::$FILTER_DAY, '20');
     }
 
@@ -250,11 +252,11 @@ class BookmarkFilterTest extends TestCase
 
     /**
      * No link for this hash
-     *
-     * @expectedException \Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testFilterUnknownSmallHash()
     {
+        $this->expectException(\Shaarli\Bookmark\Exception\BookmarkNotFoundException::class);
+
         self::$linkFilter->filter(BookmarkFilter::$FILTER_HASH, 'Iblaah');
     }
 

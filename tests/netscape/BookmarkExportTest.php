@@ -78,10 +78,11 @@ class BookmarkExportTest extends TestCase
     /**
      * Attempt to export an invalid link selection
      * @expectedException              Exception
-     * @expectedExceptionMessageRegExp /Invalid export selection/
      */
     public function testFilterAndFormatInvalid()
     {
+        $this->expectExceptionMessageRegExp('/Invalid export selection/');
+
         $this->netscapeBookmarkUtils->filterAndFormat(
             self::$formatter,
             'derp',

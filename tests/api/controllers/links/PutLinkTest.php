@@ -218,12 +218,12 @@ class PutLinkTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test link update on non existent link => ApiLinkNotFoundException.
-     *
-     * @expectedException Shaarli\Api\Exceptions\ApiLinkNotFoundException
-     * @expectedExceptionMessage Link not found
      */
     public function testGetLink404()
     {
+        $this->expectException(\Shaarli\Api\Exceptions\ApiLinkNotFoundException::class);
+        $this->expectExceptionMessage('Link not found');
+
         $env = Environment::mock([
             'REQUEST_METHOD' => 'PUT',
         ]);

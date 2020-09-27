@@ -159,12 +159,12 @@ class PutTagTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test tag update with an empty new tag name => ApiBadParametersException
-     *
-     * @expectedException Shaarli\Api\Exceptions\ApiBadParametersException
-     * @expectedExceptionMessage New tag name is required in the request body
      */
     public function testPutTagEmpty()
     {
+        $this->expectException(\Shaarli\Api\Exceptions\ApiBadParametersException::class);
+        $this->expectExceptionMessage('New tag name is required in the request body');
+
         $tagName = 'gnu';
         $newName = '';
 
@@ -194,12 +194,12 @@ class PutTagTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test tag update on non existent tag => ApiTagNotFoundException.
-     *
-     * @expectedException Shaarli\Api\Exceptions\ApiTagNotFoundException
-     * @expectedExceptionMessage Tag not found
      */
     public function testPutTag404()
     {
+        $this->expectException(\Shaarli\Api\Exceptions\ApiTagNotFoundException::class);
+        $this->expectExceptionMessage('Tag not found');
+
         $env = Environment::mock([
             'REQUEST_METHOD' => 'PUT',
         ]);

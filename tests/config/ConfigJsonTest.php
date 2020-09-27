@@ -38,12 +38,12 @@ class ConfigJsonTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Read a non existent config file -> empty array.
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp  /An error occurred while parsing JSON configuration file \([\w\/\.]+\): error code #4/
      */
     public function testReadInvalidJson()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessageRegExp(' /An error occurred while parsing JSON configuration file \\([\\w\\/\\.]+\\): error code #4/');
+
         $this->configIO->read('tests/utils/config/configInvalid.json.php');
     }
 
@@ -110,22 +110,22 @@ class ConfigJsonTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Write to invalid path.
-     *
-     * @expectedException \Shaarli\Exceptions\IOException
      */
     public function testWriteInvalidArray()
     {
+        $this->expectException(\Shaarli\Exceptions\IOException::class);
+
         $conf = array('conf' => 'value');
         @$this->configIO->write(array(), $conf);
     }
 
     /**
      * Write to invalid path.
-     *
-     * @expectedException \Shaarli\Exceptions\IOException
      */
     public function testWriteInvalidBlank()
     {
+        $this->expectException(\Shaarli\Exceptions\IOException::class);
+
         $conf = array('conf' => 'value');
         @$this->configIO->write('', $conf);
     }

@@ -44,12 +44,12 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Not writable history file: raise an exception.
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessage History file isn't readable or writable
      */
     public function testConstructNotWritable()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('History file isn\'t readable or writable');
+
         touch(self::$historyFilePath);
         chmod(self::$historyFilePath, 0440);
         $history = new History(self::$historyFilePath);
@@ -58,12 +58,12 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Not parsable history file: raise an exception.
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessageRegExp /Could not parse history file/
      */
     public function testConstructNotParsable()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessageRegExp('/Could not parse history file/');
+
         file_put_contents(self::$historyFilePath, 'not parsable');
         $history = new History(self::$historyFilePath);
         // gzinflate generates a warning

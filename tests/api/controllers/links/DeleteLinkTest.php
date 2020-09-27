@@ -113,11 +113,11 @@ class DeleteLinkTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test DELETE link endpoint: reach not existing ID.
-     *
-     * @expectedException \Shaarli\Api\Exceptions\ApiLinkNotFoundException
      */
     public function testDeleteLink404()
     {
+        $this->expectException(\Shaarli\Api\Exceptions\ApiLinkNotFoundException::class);
+
         $id = -1;
         $this->assertFalse($this->bookmarkService->exists($id));
         $env = Environment::mock([

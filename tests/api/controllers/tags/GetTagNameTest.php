@@ -117,12 +117,12 @@ class GetTagNameTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test basic getTag service: get non existent tag => ApiTagNotFoundException.
-     *
-     * @expectedException Shaarli\Api\Exceptions\ApiTagNotFoundException
-     * @expectedExceptionMessage Tag not found
      */
     public function testGetTag404()
     {
+        $this->expectException(\Shaarli\Api\Exceptions\ApiTagNotFoundException::class);
+        $this->expectExceptionMessage('Tag not found');
+
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
         ]);

@@ -150,12 +150,12 @@ class DeleteTagTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test DELETE tag endpoint: reach not existing tag.
-     *
-     * @expectedException Shaarli\Api\Exceptions\ApiTagNotFoundException
-     * @expectedExceptionMessage Tag not found
      */
     public function testDeleteLink404()
     {
+        $this->expectException(\Shaarli\Api\Exceptions\ApiTagNotFoundException::class);
+        $this->expectExceptionMessage('Tag not found');
+
         $tagName = 'nopenope';
         $tags = $this->bookmarkService->bookmarksCountPerTag();
         $this->assertFalse(isset($tags[$tagName]));

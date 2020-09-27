@@ -101,10 +101,11 @@ class LegacyLinkDBTest extends \PHPUnit\Framework\TestCase
      * Attempt to instantiate a LinkDB whereas the datastore is not writable
      *
      * @expectedException              Shaarli\Exceptions\IOException
-     * @expectedExceptionMessageRegExp /Error accessing "null"/
      */
     public function testConstructDatastoreNotWriteable()
     {
+        $this->expectExceptionMessageRegExp('/Error accessing "null"/');
+
         new LegacyLinkDB('null/store.db', false, false);
     }
 
@@ -420,22 +421,22 @@ class LegacyLinkDBTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test filterHash() with an invalid smallhash.
-     *
-     * @expectedException \Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testFilterHashInValid1()
     {
+        $this->expectException(\Shaarli\Bookmark\Exception\BookmarkNotFoundException::class);
+
         $request = 'blabla';
         self::$publicLinkDB->filterHash($request);
     }
 
     /**
      * Test filterHash() with an empty smallhash.
-     *
-     * @expectedException \Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testFilterHashInValid()
     {
+        $this->expectException(\Shaarli\Bookmark\Exception\BookmarkNotFoundException::class);
+
         self::$publicLinkDB->filterHash('');
     }
 
