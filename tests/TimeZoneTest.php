@@ -15,7 +15,7 @@ class TimeZoneTest extends PHPUnit\Framework\TestCase
      */
     protected $installedTimezones;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->installedTimezones = [
             'Antarctica/Syowa',

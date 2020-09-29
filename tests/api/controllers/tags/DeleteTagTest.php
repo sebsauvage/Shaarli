@@ -57,7 +57,7 @@ class DeleteTagTest extends \PHPUnit\Framework\TestCase
     /**
      * Before each test, instantiate a new Api with its config, plugins and bookmarks.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->conf->set('resource.datastore', self::$testDatastore);
@@ -79,7 +79,7 @@ class DeleteTagTest extends \PHPUnit\Framework\TestCase
     /**
      * After each test, remove the test datastore.
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         @unlink(self::$testDatastore);
         @unlink(self::$testHistory);
@@ -150,12 +150,12 @@ class DeleteTagTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test DELETE tag endpoint: reach not existing tag.
-     *
-     * @expectedException Shaarli\Api\Exceptions\ApiTagNotFoundException
-     * @expectedExceptionMessage Tag not found
      */
     public function testDeleteLink404()
     {
+        $this->expectException(\Shaarli\Api\Exceptions\ApiTagNotFoundException::class);
+        $this->expectExceptionMessage('Tag not found');
+
         $tagName = 'nopenope';
         $tags = $this->bookmarkService->bookmarksCountPerTag();
         $this->assertFalse(isset($tags[$tagName]));

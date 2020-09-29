@@ -46,11 +46,11 @@ class ConfigPluginTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test save_plugin_config with invalid data.
-     *
-     * @expectedException Shaarli\Config\Exception\PluginConfigOrderException
      */
     public function testSavePluginConfigInvalid()
     {
+        $this->expectException(\Shaarli\Config\Exception\PluginConfigOrderException::class);
+
         $data = array(
             'plugin2' => 0,
             'plugin3' => 0,

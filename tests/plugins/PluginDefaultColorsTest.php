@@ -19,7 +19,7 @@ class PluginDefaultColorsTest extends TestCase
     /**
      * Reset plugin path
      */
-    public function setUp()
+    protected function setUp(): void
     {
         PluginManager::$PLUGINS_PATH = 'sandbox';
         mkdir(PluginManager::$PLUGINS_PATH . '/default_colors/');
@@ -32,7 +32,7 @@ class PluginDefaultColorsTest extends TestCase
     /**
      * Remove sandbox files and folder
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (file_exists('sandbox/default_colors/default_colors.css.template')) {
             unlink('sandbox/default_colors/default_colors.css.template');

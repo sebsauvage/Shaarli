@@ -22,7 +22,7 @@ class LanguagesTest extends \PHPUnit\Framework\TestCase
     /**
      *
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->conf = new ConfigManager(self::$configFile);
     }

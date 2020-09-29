@@ -63,7 +63,7 @@ class LoginManagerTest extends TestCase
     /**
      * Prepare or reset test resources
      */
-    public function setUp()
+    protected function setUp(): void
     {
         if (file_exists($this->banFile)) {
             unlink($this->banFile);

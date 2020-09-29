@@ -34,7 +34,7 @@ class LegacyLinkFilterTest extends \PHPUnit\Framework\TestCase
     /**
      * Instantiate linkFilter with ReferenceLinkDB data.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$refDB = new ReferenceLinkDB(true);
         self::$refDB->write(self::$testDatastore);
@@ -198,20 +198,22 @@ class LegacyLinkFilterTest extends \PHPUnit\Framework\TestCase
     /**
      * Use an invalid date format
      * @expectedException              Exception
-     * @expectedExceptionMessageRegExp /Invalid date format/
      */
     public function testFilterInvalidDayWithChars()
     {
+        $this->expectExceptionMessageRegExp('/Invalid date format/');
+
         self::$linkFilter->filter(LegacyLinkFilter::$FILTER_DAY, 'Rainy day, dream away');
     }
 
     /**
      * Use an invalid date format
      * @expectedException              Exception
-     * @expectedExceptionMessageRegExp /Invalid date format/
      */
     public function testFilterInvalidDayDigits()
     {
+        $this->expectExceptionMessageRegExp('/Invalid date format/');
+
         self::$linkFilter->filter(LegacyLinkFilter::$FILTER_DAY, '20');
     }
 
@@ -235,11 +237,11 @@ class LegacyLinkFilterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * No link for this hash
-     *
-     * @expectedException \Shaarli\Bookmark\Exception\BookmarkNotFoundException
      */
     public function testFilterUnknownSmallHash()
     {
+        $this->expectException(\Shaarli\Bookmark\Exception\BookmarkNotFoundException::class);
+
         self::$linkFilter->filter(LegacyLinkFilter::$FILTER_HASH, 'Iblaah');
     }
 

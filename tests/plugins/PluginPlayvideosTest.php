@@ -19,7 +19,7 @@ class PluginPlayvideosTest extends \PHPUnit\Framework\TestCase
     /**
      * Reset plugin path
      */
-    public function setUp()
+    protected function setUp(): void
     {
         PluginManager::$PLUGINS_PATH = 'plugins';
     }

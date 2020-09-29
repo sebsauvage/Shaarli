@@ -24,7 +24,7 @@ class FormatterFactoryTest extends TestCase
     /**
      * Initialize FormatterFactory instance
      */
-    public function setUp()
+    protected function setUp(): void
     {
         copy('tests/utils/config/configJson.json.php', self::$testConf .'.json.php');
         $this->conf = new ConfigManager(self::$testConf);
