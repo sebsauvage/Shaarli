@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Plugin;
 
 use Shaarli\Config\ConfigManager;
@@ -81,7 +82,7 @@ class PluginManagerTest extends \Shaarli\TestCase
         $data = [];
         $this->pluginManager->executeHooks('error', $data);
 
-        $this->assertMatchesRegularExpression(
+        $this->assertRegExp(
             '/test \[plugin incompatibility\]: Class [\'"]Unknown[\'"] not found/',
             $this->pluginManager->getErrors()[0]
         );
