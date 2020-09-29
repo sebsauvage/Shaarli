@@ -2,11 +2,11 @@
 
 namespace Shaarli\Api\Controllers;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
+use Shaarli\TestCase;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;

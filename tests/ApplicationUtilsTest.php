@@ -8,7 +8,7 @@ require_once 'tests/utils/FakeApplicationUtils.php';
 /**
  * Unitary tests for Shaarli utilities
  */
-class ApplicationUtilsTest extends \PHPUnit\Framework\TestCase
+class ApplicationUtilsTest extends \Shaarli\TestCase
 {
     protected static $testUpdateFile = 'sandbox/update.txt';
     protected static $testVersion = '0.5.0';

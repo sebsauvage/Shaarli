@@ -2,7 +2,6 @@
 
 namespace Shaarli;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Config\ConfigManager;
 use WebThumbnailer\Application\ConfigManager as WTConfigManager;
 

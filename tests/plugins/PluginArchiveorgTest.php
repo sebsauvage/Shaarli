@@ -6,8 +6,8 @@ namespace Shaarli\Plugin\Archiveorg;
  * PluginArchiveorgTest.php
  */
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Plugin\PluginManager;
+use Shaarli\TestCase;
 
 require_once 'plugins/archiveorg/archiveorg.php';
 

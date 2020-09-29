@@ -3,8 +3,8 @@
 
 namespace Shaarli\Security;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\FileUtils;
+use Shaarli\TestCase;
 
 /**
  * Test coverage for BanManager

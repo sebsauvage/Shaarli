@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Admin;
 
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UploadedFileInterface;
 use Shaarli\Netscape\NetscapeBookmarkUtils;
 use Shaarli\Security\SessionManager;
+use Shaarli\TestCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Http\UploadedFile;

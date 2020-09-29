@@ -10,7 +10,7 @@ use Shaarli\Legacy\LegacyLinkFilter;
 /**
  * Class LegacyLinkFilterTest.
  */
-class LegacyLinkFilterTest extends \PHPUnit\Framework\TestCase
+class LegacyLinkFilterTest extends \Shaarli\TestCase
 {
     /**
      * @var string Test datastore path.

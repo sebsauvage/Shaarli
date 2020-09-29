@@ -7,7 +7,7 @@ namespace Shaarli\Http;
 
 require_once 'application/http/UrlUtils.php';
 
-class GetUrlSchemeTest extends \PHPUnit\Framework\TestCase
+class GetUrlSchemeTest extends \Shaarli\TestCase
 {
     /**
      * Get empty scheme string for empty UrlUtils

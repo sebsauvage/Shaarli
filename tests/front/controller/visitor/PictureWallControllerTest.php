@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Visitor;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Front\Exception\ThumbnailsDisabledException;
+use Shaarli\TestCase;
 use Shaarli\Thumbnailer;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -67,15 +67,17 @@ class PictureWallControllerTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['render_picwall'])
             ->willReturnCallback(function (string $hook, array $data, array $param): array {
-                static::assertSame('render_picwall', $hook);
-                static::assertArrayHasKey('linksToDisplay', $data);
-                static::assertCount(2, $data['linksToDisplay']);
-                static::assertSame(1, $data['linksToDisplay'][0]['id']);
-                static::assertSame(3, $data['linksToDisplay'][1]['id']);
-                static::assertArrayHasKey('loggedin', $param);
+                if ('render_picwall' === $hook) {
+                    static::assertArrayHasKey('linksToDisplay', $data);
+                    static::assertCount(2, $data['linksToDisplay']);
+                    static::assertSame(1, $data['linksToDisplay'][0]['id']);
+                    static::assertSame(3, $data['linksToDisplay'][1]['id']);
+                    static::assertArrayHasKey('loggedin', $param);
+                }
 
                 return $data;
             });

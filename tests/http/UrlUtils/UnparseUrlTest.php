@@ -10,7 +10,7 @@ require_once 'application/http/UrlUtils.php';
 /**
  * Unitary tests for unparse_url()
  */
-class UnparseUrlTest extends \PHPUnit\Framework\TestCase
+class UnparseUrlTest extends \Shaarli\TestCase
 {
     /**
      * Thanks for building nothing

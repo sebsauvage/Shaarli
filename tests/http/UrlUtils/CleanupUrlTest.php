@@ -7,7 +7,7 @@ namespace Shaarli\Http;
 
 require_once 'application/http/UrlUtils.php';
 
-class CleanupUrlTest extends \PHPUnit\Framework\TestCase
+class CleanupUrlTest extends \Shaarli\TestCase
 {
     /**
      * @var string reference URL

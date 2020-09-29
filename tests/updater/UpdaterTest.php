@@ -2,11 +2,11 @@
 namespace Shaarli\Updater;
 
 use Exception;
-use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
+use Shaarli\TestCase;
 
 
 /**

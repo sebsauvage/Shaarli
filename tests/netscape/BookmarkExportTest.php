@@ -2,12 +2,12 @@
 
 namespace Shaarli\Netscape;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Formatter\BookmarkFormatter;
 use Shaarli\Formatter\FormatterFactory;
 use Shaarli\History;
+use Shaarli\TestCase;
 
 require_once 'tests/utils/ReferenceLinkDB.php';
 

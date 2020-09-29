@@ -6,7 +6,7 @@ use Shaarli\Config\ConfigManager;
 /**
  * Unit tests for Plugins
  */
-class PluginManagerTest extends \PHPUnit\Framework\TestCase
+class PluginManagerTest extends \Shaarli\TestCase
 {
     /**
      * Path to tests plugin.

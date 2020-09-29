@@ -6,7 +6,6 @@
 namespace Shaarli\Bookmark;
 
 use DateTime;
-use PHPUnit\Framework\TestCase;
 use ReferenceLinkDB;
 use ReflectionClass;
 use Shaarli;
@@ -14,6 +13,7 @@ use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Formatter\BookmarkMarkdownFormatter;
 use Shaarli\History;
+use Shaarli\TestCase;
 
 /**
  * Unitary tests for LegacyLinkDBTest
@@ -748,7 +748,7 @@ class BookmarkFileServiceTest extends TestCase
         $link = $this->publicLinkDB->findByUrl('http://mediagoblin.org/');
 
         $this->assertNotEquals(false, $link);
-        $this->assertContains(
+        $this->assertContainsPolyfill(
             'A free software media publishing platform',
             $link->getDescription()
         );

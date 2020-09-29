@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Admin;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Front\Exception\WrongTokenException;
 use Shaarli\Security\SessionManager;
+use Shaarli\TestCase;
 use Shaarli\Thumbnailer;
 use Slim\Http\Request;
 use Slim\Http\Response;

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Admin\ManageShaareControllerTest;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Front\Controller\Admin\FrontAdminControllerMockHelper;
@@ -12,6 +11,7 @@ use Shaarli\Front\Controller\Admin\ManageShaareController;
 use Shaarli\Front\Exception\WrongTokenException;
 use Shaarli\Http\HttpAccess;
 use Shaarli\Security\SessionManager;
+use Shaarli\TestCase;
 use Shaarli\Thumbnailer;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -88,17 +88,18 @@ class SaveBookmarkTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['save_link'])
             ->willReturnCallback(function (string $hook, array $data) use ($parameters, $id): array {
-                static::assertSame('save_link', $hook);
-
-                static::assertSame($id, $data['id']);
-                static::assertSame($parameters['lf_url'], $data['url']);
-                static::assertSame($parameters['lf_title'], $data['title']);
-                static::assertSame($parameters['lf_description'], $data['description']);
-                static::assertSame($parameters['lf_tags'], $data['tags']);
-                static::assertTrue($data['private']);
+                if ('save_link' === $hook) {
+                    static::assertSame($id, $data['id']);
+                    static::assertSame($parameters['lf_url'], $data['url']);
+                    static::assertSame($parameters['lf_title'], $data['title']);
+                    static::assertSame($parameters['lf_description'], $data['description']);
+                    static::assertSame($parameters['lf_tags'], $data['tags']);
+                    static::assertTrue($data['private']);
+                }
 
                 return $data;
             })
@@ -174,17 +175,18 @@ class SaveBookmarkTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['save_link'])
             ->willReturnCallback(function (string $hook, array $data) use ($parameters, $id): array {
-                static::assertSame('save_link', $hook);
-
-                static::assertSame($id, $data['id']);
-                static::assertSame($parameters['lf_url'], $data['url']);
-                static::assertSame($parameters['lf_title'], $data['title']);
-                static::assertSame($parameters['lf_description'], $data['description']);
-                static::assertSame($parameters['lf_tags'], $data['tags']);
-                static::assertTrue($data['private']);
+                if ('save_link' === $hook) {
+                    static::assertSame($id, $data['id']);
+                    static::assertSame($parameters['lf_url'], $data['url']);
+                    static::assertSame($parameters['lf_title'], $data['title']);
+                    static::assertSame($parameters['lf_description'], $data['description']);
+                    static::assertSame($parameters['lf_tags'], $data['tags']);
+                    static::assertTrue($data['private']);
+                }
 
                 return $data;
             })

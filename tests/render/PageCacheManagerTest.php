@@ -6,8 +6,8 @@
 
 namespace Shaarli\Render;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Security\SessionManager;
+use Shaarli\TestCase;
 
 /**
  * Unitary tests for cached pages

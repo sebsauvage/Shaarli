@@ -5,6 +5,9 @@ matrix:
     # jobs for each supported php version
     - language: php
       php: nightly # PHP 8.0
+      install:
+        - composer self-update --2
+        - composer update --ignore-platform-req=php
     - language: php
       php: 7.4
     - language: php
@@ -45,7 +48,6 @@ cache:
 
 install:
   # install/update composer and php dependencies
-  - if [[ $TRAVIS_PHP_VERSION == "nightly" ]]; then export TRAVIS_PHP_VERSION="8.0.0"; fi
   - composer config --unset platform && composer config platform.php $TRAVIS_PHP_VERSION
   - composer update
 

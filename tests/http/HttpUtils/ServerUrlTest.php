@@ -10,7 +10,7 @@ require_once 'application/http/HttpUtils.php';
 /**
  * Unitary tests for server_url()
  */
-class ServerUrlTest extends \PHPUnit\Framework\TestCase
+class ServerUrlTest extends \Shaarli\TestCase
 {
     /**
      * Detect if the server uses SSL

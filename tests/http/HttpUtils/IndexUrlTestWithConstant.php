@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Shaarli\Http;
 
-use PHPUnit\Framework\TestCase;
+use Shaarli\TestCase;
 
 /**
  * Test index_url with SHAARLI_ROOT_URL defined to override automatic retrieval.

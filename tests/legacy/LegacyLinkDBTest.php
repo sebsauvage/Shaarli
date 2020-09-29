@@ -18,7 +18,7 @@ require_once 'tests/utils/ReferenceLinkDB.php';
 /**
  * Unitary tests for LegacyLinkDBTest
  */
-class LegacyLinkDBTest extends \PHPUnit\Framework\TestCase
+class LegacyLinkDBTest extends \Shaarli\TestCase
 {
     // datastore to test write operations
     protected static $testDatastore = 'sandbox/datastore.php';
@@ -258,7 +258,7 @@ class LegacyLinkDBTest extends \PHPUnit\Framework\TestCase
         $link = self::$publicLinkDB->getLinkFromUrl('http://mediagoblin.org/');
 
         $this->assertNotEquals(false, $link);
-        $this->assertContains(
+        $this->assertContainsPolyfill(
             'A free software media publishing platform',
             $link['description']
         );
@@ -471,9 +471,9 @@ class LegacyLinkDBTest extends \PHPUnit\Framework\TestCase
 
         $res = $linkDB->renameTag('cartoon', 'Taz');
         $this->assertEquals(3, count($res));
-        $this->assertContains(' Taz ', $linkDB[4]['tags']);
-        $this->assertContains(' Taz ', $linkDB[1]['tags']);
-        $this->assertContains(' Taz ', $linkDB[0]['tags']);
+        $this->assertContainsPolyfill(' Taz ', $linkDB[4]['tags']);
+        $this->assertContainsPolyfill(' Taz ', $linkDB[1]['tags']);
+        $this->assertContainsPolyfill(' Taz ', $linkDB[0]['tags']);
     }
 
     /**
@@ -513,7 +513,7 @@ class LegacyLinkDBTest extends \PHPUnit\Framework\TestCase
 
         $res = $linkDB->renameTag('cartoon', null);
         $this->assertEquals(3, count($res));
-        $this->assertNotContains('cartoon', $linkDB[4]['tags']);
+        $this->assertNotContainsPolyfill('cartoon', $linkDB[4]['tags']);
     }
 
     /**

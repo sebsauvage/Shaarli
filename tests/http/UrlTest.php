@@ -8,7 +8,7 @@ namespace Shaarli\Http;
 /**
  * Unitary tests for URL utilities
  */
-class UrlTest extends \PHPUnit\Framework\TestCase
+class UrlTest extends \Shaarli\TestCase
 {
     // base URL for tests
     protected static $baseUrl = 'http://domain.tld:3000';

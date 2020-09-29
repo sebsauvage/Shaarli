@@ -9,7 +9,7 @@ require_once 'application/config/ConfigPlugin.php';
 /**
  * Unitary tests for Shaarli config related functions
  */
-class ConfigPluginTest extends \PHPUnit\Framework\TestCase
+class ConfigPluginTest extends \Shaarli\TestCase
 {
     /**
      * Test save_plugin_config with valid data.

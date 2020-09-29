@@ -5,7 +5,7 @@
 
 namespace Shaarli\Http;
 
-use PHPUnit\Framework\TestCase;
+use Shaarli\TestCase;
 
 require_once 'application/http/HttpUtils.php';
 

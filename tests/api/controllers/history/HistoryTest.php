@@ -11,7 +11,7 @@ use Slim\Http\Response;
 
 require_once 'tests/utils/ReferenceHistory.php';
 
-class HistoryTest extends \PHPUnit\Framework\TestCase
+class HistoryTest extends \Shaarli\TestCase
 {
     /**
      * @var string datastore to test write operations

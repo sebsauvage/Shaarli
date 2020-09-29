@@ -2,9 +2,9 @@
 
 namespace Shaarli\Bookmark;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
+use Shaarli\TestCase;
 
 /**
  * Class BookmarkInitializerTest

@@ -3,13 +3,13 @@
 namespace Shaarli\Netscape;
 
 use DateTime;
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UploadedFileInterface;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Bookmark\BookmarkFilter;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
+use Shaarli\TestCase;
 use Slim\Http\UploadedFile;
 
 /**

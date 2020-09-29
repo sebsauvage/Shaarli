@@ -12,7 +12,7 @@ use Slim\Http\Environment;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class DeleteTagTest extends \PHPUnit\Framework\TestCase
+class DeleteTagTest extends \Shaarli\TestCase
 {
     /**
      * @var string datastore to test write operations

@@ -7,7 +7,7 @@ namespace Shaarli\Config;
  * Note: it only test the manager with ConfigJson,
  *  ConfigPhp is only a workaround to handle the transition to JSON type.
  */
-class ConfigManagerTest extends \PHPUnit\Framework\TestCase
+class ConfigManagerTest extends \Shaarli\TestCase
 {
     /**
      * @var ConfigManager

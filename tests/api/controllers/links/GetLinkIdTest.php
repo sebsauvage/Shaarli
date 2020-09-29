@@ -20,7 +20,7 @@ use Slim\Http\Response;
  *
  * @package Shaarli\Api\Controllers
  */
-class GetLinkIdTest extends \PHPUnit\Framework\TestCase
+class GetLinkIdTest extends \Shaarli\TestCase
 {
     /**
      * @var string datastore to test write operations

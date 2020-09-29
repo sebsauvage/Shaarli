@@ -3,10 +3,10 @@
 namespace Shaarli\Bookmark;
 
 use Exception;
-use PHPUnit\Framework\TestCase;
 use ReferenceLinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
+use Shaarli\TestCase;
 
 /**
  * Class BookmarkFilterTest.

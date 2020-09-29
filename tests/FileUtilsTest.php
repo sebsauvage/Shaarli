@@ -9,7 +9,7 @@ use Exception;
  *
  * Test file utility class.
  */
-class FileUtilsTest extends \PHPUnit\Framework\TestCase
+class FileUtilsTest extends \Shaarli\TestCase
 {
     /**
      * @var string Test file path.
