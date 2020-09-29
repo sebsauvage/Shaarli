@@ -42,7 +42,7 @@ class ConfigJsonTest extends \Shaarli\TestCase
     public function testReadInvalidJson()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessageRegExp(' /An error occurred while parsing JSON configuration file \\([\\w\\/\\.]+\\): error code #4/');
+        $this->expectExceptionMessageRegExp('/An error occurred while parsing JSON configuration file \\([\\w\\/\\.]+\\): error code #4/');
 
         $this->configIO->read('tests/utils/config/configInvalid.json.php');
     }
@@ -106,17 +106,6 @@ class ConfigJsonTest extends \Shaarli\TestCase
         $conf = $this->configIO->read($dest);
         $this->assertEquals('blabla', $conf['redirector']['url']);
         unlink($dest);
-    }
-
-    /**
-     * Write to invalid path.
-     */
-    public function testWriteInvalidArray()
-    {
-        $this->expectException(\Shaarli\Exceptions\IOException::class);
-
-        $conf = array('conf' => 'value');
-        @$this->configIO->write(array(), $conf);
     }
 
     /**

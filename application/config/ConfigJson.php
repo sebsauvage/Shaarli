@@ -46,7 +46,7 @@ class ConfigJson implements ConfigIO
         // JSON_PRETTY_PRINT is available from PHP 5.4.
         $print = defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0;
         $data = self::getPhpHeaders() . json_encode($conf, $print) . self::getPhpSuffix();
-        if (!file_put_contents($filepath, $data)) {
+        if (empty($filepath) || !file_put_contents($filepath, $data)) {
             throw new \Shaarli\Exceptions\IOException(
                 $filepath,
                 t('Shaarli could not create the config file. '.

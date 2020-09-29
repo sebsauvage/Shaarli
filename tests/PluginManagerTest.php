@@ -81,8 +81,8 @@ class PluginManagerTest extends \Shaarli\TestCase
         $data = [];
         $this->pluginManager->executeHooks('error', $data);
 
-        $this->assertSame(
-            'test [plugin incompatibility]: Class \'Unknown\' not found',
+        $this->assertMatchesRegularExpression(
+            '/test \[plugin incompatibility\]: Class [\'"]Unknown[\'"] not found/',
             $this->pluginManager->getErrors()[0]
         );
     }
