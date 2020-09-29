@@ -80,11 +80,10 @@ class LegacyUpdaterTest extends \Shaarli\TestCase
 
     /**
      * Test errors in UpdaterUtils::write_updates_file(): empty updates file.
-     *
-     * @expectedException              Exception
      */
     public function testWriteEmptyUpdatesFile()
     {
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/Updates file path is not set(.*)/');
 
         UpdaterUtils::write_updates_file('', array('test'));
@@ -92,11 +91,10 @@ class LegacyUpdaterTest extends \Shaarli\TestCase
 
     /**
      * Test errors in UpdaterUtils::write_updates_file(): not writable updates file.
-     *
-     * @expectedException              Exception
      */
     public function testWriteUpdatesFileNotWritable()
     {
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/Unable to write(.*)/');
 
         $updatesFile = $this->conf->get('resource.data_dir') . '/updates.txt';

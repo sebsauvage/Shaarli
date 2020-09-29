@@ -197,10 +197,10 @@ class LegacyLinkFilterTest extends \Shaarli\TestCase
 
     /**
      * Use an invalid date format
-     * @expectedException              Exception
      */
     public function testFilterInvalidDayWithChars()
     {
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/Invalid date format/');
 
         self::$linkFilter->filter(LegacyLinkFilter::$FILTER_DAY, 'Rainy day, dream away');
@@ -208,10 +208,10 @@ class LegacyLinkFilterTest extends \Shaarli\TestCase
 
     /**
      * Use an invalid date format
-     * @expectedException              Exception
      */
     public function testFilterInvalidDayDigits()
     {
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/Invalid date format/');
 
         self::$linkFilter->filter(LegacyLinkFilter::$FILTER_DAY, '20');

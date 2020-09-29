@@ -99,11 +99,10 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
 
     /**
      * Attempt to instantiate a LinkDB whereas the datastore is not writable
-     *
-     * @expectedException              Shaarli\Exceptions\IOException
      */
     public function testConstructDatastoreNotWriteable()
     {
+        $this->expectException(\Shaarli\Exceptions\IOException::class);
         $this->expectExceptionMessageRegExp('/Error accessing "null"/');
 
         new LegacyLinkDB('null/store.db', false, false);

@@ -637,11 +637,10 @@ class BookmarkFileServiceTest extends TestCase
      */
     /**
      * Attempt to instantiate a LinkDB whereas the datastore is not writable
-     *
-     * @expectedException              Shaarli\Bookmark\Exception\NotWritableDataStoreException
      */
     public function testConstructDatastoreNotWriteable()
     {
+        $this->expectException(\Shaarli\Bookmark\Exception\NotWritableDataStoreException::class);
         $this->expectExceptionMessageRegExp('#Couldn\'t load data from the data store file "null".*#');
 
         $conf = new ConfigManager('tests/utils/config/configJson');

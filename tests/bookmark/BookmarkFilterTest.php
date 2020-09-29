@@ -212,10 +212,10 @@ class BookmarkFilterTest extends TestCase
 
     /**
      * Use an invalid date format
-     * @expectedException              Exception
      */
     public function testFilterInvalidDayWithChars()
     {
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/Invalid date format/');
 
         self::$linkFilter->filter(BookmarkFilter::$FILTER_DAY, 'Rainy day, dream away');
@@ -223,10 +223,10 @@ class BookmarkFilterTest extends TestCase
 
     /**
      * Use an invalid date format
-     * @expectedException              Exception
      */
     public function testFilterInvalidDayDigits()
     {
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/Invalid date format/');
 
         self::$linkFilter->filter(BookmarkFilter::$FILTER_DAY, '20');
