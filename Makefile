@@ -85,6 +85,10 @@ all_tests: test locale_test_de_DE locale_test_en_US locale_test_fr_FR
 	@# --text doesn't work with phpunit 4.* (v5 requires PHP 5.6)
 	@#$(BIN)/phpcov merge --text coverage/txt coverage
 
+### download 3rd-party PHP libraries, including dev dependencies
+composer_dependencies_dev: clean
+	composer install --prefer-dist
+
 ##
 # Custom release archive generation
 #
