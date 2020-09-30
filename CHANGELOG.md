@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v0.12.0](https://github.com/shaarli/Shaarli/releases/tag/v0.12.0-beta) - UNRELEASED [beta 2020-08-27]
+## [v0.12.0](https://github.com/shaarli/Shaarli/releases/tag/v0.12.0-beta) - UNRELEASED [beta 2020-08-27 - beta-1 2020-09-30]
 
 **Save you `data/` folder before updating!**
 
@@ -16,6 +16,8 @@ Be aware that by using a beta version you might encounter bugs, and that 3rd par
 - Markdown rendering is now integrated into Shaarli core
 - Add autofocus on tag cloud filter input
 - Japanese translations
+- Japanese translation: add language to admin configuration page
+- Support for PHP 8.0
 - Support for local anchor URL (startting with `#`)
 - LDAP authentication
 - Encapsulated PageCacheManager
@@ -24,18 +26,22 @@ Be aware that by using a beta version you might encounter bugs, and that 3rd par
   - section about mkdocs
   - Ulauncher extension
 - CI: run against PHP 7.4
+- Added $links_per_page variable to template and display on default
+- Inject BookmarkServiceInterface in plugins data
+- Add manual configuration for root URL
+- Added PATCH to the allowed Apache request methods.
 
 ### Changed
 - Introduce Bookmark object and Service layer
   - Save bookmark as objects in the datastore
   - Handle bookmark as objects across the whole codebase (except templates and plugins)
 - Process all Shaarli page through Slim controller, with proper URL rewriting (see #1516)
+- Docs: the entire documentation has been reviewed, updated and improved, thanks to @nodiscc!
 - ATOM feed: use instance name as author name instead of URL
 - Updated French translation
-- Docs:
-  - Troubleshooting page rewritten
-  - Updated unit tests page
-  - Updated Server security page
+- Default colors plugin: generate CSS file during initialization
+- Improve default bookmarks after install
+- Upgrade all front end dependencies and webpack build
 
 ### Fixed
 - Undefined index: thumbnail in daily page
@@ -54,6 +60,8 @@ Be aware that by using a beta version you might encounter bugs, and that 3rd par
 - Division by zero in tag cloud
 - CI: deprecated linux distribution and sudo directive
 - Docker build: gcc is no longer included in python alpine image
+- Default template: display pin button in mobile view
+- Pinned bookmarks are not longer displayed first in ATOM/RSS feeds
 - Docs:
   - Outdated Docker documentation for stable branch
   - Outdated links
@@ -63,6 +71,8 @@ Be aware that by using a beta version you might encounter bugs, and that 3rd par
 - Markdown plugin
 - Docs:
   - emojione & twemoji removed
+- Makefile: remove static_analysis_summary from all: target
+- doc/Makefile: remove references to composer update
 
 ## [v0.11.1](https://github.com/shaarli/Shaarli/releases/tag/v0.11.1) - 2019-08-03
 
