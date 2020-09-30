@@ -102,16 +102,16 @@ class ApiMiddleware
         if (! $request->hasHeader('Authorization') && !isset($this->container->environment['REDIRECT_HTTP_AUTHORIZATION'])) {
             throw new ApiAuthorizationException('JWT token not provided');
         }
-	
+
         if (empty($this->conf->get('api.secret'))) {
             throw new ApiAuthorizationException('Token secret must be set in Shaarli\'s administration');
         }
 
-	if (isset($this->container->environment['REDIRECT_HTTP_AUTHORIZATION'])) {
-	    $authorization = $this->container->environment['REDIRECT_HTTP_AUTHORIZATION'];
-	} else {
+        if (isset($this->container->environment['REDIRECT_HTTP_AUTHORIZATION'])) {
+            $authorization = $this->container->environment['REDIRECT_HTTP_AUTHORIZATION'];
+        } else {
             $authorization = $request->getHeaderLine('Authorization');
-	}
+        }
 
         if (! preg_match('/^Bearer (.*)/i', $authorization, $matches)) {
             throw new ApiAuthorizationException('Invalid JWT header');
