@@ -26,7 +26,7 @@ function html_extract_title($html)
  */
 function header_extract_charset($header)
 {
-    preg_match('/charset="?([^; ]+)/i', $header, $match);
+    preg_match('/charset=["\']?([^; "\']+)/i', $header, $match);
     if (! empty($match[1])) {
         return strtolower(trim($match[1]));
     }
