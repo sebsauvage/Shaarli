@@ -91,19 +91,6 @@ class BookmarkArrayTest extends TestCase
     }
 
     /**
-     * Test adding a bad entry: invalid ID type
-     */
-    public function testArrayAccessAddBadEntryIdType()
-    {
-        $this->expectException(\Shaarli\Bookmark\Exception\InvalidBookmarkException::class);
-
-        $array = new BookmarkArray();
-        $bookmark = (new Bookmark())->setId('nope');
-        $bookmark->validate();
-        $array[] = $bookmark;
-    }
-
-    /**
      * Test adding a bad entry: ID/offset not consistent
      */
     public function testArrayAccessAddBadEntryIdOffset()

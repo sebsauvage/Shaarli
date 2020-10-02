@@ -89,12 +89,12 @@ class ApiUtils
      * If no URL is provided, it will generate a local note URL.
      * If no title is provided, it will use the URL as title.
      *
-     * @param array  $input          Request Link.
-     * @param bool   $defaultPrivate Request Link.
+     * @param array|null  $input          Request Link.
+     * @param bool        $defaultPrivate Setting defined if a bookmark is private by default.
      *
      * @return Bookmark instance.
      */
-    public static function buildBookmarkFromRequest($input, $defaultPrivate): Bookmark
+    public static function buildBookmarkFromRequest(?array $input, bool $defaultPrivate): Bookmark
     {
         $bookmark = new Bookmark();
         $url = ! empty($input['url']) ? cleanup_url($input['url']) : '';

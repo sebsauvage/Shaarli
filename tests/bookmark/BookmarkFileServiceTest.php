@@ -265,17 +265,6 @@ class BookmarkFileServiceTest extends TestCase
     }
 
     /**
-     * Test add() method with an entry which is not a bookmark instance
-     */
-    public function testAddNotABookmark()
-    {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Provided data is invalid');
-
-        $this->privateLinkDB->add(['title' => 'hi!']);
-    }
-
-    /**
      * Test add() method with a Bookmark already containing an ID
      */
     public function testAddWithId()
@@ -413,17 +402,6 @@ class BookmarkFileServiceTest extends TestCase
     }
 
     /**
-     * Test set() method with an entry which is not a bookmark instance
-     */
-    public function testSetNotABookmark()
-    {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Provided data is invalid');
-
-        $this->privateLinkDB->set(['title' => 'hi!']);
-    }
-
-    /**
      * Test set() method with a Bookmark without an ID defined.
      */
     public function testSetWithoutId()
@@ -497,17 +475,6 @@ class BookmarkFileServiceTest extends TestCase
     }
 
     /**
-     * Test addOrSet() method with an entry which is not a bookmark instance
-     */
-    public function testAddOrSetNotABookmark()
-    {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Provided data is invalid');
-
-        $this->privateLinkDB->addOrSet(['title' => 'hi!']);
-    }
-
-    /**
      * Test addOrSet() method for a bookmark without any field set and without writing the data store
      */
     public function testAddOrSetMinimalNoWrite()
@@ -562,17 +529,6 @@ class BookmarkFileServiceTest extends TestCase
 
         $bookmark = $this->privateLinkDB->get(42);
         $this->publicLinkDB->remove($bookmark);
-    }
-
-    /**
-     * Test remove() method with an entry which is not a bookmark instance
-     */
-    public function testRemoveNotABookmark()
-    {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Provided data is invalid');
-
-        $this->privateLinkDB->remove(['title' => 'hi!']);
     }
 
     /**

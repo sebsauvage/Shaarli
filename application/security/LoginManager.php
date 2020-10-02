@@ -118,7 +118,7 @@ class LoginManager
      *
      * @return true when the user is logged in, false otherwise
      */
-    public function isLoggedIn()
+    public function isLoggedIn(): bool
     {
         if ($this->openShaarli) {
             return true;

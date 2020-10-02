@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shaarli\Bookmark;
 
 use malkusch\lock\mutex\Mutex;
@@ -61,7 +63,7 @@ class BookmarkIO
     /**
      * Reads database from disk to memory
      *
-     * @return BookmarkArray instance
+     * @return Bookmark[]
      *
      * @throws NotWritableDataStoreException    Data couldn't be loaded
      * @throws EmptyDataStoreException          Datastore file exists but does not contain any bookmark
@@ -101,7 +103,7 @@ class BookmarkIO
     /**
      * Saves the database from memory to disk
      *
-     * @param BookmarkArray $links instance.
+     * @param Bookmark[] $links
      *
      * @throws NotWritableDataStoreException the datastore is not writable
      */

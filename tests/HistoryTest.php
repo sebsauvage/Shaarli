@@ -89,14 +89,6 @@ class HistoryTest extends \Shaarli\TestCase
         $this->assertEquals(History::CREATED, $actual['event']);
         $this->assertTrue(new DateTime('-2 seconds') < $actual['datetime']);
         $this->assertEquals(1, $actual['id']);
-
-        $history = new History(self::$historyFilePath);
-        $bookmark = (new Bookmark())->setId('str');
-        $history->addLink($bookmark);
-        $actual = $history->getHistory()[0];
-        $this->assertEquals(History::CREATED, $actual['event']);
-        $this->assertTrue(new DateTime('-2 seconds') < $actual['datetime']);
-        $this->assertEquals('str', $actual['id']);
     }
 
 //    /**

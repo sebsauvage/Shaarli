@@ -66,23 +66,27 @@ class SaveBookmarkTest extends TestCase
         $this->container->bookmarkService
             ->expects(static::once())
             ->method('addOrSet')
-            ->willReturnCallback(function (Bookmark $bookmark, bool $save) use ($checkBookmark, $id): void {
+            ->willReturnCallback(function (Bookmark $bookmark, bool $save) use ($checkBookmark, $id): Bookmark {
                 static::assertFalse($save);
 
                 $checkBookmark($bookmark);
 
                 $bookmark->setId($id);
+
+                return $bookmark;
             })
         ;
         $this->container->bookmarkService
             ->expects(static::once())
             ->method('set')
-            ->willReturnCallback(function (Bookmark $bookmark, bool $save) use ($checkBookmark, $id): void {
+            ->willReturnCallback(function (Bookmark $bookmark, bool $save) use ($checkBookmark, $id): Bookmark {
                 static::assertTrue($save);
 
                 $checkBookmark($bookmark);
 
                 static::assertSame($id, $bookmark->getId());
+
+                return $bookmark;
             })
         ;
 
@@ -155,21 +159,25 @@ class SaveBookmarkTest extends TestCase
         $this->container->bookmarkService
             ->expects(static::once())
             ->method('addOrSet')
-            ->willReturnCallback(function (Bookmark $bookmark, bool $save) use ($checkBookmark, $id): void {
+            ->willReturnCallback(function (Bookmark $bookmark, bool $save) use ($checkBookmark, $id): Bookmark {
                 static::assertFalse($save);
 
                 $checkBookmark($bookmark);
+
+                return $bookmark;
             })
         ;
         $this->container->bookmarkService
             ->expects(static::once())
             ->method('set')
-            ->willReturnCallback(function (Bookmark $bookmark, bool $save) use ($checkBookmark, $id): void {
+            ->willReturnCallback(function (Bookmark $bookmark, bool $save) use ($checkBookmark, $id): Bookmark {
                 static::assertTrue($save);
 
                 $checkBookmark($bookmark);
 
                 static::assertSame($id, $bookmark->getId());
+
+                return $bookmark;
             })
         ;
 
@@ -230,8 +238,10 @@ class SaveBookmarkTest extends TestCase
         $this->container->bookmarkService
             ->expects(static::once())
             ->method('addOrSet')
-            ->willReturnCallback(function (Bookmark $bookmark, bool $save) use ($thumb): void {
+            ->willReturnCallback(function (Bookmark $bookmark, bool $save) use ($thumb): Bookmark {
                 static::assertSame($thumb, $bookmark->getThumbnail());
+
+                return $bookmark;
             })
         ;
 

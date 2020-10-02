@@ -96,11 +96,12 @@ class Links extends ApiController
      */
     public function getLink($request, $response, $args)
     {
-        if (!$this->bookmarkService->exists($args['id'])) {
+        $id = is_integer_mixed($args['id']) ? (int) $args['id'] : null;
+        if ($id === null || ! $this->bookmarkService->exists($id)) {
             throw new ApiLinkNotFoundException();
         }
         $index = index_url($this->ci['environment']);
-        $out = ApiUtils::formatLink($this->bookmarkService->get($args['id']), $index);
+        $out = ApiUtils::formatLink($this->bookmarkService->get($id), $index);
 
         return $response->withJson($out, 200, $this->jsonStyle);
     }
@@ -115,7 +116,7 @@ class Links extends ApiController
      */
     public function postLink($request, $response)
     {
-        $data = $request->getParsedBody();
+        $data = (array) ($request->getParsedBody() ?? []);
         $bookmark = ApiUtils::buildBookmarkFromRequest($data, $this->conf->get('privacy.default_private_links'));
         // duplicate by URL, return 409 Conflict
         if (! empty($bookmark->getUrl())
@@ -148,7 +149,8 @@ class Links extends ApiController
      */
     public function putLink($request, $response, $args)
     {
-        if (! $this->bookmarkService->exists($args['id'])) {
+        $id = is_integer_mixed($args['id']) ? (int) $args['id'] : null;
+        if ($id === null || !$this->bookmarkService->exists($id)) {
             throw new ApiLinkNotFoundException();
         }
 
@@ -159,7 +161,7 @@ class Links extends ApiController
         // duplicate URL on a different link, return 409 Conflict
         if (! empty($requestBookmark->getUrl())
             && ! empty($dup = $this->bookmarkService->findByUrl($requestBookmark->getUrl()))
-            && $dup->getId() != $args['id']
+            && $dup->getId() != $id
         ) {
             return $response->withJson(
                 ApiUtils::formatLink($dup, $index),
@@ -168,7 +170,7 @@ class Links extends ApiController
             );
         }
 
-        $responseBookmark = $this->bookmarkService->get($args['id']);
+        $responseBookmark = $this->bookmarkService->get($id);
         $responseBookmark = ApiUtils::updateLink($responseBookmark, $requestBookmark);
         $this->bookmarkService->set($responseBookmark);
 
@@ -189,10 +191,11 @@ class Links extends ApiController
      */
     public function deleteLink($request, $response, $args)
     {
-        if (! $this->bookmarkService->exists($args['id'])) {
+        $id = is_integer_mixed($args['id']) ? (int) $args['id'] : null;
+        if ($id === null || !$this->bookmarkService->exists($id)) {
             throw new ApiLinkNotFoundException();
         }
-        $bookmark = $this->bookmarkService->get($args['id']);
+        $bookmark = $this->bookmarkService->get($id);
         $this->bookmarkService->remove($bookmark);
 
         return $response->withStatus(204);

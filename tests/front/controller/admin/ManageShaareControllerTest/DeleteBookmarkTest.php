@@ -356,6 +356,10 @@ class DeleteBookmarkTest extends TestCase
         ;
         $response = new Response();
 
+        $this->container->bookmarkService->method('get')->with('123')->willReturn(
+            (new Bookmark())->setId(123)->setUrl('http://domain.tld')->setTitle('Title 123')
+        );
+
         $this->container->formatterFactory = $this->createMock(FormatterFactory::class);
         $this->container->formatterFactory
             ->expects(static::once())
