@@ -1558,11 +1558,11 @@ form {
   text-align: center;
 
   a {
+    background: $almost-white;
     display: inline-block;
-    margin: 0 15px;
+    padding: 5px;
     text-decoration: none;
-    color: $white;
-    font-weight: bold;
+    color: $dark-grey;
   }
 }
 
