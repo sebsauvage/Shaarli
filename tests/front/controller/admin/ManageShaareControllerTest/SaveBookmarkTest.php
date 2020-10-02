@@ -239,6 +239,30 @@ class SaveBookmarkTest extends TestCase
     }
 
     /**
+     * Test save a bookmark - with ID #0
+     */
+    public function testSaveBookmarkWithIdZero(): void
+    {
+        $parameters = ['lf_id' => '0'];
+
+        $request = $this->createMock(Request::class);
+        $request
+            ->method('getParam')
+            ->willReturnCallback(function (string $key) use ($parameters): ?string {
+                return $parameters[$key] ?? null;
+            })
+        ;
+        $response = new Response();
+
+        $this->container->bookmarkService->expects(static::once())->method('exists')->with(0)->willReturn(true);
+        $this->container->bookmarkService->expects(static::once())->method('get')->with(0)->willReturn(new Bookmark());
+
+        $result = $this->controller->save($request, $response);
+
+        static::assertSame(302, $result->getStatusCode());
+    }
+
+    /**
      * Change the password with a wrong existing password
      */
     public function testSaveBookmarkFromBookmarklet(): void

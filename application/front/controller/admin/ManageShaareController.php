@@ -127,7 +127,7 @@ class ManageShaareController extends ShaarliAdminController
         $this->checkToken($request);
 
         // lf_id should only be present if the link exists.
-        $id = $request->getParam('lf_id') ? intval(escape($request->getParam('lf_id'))) : null;
+        $id = $request->getParam('lf_id') !== null ? intval(escape($request->getParam('lf_id'))) : null;
         if (null !== $id && true === $this->container->bookmarkService->exists($id)) {
             // Edit
             $bookmark = $this->container->bookmarkService->get($id);
