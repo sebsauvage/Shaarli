@@ -67,6 +67,53 @@ class ApiMiddlewareTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Invoke the middleware with a valid token
+     */
+    public function testInvokeMiddlewareWithValidToken(): void
+    {
+        $next = function (Request $request, Response $response): Response {
+            return $response;
+        };
+        $mw = new ApiMiddleware($this->container);
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI' => '/echo',
+            'HTTP_AUTHORIZATION'=> 'Bearer ' . ApiUtilsTest::generateValidJwtToken('NapoleonWasALizard'),
+        ]);
+        $request = Request::createFromEnvironment($env);
+        $response = new Response();
+        /** @var Response $response */
+        $response = $mw($request, $response, $next);
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    /**
+     * Invoke the middleware with a valid token
+     * Using specific Apache CGI redirected authorization.
+     */
+    public function testInvokeMiddlewareWithValidTokenFromRedirectedHeader(): void
+    {
+        $next = function (Request $request, Response $response): Response {
+            return $response;
+        };
+
+        $token = 'Bearer ' . ApiUtilsTest::generateValidJwtToken('NapoleonWasALizard');
+        $this->container->environment['REDIRECT_HTTP_AUTHORIZATION'] = $token;
+        $mw = new ApiMiddleware($this->container);
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI' => '/echo',
+        ]);
+        $request = Request::createFromEnvironment($env);
+        $response = new Response();
+        /** @var Response $response */
+        $response = $mw($request, $response, $next);
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    /**
      * Invoke the middleware with the API disabled:
      * should return a 401 error Unauthorized.
      */

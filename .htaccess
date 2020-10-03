@@ -10,8 +10,12 @@ RewriteRule ^(.git|doxygen|vendor) - [F]
 # fixes JWT token not correctly forwarded on some Apache/FastCGI setups
 RewriteCond %{HTTP:Authorization} ^(.*)
 RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+# Alternative (if the 2 lines above don't work)
+# SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
 
 # REST API
+# Ionos Hosting needs RewriteBase /
+# RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [QSA,L]
