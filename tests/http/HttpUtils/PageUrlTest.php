@@ -10,7 +10,7 @@ require_once 'application/http/HttpUtils.php';
 /**
  * Unitary tests for page_url()
  */
-class PageUrlTest extends \PHPUnit\Framework\TestCase
+class PageUrlTest extends \Shaarli\TestCase
 {
     /**
      * If on the main page, remove "index.php" from the URL resource

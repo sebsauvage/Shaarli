@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Admin\ManageShaareControllerTest;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Front\Controller\Admin\FrontAdminControllerMockHelper;
 use Shaarli\Front\Controller\Admin\ManageShaareController;
 use Shaarli\Http\HttpAccess;
+use Shaarli\TestCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -96,12 +96,14 @@ class DisplayCreateFormTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['render_editlink'], ['render_includes'])
             ->willReturnCallback(function (string $hook, array $data) use ($remoteTitle, $remoteDesc): array {
-                static::assertSame('render_editlink', $hook);
-                static::assertSame($remoteTitle, $data['link']['title']);
-                static::assertSame($remoteDesc, $data['link']['description']);
+                if ('render_editlink' === $hook) {
+                    static::assertSame($remoteTitle, $data['link']['title']);
+                    static::assertSame($remoteDesc, $data['link']['description']);
+                }
 
                 return $data;
             })

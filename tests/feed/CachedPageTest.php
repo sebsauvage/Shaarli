@@ -7,7 +7,7 @@ namespace Shaarli\Feed;
 /**
  * Unitary tests for cached pages
  */
-class CachedPageTest extends \PHPUnit\Framework\TestCase
+class CachedPageTest extends \Shaarli\TestCase
 {
     // test cache directory
     protected static $testCacheDir = 'sandbox/pagecache';

@@ -3,9 +3,9 @@
 namespace Shaarli\Formatter;
 
 use DateTime;
-use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Config\ConfigManager;
+use Shaarli\TestCase;
 
 /**
  * Class BookmarkDefaultFormatterTest

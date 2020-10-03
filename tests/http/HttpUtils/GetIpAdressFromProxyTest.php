@@ -7,7 +7,7 @@ require_once 'application/http/HttpUtils.php';
 /**
  * Unitary tests for getIpAddressFromProxy()
  */
-class GetIpAdressFromProxyTest extends \PHPUnit\Framework\TestCase
+class GetIpAdressFromProxyTest extends \Shaarli\TestCase
 {
 
     /**

@@ -9,7 +9,7 @@ require_once 'application/http/UrlUtils.php';
  *
  * Test whitelist_protocols() function of UrlUtils.
  */
-class WhitelistProtocolsTest extends \PHPUnit\Framework\TestCase
+class WhitelistProtocolsTest extends \Shaarli\TestCase
 {
     /**
      * Test whitelist_protocols() on a note (relative URL).

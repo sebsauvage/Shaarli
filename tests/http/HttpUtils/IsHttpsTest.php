@@ -9,7 +9,7 @@ require_once 'application/http/HttpUtils.php';
  *
  * Test class for is_https() function.
  */
-class IsHttpsTest extends \PHPUnit\Framework\TestCase
+class IsHttpsTest extends \Shaarli\TestCase
 {
 
     /**

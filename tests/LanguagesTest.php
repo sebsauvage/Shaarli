@@ -7,7 +7,7 @@ use Shaarli\Config\ConfigManager;
 /**
  * Class LanguagesTest.
  */
-class LanguagesTest extends \PHPUnit\Framework\TestCase
+class LanguagesTest extends \Shaarli\TestCase
 {
     /**
      * @var string Config file path (without extension).

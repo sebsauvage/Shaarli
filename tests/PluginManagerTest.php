@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Plugin;
 
 use Shaarli\Config\ConfigManager;
@@ -6,7 +7,7 @@ use Shaarli\Config\ConfigManager;
 /**
  * Unit tests for Plugins
  */
-class PluginManagerTest extends \PHPUnit\Framework\TestCase
+class PluginManagerTest extends \Shaarli\TestCase
 {
     /**
      * Path to tests plugin.
@@ -81,8 +82,8 @@ class PluginManagerTest extends \PHPUnit\Framework\TestCase
         $data = [];
         $this->pluginManager->executeHooks('error', $data);
 
-        $this->assertSame(
-            'test [plugin incompatibility]: Class \'Unknown\' not found',
+        $this->assertRegExp(
+            '/test \[plugin incompatibility\]: Class [\'"]Unknown[\'"] not found/',
             $this->pluginManager->getErrors()[0]
         );
     }

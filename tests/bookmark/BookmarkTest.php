@@ -2,8 +2,8 @@
 
 namespace Shaarli\Bookmark;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\Exception\InvalidBookmarkException;
+use Shaarli\TestCase;
 
 /**
  * Class BookmarkTest
@@ -150,7 +150,7 @@ class BookmarkTest extends TestCase
             $exception = $e;
         }
         $this->assertNotNull($exception);
-        $this->assertContains('- ID: '. PHP_EOL, $exception->getMessage());
+        $this->assertContainsPolyfill('- ID: '. PHP_EOL, $exception->getMessage());
     }
 
     /**
@@ -169,7 +169,7 @@ class BookmarkTest extends TestCase
             $exception = $e;
         }
         $this->assertNotNull($exception);
-        $this->assertContains('- ID: str'. PHP_EOL, $exception->getMessage());
+        $this->assertContainsPolyfill('- ID: str'. PHP_EOL, $exception->getMessage());
     }
 
     /**
@@ -188,7 +188,7 @@ class BookmarkTest extends TestCase
             $exception = $e;
         }
         $this->assertNotNull($exception);
-        $this->assertContains('- ShortUrl: '. PHP_EOL, $exception->getMessage());
+        $this->assertContainsPolyfill('- ShortUrl: '. PHP_EOL, $exception->getMessage());
     }
 
     /**
@@ -207,7 +207,7 @@ class BookmarkTest extends TestCase
             $exception = $e;
         }
         $this->assertNotNull($exception);
-        $this->assertContains('- Created: '. PHP_EOL, $exception->getMessage());
+        $this->assertContainsPolyfill('- Created: '. PHP_EOL, $exception->getMessage());
     }
 
     /**
@@ -226,7 +226,7 @@ class BookmarkTest extends TestCase
             $exception = $e;
         }
         $this->assertNotNull($exception);
-        $this->assertContains('- Created: Not a DateTime object'. PHP_EOL, $exception->getMessage());
+        $this->assertContainsPolyfill('- Created: Not a DateTime object'. PHP_EOL, $exception->getMessage());
     }
 
     /**

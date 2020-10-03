@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Visitor;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Feed\CachedPage;
+use Shaarli\TestCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -78,19 +78,20 @@ class DailyControllerTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['render_daily'])
             ->willReturnCallback(function (string $hook, array $data, array $param) use ($currentDay): array {
-                static::assertSame('render_daily', $hook);
+                if ('render_daily' === $hook) {
+                    static::assertArrayHasKey('linksToDisplay', $data);
+                    static::assertCount(3, $data['linksToDisplay']);
+                    static::assertSame(1, $data['linksToDisplay'][0]['id']);
+                    static::assertSame($currentDay->getTimestamp(), $data['day']);
+                    static::assertSame('20200510', $data['previousday']);
+                    static::assertSame('20200516', $data['nextday']);
 
-                static::assertArrayHasKey('linksToDisplay', $data);
-                static::assertCount(3, $data['linksToDisplay']);
-                static::assertSame(1, $data['linksToDisplay'][0]['id']);
-                static::assertSame($currentDay->getTimestamp(), $data['day']);
-                static::assertSame('20200510', $data['previousday']);
-                static::assertSame('20200516', $data['nextday']);
-
-                static::assertArrayHasKey('loggedin', $param);
+                    static::assertArrayHasKey('loggedin', $param);
+                }
 
                 return $data;
             })
@@ -203,19 +204,20 @@ class DailyControllerTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['render_daily'])
             ->willReturnCallback(function (string $hook, array $data, array $param) use ($currentDay): array {
-                static::assertSame('render_daily', $hook);
+                if ('render_daily' === $hook) {
+                    static::assertArrayHasKey('linksToDisplay', $data);
+                    static::assertCount(1, $data['linksToDisplay']);
+                    static::assertSame(1, $data['linksToDisplay'][0]['id']);
+                    static::assertSame($currentDay->getTimestamp(), $data['day']);
+                    static::assertEmpty($data['previousday']);
+                    static::assertEmpty($data['nextday']);
 
-                static::assertArrayHasKey('linksToDisplay', $data);
-                static::assertCount(1, $data['linksToDisplay']);
-                static::assertSame(1, $data['linksToDisplay'][0]['id']);
-                static::assertSame($currentDay->getTimestamp(), $data['day']);
-                static::assertEmpty($data['previousday']);
-                static::assertEmpty($data['nextday']);
-
-                static::assertArrayHasKey('loggedin', $param);
+                    static::assertArrayHasKey('loggedin', $param);
+                }
 
                 return $data;
             });
@@ -281,7 +283,7 @@ class DailyControllerTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
             ->willReturnCallback(function (string $hook, array $data, array $param): array {
                 return $data;
@@ -333,7 +335,7 @@ class DailyControllerTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
             ->willReturnCallback(function (string $hook, array $data, array $param): array {
                 return $data;

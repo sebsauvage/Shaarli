@@ -3,10 +3,9 @@
 namespace Shaarli;
 
 use DateTime;
-use Exception;
 use Shaarli\Bookmark\Bookmark;
 
-class HistoryTest extends \PHPUnit\Framework\TestCase
+class HistoryTest extends \Shaarli\TestCase
 {
     /**
      * @var string History file path

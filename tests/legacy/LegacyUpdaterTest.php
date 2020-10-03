@@ -20,7 +20,7 @@ require_once 'inc/rain.tpl.class.php';
  * Class UpdaterTest.
  * Runs unit tests against the updater class.
  */
-class LegacyUpdaterTest extends \PHPUnit\Framework\TestCase
+class LegacyUpdaterTest extends \Shaarli\TestCase
 {
     /**
      * @var string Path to test datastore.
@@ -80,11 +80,10 @@ class LegacyUpdaterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test errors in UpdaterUtils::write_updates_file(): empty updates file.
-     *
-     * @expectedException              Exception
      */
     public function testWriteEmptyUpdatesFile()
     {
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/Updates file path is not set(.*)/');
 
         UpdaterUtils::write_updates_file('', array('test'));
@@ -92,11 +91,10 @@ class LegacyUpdaterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test errors in UpdaterUtils::write_updates_file(): not writable updates file.
-     *
-     * @expectedException              Exception
      */
     public function testWriteUpdatesFileNotWritable()
     {
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/Unable to write(.*)/');
 
         $updatesFile = $this->conf->get('resource.data_dir') . '/updates.txt';
@@ -725,7 +723,7 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
         $this->assertEquals(\Shaarli\Thumbnailer::MODE_ALL, $this->conf->get('thumbnails.mode'));
         $this->assertEquals(125, $this->conf->get('thumbnails.width'));
         $this->assertEquals(90, $this->conf->get('thumbnails.height'));
-        $this->assertContains('You have enabled or changed thumbnails', $_SESSION['warnings'][0]);
+        $this->assertContainsPolyfill('You have enabled or changed thumbnails', $_SESSION['warnings'][0]);
     }
 
     /**

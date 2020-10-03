@@ -10,7 +10,7 @@ use Shaarli\Legacy\LegacyLinkFilter;
 /**
  * Class LegacyLinkFilterTest.
  */
-class LegacyLinkFilterTest extends \PHPUnit\Framework\TestCase
+class LegacyLinkFilterTest extends \Shaarli\TestCase
 {
     /**
      * @var string Test datastore path.
@@ -197,10 +197,10 @@ class LegacyLinkFilterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Use an invalid date format
-     * @expectedException              Exception
      */
     public function testFilterInvalidDayWithChars()
     {
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/Invalid date format/');
 
         self::$linkFilter->filter(LegacyLinkFilter::$FILTER_DAY, 'Rainy day, dream away');
@@ -208,10 +208,10 @@ class LegacyLinkFilterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Use an invalid date format
-     * @expectedException              Exception
      */
     public function testFilterInvalidDayDigits()
     {
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/Invalid date format/');
 
         self::$linkFilter->filter(LegacyLinkFilter::$FILTER_DAY, '20');

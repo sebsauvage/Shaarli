@@ -3,7 +3,6 @@
 namespace Shaarli\Feed;
 
 use DateTime;
-use PHPUnit\Framework\TestCase;
 use ReferenceLinkDB;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\BookmarkFileService;
@@ -11,6 +10,7 @@ use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Formatter\FormatterFactory;
 use Shaarli\History;
+use Shaarli\TestCase;
 
 /**
  * FeedBuilderTest class.
@@ -97,9 +97,9 @@ class FeedBuilderTest extends TestCase
         $pub = DateTime::createFromFormat(DateTime::RSS, $link['pub_iso_date']);
         $up = DateTime::createFromFormat(DateTime::ATOM, $link['up_iso_date']);
         $this->assertEquals($pub, $up);
-        $this->assertContains('Stallman has a beard', $link['description']);
-        $this->assertContains('Permalink', $link['description']);
-        $this->assertContains('http://host.tld/shaare/WDWyig', $link['description']);
+        $this->assertContainsPolyfill('Stallman has a beard', $link['description']);
+        $this->assertContainsPolyfill('Permalink', $link['description']);
+        $this->assertContainsPolyfill('http://host.tld/shaare/WDWyig', $link['description']);
         $this->assertEquals(1, count($link['taglist']));
         $this->assertEquals('sTuff', $link['taglist'][0]);
 
@@ -201,16 +201,16 @@ class FeedBuilderTest extends TestCase
         $this->assertEquals(DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114651'), $link['created']);
         $this->assertEquals('http://host.tld/shaare/WDWyig', $link['guid']);
         $this->assertEquals('http://host.tld/shaare/WDWyig', $link['url']);
-        $this->assertContains('Direct link', $link['description']);
-        $this->assertContains('http://host.tld/shaare/WDWyig', $link['description']);
+        $this->assertContainsPolyfill('Direct link', $link['description']);
+        $this->assertContainsPolyfill('http://host.tld/shaare/WDWyig', $link['description']);
         // Second link is a direct link
         $link = $data['links'][array_keys($data['links'])[1]];
         $this->assertEquals(8, $link['id']);
         $this->assertEquals(DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114633'), $link['created']);
         $this->assertEquals('http://host.tld/shaare/RttfEw', $link['guid']);
         $this->assertEquals('https://static.fsf.org/nosvn/faif-2.0.pdf', $link['url']);
-        $this->assertContains('Direct link', $link['description']);
-        $this->assertContains('https://static.fsf.org/nosvn/faif-2.0.pdf', $link['description']);
+        $this->assertContainsPolyfill('Direct link', $link['description']);
+        $this->assertContainsPolyfill('https://static.fsf.org/nosvn/faif-2.0.pdf', $link['description']);
     }
 
     /**
@@ -274,6 +274,6 @@ class FeedBuilderTest extends TestCase
         $link = $data['links'][array_keys($data['links'])[0]];
         $this->assertEquals('http://host.tld:8080/~user/shaarli/shaare/WDWyig', $link['guid']);
         $this->assertEquals('http://host.tld:8080/~user/shaarli/shaare/WDWyig', $link['url']);
-        $this->assertContains('http://host.tld:8080/~user/shaarli/./add-tag/hashtag', $link['description']);
+        $this->assertContainsPolyfill('http://host.tld:8080/~user/shaarli/./add-tag/hashtag', $link['description']);
     }
 }

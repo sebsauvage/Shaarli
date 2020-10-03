@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Shaarli\Container;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Feed\FeedBuilder;
@@ -20,6 +19,7 @@ use Shaarli\Render\PageCacheManager;
 use Shaarli\Security\CookieManager;
 use Shaarli\Security\LoginManager;
 use Shaarli\Security\SessionManager;
+use Shaarli\TestCase;
 use Shaarli\Thumbnailer;
 use Shaarli\Updater\Updater;
 use Slim\Http\Environment;

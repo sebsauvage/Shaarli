@@ -11,7 +11,7 @@ use Slim\Http\Environment;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class DeleteLinkTest extends \PHPUnit\Framework\TestCase
+class DeleteLinkTest extends \Shaarli\TestCase
 {
     /**
      * @var string datastore to test write operations

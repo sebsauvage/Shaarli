@@ -2,10 +2,10 @@
 
 namespace Shaarli\Plugin\DefaultColors;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Plugin\PluginManager;
+use Shaarli\TestCase;
 
 require_once 'plugins/default_colors/default_colors.php';
 

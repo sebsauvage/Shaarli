@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Visitor;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Front\Exception\LoginBannedException;
 use Shaarli\Front\Exception\WrongTokenException;
 use Shaarli\Render\TemplatePage;
 use Shaarli\Security\CookieManager;
 use Shaarli\Security\SessionManager;
+use Shaarli\TestCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
 

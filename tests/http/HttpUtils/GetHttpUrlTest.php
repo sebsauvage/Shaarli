@@ -10,7 +10,7 @@ require_once 'application/http/HttpUtils.php';
 /**
  * Unitary tests for get_http_response()
  */
-class GetHttpUrlTest extends \PHPUnit\Framework\TestCase
+class GetHttpUrlTest extends \Shaarli\TestCase
 {
     /**
      * Get an invalid local URL

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Shaarli\Front;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Container\ShaarliContainer;
 use Shaarli\Security\LoginManager;
+use Shaarli\TestCase;
 use Shaarli\Updater\Updater;
 use Slim\Http\Request;
 use Slim\Http\Response;

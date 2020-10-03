@@ -14,7 +14,7 @@ require_once 'plugins/qrcode/qrcode.php';
  * Class PluginQrcodeTest
  * Unit test for the QR-Code plugin
  */
-class PluginQrcodeTest extends \PHPUnit\Framework\TestCase
+class PluginQrcodeTest extends \Shaarli\TestCase
 {
     /**
      * Reset plugin path

@@ -17,7 +17,7 @@ use Slim\Http\Response;
  *
  * @package Shaarli\Api\Controllers
  */
-class GetTagsTest extends \PHPUnit\Framework\TestCase
+class GetTagsTest extends \Shaarli\TestCase
 {
     /**
      * @var string datastore to test write operations

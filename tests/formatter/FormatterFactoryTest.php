@@ -2,8 +2,8 @@
 
 namespace Shaarli\Formatter;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Config\ConfigManager;
+use Shaarli\TestCase;
 
 /**
  * Class FormatterFactoryTest

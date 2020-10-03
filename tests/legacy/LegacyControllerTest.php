@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Shaarli\Legacy;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Front\Controller\Visitor\FrontControllerMockHelper;
+use Shaarli\TestCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
 

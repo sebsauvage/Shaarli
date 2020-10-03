@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Admin\ManageShaareControllerTest;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Front\Controller\Admin\FrontAdminControllerMockHelper;
 use Shaarli\Front\Controller\Admin\ManageShaareController;
 use Shaarli\Http\HttpAccess;
 use Shaarli\Security\SessionManager;
+use Shaarli\TestCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
 

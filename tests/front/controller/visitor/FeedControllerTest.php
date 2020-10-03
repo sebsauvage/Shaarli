@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Visitor;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Feed\FeedBuilder;
+use Shaarli\TestCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -45,14 +45,16 @@ class FeedControllerTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['render_feed'])
             ->willReturnCallback(function (string $hook, array $data, array $param): void {
-                static::assertSame('render_feed', $hook);
-                static::assertSame('data', $data['content']);
+                if ('render_feed' === $hook) {
+                    static::assertSame('data', $data['content']);
 
-                static::assertArrayHasKey('loggedin', $param);
-                static::assertSame('feed.rss', $param['target']);
+                    static::assertArrayHasKey('loggedin', $param);
+                    static::assertSame('feed.rss', $param['target']);
+                }
             })
         ;
 
@@ -84,14 +86,16 @@ class FeedControllerTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['render_feed'])
             ->willReturnCallback(function (string $hook, array $data, array $param): void {
-                static::assertSame('render_feed', $hook);
-                static::assertSame('data', $data['content']);
+                if ('render_feed' === $hook) {
+                    static::assertSame('data', $data['content']);
 
-                static::assertArrayHasKey('loggedin', $param);
-                static::assertSame('feed.atom', $param['target']);
+                    static::assertArrayHasKey('loggedin', $param);
+                    static::assertSame('feed.atom', $param['target']);
+                }
             })
         ;
 
@@ -124,14 +128,16 @@ class FeedControllerTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['render_feed'])
             ->willReturnCallback(function (string $hook, array $data, array $param): void {
-                static::assertSame('render_feed', $hook);
-                static::assertSame('data', $data['content']);
+                if ('render_feed' === $hook) {
+                    static::assertSame('data', $data['content']);
 
-                static::assertArrayHasKey('loggedin', $param);
-                static::assertSame('feed.atom', $param['target']);
+                    static::assertArrayHasKey('loggedin', $param);
+                    static::assertSame('feed.atom', $param['target']);
+                }
             })
         ;
 

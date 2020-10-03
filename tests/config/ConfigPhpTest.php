@@ -8,7 +8,7 @@ namespace Shaarli\Config;
  * which are kept between tests.
  * @runTestsInSeparateProcesses
  */
-class ConfigPhpTest extends \PHPUnit\Framework\TestCase
+class ConfigPhpTest extends \Shaarli\TestCase
 {
     /**
      * @var ConfigPhp

@@ -10,7 +10,7 @@ require_once 'application/http/HttpUtils.php';
 /**
  * Unitary tests for client_ip_id()
  */
-class ClientIpIdTest extends \PHPUnit\Framework\TestCase
+class ClientIpIdTest extends \Shaarli\TestCase
 {
     /**
      * Get a remote client ID based on its IP

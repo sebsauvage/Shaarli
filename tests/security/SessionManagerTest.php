@@ -2,7 +2,7 @@
 
 namespace Shaarli\Security;
 
-use PHPUnit\Framework\TestCase;
+use Shaarli\TestCase;
 
 /**
  * Test coverage for SessionManager

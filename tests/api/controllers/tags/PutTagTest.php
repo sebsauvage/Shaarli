@@ -12,7 +12,7 @@ use Slim\Http\Environment;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class PutTagTest extends \PHPUnit\Framework\TestCase
+class PutTagTest extends \Shaarli\TestCase
 {
     /**
      * @var string datastore to test write operations

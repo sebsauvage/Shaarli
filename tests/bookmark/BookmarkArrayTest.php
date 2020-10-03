@@ -2,10 +2,7 @@
 
 namespace Shaarli\Bookmark;
 
-use PHPUnit\Framework\TestCase;
-use Shaarli\Bookmark\Exception\InvalidBookmarkException;
-use Shaarli\Config\ConfigManager;
-use Shaarli\History;
+use Shaarli\TestCase;
 
 /**
  * Class BookmarkArrayTest

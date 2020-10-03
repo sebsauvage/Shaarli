@@ -14,7 +14,7 @@ require_once 'plugins/playvideos/playvideos.php';
  * Class PluginPlayvideosTest
  * Unit test for the PlayVideos plugin
  */
-class PluginPlayvideosTest extends \PHPUnit\Framework\TestCase
+class PluginPlayvideosTest extends \Shaarli\TestCase
 {
     /**
      * Reset plugin path

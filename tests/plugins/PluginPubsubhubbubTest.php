@@ -11,7 +11,7 @@ require_once 'plugins/pubsubhubbub/pubsubhubbub.php';
  * Class PluginPubsubhubbubTest
  * Unit test for the pubsubhubbub plugin
  */
-class PluginPubsubhubbubTest extends \PHPUnit\Framework\TestCase
+class PluginPubsubhubbubTest extends \Shaarli\TestCase
 {
     /**
      * @var string Config file path (without extension).

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Visitor;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Security\LoginManager;
+use Shaarli\TestCase;
 use Shaarli\Thumbnailer;
 use Slim\Http\Request;
 use Slim\Http\Response;

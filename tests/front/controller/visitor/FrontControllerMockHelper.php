@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Visitor;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Container\ShaarliTestContainer;
@@ -115,5 +114,5 @@ trait FrontControllerMockHelper
     /**
      * Force to be used in PHPUnit context.
      */
-    protected abstract function createMock($originalClassName): MockObject;
+    protected abstract function isInTestsContext(): bool;
 }

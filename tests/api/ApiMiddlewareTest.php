@@ -18,7 +18,7 @@ use Slim\Http\Response;
  *
  * @package Api
  */
-class ApiMiddlewareTest extends \PHPUnit\Framework\TestCase
+class ApiMiddlewareTest extends \Shaarli\TestCase
 {
     /**
      * @var string datastore to test write operations
@@ -26,7 +26,7 @@ class ApiMiddlewareTest extends \PHPUnit\Framework\TestCase
     protected static $testDatastore = 'sandbox/datastore.php';
 
     /**
-     * @var \ConfigManager instance
+     * @var ConfigManager instance
      */
     protected $conf;
 
@@ -156,7 +156,7 @@ class ApiMiddlewareTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(401, $response->getStatusCode());
         $body = json_decode((string) $response->getBody());
         $this->assertEquals('Not authorized: API is disabled', $body->message);
-        $this->assertContains('ApiAuthorizationException', $body->stacktrace);
+        $this->assertContainsPolyfill('ApiAuthorizationException', $body->stacktrace);
     }
 
     /**
@@ -179,7 +179,7 @@ class ApiMiddlewareTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(401, $response->getStatusCode());
         $body = json_decode((string) $response->getBody());
         $this->assertEquals('Not authorized: JWT token not provided', $body->message);
-        $this->assertContains('ApiAuthorizationException', $body->stacktrace);
+        $this->assertContainsPolyfill('ApiAuthorizationException', $body->stacktrace);
     }
 
     /**
@@ -204,7 +204,7 @@ class ApiMiddlewareTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(401, $response->getStatusCode());
         $body = json_decode((string) $response->getBody());
         $this->assertEquals('Not authorized: Token secret must be set in Shaarli\'s administration', $body->message);
-        $this->assertContains('ApiAuthorizationException', $body->stacktrace);
+        $this->assertContainsPolyfill('ApiAuthorizationException', $body->stacktrace);
     }
 
     /**
@@ -227,7 +227,7 @@ class ApiMiddlewareTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(401, $response->getStatusCode());
         $body = json_decode((string) $response->getBody());
         $this->assertEquals('Not authorized: Invalid JWT header', $body->message);
-        $this->assertContains('ApiAuthorizationException', $body->stacktrace);
+        $this->assertContainsPolyfill('ApiAuthorizationException', $body->stacktrace);
     }
 
     /**
@@ -253,6 +253,6 @@ class ApiMiddlewareTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(401, $response->getStatusCode());
         $body = json_decode((string) $response->getBody());
         $this->assertEquals('Not authorized: Malformed JWT token', $body->message);
-        $this->assertContains('ApiAuthorizationException', $body->stacktrace);
+        $this->assertContainsPolyfill('ApiAuthorizationException', $body->stacktrace);
     }
 }

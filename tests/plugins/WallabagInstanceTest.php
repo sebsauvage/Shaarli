@@ -4,7 +4,7 @@ namespace Shaarli\Plugin\Wallabag;
 /**
  * Class WallabagInstanceTest
  */
-class WallabagInstanceTest extends \PHPUnit\Framework\TestCase
+class WallabagInstanceTest extends \Shaarli\TestCase
 {
     /**
      * @var string wallabag url.

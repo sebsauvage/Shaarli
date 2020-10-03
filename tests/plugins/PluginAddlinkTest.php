@@ -9,7 +9,7 @@ require_once 'plugins/addlink_toolbar/addlink_toolbar.php';
 /**
  * Unit test for the Addlink toolbar plugin
  */
-class PluginAddlinkTest extends \PHPUnit\Framework\TestCase
+class PluginAddlinkTest extends \Shaarli\TestCase
 {
     /**
      * Reset plugin path.

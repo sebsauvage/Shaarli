@@ -6,7 +6,6 @@
 namespace Shaarli\Bookmark;
 
 use DateTime;
-use PHPUnit\Framework\TestCase;
 use ReferenceLinkDB;
 use ReflectionClass;
 use Shaarli;
@@ -14,6 +13,7 @@ use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Formatter\BookmarkMarkdownFormatter;
 use Shaarli\History;
+use Shaarli\TestCase;
 
 /**
  * Unitary tests for LegacyLinkDBTest
@@ -637,11 +637,10 @@ class BookmarkFileServiceTest extends TestCase
      */
     /**
      * Attempt to instantiate a LinkDB whereas the datastore is not writable
-     *
-     * @expectedException              Shaarli\Bookmark\Exception\NotWritableDataStoreException
      */
     public function testConstructDatastoreNotWriteable()
     {
+        $this->expectException(\Shaarli\Bookmark\Exception\NotWritableDataStoreException::class);
         $this->expectExceptionMessageRegExp('#Couldn\'t load data from the data store file "null".*#');
 
         $conf = new ConfigManager('tests/utils/config/configJson');
@@ -748,7 +747,7 @@ class BookmarkFileServiceTest extends TestCase
         $link = $this->publicLinkDB->findByUrl('http://mediagoblin.org/');
 
         $this->assertNotEquals(false, $link);
-        $this->assertContains(
+        $this->assertContainsPolyfill(
             'A free software media publishing platform',
             $link->getDescription()
         );

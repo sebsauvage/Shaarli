@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Visitor;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Bookmark\BookmarkFilter;
+use Shaarli\TestCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -53,14 +53,16 @@ class TagCloudControllerTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['render_tagcloud'])
             ->willReturnCallback(function (string $hook, array $data, array $param): array {
-                static::assertSame('render_tagcloud', $hook);
-                static::assertSame('', $data['search_tags']);
-                static::assertCount(3, $data['tags']);
+                if ('render_tagcloud' === $hook) {
+                    static::assertSame('', $data['search_tags']);
+                    static::assertCount(3, $data['tags']);
 
-                static::assertArrayHasKey('loggedin', $param);
+                    static::assertArrayHasKey('loggedin', $param);
+                }
 
                 return $data;
             })
@@ -124,14 +126,16 @@ class TagCloudControllerTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['render_tagcloud'])
             ->willReturnCallback(function (string $hook, array $data, array $param): array {
-                static::assertSame('render_tagcloud', $hook);
-                static::assertSame('ghi def', $data['search_tags']);
-                static::assertCount(1, $data['tags']);
+               if ('render_tagcloud' === $hook) {
+                   static::assertSame('ghi def', $data['search_tags']);
+                   static::assertCount(1, $data['tags']);
 
-                static::assertArrayHasKey('loggedin', $param);
+                   static::assertArrayHasKey('loggedin', $param);
+               }
 
                 return $data;
             })
@@ -175,14 +179,16 @@ class TagCloudControllerTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['render_tagcloud'])
             ->willReturnCallback(function (string $hook, array $data, array $param): array {
-                static::assertSame('render_tagcloud', $hook);
-                static::assertSame('', $data['search_tags']);
-                static::assertCount(0, $data['tags']);
+                if ('render_tagcloud' === $hook) {
+                    static::assertSame('', $data['search_tags']);
+                    static::assertCount(0, $data['tags']);
 
-                static::assertArrayHasKey('loggedin', $param);
+                    static::assertArrayHasKey('loggedin', $param);
+                }
 
                 return $data;
             })
@@ -227,14 +233,16 @@ class TagCloudControllerTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['render_taglist'])
             ->willReturnCallback(function (string $hook, array $data, array $param): array {
-                static::assertSame('render_taglist', $hook);
-                static::assertSame('', $data['search_tags']);
-                static::assertCount(3, $data['tags']);
+                if ('render_taglist' === $hook) {
+                    static::assertSame('', $data['search_tags']);
+                    static::assertCount(3, $data['tags']);
 
-                static::assertArrayHasKey('loggedin', $param);
+                    static::assertArrayHasKey('loggedin', $param);
+                }
 
                 return $data;
             })
@@ -297,14 +305,16 @@ class TagCloudControllerTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['render_taglist'])
             ->willReturnCallback(function (string $hook, array $data, array $param): array {
-                static::assertSame('render_taglist', $hook);
-                static::assertSame('ghi def', $data['search_tags']);
-                static::assertCount(1, $data['tags']);
+                if ('render_taglist' === $hook) {
+                    static::assertSame('ghi def', $data['search_tags']);
+                    static::assertCount(1, $data['tags']);
 
-                static::assertArrayHasKey('loggedin', $param);
+                    static::assertArrayHasKey('loggedin', $param);
+                }
 
                 return $data;
             })
@@ -344,14 +354,16 @@ class TagCloudControllerTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['render_taglist'])
             ->willReturnCallback(function (string $hook, array $data, array $param): array {
-                static::assertSame('render_taglist', $hook);
-                static::assertSame('', $data['search_tags']);
-                static::assertCount(0, $data['tags']);
+                if ('render_taglist' === $hook) {
+                    static::assertSame('', $data['search_tags']);
+                    static::assertCount(0, $data['tags']);
 
-                static::assertArrayHasKey('loggedin', $param);
+                    static::assertArrayHasKey('loggedin', $param);
+                }
 
                 return $data;
             })

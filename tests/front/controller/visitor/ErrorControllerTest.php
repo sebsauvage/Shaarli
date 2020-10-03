@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Visitor;
 
-use PHPUnit\Framework\TestCase;
 use Shaarli\Front\Exception\ShaarliFrontException;
+use Shaarli\TestCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
