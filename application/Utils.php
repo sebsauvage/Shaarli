@@ -95,14 +95,14 @@ function escape($input)
         return null;
     }
 
-    if (is_bool($input)) {
+    if (is_bool($input) || is_int($input) || is_float($input) || $input instanceof DateTimeInterface) {
         return $input;
     }
 
     if (is_array($input)) {
         $out = array();
         foreach ($input as $key => $value) {
-            $out[$key] = escape($value);
+            $out[escape($key)] = escape($value);
         }
         return $out;
     }

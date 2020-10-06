@@ -34,7 +34,7 @@ class BookmarkListController extends ShaarliVisitorController
         $formatter = $this->container->formatterFactory->getFormatter();
         $formatter->addContextData('base_path', $this->container->basePath);
 
-        $searchTags = escape(normalize_spaces($request->getParam('searchtags') ?? ''));
+        $searchTags = normalize_spaces($request->getParam('searchtags') ?? '');
         $searchTerm = escape(normalize_spaces($request->getParam('searchterm') ?? ''));;
 
         // Filter bookmarks according search parameters.
@@ -104,8 +104,9 @@ class BookmarkListController extends ShaarliVisitorController
                 'page_current' => $page,
                 'page_max' => $pageCount,
                 'result_count' => count($linksToDisplay),
-                'search_term' => $searchTerm,
-                'search_tags' => $searchTags,
+                'search_term' => escape($searchTerm),
+                'search_tags' => escape($searchTags),
+                'search_tags_url' => array_map('urlencode', explode(' ', $searchTags)),
                 'visibility' => $visibility,
                 'links' => $linkDisp,
             ]

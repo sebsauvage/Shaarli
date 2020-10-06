@@ -66,10 +66,18 @@ class TagCloudController extends ShaarliVisitorController
             $tags = $this->formatTagsForCloud($tags);
         }
 
+        $tagsUrl = [];
+        foreach ($tags as $tag => $value) {
+            $tagsUrl[escape($tag)] = urlencode((string) $tag);
+        }
+
         $searchTags = implode(' ', escape($filteringTags));
+        $searchTagsUrl = urlencode(implode(' ', $filteringTags));
         $data = [
-            'search_tags' => $searchTags,
-            'tags' => $tags,
+            'search_tags' => escape($searchTags),
+            'search_tags_url' => $searchTagsUrl,
+            'tags' => escape($tags),
+            'tags_url' => $tagsUrl,
         ];
         $this->executePageHooks('render_tag' . $type, $data, 'tag.' . $type);
         $this->assignAllView($data);
