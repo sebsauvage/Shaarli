@@ -41,8 +41,8 @@ class ManageTagController extends ShaarliAdminController
 
         $isDelete = null !== $request->getParam('deletetag') && null === $request->getParam('renametag');
 
-        $fromTag = escape(trim($request->getParam('fromtag') ?? ''));
-        $toTag = escape(trim($request->getParam('totag') ?? ''));
+        $fromTag = trim($request->getParam('fromtag') ?? '');
+        $toTag = trim($request->getParam('totag') ?? '');
 
         if (0 === strlen($fromTag) || false === $isDelete && 0 === strlen($toTag)) {
             $this->saveWarningMessage(t('Invalid tags provided.'));

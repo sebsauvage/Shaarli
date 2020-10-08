@@ -78,13 +78,13 @@ class ManageShaareController extends ShaarliAdminController
                 $title = $this->container->conf->get('general.default_note_title', t('Note: '));
             }
 
-            $link = escape([
+            $link = [
                 'title' => $title,
                 'url' => $url ?? '',
                 'description' => $description ?? '',
                 'tags' => $tags ?? '',
                 'private' => $private,
-            ]);
+            ];
         } else {
             $formatter = $this->container->formatterFactory->getFormatter('raw');
             $link = $formatter->format($bookmark);
@@ -345,14 +345,14 @@ class ManageShaareController extends ShaarliAdminController
             $tags[BookmarkMarkdownFormatter::NO_MD_TAG] = 1;
         }
 
-        $data = [
+        $data = escape([
             'link' => $link,
             'link_is_new' => $isNew,
-            'http_referer' => escape($this->container->environment['HTTP_REFERER'] ?? ''),
+            'http_referer' => $this->container->environment['HTTP_REFERER'] ?? '',
             'source' => $request->getParam('source') ?? '',
             'tags' => $tags,
             'default_private_links' => $this->container->conf->get('privacy.default_private_links', false),
-        ];
+        ]);
 
         $this->executePageHooks('render_editlink', $data, TemplatePage::EDIT_LINK);
 

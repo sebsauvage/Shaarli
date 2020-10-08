@@ -555,6 +555,7 @@ function init(description) {
       }
       const refreshedToken = document.getElementById('token').value;
       const fromtag = block.getAttribute('data-tag');
+      const fromtagUrl = block.getAttribute('data-tag-url');
       const xhr = new XMLHttpRequest();
       xhr.open('POST', `${basePath}/admin/tags`);
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -564,6 +565,7 @@ function init(description) {
           location.reload();
         } else {
           block.setAttribute('data-tag', totag);
+          block.setAttribute('data-tag-url', encodeURIComponent(totag));
           input.setAttribute('name', totag);
           input.setAttribute('value', totag);
           findParent(input, 'div', { class: 'rename-tag-form' }).style.display = 'none';
@@ -571,6 +573,9 @@ function init(description) {
           block
             .querySelector('a.tag-link')
             .setAttribute('href', `${basePath}/?searchtags=${encodeURIComponent(totag)}`);
+          block
+            .querySelector('a.count')
+            .setAttribute('href', `${basePath}/add-tag/${encodeURIComponent(totag)}`);
           block
             .querySelector('a.rename-tag')
             .setAttribute('href', `${basePath}/admin/tags?fromtag=${encodeURIComponent(totag)}`);
@@ -580,7 +585,7 @@ function init(description) {
           awesomepletes = updateAwesompleteList('.rename-tag-input', existingTags, awesomepletes);
         }
       };
-      xhr.send(`renametag=1&fromtag=${encodeURIComponent(fromtag)}&totag=${encodeURIComponent(totag)}&token=${refreshedToken}`);
+      xhr.send(`renametag=1&fromtag=${fromtagUrl}&totag=${encodeURIComponent(totag)}&token=${refreshedToken}`);
       refreshToken(basePath);
     });
   });
@@ -603,6 +608,7 @@ function init(description) {
       event.preventDefault();
       const block = findParent(event.target, 'div', { class: 'tag-list-item' });
       const tag = block.getAttribute('data-tag');
+      const tagUrl = block.getAttribute('data-tag-url');
       const refreshedToken = document.getElementById('token').value;
 
       if (confirm(`Are you sure you want to delete the tag "${tag}"?`)) {
@@ -612,7 +618,7 @@ function init(description) {
         xhr.onload = () => {
           block.remove();
         };
-        xhr.send(encodeURI(`deletetag=1&fromtag=${tag}&token=${refreshedToken}`));
+        xhr.send(`deletetag=1&fromtag=${tagUrl}&token=${refreshedToken}`);
         refreshToken(basePath);
 
         existingTags = existingTags.filter((tagItem) => tagItem !== tag);

@@ -137,7 +137,7 @@ class PageBuilder
         $this->tpl->assign('language', $this->conf->get('translation.language'));
 
         if ($this->bookmarkService !== null) {
-            $this->tpl->assign('tags', $this->bookmarkService->bookmarksCountPerTag());
+            $this->tpl->assign('tags', escape($this->bookmarkService->bookmarksCountPerTag()));
         }
 
         $this->tpl->assign(

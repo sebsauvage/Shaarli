@@ -58,7 +58,9 @@ abstract class BookmarkFormatter
         $out['title'] = $this->formatTitle($bookmark);
         $out['description'] = $this->formatDescription($bookmark);
         $out['thumbnail'] = $this->formatThumbnail($bookmark);
+        $out['urlencoded_taglist'] = $this->formatUrlEncodedTagList($bookmark);
         $out['taglist'] = $this->formatTagList($bookmark);
+        $out['urlencoded_tags'] = $this->formatUrlEncodedTagString($bookmark);
         $out['tags'] = $this->formatTagString($bookmark);
         $out['sticky'] = $bookmark->isSticky();
         $out['private'] = $bookmark->isPrivate();
@@ -182,6 +184,18 @@ abstract class BookmarkFormatter
     }
 
     /**
+     * Format Url Encoded Tags
+     *
+     * @param Bookmark $bookmark instance
+     *
+     * @return array formatted Tags
+     */
+    protected function formatUrlEncodedTagList($bookmark)
+    {
+        return array_map('urlencode', $this->filterTagList($bookmark->getTags()));
+    }
+
+    /**
      * Format TagString
      *
      * @param Bookmark $bookmark instance
@@ -191,6 +205,18 @@ abstract class BookmarkFormatter
     protected function formatTagString($bookmark)
     {
         return implode(' ', $this->formatTagList($bookmark));
+    }
+
+    /**
+     * Format TagString
+     *
+     * @param Bookmark $bookmark instance
+     *
+     * @return string formatted TagString
+     */
+    protected function formatUrlEncodedTagString($bookmark)
+    {
+        return implode(' ', $this->formatUrlEncodedTagList($bookmark));
     }
 
     /**
