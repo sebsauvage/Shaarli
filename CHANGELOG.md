@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v0.12.0](https://github.com/shaarli/Shaarli/releases/tag/v0.12.0-beta) - UNRELEASED [beta 2020-08-27 - beta-1 2020-09-30]
+## [v0.12.0](https://github.com/shaarli/Shaarli/releases/tag/v0.12.0-beta) - UNRELEASED
+*[beta 2020-08-27 - beta-1 2020-09-30 - beta-2 2020-10-08]*
 
 **Save you `data/` folder before updating!**
 
@@ -18,7 +19,7 @@ Be aware that by using a beta version you might encounter bugs, and that 3rd par
 - Japanese translations
 - Japanese translation: add language to admin configuration page
 - Support for PHP 8.0
-- Support for local anchor URL (startting with `#`)
+- Support for local anchor URL (starting with `#`)
 - LDAP authentication
 - Encapsulated PageCacheManager
 - Docs:
@@ -30,6 +31,7 @@ Be aware that by using a beta version you might encounter bugs, and that 3rd par
 - Inject BookmarkServiceInterface in plugins data
 - Add manual configuration for root URL
 - Added PATCH to the allowed Apache request methods.
+- REST API: compatibility with ionos Apache's headers
 
 ### Changed
 - Introduce Bookmark object and Service layer
@@ -42,6 +44,7 @@ Be aware that by using a beta version you might encounter bugs, and that 3rd par
 - Default colors plugin: generate CSS file during initialization
 - Improve default bookmarks after install
 - Upgrade all front end dependencies and webpack build
+- Default theme: Make tag cloud/list views buttons more obvious
 
 ### Fixed
 - Undefined index: thumbnail in daily page
@@ -66,6 +69,7 @@ Be aware that by using a beta version you might encounter bugs, and that 3rd par
   - Outdated Docker documentation for stable branch
   - Outdated links
   - Plugin description in meta files
+- docker-compose.yml: pin traefik image to 1.7-alpine
 
 ### Removed
 - Markdown plugin
