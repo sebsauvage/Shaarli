@@ -347,43 +347,16 @@ msgstr ""
 "le serveur web peut accepter (%s). Merci de l'envoyer en parties plus "
 "légères."
 
-#: application/front/controller/admin/ManageShaareController.php:29
-#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
-msgid "Shaare a new link"
-msgstr "Partager un nouveau lien"
-
 #: application/front/controller/admin/ManageShaareController.php:64
-msgid "Note: "
-msgstr "Note : "
-
 #: application/front/controller/admin/ManageShaareController.php:95
 #: application/front/controller/admin/ManageShaareController.php:193
 #: application/front/controller/admin/ManageShaareController.php:262
 #: application/front/controller/admin/ManageShaareController.php:302
-#, php-format
-msgid "Bookmark with identifier %s could not be found."
-msgstr "Le lien avec l'identifiant %s n'a pas pu être trouvé."
-
 #: application/front/controller/admin/ManageShaareController.php:181
 #: application/front/controller/admin/ManageShaareController.php:239
-msgid "Invalid bookmark ID provided."
-msgstr "ID du lien non valide."
-
 #: application/front/controller/admin/ManageShaareController.php:247
-msgid "Invalid visibility provided."
-msgstr "Visibilité du lien non valide."
-
 #: application/front/controller/admin/ManageShaareController.php:378
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:171
-msgid "Edit"
-msgstr "Modifier"
-
 #: application/front/controller/admin/ManageShaareController.php:381
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:28
-msgid "Shaare"
-msgstr "Shaare"
-
 #: application/front/controller/admin/ManageTagController.php:29
 #: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
@@ -455,6 +428,29 @@ msgstr "Le cache des miniatures a été vidé."
 #: application/front/controller/admin/ServerController.php:76
 msgid "Shaarli's cache folder has been cleared!"
 msgstr "Le dossier de cache de Shaarli a été vidé !"
+
+#, php-format
+msgid "Bookmark with identifier %s could not be found."
+msgstr "Le lien avec l'identifiant %s n'a pas pu être trouvé."
+
+#: application/front/controller/admin/ShaareManageController.php:101
+msgid "Invalid visibility provided."
+msgstr "Visibilité du lien non valide."
+
+#: application/front/controller/admin/ShaarePublishController.php:154
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:171
+msgid "Edit"
+msgstr "Modifier"
+
+#: application/front/controller/admin/ShaarePublishController.php:157
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:28
+msgid "Shaare"
+msgstr "Shaare"
+
+#: application/front/controller/admin/ShaarePublishController.php:184
+msgid "Note: "
+msgstr "Note : "
 
 #: application/front/controller/admin/ThumbnailsController.php:37
 #: tmp/thumbnails.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
@@ -941,6 +937,48 @@ msgstr "Désolé, il y a rien à voir ici."
 msgid "URL or leave empty to post a note"
 msgstr "URL ou laisser vide pour créer une note"
 
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
+msgid "BULK CREATION"
+msgstr "CRÉATION DE MASSE"
+
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:40
+msgid "Metadata asynchronous retrieval is disabled."
+msgstr "La récupération asynchrone des meta-données est désactivée."
+
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
+msgid ""
+"We recommend that you enable the setting <em>general > "
+"enable_async_metadata</em> in your configuration file to use bulk link "
+"creation."
+msgstr ""
+"Nous recommandons d'activer le paramètre <em>general > "
+"enable_async_metadata</em> dans votre fichier de configuration pour utiliser "
+"la création de masse."
+
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:56
+msgid "Shaare multiple new links"
+msgstr "Partagez plusieurs nouveaux liens"
+
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:59
+msgid "Add one URL per line to create multiple bookmarks."
+msgstr "Ajouter une URL par ligne pour créer plusieurs marque-pages."
+
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:63
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:67
+msgid "Tags"
+msgstr "Tags"
+
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:73
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:83
+#: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
+msgid "Private"
+msgstr "Privé"
+
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:78
+msgid "Add links"
+msgstr "Ajouter des liens"
+
 #: tmp/changepassword.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
 msgid "Current password"
 msgstr "Mot de passe actuel"
@@ -1187,15 +1225,7 @@ msgid "Description"
 msgstr "Description"
 
 #: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:58
-msgid "Tags"
-msgstr "Tags"
-
 #: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:74
-#: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
-msgid "Private"
-msgstr "Privé"
-
 #: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:80
 msgid "Description will be rendered with"
 msgstr "La description sera générée avec"
@@ -1209,8 +1239,17 @@ msgid "Markdown syntax"
 msgstr "la syntaxe Markdown"
 
 #: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:102
+msgid "Cancel"
+msgstr "Annuler"
+
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:121
 msgid "Apply Changes"
 msgstr "Appliquer les changements"
+
+#: tmp/editlink.batch.b91ef64efc3688266305ea9b42e5017e.rtpl.php:12
+#: tmp/editlink.batch.b91ef64efc3688266305ea9b42e5017e.rtpl.php:23
+msgid "Save all"
+msgstr "Tout enregistrer"
 
 #: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:107
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:173

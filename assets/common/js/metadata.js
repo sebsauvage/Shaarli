@@ -56,37 +56,41 @@ function updateThumb(basePath, divElement, id) {
 
 (() => {
   const basePath = document.querySelector('input[name="js_base_path"]').value;
-  const loaders = document.querySelectorAll('.loading-input');
 
   /*
    * METADATA FOR EDIT BOOKMARK PAGE
    */
-  const inputTitle = document.querySelector('input[name="lf_title"]');
-  if (inputTitle != null) {
-    if (inputTitle.value.length > 0) {
-      clearLoaders(loaders);
-      return;
-    }
+  const inputTitles = document.querySelectorAll('input[name="lf_title"]');
+  if (inputTitles != null) {
+    [...inputTitles].forEach((inputTitle) => {
+      const form = inputTitle.closest('form[name="linkform"]');
+      const loaders = form.querySelectorAll('.loading-input');
 
-    const url = document.querySelector('input[name="lf_url"]').value;
+      if (inputTitle.value.length > 0) {
+        clearLoaders(loaders);
+        return;
+      }
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `${basePath}/admin/metadata?url=${encodeURI(url)}`, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onload = () => {
-      const result = JSON.parse(xhr.response);
-      Object.keys(result).forEach((key) => {
-        if (result[key] !== null && result[key].length) {
-          const element = document.querySelector(`input[name="lf_${key}"], textarea[name="lf_${key}"]`);
-          if (element != null && element.value.length === 0) {
-            element.value = he.decode(result[key]);
+      const url = form.querySelector('input[name="lf_url"]').value;
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', `${basePath}/admin/metadata?url=${encodeURI(url)}`, true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.onload = () => {
+        const result = JSON.parse(xhr.response);
+        Object.keys(result).forEach((key) => {
+          if (result[key] !== null && result[key].length) {
+            const element = form.querySelector(`input[name="lf_${key}"], textarea[name="lf_${key}"]`);
+            if (element != null && element.value.length === 0) {
+              element.value = he.decode(result[key]);
+            }
           }
-        }
-      });
-      clearLoaders(loaders);
-    };
+        });
+        clearLoaders(loaders);
+      };
 
-    xhr.send();
+      xhr.send();
+    });
   }
 
   /*

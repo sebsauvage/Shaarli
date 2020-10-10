@@ -18,6 +18,7 @@ module.exports = [
   {
     mode: 'production',
     entry: {
+      shaare_batch: './assets/common/js/shaare-batch.js',
       thumbnails: './assets/common/js/thumbnails.js',
       thumbnails_update: './assets/common/js/thumbnails-update.js',
       metadata: './assets/common/js/metadata.js',

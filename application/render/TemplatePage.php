@@ -14,6 +14,7 @@ interface TemplatePage
     public const DAILY = 'daily';
     public const DAILY_RSS = 'dailyrss';
     public const EDIT_LINK = 'editlink';
+    public const EDIT_LINK_BATCH = 'editlink.batch';
     public const ERROR = 'error';
     public const EXPORT = 'export';
     public const NETSCAPE_EXPORT_BOOKMARKS = 'export.bookmarks';

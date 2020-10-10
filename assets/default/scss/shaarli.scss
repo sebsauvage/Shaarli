@@ -1023,6 +1023,10 @@ body,
     &.button-red {
       background: $red;
     }
+
+    &.button-grey {
+      background: $light-grey;
+    }
   }
 
   .submit-buttons {
@@ -1082,6 +1086,11 @@ body,
         &.button-red {
           position: absolute;
           right: 5%;
+        }
+
+        &.button-grey {
+          position: absolute;
+          left: 5%;
         }
       }
     }
@@ -1747,6 +1756,46 @@ form {
         text-align: center;
       }
     }
+  }
+}
+
+// Batch creation
+input[name='save_edit_batch'] {
+  @extend %page-form-button;
+}
+
+.addlink-batch-show-more {
+  display: flex;
+  align-items: center;
+  margin: 20px 0 8px;
+
+  a {
+    color: var(--main-color);
+    text-decoration: none;
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    flex-grow: 1;
+    background: rgba(0, 0, 0, 0.35);
+    height: 1px;
+    font-size: 0;
+    line-height: 0;
+  }
+
+  &::before {
+    margin: 0 16px 0 0;
+  }
+
+  &::after {
+    margin: 0 0 0 16px;
+  }
+}
+
+.addlink-batch-form-block {
+  .pure-alert {
+    margin: 25px 0 0 0;
   }
 }
 

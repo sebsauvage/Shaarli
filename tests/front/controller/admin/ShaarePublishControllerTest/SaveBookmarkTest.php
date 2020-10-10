@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Shaarli\Front\Controller\Admin\ManageShaareControllerTest;
+namespace Shaarli\Front\Controller\Admin\ShaarePublishControllerTest;
 
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Front\Controller\Admin\FrontAdminControllerMockHelper;
-use Shaarli\Front\Controller\Admin\ManageShaareController;
+use Shaarli\Front\Controller\Admin\ShaarePublishController;
 use Shaarli\Front\Exception\WrongTokenException;
 use Shaarli\Http\HttpAccess;
 use Shaarli\Security\SessionManager;
@@ -20,7 +20,7 @@ class SaveBookmarkTest extends TestCase
 {
     use FrontAdminControllerMockHelper;
 
-    /** @var ManageShaareController */
+    /** @var ShaarePublishController */
     protected $controller;
 
     public function setUp(): void
@@ -28,7 +28,7 @@ class SaveBookmarkTest extends TestCase
         $this->createContainer();
 
         $this->container->httpAccess = $this->createMock(HttpAccess::class);
-        $this->controller = new ManageShaareController($this->container);
+        $this->controller = new ShaarePublishController($this->container);
     }
 
     /**
