@@ -169,7 +169,11 @@ class ShaarePublishController extends ShaarliAdminController
             $title = $request->getParam('title');
             $description = $request->getParam('description');
             $tags = $request->getParam('tags');
-            $private = filter_var($request->getParam('private'), FILTER_VALIDATE_BOOLEAN);
+            if ($request->getParam('private') !== null) {
+                $private = filter_var($request->getParam('private'), FILTER_VALIDATE_BOOLEAN);
+            } else {
+                $private = $this->container->conf->get('privacy.default_private_links', false);
+            }
 
             // If this is an HTTP(S) link, we try go get the page to extract
             // the title (otherwise we will to straight to the edit form.)

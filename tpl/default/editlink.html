@@ -65,7 +65,7 @@
 
       <div>
         <input type="checkbox"  name="lf_private" id="lf_private"
-        {if="($link_is_new && $default_private_links || $link.private == true)"}
+        {if="$link.private === true"}
           checked="checked"
         {/if}>
         &nbsp;<label for="lf_private">{'Private'|t}</label>

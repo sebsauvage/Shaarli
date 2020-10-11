@@ -654,5 +654,13 @@ function init(description) {
       e.preventDefault();
       toggleBulkCreationVisibility(bulkCreationButton, bulkCreationForm);
     });
+
+    // Force to send falsy value if the checkbox is not checked.
+    const privateButton = bulkCreationForm.querySelector('input[type="checkbox"][name="private"]');
+    const privateHiddenButton = bulkCreationForm.querySelector('input[type="hidden"][name="private"]');
+    privateButton.addEventListener('click', () => {
+      privateHiddenButton.disabled = !privateHiddenButton.disabled;
+    });
+    privateHiddenButton.disabled = privateButton.checked;
   }
 })();

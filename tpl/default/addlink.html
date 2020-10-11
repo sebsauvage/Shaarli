@@ -62,8 +62,8 @@
           </div>
 
           <div>
-            <input type="checkbox" name="private"
-                   {if="$default_private_links"} checked="checked"{/if}>
+            <input type="hidden" name="private" value="0">
+            <input type="checkbox" name="private" {if="$default_private_links"} checked="checked"{/if}>
           &nbsp; <label for="lf_private">{'Private'|t}</label>
           </div>
         </div>
