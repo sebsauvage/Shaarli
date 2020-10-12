@@ -174,4 +174,119 @@ class BookmarkDefaultFormatterTest extends TestCase
         $this->assertSame($tags, $link['taglist']);
         $this->assertSame(implode(' ', $tags), $link['tags']);
     }
+
+    /**
+     * Test formatTitleHtml with search result highlight.
+     */
+    public function testFormatTitleHtmlWithSearchHighlight(): void
+    {
+        $this->formatter = new BookmarkDefaultFormatter($this->conf, false);
+
+        $bookmark = new Bookmark();
+        $bookmark->setTitle('PSR-2: Coding Style Guide');
+        $bookmark->addAdditionalContentEntry(
+            'search_highlight',
+            ['title' => [
+                ['start' => 0, 'end' => 5], // "psr-2"
+                ['start' => 7, 'end' => 13], // coding
+                ['start' => 20, 'end' => 25], // guide
+            ]]
+        );
+
+        $link = $this->formatter->format($bookmark);
+
+        $this->assertSame(
+            '<span class="search-highlight">PSR-2</span>: ' .
+            '<span class="search-highlight">Coding</span> Style ' .
+            '<span class="search-highlight">Guide</span>',
+            $link['title_html']
+        );
+    }
+
+    /**
+     * Test formatDescription with search result highlight.
+     */
+    public function testFormatDescriptionWithSearchHighlight(): void
+    {
+        $this->formatter = new BookmarkDefaultFormatter($this->conf, false);
+
+        $bookmark = new Bookmark();
+        $bookmark->setDescription('This guide extends and expands on PSR-1, the basic coding standard.');
+        $bookmark->addAdditionalContentEntry(
+            'search_highlight',
+            ['description' => [
+                ['start' => 0, 'end' => 10], // "This guide"
+                ['start' => 45, 'end' => 50], // basic
+                ['start' => 58, 'end' => 67], // standard.
+            ]]
+        );
+
+        $link = $this->formatter->format($bookmark);
+
+        $this->assertSame(
+            '<span class="search-highlight">This guide</span> extends and expands on PSR-1, the ' .
+            '<span class="search-highlight">basic</span> coding ' .
+            '<span class="search-highlight">standard.</span>',
+            $link['description']
+        );
+    }
+
+    /**
+     * Test formatUrlHtml with search result highlight.
+     */
+    public function testFormatUrlHtmlWithSearchHighlight(): void
+    {
+        $this->formatter = new BookmarkDefaultFormatter($this->conf, false);
+
+        $bookmark = new Bookmark();
+        $bookmark->setUrl('http://www.php-fig.org/psr/psr-2/');
+        $bookmark->addAdditionalContentEntry(
+            'search_highlight',
+            ['url' => [
+                ['start' => 0, 'end' => 4], // http
+                ['start' => 15, 'end' => 18], // fig
+                ['start' => 27, 'end' => 33], // "psr-2/"
+            ]]
+        );
+
+        $link = $this->formatter->format($bookmark);
+
+        $this->assertSame(
+            '<span class="search-highlight">http</span>://www.php-' .
+            '<span class="search-highlight">fig</span>.org/psr/' .
+            '<span class="search-highlight">psr-2/</span>',
+            $link['url_html']
+        );
+    }
+
+    /**
+     * Test formatTagListHtml with search result highlight.
+     */
+    public function testFormatTagListHtmlWithSearchHighlight(): void
+    {
+        $this->formatter = new BookmarkDefaultFormatter($this->conf, false);
+
+        $bookmark = new Bookmark();
+        $bookmark->setTagsString('coding-style standards quality assurance');
+        $bookmark->addAdditionalContentEntry(
+            'search_highlight',
+            ['tags' => [
+                ['start' => 0, 'end' => 12], // coding-style
+                ['start' => 23, 'end' => 30], // quality
+                ['start' => 31, 'end' => 40], // assurance
+            ],]
+        );
+
+        $link = $this->formatter->format($bookmark);
+
+        $this->assertSame(
+            [
+                '<span class="search-highlight">coding-style</span>',
+                'standards',
+                '<span class="search-highlight">quality</span>',
+                '<span class="search-highlight">assurance</span>',
+            ],
+            $link['taglist_html']
+        );
+    }
 }

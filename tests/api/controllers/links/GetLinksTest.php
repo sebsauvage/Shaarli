@@ -398,7 +398,7 @@ class GetLinksTest extends \Shaarli\TestCase
         $response = $this->controller->getLinks($request, new Response());
         $this->assertEquals(200, $response->getStatusCode());
         $data = json_decode((string) $response->getBody(), true);
-        $this->assertEquals(4, count($data));
+        $this->assertEquals(5, count($data));
         $this->assertEquals(6, $data[0]['id']);
 
         // wildcard: placeholder at the middle

@@ -296,6 +296,10 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
                 // They need to be grouped with the first case found - order by date DESC: `sTuff`.
                 'sTuff' => 2,
                 'ut' => 1,
+                'assurance' => 1,
+                'coding-style' => 1,
+                'quality' => 1,
+                'standards' => 1,
             ),
             self::$publicLinkDB->linksCountPerTag()
         );
@@ -324,6 +328,10 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
                 'tag3' => 1,
                 'tag4' => 1,
                 'ut' => 1,
+                'assurance' => 1,
+                'coding-style' => 1,
+                'quality' => 1,
+                'standards' => 1,
             ),
             self::$privateLinkDB->linksCountPerTag()
         );
@@ -544,6 +552,10 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
             'tag4' => 1,
             'ut' => 1,
             'w3c' => 1,
+            'assurance' => 1,
+            'coding-style' => 1,
+            'quality' => 1,
+            'standards' => 1,
         ];
         $tags = self::$privateLinkDB->linksCountPerTag();
 
