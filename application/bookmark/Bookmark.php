@@ -54,6 +54,9 @@ class Bookmark
     /** @var bool True if the bookmark can only be seen while logged in */
     protected $private;
 
+    /** @var mixed[] Available to store any additional content for a bookmark. Currently used for search highlight. */
+    protected $additionalContent = [];
+
     /**
      * Initialize a link from array data. Especially useful to create a Bookmark from former link storage format.
      *
@@ -95,6 +98,8 @@ class Bookmark
      *   - the URL with the permalink
      *   - the title with the URL
      *
+     * Also make sure that we do not save search highlights in the datastore.
+     *
      * @throws InvalidBookmarkException
      */
     public function validate(): void
@@ -111,6 +116,9 @@ class Bookmark
         }
         if (empty($this->title)) {
             $this->title = $this->url;
+        }
+        if (array_key_exists('search_highlight', $this->additionalContent)) {
+            unset($this->additionalContent['search_highlight']);
         }
     }
 
@@ -433,6 +441,44 @@ class Bookmark
         $this->tags = $tags;
 
         return $this;
+    }
+
+    /**
+     * Get entire additionalContent array.
+     *
+     * @return mixed[]
+     */
+    public function getAdditionalContent(): array
+    {
+        return $this->additionalContent;
+    }
+
+    /**
+     * Set a single entry in additionalContent, by key.
+     *
+     * @param string     $key
+     * @param mixed|null $value Any type of value can be set.
+     *
+     * @return $this
+     */
+    public function addAdditionalContentEntry(string $key, $value): self
+    {
+        $this->additionalContent[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get a single entry in additionalContent, by key.
+     *
+     * @param string $key
+     * @param mixed|null $default
+     *
+     * @return mixed|null can be any type or even null.
+     */
+    public function getAdditionalContentEntry(string $key, $default = null)
+    {
+        return array_key_exists($key, $this->additionalContent) ? $this->additionalContent[$key] : $default;
     }
 
     /**

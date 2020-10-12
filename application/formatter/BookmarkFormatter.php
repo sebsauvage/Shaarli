@@ -2,7 +2,7 @@
 
 namespace Shaarli\Formatter;
 
-use DateTime;
+use DateTimeInterface;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Config\ConfigManager;
 
@@ -10,6 +10,29 @@ use Shaarli\Config\ConfigManager;
  * Class BookmarkFormatter
  *
  * Abstract class processing all bookmark attributes through methods designed to be overridden.
+ *
+ * List of available formatted fields:
+ *   - id                 ID
+ *   - shorturl           Unique identifier, used in permalinks
+ *   - url                URL, can be altered in some way, e.g. passing through an HTTP reverse proxy
+ *   - real_url           (legacy) same as `url`
+ *   - url_html           URL to be displayed in HTML content (it can contain HTML tags)
+ *   - title              Title
+ *   - title_html         Title to be displayed in HTML content (it can contain HTML tags)
+ *   - description        Description content. It most likely contains HTML tags
+ *   - thumbnail          Thumbnail: path to local cache file, false if there is none, null if hasn't been retrieved
+ *   - taglist            List of tags (array)
+ *   - taglist_urlencoded List of tags (array) URL encoded: it must be used to create a link to a URL containing a tag
+ *   - taglist_html       List of tags (array) to be displayed in HTML content (it can contain HTML tags)
+ *   - tags               Tags separated by a single whitespace
+ *   - tags_urlencoded    Tags separated by a single whitespace, URL encoded: must be used to create a link
+ *   - sticky             Is sticky (bool)
+ *   - private            Is private (bool)
+ *   - class              Additional CSS class
+ *   - created            Creation DateTime
+ *   - updated            Last edit DateTime
+ *   - timestamp          Creation timestamp
+ *   - updated_timestamp  Last edit timestamp
  *
  * @package Shaarli\Formatter
  */
@@ -55,13 +78,16 @@ abstract class BookmarkFormatter
         $out['shorturl'] = $this->formatShortUrl($bookmark);
         $out['url'] = $this->formatUrl($bookmark);
         $out['real_url'] = $this->formatRealUrl($bookmark);
+        $out['url_html'] = $this->formatUrlHtml($bookmark);
         $out['title'] = $this->formatTitle($bookmark);
+        $out['title_html'] = $this->formatTitleHtml($bookmark);
         $out['description'] = $this->formatDescription($bookmark);
         $out['thumbnail'] = $this->formatThumbnail($bookmark);
-        $out['urlencoded_taglist'] = $this->formatUrlEncodedTagList($bookmark);
         $out['taglist'] = $this->formatTagList($bookmark);
-        $out['urlencoded_tags'] = $this->formatUrlEncodedTagString($bookmark);
+        $out['taglist_urlencoded'] = $this->formatTagListUrlEncoded($bookmark);
+        $out['taglist_html'] = $this->formatTagListHtml($bookmark);
         $out['tags'] = $this->formatTagString($bookmark);
+        $out['tags_urlencoded'] = $this->formatTagStringUrlEncoded($bookmark);
         $out['sticky'] = $bookmark->isSticky();
         $out['private'] = $bookmark->isPrivate();
         $out['class'] = $this->formatClass($bookmark);
@@ -69,6 +95,7 @@ abstract class BookmarkFormatter
         $out['updated'] = $this->formatUpdated($bookmark);
         $out['timestamp'] = $this->formatCreatedTimestamp($bookmark);
         $out['updated_timestamp'] = $this->formatUpdatedTimestamp($bookmark);
+
         return $out;
     }
 
@@ -136,6 +163,18 @@ abstract class BookmarkFormatter
     }
 
     /**
+     * Format Url Html: to be displayed in HTML content, it can contains HTML tags.
+     *
+     * @param Bookmark $bookmark instance
+     *
+     * @return string formatted Url HTML
+     */
+    protected function formatUrlHtml($bookmark)
+    {
+        return $this->formatUrl($bookmark);
+    }
+
+    /**
      * Format Title
      *
      * @param Bookmark $bookmark instance
@@ -143,6 +182,18 @@ abstract class BookmarkFormatter
      * @return string formatted Title
      */
     protected function formatTitle($bookmark)
+    {
+        return $bookmark->getTitle();
+    }
+
+    /**
+     * Format Title HTML: to be displayed in HTML content, it can contains HTML tags.
+     *
+     * @param Bookmark $bookmark instance
+     *
+     * @return string formatted Title
+     */
+    protected function formatTitleHtml($bookmark)
     {
         return $bookmark->getTitle();
     }
@@ -190,9 +241,21 @@ abstract class BookmarkFormatter
      *
      * @return array formatted Tags
      */
-    protected function formatUrlEncodedTagList($bookmark)
+    protected function formatTagListUrlEncoded($bookmark)
     {
         return array_map('urlencode', $this->filterTagList($bookmark->getTags()));
+    }
+
+    /**
+     * Format Tags HTML: to be displayed in HTML content, it can contains HTML tags.
+     *
+     * @param Bookmark $bookmark instance
+     *
+     * @return array formatted Tags
+     */
+    protected function formatTagListHtml($bookmark)
+    {
+        return $this->formatTagList($bookmark);
     }
 
     /**
@@ -214,9 +277,9 @@ abstract class BookmarkFormatter
      *
      * @return string formatted TagString
      */
-    protected function formatUrlEncodedTagString($bookmark)
+    protected function formatTagStringUrlEncoded($bookmark)
     {
-        return implode(' ', $this->formatUrlEncodedTagList($bookmark));
+        return implode(' ', $this->formatTagListUrlEncoded($bookmark));
     }
 
     /**
@@ -237,7 +300,7 @@ abstract class BookmarkFormatter
      *
      * @param Bookmark $bookmark instance
      *
-     * @return DateTime instance
+     * @return DateTimeInterface instance
      */
     protected function formatCreated(Bookmark $bookmark)
     {
@@ -249,7 +312,7 @@ abstract class BookmarkFormatter
      *
      * @param Bookmark $bookmark instance
      *
-     * @return DateTime instance
+     * @return DateTimeInterface instance
      */
     protected function formatUpdated(Bookmark $bookmark)
     {

@@ -201,7 +201,7 @@ class BookmarkFilter
             return $this->noFilter($visibility);
         }
 
-        $filtered = array();
+        $filtered = [];
         $search = mb_convert_case(html_entity_decode($searchterms), MB_CASE_LOWER, 'UTF-8');
         $exactRegex = '/"([^"]+)"/';
         // Retrieve exact search terms.
@@ -213,8 +213,8 @@ class BookmarkFilter
         $explodedSearchAnd = array_values(array_filter($explodedSearchAnd));
 
         // Filter excluding terms and update andSearch.
-        $excludeSearch = array();
-        $andSearch = array();
+        $excludeSearch = [];
+        $andSearch = [];
         foreach ($explodedSearchAnd as $needle) {
             if ($needle[0] == '-' && strlen($needle) > 1) {
                 $excludeSearch[] = substr($needle, 1);
@@ -234,33 +234,38 @@ class BookmarkFilter
                 }
             }
 
-            // Concatenate link fields to search across fields.
-            // Adds a '\' separator for exact search terms.
-            $content  = mb_convert_case($link->getTitle(), MB_CASE_LOWER, 'UTF-8') .'\\';
-            $content .= mb_convert_case($link->getDescription(), MB_CASE_LOWER, 'UTF-8') .'\\';
-            $content .= mb_convert_case($link->getUrl(), MB_CASE_LOWER, 'UTF-8') .'\\';
-            $content .= mb_convert_case($link->getTagsString(), MB_CASE_LOWER, 'UTF-8') .'\\';
+            $lengths = [];
+            $content = $this->buildFullTextSearchableLink($link, $lengths);
 
             // Be optimistic
             $found = true;
+            $foundPositions = [];
 
             // First, we look for exact term search
-            for ($i = 0; $i < count($exactSearch) && $found; $i++) {
-                $found = strpos($content, $exactSearch[$i]) !== false;
-            }
-
-            // Iterate over keywords, if keyword is not found,
+            // Then iterate over keywords, if keyword is not found,
             // no need to check for the others. We want all or nothing.
-            for ($i = 0; $i < count($andSearch) && $found; $i++) {
-                $found = strpos($content, $andSearch[$i]) !== false;
+            foreach ([$exactSearch, $andSearch] as $search) {
+                for ($i = 0; $i < count($search) && $found !== false; $i++) {
+                    $found = mb_strpos($content, $search[$i]);
+                    if ($found === false) {
+                        break;
+                    }
+
+                    $foundPositions[] = ['start' => $found, 'end' => $found + mb_strlen($search[$i])];
+                }
             }
 
             // Exclude terms.
-            for ($i = 0; $i < count($excludeSearch) && $found; $i++) {
+            for ($i = 0; $i < count($excludeSearch) && $found !== false; $i++) {
                 $found = strpos($content, $excludeSearch[$i]) === false;
             }
 
-            if ($found) {
+            if ($found !== false) {
+                $link->addAdditionalContentEntry(
+                    'search_highlight',
+                    $this->postProcessFoundPositions($lengths, $foundPositions)
+                );
+
                 $filtered[$id] = $link;
             }
         }
@@ -476,5 +481,75 @@ class BookmarkFilter
         $tagsOut = str_replace(',', ' ', $tagsOut);
 
         return preg_split('/\s+/', $tagsOut, -1, PREG_SPLIT_NO_EMPTY);
+    }
+
+    /**
+     * This method finalize the content of the foundPositions array,
+     * by associated all search results to their associated bookmark field,
+     * making sure that there is no overlapping results, etc.
+     *
+     * @param array $fieldLengths   Start and end positions of every bookmark fields in the aggregated bookmark content.
+     * @param array $foundPositions Positions where the search results were found in the aggregated content.
+     *
+     * @return array Updated $foundPositions, by bookmark field.
+     */
+    protected function postProcessFoundPositions(array $fieldLengths, array $foundPositions): array
+    {
+        // Sort results by starting position ASC.
+        usort($foundPositions, function (array $entryA, array $entryB): int {
+            return $entryA['start'] > $entryB['start'] ? 1 : -1;
+        });
+
+        $out = [];
+        $currentMax = -1;
+        foreach ($foundPositions as $foundPosition) {
+            // we do not allow overlapping highlights
+            if ($foundPosition['start'] < $currentMax) {
+                continue;
+            }
+
+            $currentMax = $foundPosition['end'];
+            foreach ($fieldLengths as $part => $length) {
+                if ($foundPosition['start'] < $length['start'] || $foundPosition['start'] > $length['end']) {
+                    continue;
+                }
+
+                $out[$part][] = [
+                    'start' => $foundPosition['start'] - $length['start'],
+                    'end' => $foundPosition['end'] - $length['start'],
+                ];
+                break;
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Concatenate link fields to search across fields. Adds a '\' separator for exact search terms.
+     * Also populate $length array with starting and ending positions of every bookmark field
+     * inside concatenated content.
+     *
+     * @param Bookmark $link
+     * @param array    $lengths (by reference)
+     *
+     * @return string Lowercase concatenated fields content.
+     */
+    protected function buildFullTextSearchableLink(Bookmark $link, array &$lengths): string
+    {
+        $content  = mb_convert_case($link->getTitle(), MB_CASE_LOWER, 'UTF-8') .'\\';
+        $content .= mb_convert_case($link->getDescription(), MB_CASE_LOWER, 'UTF-8') .'\\';
+        $content .= mb_convert_case($link->getUrl(), MB_CASE_LOWER, 'UTF-8') .'\\';
+        $content .= mb_convert_case($link->getTagsString(), MB_CASE_LOWER, 'UTF-8') .'\\';
+
+        $lengths['title'] = ['start' => 0, 'end' => mb_strlen($link->getTitle())];
+        $nextField = $lengths['title']['end'] + 1;
+        $lengths['description'] = ['start' => $nextField, 'end' => $nextField + mb_strlen($link->getDescription())];
+        $nextField = $lengths['description']['end'] + 1;
+        $lengths['url'] = ['start' => $nextField, 'end' => $nextField + mb_strlen($link->getUrl())];
+        $nextField = $lengths['url']['end'] + 1;
+        $lengths['tags'] = ['start' => $nextField, 'end' => $nextField + mb_strlen($link->getTagsString())];
+
+        return $content;
     }
 }

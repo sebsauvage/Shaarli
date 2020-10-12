@@ -165,7 +165,7 @@
                   <i class="fa fa-sticky-note" aria-hidden="true"></i>
                 {/if}
 
-                <span class="linklist-link">{$value.title}</span>
+                <span class="linklist-link">{$value.title_html}</span>
               </a>
             </h2>
           </div>
@@ -183,7 +183,7 @@
                 {$tag_counter=count($value.taglist)}
                 {loop="value.taglist"}
                   <span class="label label-tag" title="{$strAddTag}">
-                    <a href="{$base_path}/add-tag/{$value1.urlencoded_taglist.$key2}">{$value}</a>
+                    <a href="{$base_path}/add-tag/{$value1.taglist_urlencoded.$key2}">{$value1.taglist_html.$key2}</a>
                   </span>
                   {if="$tag_counter - 1 != $counter"}&middot;{/if}
                 {/loop}
@@ -251,7 +251,7 @@
                 {ignore}do not add space or line break between these div - Firefox issue{/ignore}
                 class="linklist-item-infos-url pure-u-lg-5-12 pure-u-1">
                 <a href="{$value.real_url}" aria-label="{$value.title}" title="{$value.title}">
-                  <i class="fa fa-link" aria-hidden="true"></i> {$value.url}
+                  <i class="fa fa-link" aria-hidden="true"></i> {$value.url_html}
                 </a>
                 <div class="linklist-item-buttons pure-u-0 pure-u-lg-visible">
                   <a href="#" aria-label="{$strFold}" title="{$strFold}" class="fold-button"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
