@@ -2,6 +2,7 @@
 
 namespace Shaarli\Bookmark;
 
+use malkusch\lock\mutex\NoMutex;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 use Shaarli\TestCase;
@@ -34,11 +35,15 @@ class BookmarkInitializerTest extends TestCase
     /** @var BookmarkInitializer instance */
     protected $initializer;
 
+    /** @var NoMutex */
+    protected $mutex;
+
     /**
      * Initialize an empty BookmarkFileService
      */
     public function setUp(): void
     {
+        $this->mutex = new NoMutex();
         if (file_exists(self::$testDatastore)) {
             unlink(self::$testDatastore);
         }
@@ -47,7 +52,7 @@ class BookmarkInitializerTest extends TestCase
         $this->conf = new ConfigManager(self::$testConf);
         $this->conf->set('resource.datastore', self::$testDatastore);
         $this->history = new History('sandbox/history.php');
-        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, true);
+        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
 
         $this->initializer = new BookmarkInitializer($this->bookmarkService);
     }
@@ -59,7 +64,7 @@ class BookmarkInitializerTest extends TestCase
     {
         $refDB = new \ReferenceLinkDB();
         $refDB->write(self::$testDatastore);
-        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, true);
+        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
         $this->initializer = new BookmarkInitializer($this->bookmarkService);
 
         $this->initializer->initialize();
@@ -90,7 +95,7 @@ class BookmarkInitializerTest extends TestCase
         $this->bookmarkService->save();
 
         // Reload from file
-        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, true);
+        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
         $this->assertEquals($refDB->countLinks() + 3, $this->bookmarkService->count());
 
         $bookmark = $this->bookmarkService->get(43);
@@ -121,7 +126,7 @@ class BookmarkInitializerTest extends TestCase
     public function testInitializeNonExistentDataStore(): void
     {
         $this->conf->set('resource.datastore', static::$testDatastore . '_empty');
-        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, true);
+        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
 
         $this->initializer->initialize();
 

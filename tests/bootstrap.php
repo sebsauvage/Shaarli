@@ -30,3 +30,7 @@ require_once 'tests/utils/ReferenceLinkDB.php';
 require_once 'tests/utils/ReferenceSessionIdHashes.php';
 
 \ReferenceSessionIdHashes::genAllHashes();
+
+if (!defined('SHAARLI_MUTEX_FILE')) {
+    define('SHAARLI_MUTEX_FILE', __FILE__);
+}

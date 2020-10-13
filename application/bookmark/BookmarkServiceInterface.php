@@ -5,8 +5,6 @@ namespace Shaarli\Bookmark;
 
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Bookmark\Exception\NotWritableDataStoreException;
-use Shaarli\Config\ConfigManager;
-use Shaarli\History;
 
 /**
  * Class BookmarksService
@@ -15,15 +13,6 @@ use Shaarli\History;
  */
 interface BookmarkServiceInterface
 {
-    /**
-     * BookmarksService constructor.
-     *
-     * @param ConfigManager $conf       instance
-     * @param History       $history    instance
-     * @param bool          $isLoggedIn true if the current user is logged in
-     */
-    public function __construct(ConfigManager $conf, History $history, $isLoggedIn);
-
     /**
      * Find a bookmark by hash
      *

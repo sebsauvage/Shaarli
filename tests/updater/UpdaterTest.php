@@ -2,6 +2,7 @@
 namespace Shaarli\Updater;
 
 use Exception;
+use malkusch\lock\mutex\NoMutex;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
@@ -44,12 +45,13 @@ class UpdaterTest extends TestCase
      */
     protected function setUp(): void
     {
+        $mutex = new NoMutex();
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
 
         copy('tests/utils/config/configJson.json.php', self::$configFile .'.json.php');
         $this->conf = new ConfigManager(self::$configFile);
-        $this->bookmarkService = new BookmarkFileService($this->conf, $this->createMock(History::class), true);
+        $this->bookmarkService = new BookmarkFileService($this->conf, $this->createMock(History::class), $mutex, true);
         $this->updater = new Updater([], $this->bookmarkService, $this->conf, true);
     }
 

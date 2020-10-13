@@ -3,6 +3,7 @@
 namespace Shaarli\Netscape;
 
 use DateTime;
+use malkusch\lock\mutex\NoMutex;
 use Psr\Http\Message\UploadedFileInterface;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\BookmarkFileService;
@@ -87,6 +88,7 @@ class BookmarkImportTest extends TestCase
      */
     protected function setUp(): void
     {
+        $mutex = new NoMutex();
         if (file_exists(self::$testDatastore)) {
             unlink(self::$testDatastore);
         }
@@ -97,7 +99,7 @@ class BookmarkImportTest extends TestCase
         $this->conf->set('resource.page_cache', $this->pagecache);
         $this->conf->set('resource.datastore', self::$testDatastore);
         $this->history = new History(self::$historyFilePath);
-        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, true);
+        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, $mutex, true);
         $this->netscapeBookmarkUtils = new NetscapeBookmarkUtils($this->bookmarkService, $this->conf, $this->history);
     }
 

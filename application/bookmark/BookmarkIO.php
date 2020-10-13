@@ -2,6 +2,8 @@
 
 namespace Shaarli\Bookmark;
 
+use malkusch\lock\mutex\Mutex;
+use malkusch\lock\mutex\NoMutex;
 use Shaarli\Bookmark\Exception\DatastoreNotInitializedException;
 use Shaarli\Bookmark\Exception\EmptyDataStoreException;
 use Shaarli\Bookmark\Exception\NotWritableDataStoreException;
@@ -27,11 +29,14 @@ class BookmarkIO
      */
     protected $conf;
 
+
+    /** @var Mutex */
+    protected $mutex;
+
     /**
      * string Datastore PHP prefix
      */
     protected static $phpPrefix = '<?php /* ';
-
     /**
      * string Datastore PHP suffix
      */
@@ -42,10 +47,15 @@ class BookmarkIO
      *
      * @param ConfigManager $conf instance
      */
-    public function __construct($conf)
+    public function __construct(ConfigManager $conf, Mutex $mutex = null)
     {
+        if ($mutex === null) {
+            // This should only happen with legacy classes
+            $mutex = new NoMutex();
+        }
         $this->conf = $conf;
         $this->datastore = $conf->get('resource.datastore');
+        $this->mutex = $mutex;
     }
 
     /**
@@ -67,11 +77,16 @@ class BookmarkIO
             throw new NotWritableDataStoreException($this->datastore);
         }
 
+        $content = null;
+        $this->mutex->synchronized(function () use (&$content) {
+            $content = file_get_contents($this->datastore);
+        });
+
         // Note that gzinflate is faster than gzuncompress.
         // See: http://www.php.net/manual/en/function.gzdeflate.php#96439
         $links = unserialize(gzinflate(base64_decode(
-            substr(file_get_contents($this->datastore),
-                strlen(self::$phpPrefix), -strlen(self::$phpSuffix)))));
+            substr($content, strlen(self::$phpPrefix), -strlen(self::$phpSuffix))
+        )));
 
         if (empty($links)) {
             if (filesize($this->datastore) > 100) {
@@ -100,9 +115,13 @@ class BookmarkIO
             throw new NotWritableDataStoreException(dirname($this->datastore));
         }
 
-        file_put_contents(
-            $this->datastore,
-            self::$phpPrefix.base64_encode(gzdeflate(serialize($links))).self::$phpSuffix
-        );
+        $data = self::$phpPrefix.base64_encode(gzdeflate(serialize($links))).self::$phpSuffix;
+
+        $this->mutex->synchronized(function () use ($data) {
+            file_put_contents(
+                $this->datastore,
+                $data
+            );
+        });
     }
 }

@@ -6,6 +6,7 @@
 namespace Shaarli\Bookmark;
 
 use DateTime;
+use malkusch\lock\mutex\NoMutex;
 use ReferenceLinkDB;
 use ReflectionClass;
 use Shaarli;
@@ -52,6 +53,9 @@ class BookmarkFileServiceTest extends TestCase
      */
     protected $privateLinkDB = null;
 
+    /** @var NoMutex */
+    protected $mutex;
+
     /**
      * Instantiates public and private LinkDBs with test data
      *
@@ -68,6 +72,8 @@ class BookmarkFileServiceTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->mutex = new NoMutex();
+
         if (file_exists(self::$testDatastore)) {
             unlink(self::$testDatastore);
         }
@@ -87,8 +93,8 @@ class BookmarkFileServiceTest extends TestCase
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
         $this->history = new History('sandbox/history.php');
-        $this->publicLinkDB = new BookmarkFileService($this->conf, $this->history, false);
-        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, true);
+        $this->publicLinkDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, false);
+        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
     }
 
     /**
@@ -105,7 +111,7 @@ class BookmarkFileServiceTest extends TestCase
         $db = self::getMethod('migrate');
         $db->invokeArgs($this->privateLinkDB, []);
 
-        $db = new \FakeBookmarkService($this->conf, $this->history, true);
+        $db = new \FakeBookmarkService($this->conf, $this->history, $this->mutex, true);
         $this->assertInstanceOf(BookmarkArray::class, $db->getBookmarks());
         $this->assertEquals($this->refDB->countLinks(), $db->count());
     }
@@ -174,7 +180,7 @@ class BookmarkFileServiceTest extends TestCase
         $this->assertEquals($updated, $bookmark->getUpdated());
 
         // reload from file
-        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, true);
+        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
 
         $bookmark = $this->privateLinkDB->get(43);
         $this->assertEquals(43, $bookmark->getId());
@@ -212,7 +218,7 @@ class BookmarkFileServiceTest extends TestCase
         $this->assertNull($bookmark->getUpdated());
 
         // reload from file
-        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, true);
+        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
 
         $bookmark = $this->privateLinkDB->get(43);
         $this->assertEquals(43, $bookmark->getId());
@@ -242,7 +248,7 @@ class BookmarkFileServiceTest extends TestCase
         $this->assertEquals(43, $bookmark->getId());
 
         // reload from file
-        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, true);
+        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
 
         $this->privateLinkDB->get(43);
     }
@@ -314,7 +320,7 @@ class BookmarkFileServiceTest extends TestCase
         $this->assertTrue(new \DateTime('5 seconds ago') < $bookmark->getUpdated());
 
         // reload from file
-        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, true);
+        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
 
         $bookmark = $this->privateLinkDB->get(42);
         $this->assertEquals(42, $bookmark->getId());
@@ -355,7 +361,7 @@ class BookmarkFileServiceTest extends TestCase
         $this->assertTrue(new \DateTime('5 seconds ago') < $bookmark->getUpdated());
 
         // reload from file
-        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, true);
+        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
 
         $bookmark = $this->privateLinkDB->get(42);
         $this->assertEquals(42, $bookmark->getId());
@@ -388,7 +394,7 @@ class BookmarkFileServiceTest extends TestCase
         $this->assertEquals($title, $bookmark->getTitle());
 
         // reload from file
-        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, true);
+        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
 
         $bookmark = $this->privateLinkDB->get(42);
         $this->assertEquals(42, $bookmark->getId());
@@ -452,7 +458,7 @@ class BookmarkFileServiceTest extends TestCase
         $this->assertEquals(43, $bookmark->getId());
 
         // reload from file
-        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, true);
+        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
 
         $bookmark = $this->privateLinkDB->get(43);
         $this->assertEquals(43, $bookmark->getId());
@@ -472,7 +478,7 @@ class BookmarkFileServiceTest extends TestCase
         $this->assertEquals($title, $bookmark->getTitle());
 
         // reload from file
-        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, true);
+        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
 
         $bookmark = $this->privateLinkDB->get(42);
         $this->assertEquals(42, $bookmark->getId());
@@ -515,7 +521,7 @@ class BookmarkFileServiceTest extends TestCase
         $this->assertEquals($title, $bookmark->getTitle());
 
         // reload from file
-        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, true);
+        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
 
         $bookmark = $this->privateLinkDB->get(42);
         $this->assertEquals(42, $bookmark->getId());
@@ -541,7 +547,7 @@ class BookmarkFileServiceTest extends TestCase
         $this->assertInstanceOf(BookmarkNotFoundException::class, $exception);
 
         // reload from file
-        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, true);
+        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
 
         $this->privateLinkDB->get(42);
     }
@@ -645,7 +651,7 @@ class BookmarkFileServiceTest extends TestCase
 
         $conf = new ConfigManager('tests/utils/config/configJson');
         $conf->set('resource.datastore', 'null/store.db');
-        new BookmarkFileService($conf, $this->history, true);
+        new BookmarkFileService($conf, $this->history, $this->mutex, true);
     }
 
     /**
@@ -655,7 +661,7 @@ class BookmarkFileServiceTest extends TestCase
     {
         unlink(self::$testDatastore);
         $this->assertFileNotExists(self::$testDatastore);
-        new BookmarkFileService($this->conf, $this->history, true);
+        new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
         $this->assertFileExists(self::$testDatastore);
 
         // ensure the correct data has been written
@@ -669,7 +675,7 @@ class BookmarkFileServiceTest extends TestCase
     {
         unlink(self::$testDatastore);
         $this->assertFileNotExists(self::$testDatastore);
-        $db = new \FakeBookmarkService($this->conf, $this->history, false);
+        $db = new \FakeBookmarkService($this->conf, $this->history, $this->mutex, false);
         $this->assertFileNotExists(self::$testDatastore);
         $this->assertInstanceOf(BookmarkArray::class, $db->getBookmarks());
         $this->assertCount(0, $db->getBookmarks());
@@ -702,13 +708,13 @@ class BookmarkFileServiceTest extends TestCase
      */
     public function testSave()
     {
-        $testDB = new BookmarkFileService($this->conf, $this->history, true);
+        $testDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
         $dbSize = $testDB->count();
 
         $bookmark = new Bookmark();
         $testDB->add($bookmark);
 
-        $testDB = new BookmarkFileService($this->conf, $this->history, true);
+        $testDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, true);
         $this->assertEquals($dbSize + 1, $testDB->count());
     }
 
@@ -718,7 +724,7 @@ class BookmarkFileServiceTest extends TestCase
     public function testCountHiddenPublic()
     {
         $this->conf->set('privacy.hide_public_links', true);
-        $linkDB = new BookmarkFileService($this->conf, $this->history, false);
+        $linkDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, false);
 
         $this->assertEquals(0, $linkDB->count());
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shaarli\Container;
 
+use malkusch\lock\mutex\FlockMutex;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
@@ -84,6 +85,7 @@ class ContainerBuilder
             return new BookmarkFileService(
                 $container->conf,
                 $container->history,
+                new FlockMutex(fopen(SHAARLI_MUTEX_FILE, 'r'), 2),
                 $container->loginManager->isLoggedIn()
             );
         };

@@ -3,6 +3,7 @@
 namespace Shaarli\Feed;
 
 use DateTime;
+use malkusch\lock\mutex\NoMutex;
 use ReferenceLinkDB;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\BookmarkFileService;
@@ -47,6 +48,7 @@ class FeedBuilderTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        $mutex = new NoMutex();
         $conf = new ConfigManager('tests/utils/config/configJson');
         $conf->set('resource.datastore', self::$testDatastore);
         $refLinkDB = new \ReferenceLinkDB();
@@ -54,7 +56,7 @@ class FeedBuilderTest extends TestCase
         $history = new History('sandbox/history.php');
         $factory = new FormatterFactory($conf, true);
         self::$formatter = $factory->getFormatter();
-        self::$bookmarkService = new BookmarkFileService($conf, $history, true);
+        self::$bookmarkService = new BookmarkFileService($conf, $history, $mutex, true);
 
         self::$serverInfo = array(
             'HTTPS' => 'Off',

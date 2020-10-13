@@ -1,6 +1,7 @@
 <?php
 namespace Shaarli\Api\Controllers;
 
+use malkusch\lock\mutex\NoMutex;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
@@ -49,6 +50,7 @@ class InfoTest extends TestCase
      */
     protected function setUp(): void
     {
+        $mutex = new NoMutex();
         $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->conf->set('resource.datastore', self::$testDatastore);
         $this->refDB = new \ReferenceLinkDB();
@@ -58,7 +60,7 @@ class InfoTest extends TestCase
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->container['db'] = new BookmarkFileService($this->conf, $history, true);
+        $this->container['db'] = new BookmarkFileService($this->conf, $history, $mutex, true);
         $this->container['history'] = null;
 
         $this->controller = new Info($this->container);
