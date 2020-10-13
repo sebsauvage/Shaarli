@@ -30,7 +30,7 @@ class ConfigureController extends ShaarliAdminController
             'theme_available',
             ThemeUtils::getThemes($this->container->conf->get('resource.raintpl_tpl'))
         );
-        $this->assignView('formatter_available', ['default', 'markdown']);
+        $this->assignView('formatter_available', ['default', 'markdown', 'markdownExtra']);
         list($continents, $cities) = generateTimeZoneData(
             timezone_identifiers_list(),
             $this->container->conf->get('general.timezone')

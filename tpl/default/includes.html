@@ -8,7 +8,7 @@
 <link href="{$asset_path}/img/favicon.png#" rel="shortcut icon" type="image/png" />
 <link href="{$asset_path}/img/apple-touch-icon.png#" rel="apple-touch-icon" sizes="180x180" />
 <link type="text/css" rel="stylesheet" href="{$asset_path}/css/shaarli.min.css?v={$version_hash}#" />
-{if="$formatter==='markdown'"}
+{if="strpos($formatter, 'markdown') !== false"}
   <link type="text/css" rel="stylesheet" href="{$asset_path}/css/markdown.min.css?v={$version_hash}#" />
 {/if}
 {loop="$plugins_includes.css_files"}
