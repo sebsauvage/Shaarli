@@ -4,13 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v0.12.0](https://github.com/shaarli/Shaarli/releases/tag/v0.12.0-beta) - UNRELEASED
-*[beta 2020-08-27 - beta-1 2020-09-30 - beta-2 2020-10-08]*
+## [v0.12.1]() - UNRELEASED
+
+## [v0.12.0](https://github.com/shaarli/Shaarli/releases/tag/v0.12.0) - 2020-10-13
 
 **Save you `data/` folder before updating!**
-
-This is a beta version containing major changes, including new URLs for Shaarli and datastore format update.
-Be aware that by using a beta version you might encounter bugs, and that 3rd party themes or plugins might not be compatible.
 
 ### Added
 - Thumbnailer: add soundcloud.com to list of common media domains
