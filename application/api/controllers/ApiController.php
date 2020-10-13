@@ -4,6 +4,7 @@ namespace Shaarli\Api\Controllers;
 
 use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
+use Shaarli\History;
 use Slim\Container;
 
 /**
@@ -31,7 +32,7 @@ abstract class ApiController
     protected $bookmarkService;
 
     /**
-     * @var HistoryController
+     * @var History
      */
     protected $history;
 
