@@ -154,25 +154,6 @@ class BookmarkTest extends TestCase
     }
 
     /**
-     * Test validate() with a a bookmark with a non integer ID.
-     */
-    public function testValidateNotValidStringId()
-    {
-        $bookmark = new Bookmark();
-        $bookmark->setId('str');
-        $bookmark->setShortUrl('abc');
-        $bookmark->setCreated(\DateTime::createFromFormat('Ymd_His', '20190514_200102'));
-        $exception = null;
-        try {
-            $bookmark->validate();
-        } catch (InvalidBookmarkException $e) {
-            $exception = $e;
-        }
-        $this->assertNotNull($exception);
-        $this->assertContainsPolyfill('- ID: str'. PHP_EOL, $exception->getMessage());
-    }
-
-    /**
      * Test validate() with a a bookmark without short url.
      */
     public function testValidateNotValidNoShortUrl()
@@ -208,25 +189,6 @@ class BookmarkTest extends TestCase
         }
         $this->assertNotNull($exception);
         $this->assertContainsPolyfill('- Created: '. PHP_EOL, $exception->getMessage());
-    }
-
-    /**
-     * Test validate() with a a bookmark with a bad created datetime.
-     */
-    public function testValidateNotValidBadCreated()
-    {
-        $bookmark = new Bookmark();
-        $bookmark->setId(1);
-        $bookmark->setShortUrl('abc');
-        $bookmark->setCreated('hi!');
-        $exception = null;
-        try {
-            $bookmark->validate();
-        } catch (InvalidBookmarkException $e) {
-            $exception = $e;
-        }
-        $this->assertNotNull($exception);
-        $this->assertContainsPolyfill('- Created: Not a DateTime object'. PHP_EOL, $exception->getMessage());
     }
 
     /**

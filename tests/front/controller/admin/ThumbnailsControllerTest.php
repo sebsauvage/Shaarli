@@ -89,8 +89,10 @@ class ThumbnailsControllerTest extends TestCase
         $this->container->bookmarkService
             ->expects(static::once())
             ->method('set')
-            ->willReturnCallback(function (Bookmark $bookmark) use ($thumb) {
+            ->willReturnCallback(function (Bookmark $bookmark) use ($thumb): Bookmark {
                 static::assertSame($thumb, $bookmark->getThumbnail());
+
+                return $bookmark;
             })
         ;
 

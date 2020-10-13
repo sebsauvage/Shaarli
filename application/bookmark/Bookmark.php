@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shaarli\Bookmark;
 
 use DateTime;
@@ -59,25 +61,25 @@ class Bookmark
      *
      * @return $this
      */
-    public function fromArray($data)
+    public function fromArray(array $data): Bookmark
     {
-        $this->id = $data['id'];
-        $this->shortUrl = $data['shorturl'];
-        $this->url = $data['url'];
-        $this->title = $data['title'];
-        $this->description = $data['description'];
-        $this->thumbnail = isset($data['thumbnail']) ? $data['thumbnail'] : null;
-        $this->sticky = isset($data['sticky']) ? $data['sticky'] : false;
-        $this->created = $data['created'];
+        $this->id = $data['id'] ?? null;
+        $this->shortUrl = $data['shorturl'] ?? null;
+        $this->url = $data['url'] ?? null;
+        $this->title = $data['title'] ?? null;
+        $this->description = $data['description'] ?? null;
+        $this->thumbnail = $data['thumbnail'] ?? null;
+        $this->sticky = $data['sticky'] ?? false;
+        $this->created = $data['created'] ?? null;
         if (is_array($data['tags'])) {
             $this->tags = $data['tags'];
         } else {
-            $this->tags = preg_split('/\s+/', $data['tags'], -1, PREG_SPLIT_NO_EMPTY);
+            $this->tags = preg_split('/\s+/', $data['tags'] ?? '', -1, PREG_SPLIT_NO_EMPTY);
         }
         if (! empty($data['updated'])) {
             $this->updated = $data['updated'];
         }
-        $this->private = $data['private'] ? true : false;
+        $this->private = ($data['private'] ?? false) ? true : false;
 
         return $this;
     }
@@ -95,13 +97,12 @@ class Bookmark
      *
      * @throws InvalidBookmarkException
      */
-    public function validate()
+    public function validate(): void
     {
         if ($this->id === null
             || ! is_int($this->id)
             || empty($this->shortUrl)
             || empty($this->created)
-            || ! $this->created instanceof DateTimeInterface
         ) {
             throw new InvalidBookmarkException($this);
         }
@@ -119,11 +120,11 @@ class Bookmark
      *   - created: with the current datetime
      *   - shortUrl: with a generated small hash from the date and the given ID
      *
-     * @param int $id
+     * @param int|null $id
      *
      * @return Bookmark
      */
-    public function setId($id)
+    public function setId(?int $id): Bookmark
     {
         $this->id = $id;
         if (empty($this->created)) {
@@ -139,9 +140,9 @@ class Bookmark
     /**
      * Get the Id.
      *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -149,9 +150,9 @@ class Bookmark
     /**
      * Get the ShortUrl.
      *
-     * @return string
+     * @return string|null
      */
-    public function getShortUrl()
+    public function getShortUrl(): ?string
     {
         return $this->shortUrl;
     }
@@ -159,9 +160,9 @@ class Bookmark
     /**
      * Get the Url.
      *
-     * @return string
+     * @return string|null
      */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->url;
     }
@@ -171,7 +172,7 @@ class Bookmark
      *
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -181,7 +182,7 @@ class Bookmark
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return ! empty($this->description) ? $this->description : '';
     }
@@ -191,7 +192,7 @@ class Bookmark
      *
      * @return DateTimeInterface
      */
-    public function getCreated()
+    public function getCreated(): ?DateTimeInterface
     {
         return $this->created;
     }
@@ -201,7 +202,7 @@ class Bookmark
      *
      * @return DateTimeInterface
      */
-    public function getUpdated()
+    public function getUpdated(): ?DateTimeInterface
     {
         return $this->updated;
     }
@@ -209,11 +210,11 @@ class Bookmark
     /**
      * Set the ShortUrl.
      *
-     * @param string $shortUrl
+     * @param string|null $shortUrl
      *
      * @return Bookmark
      */
-    public function setShortUrl($shortUrl)
+    public function setShortUrl(?string $shortUrl): Bookmark
     {
         $this->shortUrl = $shortUrl;
 
@@ -223,14 +224,14 @@ class Bookmark
     /**
      * Set the Url.
      *
-     * @param string $url
-     * @param array  $allowedProtocols
+     * @param string|null $url
+     * @param string[]    $allowedProtocols
      *
      * @return Bookmark
      */
-    public function setUrl($url, $allowedProtocols = [])
+    public function setUrl(?string $url, array $allowedProtocols = []): Bookmark
     {
-        $url = trim($url);
+        $url = $url !== null ? trim($url) : '';
         if (! empty($url)) {
             $url = whitelist_protocols($url, $allowedProtocols);
         }
@@ -242,13 +243,13 @@ class Bookmark
     /**
      * Set the Title.
      *
-     * @param string $title
+     * @param string|null $title
      *
      * @return Bookmark
      */
-    public function setTitle($title)
+    public function setTitle(?string $title): Bookmark
     {
-        $this->title = trim($title);
+        $this->title = $title !== null ? trim($title) : '';
 
         return $this;
     }
@@ -256,11 +257,11 @@ class Bookmark
     /**
      * Set the Description.
      *
-     * @param string $description
+     * @param string|null $description
      *
      * @return Bookmark
      */
-    public function setDescription($description)
+    public function setDescription(?string $description): Bookmark
     {
         $this->description = $description;
 
@@ -271,11 +272,11 @@ class Bookmark
      * Set the Created.
      * Note: you shouldn't set this manually except for special cases (like bookmark import)
      *
-     * @param DateTimeInterface $created
+     * @param DateTimeInterface|null $created
      *
      * @return Bookmark
      */
-    public function setCreated($created)
+    public function setCreated(?DateTimeInterface $created): Bookmark
     {
         $this->created = $created;
 
@@ -285,11 +286,11 @@ class Bookmark
     /**
      * Set the Updated.
      *
-     * @param DateTimeInterface $updated
+     * @param DateTimeInterface|null $updated
      *
      * @return Bookmark
      */
-    public function setUpdated($updated)
+    public function setUpdated(?DateTimeInterface $updated): Bookmark
     {
         $this->updated = $updated;
 
@@ -301,7 +302,7 @@ class Bookmark
      *
      * @return bool
      */
-    public function isPrivate()
+    public function isPrivate(): bool
     {
         return $this->private ? true : false;
     }
@@ -309,11 +310,11 @@ class Bookmark
     /**
      * Set the Private.
      *
-     * @param bool $private
+     * @param bool|null $private
      *
      * @return Bookmark
      */
-    public function setPrivate($private)
+    public function setPrivate(?bool $private): Bookmark
     {
         $this->private = $private ? true : false;
 
@@ -323,9 +324,9 @@ class Bookmark
     /**
      * Get the Tags.
      *
-     * @return array
+     * @return string[]
      */
-    public function getTags()
+    public function getTags(): array
     {
         return is_array($this->tags) ? $this->tags : [];
     }
@@ -333,13 +334,13 @@ class Bookmark
     /**
      * Set the Tags.
      *
-     * @param array $tags
+     * @param string[]|null $tags
      *
      * @return Bookmark
      */
-    public function setTags($tags)
+    public function setTags(?array $tags): Bookmark
     {
-        $this->setTagsString(implode(' ', $tags));
+        $this->setTagsString(implode(' ', $tags ?? []));
 
         return $this;
     }
@@ -357,11 +358,11 @@ class Bookmark
     /**
      * Set the Thumbnail.
      *
-     * @param string|bool $thumbnail Thumbnail's URL - false if no thumbnail could be found
+     * @param string|bool|null $thumbnail Thumbnail's URL - false if no thumbnail could be found
      *
      * @return Bookmark
      */
-    public function setThumbnail($thumbnail)
+    public function setThumbnail($thumbnail): Bookmark
     {
         $this->thumbnail = $thumbnail;
 
@@ -373,7 +374,7 @@ class Bookmark
      *
      * @return bool
      */
-    public function isSticky()
+    public function isSticky(): bool
     {
         return $this->sticky ? true : false;
     }
@@ -381,11 +382,11 @@ class Bookmark
     /**
      * Set the Sticky.
      *
-     * @param bool $sticky
+     * @param bool|null $sticky
      *
      * @return Bookmark
      */
-    public function setSticky($sticky)
+    public function setSticky(?bool $sticky): Bookmark
     {
         $this->sticky = $sticky ? true : false;
 
@@ -395,7 +396,7 @@ class Bookmark
     /**
      * @return string Bookmark's tags as a string, separated by a space
      */
-    public function getTagsString()
+    public function getTagsString(): string
     {
         return implode(' ', $this->getTags());
     }
@@ -403,7 +404,7 @@ class Bookmark
     /**
      * @return bool
      */
-    public function isNote()
+    public function isNote(): bool
     {
         // We check empty value to get a valid result if the link has not been saved yet
         return empty($this->url) || startsWith($this->url, '/shaare/') || $this->url[0] === '?';
@@ -416,14 +417,14 @@ class Bookmark
      *   - multiple spaces will be removed
      *   - trailing dash in tags will be removed
      *
-     * @param string $tags
+     * @param string|null $tags
      *
      * @return $this
      */
-    public function setTagsString($tags)
+    public function setTagsString(?string $tags): Bookmark
     {
         // Remove first '-' char in tags.
-        $tags = preg_replace('/(^| )\-/', '$1', $tags);
+        $tags = preg_replace('/(^| )\-/', '$1', $tags ?? '');
         // Explode all tags separted by spaces or commas
         $tags = preg_split('/[\s,]+/', $tags);
         // Remove eventual empty values
@@ -440,7 +441,7 @@ class Bookmark
      * @param string $fromTag
      * @param string $toTag
      */
-    public function renameTag($fromTag, $toTag)
+    public function renameTag(string $fromTag, string $toTag): void
     {
         if (($pos = array_search($fromTag, $this->tags)) !== false) {
             $this->tags[$pos] = trim($toTag);
@@ -452,7 +453,7 @@ class Bookmark
      *
      * @param string $tag
      */
-    public function deleteTag($tag)
+    public function deleteTag(string $tag): void
     {
         if (($pos = array_search($tag, $this->tags)) !== false) {
             unset($this->tags[$pos]);

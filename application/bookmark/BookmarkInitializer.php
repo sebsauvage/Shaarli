@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shaarli\Bookmark;
 
 /**
@@ -23,7 +25,7 @@ class BookmarkInitializer
      *
      * @param BookmarkServiceInterface $bookmarkService
      */
-    public function __construct($bookmarkService)
+    public function __construct(BookmarkServiceInterface $bookmarkService)
     {
         $this->bookmarkService = $bookmarkService;
     }
@@ -31,7 +33,7 @@ class BookmarkInitializer
     /**
      * Initialize the data store with default bookmarks
      */
-    public function initialize()
+    public function initialize(): void
     {
         $bookmark = new Bookmark();
         $bookmark->setTitle('quicksilver (loop) on Vimeo ' . t('(private bookmark with thumbnail demo)'));

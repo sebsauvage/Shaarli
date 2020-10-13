@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Shaarli\Bookmark;
 
-
+use DateTime;
 use Exception;
 use malkusch\lock\mutex\Mutex;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
@@ -54,7 +55,7 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function __construct(ConfigManager $conf, History $history, Mutex $mutex, $isLoggedIn)
+    public function __construct(ConfigManager $conf, History $history, Mutex $mutex, bool $isLoggedIn)
     {
         $this->conf = $conf;
         $this->history = $history;
@@ -96,7 +97,7 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function findByHash($hash)
+    public function findByHash(string $hash): Bookmark
     {
         $bookmark = $this->bookmarkFilter->filter(BookmarkFilter::$FILTER_HASH, $hash);
         // PHP 7.3 introduced array_key_first() to avoid this hack
@@ -111,7 +112,7 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function findByUrl($url)
+    public function findByUrl(string $url): ?Bookmark
     {
         return $this->bookmarks->getByUrl($url);
     }
@@ -120,10 +121,10 @@ class BookmarkFileService implements BookmarkServiceInterface
      * @inheritDoc
      */
     public function search(
-        $request = [],
-        $visibility = null,
-        $caseSensitive = false,
-        $untaggedOnly = false,
+        array $request = [],
+        string $visibility = null,
+        bool $caseSensitive = false,
+        bool $untaggedOnly = false,
         bool $ignoreSticky = false
     ) {
         if ($visibility === null) {
@@ -131,8 +132,8 @@ class BookmarkFileService implements BookmarkServiceInterface
         }
 
         // Filter bookmark database according to parameters.
-        $searchtags = isset($request['searchtags']) ? $request['searchtags'] : '';
-        $searchterm = isset($request['searchterm']) ? $request['searchterm'] : '';
+        $searchTags = isset($request['searchtags']) ? $request['searchtags'] : '';
+        $searchTerm = isset($request['searchterm']) ? $request['searchterm'] : '';
 
         if ($ignoreSticky) {
             $this->bookmarks->reorder('DESC', true);
@@ -140,7 +141,7 @@ class BookmarkFileService implements BookmarkServiceInterface
 
         return $this->bookmarkFilter->filter(
             BookmarkFilter::$FILTER_TAG | BookmarkFilter::$FILTER_TEXT,
-            [$searchtags, $searchterm],
+            [$searchTags, $searchTerm],
             $caseSensitive,
             $visibility,
             $untaggedOnly
@@ -150,7 +151,7 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function get($id, $visibility = null)
+    public function get(int $id, string $visibility = null): Bookmark
     {
         if (! isset($this->bookmarks[$id])) {
             throw new BookmarkNotFoundException();
@@ -173,20 +174,17 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function set($bookmark, $save = true)
+    public function set(Bookmark $bookmark, bool $save = true): Bookmark
     {
         if (true !== $this->isLoggedIn) {
             throw new Exception(t('You\'re not authorized to alter the datastore'));
-        }
-        if (! $bookmark instanceof Bookmark) {
-            throw new Exception(t('Provided data is invalid'));
         }
         if (! isset($this->bookmarks[$bookmark->getId()])) {
             throw new BookmarkNotFoundException();
         }
         $bookmark->validate();
 
-        $bookmark->setUpdated(new \DateTime());
+        $bookmark->setUpdated(new DateTime());
         $this->bookmarks[$bookmark->getId()] = $bookmark;
         if ($save === true) {
             $this->save();
@@ -198,15 +196,12 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function add($bookmark, $save = true)
+    public function add(Bookmark $bookmark, bool $save = true): Bookmark
     {
         if (true !== $this->isLoggedIn) {
             throw new Exception(t('You\'re not authorized to alter the datastore'));
         }
-        if (! $bookmark instanceof Bookmark) {
-            throw new Exception(t('Provided data is invalid'));
-        }
-        if (! empty($bookmark->getId())) {
+        if (!empty($bookmark->getId())) {
             throw new Exception(t('This bookmarks already exists'));
         }
         $bookmark->setId($this->bookmarks->getNextId());
@@ -223,13 +218,10 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function addOrSet($bookmark, $save = true)
+    public function addOrSet(Bookmark $bookmark, bool $save = true): Bookmark
     {
         if (true !== $this->isLoggedIn) {
             throw new Exception(t('You\'re not authorized to alter the datastore'));
-        }
-        if (! $bookmark instanceof Bookmark) {
-            throw new Exception('Provided data is invalid');
         }
         if ($bookmark->getId() === null) {
             return $this->add($bookmark, $save);
@@ -240,13 +232,10 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function remove($bookmark, $save = true)
+    public function remove(Bookmark $bookmark, bool $save = true): void
     {
         if (true !== $this->isLoggedIn) {
             throw new Exception(t('You\'re not authorized to alter the datastore'));
-        }
-        if (! $bookmark instanceof Bookmark) {
-            throw new Exception(t('Provided data is invalid'));
         }
         if (! isset($this->bookmarks[$bookmark->getId()])) {
             throw new BookmarkNotFoundException();
@@ -262,7 +251,7 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function exists($id, $visibility = null)
+    public function exists(int $id, string $visibility = null): bool
     {
         if (! isset($this->bookmarks[$id])) {
             return false;
@@ -285,7 +274,7 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function count($visibility = null)
+    public function count(string $visibility = null): int
     {
         return count($this->search([], $visibility));
     }
@@ -293,7 +282,7 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function save()
+    public function save(): void
     {
         if (true !== $this->isLoggedIn) {
             // TODO: raise an Exception instead
@@ -308,7 +297,7 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function bookmarksCountPerTag($filteringTags = [], $visibility = null)
+    public function bookmarksCountPerTag(array $filteringTags = [], string $visibility = null): array
     {
         $bookmarks = $this->search(['searchtags' => $filteringTags], $visibility);
         $tags = [];
@@ -344,13 +333,14 @@ class BookmarkFileService implements BookmarkServiceInterface
         $keys = array_keys($tags);
         $tmpTags = array_combine($keys, $keys);
         array_multisort($tags, SORT_DESC, $tmpTags, SORT_ASC, $tags);
+
         return $tags;
     }
 
     /**
      * @inheritDoc
      */
-    public function days()
+    public function days(): array
     {
         $bookmarkDays = [];
         foreach ($this->search() as $bookmark) {
@@ -365,7 +355,7 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function filterDay($request)
+    public function filterDay(string $request)
     {
         $visibility = $this->isLoggedIn ? BookmarkFilter::$ALL : BookmarkFilter::$PUBLIC;
 
@@ -375,7 +365,7 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function initialize()
+    public function initialize(): void
     {
         $initializer = new BookmarkInitializer($this);
         $initializer->initialize();
@@ -388,7 +378,7 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * Handles migration to the new database format (BookmarksArray).
      */
-    protected function migrate()
+    protected function migrate(): void
     {
         $bookmarkDb = new LegacyLinkDB(
             $this->conf->get('resource.datastore'),

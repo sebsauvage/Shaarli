@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shaarli\Bookmark;
 
 use Shaarli\Bookmark\Exception\InvalidBookmarkException;
@@ -187,13 +189,13 @@ class BookmarkArray implements \Iterator, \Countable, \ArrayAccess
     /**
      * Returns a bookmark offset in bookmarks array from its unique ID.
      *
-     * @param int $id Persistent ID of a bookmark.
+     * @param int|null $id Persistent ID of a bookmark.
      *
      * @return int Real offset in local array, or null if doesn't exist.
      */
-    protected function getBookmarkOffset($id)
+    protected function getBookmarkOffset(?int $id): ?int
     {
-        if (isset($this->ids[$id])) {
+        if ($id !== null && isset($this->ids[$id])) {
             return $this->ids[$id];
         }
         return null;
@@ -205,7 +207,7 @@ class BookmarkArray implements \Iterator, \Countable, \ArrayAccess
      *
      * @return int next ID.
      */
-    public function getNextId()
+    public function getNextId(): int
     {
         if (!empty($this->ids)) {
             return max(array_keys($this->ids)) + 1;
@@ -214,11 +216,11 @@ class BookmarkArray implements \Iterator, \Countable, \ArrayAccess
     }
 
     /**
-     * @param $url
+     * @param string $url
      *
      * @return Bookmark|null
      */
-    public function getByUrl($url)
+    public function getByUrl(string $url): ?Bookmark
     {
         if (! empty($url)
             && isset($this->urls[$url])

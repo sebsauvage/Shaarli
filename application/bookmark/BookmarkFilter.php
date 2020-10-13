@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shaarli\Bookmark;
 
 use Exception;
@@ -77,8 +79,13 @@ class BookmarkFilter
      *
      * @throws BookmarkNotFoundException
      */
-    public function filter($type, $request, $casesensitive = false, $visibility = 'all', $untaggedonly = false)
-    {
+    public function filter(
+        string $type,
+        $request,
+        bool $casesensitive = false,
+        string $visibility = 'all',
+        bool $untaggedonly = false
+    ) {
         if (!in_array($visibility, ['all', 'public', 'private'])) {
             $visibility = 'all';
         }
@@ -128,7 +135,7 @@ class BookmarkFilter
      *
      * @return Bookmark[] filtered bookmarks.
      */
-    private function noFilter($visibility = 'all')
+    private function noFilter(string $visibility = 'all')
     {
         if ($visibility === 'all') {
             return $this->bookmarks;
@@ -151,11 +158,11 @@ class BookmarkFilter
      *
      * @param string $smallHash permalink hash.
      *
-     * @return array $filtered array containing permalink data.
+     * @return Bookmark[] $filtered array containing permalink data.
      *
-     * @throws \Shaarli\Bookmark\Exception\BookmarkNotFoundException if the smallhash doesn't match any link.
+     * @throws BookmarkNotFoundException if the smallhash doesn't match any link.
      */
-    private function filterSmallHash($smallHash)
+    private function filterSmallHash(string $smallHash)
     {
         foreach ($this->bookmarks as $key => $l) {
             if ($smallHash == $l->getShortUrl()) {
@@ -186,9 +193,9 @@ class BookmarkFilter
      * @param string $searchterms search query.
      * @param string $visibility  Optional: return only all/private/public bookmarks.
      *
-     * @return array search results.
+     * @return Bookmark[] search results.
      */
-    private function filterFulltext($searchterms, $visibility = 'all')
+    private function filterFulltext(string $searchterms, string $visibility = 'all')
     {
         if (empty($searchterms)) {
             return $this->noFilter($visibility);
@@ -268,7 +275,7 @@ class BookmarkFilter
      *
      * @return string generated regex fragment
      */
-    private static function tag2regex($tag)
+    private static function tag2regex(string $tag): string
     {
         $len = strlen($tag);
         if (!$len || $tag === "-" || $tag === "*") {
@@ -314,13 +321,13 @@ class BookmarkFilter
      * You can specify one or more tags, separated by space or a comma, e.g.
      *  print_r($mydb->filterTags('linux programming'));
      *
-     * @param string $tags          list of tags separated by commas or blank spaces.
-     * @param bool   $casesensitive ignore case if false.
-     * @param string $visibility    Optional: return only all/private/public bookmarks.
+     * @param string|array $tags          list of tags, separated by commas or blank spaces if passed as string.
+     * @param bool         $casesensitive ignore case if false.
+     * @param string       $visibility    Optional: return only all/private/public bookmarks.
      *
-     * @return array filtered bookmarks.
+     * @return Bookmark[] filtered bookmarks.
      */
-    public function filterTags($tags, $casesensitive = false, $visibility = 'all')
+    public function filterTags($tags, bool $casesensitive = false, string $visibility = 'all')
     {
         // get single tags (we may get passed an array, even though the docs say different)
         $inputTags = $tags;
@@ -396,9 +403,9 @@ class BookmarkFilter
      *
      * @param string $visibility return only all/private/public bookmarks.
      *
-     * @return array filtered bookmarks.
+     * @return Bookmark[] filtered bookmarks.
      */
-    public function filterUntagged($visibility)
+    public function filterUntagged(string $visibility)
     {
         $filtered = [];
         foreach ($this->bookmarks as $key => $link) {
@@ -427,11 +434,11 @@ class BookmarkFilter
      * @param string $day day to filter.
      * @param string $visibility return only all/private/public bookmarks.
 
-     * @return array all link matching given day.
+     * @return Bookmark[] all link matching given day.
      *
      * @throws Exception if date format is invalid.
      */
-    public function filterDay($day, $visibility)
+    public function filterDay(string $day, string $visibility)
     {
         if (!checkDateFormat('Ymd', $day)) {
             throw new Exception('Invalid date format');
@@ -460,9 +467,9 @@ class BookmarkFilter
      * @param string $tags          string containing a list of tags.
      * @param bool   $casesensitive will convert everything to lowercase if false.
      *
-     * @return array filtered tags string.
+     * @return string[] filtered tags string.
      */
-    public static function tagsStrToArray($tags, $casesensitive)
+    public static function tagsStrToArray(string $tags, bool $casesensitive): array
     {
         // We use UTF-8 conversion to handle various graphemes (i.e. cyrillic, or greek)
         $tagsOut = $casesensitive ? $tags : mb_convert_case($tags, MB_CASE_LOWER, 'UTF-8');

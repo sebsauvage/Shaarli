@@ -52,7 +52,7 @@ class ThumbnailsController extends ShaarliAdminController
         }
 
         try {
-            $bookmark = $this->container->bookmarkService->get($id);
+            $bookmark = $this->container->bookmarkService->get((int) $id);
         } catch (BookmarkNotFoundException $e) {
             return $response->withStatus(404);
         }
