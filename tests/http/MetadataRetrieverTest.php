@@ -38,6 +38,7 @@ class MetadataRetrieverTest extends TestCase
         $remoteTitle = 'Remote Title ';
         $remoteDesc = 'Sometimes the meta description is relevant.';
         $remoteTags = 'abc def';
+        $remoteCharset = 'utf-8';
 
         $expectedResult = [
             'title' => $remoteTitle,
@@ -47,9 +48,26 @@ class MetadataRetrieverTest extends TestCase
 
         $this->httpAccess
             ->expects(static::once())
+            ->method('getCurlHeaderCallback')
+            ->willReturnCallback(
+                function (&$charset) use (
+                    $remoteCharset
+                ): callable {
+                    return function () use (
+                        &$charset,
+                        $remoteCharset
+                    ): void {
+                        $charset = $remoteCharset;
+                    };
+                }
+            )
+        ;
+        $this->httpAccess
+            ->expects(static::once())
             ->method('getCurlDownloadCallback')
             ->willReturnCallback(
                 function (&$charset, &$title, &$description, &$tags) use (
+                    $remoteCharset,
                     $remoteTitle,
                     $remoteDesc,
                     $remoteTags
@@ -59,11 +77,13 @@ class MetadataRetrieverTest extends TestCase
                         &$title,
                         &$description,
                         &$tags,
+                        $remoteCharset,
                         $remoteTitle,
                         $remoteDesc,
                         $remoteTags
                     ): void {
-                        $charset = 'ISO-8859-1';
+                        static::assertSame($remoteCharset, $charset);
+
                         $title = $remoteTitle;
                         $description = $remoteDesc;
                         $tags = $remoteTags;
@@ -75,8 +95,9 @@ class MetadataRetrieverTest extends TestCase
             ->expects(static::once())
             ->method('getHttpResponse')
             ->with($url, 30, 4194304)
-            ->willReturnCallback(function($url, $timeout, $maxBytes, $callback): void {
-                $callback();
+            ->willReturnCallback(function($url, $timeout, $maxBytes, $headerCallback, $dlCallback): void {
+                $headerCallback();
+                $dlCallback();
             })
         ;
 
@@ -102,8 +123,17 @@ class MetadataRetrieverTest extends TestCase
             ->expects(static::once())
             ->method('getCurlDownloadCallback')
             ->willReturnCallback(
-                function (&$charset, &$title, &$description, &$tags): callable {
-                    return function () use (&$charset, &$title, &$description, &$tags): void {};
+                function (): callable {
+                    return function (): void {};
+                }
+            )
+        ;
+        $this->httpAccess
+            ->expects(static::once())
+            ->method('getCurlHeaderCallback')
+            ->willReturnCallback(
+                function (): callable {
+                    return function (): void {};
                 }
             )
         ;
@@ -111,8 +141,9 @@ class MetadataRetrieverTest extends TestCase
             ->expects(static::once())
             ->method('getHttpResponse')
             ->with($url, 30, 4194304)
-            ->willReturnCallback(function($url, $timeout, $maxBytes, $callback): void {
-                $callback();
+            ->willReturnCallback(function($url, $timeout, $maxBytes, $headerCallback, $dlCallback): void {
+                $headerCallback();
+                $dlCallback();
             })
         ;
 

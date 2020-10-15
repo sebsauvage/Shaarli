@@ -46,6 +46,7 @@ class MetadataRetriever
             $url,
             $this->conf->get('general.download_timeout', 30),
             $this->conf->get('general.download_max_size', 4194304),
+            $this->httpAccess->getCurlHeaderCallback($charset),
             $this->httpAccess->getCurlDownloadCallback(
                 $charset,
                 $title,

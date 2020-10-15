@@ -216,60 +216,91 @@ class LinkUtilsTest extends TestCase
     }
 
     /**
-     * Test the download callback with valid value
+     * Test the header callback with valid value
      */
-    public function testCurlDownloadCallbackOk()
+    public function testCurlHeaderCallbackOk(): void
     {
-        $callback = get_curl_download_callback(
-            $charset,
-            $title,
-            $desc,
-            $keywords,
-            false,
-            'ut_curl_getinfo_ok'
-        );
+        $callback = get_curl_header_callback($charset, 'ut_curl_getinfo_ok');
         $data = [
             'HTTP/1.1 200 OK',
             'Server: GitHub.com',
             'Date: Sat, 28 Oct 2017 12:01:33 GMT',
             'Content-Type: text/html; charset=utf-8',
             'Status: 200 OK',
-            'end' => 'th=device-width">'
+        ];
+
+        foreach ($data as $chunk) {
+            static::assertIsInt($callback(null, $chunk));
+        }
+
+        static::assertSame('utf-8', $charset);
+    }
+
+    /**
+     * Test the download callback with valid value
+     */
+    public function testCurlDownloadCallbackOk(): void
+    {
+        $charset = 'utf-8';
+        $callback = get_curl_download_callback(
+            $charset,
+            $title,
+            $desc,
+            $keywords,
+            false
+        );
+
+        $data = [
+            'th=device-width">'
                 . '<title>Refactoring · GitHub</title>'
                 . '<link rel="search" type="application/opensea',
             '<title>ignored</title>'
                 . '<meta name="description" content="desc" />'
                 . '<meta name="keywords" content="key1,key2" />',
         ];
-        foreach ($data as $key => $line) {
-            $ignore = null;
-            $expected = $key !== 'end' ? strlen($line) : false;
-            $this->assertEquals($expected, $callback($ignore, $line));
-            if ($expected === false) {
-                break;
-            }
+
+        foreach ($data as $chunk) {
+            static::assertSame(strlen($chunk), $callback(null, $chunk));
         }
-        $this->assertEquals('utf-8', $charset);
-        $this->assertEquals('Refactoring · GitHub', $title);
-        $this->assertEmpty($desc);
-        $this->assertEmpty($keywords);
+
+        static::assertSame('utf-8', $charset);
+        static::assertSame('Refactoring · GitHub', $title);
+        static::assertEmpty($desc);
+        static::assertEmpty($keywords);
+    }
+
+    /**
+     * Test the header callback with valid value
+     */
+    public function testCurlHeaderCallbackNoCharset(): void
+    {
+        $callback = get_curl_header_callback($charset, 'ut_curl_getinfo_no_charset');
+        $data = [
+            'HTTP/1.1 200 OK',
+        ];
+
+        foreach ($data as $chunk) {
+            static::assertSame(strlen($chunk), $callback(null, $chunk));
+        }
+
+        static::assertFalse($charset);
     }
 
     /**
      * Test the download callback with valid values and no charset
      */
-    public function testCurlDownloadCallbackOkNoCharset()
+    public function testCurlDownloadCallbackOkNoCharset(): void
     {
+        $charset = null;
         $callback = get_curl_download_callback(
             $charset,
             $title,
             $desc,
             $keywords,
-            false,
-            'ut_curl_getinfo_no_charset'
+            false
         );
+
         $data = [
-            'HTTP/1.1 200 OK',
             'end' => 'th=device-width">'
                 . '<title>Refactoring · GitHub</title>'
                 . '<link rel="search" type="application/opensea',
@@ -277,10 +308,11 @@ class LinkUtilsTest extends TestCase
             . '<meta name="description" content="desc" />'
             . '<meta name="keywords" content="key1,key2" />',
         ];
-        foreach ($data as $key => $line) {
-            $ignore = null;
-            $this->assertEquals(strlen($line), $callback($ignore, $line));
+
+        foreach ($data as $chunk) {
+            static::assertSame(strlen($chunk), $callback(null, $chunk));
         }
+
         $this->assertEmpty($charset);
         $this->assertEquals('Refactoring · GitHub', $title);
         $this->assertEmpty($desc);
@@ -290,18 +322,18 @@ class LinkUtilsTest extends TestCase
     /**
      * Test the download callback with valid values and no charset
      */
-    public function testCurlDownloadCallbackOkHtmlCharset()
+    public function testCurlDownloadCallbackOkHtmlCharset(): void
     {
+        $charset = null;
         $callback = get_curl_download_callback(
             $charset,
             $title,
             $desc,
             $keywords,
-            false,
-            'ut_curl_getinfo_no_charset'
+            false
         );
+
         $data = [
-            'HTTP/1.1 200 OK',
             '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
             'end' => 'th=device-width">'
                 . '<title>Refactoring · GitHub</title>'
@@ -310,14 +342,10 @@ class LinkUtilsTest extends TestCase
             . '<meta name="description" content="desc" />'
             . '<meta name="keywords" content="key1,key2" />',
         ];
-        foreach ($data as $key => $line) {
-            $ignore = null;
-            $expected = $key !== 'end' ? strlen($line) : false;
-            $this->assertEquals($expected, $callback($ignore, $line));
-            if ($expected === false) {
-                break;
-            }
+        foreach ($data as $chunk) {
+            static::assertSame(strlen($chunk), $callback(null, $chunk));
         }
+
         $this->assertEquals('utf-8', $charset);
         $this->assertEquals('Refactoring · GitHub', $title);
         $this->assertEmpty($desc);
@@ -327,25 +355,26 @@ class LinkUtilsTest extends TestCase
     /**
      * Test the download callback with valid values and no title
      */
-    public function testCurlDownloadCallbackOkNoTitle()
+    public function testCurlDownloadCallbackOkNoTitle(): void
     {
+        $charset = 'utf-8';
         $callback = get_curl_download_callback(
             $charset,
             $title,
             $desc,
             $keywords,
-            false,
-            'ut_curl_getinfo_ok'
+            false
         );
+
         $data = [
-            'HTTP/1.1 200 OK',
             'end' => 'th=device-width">Refactoring · GitHub<link rel="search" type="application/opensea',
             'ignored',
         ];
-        foreach ($data as $key => $line) {
-            $ignore = null;
-            $this->assertEquals(strlen($line), $callback($ignore, $line));
+
+        foreach ($data as $chunk) {
+            static::assertSame(strlen($chunk), $callback(null, $chunk));
         }
+
         $this->assertEquals('utf-8', $charset);
         $this->assertEmpty($title);
         $this->assertEmpty($desc);
@@ -353,81 +382,55 @@ class LinkUtilsTest extends TestCase
     }
 
     /**
-     * Test the download callback with an invalid content type.
+     * Test the header callback with an invalid content type.
      */
-    public function testCurlDownloadCallbackInvalidContentType()
+    public function testCurlHeaderCallbackInvalidContentType(): void
     {
-        $callback = get_curl_download_callback(
-            $charset,
-            $title,
-            $desc,
-            $keywords,
-            false,
-            'ut_curl_getinfo_ct_ko'
-        );
-        $ignore = null;
-        $this->assertFalse($callback($ignore, ''));
-        $this->assertEmpty($charset);
-        $this->assertEmpty($title);
+        $callback = get_curl_header_callback($charset, 'ut_curl_getinfo_ct_ko');
+        $data = [
+            'HTTP/1.1 200 OK',
+        ];
+
+        static::assertFalse($callback(null, $data[0]));
+        static::assertNull($charset);
     }
 
     /**
-     * Test the download callback with an invalid response code.
+     * Test the header callback with an invalid response code.
      */
-    public function testCurlDownloadCallbackInvalidResponseCode()
+    public function testCurlHeaderCallbackInvalidResponseCode(): void
     {
-        $callback = $callback = get_curl_download_callback(
-            $charset,
-            $title,
-            $desc,
-            $keywords,
-            false,
-            'ut_curl_getinfo_rc_ko'
-        );
-        $ignore = null;
-        $this->assertFalse($callback($ignore, ''));
-        $this->assertEmpty($charset);
-        $this->assertEmpty($title);
+        $callback = get_curl_header_callback($charset, 'ut_curl_getinfo_rc_ko');
+
+        static::assertFalse($callback(null, ''));
+        static::assertNull($charset);
     }
 
     /**
-     * Test the download callback with an invalid content type and response code.
+     * Test the header callback with an invalid content type and response code.
      */
-    public function testCurlDownloadCallbackInvalidContentTypeAndResponseCode()
+    public function testCurlHeaderCallbackInvalidContentTypeAndResponseCode(): void
     {
-        $callback = $callback = get_curl_download_callback(
-            $charset,
-            $title,
-            $desc,
-            $keywords,
-            false,
-            'ut_curl_getinfo_rs_ct_ko'
-        );
-        $ignore = null;
-        $this->assertFalse($callback($ignore, ''));
-        $this->assertEmpty($charset);
-        $this->assertEmpty($title);
+        $callback = get_curl_header_callback($charset, 'ut_curl_getinfo_rs_ct_ko');
+
+        static::assertFalse($callback(null, ''));
+        static::assertNull($charset);
     }
 
     /**
      * Test the download callback with valid value, and retrieve_description option enabled.
      */
-    public function testCurlDownloadCallbackOkWithDesc()
+    public function testCurlDownloadCallbackOkWithDesc(): void
     {
+        $charset = 'utf-8';
         $callback = get_curl_download_callback(
             $charset,
             $title,
             $desc,
             $keywords,
-            true,
-            'ut_curl_getinfo_ok'
+            true
         );
         $data = [
-            'HTTP/1.1 200 OK',
-            'Server: GitHub.com',
-            'Date: Sat, 28 Oct 2017 12:01:33 GMT',
-            'Content-Type: text/html; charset=utf-8',
-            'Status: 200 OK',
             'th=device-width">'
                 . '<title>Refactoring · GitHub</title>'
                 . '<link rel="search" type="application/opensea',
@@ -435,14 +438,11 @@ class LinkUtilsTest extends TestCase
             . '<meta name="description" content="link desc" />'
             . '<meta name="keywords" content="key1,key2" />',
         ];
-        foreach ($data as $key => $line) {
-            $ignore = null;
-            $expected = $key !== 'end' ? strlen($line) : false;
-            $this->assertEquals($expected, $callback($ignore, $line));
-            if ($expected === false) {
-                break;
-            }
+
+        foreach ($data as $chunk) {
+            static::assertSame(strlen($chunk), $callback(null, $chunk));
         }
+
         $this->assertEquals('utf-8', $charset);
         $this->assertEquals('Refactoring · GitHub', $title);
         $this->assertEquals('link desc', $desc);
@@ -453,8 +453,9 @@ class LinkUtilsTest extends TestCase
      * Test the download callback with valid value, and retrieve_description option enabled,
      * but no desc or keyword defined in the page.
      */
-    public function testCurlDownloadCallbackOkWithDescNotFound()
+    public function testCurlDownloadCallbackOkWithDescNotFound(): void
     {
+        $charset = 'utf-8';
         $callback = get_curl_download_callback(
             $charset,
             $title,
@@ -464,24 +465,16 @@ class LinkUtilsTest extends TestCase
             'ut_curl_getinfo_ok'
         );
         $data = [
-            'HTTP/1.1 200 OK',
-            'Server: GitHub.com',
-            'Date: Sat, 28 Oct 2017 12:01:33 GMT',
-            'Content-Type: text/html; charset=utf-8',
-            'Status: 200 OK',
             'th=device-width">'
                 . '<title>Refactoring · GitHub</title>'
                 . '<link rel="search" type="application/opensea',
             'end' => '<title>ignored</title>',
         ];
-        foreach ($data as $key => $line) {
-            $ignore = null;
-            $expected = $key !== 'end' ? strlen($line) : false;
-            $this->assertEquals($expected, $callback($ignore, $line));
-            if ($expected === false) {
-                break;
-            }
+
+        foreach ($data as $chunk) {
+            static::assertSame(strlen($chunk), $callback(null, $chunk));
         }
+
         $this->assertEquals('utf-8', $charset);
         $this->assertEquals('Refactoring · GitHub', $title);
         $this->assertEmpty($desc);
