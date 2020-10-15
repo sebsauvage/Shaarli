@@ -144,12 +144,14 @@ class DisplayCreateFormTest extends TestCase
 
         // Make sure that PluginManager hook is triggered
         $this->container->pluginManager
-            ->expects(static::at(0))
+            ->expects(static::atLeastOnce())
             ->method('executeHooks')
+            ->withConsecutive(['render_editlink'], ['render_includes'])
             ->willReturnCallback(function (string $hook, array $data): array {
-                static::assertSame('render_editlink', $hook);
-                static::assertSame('', $data['link']['title']);
-                static::assertSame('', $data['link']['description']);
+                if ('render_editlink' === $hook) {
+                    static::assertSame('', $data['link']['title']);
+                    static::assertSame('', $data['link']['description']);
+                }
 
                 return $data;
             })

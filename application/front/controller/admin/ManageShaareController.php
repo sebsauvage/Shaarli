@@ -129,7 +129,8 @@ class ManageShaareController extends ShaarliAdminController
         $bookmark->setTagsString($request->getParam('lf_tags'));
 
         if ($this->container->conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE
-            && false === $bookmark->isNote()
+            && true !== $this->container->conf->get('general.enable_async_metadata', true)
+            && $bookmark->shouldUpdateThumbnail()
         ) {
             $bookmark->setThumbnail($this->container->thumbnailer->get($bookmark->getUrl()));
         }

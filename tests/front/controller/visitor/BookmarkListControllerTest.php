@@ -307,7 +307,13 @@ class BookmarkListControllerTest extends TestCase
         $this->container->conf
             ->method('get')
             ->willReturnCallback(function (string $key, $default) {
-                return $key === 'thumbnails.mode' ? Thumbnailer::MODE_ALL : $default;
+                if ($key === 'thumbnails.mode') {
+                    return Thumbnailer::MODE_ALL;
+                } elseif ($key === 'general.enable_async_metadata') {
+                    return false;
+                }
+
+                return $default;
             })
         ;
 
@@ -357,7 +363,13 @@ class BookmarkListControllerTest extends TestCase
         $this->container->conf
             ->method('get')
             ->willReturnCallback(function (string $key, $default) {
-                return $key === 'thumbnails.mode' ? Thumbnailer::MODE_ALL : $default;
+                if ($key === 'thumbnails.mode') {
+                    return Thumbnailer::MODE_ALL;
+                } elseif ($key === 'general.enable_async_metadata') {
+                    return false;
+                }
+
+                return $default;
             })
         ;
 
@@ -376,6 +388,47 @@ class BookmarkListControllerTest extends TestCase
 
         static::assertSame(200, $result->getStatusCode());
         static::assertSame('linklist', (string) $result->getBody());
+    }
+
+    /**
+     * Test getting a permalink with thumbnail update with async setting: no update should run.
+     */
+    public function testThumbnailUpdateFromPermalinkAsync(): void
+    {
+        $request = $this->createMock(Request::class);
+        $response = new Response();
+
+        $this->container->loginManager = $this->createMock(LoginManager::class);
+        $this->container->loginManager->method('isLoggedIn')->willReturn(true);
+
+        $this->container->conf = $this->createMock(ConfigManager::class);
+        $this->container->conf
+            ->method('get')
+            ->willReturnCallback(function (string $key, $default) {
+                if ($key === 'thumbnails.mode') {
+                    return Thumbnailer::MODE_ALL;
+                } elseif ($key === 'general.enable_async_metadata') {
+                    return true;
+                }
+
+                return $default;
+            })
+        ;
+
+        $this->container->thumbnailer = $this->createMock(Thumbnailer::class);
+        $this->container->thumbnailer->expects(static::never())->method('get');
+
+        $this->container->bookmarkService
+            ->expects(static::once())
+            ->method('findByHash')
+            ->willReturn((new Bookmark())->setId(2)->setUrl('https://url.tld')->setTitle('Title 1'))
+        ;
+        $this->container->bookmarkService->expects(static::never())->method('set');
+        $this->container->bookmarkService->expects(static::never())->method('save');
+
+        $result = $this->controller->permalink($request, $response, ['hash' => 'abc']);
+
+        static::assertSame(200, $result->getStatusCode());
     }
 
     /**
