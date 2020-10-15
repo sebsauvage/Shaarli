@@ -40,6 +40,8 @@ Supported PHP versions:
 
 Version | Status | Shaarli compatibility
 :---:|:---:|:---:
+8.0 | Supported | Yes
+7.4 | Supported | Yes
 7.3 | Supported | Yes
 7.2 | Supported | Yes
 7.1 | Supported | Yes
@@ -53,7 +55,7 @@ Required PHP extensions:
 
 Extension | Required? | Usage
 ---|:---:|---
-[`openssl`](http://php.net/manual/en/book.openssl.php) | requires | OpenSSL, HTTPS
+[`openssl`](http://php.net/manual/en/book.openssl.php) | required | OpenSSL, HTTPS
 [`php-json`](http://php.net/manual/en/book.json.php) | required | configuration parsing
 [`php-simplexml`](https://www.php.net/manual/en/book.simplexml.php) | required | REST API (Slim framework)
 [`php-mbstring`](http://php.net/manual/en/book.mbstring.php) | CentOS, Fedora, RHEL, Windows, some hosting providers | multibyte (Unicode) string support
@@ -421,7 +423,7 @@ By default Shaarli already disallows indexing of your local copy of the document
 before = common.conf
 [Definition]
 failregex = \s-\s<HOST>\s-\sLogin failed for user.*$
-ignoreregex = 
+ignoreregex =
 ```
 
 ```ini
