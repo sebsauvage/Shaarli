@@ -54,7 +54,7 @@ function hook_isso_render_linklist($data, $conf)
         if ($conf->get('resource.theme') === 'default') {
             $button .= '<i class="linklist-plugin-icon fa fa-comment"></i>';
         } else {
-            $button .= '<img class="linklist-plugin-icon" src="plugins/isso/comment.png" ';
+            $button .= '<img class="linklist-plugin-icon" src="'. $data['_ROOT_PATH_'].'/plugins/isso/comment.png" ';
             $button .= 'title="Comment on this shaare" alt="Comments" />';
         }
         $button .= '</a></span>';

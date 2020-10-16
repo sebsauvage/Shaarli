@@ -174,10 +174,12 @@ class PageBuilder
             }
         }
 
+        $rootPath = preg_replace('#/index\.php$#', '', $basePath);
         $this->assign('base_path', $basePath);
+        $this->assign('root_path', $rootPath);
         $this->assign(
             'asset_path',
-            $basePath . '/' .
+            $rootPath . '/' .
             rtrim($this->conf->get('resource.raintpl_tpl', 'tpl'), '/') . '/' .
             $this->conf->get('resource.theme', 'default')
         );

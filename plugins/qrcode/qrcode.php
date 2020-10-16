@@ -19,7 +19,7 @@ function hook_qrcode_render_linklist($data)
 {
     $qrcode_html = file_get_contents(PluginManager::$PLUGINS_PATH . '/qrcode/qrcode.html');
 
-    $path = ($data['_BASE_PATH_'] ?? '') . '/' . PluginManager::$PLUGINS_PATH;
+    $path = ($data['_ROOT_PATH_'] ?? '') . '/' . PluginManager::$PLUGINS_PATH;
     foreach ($data['links'] as &$value) {
         $qrcode = sprintf(
             $qrcode_html,

@@ -106,6 +106,7 @@ abstract class ShaarliVisitorController
             'target' => $template,
             'loggedin' => $this->container->loginManager->isLoggedIn(),
             'basePath' => $this->container->basePath,
+            'rootPath' => preg_replace('#/index\.php$#', '', $this->container->basePath),
             'bookmarkService' => $this->container->bookmarkService
         ];
     }

@@ -76,7 +76,7 @@
                   </div>
                   {if="$thumbnails_enabled && !empty($link.thumbnail)"}
                     <div class="daily-entry-thumbnail">
-                      <img data-src="{$link.thumbnail}#" class="b-lazy"
+                      <img data-src="{$root_path}/{$link.thumbnail}#" class="b-lazy"
                            src=""
                            alt="thumbnail" width="{$thumbnails_width}" height="{$thumbnails_height}" />
                     </div>
