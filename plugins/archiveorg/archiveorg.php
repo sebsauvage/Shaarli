@@ -17,8 +17,7 @@ use Shaarli\Plugin\PluginManager;
 function hook_archiveorg_render_linklist($data)
 {
     $archive_html = file_get_contents(PluginManager::$PLUGINS_PATH . '/archiveorg/archiveorg.html');
-    $rootPath = preg_replace('#/index\.php$#', '', $data['_BASE_PATH_'] ?? '');
-    $path = $rootPath . '/' . PluginManager::$PLUGINS_PATH;
+    $path = ($data['_ROOT_PATH_'] ?? '') . '/' . PluginManager::$PLUGINS_PATH;
 
     foreach ($data['links'] as &$value) {
         $isNote = startsWith($value['real_url'], '/shaare/');

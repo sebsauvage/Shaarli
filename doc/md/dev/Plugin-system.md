@@ -148,11 +148,16 @@ If a file needs to be included in server end, use simple relative path:
 `PluginManager::$PLUGINS_PATH . '/mything/template.html'`.
 
 If it needs to be included in front end side (e.g. an image),
-the relative path must be prefixed with special data `_BASE_PATH_`:
-`($data['_BASE_PATH_'] ?? '') . '/' . PluginManager::$PLUGINS_PATH . '/mything/picture.png`.
+the relative path must be prefixed with special data:
+
+  * if it's a link that will need to be processed by Shaarli, use `_BASE_PATH_`:
+    for e.g. `$data['_BASE_PATH_'] . '/admin/tools`.
+  * if you want to include an asset, you need to add the root URL (base path without `/index.php`, for people using Shaarli without URL rewriting), then use `_ROOT_PATH_`:
+    for e.g
+`$['_ROOT_PATH_'] . '/' . PluginManager::$PLUGINS_PATH . '/mything/picture.png`.
 
 Note that special placeholders for CSS and JS files (respectively `css_files` and `js_files`) are already prefixed
-with the base path in template files.
+with the root path in template files.
 
 ### It's not working!
 

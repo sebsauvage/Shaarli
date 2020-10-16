@@ -104,6 +104,7 @@ class PluginManager
             'target' => '_PAGE_',
             'loggedin' => '_LOGGEDIN_',
             'basePath' => '_BASE_PATH_',
+            'rootPath' => '_ROOT_PATH_',
             'bookmarkService' => '_BOOKMARK_SERVICE_',
         ];
 
