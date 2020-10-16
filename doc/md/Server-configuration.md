@@ -377,7 +377,7 @@ use `https://shaarli.mydomain.org/index.php/`.
 
 **Recommended:**
   * after installation, in the configuration page, set your header link to `/index.php/`.
-  * in you `config.json.php` set `general.root_url` to
+  * in your configuration file `config.json.php` set `general.root_url` to
     `https://shaarli.mydomain.org/index.php/`.
 
 ## Allow import of large browser bookmarks export
