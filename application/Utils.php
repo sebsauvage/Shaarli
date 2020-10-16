@@ -327,6 +327,23 @@ function format_date($date, $time = true, $intl = true)
 }
 
 /**
+ * Format the date month according to the locale.
+ *
+ * @param DateTimeInterface $date to format.
+ *
+ * @return bool|string Formatted date, or false if the input is invalid.
+ */
+function format_month(DateTimeInterface $date)
+{
+    if (! $date instanceof DateTimeInterface) {
+        return false;
+    }
+
+    return strftime('%B', $date->getTimestamp());
+}
+
+
+/**
  * Check if the input is an integer, no matter its real type.
  *
  * PHP is a bit messy regarding this:
@@ -454,16 +471,20 @@ function alphabetical_sort(&$data, $reverse = false, $byKeys = false)
  * Wrapper function for translation which match the API
  * of gettext()/_() and ngettext().
  *
- * @param string $text   Text to translate.
- * @param string $nText  The plural message ID.
- * @param int    $nb     The number of items for plural forms.
- * @param string $domain The domain where the translation is stored (default: shaarli).
+ * @param string $text      Text to translate.
+ * @param string $nText     The plural message ID.
+ * @param int    $nb        The number of items for plural forms.
+ * @param string $domain    The domain where the translation is stored (default: shaarli).
+ * @param array  $variables Associative array of variables to replace in translated text.
+ * @param bool   $fixCase   Apply `ucfirst` on the translated string, might be useful for strings with variables.
  *
  * @return string Text translated.
  */
-function t($text, $nText = '', $nb = 1, $domain = 'shaarli')
+function t($text, $nText = '', $nb = 1, $domain = 'shaarli', $variables = [], $fixCase = false)
 {
-    return dn__($domain, $text, $nText, $nb);
+    $postFunction = $fixCase ? 'ucfirst' : function ($input) { return $input; };
+
+    return $postFunction(dn__($domain, $text, $nText, $nb, $variables));
 }
 
 /**

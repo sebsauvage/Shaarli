@@ -156,22 +156,29 @@ interface BookmarkServiceInterface
     public function bookmarksCountPerTag(array $filteringTags = [], ?string $visibility = null): array;
 
     /**
-     * Returns the list of days containing articles (oldest first)
+     * Return a list of bookmark matching provided period of time.
+     * It also update directly previous and next date outside of given period found in the datastore.
      *
-     * @return array containing days (in format YYYYMMDD).
+     * @param \DateTimeInterface      $from     Starting date.
+     * @param \DateTimeInterface      $to       Ending date.
+     * @param \DateTimeInterface|null $previous (by reference) updated with first created date found before $from.
+     * @param \DateTimeInterface|null $next     (by reference) updated with first created date found after $to.
+     *
+     * @return array List of bookmarks matching provided period of time.
      */
-    public function days(): array;
+    public function findByDate(
+        \DateTimeInterface $from,
+        \DateTimeInterface $to,
+        ?\DateTimeInterface &$previous,
+        ?\DateTimeInterface &$next
+    ): array;
 
     /**
-     * Returns the list of articles for a given day.
+     * Returns the latest bookmark by creation date.
      *
-     * @param string $request day to filter. Format: YYYYMMDD.
-     *
-     * @return Bookmark[] list of shaare found.
-     *
-     * @throws BookmarkNotFoundException
+     * @return Bookmark|null Found Bookmark or null if the datastore is empty.
      */
-    public function filterDay(string $request);
+    public function getLatest(): ?Bookmark;
 
     /**
      * Creates the default database after a fresh install.

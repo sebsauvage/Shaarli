@@ -686,22 +686,6 @@ class BookmarkFileServiceTest extends TestCase
     }
 
     /**
-     * List the days for which bookmarks have been posted
-     */
-    public function testDays()
-    {
-        $this->assertSame(
-            ['20100309', '20100310', '20121206', '20121207', '20130614', '20150310'],
-            $this->publicLinkDB->days()
-        );
-
-        $this->assertSame(
-            ['20100309', '20100310', '20121206', '20121207', '20130614', '20141125', '20150310'],
-            $this->privateLinkDB->days()
-        );
-    }
-
-    /**
      * The URL corresponds to an existing entry in the DB
      */
     public function testGetKnownLinkFromURL()
@@ -1074,33 +1058,105 @@ class BookmarkFileServiceTest extends TestCase
     }
 
     /**
-     * Test filterDay while logged in
+     * Test find by dates in the middle of the datastore (sorted by dates) with a single bookmark as a result.
      */
-    public function testFilterDayLoggedIn(): void
+    public function testFilterByDateMidTimePeriodSingleBookmark(): void
     {
-        $bookmarks = $this->privateLinkDB->filterDay('20121206');
-        $expectedIds = [4, 9, 1, 0];
+        $bookmarks = $this->privateLinkDB->findByDate(
+            DateTime::createFromFormat('Ymd_His', '20121206_150000'),
+            DateTime::createFromFormat('Ymd_His', '20121206_160000'),
+            $before,
+            $after
+        );
 
-        static::assertCount(4, $bookmarks);
-        foreach ($bookmarks as $bookmark) {
-            $i = ($i ?? -1) + 1;
-            static::assertSame($expectedIds[$i], $bookmark->getId());
-        }
+        static::assertCount(1, $bookmarks);
+
+        static::assertSame(9, $bookmarks[0]->getId());
+        static::assertEquals(DateTime::createFromFormat('Ymd_His', '20121206_142300'), $before);
+        static::assertEquals(DateTime::createFromFormat('Ymd_His', '20121206_172539'), $after);
     }
 
     /**
-     * Test filterDay while logged out
+     * Test find by dates in the middle of the datastore (sorted by dates) with a multiple bookmarks as a result.
      */
-    public function testFilterDayLoggedOut(): void
+    public function testFilterByDateMidTimePeriodMultipleBookmarks(): void
     {
-        $bookmarks = $this->publicLinkDB->filterDay('20121206');
-        $expectedIds = [4, 9, 1];
+        $bookmarks = $this->privateLinkDB->findByDate(
+            DateTime::createFromFormat('Ymd_His', '20121206_150000'),
+            DateTime::createFromFormat('Ymd_His', '20121206_180000'),
+            $before,
+            $after
+        );
 
-        static::assertCount(3, $bookmarks);
-        foreach ($bookmarks as $bookmark) {
-            $i = ($i ?? -1) + 1;
-            static::assertSame($expectedIds[$i], $bookmark->getId());
-        }
+        static::assertCount(2, $bookmarks);
+
+        static::assertSame(1, $bookmarks[0]->getId());
+        static::assertSame(9, $bookmarks[1]->getId());
+        static::assertEquals(DateTime::createFromFormat('Ymd_His', '20121206_142300'), $before);
+        static::assertEquals(DateTime::createFromFormat('Ymd_His', '20121206_182539'), $after);
+    }
+
+    /**
+     * Test find by dates at the end of the datastore (sorted by dates).
+     */
+    public function testFilterByDateLastTimePeriod(): void
+    {
+        $after = new DateTime();
+        $bookmarks = $this->privateLinkDB->findByDate(
+            DateTime::createFromFormat('Ymd_His', '20150310_114640'),
+            DateTime::createFromFormat('Ymd_His', '20450101_010101'),
+            $before,
+            $after
+        );
+
+        static::assertCount(1, $bookmarks);
+
+        static::assertSame(41, $bookmarks[0]->getId());
+        static::assertEquals(DateTime::createFromFormat('Ymd_His', '20150310_114633'), $before);
+        static::assertNull($after);
+    }
+
+    /**
+     * Test find by dates at the beginning of the datastore (sorted by dates).
+     */
+    public function testFilterByDateFirstTimePeriod(): void
+    {
+        $before = new DateTime();
+        $bookmarks = $this->privateLinkDB->findByDate(
+            DateTime::createFromFormat('Ymd_His', '20000101_101010'),
+            DateTime::createFromFormat('Ymd_His', '20100309_110000'),
+            $before,
+            $after
+        );
+
+        static::assertCount(1, $bookmarks);
+
+        static::assertSame(11, $bookmarks[0]->getId());
+        static::assertNull($before);
+        static::assertEquals(DateTime::createFromFormat('Ymd_His', '20100310_101010'), $after);
+    }
+
+    /**
+     * Test getLatest with a sticky bookmark: it should be ignored and return the latest by creation date instead.
+     */
+    public function testGetLatestWithSticky(): void
+    {
+        $bookmark = $this->publicLinkDB->getLatest();
+
+        static::assertSame(41, $bookmark->getId());
+    }
+
+    /**
+     * Test getLatest with a sticky bookmark: it should be ignored and return the latest by creation date instead.
+     */
+    public function testGetLatestEmptyDatastore(): void
+    {
+        unlink($this->conf->get('resource.datastore'));
+        $this->publicLinkDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, false);
+
+        $bookmark = $this->publicLinkDB->getLatest();
+
+        static::assertNull($bookmark);
     }
 
     /**

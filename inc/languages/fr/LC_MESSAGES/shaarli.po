@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2020-10-27 19:32+0100\n"
-"PO-Revision-Date: 2020-10-27 19:32+0100\n"
+"POT-Creation-Date: 2020-10-27 19:44+0100\n"
+"PO-Revision-Date: 2020-10-27 19:44+0100\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -20,78 +20,11 @@ msgstr ""
 "X-Poedit-SearchPath-3: init.php\n"
 "X-Poedit-SearchPath-4: plugins\n"
 
-#: application/ApplicationUtils.php:162
-#, php-format
-msgid ""
-"Your PHP version is obsolete! Shaarli requires at least PHP %s, and thus "
-"cannot run. Your PHP version has known security vulnerabilities and should "
-"be updated as soon as possible."
-msgstr ""
-"Votre version de PHP est obsolète ! Shaarli nécessite au moins PHP %s, et ne "
-"peut donc pas fonctionner. Votre version de PHP a des failles de sécurités "
-"connues et devrait être mise à jour au plus tôt."
-
-#: application/ApplicationUtils.php:195 application/ApplicationUtils.php:215
-msgid "directory is not readable"
-msgstr "le répertoire n'est pas accessible en lecture"
-
-#: application/ApplicationUtils.php:218
-msgid "directory is not writable"
-msgstr "le répertoire n'est pas accessible en écriture"
-
-#: application/ApplicationUtils.php:240
-msgid "file is not readable"
-msgstr "le fichier n'est pas accessible en lecture"
-
-#: application/ApplicationUtils.php:243
-msgid "file is not writable"
-msgstr "le fichier n'est pas accessible en écriture"
-
-#: application/ApplicationUtils.php:277
-msgid "Configuration parsing"
-msgstr "Chargement de la configuration"
-
-#: application/ApplicationUtils.php:278
-msgid "Slim Framework (routing, etc.)"
-msgstr "Slim Framwork (routage, etc.)"
-
-#: application/ApplicationUtils.php:279
-msgid "Multibyte (Unicode) string support"
-msgstr "Support des chaînes de caractère multibytes (Unicode)"
-
-#: application/ApplicationUtils.php:280
-msgid "Required to use thumbnails"
-msgstr "Obligatoire pour utiliser les miniatures"
-
-#: application/ApplicationUtils.php:281
-msgid "Localized text sorting (e.g. e->è->f)"
-msgstr "Tri des textes traduits (ex : e->è->f)"
-
-#: application/ApplicationUtils.php:282
-msgid "Better retrieval of bookmark metadata and thumbnail"
-msgstr "Meilleure récupération des meta-données des marque-pages et minatures"
-
-#: application/ApplicationUtils.php:283
-msgid "Use the translation system in gettext mode"
-msgstr "Utiliser le système de traduction en mode gettext"
-
-#: application/ApplicationUtils.php:284
-msgid "Login using LDAP server"
-msgstr "Authentification via un serveur LDAP"
-
-#: application/FileUtils.php:100
-msgid "Provided path is not a directory."
-msgstr "Le chemin fourni n'est pas un dossier."
-
-#: application/FileUtils.php:104
-msgid "Trying to delete a folder outside of Shaarli path."
-msgstr "Tentative de supprimer un dossier en dehors du chemin de Shaarli."
-
-#: application/History.php:179
+#: application/History.php:180
 msgid "History file isn't readable or writable"
 msgstr "Le fichier d'historique n'est pas accessible en lecture ou en écriture"
 
-#: application/History.php:190
+#: application/History.php:191
 msgid "Could not parse history file"
 msgstr "Format incorrect pour le fichier d'historique"
 
@@ -123,27 +56,27 @@ msgstr ""
 "l'extension php-gd doit être chargée pour utiliser les miniatures. Les "
 "miniatures sont désormais désactivées. Rechargez la page."
 
-#: application/Utils.php:385
+#: application/Utils.php:402
 msgid "Setting not set"
 msgstr "Paramètre non défini"
 
-#: application/Utils.php:392
+#: application/Utils.php:409
 msgid "Unlimited"
 msgstr "Illimité"
 
-#: application/Utils.php:395
+#: application/Utils.php:412
 msgid "B"
 msgstr "o"
 
-#: application/Utils.php:395
+#: application/Utils.php:412
 msgid "kiB"
 msgstr "ko"
 
-#: application/Utils.php:395
+#: application/Utils.php:412
 msgid "MiB"
 msgstr "Mo"
 
-#: application/Utils.php:395
+#: application/Utils.php:412
 msgid "GiB"
 msgstr "Go"
 
@@ -156,7 +89,7 @@ msgstr "Vous n'êtes pas autorisé à modifier les données"
 
 #: application/bookmark/BookmarkFileService.php:208
 msgid "This bookmarks already exists"
-msgstr "Ce marque-page existe déjà."
+msgstr "Ce marque-page existe déjà"
 
 #: application/bookmark/BookmarkInitializer.php:39
 msgid "(private bookmark with thumbnail demo)"
@@ -354,7 +287,8 @@ msgid "Direct link"
 msgstr "Liens directs"
 
 #: application/feed/FeedBuilder.php:181
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:96
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:103
+#: tmp/dailyrss.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:179
 msgid "Permalink"
 msgstr "Permalien"
@@ -537,19 +471,35 @@ msgstr "Outils"
 msgid "Search: "
 msgstr "Recherche : "
 
-#: application/front/controller/visitor/DailyController.php:45
-msgid "Today"
-msgstr "Aujourd'hui"
+#: application/front/controller/visitor/DailyController.php:200
+msgid "day"
+msgstr "jour"
 
-#: application/front/controller/visitor/DailyController.php:47
-msgid "Yesterday"
-msgstr "Hier"
-
-#: application/front/controller/visitor/DailyController.php:85
+#: application/front/controller/visitor/DailyController.php:200
+#: application/front/controller/visitor/DailyController.php:203
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:48
 msgid "Daily"
 msgstr "Quotidien"
+
+#: application/front/controller/visitor/DailyController.php:201
+msgid "week"
+msgstr "semaine"
+
+#: application/front/controller/visitor/DailyController.php:201
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
+msgid "Weekly"
+msgstr "Hebdomadaire"
+
+#: application/front/controller/visitor/DailyController.php:202
+msgid "month"
+msgstr "mois"
+
+#: application/front/controller/visitor/DailyController.php:202
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
+msgid "Monthly"
+msgstr "Mensuel"
 
 #: application/front/controller/visitor/ErrorController.php:33
 msgid "An unexpected error occurred."
@@ -616,7 +566,7 @@ msgstr "Mur d'images"
 
 #: application/front/controller/visitor/TagCloudController.php:88
 msgid "Tag "
-msgstr "Tag"
+msgstr "Tag "
 
 #: application/front/exceptions/AlreadyInstalledException.php:11
 msgid "Shaarli has already been installed. Login to edit the configuration."
@@ -643,6 +593,86 @@ msgstr ""
 #: application/front/exceptions/WrongTokenException.php:16
 msgid "Wrong token."
 msgstr "Jeton invalide."
+
+#: application/helper/ApplicationUtils.php:162
+#, php-format
+msgid ""
+"Your PHP version is obsolete! Shaarli requires at least PHP %s, and thus "
+"cannot run. Your PHP version has known security vulnerabilities and should "
+"be updated as soon as possible."
+msgstr ""
+"Votre version de PHP est obsolète ! Shaarli nécessite au moins PHP %s, et ne "
+"peut donc pas fonctionner. Votre version de PHP a des failles de sécurités "
+"connues et devrait être mise à jour au plus tôt."
+
+#: application/helper/ApplicationUtils.php:195
+#: application/helper/ApplicationUtils.php:215
+msgid "directory is not readable"
+msgstr "le répertoire n'est pas accessible en lecture"
+
+#: application/helper/ApplicationUtils.php:218
+msgid "directory is not writable"
+msgstr "le répertoire n'est pas accessible en écriture"
+
+#: application/helper/ApplicationUtils.php:240
+msgid "file is not readable"
+msgstr "le fichier n'est pas accessible en lecture"
+
+#: application/helper/ApplicationUtils.php:243
+msgid "file is not writable"
+msgstr "le fichier n'est pas accessible en écriture"
+
+#: application/helper/ApplicationUtils.php:277
+msgid "Configuration parsing"
+msgstr "Chargement de la configuration"
+
+#: application/helper/ApplicationUtils.php:278
+msgid "Slim Framework (routing, etc.)"
+msgstr "Slim Framwork (routage, etc.)"
+
+#: application/helper/ApplicationUtils.php:279
+msgid "Multibyte (Unicode) string support"
+msgstr "Support des chaînes de caractère multibytes (Unicode)"
+
+#: application/helper/ApplicationUtils.php:280
+msgid "Required to use thumbnails"
+msgstr "Obligatoire pour utiliser les miniatures"
+
+#: application/helper/ApplicationUtils.php:281
+msgid "Localized text sorting (e.g. e->è->f)"
+msgstr "Tri des textes traduits (ex : e->è->f)"
+
+#: application/helper/ApplicationUtils.php:282
+msgid "Better retrieval of bookmark metadata and thumbnail"
+msgstr "Meilleure récupération des meta-données des marque-pages et minatures"
+
+#: application/helper/ApplicationUtils.php:283
+msgid "Use the translation system in gettext mode"
+msgstr "Utiliser le système de traduction en mode gettext"
+
+#: application/helper/ApplicationUtils.php:284
+msgid "Login using LDAP server"
+msgstr "Authentification via un serveur LDAP"
+
+#: application/helper/DailyPageHelper.php:172
+msgid "Week"
+msgstr "Semaine"
+
+#: application/helper/DailyPageHelper.php:176
+msgid "Today"
+msgstr "Aujourd'hui"
+
+#: application/helper/DailyPageHelper.php:178
+msgid "Yesterday"
+msgstr "Hier"
+
+#: application/helper/FileUtils.php:100
+msgid "Provided path is not a directory."
+msgstr "Le chemin fourni n'est pas un dossier."
+
+#: application/helper/FileUtils.php:104
+msgid "Trying to delete a folder outside of Shaarli path."
+msgstr "Tentative de supprimer un dossier en dehors du chemin de Shaarli."
 
 #: application/legacy/LegacyLinkDB.php:131
 msgid "You are not authorized to add a link."
@@ -1103,25 +1133,30 @@ msgstr "Aucune"
 msgid "Save"
 msgstr "Enregistrer"
 
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
-msgid "The Daily Shaarli"
-msgstr "Le Quotidien Shaarli"
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
+msgid "1 RSS entry per :type"
+msgid_plural ""
+msgstr[0] "1 entrée RSS par :type"
+msgstr[1] ""
 
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:17
-msgid "1 RSS entry per day"
-msgstr "1 entrée RSS par jour"
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:49
+msgid "Previous :type"
+msgid_plural ""
+msgstr[0] ":type précédent"
+msgstr[1] "Jour précédent"
 
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:37
-msgid "Previous day"
-msgstr "Jour précédent"
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:56
+#: tmp/dailyrss.b91ef64efc3688266305ea9b42e5017e.rtpl.php:7
+msgid "All links of one :type in a single page."
+msgid_plural ""
+msgstr[0] "Tous les liens d'un :type sur une page."
+msgstr[1] "Tous les liens d'un jour sur une page."
 
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:44
-msgid "All links of one day in a single page."
-msgstr "Tous les liens d'un jour sur une page."
-
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:51
-msgid "Next day"
-msgstr "Jour suivant"
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:63
+msgid "Next :type"
+msgid_plural ""
+msgstr[0] ":type suivant"
+msgstr[1] ""
 
 #: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:21
 msgid "Edit Shaare"
@@ -1821,8 +1856,11 @@ msgstr ""
 "Glisser ce lien dans votre barre de favoris ou cliquer droit dessus et « "
 "Ajouter aux favoris »"
 
-#~ msgid "Rename"
-#~ msgstr "Renommer"
+#~ msgid "Display:"
+#~ msgstr "Afficher :"
+
+#~ msgid "The Daily Shaarli"
+#~ msgstr "Le Quotidien Shaarli"
 
 #, fuzzy
 #~| msgid "Selection"
