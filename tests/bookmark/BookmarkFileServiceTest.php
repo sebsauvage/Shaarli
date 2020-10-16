@@ -690,12 +690,12 @@ class BookmarkFileServiceTest extends TestCase
      */
     public function testDays()
     {
-        $this->assertEquals(
+        $this->assertSame(
             ['20100309', '20100310', '20121206', '20121207', '20130614', '20150310'],
             $this->publicLinkDB->days()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             ['20100309', '20100310', '20121206', '20121207', '20130614', '20141125', '20150310'],
             $this->privateLinkDB->days()
         );
