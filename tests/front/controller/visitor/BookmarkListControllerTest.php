@@ -292,6 +292,37 @@ class BookmarkListControllerTest extends TestCase
     }
 
     /**
+     * Test GET /shaare/{hash}?key={key} - Find a link by hash using a private link.
+     */
+    public function testPermalinkWithPrivateKey(): void
+    {
+        $hash = 'abcdef';
+        $privateKey = 'this is a private key';
+
+        $assignedVariables = [];
+        $this->assignTemplateVars($assignedVariables);
+
+        $request = $this->createMock(Request::class);
+        $request->method('getParam')->willReturnCallback(function (string $key, $default = null) use ($privateKey) {
+            return $key === 'key' ? $privateKey : $default;
+        });
+        $response = new Response();
+
+        $this->container->bookmarkService
+            ->expects(static::once())
+            ->method('findByHash')
+            ->with($hash, $privateKey)
+            ->willReturn((new Bookmark())->setId(123)->setTitle('Title 1')->setUrl('http://url1.tld'))
+        ;
+
+        $result = $this->controller->permalink($request, $response, ['hash' => $hash]);
+
+        static::assertSame(200, $result->getStatusCode());
+        static::assertSame('linklist', (string) $result->getBody());
+        static::assertCount(1, $assignedVariables['links']);
+    }
+
+    /**
      * Test getting link list with thumbnail updates.
      *   -> 2 thumbnails update, only 1 datastore write
      */

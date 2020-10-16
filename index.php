@@ -128,6 +128,7 @@ $app->group('/admin', function () {
     $this->get('/add-shaare', '\Shaarli\Front\Controller\Admin\ManageShaareController:addShaare');
     $this->get('/shaare', '\Shaarli\Front\Controller\Admin\ManageShaareController:displayCreateForm');
     $this->get('/shaare/{id:[0-9]+}', '\Shaarli\Front\Controller\Admin\ManageShaareController:displayEditForm');
+    $this->get('/shaare/private/{hash}', '\Shaarli\Front\Controller\Admin\ManageShaareController:sharePrivate');
     $this->post('/shaare', '\Shaarli\Front\Controller\Admin\ManageShaareController:save');
     $this->get('/shaare/delete', '\Shaarli\Front\Controller\Admin\ManageShaareController:deleteBookmark');
     $this->get('/shaare/visibility', '\Shaarli\Front\Controller\Admin\ManageShaareController:changeVisibility');

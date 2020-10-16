@@ -97,12 +97,15 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function findByHash(string $hash): Bookmark
+    public function findByHash(string $hash, string $privateKey = null): Bookmark
     {
         $bookmark = $this->bookmarkFilter->filter(BookmarkFilter::$FILTER_HASH, $hash);
         // PHP 7.3 introduced array_key_first() to avoid this hack
         $first = reset($bookmark);
-        if (! $this->isLoggedIn && $first->isPrivate()) {
+        if (!$this->isLoggedIn
+            && $first->isPrivate()
+            && (empty($privateKey) || $privateKey !== $first->getAdditionalContentEntry('private_key'))
+        ) {
             throw new Exception('Not authorized');
         }
 

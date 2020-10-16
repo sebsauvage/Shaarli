@@ -20,13 +20,14 @@ interface BookmarkServiceInterface
     /**
      * Find a bookmark by hash
      *
-     * @param string $hash
+     * @param string      $hash       Bookmark's hash
+     * @param string|null $privateKey Optional key used to access private links while logged out
      *
      * @return Bookmark
      *
      * @throws \Exception
      */
-    public function findByHash(string $hash): Bookmark;
+    public function findByHash(string $hash, string $privateKey = null);
 
     /**
      * @param $url

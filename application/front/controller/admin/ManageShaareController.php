@@ -321,6 +321,32 @@ class ManageShaareController extends ShaarliAdminController
     }
 
     /**
+     * GET /admin/shaare/private/{hash} - Attach a private key to given bookmark, then redirect to the sharing URL.
+     */
+    public function sharePrivate(Request $request, Response $response, array $args): Response
+    {
+        $this->checkToken($request);
+
+        $hash = $args['hash'] ?? '';
+        $bookmark = $this->container->bookmarkService->findByHash($hash);
+
+        if ($bookmark->isPrivate() !== true) {
+            return $this->redirect($response, '/shaare/' . $hash);
+        }
+
+        if (empty($bookmark->getAdditionalContentEntry('private_key'))) {
+            $privateKey = bin2hex(random_bytes(16));
+            $bookmark->addAdditionalContentEntry('private_key', $privateKey);
+            $this->container->bookmarkService->set($bookmark);
+        }
+
+        return $this->redirect(
+            $response,
+            '/shaare/' . $hash . '?key=' . $bookmark->getAdditionalContentEntry('private_key')
+        );
+    }
+
+    /**
      * Helper function used to display the shaare form whether it's a new or existing bookmark.
      *
      * @param array $link data used in template, either from parameters or from the data store
