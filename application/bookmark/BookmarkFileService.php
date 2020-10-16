@@ -349,7 +349,7 @@ class BookmarkFileService implements BookmarkServiceInterface
         $bookmarkDays = array_keys($bookmarkDays);
         sort($bookmarkDays);
 
-        return $bookmarkDays;
+        return array_map('strval', $bookmarkDays);
     }
 
     /**
