@@ -31,7 +31,7 @@
       {loop="$linksToDisplay"}
         <div class="picwall-pictureframe" role="listitem">
           {ignore}RainTPL hack: put the 2 src on two different line to avoid path replace bug{/ignore}
-          <img data-src="{$value.thumbnail}#" class="b-lazy"
+          <img data-src="{$root_path}/{$value.thumbnail}#" class="b-lazy"
                src=""
                alt="" width="{$thumbnails_width}" height="{$thumbnails_height}" />
           <a href="{$value.real_url}"><span class="info">{$value.title}</span></a>

@@ -10,7 +10,7 @@
     {/if}
     &middot;
     {'The personal, minimalist, super-fast, database free, bookmarking service'|t} {'by the Shaarli community'|t} &middot;
-    <a href="{$base_path}/doc/html/index.html" rel="nofollow">{'Documentation'|t}</a>
+    <a href="{$root_path}/doc/html/index.html" rel="nofollow">{'Documentation'|t}</a>
       {loop="$plugins_footer.text"}
           {$value}
       {/loop}
@@ -25,7 +25,7 @@
 {/loop}
 
 {loop="$plugins_footer.js_files"}
-	<script src="{$base_path}/{$value}#"></script>
+	<script src="{$root_path}/{$value}#"></script>
 {/loop}
 
 <div id="js-translations" class="hidden">
