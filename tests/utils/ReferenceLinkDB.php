@@ -82,7 +82,7 @@ class ReferenceLinkDB
             'This guide extends and expands on PSR-1, the basic coding standard.',
             0,
             DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20121206_152312'),
-            ''
+            'coding-style standards quality assurance'
         );
 
         $this->addLink(

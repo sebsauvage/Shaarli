@@ -748,6 +748,10 @@ class BookmarkFileServiceTest extends TestCase
                 // They need to be grouped with the first case found - order by date DESC: `sTuff`.
                 'sTuff' => 2,
                 'ut' => 1,
+                'assurance' => 1,
+                'coding-style' => 1,
+                'quality' => 1,
+                'standards' => 1,
             ],
             $this->publicLinkDB->bookmarksCountPerTag()
         );
@@ -776,6 +780,10 @@ class BookmarkFileServiceTest extends TestCase
                 'tag3' => 1,
                 'tag4' => 1,
                 'ut' => 1,
+                'assurance' => 1,
+                'coding-style' => 1,
+                'quality' => 1,
+                'standards' => 1,
             ],
             $this->privateLinkDB->bookmarksCountPerTag()
         );
@@ -918,6 +926,10 @@ class BookmarkFileServiceTest extends TestCase
             'tag4' => 1,
             'ut' => 1,
             'w3c' => 1,
+            'assurance' => 1,
+            'coding-style' => 1,
+            'quality' => 1,
+            'standards' => 1,
         ];
         $tags = $this->privateLinkDB->bookmarksCountPerTag();
 
@@ -1016,6 +1028,10 @@ class BookmarkFileServiceTest extends TestCase
             'stallman' => 1,
             'ut' => 1,
             'w3c' => 1,
+            'assurance' => 1,
+            'coding-style' => 1,
+            'quality' => 1,
+            'standards' => 1,
         ];
         $bookmark = new Bookmark();
         $bookmark->setTags(['newTagToCount', BookmarkMarkdownFormatter::NO_MD_TAG]);

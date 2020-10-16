@@ -12,10 +12,13 @@ namespace Shaarli\Formatter;
  */
 class BookmarkDefaultFormatter extends BookmarkFormatter
 {
+    const SEARCH_HIGHLIGHT_OPEN = '|@@HIGHLIGHT';
+    const SEARCH_HIGHLIGHT_CLOSE = 'HIGHLIGHT@@|';
+
     /**
      * @inheritdoc
      */
-    public function formatTitle($bookmark)
+    protected function formatTitle($bookmark)
     {
         return escape($bookmark->getTitle());
     }
@@ -23,10 +26,28 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
     /**
      * @inheritdoc
      */
-    public function formatDescription($bookmark)
+    protected function formatTitleHtml($bookmark)
+    {
+        $title = $this->tokenizeSearchHighlightField(
+            $bookmark->getTitle() ?? '',
+            $bookmark->getAdditionalContentEntry('search_highlight')['title'] ?? []
+        );
+
+        return $this->replaceTokens(escape($title));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function formatDescription($bookmark)
     {
         $indexUrl = ! empty($this->contextData['index_url']) ? $this->contextData['index_url'] : '';
-        return format_description(escape($bookmark->getDescription()), $indexUrl);
+        $description = $this->tokenizeSearchHighlightField(
+            $bookmark->getDescription() ?? '',
+            $bookmark->getAdditionalContentEntry('search_highlight')['description'] ?? []
+        );
+
+        return $this->replaceTokens(format_description(escape($description), $indexUrl));
     }
 
     /**
@@ -40,7 +61,27 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
     /**
      * @inheritdoc
      */
-    public function formatTagString($bookmark)
+    protected function formatTagListHtml($bookmark)
+    {
+        if (empty($bookmark->getAdditionalContentEntry('search_highlight')['tags'])) {
+            return $this->formatTagList($bookmark);
+        }
+
+        $tags = $this->tokenizeSearchHighlightField(
+            $bookmark->getTagsString(),
+            $bookmark->getAdditionalContentEntry('search_highlight')['tags']
+        );
+        $tags = $this->filterTagList(explode(' ', $tags));
+        $tags = escape($tags);
+        $tags = $this->replaceTokensArray($tags);
+
+        return $tags;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function formatTagString($bookmark)
     {
         return implode(' ', $this->formatTagList($bookmark));
     }
@@ -48,7 +89,7 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
     /**
      * @inheritdoc
      */
-    public function formatUrl($bookmark)
+    protected function formatUrl($bookmark)
     {
         if ($bookmark->isNote() && isset($this->contextData['index_url'])) {
             return rtrim($this->contextData['index_url'], '/') . '/' . escape(ltrim($bookmark->getUrl(), '/'));
@@ -80,8 +121,89 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
     /**
      * @inheritdoc
      */
+    protected function formatUrlHtml($bookmark)
+    {
+        $url = $this->tokenizeSearchHighlightField(
+            $bookmark->getUrl() ?? '',
+            $bookmark->getAdditionalContentEntry('search_highlight')['url'] ?? []
+        );
+
+        return $this->replaceTokens(escape($url));
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function formatThumbnail($bookmark)
     {
         return escape($bookmark->getThumbnail());
+    }
+
+    /**
+     * Insert search highlight token in provided field content based on a list of search result positions
+     *
+     * @param string     $fieldContent
+     * @param array|null $positions    List of of search results with 'start' and 'end' positions.
+     *
+     * @return string Updated $fieldContent.
+     */
+    protected function tokenizeSearchHighlightField(string $fieldContent, ?array $positions): string
+    {
+        if (empty($positions)) {
+            return $fieldContent;
+        }
+
+        $insertedTokens = 0;
+        $tokenLength = strlen(static::SEARCH_HIGHLIGHT_OPEN);
+        foreach ($positions as $position) {
+            $position = [
+                'start' => $position['start'] + ($insertedTokens * $tokenLength),
+                'end' => $position['end'] + ($insertedTokens * $tokenLength),
+            ];
+
+            $content = mb_substr($fieldContent, 0, $position['start']);
+            $content .= static::SEARCH_HIGHLIGHT_OPEN;
+            $content .= mb_substr($fieldContent, $position['start'], $position['end'] - $position['start']);
+            $content .= static::SEARCH_HIGHLIGHT_CLOSE;
+            $content .= mb_substr($fieldContent, $position['end']);
+
+            $fieldContent = $content;
+
+            $insertedTokens += 2;
+        }
+
+        return $fieldContent;
+    }
+
+    /**
+     * Replace search highlight tokens with HTML highlighted span.
+     *
+     * @param string $fieldContent
+     *
+     * @return string updated content.
+     */
+    protected function replaceTokens(string $fieldContent): string
+    {
+        return str_replace(
+            [static::SEARCH_HIGHLIGHT_OPEN, static::SEARCH_HIGHLIGHT_CLOSE],
+            ['<span class="search-highlight">', '</span>'],
+            $fieldContent
+        );
+    }
+
+    /**
+     * Apply replaceTokens to an array of content strings.
+     *
+     * @param string[] $fieldContents
+     *
+     * @return array
+     */
+    protected function replaceTokensArray(array $fieldContents): array
+    {
+        foreach ($fieldContents as &$entry) {
+            $entry = $this->replaceTokens($entry);
+        }
+
+        return $fieldContents;
     }
 }

@@ -56,7 +56,10 @@ class BookmarkMarkdownFormatter extends BookmarkDefaultFormatter
             return parent::formatDescription($bookmark);
         }
 
-        $processedDescription = $bookmark->getDescription();
+        $processedDescription = $this->tokenizeSearchHighlightField(
+            $bookmark->getDescription() ?? '',
+            $bookmark->getAdditionalContentEntry('search_highlight')['description'] ?? []
+        );
         $processedDescription = $this->filterProtocols($processedDescription);
         $processedDescription = $this->formatHashTags($processedDescription);
         $processedDescription = $this->reverseEscapedHtml($processedDescription);
@@ -65,6 +68,7 @@ class BookmarkMarkdownFormatter extends BookmarkDefaultFormatter
             ->setBreaksEnabled(true)
             ->text($processedDescription);
         $processedDescription = $this->sanitizeHtml($processedDescription);
+        $processedDescription = $this->replaceTokens($processedDescription);
 
         if (!empty($processedDescription)) {
             $processedDescription = '<div class="markdown">'. $processedDescription . '</div>';
