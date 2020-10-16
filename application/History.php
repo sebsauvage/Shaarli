@@ -4,6 +4,7 @@ namespace Shaarli;
 use DateTime;
 use Exception;
 use Shaarli\Bookmark\Bookmark;
+use Shaarli\Helper\FileUtils;
 
 /**
  * Class History

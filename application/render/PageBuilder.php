@@ -5,9 +5,9 @@ namespace Shaarli\Render;
 use Exception;
 use Psr\Log\LoggerInterface;
 use RainTPL;
-use Shaarli\ApplicationUtils;
 use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
+use Shaarli\Helper\ApplicationUtils;
 use Shaarli\Security\SessionManager;
 use Shaarli\Thumbnailer;
 

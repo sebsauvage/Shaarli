@@ -2,6 +2,8 @@
 
 namespace Shaarli;
 
+use Shaarli\Helper\ApplicationUtils;
+
 /**
  * Fake ApplicationUtils class to avoid HTTP requests
  */

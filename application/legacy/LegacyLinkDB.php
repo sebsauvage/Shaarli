@@ -8,7 +8,7 @@ use DateTime;
 use Iterator;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Exceptions\IOException;
-use Shaarli\FileUtils;
+use Shaarli\Helper\FileUtils;
 use Shaarli\Render\PageCacheManager;
 
 /**

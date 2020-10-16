@@ -1,5 +1,5 @@
 <?php
-namespace Shaarli;
+namespace Shaarli\Helper;
 
 use Exception;
 use Shaarli\Config\ConfigManager;

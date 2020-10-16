@@ -1,6 +1,6 @@
 <?php
 
-namespace Shaarli;
+namespace Shaarli\Helper;
 
 use Shaarli\Exceptions\IOException;
 
