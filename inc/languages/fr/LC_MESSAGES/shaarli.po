@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2020-09-10 16:06+0200\n"
-"PO-Revision-Date: 2020-09-10 16:07+0200\n"
+"POT-Creation-Date: 2020-10-16 20:01+0200\n"
+"PO-Revision-Date: 2020-10-16 20:02+0200\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -107,28 +107,22 @@ msgstr "Mo"
 msgid "GiB"
 msgstr "Go"
 
-#: application/bookmark/BookmarkFileService.php:174
-#: application/bookmark/BookmarkFileService.php:199
+#: application/bookmark/BookmarkFileService.php:180
+#: application/bookmark/BookmarkFileService.php:202
 #: application/bookmark/BookmarkFileService.php:224
-#: application/bookmark/BookmarkFileService.php:241
+#: application/bookmark/BookmarkFileService.php:238
 msgid "You're not authorized to alter the datastore"
 msgstr "Vous n'êtes pas autorisé à modifier les données"
-
-#: application/bookmark/BookmarkFileService.php:177
-#: application/bookmark/BookmarkFileService.php:202
-#: application/bookmark/BookmarkFileService.php:244
-msgid "Provided data is invalid"
-msgstr "Les informations fournies ne sont pas valides"
 
 #: application/bookmark/BookmarkFileService.php:205
 msgid "This bookmarks already exists"
 msgstr "Ce marque-page existe déjà."
 
-#: application/bookmark/BookmarkInitializer.php:37
+#: application/bookmark/BookmarkInitializer.php:39
 msgid "(private bookmark with thumbnail demo)"
 msgstr "(marque page privé avec une miniature)"
 
-#: application/bookmark/BookmarkInitializer.php:40
+#: application/bookmark/BookmarkInitializer.php:42
 msgid ""
 "Shaarli will automatically pick up the thumbnail for links to a variety of "
 "websites.\n"
@@ -151,11 +145,11 @@ msgstr ""
 "\n"
 "Maintenant, vous pouvez modifier ou supprimer les shaares créés par défaut.\n"
 
-#: application/bookmark/BookmarkInitializer.php:53
+#: application/bookmark/BookmarkInitializer.php:55
 msgid "Note: Shaare descriptions"
 msgstr "Note : Description des Shaares"
 
-#: application/bookmark/BookmarkInitializer.php:55
+#: application/bookmark/BookmarkInitializer.php:57
 msgid ""
 "Adding a shaare without entering a URL creates a text-only \"note\" post "
 "such as this one.\n"
@@ -219,7 +213,7 @@ msgstr ""
 "| Citron   | Fruit     | Jaune | 30    |\n"
 "| Carotte  | Légume | Orange    | 14    |\n"
 
-#: application/bookmark/BookmarkInitializer.php:89
+#: application/bookmark/BookmarkInitializer.php:91
 #: application/legacy/LegacyLinkDB.php:246
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:49
@@ -231,7 +225,7 @@ msgstr ""
 "Le gestionnaire de marque-pages personnel, minimaliste, et sans base de "
 "données"
 
-#: application/bookmark/BookmarkInitializer.php:92
+#: application/bookmark/BookmarkInitializer.php:94
 msgid ""
 "Welcome to Shaarli!\n"
 "\n"
@@ -463,11 +457,11 @@ msgstr "Votre mot de passe a été modifié"
 msgid "Plugin Administration"
 msgstr "Administration des plugins"
 
-#: application/front/controller/admin/PluginsController.php:75
+#: application/front/controller/admin/PluginsController.php:76
 msgid "Setting successfully saved."
 msgstr "Les paramètres ont été sauvegardés avec succès."
 
-#: application/front/controller/admin/PluginsController.php:78
+#: application/front/controller/admin/PluginsController.php:79
 msgid "Error while saving plugin configuration: "
 msgstr ""
 "Une erreur s'est produite lors de la sauvegarde de la configuration des "
@@ -484,7 +478,7 @@ msgstr "Mise à jour des miniatures"
 msgid "Tools"
 msgstr "Outils"
 
-#: application/front/controller/visitor/BookmarkListController.php:115
+#: application/front/controller/visitor/BookmarkListController.php:116
 msgid "Search: "
 msgstr "Recherche : "
 
@@ -505,6 +499,10 @@ msgstr "Quotidien"
 #: application/front/controller/visitor/ErrorController.php:36
 msgid "An unexpected error occurred."
 msgstr "Une erreur inattendue s'est produite."
+
+#: application/front/controller/visitor/ErrorNotFoundController.php:25
+msgid "Requested page could not be found."
+msgstr ""
 
 #: application/front/controller/visitor/InstallController.php:73
 #, php-format
@@ -556,11 +554,9 @@ msgstr "Nom d'utilisateur ou mot de passe incorrect(s)."
 msgid "Picture wall"
 msgstr "Mur d'images"
 
-#: application/front/controller/visitor/TagCloudController.php:80
-#, fuzzy
-#| msgid "Tag list"
+#: application/front/controller/visitor/TagCloudController.php:88
 msgid "Tag "
-msgstr "Liste des tags"
+msgstr "Tag"
 
 #: application/front/exceptions/AlreadyInstalledException.php:11
 msgid "Shaarli has already been installed. Login to edit the configuration."
@@ -664,7 +660,7 @@ msgstr ""
 "a été importé avec succès en %d secondes : %d liens importés, %d liens "
 "écrasés, %d liens ignorés."
 
-#: application/plugin/PluginManager.php:122
+#: application/plugin/PluginManager.php:124
 msgid " [plugin incompatibility]: "
 msgstr " [incompatibilité de l'extension] : "
 
@@ -682,7 +678,7 @@ msgstr "Impossible de purger %s : le répertoire n'existe pas"
 msgid "An error occurred while running the update "
 msgstr "Une erreur s'est produite lors de l'exécution de la mise à jour "
 
-#: index.php:62
+#: index.php:65
 msgid "Shared bookmarks on "
 msgstr "Liens partagés sur "
 
@@ -699,11 +695,11 @@ msgstr "Shaare"
 msgid "Adds the addlink input on the linklist page."
 msgstr "Ajoute le formulaire d'ajout de liens sur la page principale."
 
-#: plugins/archiveorg/archiveorg.php:26
+#: plugins/archiveorg/archiveorg.php:28
 msgid "View on archive.org"
 msgstr "Voir sur archive.org"
 
-#: plugins/archiveorg/archiveorg.php:39
+#: plugins/archiveorg/archiveorg.php:41
 msgid "For each link, add an Archive.org icon."
 msgstr "Pour chaque lien, ajoute une icône pour Archive.org."
 
@@ -881,17 +877,13 @@ msgid "Case sensitive"
 msgstr "Sensible à la casse"
 
 #: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:34
-msgid "Rename"
-msgstr "Renommer"
+#: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:68
+msgid "Rename tag"
+msgstr "Renommer le tag"
 
 #: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:93
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:173
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:147
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:147
-#: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:67
-msgid "Delete"
-msgstr "Supprimer"
+msgid "Delete tag"
+msgstr "Supprimer le tag"
 
 #: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:39
 msgid "You can also edit tags in the"
@@ -1121,6 +1113,14 @@ msgstr "la syntaxe Markdown"
 #: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:88
 msgid "Apply Changes"
 msgstr "Appliquer les changements"
+
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:93
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:173
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:147
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:147
+#: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:67
+msgid "Delete"
+msgstr "Supprimer"
 
 #: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
 msgid "Export Database"
@@ -1382,8 +1382,8 @@ msgstr "Déplier tout"
 
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:47
 #: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:47
-msgid "Are you sure you want to delete this link?"
-msgstr "Êtes-vous sûr de vouloir supprimer ce lien ?"
+msgid "Are you sure you want to delete this tag?"
+msgstr "Êtes-vous sûr de vouloir supprimer ce tag ?"
 
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:11
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:11
@@ -1525,10 +1525,6 @@ msgstr "Lister tous les liens avec ces tags"
 msgid "Tag list"
 msgstr "Liste des tags"
 
-#: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:68
-msgid "Rename tag"
-msgstr "Renommer le tag"
-
 #: tmp/tag.sort.b91ef64efc3688266305ea9b42e5017e.rtpl.php:3
 #: tmp/tag.sort.cedf684561d925457130839629000a81.rtpl.php:3
 msgid "Sort by:"
@@ -1663,6 +1659,12 @@ msgid ""
 msgstr ""
 "Glisser ce lien dans votre barre de favoris ou cliquer droit dessus et « "
 "Ajouter aux favoris »"
+
+#~ msgid "Provided data is invalid"
+#~ msgstr "Les informations fournies ne sont pas valides"
+
+#~ msgid "Rename"
+#~ msgstr "Renommer"
 
 #, fuzzy
 #~| msgid "Selection"
