@@ -151,6 +151,12 @@ $app->group('/api/v1', function () {
     $this->get('/history', '\Shaarli\Api\Controllers\HistoryController:getHistory')->setName('getHistory');
 })->add('\Shaarli\Api\ApiMiddleware');
 
-$response = $app->run(true);
-
-$app->respond($response);
+try {
+    $response = $app->run(true);
+    $app->respond($response);
+} catch (Throwable $e) {
+    die(nl2br(
+        'An unexpected error happened, and the error template could not be displayed.' . PHP_EOL . PHP_EOL .
+       exception2text($e)
+    ));
+}
