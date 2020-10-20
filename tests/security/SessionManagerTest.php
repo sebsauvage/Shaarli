@@ -2,6 +2,7 @@
 
 namespace Shaarli\Security;
 
+use Shaarli\FakeConfigManager;
 use Shaarli\TestCase;
 
 /**
@@ -12,7 +13,7 @@ class SessionManagerTest extends TestCase
     /** @var array Session ID hashes */
     protected static $sidHashes = null;
 
-    /** @var \FakeConfigManager ConfigManager substitute for testing */
+    /** @var FakeConfigManager ConfigManager substitute for testing */
     protected $conf = null;
 
     /** @var array $_SESSION array for testing */
@@ -34,7 +35,7 @@ class SessionManagerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->conf = new \FakeConfigManager([
+        $this->conf = new FakeConfigManager([
             'credentials.login' => 'johndoe',
             'credentials.salt' => 'salt',
             'security.session_protection_disabled' => false,

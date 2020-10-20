@@ -3,7 +3,7 @@
 namespace Shaarli\Render;
 
 use Exception;
-use exceptions\MissingBasePathException;
+use Psr\Log\LoggerInterface;
 use RainTPL;
 use Shaarli\ApplicationUtils;
 use Shaarli\Bookmark\BookmarkServiceInterface;
@@ -35,6 +35,9 @@ class PageBuilder
      */
     protected $session;
 
+    /** @var LoggerInterface */
+    protected $logger;
+
     /**
      * @var BookmarkServiceInterface $bookmarkService instance.
      */
@@ -54,17 +57,25 @@ class PageBuilder
      * PageBuilder constructor.
      * $tpl is initialized at false for lazy loading.
      *
-     * @param ConfigManager            $conf    Configuration Manager instance (reference).
-     * @param array                    $session $_SESSION array
-     * @param BookmarkServiceInterface $linkDB  instance.
-     * @param string                   $token   Session token
-     * @param bool                     $isLoggedIn
+     * @param ConfigManager $conf Configuration Manager instance (reference).
+     * @param array $session $_SESSION array
+     * @param LoggerInterface $logger
+     * @param null $linkDB instance.
+     * @param null $token Session token
+     * @param bool $isLoggedIn
      */
-    public function __construct(&$conf, $session, $linkDB = null, $token = null, $isLoggedIn = false)
-    {
+    public function __construct(
+        ConfigManager &$conf,
+        array $session,
+        LoggerInterface $logger,
+        $linkDB = null,
+        $token = null,
+        $isLoggedIn = false
+    ) {
         $this->tpl = false;
         $this->conf = $conf;
         $this->session = $session;
+        $this->logger = $logger;
         $this->bookmarkService = $linkDB;
         $this->token = $token;
         $this->isLoggedIn = $isLoggedIn;
@@ -98,7 +109,7 @@ class PageBuilder
             $this->tpl->assign('newVersion', escape($version));
             $this->tpl->assign('versionError', '');
         } catch (Exception $exc) {
-            logm($this->conf->get('resource.log'), $_SERVER['REMOTE_ADDR'], $exc->getMessage());
+            $this->logger->error(format_log('Error: ' . $exc->getMessage(), client_ip_id($_SERVER)));
             $this->tpl->assign('newVersion', '');
             $this->tpl->assign('versionError', escape($exc->getMessage()));
         }

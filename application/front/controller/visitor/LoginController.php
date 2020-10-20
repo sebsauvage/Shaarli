@@ -65,7 +65,6 @@ class LoginController extends ShaarliVisitorController
         }
 
         if (!$this->container->loginManager->checkCredentials(
-                $this->container->environment['REMOTE_ADDR'],
                 client_ip_id($this->container->environment),
                 $request->getParam('login'),
                 $request->getParam('password')

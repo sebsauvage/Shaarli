@@ -25,9 +25,12 @@ require_once 'application/Utils.php';
 
 require_once __DIR__ . '/init.php';
 
+use Katzgrau\KLogger\Logger;
+use Psr\Log\LogLevel;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Container\ContainerBuilder;
 use Shaarli\Languages;
+use Shaarli\Security\BanManager;
 use Shaarli\Security\CookieManager;
 use Shaarli\Security\LoginManager;
 use Shaarli\Security\SessionManager;
@@ -48,10 +51,22 @@ if ($conf->get('dev.debug', false)) {
     });
 }
 
+$logger = new Logger(
+    dirname($conf->get('resource.log')),
+    !$conf->get('dev.debug') ? LogLevel::INFO : LogLevel::DEBUG,
+    ['filename' => basename($conf->get('resource.log'))]
+);
 $sessionManager = new SessionManager($_SESSION, $conf, session_save_path());
 $sessionManager->initialize();
 $cookieManager = new CookieManager($_COOKIE);
-$loginManager = new LoginManager($conf, $sessionManager, $cookieManager);
+$banManager = new BanManager(
+    $conf->get('security.trusted_proxies', []),
+    $conf->get('security.ban_after'),
+    $conf->get('security.ban_duration'),
+    $conf->get('resource.ban_file', 'data/ipbans.php'),
+    $logger
+);
+$loginManager = new LoginManager($conf, $sessionManager, $cookieManager, $banManager, $logger);
 $loginManager->generateStaySignedInToken($_SERVER['REMOTE_ADDR']);
 
 // Sniff browser language and set date format accordingly.
@@ -71,7 +86,7 @@ date_default_timezone_set($conf->get('general.timezone', 'UTC'));
 
 $loginManager->checkLoginState(client_ip_id($_SERVER));
 
-$containerBuilder = new ContainerBuilder($conf, $sessionManager, $cookieManager, $loginManager);
+$containerBuilder = new ContainerBuilder($conf, $sessionManager, $cookieManager, $loginManager, $logger);
 $container = $containerBuilder->build();
 $app = new App($container);
 
