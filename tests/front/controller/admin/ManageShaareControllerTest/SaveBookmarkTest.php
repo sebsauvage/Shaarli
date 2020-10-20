@@ -209,7 +209,7 @@ class SaveBookmarkTest extends TestCase
     /**
      * Test save a bookmark - try to retrieve the thumbnail
      */
-    public function testSaveBookmarkWithThumbnail(): void
+    public function testSaveBookmarkWithThumbnailSync(): void
     {
         $parameters = ['lf_url' => 'http://url.tld/other?part=3#hash'];
 
@@ -224,7 +224,13 @@ class SaveBookmarkTest extends TestCase
 
         $this->container->conf = $this->createMock(ConfigManager::class);
         $this->container->conf->method('get')->willReturnCallback(function (string $key, $default) {
-            return $key === 'thumbnails.mode' ? Thumbnailer::MODE_ALL : $default;
+            if ($key === 'thumbnails.mode') {
+                return Thumbnailer::MODE_ALL;
+            } elseif ($key === 'general.enable_async_metadata') {
+                return false;
+            }
+
+            return $default;
         });
 
         $this->container->thumbnailer = $this->createMock(Thumbnailer::class);
@@ -268,6 +274,51 @@ class SaveBookmarkTest extends TestCase
 
         $this->container->bookmarkService->expects(static::once())->method('exists')->with(0)->willReturn(true);
         $this->container->bookmarkService->expects(static::once())->method('get')->with(0)->willReturn(new Bookmark());
+
+        $result = $this->controller->save($request, $response);
+
+        static::assertSame(302, $result->getStatusCode());
+    }
+
+    /**
+     * Test save a bookmark - do not attempt to retrieve thumbnails if async mode is enabled.
+     */
+    public function testSaveBookmarkWithThumbnailAsync(): void
+    {
+        $parameters = ['lf_url' => 'http://url.tld/other?part=3#hash'];
+
+        $request = $this->createMock(Request::class);
+        $request
+            ->method('getParam')
+            ->willReturnCallback(function (string $key) use ($parameters): ?string {
+                return $parameters[$key] ?? null;
+            })
+        ;
+        $response = new Response();
+
+        $this->container->conf = $this->createMock(ConfigManager::class);
+        $this->container->conf->method('get')->willReturnCallback(function (string $key, $default) {
+            if ($key === 'thumbnails.mode') {
+                return Thumbnailer::MODE_ALL;
+            } elseif ($key === 'general.enable_async_metadata') {
+                return true;
+            }
+
+            return $default;
+        });
+
+        $this->container->thumbnailer = $this->createMock(Thumbnailer::class);
+        $this->container->thumbnailer->expects(static::never())->method('get');
+
+        $this->container->bookmarkService
+            ->expects(static::once())
+            ->method('addOrSet')
+            ->willReturnCallback(function (Bookmark $bookmark): Bookmark {
+                static::assertNull($bookmark->getThumbnail());
+
+                return $bookmark;
+            })
+        ;
 
         $result = $this->controller->save($request, $response);
 

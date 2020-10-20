@@ -169,14 +169,11 @@ class BookmarkListController extends ShaarliVisitorController
      */
     protected function updateThumbnail(Bookmark $bookmark, bool $writeDatastore = true): bool
     {
-        // Logged in, thumbnails enabled, not a note, is HTTP
-        // and (never retrieved yet or no valid cache file)
+        // Logged in, not async retrieval, thumbnails enabled, and thumbnail should be updated
         if ($this->container->loginManager->isLoggedIn()
+            && true !== $this->container->conf->get('general.enable_async_metadata', true)
             && $this->container->conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE
-            && false !== $bookmark->getThumbnail()
-            && !$bookmark->isNote()
-            && (null === $bookmark->getThumbnail() || !is_file($bookmark->getThumbnail()))
-            && startsWith(strtolower($bookmark->getUrl()), 'http')
+            && $bookmark->shouldUpdateThumbnail()
         ) {
             $bookmark->setThumbnail($this->container->thumbnailer->get($bookmark->getUrl()));
             $this->container->bookmarkService->set($bookmark, $writeDatastore);
@@ -198,6 +195,7 @@ class BookmarkListController extends ShaarliVisitorController
             'page_max' => '',
             'search_tags' => '',
             'result_count' => '',
+            'async_metadata' => $this->container->conf->get('general.enable_async_metadata', true)
         ];
     }
 

@@ -347,4 +347,48 @@ class BookmarkTest extends TestCase
         $bookmark->deleteTag('nope');
         $this->assertEquals(['tag1', 'tag2', 'chair'], $bookmark->getTags());
     }
+
+    /**
+     * Test shouldUpdateThumbnail() with bookmarks needing an update.
+     */
+    public function testShouldUpdateThumbnail(): void
+    {
+        $bookmark = (new Bookmark())->setUrl('http://domain.tld/with-image');
+
+        static::assertTrue($bookmark->shouldUpdateThumbnail());
+
+        $bookmark = (new Bookmark())
+            ->setUrl('http://domain.tld/with-image')
+            ->setThumbnail('unknown file')
+        ;
+
+        static::assertTrue($bookmark->shouldUpdateThumbnail());
+    }
+
+    /**
+     * Test shouldUpdateThumbnail() with bookmarks that should not update.
+     */
+    public function testShouldNotUpdateThumbnail(): void
+    {
+        $bookmark = (new Bookmark());
+
+        static::assertFalse($bookmark->shouldUpdateThumbnail());
+
+        $bookmark = (new Bookmark())
+            ->setUrl('ftp://domain.tld/other-protocol', ['ftp'])
+        ;
+
+        static::assertFalse($bookmark->shouldUpdateThumbnail());
+
+        $bookmark = (new Bookmark())
+            ->setUrl('http://domain.tld/with-image')
+            ->setThumbnail(__FILE__)
+        ;
+
+        static::assertFalse($bookmark->shouldUpdateThumbnail());
+
+        $bookmark = (new Bookmark())->setUrl('/shaare/abcdef');
+
+        static::assertFalse($bookmark->shouldUpdateThumbnail());
+    }
 }

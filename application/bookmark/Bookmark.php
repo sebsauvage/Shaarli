@@ -378,6 +378,24 @@ class Bookmark
     }
 
     /**
+     * Return true if:
+     *   - the bookmark's thumbnail is not already set to false (= not found)
+     *   - it's not a note
+     *   - it's an HTTP(S) link
+     *   - the thumbnail has not yet be retrieved (null) or its associated cache file doesn't exist anymore
+     *
+     * @return bool True if the bookmark's thumbnail needs to be retrieved.
+     */
+    public function shouldUpdateThumbnail(): bool
+    {
+        return $this->thumbnail !== false
+            && !$this->isNote()
+            && startsWith(strtolower($this->url), 'http')
+            && (null === $this->thumbnail || !is_file($this->thumbnail))
+        ;
+    }
+
+    /**
      * Get the Sticky.
      *
      * @return bool
