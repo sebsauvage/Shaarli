@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "932b191006135ff8be495aa0b4ba7e09",
+    "content-hash": "61360efbb2e1ba4c4fe00ce1f7a78ec5",
     "packages": [
         {
             "name": "arthurhoaro/web-thumbnailer",
