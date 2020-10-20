@@ -28,10 +28,7 @@ class ErrorController extends ShaarliVisitorController
             // Internal error (any other Throwable)
             if ($this->container->conf->get('dev.debug', false)) {
                 $this->assignView('message', $throwable->getMessage());
-                $this->assignView(
-                    'stacktrace',
-                    nl2br(get_class($throwable) .': '. PHP_EOL . $throwable->getTraceAsString())
-                );
+                $this->assignView('stacktrace', exception2text($throwable));
             } else {
                 $this->assignView('message', t('An unexpected error occurred.'));
             }

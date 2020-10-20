@@ -463,3 +463,12 @@ function t($text, $nText = '', $nb = 1, $domain = 'shaarli')
 {
     return dn__($domain, $text, $nText, $nb);
 }
+
+/**
+ * Converts an exception into a printable stack trace string.
+ */
+function exception2text(Throwable $e): string
+{
+    return $e->getMessage() . PHP_EOL . $e->getFile() . $e->getLine() . PHP_EOL . $e->getTraceAsString();
+}
+
