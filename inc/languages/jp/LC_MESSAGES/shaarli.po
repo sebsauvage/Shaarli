@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-11 09:31+0900\n"
-"PO-Revision-Date: 2020-02-11 10:54+0900\n"
+"POT-Creation-Date: 2020-10-19 10:19+0900\n"
+"PO-Revision-Date: 2020-10-19 10:25+0900\n"
 "Last-Translator: yude <yudesleepy@gmail.com>\n"
 "Language-Team: Shaarli\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.2.3\n"
 "X-Poedit-Basepath: ../../../..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: node_modules\n"
 "X-Poedit-SearchPathExcluded-1: vendor\n"
 
-#: application/ApplicationUtils.php:153
+#: application/ApplicationUtils.php:161
 #, php-format
 msgid ""
 "Your PHP version is obsolete! Shaarli requires at least PHP %s, and thus "
@@ -30,88 +30,540 @@ msgstr ""
 "が必要です。 現在使用している PHP のバージョンには脆弱性があり、できるだけ速"
 "やかにアップデートするべきです。"
 
-#: application/ApplicationUtils.php:183 application/ApplicationUtils.php:195
+#: application/ApplicationUtils.php:192 application/ApplicationUtils.php:204
 msgid "directory is not readable"
 msgstr "ディレクトリを読み込めません"
 
-#: application/ApplicationUtils.php:198
+#: application/ApplicationUtils.php:207
 msgid "directory is not writable"
 msgstr "ディレクトリに書き込めません"
 
-#: application/ApplicationUtils.php:216
+#: application/ApplicationUtils.php:225
 msgid "file is not readable"
 msgstr "ファイルを読み取る権限がありません"
 
-#: application/ApplicationUtils.php:219
+#: application/ApplicationUtils.php:228
 msgid "file is not writable"
 msgstr "ファイルを書き込む権限がありません"
 
-#: application/Cache.php:16
-#, php-format
-msgid "Cannot purge %s: no directory"
-msgstr "%s を削除できません: ディレクトリが存在しません"
-
-#: application/FeedBuilder.php:151
-msgid "Direct link"
-msgstr "ダイレクトリンク"
-
-#: application/FeedBuilder.php:153
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:88
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:178
-msgid "Permalink"
-msgstr "パーマリンク"
-
-#: application/History.php:174
+#: application/History.php:179
 msgid "History file isn't readable or writable"
 msgstr "履歴ファイルを読み込む、または書き込むための権限がありません"
 
-#: application/History.php:185
+#: application/History.php:190
 msgid "Could not parse history file"
 msgstr "履歴ファイルを正常に復元できませんでした"
 
-#: application/Languages.php:177
+#: application/Languages.php:181
 msgid "Automatic"
 msgstr "自動"
 
-#: application/Languages.php:178
-msgid "English"
-msgstr "英語"
-
-#: application/Languages.php:179
-msgid "French"
-msgstr "フランス語"
-
-#: application/Languages.php:180
+#: application/Languages.php:182
 msgid "German"
 msgstr "ドイツ語"
 
-#: application/LinkDB.php:136
-msgid "You are not authorized to add a link."
-msgstr "リンクを追加するには、ログインする必要があります。"
+#: application/Languages.php:183
+msgid "English"
+msgstr "英語"
 
-#: application/LinkDB.php:139
-msgid "Internal Error: A link should always have an id and URL."
-msgstr "エラー: リンクにはIDとURLを登録しなければなりません。"
+#: application/Languages.php:184
+msgid "French"
+msgstr "フランス語"
 
-#: application/LinkDB.php:142
-msgid "You must specify an integer as a key."
-msgstr "正常なキーの値ではありません。"
+#: application/Languages.php:185
+msgid "Japanese"
+msgstr "日本語"
 
-#: application/LinkDB.php:145
-msgid "Array offset and link ID must be equal."
-msgstr "Array オフセットとリンクのIDは同じでなければなりません。"
+#: application/Thumbnailer.php:62
+msgid ""
+"php-gd extension must be loaded to use thumbnails. Thumbnails are now "
+"disabled. Please reload the page."
+msgstr ""
+"サムネイルを使用するには、php-gd エクステンションが読み込まれている必要があり"
+"ます。サムネイルは無効化されました。ページを再読込してください。"
 
-#: application/LinkDB.php:251
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:14
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:48
+#: application/Utils.php:383 tests/UtilsTest.php:343
+msgid "Setting not set"
+msgstr "未設定"
+
+#: application/Utils.php:390 tests/UtilsTest.php:341 tests/UtilsTest.php:342
+msgid "Unlimited"
+msgstr "無制限"
+
+#: application/Utils.php:393 tests/UtilsTest.php:338 tests/UtilsTest.php:339
+#: tests/UtilsTest.php:353
+msgid "B"
+msgstr "B"
+
+#: application/Utils.php:393 tests/UtilsTest.php:332 tests/UtilsTest.php:333
+#: tests/UtilsTest.php:340
+msgid "kiB"
+msgstr "kiB"
+
+#: application/Utils.php:393 tests/UtilsTest.php:334 tests/UtilsTest.php:335
+#: tests/UtilsTest.php:351 tests/UtilsTest.php:352
+msgid "MiB"
+msgstr "MiB"
+
+#: application/Utils.php:393 tests/UtilsTest.php:336 tests/UtilsTest.php:337
+msgid "GiB"
+msgstr "GiB"
+
+#: application/bookmark/BookmarkFileService.php:180
+#: application/bookmark/BookmarkFileService.php:202
+#: application/bookmark/BookmarkFileService.php:224
+#: application/bookmark/BookmarkFileService.php:238
+msgid "You're not authorized to alter the datastore"
+msgstr "設定を変更する権限がありません"
+
+#: application/bookmark/BookmarkFileService.php:205
+msgid "This bookmarks already exists"
+msgstr "このブックマークは既に存在します。"
+
+#: application/bookmark/BookmarkInitializer.php:39
+msgid "(private bookmark with thumbnail demo)"
+msgstr "(サムネイルデモが付属しているプライベートブックマーク)"
+
+#: application/bookmark/BookmarkInitializer.php:42
+msgid ""
+"Shaarli will automatically pick up the thumbnail for links to a variety of "
+"websites.\n"
+"\n"
+"Explore your new Shaarli instance by trying out controls and menus.\n"
+"Visit the project on [Github](https://github.com/shaarli/Shaarli) or [the "
+"documentation](https://shaarli.readthedocs.io/en/master/) to learn more "
+"about Shaarli.\n"
+"\n"
+"Now you can edit or delete the default shaares.\n"
+msgstr ""
+"Shaarli は自動的に多様なウェブサイトのサムネイルを取得します。\n"
+"\n"
+"あなたの新しい Shaarli インスタンスをコントロールやメニューを試したりして、探"
+"検してください。\n"
+" [Github](https://github.com/shaarli/Shaarli) または [the documentation]"
+"(https://shaarli.readthedocs.io/en/master/) でプロジェクトを訪問して、"
+"Shaarli をもっとよく知ることができます。\n"
+"\n"
+"今から、既定の shaares を編集したり、削除したりすることができます。\n"
+
+#: application/bookmark/BookmarkInitializer.php:55
+msgid "Note: Shaare descriptions"
+msgstr "説明: Shaare の概要"
+
+#: application/bookmark/BookmarkInitializer.php:57
+msgid ""
+"Adding a shaare without entering a URL creates a text-only \"note\" post "
+"such as this one.\n"
+"This note is private, so you are the only one able to see it while logged "
+"in.\n"
+"\n"
+"You can use this to keep notes, post articles, code snippets, and much "
+"more.\n"
+"\n"
+"The Markdown formatting setting allows you to format your notes and bookmark "
+"description:\n"
+"\n"
+"### Title headings\n"
+"\n"
+"#### Multiple headings levels\n"
+"  * bullet lists\n"
+"  * _italic_ text\n"
+"  * **bold** text\n"
+"  * ~~strike through~~ text\n"
+"  * `code` blocks\n"
+"  * images\n"
+"  * [links](https://en.wikipedia.org/wiki/Markdown)\n"
+"\n"
+"Markdown also supports tables:\n"
+"\n"
+"| Name    | Type      | Color  | Qty   |\n"
+"| ------- | --------- | ------ | ----- |\n"
+"| Orange  | Fruit     | Orange | 126   |\n"
+"| Apple   | Fruit     | Any    | 62    |\n"
+"| Lemon   | Fruit     | Yellow | 30    |\n"
+"| Carrot  | Vegetable | Red    | 14    |\n"
+msgstr ""
+"URL を追加せずに shaare を作成すると、テキストのみのこのような \"ノート\" が"
+"作成されます。\n"
+"このノートはプライベートなので、ログイン中のあなたしか見ることはできませ"
+"ん。\n"
+"\n"
+"あなたはこれをメモ帳として使ったり、記事を投稿したり、コード スニペットとした"
+"りするなどといったことに使えます。\n"
+"\n"
+"Markdown フォーマットの設定により、ノートやブックマークの概要を以下のように"
+"フォーマットできます:\n"
+"\n"
+"### タイトル ヘッダー\n"
+"\n"
+"#### 複数の見出し\n"
+" * 箇条書きリスト\n"
+" * _イタリック_ 文字\n"
+" * **ボールド** 文字\n"
+" * ~~打ち消し~~ 文字\n"
+" * `コード` ブロック\n"
+" * 画像\n"
+" * [リンク](https://en.wikipedia.org/wiki/Markdown)\n"
+"\n"
+"Markdown は表もサポートします:\n"
+"\n"
+"| 名前    | 種類      | 色  | 数量   |\n"
+"| ------- | --------- | ------ | ----- |\n"
+"| オレンジ  | 果物     | 橙 | 126   |\n"
+"| リンゴ   | 果物     | 任意    | 62    |\n"
+"| レモン   | 果物     | 黄 | 30    |\n"
+"| 人参  | 野菜 | 赤    | 14    |\n"
+
+#: application/bookmark/BookmarkInitializer.php:91
+#: application/legacy/LegacyLinkDB.php:246
 msgid ""
 "The personal, minimalist, super-fast, database free, bookmarking service"
 msgstr ""
 "個人向けの、ミニマムで高速でかつデータベースのいらないブックマークサービス"
 
-#: application/LinkDB.php:253
+#: application/bookmark/BookmarkInitializer.php:94
+msgid ""
+"Welcome to Shaarli!\n"
+"\n"
+"Shaarli allows you to bookmark your favorite pages, and share them with "
+"others or store them privately.\n"
+"You can add a description to your bookmarks, such as this one, and tag "
+"them.\n"
+"\n"
+"Create a new shaare by clicking the `+Shaare` button, or using any of the "
+"recommended tools (browser extension, mobile app, bookmarklet, REST API, "
+"etc.).\n"
+"\n"
+"You can easily retrieve your links, even with thousands of them, using the "
+"internal search engine, or search through tags (e.g. this Shaare is tagged "
+"with `shaarli` and `help`).\n"
+"Hashtags such as #shaarli #help are also supported.\n"
+"You can also filter the available [RSS feed](/feed/atom) and picture wall by "
+"tag or plaintext search.\n"
+"\n"
+"We hope that you will enjoy using Shaarli, maintained with ❤️ by the "
+"community!\n"
+"Feel free to open [an issue](https://github.com/shaarli/Shaarli/issues) if "
+"you have a suggestion or encounter an issue.\n"
+msgstr ""
+"Shaarli へようこそ！\n"
+"\n"
+"Shaarli では、あなたのお気に入りのページをブックマークしたり、それを他の人と"
+"共有するか、またはプライベートなものとして保管することができます。\n"
+"加えて、あなたのブックマークにこの項目のように概要を追加したり、タグ付けした"
+"りすることができます。\n"
+"\n"
+"`+Shaare` ボタンをクリックすることで新しい shaare を作成できます。また、推奨"
+"されたツールを使うこともできます (ブラウザー 拡張機能、モバイル アプリ、ブッ"
+"クマークレット、REST API など...)。\n"
+"\n"
+"また、簡単にあなたのリンクを取得できます。それが何千と登る数であっても、内部"
+"の検索エンジンや、タグを使って検索できます (例えば、この Shaare は `shaarli` "
+"と `help` というタグが付いています)。\n"
+"#shaarli や #help といったハッシュタグもサポートされています。\n"
+"タグやテキスト検索による [RSS フィード](/feed/atom) や ピクチャー ウォール で"
+"項目を絞ることもできます。\n"
+"\n"
+"私たちはあなたが Shaarli を楽しんでくれることを願っています。Shaarli はコミュ"
+"ニティーによって ♡ と共にメンテナンスされています！\n"
+"何か問題に遭遇したり、提案があれば、気軽に  [Issue](https://github.com/"
+"shaarli/Shaarli/issues) を開いてください。\n"
+
+#: application/bookmark/exception/BookmarkNotFoundException.php:13
+msgid "The link you are trying to reach does not exist or has been deleted."
+msgstr "開こうとしたリンクは存在しないか、削除されています。"
+
+#: application/config/ConfigJson.php:52 application/config/ConfigPhp.php:129
+msgid ""
+"Shaarli could not create the config file. Please make sure Shaarli has the "
+"right to write in the folder is it installed in."
+msgstr ""
+"Shaarli は設定ファイルを作成できませんでした。Shaarli が正しい権限下に置かれ"
+"ていて、インストールされているディレクトリに書き込みできることを確認してくだ"
+"さい。"
+
+#: application/config/ConfigManager.php:136
+#: application/config/ConfigManager.php:163
+msgid "Invalid setting key parameter. String expected, got: "
+msgstr ""
+"不正なキーの値です。文字列が想定されていますが、次のように入力されました: "
+
+#: application/config/exception/MissingFieldConfigException.php:21
+#, php-format
+msgid "Configuration value is required for %s"
+msgstr "%s には設定が必要です"
+
+#: application/config/exception/PluginConfigOrderException.php:15
+msgid "An error occurred while trying to save plugins loading order."
+msgstr "プラグインの読込順を変更する際にエラーが発生しました。"
+
+#: application/config/exception/UnauthorizedConfigException.php:16
+msgid "You are not authorized to alter config."
+msgstr "設定を変更する権限がありません。"
+
+#: application/exceptions/IOException.php:22
+msgid "Error accessing"
+msgstr "読込中にエラーが発生しました"
+
+#: application/feed/FeedBuilder.php:179
+msgid "Direct link"
+msgstr "ダイレクトリンク"
+
+#: application/feed/FeedBuilder.php:181
+msgid "Permalink"
+msgstr "パーマリンク"
+
+#: application/front/controller/admin/ConfigureController.php:54
+msgid "Configure"
+msgstr "設定"
+
+#: application/front/controller/admin/ConfigureController.php:102
+#: application/legacy/LegacyUpdater.php:537
+msgid "You have enabled or changed thumbnails mode."
+msgstr "サムネイルのモードを有効化、または変更しました。"
+
+#: application/front/controller/admin/ConfigureController.php:103
+#: application/legacy/LegacyUpdater.php:538
+msgid "Please synchronize them."
+msgstr "それらを同期してください。"
+
+#: application/front/controller/admin/ConfigureController.php:113
+#: application/front/controller/visitor/InstallController.php:136
+msgid "Error while writing config file after configuration update."
+msgstr "設定ファイルを更新した後の書き込みに失敗しました。"
+
+#: application/front/controller/admin/ConfigureController.php:122
+msgid "Configuration was saved."
+msgstr "設定は保存されました。"
+
+#: application/front/controller/admin/ExportController.php:26
+msgid "Export"
+msgstr "エクスポート"
+
+#: application/front/controller/admin/ExportController.php:42
+msgid "Please select an export mode."
+msgstr "エクスポート モードを指定してください。"
+
+#: application/front/controller/admin/ImportController.php:41
+msgid "Import"
+msgstr "インポート"
+
+#: application/front/controller/admin/ImportController.php:55
+msgid "No import file provided."
+msgstr "何のインポート元ファイルも指定されませんでした。"
+
+#: application/front/controller/admin/ImportController.php:66
+#, php-format
+msgid ""
+"The file you are trying to upload is probably bigger than what this "
+"webserver can accept (%s). Please upload in smaller chunks."
+msgstr ""
+"あなたがアップロードしようとしているファイルは、サーバーが許可しているファイ"
+"ルサイズ (%s) よりも大きいです。もう少し小さいものをアップロードしてくださ"
+"い。"
+
+#: application/front/controller/admin/ManageShaareController.php:29
+msgid "Shaare a new link"
+msgstr "新しいリンクを追加"
+
+#: application/front/controller/admin/ManageShaareController.php:78
+msgid "Note: "
+msgstr "注: "
+
+#: application/front/controller/admin/ManageShaareController.php:109
+#: application/front/controller/admin/ManageShaareController.php:206
+#: application/front/controller/admin/ManageShaareController.php:275
+#: application/front/controller/admin/ManageShaareController.php:315
+#, php-format
+msgid "Bookmark with identifier %s could not be found."
+msgstr "%s という識別子を持ったブックマークは見つかりませんでした。"
+
+#: application/front/controller/admin/ManageShaareController.php:194
+#: application/front/controller/admin/ManageShaareController.php:252
+msgid "Invalid bookmark ID provided."
+msgstr "不正なブックマーク ID が入力されました。"
+
+#: application/front/controller/admin/ManageShaareController.php:260
+msgid "Invalid visibility provided."
+msgstr "不正な公開設定が入力されました。"
+
+#: application/front/controller/admin/ManageShaareController.php:363
+msgid "Edit"
+msgstr "共有"
+
+#: application/front/controller/admin/ManageShaareController.php:366
+msgid "Shaare"
+msgstr "Shaare"
+
+#: application/front/controller/admin/ManageTagController.php:29
+msgid "Manage tags"
+msgstr "タグを設定"
+
+#: application/front/controller/admin/ManageTagController.php:48
+msgid "Invalid tags provided."
+msgstr "不正なタグが入力されました。"
+
+#: application/front/controller/admin/ManageTagController.php:72
+#, php-format
+msgid "The tag was removed from %d bookmark."
+msgid_plural "The tag was removed from %d bookmarks."
+msgstr[0] "%d 件のリンクからタグが削除されました。"
+msgstr[1] "%d 件のリンクからタグが削除されました。"
+
+#: application/front/controller/admin/ManageTagController.php:77
+#, php-format
+msgid "The tag was renamed in %d bookmark."
+msgid_plural "The tag was renamed in %d bookmarks."
+msgstr[0] "このタグを持つ %d 件のリンクにおいて、名前が変更されました。"
+msgstr[1] "このタグを持つ %d 件のリンクにおいて、名前が変更されました。"
+
+#: application/front/controller/admin/PasswordController.php:28
+msgid "Change password"
+msgstr "パスワードを変更"
+
+#: application/front/controller/admin/PasswordController.php:55
+msgid "You must provide the current and new password to change it."
+msgstr ""
+"パスワードを変更するには、現在のパスワードと、新しいパスワードを入力する必要"
+"があります。"
+
+#: application/front/controller/admin/PasswordController.php:71
+msgid "The old password is not correct."
+msgstr "元のパスワードが正しくありません。"
+
+#: application/front/controller/admin/PasswordController.php:97
+msgid "Your password has been changed"
+msgstr "あなたのパスワードは変更されました"
+
+#: application/front/controller/admin/PluginsController.php:45
+msgid "Plugin Administration"
+msgstr "プラグイン管理"
+
+#: application/front/controller/admin/PluginsController.php:76
+msgid "Setting successfully saved."
+msgstr "設定が正常に保存されました。"
+
+#: application/front/controller/admin/PluginsController.php:79
+msgid "Error while saving plugin configuration: "
+msgstr "プラグインの設定ファイルを保存するときにエラーが発生しました: "
+
+#: application/front/controller/admin/ThumbnailsController.php:37
+msgid "Thumbnails update"
+msgstr "サムネイルの更新"
+
+#: application/front/controller/admin/ToolsController.php:31
+msgid "Tools"
+msgstr "ツール"
+
+#: application/front/controller/visitor/BookmarkListController.php:116
+msgid "Search: "
+msgstr "検索: "
+
+#: application/front/controller/visitor/DailyController.php:45
+msgid "Today"
+msgstr "今日"
+
+#: application/front/controller/visitor/DailyController.php:47
+msgid "Yesterday"
+msgstr "昨日"
+
+#: application/front/controller/visitor/DailyController.php:85
+msgid "Daily"
+msgstr "デイリー"
+
+#: application/front/controller/visitor/ErrorController.php:36
+msgid "An unexpected error occurred."
+msgstr "予期しないエラーが発生しました。"
+
+#: application/front/controller/visitor/ErrorNotFoundController.php:25
+msgid "Requested page could not be found."
+msgstr "リクエストされたページは存在しません。"
+
+#: application/front/controller/visitor/InstallController.php:73
+#, php-format
+msgid ""
+"<pre>Sessions do not seem to work correctly on your server.<br>Make sure the "
+"variable \"session.save_path\" is set correctly in your PHP config, and that "
+"you have write access to it.<br>It currently points to %s.<br>On some "
+"browsers, accessing your server via a hostname like 'localhost' or any "
+"custom hostname without a dot causes cookie storage to fail. We recommend "
+"accessing your server via it's IP address or Fully Qualified Domain Name.<br>"
+msgstr ""
+"<pre>セッションが正常にあなたのサーバー上で稼働していないようです。<br>PHP の"
+"設定ファイル内にて、正しく \"session.save_path\" の値が設定されていることと、"
+"権限が間違っていないことを確認してください。<br>現在 %s からPHPの設定ファイル"
+"を読み込んでいます。<br>一部のブラウザーにおいて、localhost や他のドットを含"
+"まないホスト名にてサーバーにアクセスする際に、クッキーを保存できないことがあ"
+"ります。IP アドレスや完全なドメイン名でサーバーにアクセスすることをおすすめし"
+"ます。<br>"
+
+#: application/front/controller/visitor/InstallController.php:144
+msgid ""
+"Shaarli is now configured. Please login and start shaaring your bookmarks!"
+msgstr ""
+"Shaarli の設定が完了しました。ログインして、あなたのブックマークを登録しま"
+"しょう！"
+
+#: application/front/controller/visitor/InstallController.php:158
+msgid "Insufficient permissions:"
+msgstr "権限がありません:"
+
+#: application/front/controller/visitor/LoginController.php:46
+msgid "Login"
+msgstr "ログイン"
+
+#: application/front/controller/visitor/LoginController.php:78
+msgid "Wrong login/password."
+msgstr "不正なユーザー名、またはパスワードです。"
+
+#: application/front/controller/visitor/PictureWallController.php:29
+msgid "Picture wall"
+msgstr "ピクチャウォール"
+
+#: application/front/controller/visitor/TagCloudController.php:88
+msgid "Tag "
+msgstr "タグ "
+
+#: application/front/exceptions/AlreadyInstalledException.php:11
+msgid "Shaarli has already been installed. Login to edit the configuration."
+msgstr "Shaarli がインストールされました。ログインして設定を変更できます。"
+
+#: application/front/exceptions/LoginBannedException.php:11
+msgid ""
+"You have been banned after too many failed login attempts. Try again later."
+msgstr "複数回に渡るログインへの失敗を検出しました。後でまた試してください。"
+
+#: application/front/exceptions/OpenShaarliPasswordException.php:16
+msgid "You are not supposed to change a password on an Open Shaarli."
+msgstr ""
+"公開されている Shaarli において、パスワードを変更することは想定されていませ"
+"ん。"
+
+#: application/front/exceptions/ThumbnailsDisabledException.php:11
+msgid "Picture wall unavailable (thumbnails are disabled)."
+msgstr "ピクチャ ウォールは利用できません (サムネイルが無効化されています)。"
+
+#: application/front/exceptions/WrongTokenException.php:16
+msgid "Wrong token."
+msgstr "不正なトークンです。"
+
+#: application/legacy/LegacyLinkDB.php:131
+msgid "You are not authorized to add a link."
+msgstr "リンクを追加するには、ログインする必要があります。"
+
+#: application/legacy/LegacyLinkDB.php:134
+msgid "Internal Error: A link should always have an id and URL."
+msgstr "エラー: リンクにはIDとURLを登録しなければなりません。"
+
+#: application/legacy/LegacyLinkDB.php:137
+msgid "You must specify an integer as a key."
+msgstr "正常なキーの値ではありません。"
+
+#: application/legacy/LegacyLinkDB.php:140
+msgid "Array offset and link ID must be equal."
+msgstr "Array オフセットとリンクのIDは同じでなければなりません。"
+
+#: application/legacy/LegacyLinkDB.php:249
 msgid ""
 "Welcome to Shaarli! This is your first public bookmark. To edit or delete "
 "me, you must first login.\n"
@@ -131,321 +583,119 @@ msgstr ""
 "あなたは Sebastien Sauvage による、コミュニティーサポートのあるバージョンのオ"
 "リジナルのShaarli プロジェクトを使用しています。"
 
-#: application/LinkDB.php:267
+#: application/legacy/LegacyLinkDB.php:266
 msgid "My secret stuff... - Pastebin.com"
 msgstr "わたしのひ💗み💗つ💗 - Pastebin.com"
 
-#: application/LinkDB.php:269
+#: application/legacy/LegacyLinkDB.php:268
 msgid "Shhhh! I'm a private link only YOU can see. You can delete me too."
 msgstr ""
 "シーッ！ これはあなたしか見られないプライベートリンクです。消すこともできま"
 "す。"
 
-#: application/LinkFilter.php:452
-msgid "The link you are trying to reach does not exist or has been deleted."
-msgstr "開こうとしたリンクは存在しないか、削除されています。"
+#: application/legacy/LegacyUpdater.php:104
+#, fuzzy
+#| msgid "Couldn't retrieve Updater class methods."
+msgid "Couldn't retrieve updater class methods."
+msgstr "アップデーターのクラスメゾットを受信できませんでした。"
 
-#: application/NetscapeBookmarkUtils.php:35
+#: application/legacy/LegacyUpdater.php:538
+msgid "<a href=\"./admin/thumbnails\">"
+msgstr "<a href=\"./admin/thumbnails\">"
+
+#: application/netscape/NetscapeBookmarkUtils.php:63
 msgid "Invalid export selection:"
 msgstr "不正なエクスポートの選択:"
 
-#: application/NetscapeBookmarkUtils.php:81
+#: application/netscape/NetscapeBookmarkUtils.php:215
 #, php-format
 msgid "File %s (%d bytes) "
 msgstr "ファイル %s (%d バイト) "
 
-#: application/NetscapeBookmarkUtils.php:83
+#: application/netscape/NetscapeBookmarkUtils.php:217
 msgid "has an unknown file format. Nothing was imported."
 msgstr "は不明なファイル形式です。インポートは中止されました。"
 
-#: application/NetscapeBookmarkUtils.php:86
-#, php-format
+#: application/netscape/NetscapeBookmarkUtils.php:221
+#, fuzzy, php-format
+#| msgid ""
+#| "was successfully processed in %d seconds: %d links imported, %d links "
+#| "overwritten, %d links skipped."
 msgid ""
-"was successfully processed in %d seconds: %d links imported, %d links "
-"overwritten, %d links skipped."
+"was successfully processed in %d seconds: %d bookmarks imported, %d "
+"bookmarks overwritten, %d bookmarks skipped."
 msgstr ""
 "が %d 秒で処理され、%d 件のリンクがインポートされ、%d 件のリンクが上書きさ"
 "れ、%d 件のリンクがスキップされました。"
 
-#: application/PageBuilder.php:168
-msgid "The page you are trying to reach does not exist or has been deleted."
-msgstr "あなたが開こうとしたページは存在しないか、削除されています。"
+#: application/plugin/PluginManager.php:124
+msgid " [plugin incompatibility]: "
+msgstr "[非対応のプラグイン]: "
 
-#: application/PageBuilder.php:170
-msgid "404 Not Found"
-msgstr "404 ページが存在しません"
-
-#: application/PluginManager.php:243
+#: application/plugin/exception/PluginFileNotFoundException.php:21
 #, php-format
 msgid "Plugin \"%s\" files not found."
 msgstr "プラグイン「%s」のファイルが存在しません。"
 
-#: application/Updater.php:76
-msgid "Couldn't retrieve Updater class methods."
-msgstr "アップデーターのクラスメゾットを受信できませんでした。"
+#: application/render/PageCacheManager.php:32
+#, php-format
+msgid "Cannot purge %s: no directory"
+msgstr "%s を削除できません: ディレクトリが存在しません"
 
-#: application/Updater.php:532
+#: application/updater/exception/UpdaterException.php:51
 msgid "An error occurred while running the update "
 msgstr "更新中に問題が発生しました "
 
-#: application/Updater.php:572
-msgid "Updates file path is not set, can't write updates."
-msgstr "更新するファイルのパスが指定されていないため、更新を書き込めません。"
+#: index.php:65
+msgid "Shared bookmarks on "
+msgstr "次において共有されたリンク "
 
-#: application/Updater.php:577
-msgid "Unable to write updates in "
-msgstr "更新を次の項目に書き込めませんでした: "
-
-#: application/Utils.php:376 tests/UtilsTest.php:340
-msgid "Setting not set"
-msgstr "未設定"
-
-#: application/Utils.php:383 tests/UtilsTest.php:338 tests/UtilsTest.php:339
-msgid "Unlimited"
-msgstr "無制限"
-
-#: application/Utils.php:386 tests/UtilsTest.php:335 tests/UtilsTest.php:336
-#: tests/UtilsTest.php:350
-msgid "B"
-msgstr "B"
-
-#: application/Utils.php:386 tests/UtilsTest.php:329 tests/UtilsTest.php:330
-#: tests/UtilsTest.php:337
-msgid "kiB"
-msgstr "kiB"
-
-#: application/Utils.php:386 tests/UtilsTest.php:331 tests/UtilsTest.php:332
-#: tests/UtilsTest.php:348 tests/UtilsTest.php:349
-msgid "MiB"
-msgstr "MiB"
-
-#: application/Utils.php:386 tests/UtilsTest.php:333 tests/UtilsTest.php:334
-msgid "GiB"
-msgstr "GiB"
-
-#: application/config/ConfigJson.php:52 application/config/ConfigPhp.php:121
-msgid ""
-"Shaarli could not create the config file. Please make sure Shaarli has the "
-"right to write in the folder is it installed in."
-msgstr ""
-"Shaarli は設定ファイルを作成できませんでした。Shaarli が正しい権限下に置かれ"
-"ていて、インストールされているディレクトリに書き込みできることを確認してくだ"
-"さい。"
-
-#: application/config/ConfigManager.php:135
-msgid "Invalid setting key parameter. String expected, got: "
-msgstr ""
-"不正なキーの値です。文字列が想定されていますが、次のように入力されました: "
-
-#: application/config/exception/MissingFieldConfigException.php:21
-#, php-format
-msgid "Configuration value is required for %s"
-msgstr "%s には設定が必要です"
-
-#: application/config/exception/PluginConfigOrderException.php:15
-msgid "An error occurred while trying to save plugins loading order."
-msgstr "プラグインの読込順を変更する際にエラーが発生しました。"
-
-#: application/config/exception/UnauthorizedConfigException.php:16
-msgid "You are not authorized to alter config."
-msgstr "設定を変更する権限がありません。"
-
-#: application/exceptions/IOException.php:19
-msgid "Error accessing"
-msgstr "読込中にエラーが発生しました"
-
-#: index.php:142
-msgid "Shared links on "
-msgstr "次において共有されたリンク:"
-
-#: index.php:164
-msgid "Insufficient permissions:"
-msgstr "権限がありません:"
-
-#: index.php:303
-msgid "I said: NO. You are banned for the moment. Go away."
-msgstr "あなたはこのサーバーからBANされています。"
-
-#: index.php:368
-msgid "Wrong login/password."
-msgstr "不正なユーザー名、またはパスワードです。"
-
-#: index.php:576 tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:42
-msgid "Daily"
-msgstr "デイリー"
-
-#: index.php:681 tmp/loginform.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
-#: tmp/loginform.b91ef64efc3688266305ea9b42e5017e.rtpl.php:44
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:71
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:95
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:71
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:95
-msgid "Login"
-msgstr "ログイン"
-
-#: index.php:722 tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:39
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:39
-msgid "Picture wall"
-msgstr "ピクチャウォール"
-
-#: index.php:770 tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:36
-#: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:19
-msgid "Tag cloud"
-msgstr "タグクラウド"
-
-#: index.php:803 tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:19
-msgid "Tag list"
-msgstr "タグ一覧"
-
-#: index.php:1028 tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:31
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:31
-msgid "Tools"
-msgstr "ツール"
-
-#: index.php:1037
-msgid "You are not supposed to change a password on an Open Shaarli."
-msgstr ""
-"公開されている Shaarli において、パスワードを変更することは想定されていませ"
-"ん。"
-
-#: index.php:1042 index.php:1084 index.php:1160 index.php:1191 index.php:1291
-msgid "Wrong token."
-msgstr "不正なトークンです。"
-
-#: index.php:1047
-msgid "The old password is not correct."
-msgstr "元のパスワードが正しくありません。"
-
-#: index.php:1067
-msgid "Your password has been changed"
-msgstr "あなたのパスワードは変更されました"
-
-#: index.php:1072
-#: tmp/changepassword.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
-msgid "Change password"
-msgstr "パスワードを変更"
-
-#: index.php:1120
-msgid "Configuration was saved."
-msgstr "設定は保存されました。"
-
-#: index.php:1143 tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
-msgid "Configure"
-msgstr "設定"
-
-#: index.php:1154 tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
-msgid "Manage tags"
-msgstr "タグを設定"
-
-#: index.php:1172
-#, php-format
-msgid "The tag was removed from %d link."
-msgid_plural "The tag was removed from %d links."
-msgstr[0] "%d 件のリンクからタグが削除されました。"
-msgstr[1] "The tag was removed from %d links."
-
-#: index.php:1173
-#, php-format
-msgid "The tag was renamed in %d link."
-msgid_plural "The tag was renamed in %d links."
-msgstr[0] "タグが %d 件のリンクにおいて、名前が変更されました。"
-msgstr[1] "タグが %d 件のリンクにおいて、名前が変更されました。"
-
-#: index.php:1181 tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
-msgid "Shaare a new link"
-msgstr "新しいリンクを追加"
-
-#: index.php:1351 tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:170
-msgid "Edit"
-msgstr "共有"
-
-#: index.php:1351 index.php:1421
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:26
-msgid "Shaare"
-msgstr "Shaare"
-
-#: index.php:1390
-msgid "Note: "
-msgstr "注: "
-
-#: index.php:1430 tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:65
-msgid "Export"
-msgstr "エクスポート"
-
-#: index.php:1492 tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:83
-msgid "Import"
-msgstr "インポート"
-
-#: index.php:1502
-#, php-format
-msgid ""
-"The file you are trying to upload is probably bigger than what this "
-"webserver can accept (%s). Please upload in smaller chunks."
-msgstr ""
-"あなたがアップロードしようとしているファイルは、サーバーが許可しているファイ"
-"ルサイズ (%s) よりも大きいです。もう少し小さいものをアップロードしてくださ"
-"い。"
-
-#: index.php:1541 tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:22
-msgid "Plugin administration"
-msgstr "プラグイン管理"
-
-#: index.php:1706
-msgid "Search: "
-msgstr "検索: "
-
-#: index.php:1933
-#, php-format
-msgid ""
-"<pre>Sessions do not seem to work correctly on your server.<br>Make sure the "
-"variable \"session.save_path\" is set correctly in your PHP config, and that "
-"you have write access to it.<br>It currently points to %s.<br>On some "
-"browsers, accessing your server via a hostname like 'localhost' or any "
-"custom hostname without a dot causes cookie storage to fail. We recommend "
-"accessing your server via it's IP address or Fully Qualified Domain Name.<br>"
-msgstr ""
-"<pre>セッションが正常にあなたのサーバー上で稼働していないようです。<br>PHP の"
-"設定ファイル内にて、正しく \"session.save_path\" の値が設定されていることと、"
-"権限が間違っていないことを確認してください。<br>現在 %s からPHPの設定ファイル"
-"を読み込んでいます。<br>一部のブラウザーにおいて、localhost や他のドットを含"
-"まないホスト名にてサーバーにアクセスする際に、クッキーを保存できないことがあ"
-"ります。IP アドレスや完全なドメイン名でサーバーにアクセスすることをおすすめし"
-"ます。<br>"
-
-#: index.php:1943
-msgid "Click to try again."
-msgstr "クリックして再度試します。"
-
-#: plugins/addlink_toolbar/addlink_toolbar.php:29
+#: plugins/addlink_toolbar/addlink_toolbar.php:31
 msgid "URI"
 msgstr "URI"
 
-#: plugins/addlink_toolbar/addlink_toolbar.php:33
-#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:19
+#: plugins/addlink_toolbar/addlink_toolbar.php:35
 msgid "Add link"
 msgstr "リンクを追加"
 
-#: plugins/addlink_toolbar/addlink_toolbar.php:50
+#: plugins/addlink_toolbar/addlink_toolbar.php:52
 msgid "Adds the addlink input on the linklist page."
 msgstr "リンク一覧のページに、リンクを追加するためのフォームを表示する。"
 
-#: plugins/archiveorg/archiveorg.php:23
+#: plugins/archiveorg/archiveorg.php:28
 msgid "View on archive.org"
 msgstr "archive.org 上で表示する"
 
-#: plugins/archiveorg/archiveorg.php:36
+#: plugins/archiveorg/archiveorg.php:41
 msgid "For each link, add an Archive.org icon."
 msgstr "それぞれのリンクに、Archive.org のアイコンを追加する。"
 
-#: plugins/demo_plugin/demo_plugin.php:465
+#: plugins/default_colors/default_colors.php:38
+msgid ""
+"Default colors plugin error: This plugin is active and no custom color is "
+"configured."
+msgstr ""
+"既定の色のプラグインにおけるエラー: このプラグインは有効なので、カスタム カ"
+"ラーは適用されません。"
+
+#: plugins/default_colors/default_colors.php:113
+msgid "Override default theme colors. Use any CSS valid color."
+msgstr ""
+"既定のテーマの色を上書きします。どのような CSS カラーコードでも使えます。"
+
+#: plugins/default_colors/default_colors.php:114
+msgid "Main color (navbar green)"
+msgstr "メイン カラー (ナビバーの緑)"
+
+#: plugins/default_colors/default_colors.php:115
+msgid "Background color (light grey)"
+msgstr "背景色 (灰色)"
+
+#: plugins/default_colors/default_colors.php:116
+msgid "Dark main color (e.g. visited links)"
+msgstr "暗い方の メイン カラー (例: 閲覧済みリンク)"
+
+#: plugins/demo_plugin/demo_plugin.php:477
 msgid ""
 "A demo plugin covering all use cases for template designers and plugin "
 "developers."
@@ -453,7 +703,15 @@ msgstr ""
 "テンプレートのデザイナーや、プラグインの開発者のためのすべての状況に対応でき"
 "るデモプラグインです。"
 
-#: plugins/isso/isso.php:20
+#: plugins/demo_plugin/demo_plugin.php:478
+msgid "This is a parameter dedicated to the demo plugin. It'll be suffixed."
+msgstr "これはデモプラグイン専用のパラメーターです。末尾に追加されます。"
+
+#: plugins/demo_plugin/demo_plugin.php:479
+msgid "Other demo parameter"
+msgstr "他のデモ パラメーター"
+
+#: plugins/isso/isso.php:22
 msgid ""
 "Isso plugin error: Please define the \"ISSO_SERVER\" setting in the plugin "
 "administration page."
@@ -461,45 +719,17 @@ msgstr ""
 "Isso プラグインエラー: \"ISSO_SERVER\" の値をプラグイン管理ページにて指定して"
 "ください。"
 
-#: plugins/isso/isso.php:63
+#: plugins/isso/isso.php:92
 msgid "Let visitor comment your shaares on permalinks with Isso."
 msgstr ""
 "Isso を使って、あなたのパーマリンク上のリンクに第三者がコメントを残すことがで"
 "きます。"
 
-#: plugins/isso/isso.php:64
+#: plugins/isso/isso.php:93
 msgid "Isso server URL (without 'http://')"
 msgstr "Isso server URL ('http://' 抜き)"
 
-#: plugins/markdown/markdown.php:158
-msgid "Description will be rendered with"
-msgstr "説明は次の方法で描画されます:"
-
-#: plugins/markdown/markdown.php:159
-msgid "Markdown syntax documentation"
-msgstr "マークダウン形式のドキュメント"
-
-#: plugins/markdown/markdown.php:160
-msgid "Markdown syntax"
-msgstr "マークダウン形式"
-
-#: plugins/markdown/markdown.php:339
-msgid ""
-"Render shaare description with Markdown syntax.<br><strong>Warning</"
-"strong>:\n"
-"If your shaared descriptions contained HTML tags before enabling the "
-"markdown plugin,\n"
-"enabling it might break your page.\n"
-"See the <a href=\"https://github.com/shaarli/Shaarli/tree/master/plugins/"
-"markdown#html-rendering\">README</a>."
-msgstr ""
-"リンクの説明をマークダウン形式で表示します。<br><strong>警告</strong>:\n"
-"リンクの説明にHTMLタグがこのプラグインを有効にする前に含まれていた場合、\n"
-"正常にページを表示できなくなるかもしれません。\n"
-"詳しくは <a href=\"https://github.com/shaarli/Shaarli/tree/master/plugins/"
-"markdown#html-rendering\">README</a> をご覧ください。"
-
-#: plugins/piwik/piwik.php:21
+#: plugins/piwik/piwik.php:23
 msgid ""
 "Piwik plugin error: Please define PIWIK_URL and PIWIK_SITEID in the plugin "
 "administration page."
@@ -507,27 +737,27 @@ msgstr ""
 "Piwik プラグインエラー: PIWIK_URL と PIWIK_SITEID の値をプラグイン管理ページ"
 "で指定してください。"
 
-#: plugins/piwik/piwik.php:70
+#: plugins/piwik/piwik.php:72
 msgid "A plugin that adds Piwik tracking code to Shaarli pages."
 msgstr "Piwik のトラッキングコードをShaarliに追加するプラグインです。"
 
-#: plugins/piwik/piwik.php:71
+#: plugins/piwik/piwik.php:73
 msgid "Piwik URL"
 msgstr "Piwik URL"
 
-#: plugins/piwik/piwik.php:72
+#: plugins/piwik/piwik.php:74
 msgid "Piwik site ID"
 msgstr "Piwik サイトID"
 
-#: plugins/playvideos/playvideos.php:22
+#: plugins/playvideos/playvideos.php:25
 msgid "Video player"
 msgstr "動画プレイヤー"
 
-#: plugins/playvideos/playvideos.php:25
+#: plugins/playvideos/playvideos.php:28
 msgid "Play Videos"
 msgstr "動画を再生"
 
-#: plugins/playvideos/playvideos.php:56
+#: plugins/playvideos/playvideos.php:59
 msgid "Add a button in the toolbar allowing to watch all videos."
 msgstr "すべての動画を閲覧するボタンをツールバーに追加します。"
 
@@ -535,26 +765,26 @@ msgstr "すべての動画を閲覧するボタンをツールバーに追加し
 msgid "plugins/playvideos/jquery-1.11.2.min.js"
 msgstr "plugins/playvideos/jquery-1.11.2.min.js"
 
-#: plugins/pubsubhubbub/pubsubhubbub.php:69
+#: plugins/pubsubhubbub/pubsubhubbub.php:72
 #, php-format
 msgid "Could not publish to PubSubHubbub: %s"
 msgstr "PubSubHubbub に登録できませんでした: %s"
 
-#: plugins/pubsubhubbub/pubsubhubbub.php:95
+#: plugins/pubsubhubbub/pubsubhubbub.php:99
 #, php-format
 msgid "Could not post to %s"
 msgstr "%s に登録できませんでした"
 
-#: plugins/pubsubhubbub/pubsubhubbub.php:99
+#: plugins/pubsubhubbub/pubsubhubbub.php:103
 #, php-format
 msgid "Bad response from the hub %s"
 msgstr "ハブ %s からの不正なレスポンス"
 
-#: plugins/pubsubhubbub/pubsubhubbub.php:110
+#: plugins/pubsubhubbub/pubsubhubbub.php:114
 msgid "Enable PubSubHubbub feed publishing."
 msgstr "PubSubHubbub へのフィードを公開する。"
 
-#: plugins/qrcode/qrcode.php:69 plugins/wallabag/wallabag.php:68
+#: plugins/qrcode/qrcode.php:73 plugins/wallabag/wallabag.php:70
 msgid "For each link, add a QRCode icon."
 msgstr "それぞれのリンクについて、QRコードのアイコンを追加する。"
 
@@ -570,724 +800,534 @@ msgstr ""
 msgid "Save to wallabag"
 msgstr "Wallabag に保存"
 
-#: plugins/wallabag/wallabag.php:69
+#: plugins/wallabag/wallabag.php:71
 msgid "Wallabag API URL"
 msgstr "Wallabag のAPIのURL"
 
-#: plugins/wallabag/wallabag.php:70
+#: plugins/wallabag/wallabag.php:72
 msgid "Wallabag API version (1 or 2)"
 msgstr "Wallabag のAPIのバージョン (1 または 2)"
 
 #: tests/LanguagesTest.php:214 tests/LanguagesTest.php:227
-#: tests/languages/fr/LanguagesFrTest.php:160
-#: tests/languages/fr/LanguagesFrTest.php:173
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:81
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:81
+#: tests/languages/fr/LanguagesFrTest.php:159
+#: tests/languages/fr/LanguagesFrTest.php:172
 msgid "Search"
 msgid_plural "Search"
 msgstr[0] "検索"
 msgstr[1] "検索"
 
-#: tmp/404.b91ef64efc3688266305ea9b42e5017e.rtpl.php:12
-msgid "Sorry, nothing to see here."
-msgstr "すみませんが、ここには何もありません。"
-
-#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
-msgid "URL or leave empty to post a note"
-msgstr "URL を入力するか、空欄にするとノートを投稿します"
-
-#: tmp/changepassword.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
-msgid "Current password"
-msgstr "現在のパスワード"
-
-#: tmp/changepassword.b91ef64efc3688266305ea9b42e5017e.rtpl.php:19
-msgid "New password"
-msgstr "新しいパスワード"
-
-#: tmp/changepassword.b91ef64efc3688266305ea9b42e5017e.rtpl.php:23
-msgid "Change"
-msgstr "変更"
-
-#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
-#: tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:77
-msgid "Tag"
-msgstr "タグ"
-
-#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
-msgid "New name"
-msgstr "変更先の名前"
-
-#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:31
-msgid "Case sensitive"
-msgstr "大文字と小文字を区別"
-
-#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:34
-msgid "Rename"
-msgstr "名前を変更"
-
-#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:79
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:172
-msgid "Delete"
-msgstr "削除"
-
-#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:39
-msgid "You can also edit tags in the"
-msgstr "次に含まれるタグを編集することもできます:"
-
-#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:39
-msgid "tag list"
-msgstr "タグ一覧"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
-msgid "title"
-msgstr "タイトル"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:43
-msgid "Home link"
-msgstr "ホームのリンク先"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:44
-msgid "Default value"
-msgstr "既定の値"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:58
-msgid "Theme"
-msgstr "テーマ"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:87
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:78
-msgid "Language"
-msgstr "言語"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:116
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:102
-msgid "Timezone"
-msgstr "タイムゾーン"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:117
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:103
-msgid "Continent"
-msgstr "大陸"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:117
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:103
-msgid "City"
-msgstr "町"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:164
-msgid "Disable session cookie hijacking protection"
-msgstr "不正ログイン防止のためのセッションクッキーを無効化"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:166
-msgid "Check this if you get disconnected or if your IP address changes often"
-msgstr ""
-"あなたが切断されたり、IPアドレスが頻繁に変わる環境下であるならチェックを入れ"
-"てください"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:183
-msgid "Private links by default"
-msgstr "既定でプライベートリンク"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:184
-msgid "All new links are private by default"
-msgstr "すべての新規リンクをプライベートで作成"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:199
-msgid "RSS direct links"
-msgstr "RSS 直リンク"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:200
-msgid "Check this to use direct URL instead of permalink in feeds"
-msgstr "フィードでパーマリンクの代わりに直リンクを使う"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:215
-msgid "Hide public links"
-msgstr "公開リンクを隠す"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:216
-msgid "Do not show any links if the user is not logged in"
-msgstr "ログインしていないユーザーには何のリンクも表示しない"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:231
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:150
-msgid "Check updates"
-msgstr "更新を確認"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:232
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:152
-msgid "Notify me when a new release is ready"
-msgstr "新しいバージョンがリリースされたときに通知"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:247
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
-msgid "Enable REST API"
-msgstr "REST API を有効化"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:248
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:170
-msgid "Allow third party software to use Shaarli such as mobile application"
-msgstr ""
-"モバイルアプリといったサードパーティーのソフトウェアにShaarliを使用することを"
-"許可"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:263
-msgid "API secret"
-msgstr "API シークレット"
-
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:274
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:74
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:139
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:199
-msgid "Save"
-msgstr "保存"
-
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
-msgid "The Daily Shaarli"
-msgstr "デイリーSharli"
-
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:17
-msgid "1 RSS entry per day"
-msgstr "各日1つずつのRSS項目"
-
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:37
-msgid "Previous day"
-msgstr "前日"
-
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:44
-msgid "All links of one day in a single page."
-msgstr "1日に作成されたすべてのリンクです。"
-
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:51
-msgid "Next day"
-msgstr "翌日"
-
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:25
-msgid "Created:"
-msgstr "作成:"
-
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
-msgid "URL"
-msgstr "URL"
-
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:34
-msgid "Title"
-msgstr "タイトル"
-
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:40
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:75
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:99
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:124
-msgid "Description"
-msgstr "説明"
-
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:46
-msgid "Tags"
-msgstr "タグ"
-
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:59
-#: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:168
-msgid "Private"
-msgstr "プライベート"
-
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:74
-msgid "Apply Changes"
-msgstr "変更を適用"
-
-#: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
-msgid "Export Database"
-msgstr "データベースをエクスポート"
-
-#: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
-msgid "Selection"
-msgstr "選択済み"
-
-#: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:31
-msgid "All"
-msgstr "すべて"
-
-#: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
-msgid "Public"
-msgstr "公開"
-
-#: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:52
-msgid "Prepend note permalinks with this Shaarli instance's URL"
-msgstr "この Shaarli のインスタンスのURL にノートへのパーマリンクを付け加える"
-
-#: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:53
-msgid "Useful to import bookmarks in a web browser"
-msgstr "ウェブブラウザーのリンクをインポートするのに有効です"
-
-#: tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
-msgid "Import Database"
-msgstr "データベースをインポート"
-
-#: tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:23
-msgid "Maximum size allowed:"
-msgstr "最大サイズ:"
-
-#: tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
-msgid "Visibility"
-msgstr "可視性"
-
-#: tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
-msgid "Use values from the imported file, default to public"
-msgstr "インポート元のファイルの値を使用 (既定は公開リンクとなります)"
-
-#: tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
-msgid "Import all bookmarks as private"
-msgstr "すべてのブックマーク項目をプライベートリンクとしてインポート"
-
-#: tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:46
-msgid "Import all bookmarks as public"
-msgstr "すべてのブックマーク項目を公開リンクとしてインポート"
-
-#: tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:57
-msgid "Overwrite existing bookmarks"
-msgstr "既に存在しているブックマークを上書き"
-
-#: tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:58
-msgid "Duplicates based on URL"
-msgstr "URL による重複"
-
-#: tmp/import.b91ef64efc3688266305ea9b42e5017e.rtpl.php:72
-msgid "Add default tags"
-msgstr "既定のタグを追加"
-
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:22
-msgid "Install Shaarli"
-msgstr "Shaarli をインストール"
-
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:25
-msgid "It looks like it's the first time you run Shaarli. Please configure it."
-msgstr "どうやら Shaarli を初めて起動しているようです。設定してください。"
-
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:33
-#: tmp/loginform.b91ef64efc3688266305ea9b42e5017e.rtpl.php:30
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:147
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:147
-msgid "Username"
-msgstr "ユーザー名"
-
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
-#: tmp/loginform.b91ef64efc3688266305ea9b42e5017e.rtpl.php:34
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:148
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:148
-msgid "Password"
-msgstr "パスワード"
-
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:63
-msgid "Shaarli title"
-msgstr "Shaarli のタイトル"
-
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:69
-msgid "My links"
-msgstr "自分のリンク"
-
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:182
-msgid "Install"
-msgstr "インストール"
-
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:80
-msgid "shaare"
-msgid_plural "shaares"
-msgstr[0] "共有"
-msgstr[1] "共有"
-
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:18
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:84
-msgid "private link"
-msgid_plural "private links"
-msgstr[0] "プライベートリンク"
-msgstr[1] "プライベートリンク"
-
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:31
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:117
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:117
-msgid "Search text"
-msgstr "文字列で検索"
-
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:38
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:124
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:124
-#: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
-#: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:64
-#: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
-#: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:74
-msgid "Filter by tag"
-msgstr "タグによって分類"
-
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:111
-msgid "Nothing found."
-msgstr "何も見つかりませんでした。"
-
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:119
-#, php-format
-msgid "%s result"
-msgid_plural "%s results"
-msgstr[0] "%s 件の結果"
-msgstr[1] "%s 件の結果"
-
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:123
-msgid "for"
-msgstr "for"
-
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:130
-msgid "tagged"
-msgstr "タグ付けされた"
-
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:134
-msgid "Remove tag"
-msgstr "タグを削除"
-
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:143
-msgid "with status"
-msgstr "with status"
-
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:154
-msgid "without any tag"
-msgstr "タグなし"
-
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:174
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:42
-msgid "Fold"
-msgstr "畳む"
-
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:176
-msgid "Edited: "
-msgstr "編集済み: "
-
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:180
-msgid "permalink"
-msgstr "パーマリンク"
-
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:182
-msgid "Add tag"
-msgstr "タグを追加"
-
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:7
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:7
-msgid "Filters"
-msgstr "分類"
-
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:12
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:12
-msgid "Only display private links"
-msgstr "プライベートリンクのみを表示"
-
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:15
-msgid "Only display public links"
-msgstr "公開リンクのみを表示"
-
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:20
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:20
-msgid "Filter untagged links"
-msgstr "タグ付けされていないリンクで分類"
-
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:76
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:24
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:76
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:43
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:43
-msgid "Fold all"
-msgstr "すべて畳む"
-
-#: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:69
-#: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:69
-msgid "Links per page"
-msgstr "各ページをリンク"
-
-#: tmp/loginform.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
-msgid ""
-"You have been banned after too many failed login attempts. Try again later."
-msgstr "複数回に渡るログインへの失敗を検出しました。後でまた試してください。"
-
-#: tmp/loginform.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:151
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:151
-msgid "Remember me"
-msgstr "パスワードを保存"
-
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:14
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:48
-msgid "by the Shaarli community"
-msgstr "by Shaarli コミュニティ"
-
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:15
-msgid "Documentation"
-msgstr "ドキュメント"
-
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:44
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:44
-msgid "Expand"
-msgstr "展開する"
-
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:45
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:45
-msgid "Expand all"
-msgstr "すべて展開する"
-
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:46
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:46
-msgid "Are you sure you want to delete this link?"
-msgstr "本当にこのリンクを削除しますか？"
-
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:61
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:86
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:61
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:86
-msgid "RSS Feed"
-msgstr "RSS フィード"
-
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:66
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:102
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:66
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:102
-msgid "Logout"
-msgstr "ログアウト"
-
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:169
-msgid "is available"
-msgstr "が利用可能"
-
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:176
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:176
-msgid "Error"
-msgstr "エラー"
-
-#: tmp/picwall.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
-msgid "Picture Wall"
-msgstr "ピクチャーウォール"
-
-#: tmp/picwall.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
-msgid "pics"
-msgstr "画像"
-
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
-msgid "You need to enable Javascript to change plugin loading order."
-msgstr ""
-"プラグインを読み込む順番を変更するには、Javascriptを有効にする必要がありま"
-"す。"
-
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
-msgid "Enabled Plugins"
-msgstr "有効なプラグイン"
-
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:34
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:155
-msgid "No plugin enabled."
-msgstr "有効なプラグインはありません。"
-
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:40
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:73
-msgid "Disable"
-msgstr "無効化"
-
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:74
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:98
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:123
-msgid "Name"
-msgstr "名前"
-
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:43
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:76
-msgid "Order"
-msgstr "順序"
-
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:86
-msgid "Disabled Plugins"
-msgstr "無効なプラグイン"
-
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:91
-msgid "No plugin disabled."
-msgstr "無効なプラグインはありません。"
-
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:97
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:122
-msgid "Enable"
-msgstr "有効化"
-
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:134
-msgid "More plugins available"
-msgstr "さらに利用できるプラグインがあります"
-
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:136
-msgid "in the documentation"
-msgstr "ドキュメント内"
-
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:150
-msgid "Plugin configuration"
-msgstr "プラグイン設定"
-
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:195
-msgid "No parameter available."
-msgstr "利用可能な設定項目はありません。"
-
-#: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:19
-#: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:19
-msgid "tags"
-msgstr "タグ"
-
-#: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
-#: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
-msgid "List all links with those tags"
-msgstr "このタグが付いているリンクをリスト化する"
-
-#: tmp/tag.sort.b91ef64efc3688266305ea9b42e5017e.rtpl.php:3
-#: tmp/tag.sort.cedf684561d925457130839629000a81.rtpl.php:3
-msgid "Sort by:"
-msgstr "分類:"
-
-#: tmp/tag.sort.b91ef64efc3688266305ea9b42e5017e.rtpl.php:5
-#: tmp/tag.sort.cedf684561d925457130839629000a81.rtpl.php:5
-msgid "Cloud"
-msgstr "クラウド"
-
-#: tmp/tag.sort.b91ef64efc3688266305ea9b42e5017e.rtpl.php:6
-#: tmp/tag.sort.cedf684561d925457130839629000a81.rtpl.php:6
-msgid "Most used"
-msgstr "もっとも使われた"
-
-#: tmp/tag.sort.b91ef64efc3688266305ea9b42e5017e.rtpl.php:7
-#: tmp/tag.sort.cedf684561d925457130839629000a81.rtpl.php:7
-msgid "Alphabetical"
-msgstr "アルファベット順"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
-msgid "Settings"
-msgstr "設定"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
-msgid "Change Shaarli settings: title, timezone, etc."
-msgstr "Shaarli の設定を変更: タイトル、タイムゾーンなど。"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:17
-msgid "Configure your Shaarli"
-msgstr "あなたの Shaarli を設定"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:21
-msgid "Enable, disable and configure plugins"
-msgstr "プラグインを有効化、無効化、設定する"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
-msgid "Change your password"
-msgstr "パスワードを変更"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
-msgid "Rename or delete a tag in all links"
-msgstr "すべてのリンクのタグの名前を変更する、または削除する"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
-msgid ""
-"Import Netscape HTML bookmarks (as exported from Firefox, Chrome, Opera, "
-"delicious...)"
-msgstr ""
-"Netscape HTML 形式のブックマークをインポートする (Firefox、Chrome、Operaと"
-"いったブラウザーが含まれます)"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
-msgid "Import links"
-msgstr "リンクをインポート"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:47
-msgid ""
-"Export Netscape HTML bookmarks (which can be imported in Firefox, Chrome, "
-"Opera, delicious...)"
-msgstr ""
-"Netscape HTML 形式のブックマークをエクスポートする (Firefox、Chrome、Operaと"
-"いったブラウザーが含まれます)"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
-msgid "Export database"
-msgstr "リンクをエクスポート"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:71
-msgid ""
-"Drag one of these button to your bookmarks toolbar or right-click it and "
-"\"Bookmark This Link\""
-msgstr ""
-"これらのボタンのうち1つををブックマークバーにドラッグするか、右クリックして"
-"「このリンクをブックマークに追加」してください"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:72
-msgid "then click on the bookmarklet in any page you want to share."
-msgstr "共有したいページでブックマークレットをクリックしてください。"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:76
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:100
-msgid ""
-"Drag this link to your bookmarks toolbar or right-click it and Bookmark This "
-"Link"
-msgstr ""
-"このリンクをブックマークバーにドラッグするか、右クリックして「このリンクを"
-"ブックマークに追加」してください"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:77
-msgid "then click ✚Shaare link button in any page you want to share"
-msgstr "✚リンクを共有 ボタンをクリックすることで、どこでもリンクを共有できます"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:86
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:108
-msgid "The selected text is too long, it will be truncated."
-msgstr "選択された文字列は長すぎるので、一部が切り捨てられます。"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:96
-msgid "Shaare link"
-msgstr "共有リンク"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:101
-msgid ""
-"Then click ✚Add Note button anytime to start composing a private Note (text "
-"post) to your Shaarli"
-msgstr ""
-"✚ノートを追加 ボタンをクリックすることで、いつでもプライベートノート(テキスト"
-"形式)をShaarli上に作成できます"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:117
-msgid "Add Note"
-msgstr "ノートを追加"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:129
-msgid ""
-"You need to browse your Shaarli over <strong>HTTPS</strong> to use this "
-"functionality."
-msgstr ""
-"この機能を使用するには、<strong>HTTPS</strong> 経由でShaarliに接続してくださ"
-"い。"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:134
-msgid "Add to"
-msgstr "次に追加:"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:145
-msgid "3rd party"
-msgstr "サードパーティー"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:147
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:153
-msgid "Plugin"
-msgstr "プラグイン"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:148
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:154
-msgid "plugin"
-msgstr "プラグイン"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:175
-msgid ""
-"Drag this link to your bookmarks toolbar, or right-click it and choose "
-"Bookmark This Link"
-msgstr ""
-"このリンクをブックマークバーにドラッグするか、右クリックして「このリンクを"
-"ブックマークに追加」してください"
+#~ msgid "The page you are trying to reach does not exist or has been deleted."
+#~ msgstr "あなたが開こうとしたページは存在しないか、削除されています。"
+
+#~ msgid "404 Not Found"
+#~ msgstr "404 ページが存在しません"
+
+#~ msgid "Updates file path is not set, can't write updates."
+#~ msgstr ""
+#~ "更新するファイルのパスが指定されていないため、更新を書き込めません。"
+
+#~ msgid "Unable to write updates in "
+#~ msgstr "更新を次の項目に書き込めませんでした: "
+
+#~ msgid "I said: NO. You are banned for the moment. Go away."
+#~ msgstr "あなたはこのサーバーからBANされています。"
+
+#~ msgid "Tag cloud"
+#~ msgstr "タグクラウド"
+
+#~ msgid "Click to try again."
+#~ msgstr "クリックして再度試します。"
+
+#~ msgid "Description will be rendered with"
+#~ msgstr "説明は次の方法で描画されます:"
+
+#~ msgid "Markdown syntax documentation"
+#~ msgstr "マークダウン形式のドキュメント"
+
+#~ msgid "Markdown syntax"
+#~ msgstr "マークダウン形式"
+
+#~ msgid ""
+#~ "Render shaare description with Markdown syntax.<br><strong>Warning</"
+#~ "strong>:\n"
+#~ "If your shaared descriptions contained HTML tags before enabling the "
+#~ "markdown plugin,\n"
+#~ "enabling it might break your page.\n"
+#~ "See the <a href=\"https://github.com/shaarli/Shaarli/tree/master/plugins/"
+#~ "markdown#html-rendering\">README</a>."
+#~ msgstr ""
+#~ "リンクの説明をマークダウン形式で表示します。<br><strong>警告</strong>:\n"
+#~ "リンクの説明にHTMLタグがこのプラグインを有効にする前に含まれていた場合、\n"
+#~ "正常にページを表示できなくなるかもしれません。\n"
+#~ "詳しくは <a href=\"https://github.com/shaarli/Shaarli/tree/master/plugins/"
+#~ "markdown#html-rendering\">README</a> をご覧ください。"
+
+#~ msgid "Sorry, nothing to see here."
+#~ msgstr "すみませんが、ここには何もありません。"
+
+#~ msgid "URL or leave empty to post a note"
+#~ msgstr "URL を入力するか、空欄にするとノートを投稿します"
+
+#~ msgid "Current password"
+#~ msgstr "現在のパスワード"
+
+#~ msgid "New password"
+#~ msgstr "新しいパスワード"
+
+#~ msgid "Change"
+#~ msgstr "変更"
+
+#~ msgid "Tag"
+#~ msgstr "タグ"
+
+#~ msgid "New name"
+#~ msgstr "変更先の名前"
+
+#~ msgid "Case sensitive"
+#~ msgstr "大文字と小文字を区別"
+
+#~ msgid "Rename"
+#~ msgstr "名前を変更"
+
+#~ msgid "Delete"
+#~ msgstr "削除"
+
+#~ msgid "You can also edit tags in the"
+#~ msgstr "次に含まれるタグを編集することもできます:"
+
+#~ msgid "tag list"
+#~ msgstr "タグ一覧"
+
+#~ msgid "title"
+#~ msgstr "タイトル"
+
+#~ msgid "Home link"
+#~ msgstr "ホームのリンク先"
+
+#~ msgid "Default value"
+#~ msgstr "既定の値"
+
+#~ msgid "Theme"
+#~ msgstr "テーマ"
+
+#~ msgid "Language"
+#~ msgstr "言語"
+
+#~ msgid "Timezone"
+#~ msgstr "タイムゾーン"
+
+#~ msgid "Continent"
+#~ msgstr "大陸"
+
+#~ msgid "City"
+#~ msgstr "町"
+
+#~ msgid "Disable session cookie hijacking protection"
+#~ msgstr "不正ログイン防止のためのセッションクッキーを無効化"
+
+#~ msgid ""
+#~ "Check this if you get disconnected or if your IP address changes often"
+#~ msgstr ""
+#~ "あなたが切断されたり、IPアドレスが頻繁に変わる環境下であるならチェックを入"
+#~ "れてください"
+
+#~ msgid "Private links by default"
+#~ msgstr "既定でプライベートリンク"
+
+#~ msgid "All new links are private by default"
+#~ msgstr "すべての新規リンクをプライベートで作成"
+
+#~ msgid "RSS direct links"
+#~ msgstr "RSS 直リンク"
+
+#~ msgid "Check this to use direct URL instead of permalink in feeds"
+#~ msgstr "フィードでパーマリンクの代わりに直リンクを使う"
+
+#~ msgid "Hide public links"
+#~ msgstr "公開リンクを隠す"
+
+#~ msgid "Do not show any links if the user is not logged in"
+#~ msgstr "ログインしていないユーザーには何のリンクも表示しない"
+
+#~ msgid "Check updates"
+#~ msgstr "更新を確認"
+
+#~ msgid "Notify me when a new release is ready"
+#~ msgstr "新しいバージョンがリリースされたときに通知"
+
+#~ msgid "Enable REST API"
+#~ msgstr "REST API を有効化"
+
+#~ msgid "Allow third party software to use Shaarli such as mobile application"
+#~ msgstr ""
+#~ "モバイルアプリといったサードパーティーのソフトウェアにShaarliを使用するこ"
+#~ "とを許可"
+
+#~ msgid "API secret"
+#~ msgstr "API シークレット"
+
+#~ msgid "Save"
+#~ msgstr "保存"
+
+#~ msgid "The Daily Shaarli"
+#~ msgstr "デイリーSharli"
+
+#~ msgid "1 RSS entry per day"
+#~ msgstr "各日1つずつのRSS項目"
+
+#~ msgid "Previous day"
+#~ msgstr "前日"
+
+#~ msgid "All links of one day in a single page."
+#~ msgstr "1日に作成されたすべてのリンクです。"
+
+#~ msgid "Next day"
+#~ msgstr "翌日"
+
+#~ msgid "Created:"
+#~ msgstr "作成:"
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid "Title"
+#~ msgstr "タイトル"
+
+#~ msgid "Description"
+#~ msgstr "説明"
+
+#~ msgid "Tags"
+#~ msgstr "タグ"
+
+#~ msgid "Private"
+#~ msgstr "プライベート"
+
+#~ msgid "Apply Changes"
+#~ msgstr "変更を適用"
+
+#~ msgid "Export Database"
+#~ msgstr "データベースをエクスポート"
+
+#~ msgid "Selection"
+#~ msgstr "選択済み"
+
+#~ msgid "All"
+#~ msgstr "すべて"
+
+#~ msgid "Public"
+#~ msgstr "公開"
+
+#~ msgid "Prepend note permalinks with this Shaarli instance's URL"
+#~ msgstr ""
+#~ "この Shaarli のインスタンスのURL にノートへのパーマリンクを付け加える"
+
+#~ msgid "Useful to import bookmarks in a web browser"
+#~ msgstr "ウェブブラウザーのリンクをインポートするのに有効です"
+
+#~ msgid "Import Database"
+#~ msgstr "データベースをインポート"
+
+#~ msgid "Maximum size allowed:"
+#~ msgstr "最大サイズ:"
+
+#~ msgid "Visibility"
+#~ msgstr "可視性"
+
+#~ msgid "Use values from the imported file, default to public"
+#~ msgstr "インポート元のファイルの値を使用 (既定は公開リンクとなります)"
+
+#~ msgid "Import all bookmarks as public"
+#~ msgstr "すべてのブックマーク項目を公開リンクとしてインポート"
+
+#~ msgid "Overwrite existing bookmarks"
+#~ msgstr "既に存在しているブックマークを上書き"
+
+#~ msgid "Duplicates based on URL"
+#~ msgstr "URL による重複"
+
+#~ msgid "Add default tags"
+#~ msgstr "既定のタグを追加"
+
+#~ msgid "Install Shaarli"
+#~ msgstr "Shaarli をインストール"
+
+#~ msgid ""
+#~ "It looks like it's the first time you run Shaarli. Please configure it."
+#~ msgstr "どうやら Shaarli を初めて起動しているようです。設定してください。"
+
+#~ msgid "Username"
+#~ msgstr "ユーザー名"
+
+#~ msgid "Password"
+#~ msgstr "パスワード"
+
+#~ msgid "Shaarli title"
+#~ msgstr "Shaarli のタイトル"
+
+#~ msgid "My links"
+#~ msgstr "自分のリンク"
+
+#~ msgid "Install"
+#~ msgstr "インストール"
+
+#~ msgid "shaare"
+#~ msgid_plural "shaares"
+#~ msgstr[0] "共有"
+#~ msgstr[1] "共有"
+
+#~ msgid "private link"
+#~ msgid_plural "private links"
+#~ msgstr[0] "プライベートリンク"
+#~ msgstr[1] "プライベートリンク"
+
+#~ msgid "Search text"
+#~ msgstr "文字列で検索"
+
+#~ msgid "Filter by tag"
+#~ msgstr "タグによって分類"
+
+#~ msgid "Nothing found."
+#~ msgstr "何も見つかりませんでした。"
+
+#~ msgid "%s result"
+#~ msgid_plural "%s results"
+#~ msgstr[0] "%s 件の結果"
+#~ msgstr[1] "%s 件の結果"
+
+#~ msgid "for"
+#~ msgstr "for"
+
+#~ msgid "tagged"
+#~ msgstr "タグ付けされた"
+
+#~ msgid "Remove tag"
+#~ msgstr "タグを削除"
+
+#~ msgid "with status"
+#~ msgstr "with status"
+
+#~ msgid "without any tag"
+#~ msgstr "タグなし"
+
+#~ msgid "Fold"
+#~ msgstr "畳む"
+
+#~ msgid "Edited: "
+#~ msgstr "編集済み: "
+
+#~ msgid "permalink"
+#~ msgstr "パーマリンク"
+
+#~ msgid "Add tag"
+#~ msgstr "タグを追加"
+
+#~ msgid "Filters"
+#~ msgstr "分類"
+
+#~ msgid "Only display private links"
+#~ msgstr "プライベートリンクのみを表示"
+
+#~ msgid "Only display public links"
+#~ msgstr "公開リンクのみを表示"
+
+#~ msgid "Filter untagged links"
+#~ msgstr "タグ付けされていないリンクで分類"
+
+#~ msgid "Fold all"
+#~ msgstr "すべて畳む"
+
+#~ msgid "Links per page"
+#~ msgstr "各ページをリンク"
+
+#~ msgid "Remember me"
+#~ msgstr "パスワードを保存"
+
+#~ msgid "by the Shaarli community"
+#~ msgstr "by Shaarli コミュニティ"
+
+#~ msgid "Documentation"
+#~ msgstr "ドキュメント"
+
+#~ msgid "Expand"
+#~ msgstr "展開する"
+
+#~ msgid "Expand all"
+#~ msgstr "すべて展開する"
+
+#~ msgid "Are you sure you want to delete this link?"
+#~ msgstr "本当にこのリンクを削除しますか？"
+
+#~ msgid "RSS Feed"
+#~ msgstr "RSS フィード"
+
+#~ msgid "Logout"
+#~ msgstr "ログアウト"
+
+#~ msgid "is available"
+#~ msgstr "が利用可能"
+
+#~ msgid "Error"
+#~ msgstr "エラー"
+
+#~ msgid "Picture Wall"
+#~ msgstr "ピクチャーウォール"
+
+#~ msgid "pics"
+#~ msgstr "画像"
+
+#~ msgid "You need to enable Javascript to change plugin loading order."
+#~ msgstr ""
+#~ "プラグインを読み込む順番を変更するには、Javascriptを有効にする必要がありま"
+#~ "す。"
+
+#~ msgid "Enabled Plugins"
+#~ msgstr "有効なプラグイン"
+
+#~ msgid "No plugin enabled."
+#~ msgstr "有効なプラグインはありません。"
+
+#~ msgid "Disable"
+#~ msgstr "無効化"
+
+#~ msgid "Name"
+#~ msgstr "名前"
+
+#~ msgid "Order"
+#~ msgstr "順序"
+
+#~ msgid "Disabled Plugins"
+#~ msgstr "無効なプラグイン"
+
+#~ msgid "No plugin disabled."
+#~ msgstr "無効なプラグインはありません。"
+
+#~ msgid "Enable"
+#~ msgstr "有効化"
+
+#~ msgid "More plugins available"
+#~ msgstr "さらに利用できるプラグインがあります"
+
+#~ msgid "in the documentation"
+#~ msgstr "ドキュメント内"
+
+#~ msgid "No parameter available."
+#~ msgstr "利用可能な設定項目はありません。"
+
+#~ msgid "tags"
+#~ msgstr "タグ"
+
+#~ msgid "List all links with those tags"
+#~ msgstr "このタグが付いているリンクをリスト化する"
+
+#~ msgid "Sort by:"
+#~ msgstr "分類:"
+
+#~ msgid "Cloud"
+#~ msgstr "クラウド"
+
+#~ msgid "Most used"
+#~ msgstr "もっとも使われた"
+
+#~ msgid "Alphabetical"
+#~ msgstr "アルファベット順"
+
+#~ msgid "Settings"
+#~ msgstr "設定"
+
+#~ msgid "Change Shaarli settings: title, timezone, etc."
+#~ msgstr "Shaarli の設定を変更: タイトル、タイムゾーンなど。"
+
+#~ msgid "Configure your Shaarli"
+#~ msgstr "あなたの Shaarli を設定"
+
+#~ msgid "Enable, disable and configure plugins"
+#~ msgstr "プラグインを有効化、無効化、設定する"
+
+#~ msgid "Change your password"
+#~ msgstr "パスワードを変更"
+
+#~ msgid "Rename or delete a tag in all links"
+#~ msgstr "すべてのリンクのタグの名前を変更する、または削除する"
+
+#~ msgid ""
+#~ "Import Netscape HTML bookmarks (as exported from Firefox, Chrome, Opera, "
+#~ "delicious...)"
+#~ msgstr ""
+#~ "Netscape HTML 形式のブックマークをインポートする (Firefox、Chrome、Operaと"
+#~ "いったブラウザーが含まれます)"
+
+#~ msgid "Import links"
+#~ msgstr "リンクをインポート"
+
+#~ msgid ""
+#~ "Export Netscape HTML bookmarks (which can be imported in Firefox, Chrome, "
+#~ "Opera, delicious...)"
+#~ msgstr ""
+#~ "Netscape HTML 形式のブックマークをエクスポートする (Firefox、Chrome、Opera"
+#~ "といったブラウザーが含まれます)"
+
+#~ msgid "Export database"
+#~ msgstr "リンクをエクスポート"
+
+#~ msgid ""
+#~ "Drag one of these button to your bookmarks toolbar or right-click it and "
+#~ "\"Bookmark This Link\""
+#~ msgstr ""
+#~ "これらのボタンのうち1つををブックマークバーにドラッグするか、右クリックし"
+#~ "て「このリンクをブックマークに追加」してください"
+
+#~ msgid "then click on the bookmarklet in any page you want to share."
+#~ msgstr "共有したいページでブックマークレットをクリックしてください。"
+
+#~ msgid ""
+#~ "Drag this link to your bookmarks toolbar or right-click it and Bookmark "
+#~ "This Link"
+#~ msgstr ""
+#~ "このリンクをブックマークバーにドラッグするか、右クリックして「このリンクを"
+#~ "ブックマークに追加」してください"
+
+#~ msgid "then click ✚Shaare link button in any page you want to share"
+#~ msgstr ""
+#~ "✚リンクを共有 ボタンをクリックすることで、どこでもリンクを共有できます"
+
+#~ msgid "The selected text is too long, it will be truncated."
+#~ msgstr "選択された文字列は長すぎるので、一部が切り捨てられます。"
+
+#~ msgid "Shaare link"
+#~ msgstr "共有リンク"
+
+#~ msgid ""
+#~ "Then click ✚Add Note button anytime to start composing a private Note "
+#~ "(text post) to your Shaarli"
+#~ msgstr ""
+#~ "✚ノートを追加 ボタンをクリックすることで、いつでもプライベートノート(テキ"
+#~ "スト形式)をShaarli上に作成できます"
+
+#~ msgid "Add Note"
+#~ msgstr "ノートを追加"
+
+#~ msgid ""
+#~ "You need to browse your Shaarli over <strong>HTTPS</strong> to use this "
+#~ "functionality."
+#~ msgstr ""
+#~ "この機能を使用するには、<strong>HTTPS</strong> 経由でShaarliに接続してくだ"
+#~ "さい。"
+
+#~ msgid "Add to"
+#~ msgstr "次に追加:"
+
+#~ msgid "3rd party"
+#~ msgstr "サードパーティー"
+
+#~ msgid "Plugin"
+#~ msgstr "プラグイン"
+
+#~ msgid "plugin"
+#~ msgstr "プラグイン"
+
+#~ msgid ""
+#~ "Drag this link to your bookmarks toolbar, or right-click it and choose "
+#~ "Bookmark This Link"
+#~ msgstr ""
+#~ "このリンクをブックマークバーにドラッグするか、右クリックして「このリンクを"
+#~ "ブックマークに追加」してください"
