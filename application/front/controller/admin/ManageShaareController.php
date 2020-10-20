@@ -53,36 +53,22 @@ class ManageShaareController extends ShaarliAdminController
 
             // If this is an HTTP(S) link, we try go get the page to extract
             // the title (otherwise we will to straight to the edit form.)
-            if (empty($title) && strpos(get_url_scheme($url) ?: '', 'http') !== false) {
-                $retrieveDescription = $this->container->conf->get('general.retrieve_description');
-                // Short timeout to keep the application responsive
-                // The callback will fill $charset and $title with data from the downloaded page.
-                $this->container->httpAccess->getHttpResponse(
-                    $url,
-                    $this->container->conf->get('general.download_timeout', 30),
-                    $this->container->conf->get('general.download_max_size', 4194304),
-                    $this->container->httpAccess->getCurlDownloadCallback(
-                        $charset,
-                        $title,
-                        $description,
-                        $tags,
-                        $retrieveDescription
-                    )
-                );
-                if (! empty($title) && strtolower($charset) !== 'utf-8' && mb_check_encoding($charset)) {
-                    $title = mb_convert_encoding($title, 'utf-8', $charset);
-                }
+            if (true !== $this->container->conf->get('general.enable_async_metadata', true)
+                && empty($title)
+                && strpos(get_url_scheme($url) ?: '', 'http') !== false
+            ) {
+                $metadata = $this->container->metadataRetriever->retrieve($url);
             }
 
-            if (empty($url) && empty($title)) {
-                $title = $this->container->conf->get('general.default_note_title', t('Note: '));
+            if (empty($url)) {
+                $metadata['title'] = $this->container->conf->get('general.default_note_title', t('Note: '));
             }
 
             $link = [
-                'title' => $title,
+                'title' => $title ?? $metadata['title'] ?? '',
                 'url' => $url ?? '',
-                'description' => $description ?? '',
-                'tags' => $tags ?? '',
+                'description' => $description ?? $metadata['description'] ?? '',
+                'tags' => $tags ?? $metadata['tags'] ?? '',
                 'private' => $private,
             ];
         } else {
@@ -352,6 +338,8 @@ class ManageShaareController extends ShaarliAdminController
             'source' => $request->getParam('source') ?? '',
             'tags' => $tags,
             'default_private_links' => $this->container->conf->get('privacy.default_private_links', false),
+            'async_metadata' => $this->container->conf->get('general.enable_async_metadata', true),
+            'retrieve_description' => $this->container->conf->get('general.retrieve_description', false),
         ]);
 
         $this->executePageHooks('render_editlink', $data, TemplatePage::EDIT_LINK);

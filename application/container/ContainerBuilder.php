@@ -14,6 +14,7 @@ use Shaarli\Front\Controller\Visitor\ErrorController;
 use Shaarli\Front\Controller\Visitor\ErrorNotFoundController;
 use Shaarli\History;
 use Shaarli\Http\HttpAccess;
+use Shaarli\Http\MetadataRetriever;
 use Shaarli\Netscape\NetscapeBookmarkUtils;
 use Shaarli\Plugin\PluginManager;
 use Shaarli\Render\PageBuilder;
@@ -88,6 +89,10 @@ class ContainerBuilder
                 new FlockMutex(fopen(SHAARLI_MUTEX_FILE, 'r'), 2),
                 $container->loginManager->isLoggedIn()
             );
+        };
+
+        $container['metadataRetriever'] = function (ShaarliContainer $container): MetadataRetriever {
+            return new MetadataRetriever($container->conf, $container->httpAccess);
         };
 
         $container['pageBuilder'] = function (ShaarliContainer $container): PageBuilder {

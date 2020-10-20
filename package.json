@@ -7,6 +7,7 @@
     "awesomplete": "^1.1.2",
     "blazy": "^1.8.2",
     "fork-awesome": "^1.1.7",
+    "he": "^1.2.0",
     "pure-extras": "^1.0.0",
     "purecss": "^1.0.0"
   },

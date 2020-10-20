@@ -175,6 +175,7 @@ translate:
 eslint:
 	@yarn run eslint -c .dev/.eslintrc.js assets/vintage/js/
 	@yarn run eslint -c .dev/.eslintrc.js assets/default/js/
+	@yarn run eslint -c .dev/.eslintrc.js assets/common/js/
 
 ### Run CSSLint check against Shaarli's SCSS files
 sasslint:

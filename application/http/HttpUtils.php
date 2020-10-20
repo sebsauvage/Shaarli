@@ -6,12 +6,14 @@ use Shaarli\Http\Url;
  * GET an HTTP URL to retrieve its content
  * Uses the cURL library or a fallback method
  *
- * @param string          $url               URL to get (http://...)
- * @param int             $timeout           network timeout (in seconds)
- * @param int             $maxBytes          maximum downloaded bytes (default: 4 MiB)
- * @param callable|string $curlWriteFunction Optional callback called during the download (cURL CURLOPT_WRITEFUNCTION).
- *                                           Can be used to add download conditions on the
- *                                           headers (response code, content type, etc.).
+ * @param string          $url                URL to get (http://...)
+ * @param int             $timeout            network timeout (in seconds)
+ * @param int             $maxBytes           maximum downloaded bytes (default: 4 MiB)
+ * @param callable|string $curlHeaderFunction Optional callback called during the download of headers
+ *                                            (CURLOPT_HEADERFUNCTION)
+ * @param callable|string $curlWriteFunction  Optional callback called during the download (cURL CURLOPT_WRITEFUNCTION).
+ *                                            Can be used to add download conditions on the
+ *                                            headers (response code, content type, etc.).
  *
  * @return array HTTP response headers, downloaded content
  *
@@ -35,8 +37,13 @@ use Shaarli\Http\Url;
  * @see http://stackoverflow.com/q/9183178
  * @see http://stackoverflow.com/q/1462720
  */
-function get_http_response($url, $timeout = 30, $maxBytes = 4194304, $curlWriteFunction = null)
-{
+function get_http_response(
+    $url,
+    $timeout = 30,
+    $maxBytes = 4194304,
+    $curlHeaderFunction = null,
+    $curlWriteFunction = null
+) {
     $urlObj = new Url($url);
     $cleanUrl = $urlObj->idnToAscii();
 
@@ -70,7 +77,8 @@ function get_http_response($url, $timeout = 30, $maxBytes = 4194304, $curlWriteF
     // General cURL settings
     curl_setopt($ch, CURLOPT_AUTOREFERER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_HEADER, true);
+    // Default header download if the $curlHeaderFunction is not defined
+    curl_setopt($ch, CURLOPT_HEADER, !is_callable($curlHeaderFunction));
     curl_setopt(
         $ch,
         CURLOPT_HTTPHEADER,
@@ -81,25 +89,21 @@ function get_http_response($url, $timeout = 30, $maxBytes = 4194304, $curlWriteF
     curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
     curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
 
-    if (is_callable($curlWriteFunction)) {
-        curl_setopt($ch, CURLOPT_WRITEFUNCTION, $curlWriteFunction);
-    }
-
     // Max download size management
     curl_setopt($ch, CURLOPT_BUFFERSIZE, 1024*16);
     curl_setopt($ch, CURLOPT_NOPROGRESS, false);
+    if (is_callable($curlHeaderFunction)) {
+        curl_setopt($ch, CURLOPT_HEADERFUNCTION, $curlHeaderFunction);
+    }
+    if (is_callable($curlWriteFunction)) {
+        curl_setopt($ch, CURLOPT_WRITEFUNCTION, $curlWriteFunction);
+    }
     curl_setopt(
         $ch,
         CURLOPT_PROGRESSFUNCTION,
-        function ($arg0, $arg1, $arg2, $arg3, $arg4 = 0) use ($maxBytes) {
-            if (version_compare(phpversion(), '5.5', '<')) {
-                // PHP version lower than 5.5
-                // Callback has 4 arguments
-                $downloaded = $arg1;
-            } else {
-                // Callback has 5 arguments
-                $downloaded = $arg2;
-            }
+        function ($arg0, $arg1, $arg2, $arg3, $arg4) use ($maxBytes) {
+            $downloaded = $arg2;
+
             // Non-zero return stops downloading
             return ($downloaded > $maxBytes) ? 1 : 0;
         }
@@ -493,53 +497,22 @@ function is_https($server)
  * Get cURL callback function for CURLOPT_WRITEFUNCTION
  *
  * @param string $charset     to extract from the downloaded page (reference)
- * @param string $title       to extract from the downloaded page (reference)
- * @param string $description to extract from the downloaded page (reference)
- * @param string $keywords    to extract from the downloaded page (reference)
- * @param bool   $retrieveDescription Automatically tries to retrieve description and keywords from HTML content
  * @param string $curlGetInfo Optionally overrides curl_getinfo function
  *
  * @return Closure
  */
-function get_curl_download_callback(
+function get_curl_header_callback(
     &$charset,
-    &$title,
-    &$description,
-    &$keywords,
-    $retrieveDescription,
     $curlGetInfo = 'curl_getinfo'
 ) {
     $isRedirected = false;
-    $currentChunk = 0;
-    $foundChunk = null;
 
-    /**
-     * cURL callback function for CURLOPT_WRITEFUNCTION (called during the download).
-     *
-     * While downloading the remote page, we check that the HTTP code is 200 and content type is 'html/text'
-     * Then we extract the title and the charset and stop the download when it's done.
-     *
-     * @param resource $ch   cURL resource
-     * @param string   $data chunk of data being downloaded
-     *
-     * @return int|bool length of $data or false if we need to stop the download
-     */
-    return function (&$ch, $data) use (
-        $retrieveDescription,
-        $curlGetInfo,
-        &$charset,
-        &$title,
-        &$description,
-        &$keywords,
-        &$isRedirected,
-        &$currentChunk,
-        &$foundChunk
-    ) {
-        $currentChunk++;
+    return function ($ch, $data) use ($curlGetInfo, &$charset, &$isRedirected) {
         $responseCode = $curlGetInfo($ch, CURLINFO_RESPONSE_CODE);
+        $chunkLength = strlen($data);
         if (!empty($responseCode) && in_array($responseCode, [301, 302])) {
             $isRedirected = true;
-            return strlen($data);
+            return $chunkLength;
         }
         if (!empty($responseCode) && $responseCode !== 200) {
             return false;
@@ -555,11 +528,65 @@ function get_curl_download_callback(
         if (!empty($contentType) && empty($charset)) {
             $charset = header_extract_charset($contentType);
         }
+
+        return $chunkLength;
+    };
+}
+
+/**
+ * Get cURL callback function for CURLOPT_WRITEFUNCTION
+ *
+ * @param string $charset     to extract from the downloaded page (reference)
+ * @param string $title       to extract from the downloaded page (reference)
+ * @param string $description to extract from the downloaded page (reference)
+ * @param string $keywords    to extract from the downloaded page (reference)
+ * @param bool   $retrieveDescription Automatically tries to retrieve description and keywords from HTML content
+ * @param string $curlGetInfo Optionally overrides curl_getinfo function
+ *
+ * @return Closure
+ */
+function get_curl_download_callback(
+    &$charset,
+    &$title,
+    &$description,
+    &$keywords,
+    $retrieveDescription
+) {
+    $currentChunk = 0;
+    $foundChunk = null;
+
+    /**
+     * cURL callback function for CURLOPT_WRITEFUNCTION (called during the download).
+     *
+     * While downloading the remote page, we check that the HTTP code is 200 and content type is 'html/text'
+     * Then we extract the title and the charset and stop the download when it's done.
+     *
+     * @param resource $ch   cURL resource
+     * @param string   $data chunk of data being downloaded
+     *
+     * @return int|bool length of $data or false if we need to stop the download
+     */
+    return function ($ch, $data) use (
+        $retrieveDescription,
+        &$charset,
+        &$title,
+        &$description,
+        &$keywords,
+        &$currentChunk,
+        &$foundChunk
+    ) {
+        $chunkLength = strlen($data);
+        $currentChunk++;
+
         if (empty($charset)) {
             $charset = html_extract_charset($data);
         }
         if (empty($title)) {
             $title = html_extract_title($data);
+            $foundChunk = ! empty($title) ? $currentChunk : $foundChunk;
+        }
+        if (empty($title)) {
+            $title = html_extract_tag('title', $data);
             $foundChunk = ! empty($title) ? $currentChunk : $foundChunk;
         }
         if ($retrieveDescription && empty($description)) {
@@ -591,6 +618,6 @@ function get_curl_download_callback(
             return false;
         }
 
-        return strlen($data);
+        return $chunkLength;
     };
 }

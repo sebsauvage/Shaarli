@@ -20,6 +20,7 @@ module.exports = [
     entry: {
       thumbnails: './assets/common/js/thumbnails.js',
       thumbnails_update: './assets/common/js/thumbnails-update.js',
+      metadata: './assets/common/js/metadata.js',
       pluginsadmin: './assets/default/js/plugins-admin.js',
       shaarli: [
         './assets/default/js/base.js',
@@ -99,6 +100,7 @@ module.exports = [
       ].concat(glob.sync('./assets/vintage/img/*')),
       markdown: './assets/common/css/markdown.css',
       thumbnails: './assets/common/js/thumbnails.js',
+      metadata: './assets/common/js/metadata.js',
       thumbnails_update: './assets/common/js/thumbnails-update.js',
     },
     output: {

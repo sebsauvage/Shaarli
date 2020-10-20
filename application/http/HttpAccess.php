@@ -14,9 +14,14 @@ namespace Shaarli\Http;
  */
 class HttpAccess
 {
-    public function getHttpResponse($url, $timeout = 30, $maxBytes = 4194304, $curlWriteFunction = null)
-    {
-        return get_http_response($url, $timeout, $maxBytes, $curlWriteFunction);
+    public function getHttpResponse(
+        $url,
+        $timeout = 30,
+        $maxBytes = 4194304,
+        $curlHeaderFunction = null,
+        $curlWriteFunction = null
+    ) {
+        return get_http_response($url, $timeout, $maxBytes, $curlHeaderFunction, $curlWriteFunction);
     }
 
     public function getCurlDownloadCallback(
@@ -24,16 +29,19 @@ class HttpAccess
         &$title,
         &$description,
         &$keywords,
-        $retrieveDescription,
-        $curlGetInfo = 'curl_getinfo'
+        $retrieveDescription
     ) {
         return get_curl_download_callback(
             $charset,
             $title,
             $description,
             $keywords,
-            $retrieveDescription,
-            $curlGetInfo
+            $retrieveDescription
         );
+    }
+
+    public function getCurlHeaderCallback(&$charset, $curlGetInfo = 'curl_getinfo')
+    {
+        return get_curl_header_callback($charset, $curlGetInfo);
     }
 }
