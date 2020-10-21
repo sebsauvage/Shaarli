@@ -79,6 +79,15 @@ class InstallControllerTest extends TestCase
         static::assertIsArray($assignedVariables['languages']);
         static::assertSame('Automatic', $assignedVariables['languages']['auto']);
         static::assertSame('French', $assignedVariables['languages']['fr']);
+
+        static::assertSame(PHP_VERSION, $assignedVariables['php_version']);
+        static::assertArrayHasKey('php_has_reached_eol', $assignedVariables);
+        static::assertArrayHasKey('php_eol', $assignedVariables);
+        static::assertArrayHasKey('php_extensions', $assignedVariables);
+        static::assertArrayHasKey('permissions', $assignedVariables);
+        static::assertEmpty($assignedVariables['permissions']);
+
+        static::assertSame('Install Shaarli', $assignedVariables['pagetitle']);
     }
 
     /**

@@ -128,6 +128,8 @@ $app->group('/admin', function () {
     $this->get('/plugins', '\Shaarli\Front\Controller\Admin\PluginsController:index');
     $this->post('/plugins', '\Shaarli\Front\Controller\Admin\PluginsController:save');
     $this->get('/token', '\Shaarli\Front\Controller\Admin\TokenController:getToken');
+    $this->get('/server', '\Shaarli\Front\Controller\Admin\ServerController:index');
+    $this->get('/clear-cache', '\Shaarli\Front\Controller\Admin\ServerController:clearCache');
     $this->get('/thumbnails', '\Shaarli\Front\Controller\Admin\ThumbnailsController:index');
     $this->get('/metadata', '\Shaarli\Front\Controller\Admin\MetadataController:ajaxRetrieveTitle');
     $this->get('/visibility/{visibility}', '\Shaarli\Front\Controller\Admin\SessionFilterController:visibility');

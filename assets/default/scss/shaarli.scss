@@ -1047,7 +1047,7 @@ body,
   }
 
   table {
-    margin: auto;
+    margin: 10px auto 25px auto;
     width: 90%;
 
     .order {
@@ -1693,6 +1693,60 @@ form {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+}
+
+// SERVER PAGE
+
+.server-tables-page,
+.server-tables {
+  .window-subtitle {
+    &::before {
+      display: block;
+      margin: 8px auto;
+      background: linear-gradient(to right, var(--background-color), $dark-grey, var(--background-color));
+      width: 50%;
+      height: 1px;
+      content: '';
+    }
+  }
+
+  .server-row {
+    p {
+      height: 25px;
+      padding: 0 10px;
+    }
+  }
+
+  .server-label {
+    text-align: right;
+    font-weight: bold;
+  }
+
+  i {
+    &.fa-color-green {
+      color: $main-green;
+    }
+
+    &.fa-color-orange {
+      color: $orange;
+    }
+
+    &.fa-color-red {
+      color: $red;
+    }
+  }
+
+  @media screen and (max-width: 64em) {
+    .server-label {
+      text-align: center;
+    }
+
+    .server-row {
+      p {
+        text-align: center;
+      }
+    }
   }
 }
 
