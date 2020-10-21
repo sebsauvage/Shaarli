@@ -325,6 +325,11 @@ server {
         deny all;
     }
 
+    location ~ /doc/ {
+        default_type "text/html";
+        try_files $uri $uri/ $uri.html =404;
+    }
+
     location = /favicon.ico {
         # serve the Shaarli favicon from its custom location
         alias /var/www/shaarli/images/favicon.ico;
