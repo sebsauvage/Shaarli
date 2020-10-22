@@ -68,15 +68,16 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
      */
     protected function formatTagListHtml($bookmark)
     {
+        $tagsSeparator = $this->conf->get('general.tags_separator', ' ');
         if (empty($bookmark->getAdditionalContentEntry('search_highlight')['tags'])) {
             return $this->formatTagList($bookmark);
         }
 
         $tags = $this->tokenizeSearchHighlightField(
-            $bookmark->getTagsString(),
+            $bookmark->getTagsString($tagsSeparator),
             $bookmark->getAdditionalContentEntry('search_highlight')['tags']
         );
-        $tags = $this->filterTagList(explode(' ', $tags));
+        $tags = $this->filterTagList(tags_str2array($tags, $tagsSeparator));
         $tags = escape($tags);
         $tags = $this->replaceTokensArray($tags);
 
@@ -88,7 +89,7 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
      */
     protected function formatTagString($bookmark)
     {
-        return implode(' ', $this->formatTagList($bookmark));
+        return implode($this->conf->get('general.tags_separator'), $this->formatTagList($bookmark));
     }
 
     /**

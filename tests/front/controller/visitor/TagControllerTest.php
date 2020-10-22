@@ -50,7 +50,7 @@ class TagControllerTest extends TestCase
 
         static::assertInstanceOf(Response::class, $result);
         static::assertSame(302, $result->getStatusCode());
-        static::assertSame(['/controller/?searchtags=def+abc'], $result->getHeader('location'));
+        static::assertSame(['/controller/?searchtags=def%40abc'], $result->getHeader('location'));
     }
 
     public function testAddTagWithoutRefererAndExistingSearch(): void
@@ -80,7 +80,7 @@ class TagControllerTest extends TestCase
 
         static::assertInstanceOf(Response::class, $result);
         static::assertSame(302, $result->getStatusCode());
-        static::assertSame(['/controller/?searchtags=def+abc'], $result->getHeader('location'));
+        static::assertSame(['/controller/?searchtags=def%40abc'], $result->getHeader('location'));
     }
 
     public function testAddTagResetPagination(): void
@@ -96,7 +96,7 @@ class TagControllerTest extends TestCase
 
         static::assertInstanceOf(Response::class, $result);
         static::assertSame(302, $result->getStatusCode());
-        static::assertSame(['/controller/?searchtags=def+abc'], $result->getHeader('location'));
+        static::assertSame(['/controller/?searchtags=def%40abc'], $result->getHeader('location'));
     }
 
     public function testAddTagWithRefererAndEmptySearch(): void

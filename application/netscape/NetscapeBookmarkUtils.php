@@ -101,11 +101,11 @@ class NetscapeBookmarkUtils
 
         // Add tags to all imported bookmarks?
         if (empty($post['default_tags'])) {
-            $defaultTags = array();
+            $defaultTags = [];
         } else {
-            $defaultTags = preg_split(
-                '/[\s,]+/',
-                escape($post['default_tags'])
+            $defaultTags = tags_str2array(
+                escape($post['default_tags']),
+                $this->conf->get('general.tags_separator', ' ')
             );
         }
 
@@ -171,7 +171,7 @@ class NetscapeBookmarkUtils
             $link->setUrl($bkm['uri'], $this->conf->get('security.allowed_protocols'));
             $link->setDescription($bkm['note']);
             $link->setPrivate($private);
-            $link->setTagsString($bkm['tags']);
+            $link->setTags($bkm['tags']);
 
             $this->bookmarkService->addOrSet($link, false);
             $importCount++;

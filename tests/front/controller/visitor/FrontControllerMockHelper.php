@@ -41,6 +41,10 @@ trait FrontControllerMockHelper
         // Config
         $this->container->conf = $this->createMock(ConfigManager::class);
         $this->container->conf->method('get')->willReturnCallback(function (string $parameter, $default) {
+            if ($parameter === 'general.tags_separator') {
+                return '@';
+            }
+
             return $default === null ? $parameter : $default;
         });
 

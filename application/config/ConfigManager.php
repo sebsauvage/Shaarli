@@ -368,6 +368,7 @@ class ConfigManager
         $this->setEmpty('general.default_note_title', 'Note: ');
         $this->setEmpty('general.retrieve_description', true);
         $this->setEmpty('general.enable_async_metadata', true);
+        $this->setEmpty('general.tags_separator', ' ');
 
         $this->setEmpty('updates.check_updates', false);
         $this->setEmpty('updates.check_updates_branch', 'stable');

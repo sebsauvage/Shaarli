@@ -6,6 +6,7 @@ namespace Shaarli\Bookmark;
 
 use Exception;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
+use Shaarli\Config\ConfigManager;
 
 /**
  * Class LinkFilter.
@@ -58,12 +59,16 @@ class BookmarkFilter
      */
     private $bookmarks;
 
+    /** @var ConfigManager */
+    protected $conf;
+
     /**
      * @param Bookmark[] $bookmarks initialization.
      */
-    public function __construct($bookmarks)
+    public function __construct($bookmarks, ConfigManager $conf)
     {
         $this->bookmarks = $bookmarks;
+        $this->conf = $conf;
     }
 
     /**
@@ -107,10 +112,14 @@ class BookmarkFilter
                     $filtered = $this->bookmarks;
                 }
                 if (!empty($request[0])) {
-                    $filtered = (new BookmarkFilter($filtered))->filterTags($request[0], $casesensitive, $visibility);
+                    $filtered = (new BookmarkFilter($filtered, $this->conf))
+                        ->filterTags($request[0], $casesensitive, $visibility)
+                    ;
                 }
                 if (!empty($request[1])) {
-                    $filtered = (new BookmarkFilter($filtered))->filterFulltext($request[1], $visibility);
+                    $filtered = (new BookmarkFilter($filtered, $this->conf))
+                        ->filterFulltext($request[1], $visibility)
+                    ;
                 }
                 return $filtered;
             case self::$FILTER_TEXT:
@@ -280,8 +289,9 @@ class BookmarkFilter
      *
      * @return string generated regex fragment
      */
-    private static function tag2regex(string $tag): string
+    protected function tag2regex(string $tag): string
     {
+        $tagsSeparator = $this->conf->get('general.tags_separator', ' ');
         $len = strlen($tag);
         if (!$len || $tag === "-" || $tag === "*") {
             // nothing to search, return empty regex
@@ -295,12 +305,13 @@ class BookmarkFilter
             $i = 0; // start at first character
             $regex = '(?='; // use positive lookahead
         }
-        $regex .= '.*(?:^| )'; // before tag may only be a space or the beginning
+        // before tag may only be the separator or the beginning
+        $regex .= '.*(?:^|' . $tagsSeparator . ')';
         // iterate over string, separating it into placeholder and content
         for (; $i < $len; $i++) {
             if ($tag[$i] === '*') {
                 // placeholder found
-                $regex .= '[^ ]*?';
+                $regex .= '[^' . $tagsSeparator . ']*?';
             } else {
                 // regular characters
                 $offset = strpos($tag, '*', $i);
@@ -316,7 +327,8 @@ class BookmarkFilter
                 $i = $offset;
             }
         }
-        $regex .= '(?:$| ))'; // after the tag may only be a space or the end
+        // after the tag may only be the separator or the end
+        $regex .= '(?:$|' . $tagsSeparator . '))';
         return $regex;
     }
 
@@ -334,14 +346,15 @@ class BookmarkFilter
      */
     public function filterTags($tags, bool $casesensitive = false, string $visibility = 'all')
     {
+        $tagsSeparator = $this->conf->get('general.tags_separator', ' ');
         // get single tags (we may get passed an array, even though the docs say different)
         $inputTags = $tags;
         if (!is_array($tags)) {
             // we got an input string, split tags
-            $inputTags = preg_split('/(?:\s+)|,/', $inputTags, -1, PREG_SPLIT_NO_EMPTY);
+            $inputTags = tags_str2array($inputTags, $tagsSeparator);
         }
 
-        if (!count($inputTags)) {
+        if (count($inputTags) === 0) {
             // no input tags
             return $this->noFilter($visibility);
         }
@@ -358,7 +371,7 @@ class BookmarkFilter
         }
 
         // build regex from all tags
-        $re = '/^' . implode(array_map("self::tag2regex", $inputTags)) . '.*$/';
+        $re = '/^' . implode(array_map([$this, 'tag2regex'], $inputTags)) . '.*$/';
         if (!$casesensitive) {
             // make regex case insensitive
             $re .= 'i';
@@ -378,7 +391,8 @@ class BookmarkFilter
                     continue;
                 }
             }
-            $search = $link->getTagsString(); // build search string, start with tags of current link
+            // build search string, start with tags of current link
+            $search = $link->getTagsString($tagsSeparator);
             if (strlen(trim($link->getDescription())) && strpos($link->getDescription(), '#') !== false) {
                 // description given and at least one possible tag found
                 $descTags = array();
@@ -390,9 +404,9 @@ class BookmarkFilter
                 );
                 if (count($descTags[1])) {
                     // there were some tags in the description, add them to the search string
-                    $search .= ' ' . implode(' ', $descTags[1]);
+                    $search .= $tagsSeparator . tags_array2str($descTags[1], $tagsSeparator);
                 }
-            };
+            }
             // match regular expression with search string
             if (!preg_match($re, $search)) {
                 // this entry does _not_ match our regex
@@ -422,7 +436,7 @@ class BookmarkFilter
                 }
             }
 
-            if (empty(trim($link->getTagsString()))) {
+            if (empty($link->getTags())) {
                 $filtered[$key] = $link;
             }
         }
@@ -537,10 +551,11 @@ class BookmarkFilter
      */
     protected function buildFullTextSearchableLink(Bookmark $link, array &$lengths): string
     {
+        $tagString = $link->getTagsString($this->conf->get('general.tags_separator', ' '));
         $content  = mb_convert_case($link->getTitle(), MB_CASE_LOWER, 'UTF-8') .'\\';
         $content .= mb_convert_case($link->getDescription(), MB_CASE_LOWER, 'UTF-8') .'\\';
         $content .= mb_convert_case($link->getUrl(), MB_CASE_LOWER, 'UTF-8') .'\\';
-        $content .= mb_convert_case($link->getTagsString(), MB_CASE_LOWER, 'UTF-8') .'\\';
+        $content .= mb_convert_case($tagString, MB_CASE_LOWER, 'UTF-8') .'\\';
 
         $lengths['title'] = ['start' => 0, 'end' => mb_strlen($link->getTitle())];
         $nextField = $lengths['title']['end'] + 1;
@@ -548,7 +563,7 @@ class BookmarkFilter
         $nextField = $lengths['description']['end'] + 1;
         $lengths['url'] = ['start' => $nextField, 'end' => $nextField + mb_strlen($link->getUrl())];
         $nextField = $lengths['url']['end'] + 1;
-        $lengths['tags'] = ['start' => $nextField, 'end' => $nextField + mb_strlen($link->getTagsString())];
+        $lengths['tags'] = ['start' => $nextField, 'end' => $nextField + mb_strlen($tagString)];
 
         return $content;
     }

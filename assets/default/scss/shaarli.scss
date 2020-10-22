@@ -139,6 +139,16 @@ body,
   }
 }
 
+.page-form,
+.pure-alert {
+  code {
+    display: inline-block;
+    padding: 0 2px;
+    color: $dark-grey;
+    background-color: var(--background-color);
+  }
+}
+
 // Make pure-extras alert closable.
 .pure-alert-closable {
   .fa-times {

@@ -42,19 +42,20 @@ function refreshToken(basePath, callback) {
   xhr.send();
 }
 
-function createAwesompleteInstance(element, tags = []) {
+function createAwesompleteInstance(element, separator, tags = []) {
   const awesome = new Awesomplete(Awesomplete.$(element));
-  // Tags are separated by a space
-  awesome.filter = (text, input) => Awesomplete.FILTER_CONTAINS(text, input.match(/[^ ]*$/)[0]);
+
+  // Tags are separated by separator
+  awesome.filter = (text, input) => Awesomplete.FILTER_CONTAINS(text, input.match(new RegExp(`[^${separator}]*$`))[0]);
   // Insert new selected tag in the input
   awesome.replace = (text) => {
-    const before = awesome.input.value.match(/^.+ \s*|/)[0];
-    awesome.input.value = `${before}${text} `;
+    const before = awesome.input.value.match(new RegExp(`^.+${separator}+|`))[0];
+    awesome.input.value = `${before}${text}${separator}`;
   };
   // Highlight found items
-  awesome.item = (text, input) => Awesomplete.ITEM(text, input.match(/[^ ]*$/)[0]);
+  awesome.item = (text, input) => Awesomplete.ITEM(text, input.match(new RegExp(`[^${separator}]*$`))[0]);
   // Don't display already selected items
-  const reg = /(\w+) /g;
+  const reg = new RegExp(`/(\w+)${separator}/g`);
   let match;
   awesome.data = (item, input) => {
     while ((match = reg.exec(input))) {
@@ -78,13 +79,14 @@ function createAwesompleteInstance(element, tags = []) {
  * @param selector  CSS selector
  * @param tags      Array of tags
  * @param instances List of existing awesomplete instances
+ * @param separator Tags separator character
  */
-function updateAwesompleteList(selector, tags, instances) {
+function updateAwesompleteList(selector, tags, instances, separator) {
   if (instances.length === 0) {
     // First load: create Awesomplete instances
     const elements = document.querySelectorAll(selector);
     [...elements].forEach((element) => {
-      instances.push(createAwesompleteInstance(element, tags));
+      instances.push(createAwesompleteInstance(element, separator, tags));
     });
   } else {
     // Update awesomplete tag list
@@ -214,6 +216,8 @@ function init(description) {
 
 (() => {
   const basePath = document.querySelector('input[name="js_base_path"]').value;
+  const tagsSeparatorElement = document.querySelector('input[name="tags_separator"]');
+  const tagsSeparator = tagsSeparatorElement ? tagsSeparatorElement.value || '\s' : '\s';
 
   /**
    * Handle responsive menu.
@@ -575,7 +579,7 @@ function init(description) {
 
           // Refresh awesomplete values
           existingTags = existingTags.map((tag) => (tag === fromtag ? totag : tag));
-          awesomepletes = updateAwesompleteList('.rename-tag-input', existingTags, awesomepletes);
+          awesomepletes = updateAwesompleteList('.rename-tag-input', existingTags, awesomepletes, tagsSeparator);
         }
       };
       xhr.send(`renametag=1&fromtag=${fromtagUrl}&totag=${encodeURIComponent(totag)}&token=${refreshedToken}`);
@@ -615,14 +619,14 @@ function init(description) {
         refreshToken(basePath);
 
         existingTags = existingTags.filter((tagItem) => tagItem !== tag);
-        awesomepletes = updateAwesompleteList('.rename-tag-input', existingTags, awesomepletes);
+        awesomepletes = updateAwesompleteList('.rename-tag-input', existingTags, awesomepletes, tagsSeparator);
       }
     });
   });
 
   const autocompleteFields = document.querySelectorAll('input[data-multiple]');
   [...autocompleteFields].forEach((autocompleteField) => {
-    awesomepletes.push(createAwesompleteInstance(autocompleteField));
+    awesomepletes.push(createAwesompleteInstance(autocompleteField, tagsSeparator));
   });
 
   const exportForm = document.querySelector('#exportform');
