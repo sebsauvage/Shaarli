@@ -1793,6 +1793,29 @@ input[name='save_edit_batch'] {
   }
 }
 
+.dark-layer {
+  display: none;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 998;
+  background-color: rgba(0, 0, 0, .75);
+  color: #fff;
+
+  .screen-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+  }
+
+  .progressbar {
+    width: 33%;
+  }
+}
+
 .addlink-batch-form-block {
   .pure-alert {
     margin: 25px 0 0 0;

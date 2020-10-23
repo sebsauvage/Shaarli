@@ -15,7 +15,7 @@ const sendBookmarkForm = (basePath, formElement) => {
         alert(`An error occurred. Return code: ${xhr.status}`);
         reject();
       } else {
-        formElement.remove();
+        formElement.closest('.edit-link-container').remove();
         resolve();
       }
     };
@@ -32,7 +32,7 @@ const sendBookmarkDelete = (buttonElement, formElement) => (
         alert(`An error occurred. Return code: ${xhr.status}`);
         reject();
       } else {
-        formElement.remove();
+        formElement.closest('.edit-link-container').remove();
         resolve();
       }
     };
@@ -80,9 +80,23 @@ const redirectIfEmptyBatch = (basePath, formElements, path) => {
       saveAllButton.addEventListener('click', (e) => {
         e.preventDefault();
 
+        const forms = [...getForms()];
+        const nbForm = forms.length;
+        let current = 0;
+        const progressBar = document.querySelector('.progressbar > div');
+        const progressBarCurrent = document.querySelector('.progressbar-current');
+
+        document.querySelector('.dark-layer').style.display = 'block';
+        document.querySelector('.progressbar-max').innerHTML = nbForm;
+        progressBarCurrent.innerHTML = current;
+
         const promises = [];
-        [...getForms()].forEach((formElement) => {
-          promises.push(sendBookmarkForm(basePath, formElement));
+        forms.forEach((formElement) => {
+          promises.push(sendBookmarkForm(basePath, formElement).then(() => {
+            current += 1;
+            progressBar.style.width = `${(current * 100) / nbForm}%`;
+            progressBarCurrent.innerHTML = current;
+          }));
         });
 
         Promise.all(promises).then(() => {
