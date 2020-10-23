@@ -46,6 +46,9 @@ class ShaarePublishController extends ShaarliAdminController
 
         $links = [];
         foreach ($urls as $url) {
+            if (empty($url)) {
+                continue;
+            }
             $link = $this->buildLinkDataFromUrl($request, $url);
             $data = $this->buildFormData($link, $link['linkIsNew'], $request);
             $data['token'] = $this->container->sessionManager->generateToken();

@@ -36,6 +36,7 @@ class DisplayCreateBatchFormTest extends TestCase
         $urls = [
             'https://domain1.tld/url1',
             'https://domain2.tld/url2',
+            ' ',
             'https://domain3.tld/url3',
         ];
 
@@ -57,6 +58,6 @@ class DisplayCreateBatchFormTest extends TestCase
         static::assertCount(3, $assignedVariables['links']);
         static::assertSame($urls[0], $assignedVariables['links'][0]['link']['url']);
         static::assertSame($urls[1], $assignedVariables['links'][1]['link']['url']);
-        static::assertSame($urls[2], $assignedVariables['links'][2]['link']['url']);
+        static::assertSame($urls[3], $assignedVariables['links'][2]['link']['url']);
     }
 }
