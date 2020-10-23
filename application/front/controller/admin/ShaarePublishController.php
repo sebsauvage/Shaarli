@@ -6,6 +6,7 @@ namespace Shaarli\Front\Controller\Admin;
 
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
+use Shaarli\Formatter\BookmarkFormatter;
 use Shaarli\Formatter\BookmarkMarkdownFormatter;
 use Shaarli\Render\TemplatePage;
 use Shaarli\Thumbnailer;
@@ -14,6 +15,16 @@ use Slim\Http\Response;
 
 class ShaarePublishController extends ShaarliAdminController
 {
+    /**
+     * @var BookmarkFormatter[] Statically cached instances of formatters
+     */
+    protected $formatters = [];
+
+    /**
+     * @var array Statically cached bookmark's tags counts
+     */
+    protected $tags;
+
     /**
      * GET /admin/shaare - Displays the bookmark form for creation.
      *                     Note that if the URL is found in existing bookmarks, then it will be in edit mode.
@@ -72,7 +83,7 @@ class ShaarePublishController extends ShaarliAdminController
             return $this->redirect($response, '/');
         }
 
-        $formatter = $this->container->formatterFactory->getFormatter('raw');
+        $formatter = $this->getFormatter('raw');
         $link = $formatter->format($bookmark);
 
         return $this->displayForm($link, false, $request, $response);
@@ -110,7 +121,7 @@ class ShaarePublishController extends ShaarliAdminController
         $this->container->bookmarkService->addOrSet($bookmark, false);
 
         // To preserve backward compatibility with 3rd parties, plugins still use arrays
-        $formatter = $this->container->formatterFactory->getFormatter('raw');
+        $formatter = $this->getFormatter('raw');
         $data = $formatter->format($bookmark);
         $this->executePageHooks('save_link', $data);
 
@@ -198,7 +209,7 @@ class ShaarePublishController extends ShaarliAdminController
             ];
         }
 
-        $formatter = $this->container->formatterFactory->getFormatter('raw');
+        $formatter = $this->getFormatter('raw');
         $link = $formatter->format($bookmark);
         $link['linkIsNew'] = false;
 
@@ -207,20 +218,43 @@ class ShaarePublishController extends ShaarliAdminController
 
     protected function buildFormData(array $link, bool $isNew, Request $request): array
     {
-        $tags = $this->container->bookmarkService->bookmarksCountPerTag();
-        if ($this->container->conf->get('formatter') === 'markdown') {
-            $tags[BookmarkMarkdownFormatter::NO_MD_TAG] = 1;
-        }
-
         return escape([
             'link' => $link,
             'link_is_new' => $isNew,
             'http_referer' => $this->container->environment['HTTP_REFERER'] ?? '',
             'source' => $request->getParam('source') ?? '',
-            'tags' => $tags,
+            'tags' => $this->getTags(),
             'default_private_links' => $this->container->conf->get('privacy.default_private_links', false),
             'async_metadata' => $this->container->conf->get('general.enable_async_metadata', true),
             'retrieve_description' => $this->container->conf->get('general.retrieve_description', false),
         ]);
+    }
+
+    /**
+     * Memoize formatterFactory->getFormatter() calls.
+     */
+    protected function getFormatter(string $type): BookmarkFormatter
+    {
+        if (!array_key_exists($type, $this->formatters) || $this->formatters[$type] === null) {
+            $this->formatters[$type] = $this->container->formatterFactory->getFormatter($type);
+        }
+
+        return $this->formatters[$type];
+    }
+
+    /**
+     * Memoize bookmarkService->bookmarksCountPerTag() calls.
+     */
+    protected function getTags(): array
+    {
+        if ($this->tags === null) {
+            $this->tags = $this->container->bookmarkService->bookmarksCountPerTag();
+
+            if ($this->container->conf->get('formatter') === 'markdown') {
+                $this->tags[BookmarkMarkdownFormatter::NO_MD_TAG] = 1;
+            }
+        }
+
+        return $this->tags;
     }
 }
