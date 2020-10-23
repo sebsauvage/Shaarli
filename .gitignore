@@ -27,6 +27,17 @@ phpmd.html
 phpdoc.xml
 
 # User plugin configuration
+plugins/*
+!addlink_toolbar
+!archiveorg
+!default_colors
+!demo_plugin
+!isso
+!piwik
+!playvideos
+!pubsubhubbub
+!qrcode
+!wallabag
 plugins/*/config.php
 plugins/default_colors/default_colors.css
 
