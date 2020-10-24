@@ -63,41 +63,25 @@ class UtilsTest extends \Shaarli\TestCase
     }
 
     /**
-     * Log a message to a file - IPv4 client address
+     * Format a log a message - IPv4 client address
      */
-    public function testLogmIp4()
+    public function testFormatLogIp4()
     {
-        $logMessage = 'IPv4 client connected';
-        logm(self::$testLogFile, '127.0.0.1', $logMessage);
-        list($date, $ip, $message) = $this->getLastLogEntry();
+        $message = 'IPv4 client connected';
+        $log = format_log($message, '127.0.0.1');
 
-        $this->assertInstanceOf(
-            'DateTime',
-            DateTime::createFromFormat(self::$dateFormat, $date)
-        );
-        $this->assertTrue(
-            filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false
-        );
-        $this->assertEquals($logMessage, $message);
+        static::assertSame('- 127.0.0.1 - IPv4 client connected', $log);
     }
 
     /**
-     * Log a message to a file - IPv6 client address
+     * Format a log a message - IPv6 client address
      */
-    public function testLogmIp6()
+    public function testFormatLogIp6()
     {
-        $logMessage = 'IPv6 client connected';
-        logm(self::$testLogFile, '2001:db8::ff00:42:8329', $logMessage);
-        list($date, $ip, $message) = $this->getLastLogEntry();
+        $message = 'IPv6 client connected';
+        $log = format_log($message, '2001:db8::ff00:42:8329');
 
-        $this->assertInstanceOf(
-            'DateTime',
-            DateTime::createFromFormat(self::$dateFormat, $date)
-        );
-        $this->assertTrue(
-            filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false
-        );
-        $this->assertEquals($logMessage, $message);
+        static::assertSame('- 2001:db8::ff00:42:8329 - IPv6 client connected', $log);
     }
 
     /**

@@ -4,21 +4,23 @@
  */
 
 /**
- * Logs a message to a text file
+ * Format log using provided data.
  *
- * The log format is compatible with fail2ban.
+ * @param string      $message  the message to log
+ * @param string|null $clientIp the client's remote IPv4/IPv6 address
  *
- * @param string $logFile  where to write the logs
- * @param string $clientIp the client's remote IPv4/IPv6 address
- * @param string $message  the message to log
+ * @return string Formatted message to log
  */
-function logm($logFile, $clientIp, $message)
+function format_log(string $message, string $clientIp = null): string
 {
-    file_put_contents(
-        $logFile,
-        date('Y/m/d H:i:s').' - '.$clientIp.' - '.strval($message).PHP_EOL,
-        FILE_APPEND
-    );
+    $out = $message;
+
+    if (!empty($clientIp)) {
+        // Note: we keep the first dash to avoid breaking fail2ban configs
+        $out = '- ' . $clientIp . ' - ' . $out;
+    }
+
+    return $out;
 }
 
 /**
