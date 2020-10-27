@@ -73,7 +73,7 @@ class ConfigJson implements ConfigIO
      */
     public static function getPhpHeaders()
     {
-        return '<?php /*'. PHP_EOL;
+        return '<?php /*'. "\n";
     }
 
     /**
@@ -85,6 +85,6 @@ class ConfigJson implements ConfigIO
      */
     public static function getPhpSuffix()
     {
-        return PHP_EOL . '*/ ?>';
+        return "\n" . '*/ ?>';
     }
 }
