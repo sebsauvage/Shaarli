@@ -137,8 +137,10 @@ class BookmarkListController extends ShaarliVisitorController
      */
     public function permalink(Request $request, Response $response, array $args): Response
     {
+        $privateKey = $request->getParam('key');
+
         try {
-            $bookmark = $this->container->bookmarkService->findByHash($args['hash']);
+            $bookmark = $this->container->bookmarkService->findByHash($args['hash'], $privateKey);
         } catch (BookmarkNotFoundException $e) {
             $this->assignView('error_message', $e->getMessage());
 

@@ -129,6 +129,7 @@
       {$strAddTag=t('Add tag')}
       {$strToggleSticky=t('Toggle sticky')}
       {$strSticky=t('Sticky')}
+      {$strShaarePrivate=t('Share a private link')}
       {ignore}End of translations{/ignore}
       {loop="links"}
         <div class="anchor" id="{$value.shorturl}"></div>
@@ -240,6 +241,12 @@
                   {/if}
                   {$strPermalinkLc}
                 </a>
+
+                {if="$is_logged_in && $value.private"}
+                  <a href="{$base_path}/admin/shaare/private/{$value.shorturl}?token={$token}" title="{$strShaarePrivate}">
+                    <i class="fa fa-share-alt"></i>
+                  </a>
+                {/if}
 
                 <div class="pure-u-0 pure-u-lg-visible">
                   {if="isset($value.link_plugin)"}

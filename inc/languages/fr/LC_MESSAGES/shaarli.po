@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2020-10-21 15:00+0200\n"
-"PO-Revision-Date: 2020-10-21 15:06+0200\n"
+"POT-Creation-Date: 2020-10-27 19:32+0100\n"
+"PO-Revision-Date: 2020-10-27 19:32+0100\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -123,38 +123,38 @@ msgstr ""
 "l'extension php-gd doit être chargée pour utiliser les miniatures. Les "
 "miniatures sont désormais désactivées. Rechargez la page."
 
-#: application/Utils.php:383
+#: application/Utils.php:385
 msgid "Setting not set"
 msgstr "Paramètre non défini"
 
-#: application/Utils.php:390
+#: application/Utils.php:392
 msgid "Unlimited"
 msgstr "Illimité"
 
-#: application/Utils.php:393
+#: application/Utils.php:395
 msgid "B"
 msgstr "o"
 
-#: application/Utils.php:393
+#: application/Utils.php:395
 msgid "kiB"
 msgstr "ko"
 
-#: application/Utils.php:393
+#: application/Utils.php:395
 msgid "MiB"
 msgstr "Mo"
 
-#: application/Utils.php:393
+#: application/Utils.php:395
 msgid "GiB"
 msgstr "Go"
 
-#: application/bookmark/BookmarkFileService.php:180
-#: application/bookmark/BookmarkFileService.php:202
-#: application/bookmark/BookmarkFileService.php:224
-#: application/bookmark/BookmarkFileService.php:238
+#: application/bookmark/BookmarkFileService.php:183
+#: application/bookmark/BookmarkFileService.php:205
+#: application/bookmark/BookmarkFileService.php:227
+#: application/bookmark/BookmarkFileService.php:241
 msgid "You're not authorized to alter the datastore"
 msgstr "Vous n'êtes pas autorisé à modifier les données"
 
-#: application/bookmark/BookmarkFileService.php:205
+#: application/bookmark/BookmarkFileService.php:208
 msgid "This bookmarks already exists"
 msgstr "Ce marque-page existe déjà."
 
@@ -439,12 +439,12 @@ msgstr "ID du lien non valide."
 msgid "Invalid visibility provided."
 msgstr "Visibilité du lien non valide."
 
-#: application/front/controller/admin/ManageShaareController.php:352
+#: application/front/controller/admin/ManageShaareController.php:378
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:171
 msgid "Edit"
 msgstr "Modifier"
 
-#: application/front/controller/admin/ManageShaareController.php:355
+#: application/front/controller/admin/ManageShaareController.php:381
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:28
 msgid "Shaare"
@@ -551,7 +551,7 @@ msgstr "Hier"
 msgid "Daily"
 msgstr "Quotidien"
 
-#: application/front/controller/visitor/ErrorController.php:36
+#: application/front/controller/visitor/ErrorController.php:33
 msgid "An unexpected error occurred."
 msgstr "Une erreur inattendue s'est produite."
 
@@ -604,7 +604,7 @@ msgstr "Permissions insuffisantes :"
 msgid "Login"
 msgstr "Connexion"
 
-#: application/front/controller/visitor/LoginController.php:78
+#: application/front/controller/visitor/LoginController.php:77
 msgid "Wrong login/password."
 msgstr "Nom d'utilisateur ou mot de passe incorrect(s)."
 
@@ -738,7 +738,7 @@ msgstr "Impossible de purger %s : le répertoire n'existe pas"
 msgid "An error occurred while running the update "
 msgstr "Une erreur s'est produite lors de l'exécution de la mise à jour "
 
-#: index.php:65
+#: index.php:80
 msgid "Shared bookmarks on "
 msgstr "Liens partagés sur "
 
@@ -1375,6 +1375,10 @@ msgstr "Changer statut épinglé"
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:187
 msgid "Sticky"
 msgstr "Épinglé"
+
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:189
+msgid "Share a private link"
+msgstr "Partager un lien privé"
 
 #: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:5
 #: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:5

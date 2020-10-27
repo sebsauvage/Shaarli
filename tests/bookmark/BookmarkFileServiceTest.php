@@ -898,6 +898,37 @@ class BookmarkFileServiceTest extends TestCase
     }
 
     /**
+     * Test filterHash() on a private bookmark while logged out.
+     */
+    public function testFilterHashPrivateWhileLoggedOut()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Not authorized');
+
+        $hash = smallHash('20141125_084734' . 6);
+
+        $this->publicLinkDB->findByHash($hash);
+    }
+
+    /**
+     * Test filterHash() with private key.
+     */
+    public function testFilterHashWithPrivateKey()
+    {
+        $hash = smallHash('20141125_084734' . 6);
+        $privateKey = 'this is usually auto generated';
+
+        $bookmark = $this->privateLinkDB->findByHash($hash);
+        $bookmark->addAdditionalContentEntry('private_key', $privateKey);
+        $this->privateLinkDB->save();
+
+        $this->privateLinkDB = new BookmarkFileService($this->conf, $this->history, $this->mutex, false);
+        $bookmark = $this->privateLinkDB->findByHash($hash, $privateKey);
+
+        static::assertSame(6, $bookmark->getId());
+    }
+
+    /**
      * Test linksCountPerTag all tags without filter.
      * Equal occurrences should be sorted alphabetically.
      */
