@@ -139,6 +139,31 @@ Each file contain two keys:
 
 > Note: In PHP, `parse_ini_file()` seems to want strings to be between by quotes `"` in the ini file.
 
+### Register plugin's routes
+
+Shaarli lets you register custom Slim routes for your plugin.
+
+To register a route, the plugin must include a function called `function <plugin_name>_register_routes(): array`.
+
+This method must return an array of routes, each entry must contain the following keys:
+
+  - `method`: HTTP method, `GET/POST/PUT/PATCH/DELETE`
+  - `route` (path): without prefix, e.g. `/up/{variable}`
+     It will be later prefixed by `/plugin/<plugin name>/`.
+  - `callable` string, function name or FQN class's method to execute, e.g. `demo_plugin_custom_controller`.
+
+Callable functions or methods must have `Slim\Http\Request` and `Slim\Http\Response` parameters
+and return a `Slim\Http\Response`. We recommend creating a dedicated class and extend either
+`ShaarliVisitorController` or `ShaarliAdminController` to use helper functions they provide.
+
+A dedicated plugin template is available for rendering content: `pluginscontent.html` using `content` placeholder.
+
+> **Warning**: plugins are not able to use RainTPL template engine for their content due to technical restrictions.
+> RainTPL does not allow to register multiple template folders, so all HTML rendering must be done within plugin
+> custom controller.
+
+Check out the `demo_plugin` for a live example: `GET <shaarli_url>/plugin/demo_plugin/custom`.
+
 ### Understanding relative paths
 
 Because Shaarli is a self-hosted tool, an instance can either be installed at the root directory, or under a subfolder.

@@ -120,4 +120,43 @@ class PluginManagerTest extends \Shaarli\TestCase
         $this->assertEquals('test plugin', $meta[self::$pluginName]['description']);
         $this->assertEquals($expectedParameters, $meta[self::$pluginName]['parameters']);
     }
+
+    /**
+     * Test plugin custom routes - note that there is no check on callable functions
+     */
+    public function testRegisteredRoutes(): void
+    {
+        PluginManager::$PLUGINS_PATH = self::$pluginPath;
+        $this->pluginManager->load([self::$pluginName]);
+
+        $expectedParameters = [
+            [
+                'method' => 'GET',
+                'route' => '/test',
+                'callable' => 'getFunction',
+            ],
+            [
+                'method' => 'POST',
+                'route' => '/custom',
+                'callable' => 'postFunction',
+            ],
+        ];
+        $meta = $this->pluginManager->getRegisteredRoutes();
+        static::assertSame($expectedParameters, $meta[self::$pluginName]);
+    }
+
+    /**
+     * Test plugin custom routes with invalid route
+     */
+    public function testRegisteredRoutesInvalid(): void
+    {
+        $plugin = 'test_route_invalid';
+        $this->pluginManager->load([$plugin]);
+
+        $meta = $this->pluginManager->getRegisteredRoutes();
+        static::assertSame([], $meta);
+
+        $errors = $this->pluginManager->getErrors();
+        static::assertSame(['test_route_invalid [plugin incompatibility]: trying to register invalid route.'], $errors);
+    }
 }

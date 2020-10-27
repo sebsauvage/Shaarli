@@ -50,6 +50,9 @@ class ContainerBuilder
     /** @var LoginManager */
     protected $login;
 
+    /** @var PluginManager */
+    protected $pluginManager;
+
     /** @var LoggerInterface */
     protected $logger;
 
@@ -61,12 +64,14 @@ class ContainerBuilder
         SessionManager $session,
         CookieManager $cookieManager,
         LoginManager $login,
+        PluginManager $pluginManager,
         LoggerInterface $logger
     ) {
         $this->conf = $conf;
         $this->session = $session;
         $this->login = $login;
         $this->cookieManager = $cookieManager;
+        $this->pluginManager = $pluginManager;
         $this->logger = $logger;
     }
 
@@ -78,12 +83,10 @@ class ContainerBuilder
         $container['sessionManager'] = $this->session;
         $container['cookieManager'] = $this->cookieManager;
         $container['loginManager'] = $this->login;
+        $container['pluginManager'] = $this->pluginManager;
         $container['logger'] = $this->logger;
         $container['basePath'] = $this->basePath;
 
-        $container['plugins'] = function (ShaarliContainer $container): PluginManager {
-            return new PluginManager($container->conf);
-        };
 
         $container['history'] = function (ShaarliContainer $container): History {
             return new History($container->conf->get('resource.history'));
@@ -111,14 +114,6 @@ class ContainerBuilder
                 $container->sessionManager->generateToken(),
                 $container->loginManager->isLoggedIn()
             );
-        };
-
-        $container['pluginManager'] = function (ShaarliContainer $container): PluginManager {
-            $pluginManager = new PluginManager($container->conf);
-
-            $pluginManager->load($container->conf->get('general.enabled_plugins'));
-
-            return $pluginManager;
         };
 
         $container['formatterFactory'] = function (ShaarliContainer $container): FormatterFactory {

@@ -7,6 +7,8 @@
  * Can be used by plugin developers to make their own plugin.
  */
 
+require_once __DIR__ . '/DemoPluginController.php';
+
 /*
  * RENDER HEADER, INCLUDES, FOOTER
  *
@@ -58,6 +60,17 @@ function demo_plugin_init($conf)
 
     $errors[] = 'This a demo init error.';
     return $errors;
+}
+
+function demo_plugin_register_routes(): array
+{
+    return [
+        [
+            'method' => 'GET',
+            'route' => '/custom',
+            'callable' => 'Shaarli\DemoPlugin\DemoPluginController:index',
+        ],
+    ];
 }
 
 /**
@@ -304,7 +317,11 @@ function hook_demo_plugin_render_editlink($data)
 function hook_demo_plugin_render_tools($data)
 {
     // field_plugin
-    $data['tools_plugin'][] = 'tools_plugin';
+    $data['tools_plugin'][] = '<div class="tools-item">
+        <a href="' . $data['_BASE_PATH_'] . '/plugin/demo_plugin/custom">
+          <span class="pure-button pure-u-lg-2-3 pure-u-3-4">Demo Plugin Custom Route</span>
+        </a>
+      </div>';
 
     return $data;
 }
