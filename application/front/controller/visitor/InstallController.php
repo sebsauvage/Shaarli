@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Visitor;
 
-use Shaarli\ApplicationUtils;
 use Shaarli\Container\ShaarliContainer;
 use Shaarli\Front\Exception\AlreadyInstalledException;
 use Shaarli\Front\Exception\ResourcePermissionException;
+use Shaarli\Helper\ApplicationUtils;
 use Shaarli\Languages;
 use Shaarli\Security\SessionManager;
 use Slim\Http\Request;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>Daily - {$title}</title>
+    <title>{$localizedType} - {$title}</title>
     <link>{$index_url}</link>
-    <description>Daily shaared bookmarks</description>
+    <description>{function="t('All links of one :type in a single page.', '', 1, 'shaarli', [':type' => t($type)])"}</description>
     <language>{$language}</language>
     <copyright>{$index_url}</copyright>
     <generator>Shaarli</generator>
@@ -18,12 +18,15 @@
           {loop="$value.links"}
             <h3><a href="{$value.url}">{$value.title}</a></h3>
             <small>
-              {if="!$hide_timestamps"}{$value.created|format_date} - {/if}{if="$value.tags"}{$value.tags}{/if}<br>
+              {if="!$hide_timestamps"}{$value.created|format_date} &#8212; {/if}
+              <a href="{$index_url}shaare/{$value.shorturl}">{'Permalink'|t}</a>
+              {if="$value.tags"} &#8212; {$value.tags}{/if}
+              <br>
               {$value.url}
             </small><br>
             {if="$value.thumbnail"}<img src="{$index_url}{$value.thumbnail}#" alt="thumbnail" />{/if}<br>
             {if="$value.description"}{$value.description}{/if}
-            <br><br><hr>
+            <br><hr>
           {/loop}
         ]]></description>
       </item>

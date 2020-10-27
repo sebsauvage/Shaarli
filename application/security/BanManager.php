@@ -4,7 +4,7 @@
 namespace Shaarli\Security;
 
 use Psr\Log\LoggerInterface;
-use Shaarli\FileUtils;
+use Shaarli\Helper\FileUtils;
 
 /**
  * Class BanManager

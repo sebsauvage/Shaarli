@@ -1,7 +1,8 @@
 <?php
-namespace Shaarli;
+namespace Shaarli\Helper;
 
 use Shaarli\Config\ConfigManager;
+use Shaarli\FakeApplicationUtils;
 
 require_once 'tests/utils/FakeApplicationUtils.php';
 

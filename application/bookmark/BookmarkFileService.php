@@ -343,26 +343,42 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function days(): array
-    {
-        $bookmarkDays = [];
-        foreach ($this->search() as $bookmark) {
-            $bookmarkDays[$bookmark->getCreated()->format('Ymd')] = 0;
-        }
-        $bookmarkDays = array_keys($bookmarkDays);
-        sort($bookmarkDays);
+    public function findByDate(
+        \DateTimeInterface $from,
+        \DateTimeInterface $to,
+        ?\DateTimeInterface &$previous,
+        ?\DateTimeInterface &$next
+    ): array {
+        $out = [];
+        $previous = null;
+        $next = null;
 
-        return array_map('strval', $bookmarkDays);
+        foreach ($this->search([], null, false, false, true) as $bookmark) {
+            if ($to < $bookmark->getCreated()) {
+                $next = $bookmark->getCreated();
+            } else if ($from < $bookmark->getCreated() && $to > $bookmark->getCreated()) {
+                $out[] = $bookmark;
+            } else {
+                if ($previous !== null) {
+                    break;
+                }
+                $previous = $bookmark->getCreated();
+            }
+        }
+
+        return $out;
     }
 
     /**
      * @inheritDoc
      */
-    public function filterDay(string $request)
+    public function getLatest(): ?Bookmark
     {
-        $visibility = $this->isLoggedIn ? BookmarkFilter::$ALL : BookmarkFilter::$PUBLIC;
+        foreach ($this->search([], null, false, false, true) as $bookmark) {
+            return $bookmark;
+        }
 
-        return $this->bookmarkFilter->filter(BookmarkFilter::$FILTER_DAY, $request, false, $visibility);
+        return null;
     }
 
     /**

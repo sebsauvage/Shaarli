@@ -59,6 +59,7 @@
             "Shaarli\\Front\\Controller\\Admin\\": "application/front/controller/admin",
             "Shaarli\\Front\\Controller\\Visitor\\": "application/front/controller/visitor",
             "Shaarli\\Front\\Exception\\": "application/front/exceptions",
+            "Shaarli\\Helper\\": "application/helper",
             "Shaarli\\Http\\": "application/http",
             "Shaarli\\Legacy\\": "application/legacy",
             "Shaarli\\Netscape\\": "application/netscape",

@@ -7,7 +7,6 @@ use RainTPL;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
-use Shaarli\ApplicationUtils;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\BookmarkArray;
 use Shaarli\Bookmark\BookmarkFilter;
@@ -17,6 +16,7 @@ use Shaarli\Config\ConfigJson;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Config\ConfigPhp;
 use Shaarli\Exceptions\IOException;
+use Shaarli\Helper\ApplicationUtils;
 use Shaarli\Thumbnailer;
 use Shaarli\Updater\Exception\UpdaterException;
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Admin;
 
-use Shaarli\ApplicationUtils;
-use Shaarli\FileUtils;
+use Shaarli\Helper\ApplicationUtils;
+use Shaarli\Helper\FileUtils;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
