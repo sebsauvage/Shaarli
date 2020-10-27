@@ -133,7 +133,7 @@ class FileUtils
      */
     public static function isPathInShaarliFolder(string $path): bool
     {
-        $rootDirectory = dirname(dirname(__FILE__));
+        $rootDirectory = dirname(dirname(dirname(__FILE__)));
 
         return strpos(realpath($path), $rootDirectory) !== false;
     }

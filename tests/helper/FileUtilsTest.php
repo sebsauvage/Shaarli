@@ -4,6 +4,7 @@ namespace Shaarli\Helper;
 
 use Exception;
 use Shaarli\Exceptions\IOException;
+use Shaarli\TestCase;
 
 /**
  * Class FileUtilsTest
