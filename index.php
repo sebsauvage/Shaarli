@@ -125,14 +125,15 @@ $app->group('/admin', function () {
     $this->post('/configure', '\Shaarli\Front\Controller\Admin\ConfigureController:save');
     $this->get('/tags', '\Shaarli\Front\Controller\Admin\ManageTagController:index');
     $this->post('/tags', '\Shaarli\Front\Controller\Admin\ManageTagController:save');
-    $this->get('/add-shaare', '\Shaarli\Front\Controller\Admin\ManageShaareController:addShaare');
-    $this->get('/shaare', '\Shaarli\Front\Controller\Admin\ManageShaareController:displayCreateForm');
-    $this->get('/shaare/{id:[0-9]+}', '\Shaarli\Front\Controller\Admin\ManageShaareController:displayEditForm');
-    $this->get('/shaare/private/{hash}', '\Shaarli\Front\Controller\Admin\ManageShaareController:sharePrivate');
-    $this->post('/shaare', '\Shaarli\Front\Controller\Admin\ManageShaareController:save');
-    $this->get('/shaare/delete', '\Shaarli\Front\Controller\Admin\ManageShaareController:deleteBookmark');
-    $this->get('/shaare/visibility', '\Shaarli\Front\Controller\Admin\ManageShaareController:changeVisibility');
-    $this->get('/shaare/{id:[0-9]+}/pin', '\Shaarli\Front\Controller\Admin\ManageShaareController:pinBookmark');
+    $this->get('/add-shaare', '\Shaarli\Front\Controller\Admin\ShaareAddController:addShaare');
+    $this->get('/shaare', '\Shaarli\Front\Controller\Admin\ShaarePublishController:displayCreateForm');
+    $this->get('/shaare/{id:[0-9]+}', '\Shaarli\Front\Controller\Admin\ShaarePublishController:displayEditForm');
+    $this->get('/shaare/private/{hash}', '\Shaarli\Front\Controller\Admin\ShaareManageController:sharePrivate');
+    $this->post('/shaare-batch', '\Shaarli\Front\Controller\Admin\ShaarePublishController:displayCreateBatchForms');
+    $this->post('/shaare', '\Shaarli\Front\Controller\Admin\ShaarePublishController:save');
+    $this->get('/shaare/delete', '\Shaarli\Front\Controller\Admin\ShaareManageController:deleteBookmark');
+    $this->get('/shaare/visibility', '\Shaarli\Front\Controller\Admin\ShaareManageController:changeVisibility');
+    $this->get('/shaare/{id:[0-9]+}/pin', '\Shaarli\Front\Controller\Admin\ShaareManageController:pinBookmark');
     $this->patch(
         '/shaare/{id:[0-9]+}/update-thumbnail',
         '\Shaarli\Front\Controller\Admin\ThumbnailsController:ajaxUpdate'

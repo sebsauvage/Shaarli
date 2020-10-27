@@ -634,4 +634,33 @@ function init(description) {
       });
     });
   }
+
+  const bulkCreationButton = document.querySelector('.addlink-batch-show-more-block');
+  if (bulkCreationButton != null) {
+    const toggleBulkCreationVisibility = (showMoreBlockElement, formElement) => {
+      if (bulkCreationButton.classList.contains('pure-u-0')) {
+        showMoreBlockElement.classList.remove('pure-u-0');
+        formElement.classList.add('pure-u-0');
+      } else {
+        showMoreBlockElement.classList.add('pure-u-0');
+        formElement.classList.remove('pure-u-0');
+      }
+    };
+
+    const bulkCreationForm = document.querySelector('.addlink-batch-form-block');
+
+    toggleBulkCreationVisibility(bulkCreationButton, bulkCreationForm);
+    bulkCreationButton.querySelector('a').addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleBulkCreationVisibility(bulkCreationButton, bulkCreationForm);
+    });
+
+    // Force to send falsy value if the checkbox is not checked.
+    const privateButton = bulkCreationForm.querySelector('input[type="checkbox"][name="private"]');
+    const privateHiddenButton = bulkCreationForm.querySelector('input[type="hidden"][name="private"]');
+    privateButton.addEventListener('click', () => {
+      privateHiddenButton.disabled = !privateHiddenButton.disabled;
+    });
+    privateHiddenButton.disabled = privateButton.checked;
+  }
 })();

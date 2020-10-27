@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Shaarli\Front\Controller\Admin\ManageShaareControllerTest;
+namespace Shaarli\Front\Controller\Admin\ShaarePublishControllerTest;
 
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Front\Controller\Admin\FrontAdminControllerMockHelper;
-use Shaarli\Front\Controller\Admin\ManageShaareController;
+use Shaarli\Front\Controller\Admin\ShaarePublishController;
 use Shaarli\Http\HttpAccess;
 use Shaarli\Http\MetadataRetriever;
 use Shaarli\TestCase;
@@ -18,7 +18,7 @@ class DisplayCreateFormTest extends TestCase
 {
     use FrontAdminControllerMockHelper;
 
-    /** @var ManageShaareController */
+    /** @var ShaarePublishController */
     protected $controller;
 
     public function setUp(): void
@@ -27,7 +27,7 @@ class DisplayCreateFormTest extends TestCase
 
         $this->container->httpAccess = $this->createMock(HttpAccess::class);
         $this->container->metadataRetriever = $this->createMock(MetadataRetriever::class);
-        $this->controller = new ManageShaareController($this->container);
+        $this->controller = new ShaarePublishController($this->container);
     }
 
     /**

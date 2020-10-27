@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html{if="$language !== 'auto'"} lang="{$language}"{/if}>
+<head>
+  {include="includes"}
+</head>
+<body>
+<div class="dark-layer">
+  <div class="screen-center">
+    <div><span class="progressbar-current"></span> / <span class="progressbar-max"></span></div>
+    <div class="progressbar">
+      <div></div>
+    </div>
+  </div>
+</div>
+
+{include="page.header"}
+
+<div class="center">
+  <input type="submit" name="save_edit_batch" class="pure-button-shaarli" value="{'Save all'|t}">
+</div>
+
+{loop="$links"}
+  {include="editlink"}
+{/loop}
+
+<div class="center">
+  <input type="submit" name="save_edit_batch" class="pure-button-shaarli" value="{'Save all'|t}">
+</div>
+
+{include="page.footer"}
+{if="$async_metadata"}<script src="{$asset_path}/js/metadata.min.js?v={$version_hash}#"></script>{/if}
+<script src="{$asset_path}/js/shaare_batch.min.js?v={$version_hash}#"></script>
