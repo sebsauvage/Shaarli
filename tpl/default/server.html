@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html{if="$language !== 'auto'"} lang="{$language}"{/if}>
+<head>
+  {include="includes"}
+</head>
+<body>
+{include="page.header"}
+
+<div class="pure-g">
+  <div class="pure-u-lg-1-4 pure-u-1-24"></div>
+  <div class="pure-u-lg-1-2 pure-u-22-24 page-form server-tables-page">
+    <h2 class="window-title">{'Server administration'|t}</h2>
+
+    <h3 class="window-subtitle">{'General'|t}</h3>
+
+    <div class="pure-g server-row">
+      <div class="pure-u-lg-1-2 pure-u-1 server-label">
+        <p>{'Index URL'|t}</p>
+      </div>
+      <div class="pure-u-lg-1-2 pure-u-1">
+        <p><a href="{$index_url}" title="{$pagetitle}">{$index_url}</a></p>
+      </div>
+    </div>
+    <div class="pure-g server-row">
+      <div class="pure-u-lg-1-2 pure-u-1 server-label">
+        <p>{'Base path'|t}</p>
+      </div>
+      <div class="pure-u-lg-1-2 pure-u-1">
+        <p>{$base_path}</p>
+      </div>
+    </div>
+    <div class="pure-g server-row">
+      <div class="pure-u-lg-1-2 pure-u-1 server-label">
+        <p>{'Client IP'|t}</p>
+      </div>
+      <div class="pure-u-lg-1-2 pure-u-1">
+        <p>{$client_ip}</p>
+      </div>
+    </div>
+    <div class="pure-g server-row">
+      <div class="pure-u-lg-1-2 pure-u-1 server-label">
+        <p>{'Trusted reverse proxies'|t}</p>
+      </div>
+      <div class="pure-u-lg-1-2 pure-u-1">
+        {if="count($trusted_proxies) > 0"}
+        <p>
+          {loop="$trusted_proxies"}
+          {$value}<br>
+          {/loop}
+        </p>
+        {else}
+        <p>{'N/A'|t}</p>
+        {/if}
+      </div>
+    </div>
+
+    {include="server.requirements"}
+
+    <h3 class="window-subtitle">Version</h3>
+
+    <div class="pure-g server-row">
+      <div class="pure-u-lg-1-2 pure-u-1 server-label">
+        <p>Current version</p>
+      </div>
+      <div class="pure-u-lg-1-2 pure-u-1">
+        <p>{$current_version}</p>
+      </div>
+    </div>
+
+    <div class="pure-g server-row">
+      <div class="pure-u-lg-1-2 pure-u-1 server-label">
+        <p>Latest release</p>
+      </div>
+      <div class="pure-u-lg-1-2 pure-u-1">
+        <p>
+          <a href="{$release_url}" title="{'Visit releases page on Github'|t}">
+            {$latest_version}
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <h3 class="window-subtitle">Thumbnails</h3>
+
+    <div class="pure-g server-row">
+      <div class="pure-u-lg-1-2 pure-u-1 server-label">
+        <p>Thumbnails status</p>
+      </div>
+      <div class="pure-u-lg-1-2 pure-u-1">
+        <p>
+          {if="$thumbnails_mode==='all'"}
+            {'All'|t}
+          {elseif="$thumbnails_mode==='common'"}
+            {'Only common media hosts'|t}
+          {else}
+            {'None'|t}
+          {/if}
+        </p>
+      </div>
+    </div>
+
+    {if="$thumbnails_mode!=='none'"}
+    <div class="center tools-item">
+      <a href="{$base_path}/admin/thumbnails" title="{'Synchronize all link thumbnails'|t}">
+        <span class="pure-button pure-u-lg-2-3 pure-u-3-4">{'Synchronize thumbnails'|t}</span>
+      </a>
+    </div>
+    {/if}
+
+    <h3 class="window-subtitle">Cache</h3>
+
+    <div class="center tools-item">
+      <a href="{$base_path}/admin/clear-cache?type=main">
+        <span class="pure-button pure-u-lg-2-3 pure-u-3-4">Clear main cache</span>
+      </a>
+    </div>
+
+    <div class="center tools-item">
+      <a href="{$base_path}/admin/clear-cache?type=thumbnails">
+        <span class="pure-button pure-u-lg-2-3 pure-u-3-4">Clear thumbnails cache</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+{include="page.footer"}
+
+</body>
+</html>

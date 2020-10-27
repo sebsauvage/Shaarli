@@ -53,6 +53,16 @@ class InstallController extends ShaarliVisitorController
         $this->assignView('cities', $cities);
         $this->assignView('languages', Languages::getAvailableLanguages());
 
+        $phpEol = new \DateTimeImmutable(ApplicationUtils::getPhpEol(PHP_VERSION));
+
+        $this->assignView('php_version', PHP_VERSION);
+        $this->assignView('php_eol', format_date($phpEol, false));
+        $this->assignView('php_has_reached_eol', $phpEol < new \DateTimeImmutable());
+        $this->assignView('php_extensions', ApplicationUtils::getPhpExtensionsRequirement());
+        $this->assignView('permissions', ApplicationUtils::checkResourcePermissions($this->container->conf));
+
+        $this->assignView('pagetitle', t('Install Shaarli'));
+
         return $response->write($this->render('install'));
     }
 
@@ -150,7 +160,7 @@ class InstallController extends ShaarliVisitorController
     protected function checkPermissions(): bool
     {
         // Ensure Shaarli has proper access to its resources
-        $errors = ApplicationUtils::checkResourcePermissions($this->container->conf);
+        $errors = ApplicationUtils::checkResourcePermissions($this->container->conf, true);
         if (empty($errors)) {
             return true;
         }

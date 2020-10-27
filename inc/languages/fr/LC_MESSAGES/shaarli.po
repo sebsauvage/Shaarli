@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2020-10-16 20:01+0200\n"
-"PO-Revision-Date: 2020-10-16 20:02+0200\n"
+"POT-Creation-Date: 2020-10-21 15:00+0200\n"
+"PO-Revision-Date: 2020-10-21 15:06+0200\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Poedit-SearchPath-3: init.php\n"
 "X-Poedit-SearchPath-4: plugins\n"
 
-#: application/ApplicationUtils.php:161
+#: application/ApplicationUtils.php:162
 #, php-format
 msgid ""
 "Your PHP version is obsolete! Shaarli requires at least PHP %s, and thus "
@@ -31,21 +31,61 @@ msgstr ""
 "peut donc pas fonctionner. Votre version de PHP a des failles de sécurités "
 "connues et devrait être mise à jour au plus tôt."
 
-#: application/ApplicationUtils.php:192 application/ApplicationUtils.php:204
+#: application/ApplicationUtils.php:195 application/ApplicationUtils.php:215
 msgid "directory is not readable"
 msgstr "le répertoire n'est pas accessible en lecture"
 
-#: application/ApplicationUtils.php:207
+#: application/ApplicationUtils.php:218
 msgid "directory is not writable"
 msgstr "le répertoire n'est pas accessible en écriture"
 
-#: application/ApplicationUtils.php:225
+#: application/ApplicationUtils.php:240
 msgid "file is not readable"
 msgstr "le fichier n'est pas accessible en lecture"
 
-#: application/ApplicationUtils.php:228
+#: application/ApplicationUtils.php:243
 msgid "file is not writable"
 msgstr "le fichier n'est pas accessible en écriture"
+
+#: application/ApplicationUtils.php:277
+msgid "Configuration parsing"
+msgstr "Chargement de la configuration"
+
+#: application/ApplicationUtils.php:278
+msgid "Slim Framework (routing, etc.)"
+msgstr "Slim Framwork (routage, etc.)"
+
+#: application/ApplicationUtils.php:279
+msgid "Multibyte (Unicode) string support"
+msgstr "Support des chaînes de caractère multibytes (Unicode)"
+
+#: application/ApplicationUtils.php:280
+msgid "Required to use thumbnails"
+msgstr "Obligatoire pour utiliser les miniatures"
+
+#: application/ApplicationUtils.php:281
+msgid "Localized text sorting (e.g. e->è->f)"
+msgstr "Tri des textes traduits (ex : e->è->f)"
+
+#: application/ApplicationUtils.php:282
+msgid "Better retrieval of bookmark metadata and thumbnail"
+msgstr "Meilleure récupération des meta-données des marque-pages et minatures"
+
+#: application/ApplicationUtils.php:283
+msgid "Use the translation system in gettext mode"
+msgstr "Utiliser le système de traduction en mode gettext"
+
+#: application/ApplicationUtils.php:284
+msgid "Login using LDAP server"
+msgstr "Authentification via un serveur LDAP"
+
+#: application/FileUtils.php:100
+msgid "Provided path is not a directory."
+msgstr "Le chemin fourni n'est pas un dossier."
+
+#: application/FileUtils.php:104
+msgid "Trying to delete a folder outside of Shaarli path."
+msgstr "Tentative de supprimer un dossier en dehors du chemin de Shaarli."
 
 #: application/History.php:179
 msgid "History file isn't readable or writable"
@@ -330,12 +370,13 @@ msgid "You have enabled or changed thumbnails mode."
 msgstr "Vous avez activé ou changé le mode de miniatures."
 
 #: application/front/controller/admin/ConfigureController.php:103
+#: application/front/controller/admin/ServerController.php:68
 #: application/legacy/LegacyUpdater.php:538
 msgid "Please synchronize them."
 msgstr "Merci de les synchroniser."
 
 #: application/front/controller/admin/ConfigureController.php:113
-#: application/front/controller/visitor/InstallController.php:136
+#: application/front/controller/visitor/InstallController.php:146
 msgid "Error while writing config file after configuration update."
 msgstr ""
 "Une erreur s'est produite lors de la sauvegarde du fichier de configuration."
@@ -377,33 +418,33 @@ msgstr ""
 msgid "Shaare a new link"
 msgstr "Partager un nouveau lien"
 
-#: application/front/controller/admin/ManageShaareController.php:78
+#: application/front/controller/admin/ManageShaareController.php:64
 msgid "Note: "
 msgstr "Note : "
 
-#: application/front/controller/admin/ManageShaareController.php:109
-#: application/front/controller/admin/ManageShaareController.php:206
-#: application/front/controller/admin/ManageShaareController.php:275
-#: application/front/controller/admin/ManageShaareController.php:315
+#: application/front/controller/admin/ManageShaareController.php:95
+#: application/front/controller/admin/ManageShaareController.php:193
+#: application/front/controller/admin/ManageShaareController.php:262
+#: application/front/controller/admin/ManageShaareController.php:302
 #, php-format
 msgid "Bookmark with identifier %s could not be found."
 msgstr "Le lien avec l'identifiant %s n'a pas pu être trouvé."
 
-#: application/front/controller/admin/ManageShaareController.php:194
-#: application/front/controller/admin/ManageShaareController.php:252
+#: application/front/controller/admin/ManageShaareController.php:181
+#: application/front/controller/admin/ManageShaareController.php:239
 msgid "Invalid bookmark ID provided."
 msgstr "ID du lien non valide."
 
-#: application/front/controller/admin/ManageShaareController.php:260
+#: application/front/controller/admin/ManageShaareController.php:247
 msgid "Invalid visibility provided."
 msgstr "Visibilité du lien non valide."
 
-#: application/front/controller/admin/ManageShaareController.php:363
+#: application/front/controller/admin/ManageShaareController.php:352
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:171
 msgid "Edit"
 msgstr "Modifier"
 
-#: application/front/controller/admin/ManageShaareController.php:366
+#: application/front/controller/admin/ManageShaareController.php:355
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:28
 msgid "Shaare"
@@ -411,7 +452,7 @@ msgstr "Shaare"
 
 #: application/front/controller/admin/ManageTagController.php:29
 #: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
 msgid "Manage tags"
 msgstr "Gérer les tags"
 
@@ -435,7 +476,7 @@ msgstr[1] "Le tag a été renommé dans %d liens."
 
 #: application/front/controller/admin/PasswordController.php:28
 #: tmp/changepassword.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
 msgid "Change password"
 msgstr "Modifier le mot de passe"
 
@@ -466,6 +507,20 @@ msgid "Error while saving plugin configuration: "
 msgstr ""
 "Une erreur s'est produite lors de la sauvegarde de la configuration des "
 "plugins : "
+
+#: application/front/controller/admin/ServerController.php:50
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
+msgid "Server administration"
+msgstr "Administration serveur"
+
+#: application/front/controller/admin/ServerController.php:67
+msgid "Thumbnails cache has been cleared."
+msgstr "Le cache des miniatures a été vidé."
+
+#: application/front/controller/admin/ServerController.php:76
+msgid "Shaarli's cache folder has been cleared!"
+msgstr "Le dossier de cache de Shaarli a été vidé !"
 
 #: application/front/controller/admin/ThumbnailsController.php:37
 #: tmp/thumbnails.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
@@ -502,9 +557,14 @@ msgstr "Une erreur inattendue s'est produite."
 
 #: application/front/controller/visitor/ErrorNotFoundController.php:25
 msgid "Requested page could not be found."
-msgstr ""
+msgstr "La page demandée n'a pas pu être trouvée."
 
-#: application/front/controller/visitor/InstallController.php:73
+#: application/front/controller/visitor/InstallController.php:64
+#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:22
+msgid "Install Shaarli"
+msgstr "Installation de Shaarli"
+
+#: application/front/controller/visitor/InstallController.php:83
 #, php-format
 msgid ""
 "<pre>Sessions do not seem to work correctly on your server.<br>Make sure the "
@@ -523,14 +583,14 @@ msgstr ""
 "des cookies. Nous vous recommandons d'accéder à votre serveur depuis son "
 "adresse IP ou un <em>Fully Qualified Domain Name</em>.<br>"
 
-#: application/front/controller/visitor/InstallController.php:144
+#: application/front/controller/visitor/InstallController.php:154
 msgid ""
 "Shaarli is now configured. Please login and start shaaring your bookmarks!"
 msgstr ""
 "Shaarli est maintenant configuré. Vous pouvez vous connecter et commencez à "
 "shaare vos liens !"
 
-#: application/front/controller/visitor/InstallController.php:158
+#: application/front/controller/visitor/InstallController.php:168
 msgid "Insufficient permissions:"
 msgstr "Permissions insuffisantes :"
 
@@ -1016,25 +1076,28 @@ msgstr ""
 "miniatures."
 
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:328
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:56
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:122
 msgid "Synchronize thumbnails"
 msgstr "Synchroniser les miniatures"
 
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:339
 #: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:30
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:102
 msgid "All"
 msgstr "Tous"
 
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:343
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:106
 msgid "Only common media hosts"
 msgstr "Seulement les hébergeurs de média connus"
 
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:347
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:110
 msgid "None"
 msgstr "Aucune"
 
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:355
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:88
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:102
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:139
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:199
 msgid "Save"
@@ -1060,27 +1123,27 @@ msgstr "Tous les liens d'un jour sur une page."
 msgid "Next day"
 msgstr "Jour suivant"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:18
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:21
 msgid "Edit Shaare"
 msgstr "Modifier le Shaare"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:18
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:21
 msgid "New Shaare"
 msgstr "Nouveau Shaare"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
 msgid "Created:"
 msgstr "Création :"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:32
 msgid "URL"
 msgstr "URL"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:38
 msgid "Title"
 msgstr "Titre"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:49
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:75
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:99
@@ -1088,33 +1151,33 @@ msgstr "Titre"
 msgid "Description"
 msgstr "Description"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:47
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:58
 msgid "Tags"
 msgstr "Tags"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:60
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:74
 #: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
 msgid "Private"
 msgstr "Privé"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:66
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:80
 msgid "Description will be rendered with"
 msgstr "La description sera générée avec"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:68
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:82
 msgid "Markdown syntax documentation"
 msgstr "Documentation sur la syntaxe Markdown"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:69
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:83
 msgid "Markdown syntax"
 msgstr "la syntaxe Markdown"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:88
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:102
 msgid "Apply Changes"
 msgstr "Appliquer les changements"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:93
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:107
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:173
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:147
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:147
@@ -1179,10 +1242,6 @@ msgstr "Les doublons s'appuient sur les URL"
 msgid "Add default tags"
 msgstr "Ajouter des tags par défaut"
 
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:22
-msgid "Install Shaarli"
-msgstr "Installation de Shaarli"
-
 #: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:25
 msgid "It looks like it's the first time you run Shaarli. Please configure it."
 msgstr ""
@@ -1214,6 +1273,10 @@ msgstr "Mes liens"
 #: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:181
 msgid "Install"
 msgstr "Installer"
+
+#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:190
+msgid "Server requirements"
+msgstr "Pré-requis serveur"
 
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:79
@@ -1511,6 +1574,100 @@ msgstr "Configuration des extensions"
 msgid "No parameter available."
 msgstr "Aucun paramètre disponible."
 
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
+msgid "General"
+msgstr "Général"
+
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:20
+msgid "Index URL"
+msgstr "URL de l'index"
+
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
+msgid "Base path"
+msgstr "Chemin de base"
+
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
+msgid "Client IP"
+msgstr "IP du client"
+
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:44
+msgid "Trusted reverse proxies"
+msgstr "Reverse proxies de confiance"
+
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:58
+msgid "N/A"
+msgstr "N/A"
+
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:84
+msgid "Visit releases page on Github"
+msgstr "Visiter la page des releases sur Github"
+
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:121
+msgid "Synchronize all link thumbnails"
+msgstr "Synchroniser toutes les miniatures"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:2
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:2
+msgid "Permissions"
+msgstr "Permissions"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:8
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:8
+msgid "There are permissions that need to be fixed."
+msgstr "Il y a des permissions qui doivent être corrigées."
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:23
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:23
+msgid "All read/write permissions are properly set."
+msgstr "Toutes les permissions de lecture/écriture sont définies correctement."
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:32
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:32
+msgid "Running PHP"
+msgstr "Fonctionnant avec PHP"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:36
+msgid "End of life: "
+msgstr "Fin de vie : "
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:48
+msgid "Extension"
+msgstr "Extension"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:49
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:49
+msgid "Usage"
+msgstr "Utilisation"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:50
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:50
+msgid "Status"
+msgstr "Statut"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:51
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:66
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:51
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:66
+msgid "Loaded"
+msgstr "Chargé"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:60
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:60
+msgid "Required"
+msgstr "Obligatoire"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:60
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:60
+msgid "Optional"
+msgstr "Optionnel"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:70
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:70
+msgid "Not loaded"
+msgstr "Non chargé"
+
 #: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:19
 #: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:19
 msgid "tags"
@@ -1561,15 +1718,19 @@ msgstr "Configurer Shaarli"
 msgid "Enable, disable and configure plugins"
 msgstr "Activer, désactiver et configurer les extensions"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:27
+msgid "Check instance's server configuration"
+msgstr "Vérifier la configuration serveur de l'instance"
+
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:34
 msgid "Change your password"
 msgstr "Modifier le mot de passe"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
 msgid "Rename or delete a tag in all links"
 msgstr "Renommer ou supprimer un tag dans tous les liens"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:47
 msgid ""
 "Import Netscape HTML bookmarks (as exported from Firefox, Chrome, Opera, "
 "delicious...)"
@@ -1577,11 +1738,11 @@ msgstr ""
 "Importer des marques pages au format Netscape HTML (comme exportés depuis "
 "Firefox, Chrome, Opera, delicious...)"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
 msgid "Import links"
 msgstr "Importer des liens"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:47
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:53
 msgid ""
 "Export Netscape HTML bookmarks (which can be imported in Firefox, Chrome, "
 "Opera, delicious...)"
@@ -1589,15 +1750,11 @@ msgstr ""
 "Exporter les marques pages au format Netscape HTML (comme exportés depuis "
 "Firefox, Chrome, Opera, delicious...)"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:54
 msgid "Export database"
 msgstr "Exporter les données"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:55
-msgid "Synchronize all link thumbnails"
-msgstr "Synchroniser toutes les miniatures"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:81
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:77
 msgid ""
 "Drag one of these button to your bookmarks toolbar or right-click it and "
 "\"Bookmark This Link\""
@@ -1605,13 +1762,13 @@ msgstr ""
 "Glisser un de ces boutons dans votre barre de favoris ou cliquer droit "
 "dessus et « Ajouter aux favoris »"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:82
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:78
 msgid "then click on the bookmarklet in any page you want to share."
 msgstr ""
 "puis cliquer sur le marque-page depuis un site que vous souhaitez partager."
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:86
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:110
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:82
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:106
 msgid ""
 "Drag this link to your bookmarks toolbar or right-click it and Bookmark This "
 "Link"
@@ -1619,49 +1776,46 @@ msgstr ""
 "Glisser ce lien dans votre barre de favoris ou cliquer droit dessus et « "
 "Ajouter aux favoris »"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:87
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:83
 msgid "then click ✚Shaare link button in any page you want to share"
 msgstr "puis cliquer sur ✚Shaare depuis un site que vous souhaitez partager"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:96
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:118
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:92
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:114
 msgid "The selected text is too long, it will be truncated."
 msgstr "Le texte sélectionné est trop long, il sera tronqué."
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:106
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:102
 msgid "Shaare link"
 msgstr "Shaare"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:111
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:107
 msgid ""
 "Then click ✚Add Note button anytime to start composing a private Note (text "
 "post) to your Shaarli"
 msgstr ""
 "Puis cliquer sur ✚Add Note pour commencer à rédiger une Note sur Shaarli"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:127
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:123
 msgid "Add Note"
 msgstr "Ajouter une Note"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:136
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:132
 msgid "3rd party"
 msgstr "Applications tierces"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:139
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:144
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:135
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:140
 msgid "plugin"
 msgstr "extension"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:165
 msgid ""
 "Drag this link to your bookmarks toolbar, or right-click it and choose "
 "Bookmark This Link"
 msgstr ""
 "Glisser ce lien dans votre barre de favoris ou cliquer droit dessus et « "
 "Ajouter aux favoris »"
-
-#~ msgid "Provided data is invalid"
-#~ msgstr "Les informations fournies ne sont pas valides"
 
 #~ msgid "Rename"
 #~ msgstr "Renommer"
