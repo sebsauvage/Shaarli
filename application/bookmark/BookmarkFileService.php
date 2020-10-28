@@ -106,7 +106,7 @@ class BookmarkFileService implements BookmarkServiceInterface
             && $first->isPrivate()
             && (empty($privateKey) || $privateKey !== $first->getAdditionalContentEntry('private_key'))
         ) {
-            throw new Exception('Not authorized');
+            throw new BookmarkNotFoundException();
         }
 
         return $first;
