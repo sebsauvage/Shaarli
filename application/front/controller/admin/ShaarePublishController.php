@@ -139,7 +139,7 @@ class ShaarePublishController extends ShaarliAdminController
         }
 
         if (!empty($request->getParam('returnurl'))) {
-            $this->container->environment['HTTP_REFERER'] = escape($request->getParam('returnurl'));
+            $this->container->environment['HTTP_REFERER'] = $request->getParam('returnurl');
         }
 
         return $this->redirectFromReferer(
