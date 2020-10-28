@@ -293,9 +293,12 @@ class SessionManager
         return session_start();
     }
 
-    public function cookieParameters(int $lifeTime, string $path, string $domain): bool
+    /**
+     * Be careful, return type of session_set_cookie_params() changed between PHP 7.1 and 7.2.
+     */
+    public function cookieParameters(int $lifeTime, string $path, string $domain): void
     {
-        return session_set_cookie_params($lifeTime, $path, $domain);
+        session_set_cookie_params($lifeTime, $path, $domain);
     }
 
     public function regenerateId(bool $deleteOldSession = false): bool
