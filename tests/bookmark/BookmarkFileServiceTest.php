@@ -886,8 +886,8 @@ class BookmarkFileServiceTest extends TestCase
      */
     public function testFilterHashPrivateWhileLoggedOut()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Not authorized');
+        $this->expectException(BookmarkNotFoundException::class);
+        $this->expectExceptionMessage('The link you are trying to reach does not exist or has been deleted');
 
         $hash = smallHash('20141125_084734' . 6);
 
