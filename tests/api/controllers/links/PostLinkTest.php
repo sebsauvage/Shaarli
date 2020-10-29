@@ -92,8 +92,8 @@ class PostLinkTest extends TestCase
 
         $mock = $this->createMock(Router::class);
         $mock->expects($this->any())
-             ->method('relativePathFor')
-             ->willReturn('api/v1/bookmarks/1');
+             ->method('pathFor')
+             ->willReturn('/api/v1/bookmarks/1');
 
         // affect @property-read... seems to work
         $this->controller->getCi()->router = $mock;
@@ -128,7 +128,7 @@ class PostLinkTest extends TestCase
 
         $response = $this->controller->postLink($request, new Response());
         $this->assertEquals(201, $response->getStatusCode());
-        $this->assertEquals('api/v1/bookmarks/1', $response->getHeader('Location')[0]);
+        $this->assertEquals('/api/v1/bookmarks/1', $response->getHeader('Location')[0]);
         $data = json_decode((string) $response->getBody(), true);
         $this->assertEquals(self::NB_FIELDS_LINK, count($data));
         $this->assertEquals(43, $data['id']);
@@ -175,7 +175,7 @@ class PostLinkTest extends TestCase
         $response = $this->controller->postLink($request, new Response());
 
         $this->assertEquals(201, $response->getStatusCode());
-        $this->assertEquals('api/v1/bookmarks/1', $response->getHeader('Location')[0]);
+        $this->assertEquals('/api/v1/bookmarks/1', $response->getHeader('Location')[0]);
         $data = json_decode((string) $response->getBody(), true);
         $this->assertEquals(self::NB_FIELDS_LINK, count($data));
         $this->assertEquals(43, $data['id']);

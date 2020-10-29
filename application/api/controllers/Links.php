@@ -131,7 +131,7 @@ class Links extends ApiController
 
         $this->bookmarkService->add($bookmark);
         $out = ApiUtils::formatLink($bookmark, index_url($this->ci['environment']));
-        $redirect = $this->ci->router->relativePathFor('getLink', ['id' => $bookmark->getId()]);
+        $redirect = $this->ci->router->pathFor('getLink', ['id' => $bookmark->getId()]);
         return $response->withAddedHeader('Location', $redirect)
                         ->withJson($out, 201, $this->jsonStyle);
     }
