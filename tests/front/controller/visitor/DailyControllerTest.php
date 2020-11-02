@@ -327,7 +327,7 @@ class DailyControllerTest extends TestCase
         static::assertSame(200, $result->getStatusCode());
         static::assertSame('daily', (string) $result->getBody());
         static::assertCount(0, $assignedVariables['linksToDisplay']);
-        static::assertSame('Today - ' . (new \DateTime())->format('F d, Y'), $assignedVariables['dayDesc']);
+        static::assertSame('Today - ' . (new \DateTime())->format('F j, Y'), $assignedVariables['dayDesc']);
         static::assertEquals((new \DateTime())->setTime(0, 0)->getTimestamp(), $assignedVariables['day']);
         static::assertEquals((new \DateTime())->setTime(0, 0), $assignedVariables['dayDate']);
     }
