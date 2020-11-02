@@ -240,8 +240,8 @@ class DailyPageHelperTest extends TestCase
     public function getDescriptionsByType(): array
     {
         return [
-            [DailyPageHelper::DAY, $date = new \DateTimeImmutable(), 'Today - ' . $date->format('F d, Y')],
-            [DailyPageHelper::DAY, $date = new \DateTimeImmutable('-1 day'), 'Yesterday - ' . $date->format('F d, Y')],
+            [DailyPageHelper::DAY, $date = new \DateTimeImmutable(), 'Today - ' . $date->format('F j, Y')],
+            [DailyPageHelper::DAY, $date = new \DateTimeImmutable('-1 day'), 'Yesterday - ' . $date->format('F j, Y')],
             [DailyPageHelper::DAY, new \DateTimeImmutable('2020-10-09 04:05:06'), 'October 9, 2020'],
             [DailyPageHelper::WEEK, new \DateTimeImmutable('2020-10-09 04:05:06'), 'Week 41 (October 5, 2020)'],
             [DailyPageHelper::MONTH, new \DateTimeImmutable('2020-10-09 04:05:06'), 'October, 2020'],
