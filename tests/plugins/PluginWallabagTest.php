@@ -49,14 +49,15 @@ class PluginWallabagTest extends \Shaarli\TestCase
         $conf = new ConfigManager('');
         $conf->set('plugins.WALLABAG_URL', 'value');
         $str = 'http://randomstr.com/test';
-        $data = array(
+        $data = [
             'title' => $str,
-            'links' => array(
-                array(
+            'links' => [
+                [
                     'url' => $str,
-                )
-            )
-        );
+                ]
+            ],
+            '_LOGGEDIN_' => true,
+        ];
 
         $data = hook_wallabag_render_linklist($data, $conf);
         $link = $data['links'][0];
@@ -68,5 +69,27 @@ class PluginWallabagTest extends \Shaarli\TestCase
         $this->assertEquals(1, count($link['link_plugin']));
         $this->assertNotFalse(strpos($link['link_plugin'][0], urlencode($str)));
         $this->assertNotFalse(strpos($link['link_plugin'][0], $conf->get('plugins.WALLABAG_URL')));
+    }
+
+    /**
+     * Test render_linklist hook while logged out: no change.
+     */
+    public function testWallabagLinklistLoggedOut(): void
+    {
+        $conf = new ConfigManager('');
+        $str = 'http://randomstr.com/test';
+        $data = [
+            'title' => $str,
+            'links' => [
+                [
+                    'url' => $str,
+                ]
+            ],
+            '_LOGGEDIN_' => false,
+        ];
+
+        $result = hook_wallabag_render_linklist($data, $conf);
+
+        static::assertSame($data, $result);
     }
 }
