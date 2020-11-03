@@ -164,6 +164,22 @@ _These settings should not be edited_
 - **trusted_proxies**: List of trusted IP which won't be banned after failed login attemps. Useful if Shaarli is behind a reverse proxy.
 - **allowed_protocols**: List of allowed protocols in shaare URLs or markdown-rendered descriptions. Useful if you want to store `javascript:` links (bookmarklets) in Shaarli (default: `["ftp", "ftps", "magnet"]`).
 
+### Formatter
+
+Single string value. Default available:
+
+  - `default`: supports line breaks, URL and hashtag auto-links.
+  - `markdown`: supports [Markdown](https://daringfireball.net/projects/markdown/syntax).
+  - `markdownExtra`: adds [extra](https://michelf.ca/projects/php-markdown/extra/) flavor to Markdown.
+
+### Formatter Settings
+
+Additional settings applied to formatters.
+
+#### default
+
+  - **autolink**: boolean to enable or disable automatic linkification of URL and hashtags.
+
 ### Resources
 
 - **data_dir**: Data directory.

@@ -138,12 +138,17 @@ function space2nbsp($text)
  *
  * @param string $description shaare's description.
  * @param string $indexUrl    URL to Shaarli's index.
-
+ * @param bool   $autolink    Turn on/off automatic linkifications of URLs and hashtags
+ *
  * @return string formatted description.
  */
-function format_description($description, $indexUrl = '')
+function format_description($description, $indexUrl = '', $autolink = true)
 {
-    return nl2br(space2nbsp(hashtag_autolink(text2clickable($description), $indexUrl)));
+    if ($autolink) {
+        $description = hashtag_autolink(text2clickable($description), $indexUrl);
+    }
+
+    return nl2br(space2nbsp($description));
 }
 
 /**

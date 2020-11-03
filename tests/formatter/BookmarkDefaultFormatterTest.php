@@ -289,4 +289,24 @@ class BookmarkDefaultFormatterTest extends TestCase
             $link['taglist_html']
         );
     }
+
+    /**
+     * Test default formatting with formatter_settings.autolink set to false:
+     *   URLs and hashtags should not be transformed
+     */
+    public function testFormatDescriptionWithoutLinkification(): void
+    {
+        $this->conf->set('formatter_settings.autolink', false);
+        $this->formatter = new BookmarkDefaultFormatter($this->conf, false);
+
+        $bookmark = new Bookmark();
+        $bookmark->setDescription('Hi!' . PHP_EOL . 'https://thisisaurl.tld  #hashtag');
+
+        $link = $this->formatter->format($bookmark);
+
+        static::assertSame(
+            'Hi!<br />' . PHP_EOL . 'https://thisisaurl.tld &nbsp;#hashtag',
+            $link['description']
+        );
+    }
 }
