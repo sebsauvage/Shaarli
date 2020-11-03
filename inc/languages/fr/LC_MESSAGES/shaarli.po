@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2020-10-27 19:44+0100\n"
-"PO-Revision-Date: 2020-10-27 19:44+0100\n"
+"POT-Creation-Date: 2020-11-03 11:51+0100\n"
+"PO-Revision-Date: 2020-11-03 11:55+0100\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -347,16 +347,6 @@ msgstr ""
 "le serveur web peut accepter (%s). Merci de l'envoyer en parties plus "
 "légères."
 
-#: application/front/controller/admin/ManageShaareController.php:64
-#: application/front/controller/admin/ManageShaareController.php:95
-#: application/front/controller/admin/ManageShaareController.php:193
-#: application/front/controller/admin/ManageShaareController.php:262
-#: application/front/controller/admin/ManageShaareController.php:302
-#: application/front/controller/admin/ManageShaareController.php:181
-#: application/front/controller/admin/ManageShaareController.php:239
-#: application/front/controller/admin/ManageShaareController.php:247
-#: application/front/controller/admin/ManageShaareController.php:378
-#: application/front/controller/admin/ManageShaareController.php:381
 #: application/front/controller/admin/ManageTagController.php:29
 #: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
 #: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
@@ -429,6 +419,20 @@ msgstr "Le cache des miniatures a été vidé."
 msgid "Shaarli's cache folder has been cleared!"
 msgstr "Le dossier de cache de Shaarli a été vidé !"
 
+#: application/front/controller/admin/ShaareAddController.php:26
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
+msgid "Shaare a new link"
+msgstr "Partagez un nouveau lien"
+
+#: application/front/controller/admin/ShaareManageController.php:35
+#: application/front/controller/admin/ShaareManageController.php:93
+msgid "Invalid bookmark ID provided."
+msgstr "L'ID du marque-page fourni n'est pas valide."
+
+#: application/front/controller/admin/ShaareManageController.php:47
+#: application/front/controller/admin/ShaareManageController.php:116
+#: application/front/controller/admin/ShaareManageController.php:156
+#: application/front/controller/admin/ShaarePublishController.php:82
 #, php-format
 msgid "Bookmark with identifier %s could not be found."
 msgstr "Le lien avec l'identifiant %s n'a pas pu être trouvé."
@@ -437,18 +441,18 @@ msgstr "Le lien avec l'identifiant %s n'a pas pu être trouvé."
 msgid "Invalid visibility provided."
 msgstr "Visibilité du lien non valide."
 
-#: application/front/controller/admin/ShaarePublishController.php:154
+#: application/front/controller/admin/ShaarePublishController.php:168
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:171
 msgid "Edit"
 msgstr "Modifier"
 
-#: application/front/controller/admin/ShaarePublishController.php:157
+#: application/front/controller/admin/ShaarePublishController.php:171
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:28
 msgid "Shaare"
 msgstr "Shaare"
 
-#: application/front/controller/admin/ShaarePublishController.php:184
+#: application/front/controller/admin/ShaarePublishController.php:202
 msgid "Note: "
 msgstr "Note : "
 
@@ -905,7 +909,7 @@ msgstr "Mauvaise réponse du hub %s"
 msgid "Enable PubSubHubbub feed publishing."
 msgstr "Active la publication de flux vers PubSubHubbub."
 
-#: plugins/qrcode/qrcode.php:73 plugins/wallabag/wallabag.php:70
+#: plugins/qrcode/qrcode.php:73 plugins/wallabag/wallabag.php:71
 msgid "For each link, add a QRCode icon."
 msgstr "Pour chaque lien, ajouter une icône de QRCode."
 
@@ -917,15 +921,15 @@ msgstr ""
 "Erreur de l'extension Wallabag : Merci de définir le paramètre « "
 "WALLABAG_URL » dans la page d'administration des extensions."
 
-#: plugins/wallabag/wallabag.php:47
+#: plugins/wallabag/wallabag.php:48
 msgid "Save to wallabag"
 msgstr "Sauvegarder dans Wallabag"
 
-#: plugins/wallabag/wallabag.php:71
+#: plugins/wallabag/wallabag.php:72
 msgid "Wallabag API URL"
 msgstr "URL de l'API Wallabag"
 
-#: plugins/wallabag/wallabag.php:72
+#: plugins/wallabag/wallabag.php:73
 msgid "Wallabag API version (1 or 2)"
 msgstr "Version de l'API Wallabag (1 ou 2)"
 
@@ -1165,7 +1169,7 @@ msgid "None"
 msgstr "Aucune"
 
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:355
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:102
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:121
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:139
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:199
 msgid "Save"
@@ -1196,27 +1200,27 @@ msgid_plural ""
 msgstr[0] ":type suivant"
 msgstr[1] ""
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:21
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:30
 msgid "Edit Shaare"
 msgstr "Modifier le Shaare"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:21
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:30
 msgid "New Shaare"
 msgstr "Nouveau Shaare"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:38
 msgid "Created:"
 msgstr "Création :"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:32
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
 msgid "URL"
 msgstr "URL"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:38
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:47
 msgid "Title"
 msgstr "Titre"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:49
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:58
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:75
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:99
@@ -1224,21 +1228,19 @@ msgstr "Titre"
 msgid "Description"
 msgstr "Description"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:58
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:74
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:80
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:89
 msgid "Description will be rendered with"
 msgstr "La description sera générée avec"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:82
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:91
 msgid "Markdown syntax documentation"
 msgstr "Documentation sur la syntaxe Markdown"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:83
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:92
 msgid "Markdown syntax"
 msgstr "la syntaxe Markdown"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:102
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:115
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -1246,18 +1248,18 @@ msgstr "Annuler"
 msgid "Apply Changes"
 msgstr "Appliquer les changements"
 
-#: tmp/editlink.batch.b91ef64efc3688266305ea9b42e5017e.rtpl.php:12
-#: tmp/editlink.batch.b91ef64efc3688266305ea9b42e5017e.rtpl.php:23
-msgid "Save all"
-msgstr "Tout enregistrer"
-
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:107
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:126
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:173
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:147
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:147
 #: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:67
 msgid "Delete"
 msgstr "Supprimer"
+
+#: tmp/editlink.batch.b91ef64efc3688266305ea9b42e5017e.rtpl.php:21
+#: tmp/editlink.batch.b91ef64efc3688266305ea9b42e5017e.rtpl.php:32
+msgid "Save all"
+msgstr "Tout enregistrer"
 
 #: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
 msgid "Export Database"
@@ -1472,7 +1474,7 @@ msgstr "Afficher uniquement les liens publics"
 #: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:18
 #: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:18
 msgid "Filter untagged links"
-msgstr "Filtrer par liens privés"
+msgstr "Filtrer par liens sans tag"
 
 #: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
 #: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:24
