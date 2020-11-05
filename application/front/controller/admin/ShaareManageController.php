@@ -66,8 +66,8 @@ class ShaareManageController extends ShaarliAdminController
             return $response->write('<script>self.close();</script>');
         }
 
-        // Don't redirect to where we were previously because the datastore has changed.
-        return $this->redirect($response, '/');
+        // Don't redirect to permalink after deletion.
+        return $this->redirectFromReferer($request, $response, ['shaare/']);
     }
 
     /**
