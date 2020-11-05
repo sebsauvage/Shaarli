@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2020-11-03 11:51+0100\n"
-"PO-Revision-Date: 2020-11-03 11:55+0100\n"
+"POT-Creation-Date: 2020-11-05 16:47+0100\n"
+"PO-Revision-Date: 2020-11-05 16:48+0100\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -189,9 +189,9 @@ msgstr ""
 #: application/bookmark/BookmarkInitializer.php:91
 #: application/legacy/LegacyLinkDB.php:246
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:49
+#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:50
 #: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:15
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:49
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:50
 msgid ""
 "The personal, minimalist, super-fast, database free, bookmarking service"
 msgstr ""
@@ -1017,11 +1017,11 @@ msgstr "Renommer le tag"
 msgid "Delete tag"
 msgstr "Supprimer le tag"
 
-#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:39
+#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:40
 msgid "You can also edit tags in the"
 msgstr "Vous pouvez aussi modifier les tags dans la"
 
-#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:39
+#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:40
 msgid "tag list"
 msgstr "liste des tags"
 
@@ -1502,9 +1502,9 @@ msgid "Remember me"
 msgstr "Rester connecté"
 
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:49
+#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:50
 #: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:15
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:49
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:50
 msgid "by the Shaarli community"
 msgstr "par la communauté Shaarli"
 
@@ -1525,6 +1525,11 @@ msgstr "Déplier tout"
 
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:47
 #: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:47
+msgid "Are you sure you want to delete this link?"
+msgstr "Êtes-vous sûr de vouloir supprimer ce lien ?"
+
+#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:48
 msgid "Are you sure you want to delete this tag?"
 msgstr "Êtes-vous sûr de vouloir supprimer ce tag ?"
 

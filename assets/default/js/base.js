@@ -294,7 +294,8 @@ function init(description) {
   const deleteLinks = document.querySelectorAll('.confirm-delete');
   [...deleteLinks].forEach((deleteLink) => {
     deleteLink.addEventListener('click', (event) => {
-      if (!confirm(document.getElementById('translation-delete-tag').innerHTML)) {
+      const type = event.currentTarget.getAttribute('data-type') || 'link';
+      if (!confirm(document.getElementById(`translation-delete-${type}`).innerHTML)) {
         event.preventDefault();
       }
     });
