@@ -50,7 +50,31 @@ class ErrorControllerTest extends TestCase
     }
 
     /**
-     * Test displaying error with any exception (no debug): only display an error occurred with HTTP 500.
+     * Test displaying error with any exception (no debug) while logged in:
+     * display full error details
+     */
+    public function testDisplayAnyExceptionErrorNoDebugLoggedIn(): void
+    {
+        $request = $this->createMock(Request::class);
+        $response = new Response();
+
+        // Save RainTPL assigned variables
+        $assignedVariables = [];
+        $this->assignTemplateVars($assignedVariables);
+
+        $this->container->loginManager->method('isLoggedIn')->willReturn(true);
+
+        $result = ($this->controller)($request, $response, new \Exception('abc'));
+
+        static::assertSame(500, $result->getStatusCode());
+        static::assertSame('Error: abc', $assignedVariables['message']);
+        static::assertContainsPolyfill('Please report it on Github', $assignedVariables['text']);
+        static::assertArrayHasKey('stacktrace', $assignedVariables);
+    }
+
+    /**
+     * Test displaying error with any exception (no debug) while logged out:
+     * display standard error without detail
      */
     public function testDisplayAnyExceptionErrorNoDebug(): void
     {
@@ -61,10 +85,13 @@ class ErrorControllerTest extends TestCase
         $assignedVariables = [];
         $this->assignTemplateVars($assignedVariables);
 
+        $this->container->loginManager->method('isLoggedIn')->willReturn(false);
+
         $result = ($this->controller)($request, $response, new \Exception('abc'));
 
         static::assertSame(500, $result->getStatusCode());
         static::assertSame('An unexpected error occurred.', $assignedVariables['message']);
+        static::assertArrayNotHasKey('text', $assignedVariables);
         static::assertArrayNotHasKey('stacktrace', $assignedVariables);
     }
 }

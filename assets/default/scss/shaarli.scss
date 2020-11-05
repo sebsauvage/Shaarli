@@ -1266,11 +1266,15 @@ form {
     margin: 70px 0 25px;
   }
 
+  a {
+    color: var(--main-color);
+  }
+
   pre {
     margin: 0 20%;
     padding: 20px 0;
     text-align: left;
-    line-height: .7em;
+    line-height: 1em;
   }
 }
 
