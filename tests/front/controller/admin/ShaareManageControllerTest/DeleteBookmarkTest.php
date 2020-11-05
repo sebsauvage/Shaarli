@@ -38,6 +38,8 @@ class DeleteBookmarkTest extends TestCase
     {
         $parameters = ['id' => '123'];
 
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/shaare/abcdef';
+
         $request = $this->createMock(Request::class);
         $request
             ->method('getParam')
@@ -89,6 +91,8 @@ class DeleteBookmarkTest extends TestCase
     public function testDeleteMultipleBookmarks(): void
     {
         $parameters = ['id' => '123 456 789'];
+
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/?searchtags=abcdef';
 
         $request = $this->createMock(Request::class);
         $request
@@ -152,7 +156,7 @@ class DeleteBookmarkTest extends TestCase
         $result = $this->controller->deleteBookmark($request, $response);
 
         static::assertSame(302, $result->getStatusCode());
-        static::assertSame(['/subfolder/'], $result->getHeader('location'));
+        static::assertSame(['/subfolder/?searchtags=abcdef'], $result->getHeader('location'));
     }
 
     /**
