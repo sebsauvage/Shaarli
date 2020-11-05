@@ -142,7 +142,8 @@ module.exports = [
               loader: 'file-loader',
               options: {
                 name: '../img/[name].[ext]',
-                publicPath: '',
+                // do not add a publicPath here because it's already handled by CSS's publicPath
+                publicPath: '../vintage',
               }
             }
           ],
