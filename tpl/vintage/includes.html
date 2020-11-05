@@ -5,13 +5,13 @@
 <meta name="referrer" content="same-origin">
 <link rel="alternate" type="application/rss+xml" href="{$feedurl}feed/rss?{$searchcrits}#" title="RSS Feed" />
 <link rel="alternate" type="application/atom+xml" href="{$feedurl}feed/atom?{$searchcrits}#" title="ATOM Feed" />
-<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="{$asset_path}/img/favicon.ico#" rel="shortcut icon" type="image/x-icon" />
 <link type="text/css" rel="stylesheet" href="{$asset_path}/css/shaarli.min.css#" />
 {if="$formatter==='markdown'"}
   <link type="text/css" rel="stylesheet" href="{$asset_path}/css/markdown.min.css?v={$version_hash}#" />
 {/if}
 {loop="$plugins_includes.css_files"}
-<link type="text/css" rel="stylesheet" href="{$base_path}/{$value}#"/>
+<link type="text/css" rel="stylesheet" href="{$root_path}/{$value}#"/>
 {/loop}
 {if="is_file('data/user.css')"}<link type="text/css" rel="stylesheet" href="{$base_path}/data/user.css#" />{/if}
 <link rel="search" type="application/opensearchdescription+xml" href="{$base_path}/open-search#"

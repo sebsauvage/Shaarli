@@ -217,7 +217,7 @@ function init(description) {
 (() => {
   const basePath = document.querySelector('input[name="js_base_path"]').value;
   const tagsSeparatorElement = document.querySelector('input[name="tags_separator"]');
-  const tagsSeparator = tagsSeparatorElement ? tagsSeparatorElement.value || '\s' : '\s';
+  const tagsSeparator = tagsSeparatorElement ? tagsSeparatorElement.value || ' ' : ' ';
 
   /**
    * Handle responsive menu.
