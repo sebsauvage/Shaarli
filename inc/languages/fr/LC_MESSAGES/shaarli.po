@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2020-11-05 16:47+0100\n"
-"PO-Revision-Date: 2020-11-05 16:48+0100\n"
+"POT-Creation-Date: 2020-11-05 19:43+0100\n"
+"PO-Revision-Date: 2020-11-05 19:44+0100\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -501,7 +501,15 @@ msgstr "mois"
 msgid "Monthly"
 msgstr "Mensuel"
 
-#: application/front/controller/visitor/ErrorController.php:33
+#: application/front/controller/visitor/ErrorController.php:30
+msgid "Error: "
+msgstr "Erreur : "
+
+#: application/front/controller/visitor/ErrorController.php:34
+msgid "Please report it on Github."
+msgstr "Merci de la rapporter sur Github."
+
+#: application/front/controller/visitor/ErrorController.php:39
 msgid "An unexpected error occurred."
 msgstr "Une erreur inattendue s'est produite."
 
