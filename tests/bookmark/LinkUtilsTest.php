@@ -169,6 +169,36 @@ class LinkUtilsTest extends TestCase
     }
 
     /**
+     * Test html_extract_tag() with double quoted content containing single quote, and the opposite.
+     */
+    public function testHtmlExtractExistentNameTagWithMixedQuotes(): void
+    {
+        $description = 'Bob and Alice share M&M\'s.';
+
+        $html = '<meta property="og:description" content="' . $description . '">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        $html = '<meta tag1="content1" property="og:unrelated1 og:description og:unrelated2" '.
+            'tag2="content2" content="' . $description . '" tag3="content3">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        $html = '<meta property="og:description" name="description" content="' . $description . '">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        $description = 'Bob and Alice share "cookies".';
+
+        $html = '<meta property="og:description" content=\'' . $description . '\'>';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        $html = '<meta tag1="content1" property="og:unrelated1 og:description og:unrelated2" '.
+            'tag2="content2" content=\'' . $description . '\' tag3="content3">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        $html = '<meta property="og:description" name="description" content=\'' . $description . '\'>';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+    }
+
+    /**
      * Test html_extract_tag() when the tag <meta name= is not found.
      */
     public function testHtmlExtractNonExistentNameTag()
