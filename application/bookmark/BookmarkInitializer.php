@@ -36,8 +36,8 @@ class BookmarkInitializer
     public function initialize(): void
     {
         $bookmark = new Bookmark();
-        $bookmark->setTitle('quicksilver (loop) on Vimeo ' . t('(private bookmark with thumbnail demo)'));
-        $bookmark->setUrl('https://vimeo.com/153493904');
+        $bookmark->setTitle('Calm Jazz Music - YouTube ' . t('(private bookmark with thumbnail demo)'));
+        $bookmark->setUrl('https://www.youtube.com/watch?v=DVEUcbPkb-c');
         $bookmark->setDescription(t(
 'Shaarli will automatically pick up the thumbnail for links to a variety of websites.
 
