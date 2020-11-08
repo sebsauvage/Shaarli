@@ -13,6 +13,9 @@ namespace Shaarli\Bookmark;
  * To prevent data corruption, it does not overwrite existing bookmarks,
  * even though there should not be any.
  *
+ * We disable this because otherwise it creates indentation issues, and heredoc is not supported by PHP gettext.
+ * @phpcs:disable Generic.Files.LineLength.TooLong
+ *
  * @package Shaarli\Bookmark
  */
 class BookmarkInitializer

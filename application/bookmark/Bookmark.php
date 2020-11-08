@@ -19,7 +19,7 @@ use Shaarli\Bookmark\Exception\InvalidBookmarkException;
 class Bookmark
 {
     /** @var string Date format used in string (former ID format) */
-    const LINK_DATE_FORMAT = 'Ymd_His';
+    public const LINK_DATE_FORMAT = 'Ymd_His';
 
     /** @var int Bookmark ID */
     protected $id;

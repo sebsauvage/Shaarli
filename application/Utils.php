@@ -382,8 +382,10 @@ function return_bytes($val)
     switch ($last) {
         case 'g':
             $val *= 1024;
+        // do no break in order 1024^2 for each unit
         case 'm':
             $val *= 1024;
+        // do no break in order 1024^2 for each unit
         case 'k':
             $val *= 1024;
     }

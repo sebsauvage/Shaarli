@@ -41,7 +41,7 @@ class Languages
     /**
      * Core translations domain
      */
-    const DEFAULT_DOMAIN = 'shaarli';
+    public const DEFAULT_DOMAIN = 'shaarli';
 
     /**
      * @var TranslatorInterface
@@ -122,7 +122,9 @@ class Languages
         $translations = new Translations();
         // Core translations
         try {
-            $translations = $translations->addFromPoFile('inc/languages/' . $this->language . '/LC_MESSAGES/shaarli.po');
+            $translations = $translations->addFromPoFile(
+                'inc/languages/' . $this->language . '/LC_MESSAGES/shaarli.po'
+            );
             $translations->setDomain('shaarli');
             $this->translator->loadTranslations($translations);
         } catch (\InvalidArgumentException $e) {

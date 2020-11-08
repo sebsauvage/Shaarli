@@ -62,7 +62,7 @@ class LegacyLinkDB implements Iterator, Countable, ArrayAccess
     private $datastore;
 
     // Link date storage format
-    const LINK_DATE_FORMAT = 'Ymd_His';
+    public const LINK_DATE_FORMAT = 'Ymd_His';
 
     // List of bookmarks (associative array)
     //  - key:   link date (e.g. "20110823_124546"),

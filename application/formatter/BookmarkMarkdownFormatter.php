@@ -16,7 +16,7 @@ class BookmarkMarkdownFormatter extends BookmarkDefaultFormatter
     /**
      * When this tag is present in a bookmark, its description should not be processed with Markdown
      */
-    const NO_MD_TAG = 'nomarkdown';
+    public const NO_MD_TAG = 'nomarkdown';
 
     /** @var \Parsedown instance */
     protected $parsedown;

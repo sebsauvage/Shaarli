@@ -13,7 +13,7 @@ use WebThumbnailer\WebThumbnailer;
  */
 class Thumbnailer
 {
-    const COMMON_MEDIA_DOMAINS = [
+    protected const COMMON_MEDIA_DOMAINS = [
         'imgur.com',
         'flickr.com',
         'youtube.com',
@@ -31,9 +31,9 @@ class Thumbnailer
         'deviantart.com',
     ];
 
-    const MODE_ALL = 'all';
-    const MODE_COMMON = 'common';
-    const MODE_NONE = 'none';
+    public const MODE_ALL = 'all';
+    public const MODE_COMMON = 'common';
+    public const MODE_NONE = 'none';
 
     /**
      * @var WebThumbnailer instance.

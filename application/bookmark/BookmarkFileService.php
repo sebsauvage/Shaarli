@@ -409,14 +409,14 @@ class BookmarkFileService implements BookmarkServiceInterface
             false
         );
         $updater = new LegacyUpdater(
-            UpdaterUtils::read_updates_file($this->conf->get('resource.updates')),
+            UpdaterUtils::readUpdatesFile($this->conf->get('resource.updates')),
             $bookmarkDb,
             $this->conf,
             true
         );
         $newUpdates = $updater->update();
         if (! empty($newUpdates)) {
-            UpdaterUtils::write_updates_file(
+            UpdaterUtils::writeUpdatesFile(
                 $this->conf->get('resource.updates'),
                 $updater->getDoneUpdates()
             );

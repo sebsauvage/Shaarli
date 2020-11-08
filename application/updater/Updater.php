@@ -122,12 +122,12 @@ class Updater
 
     public function readUpdates(string $updatesFilepath): array
     {
-        return UpdaterUtils::read_updates_file($updatesFilepath);
+        return UpdaterUtils::readUpdatesFile($updatesFilepath);
     }
 
     public function writeUpdates(string $updatesFilepath, array $updates): void
     {
-        UpdaterUtils::write_updates_file($updatesFilepath, $updates);
+        UpdaterUtils::writeUpdatesFile($updatesFilepath, $updates);
     }
 
     /**
