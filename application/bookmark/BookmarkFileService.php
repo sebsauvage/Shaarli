@@ -91,7 +91,7 @@ class BookmarkFileService implements BookmarkServiceInterface
             }
         }
 
-        $this->bookmarkFilter = new BookmarkFilter($this->bookmarks);
+        $this->bookmarkFilter = new BookmarkFilter($this->bookmarks, $this->conf);
     }
 
     /**

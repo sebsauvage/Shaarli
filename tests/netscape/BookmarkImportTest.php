@@ -531,7 +531,7 @@ class BookmarkImportTest extends TestCase
     {
         $post = array(
             'privacy' => 'public',
-            'default_tags' => 'tag1,tag2 tag3'
+            'default_tags' => 'tag1 tag2 tag3'
         );
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
@@ -552,7 +552,7 @@ class BookmarkImportTest extends TestCase
     {
         $post = array(
             'privacy' => 'public',
-            'default_tags' => 'tag1&,tag2 "tag3"'
+            'default_tags' => 'tag1& tag2 "tag3"'
         );
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
@@ -569,6 +569,43 @@ class BookmarkImportTest extends TestCase
         $this->assertEquals(
             'tag1&amp; tag2 &quot;tag3&quot; public hello world',
             $this->bookmarkService->get(1)->getTagsString()
+        );
+    }
+
+    /**
+     * Add user-specified tags to all imported bookmarks
+     */
+    public function testSetDefaultTagsWithCustomSeparator()
+    {
+        $separator = '@';
+        $this->conf->set('general.tags_separator', $separator);
+        $post = [
+            'privacy' => 'public',
+            'default_tags' => 'tag1@tag2@tag3@multiple words tag'
+        ];
+        $files = file2array('netscape_basic.htm');
+        $this->assertStringMatchesFormat(
+            'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
+            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            $this->netscapeBookmarkUtils->import($post, $files)
+        );
+        $this->assertEquals(2, $this->bookmarkService->count());
+        $this->assertEquals(0, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
+        $this->assertEquals(
+            'tag1@tag2@tag3@multiple words tag@private@secret',
+            $this->bookmarkService->get(0)->getTagsString($separator)
+        );
+        $this->assertEquals(
+            ['tag1', 'tag2', 'tag3', 'multiple words tag', 'private', 'secret'],
+            $this->bookmarkService->get(0)->getTags()
+        );
+        $this->assertEquals(
+            'tag1@tag2@tag3@multiple words tag@public@hello@world',
+            $this->bookmarkService->get(1)->getTagsString($separator)
+        );
+        $this->assertEquals(
+            ['tag1', 'tag2', 'tag3', 'multiple words tag', 'public', 'hello', 'world'],
+            $this->bookmarkService->get(1)->getTags()
         );
     }
 

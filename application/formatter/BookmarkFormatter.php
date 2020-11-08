@@ -267,7 +267,7 @@ abstract class BookmarkFormatter
      */
     protected function formatTagString($bookmark)
     {
-        return implode(' ', $this->formatTagList($bookmark));
+        return implode($this->conf->get('general.tags_separator', ' '), $this->formatTagList($bookmark));
     }
 
     /**
@@ -351,6 +351,7 @@ abstract class BookmarkFormatter
 
     /**
      * Format tag list, e.g. remove private tags if the user is not logged in.
+     * TODO: this method is called multiple time to format tags, the result should be cached.
      *
      * @param array $tags
      *

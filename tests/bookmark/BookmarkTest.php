@@ -79,6 +79,23 @@ class BookmarkTest extends TestCase
     }
 
     /**
+     * Test fromArray() with a link with a custom tags separator
+     */
+    public function testFromArrayCustomTagsSeparator()
+    {
+        $data = [
+            'id' => 1,
+            'tags' => ['tag1', 'tag2', 'chair'],
+        ];
+
+        $bookmark = (new Bookmark())->fromArray($data, '@');
+        $this->assertEquals($data['id'], $bookmark->getId());
+        $this->assertEquals($data['tags'], $bookmark->getTags());
+        $this->assertEquals('tag1@tag2@chair', $bookmark->getTagsString('@'));
+    }
+
+
+    /**
      * Test validate() with a valid minimal bookmark
      */
     public function testValidateValidFullBookmark()
@@ -252,7 +269,7 @@ class BookmarkTest extends TestCase
     {
         $bookmark = new Bookmark();
 
-        $str = 'tag1    tag2 tag3.tag3-2, tag4   ,  -tag5   ';
+        $str = 'tag1    tag2 tag3.tag3-2 tag4     -tag5   ';
         $bookmark->setTagsString($str);
         $this->assertEquals(
             [
@@ -276,9 +293,9 @@ class BookmarkTest extends TestCase
         $array = [
             'tag1    ',
             '     tag2',
-            'tag3.tag3-2,',
-            ',  tag4',
-            ',  ',
+            'tag3.tag3-2',
+            '  tag4',
+            '  ',
             '-tag5   ',
         ];
         $bookmark->setTags($array);

@@ -95,6 +95,10 @@ class BookmarkListController extends ShaarliVisitorController
             $next_page_url = '?page=' . ($page - 1) . $searchtermUrl . $searchtagsUrl;
         }
 
+        $tagsSeparator = $this->container->conf->get('general.tags_separator', ' ');
+        $searchTagsUrlEncoded = array_map('urlencode', tags_str2array($searchTags, $tagsSeparator));
+        $searchTags = !empty($searchTags) ? trim($searchTags, $tagsSeparator) . $tagsSeparator : '';
+
         // Fill all template fields.
         $data = array_merge(
             $this->initializeTemplateVars(),
@@ -106,7 +110,7 @@ class BookmarkListController extends ShaarliVisitorController
                 'result_count' => count($linksToDisplay),
                 'search_term' => escape($searchTerm),
                 'search_tags' => escape($searchTags),
-                'search_tags_url' => array_map('urlencode', explode(' ', $searchTags)),
+                'search_tags_url' => $searchTagsUrlEncoded,
                 'visibility' => $visibility,
                 'links' => $linkDisp,
             ]
@@ -119,8 +123,9 @@ class BookmarkListController extends ShaarliVisitorController
                 return '[' . $tag . ']';
             };
             $data['pagetitle'] .= ! empty($searchTags)
-                ? implode(' ', array_map($bracketWrap, preg_split('/\s+/', $searchTags))) . ' '
-                : '';
+                ? implode(' ', array_map($bracketWrap, tags_str2array($searchTags, $tagsSeparator))) . ' '
+                : ''
+            ;
             $data['pagetitle'] .= '- ';
         }
 

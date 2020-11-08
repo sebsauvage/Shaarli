@@ -74,7 +74,7 @@ class DisplayEditFormTest extends TestCase
         static::assertSame($url, $assignedVariables['link']['url']);
         static::assertSame($title, $assignedVariables['link']['title']);
         static::assertSame($description, $assignedVariables['link']['description']);
-        static::assertSame(implode(' ', $tags), $assignedVariables['link']['tags']);
+        static::assertSame(implode('@', $tags) . '@', $assignedVariables['link']['tags']);
         static::assertTrue($assignedVariables['link']['private']);
         static::assertSame($createdAt, $assignedVariables['link']['created']);
     }

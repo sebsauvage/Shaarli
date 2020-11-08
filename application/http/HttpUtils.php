@@ -550,7 +550,8 @@ function get_curl_download_callback(
     &$title,
     &$description,
     &$keywords,
-    $retrieveDescription
+    $retrieveDescription,
+    $tagsSeparator
 ) {
     $currentChunk = 0;
     $foundChunk = null;
@@ -568,6 +569,7 @@ function get_curl_download_callback(
      */
     return function ($ch, $data) use (
         $retrieveDescription,
+        $tagsSeparator,
         &$charset,
         &$title,
         &$description,
@@ -598,10 +600,10 @@ function get_curl_download_callback(
             if (! empty($keywords)) {
                 $foundChunk = $currentChunk;
                 // Keywords use the format tag1, tag2 multiple words, tag
-                // So we format them to match Shaarli's separator and glue multiple words with '-'
-                $keywords = implode(' ', array_map(function($keyword) {
-                    return implode('-', preg_split('/\s+/', trim($keyword)));
-                }, explode(',', $keywords)));
+                // So we split the result with `,`, then if a tag contains the separator we replace it by `-`.
+                $keywords = tags_array2str(array_map(function(string $keyword) use ($tagsSeparator): string {
+                    return tags_array2str(tags_str2array($keyword, $tagsSeparator), '-');
+                }, tags_str2array($keywords, ',')), $tagsSeparator);
             }
         }
 

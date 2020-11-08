@@ -173,7 +173,7 @@ class BookmarkListControllerTest extends TestCase
         $request = $this->createMock(Request::class);
         $request->method('getParam')->willReturnCallback(function (string $key) {
             if ('searchtags' === $key) {
-                return 'abc def';
+                return 'abc@def';
             }
             if ('searchterm' === $key) {
                 return 'ghi jkl';
@@ -204,7 +204,7 @@ class BookmarkListControllerTest extends TestCase
             ->expects(static::once())
             ->method('search')
             ->with(
-                ['searchtags' => 'abc def', 'searchterm' => 'ghi jkl'],
+                ['searchtags' => 'abc@def', 'searchterm' => 'ghi jkl'],
                 'private',
                 false,
                 true
@@ -222,7 +222,7 @@ class BookmarkListControllerTest extends TestCase
         static::assertSame('linklist', (string) $result->getBody());
 
         static::assertSame('Search: ghi jkl [abc] [def] - Shaarli', $assignedVariables['pagetitle']);
-        static::assertSame('?page=2&searchterm=ghi+jkl&searchtags=abc+def', $assignedVariables['previous_page_url']);
+        static::assertSame('?page=2&searchterm=ghi+jkl&searchtags=abc%40def', $assignedVariables['previous_page_url']);
     }
 
     /**

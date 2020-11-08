@@ -113,7 +113,10 @@ class ShaarePublishController extends ShaarliAdminController
         $bookmark->setDescription($request->getParam('lf_description'));
         $bookmark->setUrl($request->getParam('lf_url'), $this->container->conf->get('security.allowed_protocols', []));
         $bookmark->setPrivate(filter_var($request->getParam('lf_private'), FILTER_VALIDATE_BOOLEAN));
-        $bookmark->setTagsString($request->getParam('lf_tags'));
+        $bookmark->setTagsString(
+            $request->getParam('lf_tags'),
+            $this->container->conf->get('general.tags_separator', ' ')
+        );
 
         if ($this->container->conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE
             && true !== $this->container->conf->get('general.enable_async_metadata', true)
@@ -128,7 +131,7 @@ class ShaarePublishController extends ShaarliAdminController
         $data = $formatter->format($bookmark);
         $this->executePageHooks('save_link', $data);
 
-        $bookmark->fromArray($data);
+        $bookmark->fromArray($data, $this->container->conf->get('general.tags_separator', ' '));
         $this->container->bookmarkService->set($bookmark);
 
         // If we are called from the bookmarklet, we must close the popup:
@@ -221,6 +224,11 @@ class ShaarePublishController extends ShaarliAdminController
 
     protected function buildFormData(array $link, bool $isNew, Request $request): array
     {
+        $link['tags'] = strlen($link['tags']) > 0
+            ? $link['tags'] . $this->container->conf->get('general.tags_separator', ' ')
+            : $link['tags']
+        ;
+
         return escape([
             'link' => $link,
             'link_is_new' => $isNew,

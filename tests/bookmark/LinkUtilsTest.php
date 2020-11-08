@@ -277,7 +277,8 @@ class LinkUtilsTest extends TestCase
             $title,
             $desc,
             $keywords,
-            false
+            false,
+            ' '
         );
 
         $data = [
@@ -327,7 +328,8 @@ class LinkUtilsTest extends TestCase
             $title,
             $desc,
             $keywords,
-            false
+            false,
+            ' '
         );
 
         $data = [
@@ -360,7 +362,8 @@ class LinkUtilsTest extends TestCase
             $title,
             $desc,
             $keywords,
-            false
+            false,
+            ' '
         );
 
         $data = [
@@ -393,7 +396,8 @@ class LinkUtilsTest extends TestCase
             $title,
             $desc,
             $keywords,
-            false
+            false,
+            ' '
         );
 
         $data = [
@@ -458,7 +462,8 @@ class LinkUtilsTest extends TestCase
             $title,
             $desc,
             $keywords,
-            true
+            true,
+            ' '
         );
         $data = [
             'th=device-width">'
@@ -602,6 +607,115 @@ class LinkUtilsTest extends TestCase
         $this->assertFalse(is_note(''));
         $this->assertFalse(is_note('nope'));
         $this->assertFalse(is_note('https://github.com/shaarli/Shaarli/?hi'));
+    }
+
+    /**
+     * Test tags_str2array with whitespace separator.
+     */
+    public function testTagsStr2ArrayWithSpaceSeparator(): void
+    {
+        $separator = ' ';
+
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_str2array('tag1 tag2 tag3', $separator));
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_str2array('tag1  tag2     tag3', $separator));
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_str2array('   tag1  tag2     tag3   ', $separator));
+        static::assertSame(['tag1@', 'tag2,', '.tag3'], tags_str2array('   tag1@  tag2,     .tag3   ', $separator));
+        static::assertSame([], tags_str2array('', $separator));
+        static::assertSame([], tags_str2array('   ', $separator));
+        static::assertSame([], tags_str2array(null, $separator));
+    }
+
+    /**
+     * Test tags_str2array with @ separator.
+     */
+    public function testTagsStr2ArrayWithCharSeparator(): void
+    {
+        $separator = '@';
+
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_str2array('tag1@tag2@tag3', $separator));
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_str2array('tag1@@@@tag2@@@@tag3', $separator));
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_str2array('@@@tag1@@@tag2@@@@tag3@@', $separator));
+        static::assertSame(
+            ['tag1#', 'tag2, and other', '.tag3'],
+            tags_str2array('@@@   tag1#     @@@ tag2, and other @@@@.tag3@@', $separator)
+        );
+        static::assertSame([], tags_str2array('', $separator));
+        static::assertSame([], tags_str2array('   ', $separator));
+        static::assertSame([], tags_str2array(null, $separator));
+    }
+
+    /**
+     * Test tags_array2str with ' ' separator.
+     */
+    public function testTagsArray2StrWithSpaceSeparator(): void
+    {
+        $separator = ' ';
+
+        static::assertSame('tag1 tag2 tag3', tags_array2str(['tag1', 'tag2', 'tag3'], $separator));
+        static::assertSame('tag1, tag2@ tag3', tags_array2str(['tag1,', 'tag2@', 'tag3'], $separator));
+        static::assertSame('tag1 tag2 tag3', tags_array2str(['   tag1   ', 'tag2', 'tag3   '], $separator));
+        static::assertSame('tag1 tag2 tag3', tags_array2str(['   tag1   ', ' ', 'tag2', '   ', 'tag3   '], $separator));
+        static::assertSame('tag1', tags_array2str(['   tag1   '], $separator));
+        static::assertSame('', tags_array2str(['  '], $separator));
+        static::assertSame('', tags_array2str([], $separator));
+        static::assertSame('', tags_array2str(null, $separator));
+    }
+
+    /**
+     * Test tags_array2str with @ separator.
+     */
+    public function testTagsArray2StrWithCharSeparator(): void
+    {
+        $separator = '@';
+
+        static::assertSame('tag1@tag2@tag3', tags_array2str(['tag1', 'tag2', 'tag3'], $separator));
+        static::assertSame('tag1,@tag2@tag3', tags_array2str(['tag1,', 'tag2@', 'tag3'], $separator));
+        static::assertSame(
+            'tag1@tag2, and other@tag3',
+            tags_array2str(['@@@@ tag1@@@', ' @tag2, and other @', 'tag3@@@@'], $separator)
+        );
+        static::assertSame('tag1@tag2@tag3', tags_array2str(['@@@tag1@@@', '@', 'tag2', '@@@', 'tag3@@@'], $separator));
+        static::assertSame('tag1', tags_array2str(['@@@@tag1@@@@'], $separator));
+        static::assertSame('', tags_array2str(['@@@'], $separator));
+        static::assertSame('', tags_array2str([], $separator));
+        static::assertSame('', tags_array2str(null, $separator));
+    }
+
+    /**
+     * Test tags_array2str with @ separator.
+     */
+    public function testTagsFilterWithSpaceSeparator(): void
+    {
+        $separator = ' ';
+
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_filter(['tag1', 'tag2', 'tag3'], $separator));
+        static::assertSame(['tag1,', 'tag2@', 'tag3'], tags_filter(['tag1,', 'tag2@', 'tag3'], $separator));
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_filter(['   tag1   ', 'tag2', 'tag3   '], $separator));
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_filter(['   tag1   ', ' ', 'tag2', '   ', 'tag3   '], $separator));
+        static::assertSame(['tag1'], tags_filter(['   tag1   '], $separator));
+        static::assertSame([], tags_filter(['  '], $separator));
+        static::assertSame([], tags_filter([], $separator));
+        static::assertSame([], tags_filter(null, $separator));
+    }
+
+    /**
+     * Test tags_array2str with @ separator.
+     */
+    public function testTagsArrayFilterWithSpaceSeparator(): void
+    {
+        $separator = '@';
+
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_filter(['tag1', 'tag2', 'tag3'], $separator));
+        static::assertSame(['tag1,', 'tag2#', 'tag3'], tags_filter(['tag1,', 'tag2#', 'tag3'], $separator));
+        static::assertSame(
+            ['tag1', 'tag2, and other', 'tag3'],
+            tags_filter(['@@@@ tag1@@@', ' @tag2, and other @', 'tag3@@@@'], $separator)
+        );
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_filter(['@@@tag1@@@', '@', 'tag2', '@@@', 'tag3@@@'], $separator));
+        static::assertSame(['tag1'], tags_filter(['@@@@tag1@@@@'], $separator));
+        static::assertSame([], tags_filter(['@@@'], $separator));
+        static::assertSame([], tags_filter([], $separator));
+        static::assertSame([], tags_filter(null, $separator));
     }
 
     /**

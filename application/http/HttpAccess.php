@@ -29,14 +29,16 @@ class HttpAccess
         &$title,
         &$description,
         &$keywords,
-        $retrieveDescription
+        $retrieveDescription,
+        $tagsSeparator
     ) {
         return get_curl_download_callback(
             $charset,
             $title,
             $description,
             $keywords,
-            $retrieveDescription
+            $retrieveDescription,
+            $tagsSeparator
         );
     }
 

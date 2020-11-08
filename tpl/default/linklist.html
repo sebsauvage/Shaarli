@@ -90,7 +90,7 @@
           {'for'|t} <em><strong>{$search_term}</strong></em>
         {/if}
         {if="!empty($search_tags)"}
-          {$exploded_tags=explode(' ', $search_tags)}
+          {$exploded_tags=tags_str2array($search_tags, $tags_separator)}
           {'tagged'|t}
           {loop="$exploded_tags"}
               <span class="label label-tag" title="{'Remove tag'|t}">

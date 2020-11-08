@@ -125,6 +125,7 @@ $app->group('/admin', function () {
     $this->post('/configure', '\Shaarli\Front\Controller\Admin\ConfigureController:save');
     $this->get('/tags', '\Shaarli\Front\Controller\Admin\ManageTagController:index');
     $this->post('/tags', '\Shaarli\Front\Controller\Admin\ManageTagController:save');
+    $this->post('/tags/change-separator', '\Shaarli\Front\Controller\Admin\ManageTagController:changeSeparator');
     $this->get('/add-shaare', '\Shaarli\Front\Controller\Admin\ShaareAddController:addShaare');
     $this->get('/shaare', '\Shaarli\Front\Controller\Admin\ShaarePublishController:displayCreateForm');
     $this->get('/shaare/{id:[0-9]+}', '\Shaarli\Front\Controller\Admin\ShaarePublishController:displayEditForm');

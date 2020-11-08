@@ -60,11 +60,13 @@ class Bookmark
     /**
      * Initialize a link from array data. Especially useful to create a Bookmark from former link storage format.
      *
-     * @param array $data
+     * @param array  $data
+     * @param string $tagsSeparator Tags separator loaded from the config file.
+     *                              This is a context data, and it should *never* be stored in the Bookmark object.
      *
      * @return $this
      */
-    public function fromArray(array $data): Bookmark
+    public function fromArray(array $data, string $tagsSeparator = ' '): Bookmark
     {
         $this->id = $data['id'] ?? null;
         $this->shortUrl = $data['shorturl'] ?? null;
@@ -77,7 +79,7 @@ class Bookmark
         if (is_array($data['tags'])) {
             $this->tags = $data['tags'];
         } else {
-            $this->tags = preg_split('/\s+/', $data['tags'] ?? '', -1, PREG_SPLIT_NO_EMPTY);
+            $this->tags = tags_str2array($data['tags'] ?? '', $tagsSeparator);
         }
         if (! empty($data['updated'])) {
             $this->updated = $data['updated'];
@@ -348,7 +350,12 @@ class Bookmark
      */
     public function setTags(?array $tags): Bookmark
     {
-        $this->setTagsString(implode(' ', $tags ?? []));
+        $this->tags = array_map(
+            function (string $tag): string {
+                return $tag[0] === '-' ? substr($tag, 1) : $tag;
+            },
+            tags_filter($tags, ' ')
+        );
 
         return $this;
     }
@@ -420,11 +427,13 @@ class Bookmark
     }
 
     /**
-     * @return string Bookmark's tags as a string, separated by a space
+     * @param string $separator Tags separator loaded from the config file.
+     *
+     * @return string Bookmark's tags as a string, separated by a separator
      */
-    public function getTagsString(): string
+    public function getTagsString(string $separator = ' '): string
     {
-        return implode(' ', $this->getTags());
+        return tags_array2str($this->getTags(), $separator);
     }
 
     /**
@@ -444,19 +453,13 @@ class Bookmark
      *   - trailing dash in tags will be removed
      *
      * @param string|null $tags
+     * @param string      $separator Tags separator loaded from the config file.
      *
      * @return $this
      */
-    public function setTagsString(?string $tags): Bookmark
+    public function setTagsString(?string $tags, string $separator = ' '): Bookmark
     {
-        // Remove first '-' char in tags.
-        $tags = preg_replace('/(^| )\-/', '$1', $tags ?? '');
-        // Explode all tags separted by spaces or commas
-        $tags = preg_split('/[\s,]+/', $tags);
-        // Remove eventual empty values
-        $tags = array_values(array_filter($tags));
-
-        $this->tags = $tags;
+        $this->setTags(tags_str2array($tags, $separator));
 
         return $this;
     }
@@ -507,7 +510,7 @@ class Bookmark
      */
     public function renameTag(string $fromTag, string $toTag): void
     {
-        if (($pos = array_search($fromTag, $this->tags)) !== false) {
+        if (($pos = array_search($fromTag, $this->tags ?? [])) !== false) {
             $this->tags[$pos] = trim($toTag);
         }
     }
@@ -519,7 +522,7 @@ class Bookmark
      */
     public function deleteTag(string $tag): void
     {
-        if (($pos = array_search($tag, $this->tags)) !== false) {
+        if (($pos = array_search($tag, $this->tags ?? [])) !== false) {
             unset($this->tags[$pos]);
             $this->tags = array_values($this->tags);
         }

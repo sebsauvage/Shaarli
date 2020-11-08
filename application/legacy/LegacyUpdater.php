@@ -585,7 +585,7 @@ class LegacyUpdater
 
         $linksArray = new BookmarkArray();
         foreach ($this->linkDB as $key => $link) {
-            $linksArray[$key] = (new Bookmark())->fromArray($link);
+            $linksArray[$key] = (new Bookmark())->fromArray($link, $this->conf->get('general.tags_separator', ' '));
         }
         $linksIo = new BookmarkIO($this->conf);
         $linksIo->write($linksArray);

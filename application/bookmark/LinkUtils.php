@@ -176,3 +176,49 @@ function is_note($linkUrl)
 {
     return isset($linkUrl[0]) && $linkUrl[0] === '?';
 }
+
+/**
+ * Extract an array of tags from a given tag string, with provided separator.
+ *
+ * @param string|null $tags      String containing a list of tags separated by $separator.
+ * @param string      $separator Shaarli's default: ' ' (whitespace)
+ *
+ * @return array List of tags
+ */
+function tags_str2array(?string $tags, string $separator): array
+{
+    // For whitespaces, we use the special \s regex character
+    $separator = $separator === ' ' ? '\s' : $separator;
+
+    return preg_split('/\s*' . $separator . '+\s*/', trim($tags) ?? '', -1, PREG_SPLIT_NO_EMPTY);
+}
+
+/**
+ * Return a tag string with provided separator from a list of tags.
+ * Note that given array is clean up by tags_filter().
+ *
+ * @param array|null $tags      List of tags
+ * @param string     $separator
+ *
+ * @return string
+ */
+function tags_array2str(?array $tags, string $separator): string
+{
+    return implode($separator, tags_filter($tags, $separator));
+}
+
+/**
+ * Clean an array of tags: trim + remove empty entries
+ *
+ * @param array|null $tags List of tags
+ * @param string     $separator
+ *
+ * @return array
+ */
+function tags_filter(?array $tags, string $separator): array
+{
+    $trimDefault = " \t\n\r\0\x0B";
+    return array_values(array_filter(array_map(function (string $entry) use ($separator, $trimDefault): string {
+        return trim($entry, $trimDefault . $separator);
+    }, $tags ?? [])));
+}

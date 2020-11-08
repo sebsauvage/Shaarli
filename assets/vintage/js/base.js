@@ -2,29 +2,38 @@ import Awesomplete from 'awesomplete';
 import 'awesomplete/awesomplete.css';
 
 (() => {
-  const awp = Awesomplete.$;
   const autocompleteFields = document.querySelectorAll('input[data-multiple]');
-  [...autocompleteFields].forEach((autocompleteField) => {
-    const awesomplete = new Awesomplete(awp(autocompleteField));
-    awesomplete.filter = (text, input) => Awesomplete.FILTER_CONTAINS(text, input.match(/[^ ]*$/)[0]);
-    awesomplete.replace = (text) => {
-      const before = awesomplete.input.value.match(/^.+ \s*|/)[0];
-      awesomplete.input.value = `${before}${text} `;
-    };
-    awesomplete.minChars = 1;
+  const tagsSeparatorElement = document.querySelector('input[name="tags_separator"]');
+  const tagsSeparator = tagsSeparatorElement ? tagsSeparatorElement.value || ' ' : ' ';
 
-    autocompleteField.addEventListener('input', () => {
-      const proposedTags = autocompleteField.getAttribute('data-list').replace(/,/g, '').split(' ');
-      const reg = /(\w+) /g;
-      let match;
-      while ((match = reg.exec(autocompleteField.value)) !== null) {
-        const id = proposedTags.indexOf(match[1]);
-        if (id !== -1) {
-          proposedTags.splice(id, 1);
+  [...autocompleteFields].forEach((autocompleteField) => {
+    const awesome = new Awesomplete(Awesomplete.$(autocompleteField));
+
+    // Tags are separated by separator
+    awesome.filter = (text, input) => Awesomplete.FILTER_CONTAINS(
+      text,
+      input.match(new RegExp(`[^${tagsSeparator}]*$`))[0],
+    );
+    // Insert new selected tag in the input
+    awesome.replace = (text) => {
+      const before = awesome.input.value.match(new RegExp(`^.+${tagsSeparator}+|`))[0];
+      awesome.input.value = `${before}${text}${tagsSeparator}`;
+    };
+    // Highlight found items
+    awesome.item = (text, input) => Awesomplete.ITEM(text, input.match(new RegExp(`[^${tagsSeparator}]*$`))[0]);
+
+    // Don't display already selected items
+    // WARNING: pseudo classes does not seem to work with string litterals...
+    const reg = new RegExp(`([^${tagsSeparator}]+)${tagsSeparator}`, 'g');
+    let match;
+    awesome.data = (item, input) => {
+      while ((match = reg.exec(input))) {
+        if (item === match[1]) {
+          return '';
         }
       }
-
-      awesomplete.list = proposedTags;
-    });
+      return item;
+    };
+    awesome.minChars = 1;
   });
 })();

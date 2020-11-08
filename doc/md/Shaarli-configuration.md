@@ -74,6 +74,7 @@ Some settings can be configured directly from a web browser by accesing the `Too
         "timezone": "Europe\/Paris",
         "title": "My Shaarli",
         "header_link": "?"
+        "tags_separator": " "
     },
     "dev": {
         "debug": false,
@@ -153,6 +154,7 @@ _These settings should not be edited_
 - **enable_async_metadata** (boolean): Retrieve external bookmark metadata asynchronously to prevent bookmark creation slowdown.
 - **retrieve_description** (boolean): If set to true, for every new Shaare Shaarli will try to retrieve the description and keywords from the HTML meta tags.
 - **root_url**: Overrides automatic discovery of Shaarli instance's URL (e.g.) `https://sub.domain.tld/shaarli-folder/`.
+- **tags_separator**: Defines your tags separator (default: whitespace).
 
 ### Security
 
