@@ -1122,6 +1122,16 @@ ul.errors {
     float: left;
 }
 
+ul.warnings {
+    color: orange;
+    float: left;
+}
+
+ul.successes {
+    color: green;
+    float: left;
+}
+
 #pluginsadmin {
     width: 80%;
     padding: 20px 0 0 20px;
