@@ -6,7 +6,7 @@ Please read [Contributing to Shaarli](https://github.com/shaarli/Shaarli/tree/ma
 
 
 - [Unit tests](Unit-tests)
-- Javascript linting - Shaarli uses [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript). 
+- Javascript linting - Shaarli uses [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
 Run `make eslint` to check JS style.
 - [GnuPG signature](GnuPG-signature) for tags/releases
 
@@ -51,12 +51,12 @@ PHP (managed through [`composer.json`](https://github.com/shaarli/Shaarli/blob/m
 
 ## Link structure
 
-Every link available through the `LinkDB` object is represented as an array 
+Every link available through the `LinkDB` object is represented as an array
 containing the following fields:
 
   * `id` (integer): Unique identifier.
   * `title` (string): Title of the link.
-  * `url` (string): URL of the link. Used for displayable links (without redirector, url encoding, etc.).  
+  * `url` (string): URL of the link. Used for displayable links (without redirector, url encoding, etc.).
            Can be absolute or relative for Notes.
   * `real_url` (string): Real destination URL, can be redirected, encoded, etc.
   * `shorturl` (string): Permalink small hash.
@@ -66,7 +66,7 @@ containing the following fields:
   * `thumbnail` (string|boolean): relative path of the thumbnail cache file, or false if there isn't any.
   * `created` (DateTime): link creation date time.
   * `updated` (DateTime): last modification date time.
-  
+
 Small hashes are used to make a link to an entry in Shaarli. They are unique: the date of the item (eg. `20110923_150523`) is hashed with CRC32, then converted to base64 and some characters are replaced. They are always 6 characters longs and use only `A-Z a-z 0-9 - _` and `@`.
 
 
@@ -163,11 +163,13 @@ See [`.travis.yml`](https://github.com/shaarli/Shaarli/blob/master/.travis.yml).
 
 ## Static analysis
 
-Patches should try to stick to the [PHP Standard Recommendations](http://www.php-fig.org/psr/) (PSR), especially:
+Patches should try to stick to the [PHP Standard Recommendations](http://www.php-fig.org/psr/) (PSR), and must follow:
 
 - [PSR-1](http://www.php-fig.org/psr/psr-1/) - Basic Coding Standard
 - [PSR-2](http://www.php-fig.org/psr/psr-2/) - Coding Style Guide
+- [PSR-12](http://www.php-fig.org/psr/psr-12/) - Extended Coding Style  Guide
 
+These are enforced on pull requests using our Continuous Integration tools.
 
 **Work in progress:** Static analysis is currently being discussed here: in [#95 - Fix coding style (static analysis)](https://github.com/shaarli/Shaarli/issues/95), [#130 - Continuous Integration tools & features](https://github.com/shaarli/Shaarli/issues/130)
 
