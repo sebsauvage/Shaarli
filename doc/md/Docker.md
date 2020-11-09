@@ -1,3 +1,4 @@
+
 # Docker
 
 [Docker](https://docs.docker.com/get-started/overview/) is an open platform for developing, shipping, and running applications
@@ -113,9 +114,11 @@ $ mkdir shaarli && cd shaarli
 # Download the latest version of Shaarli's docker-compose.yml
 $ curl -L https://raw.githubusercontent.com/shaarli/Shaarli/latest/docker-compose.yml -o docker-compose.yml
 # Create the .env file and fill in your VPS and domain information
-# (replace <MY_SHAARLI_DOMAIN> and <MY_CONTACT_EMAIL> with your actual information)
+# (replace <shaarli.mydomain.org>, <admin@mydomain.org> and <latest> with your actual information)
 $ echo 'SHAARLI_VIRTUAL_HOST=shaarli.mydomain.org' > .env
 $ echo 'SHAARLI_LETSENCRYPT_EMAIL=admin@mydomain.org' >> .env
+# Available Docker tags can be found at https://hub.docker.com/r/shaarli/shaarli/tags
+$ echo 'SHAARLI_DOCKER_TAG=latest' >> .env
 # Pull the Docker images
 $ docker-compose pull
 # Run!
