@@ -6,6 +6,7 @@
 {if="$link.title==''"}onload="document.linkform.lf_title.focus();"
 {elseif="$link.description==''"}onload="document.linkform.lf_description.focus();"
 {else}onload="document.linkform.lf_tags.focus();"{/if} >
+{$asyncLoadClass=$link_is_new && $async_metadata && empty($link.title) ? 'loading-input' : ''}
 <div id="pageheader">
     {include="page.header"}
     <div id="shaarli_title"><a href="{$titleLink}">{$shaarlititle}</a></div>
@@ -14,12 +15,29 @@
           {if="isset($link.id)"}
 	          <input type="hidden" name="lf_id" value="{$link.id}">
           {/if}
-            <label for="lf_url"><i>URL</i></label><br><input type="text" name="lf_url" id="lf_url" value="{$link.url}" class="lf_input"><br>
-            <label for="lf_title"><i>Title</i></label><br><input type="text" name="lf_title" id="lf_title" value="{$link.title}" class="lf_input"><br>
-            <label for="lf_description"><i>Description</i></label><br><textarea name="lf_description" id="lf_description" rows="4" cols="25">{$link.description}</textarea><br>
-            <label for="lf_tags"><i>Tags</i></label><br>
-            <input type="text" name="lf_tags" id="lf_tags" value="{$link.tags}" class="lf_input"
-                data-list="{loop="$tags"}{$key}, {/loop}" data-multiple autocomplete="off" ><br>
+            <label for="lf_url"><i>URL</i></label><br><input type="text" name="lf_url" id="lf_url" value="{$link.url}" class="lf_input">
+            <label for="lf_title"><i>Title</i></label>
+            <div class="{$asyncLoadClass}">
+              <input type="text" name="lf_title" id="lf_title" value="{$link.title}" class="lf_input">
+              <div class="icon-container">
+                <i class="loader"></i>
+              </div>
+            </div>
+            <label for="lf_description"><i>Description</i></label>
+            <div class="{if="$retrieve_description"}{$asyncLoadClass}{/if}">
+              <textarea name="lf_description" id="lf_description" rows="4" cols="25">{$link.description}</textarea>
+              <div class="icon-container">
+                <i class="loader"></i>
+              </div>
+            </div>
+            <label for="lf_tags"><i>Tags</i></label>
+            <div class="{if="$retrieve_description"}{$asyncLoadClass}{/if}">
+              <input type="text" name="lf_tags" id="lf_tags" value="{$link.tags}" class="lf_input"
+                data-list="{loop="$tags"}{$key}, {/loop}" data-multiple autocomplete="off" >
+              <div class="icon-container">
+                <i class="loader"></i>
+              </div>
+            </div>
 
           {if="$formatter==='markdown'"}
             <div class="md_help">
@@ -56,5 +74,5 @@
     </div>
 </div>
 {include="page.footer"}
-</body>
+{if="$link_is_new && $async_metadata"}<script src="{$asset_path}/js/metadata.min.js?v={$version_hash}#"></script>{/if}</body>
 </html>
