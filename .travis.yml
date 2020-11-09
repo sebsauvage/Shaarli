@@ -49,6 +49,10 @@ cache:
   directories:
     - $HOME/.composer/cache
 
+before_install:
+  # Disable xdebug: it significantly speed up tests and linter, and we don't use coverage yet
+  - phpenv config-rm xdebug.ini || echo 'No xdebug config.'
+
 install:
   # install/update composer and php dependencies
   - composer config --unset platform && composer config platform.php $TRAVIS_PHP_VERSION
@@ -60,4 +64,5 @@ before_script:
 script:
   - make clean
   - make check_permissions
+  - make code_sniffer
   - make all_tests
