@@ -370,8 +370,8 @@ class ConfigManager
         $this->setEmpty('general.enable_async_metadata', true);
         $this->setEmpty('general.tags_separator', ' ');
 
-        $this->setEmpty('updates.check_updates', false);
-        $this->setEmpty('updates.check_updates_branch', 'stable');
+        $this->setEmpty('updates.check_updates', true);
+        $this->setEmpty('updates.check_updates_branch', 'latest');
         $this->setEmpty('updates.check_updates_interval', 86400);
 
         $this->setEmpty('feed.rss_permalinks', true);

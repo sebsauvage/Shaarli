@@ -25,9 +25,16 @@ class ServerController extends ShaarliAdminController
      */
     public function index(Request $request, Response $response): Response
     {
-        $latestVersion = 'v' . ApplicationUtils::getVersion(
-            ApplicationUtils::$GIT_RAW_URL . '/latest/' . ApplicationUtils::$VERSION_FILE
-        );
+        $releaseUrl = ApplicationUtils::$GITHUB_URL . '/releases/';
+        if ($this->container->conf->get('updates.check_updates', true)) {
+            $latestVersion = 'v' . ApplicationUtils::getVersion(
+                ApplicationUtils::$GIT_RAW_URL . '/latest/' . ApplicationUtils::$VERSION_FILE
+            );
+            $releaseUrl .= 'tag/' . $latestVersion;
+        } else {
+            $latestVersion = t('Check disabled');
+        }
+
         $currentVersion = ApplicationUtils::getVersion('./shaarli_version.php');
         $currentVersion = $currentVersion === 'dev' ? $currentVersion : 'v' . $currentVersion;
         $phpEol = new \DateTimeImmutable(ApplicationUtils::getPhpEol(PHP_VERSION));
@@ -37,7 +44,7 @@ class ServerController extends ShaarliAdminController
         $this->assignView('php_has_reached_eol', $phpEol < new \DateTimeImmutable());
         $this->assignView('php_extensions', ApplicationUtils::getPhpExtensionsRequirement());
         $this->assignView('permissions', ApplicationUtils::checkResourcePermissions($this->container->conf));
-        $this->assignView('release_url', ApplicationUtils::$GITHUB_URL . '/releases/tag/' . $latestVersion);
+        $this->assignView('release_url', $releaseUrl);
         $this->assignView('latest_version', $latestVersion);
         $this->assignView('current_version', $currentVersion);
         $this->assignView('thumbnails_mode', $this->container->conf->get('thumbnails.mode'));
