@@ -28,14 +28,14 @@ function default_colors_init($conf)
 {
     $params = [];
     foreach (DEFAULT_COLORS_PLACEHOLDERS as $placeholder) {
-        $value = trim($conf->get('plugins.'. $placeholder, ''));
+        $value = trim($conf->get('plugins.' . $placeholder, ''));
         if (strlen($value) > 0) {
             $params[$placeholder] = $value;
         }
     }
 
     if (empty($params)) {
-        $error = t('Default colors plugin error: '.
+        $error = t('Default colors plugin error: ' .
             'This plugin is active and no custom color is configured.');
         return [$error];
     }
@@ -56,7 +56,7 @@ function default_colors_init($conf)
 function hook_default_colors_render_includes($data)
 {
     $file = PluginManager::$PLUGINS_PATH . '/default_colors/default_colors.css';
-    if (file_exists($file )) {
+    if (file_exists($file)) {
         $data['css_files'][] = $file ;
     }
 
@@ -75,7 +75,7 @@ function default_colors_generate_css_file($params): void
     $content = '';
     foreach (DEFAULT_COLORS_PLACEHOLDERS as $rule) {
         $content .= !empty($params[$rule])
-            ? default_colors_format_css_rule($params, $rule) .';'. PHP_EOL
+            ? default_colors_format_css_rule($params, $rule) . ';' . PHP_EOL
             : '';
     }
 
@@ -99,8 +99,8 @@ function default_colors_format_css_rule($data, $parameter)
     }
 
     $key = str_replace('DEFAULT_COLORS_', '', $parameter);
-    $key = str_replace('_', '-', strtolower($key)) .'-color';
-    return '  --'. $key .': '. $data[$parameter];
+    $key = str_replace('_', '-', strtolower($key)) . '-color';
+    return '  --' . $key . ': ' . $data[$parameter];
 }
 
 

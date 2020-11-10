@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Bookmark\Exception;
 
 use Exception;

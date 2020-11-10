@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Shaarli\Api\Controllers;
 
 use Shaarli\Api\Exceptions\ApiBadParametersException;

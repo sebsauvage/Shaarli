@@ -27,10 +27,6 @@ PHPCS := $(BIN)/phpcs
 code_sniffer:
 	@$(PHPCS)
 
-### - errors filtered by coding standard: PEAR, PSR1, PSR2, Zend...
-PHPCS_%:
-	@$(PHPCS) --report-full --report-width=200 --standard=$*
-
 ### - errors by Git author
 code_sniffer_blame:
 	@$(PHPCS) --report-gitblame

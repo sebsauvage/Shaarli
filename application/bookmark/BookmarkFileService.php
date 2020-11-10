@@ -69,7 +69,7 @@ class BookmarkFileService implements BookmarkServiceInterface
         } else {
             try {
                 $this->bookmarks = $this->bookmarksIO->read();
-            } catch (EmptyDataStoreException|DatastoreNotInitializedException $e) {
+            } catch (EmptyDataStoreException | DatastoreNotInitializedException $e) {
                 $this->bookmarks = new BookmarkArray();
 
                 if ($this->isLoggedIn) {
@@ -85,7 +85,7 @@ class BookmarkFileService implements BookmarkServiceInterface
             if (! $this->bookmarks instanceof BookmarkArray) {
                 $this->migrate();
                 exit(
-                    'Your data store has been migrated, please reload the page.'. PHP_EOL .
+                    'Your data store has been migrated, please reload the page.' . PHP_EOL .
                     'If this message keeps showing up, please delete data/updates.txt file.'
                 );
             }
@@ -102,7 +102,8 @@ class BookmarkFileService implements BookmarkServiceInterface
         $bookmark = $this->bookmarkFilter->filter(BookmarkFilter::$FILTER_HASH, $hash);
         // PHP 7.3 introduced array_key_first() to avoid this hack
         $first = reset($bookmark);
-        if (!$this->isLoggedIn
+        if (
+            !$this->isLoggedIn
             && $first->isPrivate()
             && (empty($privateKey) || $privateKey !== $first->getAdditionalContentEntry('private_key'))
         ) {
@@ -165,7 +166,8 @@ class BookmarkFileService implements BookmarkServiceInterface
         }
 
         $bookmark = $this->bookmarks[$id];
-        if (($bookmark->isPrivate() && $visibility != 'all' && $visibility != 'private')
+        if (
+            ($bookmark->isPrivate() && $visibility != 'all' && $visibility != 'private')
             || (! $bookmark->isPrivate() && $visibility != 'all' && $visibility != 'public')
         ) {
             throw new Exception('Unauthorized');
@@ -265,7 +267,8 @@ class BookmarkFileService implements BookmarkServiceInterface
         }
 
         $bookmark = $this->bookmarks[$id];
-        if (($bookmark->isPrivate() && $visibility != 'all' && $visibility != 'private')
+        if (
+            ($bookmark->isPrivate() && $visibility != 'all' && $visibility != 'private')
             || (! $bookmark->isPrivate() && $visibility != 'all' && $visibility != 'public')
         ) {
             return false;
@@ -307,7 +310,8 @@ class BookmarkFileService implements BookmarkServiceInterface
         $caseMapping = [];
         foreach ($bookmarks as $bookmark) {
             foreach ($bookmark->getTags() as $tag) {
-                if (empty($tag)
+                if (
+                    empty($tag)
                     || (! $this->isLoggedIn && startsWith($tag, '.'))
                     || $tag === BookmarkMarkdownFormatter::NO_MD_TAG
                     || in_array($tag, $filteringTags, true)
@@ -356,7 +360,7 @@ class BookmarkFileService implements BookmarkServiceInterface
         foreach ($this->search([], null, false, false, true) as $bookmark) {
             if ($to < $bookmark->getCreated()) {
                 $next = $bookmark->getCreated();
-            } else if ($from < $bookmark->getCreated() && $to > $bookmark->getCreated()) {
+            } elseif ($from < $bookmark->getCreated() && $to > $bookmark->getCreated()) {
                 $out[] = $bookmark;
             } else {
                 if ($previous !== null) {
@@ -405,14 +409,14 @@ class BookmarkFileService implements BookmarkServiceInterface
             false
         );
         $updater = new LegacyUpdater(
-            UpdaterUtils::read_updates_file($this->conf->get('resource.updates')),
+            UpdaterUtils::readUpdatesFile($this->conf->get('resource.updates')),
             $bookmarkDb,
             $this->conf,
             true
         );
         $newUpdates = $updater->update();
         if (! empty($newUpdates)) {
-            UpdaterUtils::write_updates_file(
+            UpdaterUtils::writeUpdatesFile(
                 $this->conf->get('resource.updates'),
                 $updater->getDoneUpdates()
             );

@@ -51,7 +51,7 @@ class LegacyController extends ShaarliVisitorController
 
         if (!$this->container->loginManager->isLoggedIn()) {
             $parameters = $buildParameters($request->getQueryParams(), true);
-            return $this->redirect($response, '/login?returnurl='. $this->getBasePath() . $route . $parameters);
+            return $this->redirect($response, '/login?returnurl=' . $this->getBasePath() . $route . $parameters);
         }
 
         $parameters = $buildParameters($request->getQueryParams(), false);

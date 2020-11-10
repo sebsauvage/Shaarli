@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shaarli utilities
  */
@@ -102,7 +103,7 @@ function escape($input)
     }
 
     if (is_array($input)) {
-        $out = array();
+        $out = [];
         foreach ($input as $key => $value) {
             $out[escape($key)] = escape($value);
         }
@@ -163,7 +164,7 @@ function checkDateFormat($format, $string)
  *
  * @return string $referer - final referer.
  */
-function generateLocation($referer, $host, $loopTerms = array())
+function generateLocation($referer, $host, $loopTerms = [])
 {
     $finalReferer = './?';
 
@@ -196,7 +197,7 @@ function generateLocation($referer, $host, $loopTerms = array())
 function autoLocale($headerLocale)
 {
     // Default if browser does not send HTTP_ACCEPT_LANGUAGE
-    $locales = array('en_US', 'en_US.utf8', 'en_US.UTF-8');
+    $locales = ['en_US', 'en_US.utf8', 'en_US.UTF-8'];
     if (! empty($headerLocale)) {
         if (preg_match_all('/([a-z]{2,3})[-_]?([a-z]{2})?,?/i', $headerLocale, $matches, PREG_SET_ORDER)) {
             $attempts = [];
@@ -376,13 +377,15 @@ function return_bytes($val)
         return $val;
     }
     $val = trim($val);
-    $last = strtolower($val[strlen($val)-1]);
+    $last = strtolower($val[strlen($val) - 1]);
     $val = intval(substr($val, 0, -1));
     switch ($last) {
         case 'g':
             $val *= 1024;
+        // do no break in order 1024^2 for each unit
         case 'm':
             $val *= 1024;
+        // do no break in order 1024^2 for each unit
         case 'k':
             $val *= 1024;
     }
@@ -482,7 +485,9 @@ function alphabetical_sort(&$data, $reverse = false, $byKeys = false)
  */
 function t($text, $nText = '', $nb = 1, $domain = 'shaarli', $variables = [], $fixCase = false)
 {
-    $postFunction = $fixCase ? 'ucfirst' : function ($input) { return $input; };
+    $postFunction = $fixCase ? 'ucfirst' : function ($input) {
+        return $input;
+    };
 
     return $postFunction(dn__($domain, $text, $nText, $nb, $variables));
 }
@@ -494,4 +499,3 @@ function exception2text(Throwable $e): string
 {
     return $e->getMessage() . PHP_EOL . $e->getFile() . $e->getLine() . PHP_EOL . $e->getTraceAsString();
 }
-

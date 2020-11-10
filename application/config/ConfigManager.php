@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Config;
 
 use Shaarli\Config\Exception\MissingFieldConfigException;
@@ -20,7 +21,7 @@ class ConfigManager
      */
     protected static $NOT_FOUND = 'NOT_FOUND';
 
-    public static $DEFAULT_PLUGINS = array('qrcode');
+    public static $DEFAULT_PLUGINS = ['qrcode'];
 
     /**
      * @var string Config folder.
@@ -133,7 +134,7 @@ class ConfigManager
     public function set($setting, $value, $write = false, $isLoggedIn = false)
     {
         if (empty($setting) || ! is_string($setting)) {
-            throw new \Exception(t('Invalid setting key parameter. String expected, got: '). gettype($setting));
+            throw new \Exception(t('Invalid setting key parameter. String expected, got: ') . gettype($setting));
         }
 
         // During the ConfigIO transition, map legacy settings to the new ones.
@@ -160,7 +161,7 @@ class ConfigManager
     public function remove($setting, $write = false, $isLoggedIn = false)
     {
         if (empty($setting) || ! is_string($setting)) {
-            throw new \Exception(t('Invalid setting key parameter. String expected, got: '). gettype($setting));
+            throw new \Exception(t('Invalid setting key parameter. String expected, got: ') . gettype($setting));
         }
 
         // During the ConfigIO transition, map legacy settings to the new ones.
@@ -213,7 +214,7 @@ class ConfigManager
     public function write($isLoggedIn)
     {
         // These fields are required in configuration.
-        $mandatoryFields = array(
+        $mandatoryFields = [
             'credentials.login',
             'credentials.hash',
             'credentials.salt',
@@ -222,7 +223,7 @@ class ConfigManager
             'general.title',
             'general.header_link',
             'privacy.default_private_links',
-        );
+        ];
 
         // Only logged in user can alter config.
         if (is_file($this->getConfigFileExt()) && !$isLoggedIn) {
@@ -392,7 +393,7 @@ class ConfigManager
         $this->setEmpty('translation.mode', 'php');
         $this->setEmpty('translation.extensions', []);
 
-        $this->setEmpty('plugins', array());
+        $this->setEmpty('plugins', []);
 
         $this->setEmpty('formatter', 'markdown');
     }

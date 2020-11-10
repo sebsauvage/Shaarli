@@ -13,6 +13,9 @@ namespace Shaarli\Bookmark;
  * To prevent data corruption, it does not overwrite existing bookmarks,
  * even though there should not be any.
  *
+ * We disable this because otherwise it creates indentation issues, and heredoc is not supported by PHP gettext.
+ * @phpcs:disable Generic.Files.LineLength.TooLong
+ *
  * @package Shaarli\Bookmark
  */
 class BookmarkInitializer
@@ -39,7 +42,7 @@ class BookmarkInitializer
         $bookmark->setTitle('Calm Jazz Music - YouTube ' . t('(private bookmark with thumbnail demo)'));
         $bookmark->setUrl('https://www.youtube.com/watch?v=DVEUcbPkb-c');
         $bookmark->setDescription(t(
-'Shaarli will automatically pick up the thumbnail for links to a variety of websites.
+            'Shaarli will automatically pick up the thumbnail for links to a variety of websites.
 
 Explore your new Shaarli instance by trying out controls and menus.
 Visit the project on [Github](https://github.com/shaarli/Shaarli) or [the documentation](https://shaarli.readthedocs.io/en/master/) to learn more about Shaarli.
@@ -54,7 +57,7 @@ Now you can edit or delete the default shaares.
         $bookmark = new Bookmark();
         $bookmark->setTitle(t('Note: Shaare descriptions'));
         $bookmark->setDescription(t(
-'Adding a shaare without entering a URL creates a text-only "note" post such as this one.
+            'Adding a shaare without entering a URL creates a text-only "note" post such as this one.
 This note is private, so you are the only one able to see it while logged in.
 
 You can use this to keep notes, post articles, code snippets, and much more.
@@ -91,7 +94,7 @@ Markdown also supports tables:
             'Shaarli - ' . t('The personal, minimalist, super-fast, database free, bookmarking service')
         );
         $bookmark->setDescription(t(
-'Welcome to Shaarli!
+            'Welcome to Shaarli!
 
 Shaarli allows you to bookmark your favorite pages, and share them with others or store them privately.
 You can add a description to your bookmarks, such as this one, and tag them.

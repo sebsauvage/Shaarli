@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Security;
 
 use Exception;
@@ -106,7 +107,8 @@ class LoginManager
             // The user client has a valid stay-signed-in cookie
             // Session information is updated with the current client information
             $this->sessionManager->storeLoginInfo($clientIpId);
-        } elseif ($this->sessionManager->hasSessionExpired()
+        } elseif (
+            $this->sessionManager->hasSessionExpired()
             || $this->sessionManager->hasClientIpChanged($clientIpId)
         ) {
             $this->sessionManager->logout();
@@ -145,7 +147,8 @@ class LoginManager
         // Check credentials
         try {
             $useLdapLogin = !empty($this->configManager->get('ldap.host'));
-            if ($login === $this->configManager->get('credentials.login')
+            if (
+                $login === $this->configManager->get('credentials.login')
                 && (
                     (false === $useLdapLogin && $this->checkCredentialsFromLocalConfig($login, $password))
                     || (true === $useLdapLogin && $this->checkCredentialsFromLdap($login, $password))
@@ -156,7 +159,7 @@ class LoginManager
 
                 return true;
             }
-        } catch(Exception $exception) {
+        } catch (Exception $exception) {
             $this->logger->info(format_log('Exception while checking credentials: ' . $exception, $clientIpId));
         }
 
@@ -174,7 +177,8 @@ class LoginManager
      *
      * @return bool true if the provided credentials are valid, false otherwise
      */
-    public function checkCredentialsFromLocalConfig($login, $password) {
+    public function checkCredentialsFromLocalConfig($login, $password)
+    {
         $hash = sha1($password . $login . $this->configManager->get('credentials.salt'));
 
         return $login == $this->configManager->get('credentials.login')
@@ -193,14 +197,14 @@ class LoginManager
      */
     public function checkCredentialsFromLdap($login, $password, $connect = null, $bind = null)
     {
-        $connect = $connect ?? function($host) {
+        $connect = $connect ?? function ($host) {
             $resource = ldap_connect($host);
 
             ldap_set_option($resource, LDAP_OPT_PROTOCOL_VERSION, 3);
 
             return $resource;
         };
-        $bind = $bind ?? function($handle, $dn, $password) {
+        $bind = $bind ?? function ($handle, $dn, $password) {
             return ldap_bind($handle, $dn, $password);
         };
 

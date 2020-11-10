@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shaarli - The personal, minimalist, super-fast, database free, bookmarking service.
  *
@@ -77,9 +78,9 @@ if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
 new Languages(setlocale(LC_MESSAGES, 0), $conf);
 
 $conf->setEmpty('general.timezone', date_default_timezone_get());
-$conf->setEmpty('general.title', t('Shared bookmarks on '). escape(index_url($_SERVER)));
+$conf->setEmpty('general.title', t('Shared bookmarks on ') . escape(index_url($_SERVER)));
 
-RainTPL::$tpl_dir = $conf->get('resource.raintpl_tpl').'/'.$conf->get('resource.theme').'/'; // template directory
+RainTPL::$tpl_dir = $conf->get('resource.raintpl_tpl') . '/' . $conf->get('resource.theme') . '/'; // template directory
 RainTPL::$cache_dir = $conf->get('resource.raintpl_tmp'); // cache directory
 
 date_default_timezone_set($conf->get('general.timezone', 'UTC'));
@@ -177,6 +178,6 @@ try {
 } catch (Throwable $e) {
     die(nl2br(
         'An unexpected error happened, and the error template could not be displayed.' . PHP_EOL . PHP_EOL .
-       exception2text($e)
+        exception2text($e)
     ));
 }

@@ -26,7 +26,7 @@ class PictureWallController extends ShaarliVisitorController
 
         $this->assignView(
             'pagetitle',
-            t('Picture wall') .' - '. $this->container->conf->get('general.title', 'Shaarli')
+            t('Picture wall') . ' - ' . $this->container->conf->get('general.title', 'Shaarli')
         );
 
         // Optionally filter the results:

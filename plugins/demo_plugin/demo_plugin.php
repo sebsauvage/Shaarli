@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Demo Plugin.
  *
@@ -82,14 +83,14 @@ function hook_demo_plugin_render_header($data)
              * A link is an array of its attributes (key="value"),
              * and a mandatory `html` key, which contains its value.
              */
-            $button = array(
-                'attr' => array (
+            $button = [
+                'attr' =>  [
                     'href' => '#',
                     'class' => 'mybutton',
                     'title' => 'hover me',
-                ),
+                ],
                 'html' => 'DEMO buttons toolbar',
-            );
+            ];
             $data['buttons_toolbar'][] = $button;
         }
 
@@ -115,29 +116,29 @@ function hook_demo_plugin_render_header($data)
          *   <input input-2-attribute-1="input 2 attribute 1 value">
          * </form>
          */
-        $form = array(
-            'attr' => array(
+        $form = [
+            'attr' => [
                 'method' => 'GET',
                 'action' => $data['_BASE_PATH_'] . '/',
                 'class' => 'addform',
-            ),
-            'inputs' => array(
-                array(
+            ],
+            'inputs' => [
+                [
                     'type' => 'text',
                     'name' => 'demo',
                     'placeholder' => 'demo',
-                )
-            )
-        );
+                ]
+            ]
+        ];
         $data['fields_toolbar'][] = $form;
     }
     // Another button always displayed
-    $button = array(
-        'attr' => array(
+    $button = [
+        'attr' => [
             'href' => '#',
-        ),
+        ],
         'html' => 'Demo',
-    );
+    ];
     $data['buttons_toolbar'][] = $button;
 
     return $data;
@@ -187,7 +188,7 @@ function hook_demo_plugin_render_includes($data)
 function hook_demo_plugin_render_footer($data)
 {
     // Footer text
-    $data['text'][] = '<br>'. demo_plugin_t('Shaarli is now enhanced by the awesome demo_plugin.');
+    $data['text'][] = '<br>' . demo_plugin_t('Shaarli is now enhanced by the awesome demo_plugin.');
 
     // Free elements at the end of the page.
     $data['endofpage'][] = '<marquee id="demo_marquee">' .
@@ -229,13 +230,13 @@ function hook_demo_plugin_render_linklist($data)
      * and a mandatory `html` key, which contains its value.
      * It's also recommended to add key 'on' or 'off' for theme rendering.
      */
-    $action = array(
-        'attr' => array(
+    $action = [
+        'attr' => [
             'href' => '?up',
             'title' => 'Uppercase!',
-        ),
+        ],
         'html' => '←',
-    );
+    ];
 
     if (isset($_GET['up'])) {
         // Manipulate link data
@@ -275,7 +276,7 @@ function hook_demo_plugin_render_linklist($data)
 function hook_demo_plugin_render_editlink($data)
 {
     // Load HTML into a string
-    $html = file_get_contents(PluginManager::$PLUGINS_PATH .'/demo_plugin/field.html');
+    $html = file_get_contents(PluginManager::$PLUGINS_PATH . '/demo_plugin/field.html');
 
     // Replace value in HTML if it exists in $data
     if (!empty($data['link']['stuff'])) {

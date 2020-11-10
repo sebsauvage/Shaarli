@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Generates a list of available timezone continents and cities.
  *
@@ -43,7 +44,7 @@ function generateTimeZoneData($installedTimeZones, $preselectedTimezone = '')
         // Try to split the provided timezone
         $spos = strpos($preselectedTimezone, '/');
         $pcontinent = substr($preselectedTimezone, 0, $spos);
-        $pcity = substr($preselectedTimezone, $spos+1);
+        $pcity = substr($preselectedTimezone, $spos + 1);
     }
 
     $continents = [];
@@ -60,7 +61,7 @@ function generateTimeZoneData($installedTimeZones, $preselectedTimezone = '')
         }
 
         $continent = substr($tz, 0, $spos);
-        $city = substr($tz, $spos+1);
+        $city = substr($tz, $spos + 1);
         $cities[] = ['continent' => $continent, 'city' => $city];
         $continents[$continent] = true;
     }
@@ -85,7 +86,7 @@ function generateTimeZoneData($installedTimeZones, $preselectedTimezone = '')
 function isTimeZoneValid($continent, $city)
 {
     return in_array(
-        $continent.'/'.$city,
+        $continent . '/' . $city,
         timezone_identifiers_list()
     );
 }

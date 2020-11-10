@@ -54,7 +54,7 @@ class ShaareManageController extends ShaarliAdminController
             $data = $formatter->format($bookmark);
             $this->executePageHooks('delete_link', $data);
             $this->container->bookmarkService->remove($bookmark, false);
-            ++ $count;
+            ++$count;
         }
 
         if ($count > 0) {

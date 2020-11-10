@@ -72,7 +72,9 @@ class ServerController extends ShaarliAdminController
 
             $this->saveWarningMessage(
                 t('Thumbnails cache has been cleared.') . ' ' .
-                '<a href="'. $this->container->basePath .'/admin/thumbnails">' . t('Please synchronize them.') .'</a>'
+                '<a href="' . $this->container->basePath . '/admin/thumbnails">' .
+                    t('Please synchronize them.') .
+                '</a>'
             );
         } else {
             $folders = [

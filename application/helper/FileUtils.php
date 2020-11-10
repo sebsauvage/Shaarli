@@ -105,7 +105,7 @@ class FileUtils
         }
 
         foreach (new \DirectoryIterator($path) as $file) {
-            if($file->isDot()) {
+            if ($file->isDot()) {
                 continue;
             }
 
@@ -116,7 +116,7 @@ class FileUtils
 
             if ($file->isFile()) {
                 unlink($file->getPathname());
-            } elseif($file->isDir()) {
+            } elseif ($file->isDir()) {
                 $skipped = static::clearFolder($file->getRealPath(), true, $exclude) || $skipped;
             }
         }

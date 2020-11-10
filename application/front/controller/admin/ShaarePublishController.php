@@ -118,7 +118,8 @@ class ShaarePublishController extends ShaarliAdminController
             $this->container->conf->get('general.tags_separator', ' ')
         );
 
-        if ($this->container->conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE
+        if (
+            $this->container->conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE
             && true !== $this->container->conf->get('general.enable_async_metadata', true)
             && $bookmark->shouldUpdateThumbnail()
         ) {
@@ -148,7 +149,8 @@ class ShaarePublishController extends ShaarliAdminController
         return $this->redirectFromReferer(
             $request,
             $response,
-            ['/admin/add-shaare', '/admin/shaare'], ['addlink', 'post', 'edit_link'],
+            ['/admin/add-shaare', '/admin/shaare'],
+            ['addlink', 'post', 'edit_link'],
             $bookmark->getShortUrl()
         );
     }
@@ -168,10 +170,10 @@ class ShaarePublishController extends ShaarliAdminController
             $this->assignView($key, $value);
         }
 
-        $editLabel = false === $isNew ? t('Edit') .' ' : '';
+        $editLabel = false === $isNew ? t('Edit') . ' ' : '';
         $this->assignView(
             'pagetitle',
-            $editLabel . t('Shaare') .' - '. $this->container->conf->get('general.title', 'Shaarli')
+            $editLabel . t('Shaare') . ' - ' . $this->container->conf->get('general.title', 'Shaarli')
         );
 
         return $response->write($this->render(TemplatePage::EDIT_LINK));
@@ -194,7 +196,8 @@ class ShaarePublishController extends ShaarliAdminController
 
             // If this is an HTTP(S) link, we try go get the page to extract
             // the title (otherwise we will to straight to the edit form.)
-            if (true !== $this->container->conf->get('general.enable_async_metadata', true)
+            if (
+                true !== $this->container->conf->get('general.enable_async_metadata', true)
                 && empty($title)
                 && strpos(get_url_scheme($url) ?: '', 'http') !== false
             ) {

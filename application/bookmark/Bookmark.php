@@ -19,7 +19,7 @@ use Shaarli\Bookmark\Exception\InvalidBookmarkException;
 class Bookmark
 {
     /** @var string Date format used in string (former ID format) */
-    const LINK_DATE_FORMAT = 'Ymd_His';
+    public const LINK_DATE_FORMAT = 'Ymd_His';
 
     /** @var int Bookmark ID */
     protected $id;
@@ -106,7 +106,8 @@ class Bookmark
      */
     public function validate(): void
     {
-        if ($this->id === null
+        if (
+            $this->id === null
             || ! is_int($this->id)
             || empty($this->shortUrl)
             || empty($this->created)
@@ -114,7 +115,7 @@ class Bookmark
             throw new InvalidBookmarkException($this);
         }
         if (empty($this->url)) {
-            $this->url = '/shaare/'. $this->shortUrl;
+            $this->url = '/shaare/' . $this->shortUrl;
         }
         if (empty($this->title)) {
             $this->title = $this->url;

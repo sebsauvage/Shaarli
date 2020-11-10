@@ -27,7 +27,7 @@ class TagController extends ShaarliVisitorController
         // In case browser does not send HTTP_REFERER, we search a single tag
         if (null === $referer) {
             if (null !== $newTag) {
-                return $this->redirect($response, '/?searchtags='. urlencode($newTag));
+                return $this->redirect($response, '/?searchtags=' . urlencode($newTag));
             }
 
             return $this->redirect($response, '/');
@@ -37,7 +37,7 @@ class TagController extends ShaarliVisitorController
         parse_str($currentUrl['query'] ?? '', $params);
 
         if (null === $newTag) {
-            return $response->withRedirect(($currentUrl['path'] ?? './') .'?'. http_build_query($params));
+            return $response->withRedirect(($currentUrl['path'] ?? './') . '?' . http_build_query($params));
         }
 
         // Prevent redirection loop
@@ -68,7 +68,7 @@ class TagController extends ShaarliVisitorController
         // We also remove page (keeping the same page has no sense, since the results are different)
         unset($params['page']);
 
-        return $response->withRedirect(($currentUrl['path'] ?? './') .'?'. http_build_query($params));
+        return $response->withRedirect(($currentUrl['path'] ?? './') . '?' . http_build_query($params));
     }
 
     /**
@@ -90,7 +90,7 @@ class TagController extends ShaarliVisitorController
         parse_str($currentUrl['query'] ?? '', $params);
 
         if (null === $tagToRemove) {
-            return $response->withRedirect(($currentUrl['path'] ?? './') .'?'. http_build_query($params));
+            return $response->withRedirect(($currentUrl['path'] ?? './') . '?' . http_build_query($params));
         }
 
         // Prevent redirection loop

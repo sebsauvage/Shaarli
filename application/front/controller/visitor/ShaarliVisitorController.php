@@ -144,7 +144,8 @@ abstract class ShaarliVisitorController
         if (null !== $referer) {
             $currentUrl = parse_url($referer);
             // If the referer is not related to Shaarli instance, redirect to default
-            if (isset($currentUrl['host'])
+            if (
+                isset($currentUrl['host'])
                 && strpos(index_url($this->container->environment), $currentUrl['host']) === false
             ) {
                 return $response->withRedirect($defaultPath);
@@ -173,7 +174,7 @@ abstract class ShaarliVisitorController
             }
         }
 
-        $queryString = count($params) > 0 ? '?'. http_build_query($params) : '';
+        $queryString = count($params) > 0 ? '?' . http_build_query($params) : '';
         $anchor = $anchor ? '#' . $anchor : '';
 
         return $response->withRedirect($path . $queryString . $anchor);

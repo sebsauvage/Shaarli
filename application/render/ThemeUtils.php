@@ -23,10 +23,10 @@ class ThemeUtils
     public static function getThemes($tplDir)
     {
         $tplDir = rtrim($tplDir, '/');
-        $allTheme = glob($tplDir.'/*', GLOB_ONLYDIR);
+        $allTheme = glob($tplDir . '/*', GLOB_ONLYDIR);
         $themes = [];
         foreach ($allTheme as $value) {
-            $themes[] = str_replace($tplDir.'/', '', $value);
+            $themes[] = str_replace($tplDir . '/', '', $value);
         }
 
         return $themes;

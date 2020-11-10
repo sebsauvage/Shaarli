@@ -158,7 +158,7 @@ class ContainerBuilder
 
         $container['updater'] = function (ShaarliContainer $container): Updater {
             return new Updater(
-                UpdaterUtils::read_updates_file($container->conf->get('resource.updates')),
+                UpdaterUtils::readUpdatesFile($container->conf->get('resource.updates')),
                 $container->bookmarkService,
                 $container->conf,
                 $container->loginManager->isLoggedIn()
