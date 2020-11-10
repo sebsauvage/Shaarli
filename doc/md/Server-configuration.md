@@ -296,7 +296,7 @@ server {
     location / {
         # default index file when no file URI is requested
         index index.php;
-        try_files $uri /index.php$is_args$args;
+        try_files _ /index.php$is_args$args;
     }
 
     location ~ (index)\.php$ {
@@ -309,23 +309,7 @@ server {
         include        fastcgi.conf;
     }
 
-    location ~ \.php$ {
-        # deny access to all other PHP scripts
-        # disable this if you host other PHP applications on the same virtualhost
-        deny all;
-    }
-
-    location ~ /\. {
-        # deny access to dotfiles
-        deny all;
-    }
-
-    location ~ ~$ {
-        # deny access to temp editor files, e.g. "script.php~"
-        deny all;
-    }
-
-    location ~ /doc/ {
+    location ~ /doc/html/ {
         default_type "text/html";
         try_files $uri $uri/ $uri.html =404;
     }
@@ -336,13 +320,12 @@ server {
     }
 
     # allow client-side caching of static files
-    location ~* \.(?:ico|css|js|gif|jpe?g|png)$ {
+    location ~* \.(?:ico|css|js|gif|jpe?g|png|ttf|oet|woff2?)$ {
         expires    max;
         add_header Cache-Control "public, must-revalidate, proxy-revalidate";
         # HTTP 1.0 compatibility
         add_header Pragma public;
     }
-
 }
 ```
 

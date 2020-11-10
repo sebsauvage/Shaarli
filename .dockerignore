@@ -2,7 +2,15 @@
 .dev
 .git
 .github
+.gitattributes
+.gitignore
+.travis.yml
 tests
+
+# Docker related resources are not needed inside the container
+.dockerignore
+Dockerfile
+Dockerfile.armhf
 
 # Docker Compose resources
 docker-compose.yml
@@ -12,6 +20,9 @@ cache/*
 data/*
 pagecache/*
 tmp/*
+
+# Shaarli's docs are created during the build
+doc/html/
 
 # Eclipse project files
 .settings
