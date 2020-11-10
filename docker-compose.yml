@@ -2,12 +2,13 @@
 # Shaarli - Docker Compose example configuration
 #
 # See:
-# - https://shaarli.readthedocs.io/en/master/docker/shaarli-images/
-# - https://shaarli.readthedocs.io/en/master/guides/install-shaarli-with-debian9-and-docker/
+# - https://shaarli.readthedocs.io/en/master/Docker/#docker-compose
 #
 # Environment variables:
 # - SHAARLI_VIRTUAL_HOST      Fully Qualified Domain Name for the Shaarli instance
 # - SHAARLI_LETSENCRYPT_EMAIL Contact email for certificate renewal
+# - SHAARLI_DOCKER_TAG        Shaarli docker tag to use
+#                             See: https://hub.docker.com/r/shaarli/shaarli/tags
 version: '3'
 
 networks:
@@ -20,7 +21,7 @@ volumes:
 
 services:
   shaarli:
-    image: shaarli/shaarli:master
+    image: shaarli/shaarli:${SHAARLI_DOCKER_TAG}
     build: ./
     networks:
       - http-proxy
@@ -40,7 +41,7 @@ services:
       - "--entrypoints=Name:https Address::443 TLS"
       - "--retry"
       - "--docker"
-      - "--docker.domain=docker.localhost"
+      - "--docker.domain=${SHAARLI_VIRTUAL_HOST}"
       - "--docker.exposedbydefault=true"
       - "--docker.watch=true"
       - "--acme"
