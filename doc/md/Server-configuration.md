@@ -193,19 +193,24 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
         Require all granted
     </Directory>
 
-    <LocationMatch "/\.">
-        # Prevent accessing dotfiles
-        RedirectMatch 404 ".*"
-    </LocationMatch>
+    # BE CAREFUL: directives order matter!
 
-    <LocationMatch "\.(?:ico|css|js|gif|jpe?g|png)$">
+    <FilesMatch ".*\.(?!(ico|css|js|gif|jpe?g|png|ttf|oet|woff2?)$)[^\.]*$">
+        Require all denied
+    </FilesMatch>
+
+    <Files "index.php">
+        Require all granted
+    </Files>
+
+    <FilesMatch "\.(?:ico|css|js|gif|jpe?g|png|ttf|oet|woff2)$">
         # allow client-side caching of static files
         Header set Cache-Control "max-age=2628000, public, must-revalidate, proxy-revalidate"
-    </LocationMatch>
+    </FilesMatch>
+
 
     # serve the Shaarli favicon from its custom location
     Alias favicon.ico /var/www/shaarli.mydomain.org/images/favicon.ico
-
 </VirtualHost>
 ```
 
