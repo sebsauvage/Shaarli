@@ -4,7 +4,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v0.12.1]() - UNRELEASED
+## [v0.12.2]() - UNRELEASED
+
+## [v0.12.1](https://github.com/shaarli/Shaarli/releases/tag/v0.12.0) - 2020-11-12
+
+> nginx ([#1628](https://github.com/shaarli/Shaarli/pull/1628)) and Apache ([#1630](https://github.com/shaarli/Shaarli/pull/1630)) configurations have been reviewed. It is recommended that you
+> update yours using [the documentation](https://shaarli.readthedocs.io/en/master/Server-configuration/).
+> Users using official Docker image will receive updated configuration automatically.
+
+### Added
+- Bulk creation of bookmarks
+- Server administration tool page (and install page requirements)
+- Support any tag separator, not just whitespaces
+- Share a private bookmark using a URL with a token
+- Add a setting to retrieve bookmark metadata asynchronously (enabled by default)
+- Highlight fulltext search results
+- Weekly and monthly view/RSS feed for daily page
+- MarkdownExtra formatter
+- Default formatter: add a setting to disable auto-linkification
+- Add mutex on datastore I/O operations to prevent data loss
+- PHP 8.0 support
+- REST API: allow override of creation and update dates
+- Add strict types for bookmarks management
+
+### Changed
+- Improve regex and performances to extract HTML metadata (title, description, etc.)
+- Support using Shaarli without URL rewriting (prefix URL with `/index.php/`)
+- Improve the "Manage tags" tools page
+- Use PSR-3 logger for login attempts
+- Move utils classes to Shaarli\Helper namespace and folder
+- Include php-simplexml in Docker image
+- Raise 404 error instead of 500 if permalink access is denied
+- Display error details even with dev.debug set to false
+- Reviewed nginx configuration
+- Reviewed Apache configuration
+- Replace vimeo link in demo bookmarks due to IP ban on the demo instance
+- Apply PSR-12 on code base, and add CI check using PHPCS
+
+### Fixed
+- Compatiliby issue on login with PHP 7.1
+- Japanese translations update
+- Redirect to referrer after bookmark deletion
+- Inject ROOT_PATH in plugin instead of regenerating it everywhere
+- Wallabag plugin: minor improvements
+- REST API postLink: change relative path to absolute path
+- Webpack: fix vintage theme images include
+- Docker-compose: fix SSL certificate + add parameter for Docker tag
+
+### Removed
+- `config.json.php` new lines in prefix/suffix to prevent issues with Windows PHP
 
 ## [v0.12.0](https://github.com/shaarli/Shaarli/releases/tag/v0.12.0) - 2020-10-13
 
