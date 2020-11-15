@@ -154,16 +154,20 @@ class DailyPageHelper
      * Get localized description of the time period depending on given datetime and type.
      * Example: for a month period, it returns `October, 2020`.
      *
-     * @param string             $type      month/week/day
-     * @param \DateTimeImmutable $requested DateTime extracted from request input
-     *                                      (should come from extractRequestedDateTime)
+     * @param string             $type            month/week/day
+     * @param \DateTimeImmutable $requested       DateTime extracted from request input
+     *                                            (should come from extractRequestedDateTime)
+     * @param bool               $includeRelative Include relative date description (today, yesterday, etc.)
      *
      * @return string Localized time period description
      *
      * @throws \Exception Type not supported.
      */
-    public static function getDescriptionByType(string $type, \DateTimeImmutable $requested): string
-    {
+    public static function getDescriptionByType(
+        string $type,
+        \DateTimeImmutable $requested,
+        bool $includeRelative = true
+    ): string {
         switch ($type) {
             case static::MONTH:
                 return $requested->format('F') . ', ' . $requested->format('Y');
@@ -172,9 +176,9 @@ class DailyPageHelper
                 return t('Week') . ' ' . $requested->format('W') . ' (' . format_date($requested, false) . ')';
             case static::DAY:
                 $out = '';
-                if ($requested->format('Ymd') === date('Ymd')) {
+                if ($includeRelative && $requested->format('Ymd') === date('Ymd')) {
                     $out = t('Today') . ' - ';
-                } elseif ($requested->format('Ymd') === date('Ymd', strtotime('-1 days'))) {
+                } elseif ($includeRelative && $requested->format('Ymd') === date('Ymd', strtotime('-1 days'))) {
                     $out = t('Yesterday') . ' - ';
                 }
                 return $out . format_date($requested, false);
