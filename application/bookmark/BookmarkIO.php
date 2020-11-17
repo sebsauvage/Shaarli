@@ -112,12 +112,12 @@ class BookmarkIO
         if (is_file($this->datastore) && !is_writeable($this->datastore)) {
             // The datastore exists but is not writeable
             throw new NotWritableDataStoreException($this->datastore);
-        } else if (!is_file($this->datastore) && !is_writeable(dirname($this->datastore))) {
+        } elseif (!is_file($this->datastore) && !is_writeable(dirname($this->datastore))) {
             // The datastore does not exist and its parent directory is not writeable
             throw new NotWritableDataStoreException(dirname($this->datastore));
         }
 
-        $data = self::$phpPrefix.base64_encode(gzdeflate(serialize($links))).self::$phpSuffix;
+        $data = self::$phpPrefix . base64_encode(gzdeflate(serialize($links))) . self::$phpSuffix;
 
         $this->mutex->synchronized(function () use ($data) {
             file_put_contents(

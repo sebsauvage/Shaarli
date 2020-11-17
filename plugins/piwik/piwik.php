@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Piwik plugin.
  * Adds tracking code on each page.
@@ -22,7 +23,7 @@ function piwik_init($conf)
     if (empty($piwikUrl) || empty($piwikSiteid)) {
         $error = t('Piwik plugin error: ' .
             'Please define PIWIK_URL and PIWIK_SITEID in the plugin administration page.');
-        return array($error);
+        return [$error];
     }
 }
 

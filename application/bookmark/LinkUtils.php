@@ -67,17 +67,18 @@ function html_extract_tag($tag, $html)
     $propertiesKey = ['property', 'name', 'itemprop'];
     $properties = implode('|', $propertiesKey);
     // We need a OR here to accept either 'property=og:noquote' or 'property="og:unrelated og:my-tag"'
-    $orCondition  = '["\']?(?:og:)?'. $tag .'["\']?|["\'][^\'"]*?(?:og:)?' . $tag . '[^\'"]*?[\'"]';
-    // Try to retrieve OpenGraph image.
-    $ogRegex = '#<meta[^>]+(?:'. $properties .')=(?:'. $orCondition .')[^>]*content=["\'](.*?)["\'].*?>#';
+    $orCondition  = '["\']?(?:og:)?' . $tag . '["\']?|["\'][^\'"]*?(?:og:)?' . $tag . '[^\'"]*?[\'"]';
+    // Try to retrieve OpenGraph tag.
+    $ogRegex = '#<meta[^>]+(?:' . $properties . ')=(?:' . $orCondition . ')[^>]*content=(["\'])([^\1]*?)\1.*?>#';
     // If the attributes are not in the order property => content (e.g. Github)
     // New regex to keep this readable... more or less.
-    $ogRegexReverse = '#<meta[^>]+content=["\'](.*?)["\'][^>]+(?:'. $properties .')=(?:'. $orCondition .').*?>#';
+    $ogRegexReverse = '#<meta[^>]+content=(["\'])([^\1]*?)\1[^>]+(?:' . $properties . ')=(?:' . $orCondition . ').*?>#';
 
-    if (preg_match($ogRegex, $html, $matches) > 0
+    if (
+        preg_match($ogRegex, $html, $matches) > 0
         || preg_match($ogRegexReverse, $html, $matches) > 0
     ) {
-        return $matches[1];
+        return $matches[2];
     }
 
     return false;
@@ -116,7 +117,7 @@ function hashtag_autolink($description, $indexUrl = '')
      * \p{Mn} - any non marking space (accents, umlauts, etc)
      */
     $regex = '/(^|\s)#([\p{Pc}\p{N}\p{L}\p{Mn}]+)/mui';
-    $replacement = '$1<a href="'. $indexUrl .'./add-tag/$2" title="Hashtag $2">#$2</a>';
+    $replacement = '$1<a href="' . $indexUrl . './add-tag/$2" title="Hashtag $2">#$2</a>';
     return preg_replace($regex, $replacement, $description);
 }
 
@@ -138,12 +139,17 @@ function space2nbsp($text)
  *
  * @param string $description shaare's description.
  * @param string $indexUrl    URL to Shaarli's index.
-
+ * @param bool   $autolink    Turn on/off automatic linkifications of URLs and hashtags
+ *
  * @return string formatted description.
  */
-function format_description($description, $indexUrl = '')
+function format_description($description, $indexUrl = '', $autolink = true)
 {
-    return nl2br(space2nbsp(hashtag_autolink(text2clickable($description), $indexUrl)));
+    if ($autolink) {
+        $description = hashtag_autolink(text2clickable($description), $indexUrl);
+    }
+
+    return nl2br(space2nbsp($description));
 }
 
 /**
@@ -170,4 +176,50 @@ function link_small_hash($date, $id)
 function is_note($linkUrl)
 {
     return isset($linkUrl[0]) && $linkUrl[0] === '?';
+}
+
+/**
+ * Extract an array of tags from a given tag string, with provided separator.
+ *
+ * @param string|null $tags      String containing a list of tags separated by $separator.
+ * @param string      $separator Shaarli's default: ' ' (whitespace)
+ *
+ * @return array List of tags
+ */
+function tags_str2array(?string $tags, string $separator): array
+{
+    // For whitespaces, we use the special \s regex character
+    $separator = $separator === ' ' ? '\s' : $separator;
+
+    return preg_split('/\s*' . $separator . '+\s*/', trim($tags) ?? '', -1, PREG_SPLIT_NO_EMPTY);
+}
+
+/**
+ * Return a tag string with provided separator from a list of tags.
+ * Note that given array is clean up by tags_filter().
+ *
+ * @param array|null $tags      List of tags
+ * @param string     $separator
+ *
+ * @return string
+ */
+function tags_array2str(?array $tags, string $separator): string
+{
+    return implode($separator, tags_filter($tags, $separator));
+}
+
+/**
+ * Clean an array of tags: trim + remove empty entries
+ *
+ * @param array|null $tags List of tags
+ * @param string     $separator
+ *
+ * @return array
+ */
+function tags_filter(?array $tags, string $separator): array
+{
+    $trimDefault = " \t\n\r\0\x0B";
+    return array_values(array_filter(array_map(function (string $entry) use ($separator, $trimDefault): string {
+        return trim($entry, $trimDefault . $separator);
+    }, $tags ?? [])));
 }

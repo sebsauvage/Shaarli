@@ -43,7 +43,7 @@ class LoginController extends ShaarliVisitorController
         $this
             ->assignView('returnurl', escape($returnUrl))
             ->assignView('remember_user_default', $this->container->conf->get('privacy.remember_user_default', true))
-            ->assignView('pagetitle', t('Login') .' - '. $this->container->conf->get('general.title', 'Shaarli'))
+            ->assignView('pagetitle', t('Login') . ' - ' . $this->container->conf->get('general.title', 'Shaarli'))
         ;
 
         return $response->write($this->render(TemplatePage::LOGIN));
@@ -64,8 +64,8 @@ class LoginController extends ShaarliVisitorController
             return $this->redirect($response, '/');
         }
 
-        if (!$this->container->loginManager->checkCredentials(
-                $this->container->environment['REMOTE_ADDR'],
+        if (
+            !$this->container->loginManager->checkCredentials(
                 client_ip_id($this->container->environment),
                 $request->getParam('login'),
                 $request->getParam('password')
@@ -102,7 +102,8 @@ class LoginController extends ShaarliVisitorController
      */
     protected function checkLoginState(): bool
     {
-        if ($this->container->loginManager->isLoggedIn()
+        if (
+            $this->container->loginManager->isLoggedIn()
             || $this->container->conf->get('security.open_shaarli', false)
         ) {
             throw new CantLoginException();

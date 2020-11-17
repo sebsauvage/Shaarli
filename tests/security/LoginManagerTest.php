@@ -2,6 +2,8 @@
 
 namespace Shaarli\Security;
 
+use Psr\Log\LoggerInterface;
+use Shaarli\FakeConfigManager;
 use Shaarli\TestCase;
 
 /**
@@ -9,7 +11,7 @@ use Shaarli\TestCase;
  */
 class LoginManagerTest extends TestCase
 {
-    /** @var \FakeConfigManager Configuration Manager instance */
+    /** @var FakeConfigManager Configuration Manager instance */
     protected $configManager = null;
 
     /** @var LoginManager Login Manager instance */
@@ -60,6 +62,9 @@ class LoginManagerTest extends TestCase
     /** @var CookieManager */
     protected $cookieManager;
 
+    /** @var BanManager */
+    protected $banManager;
+
     /**
      * Prepare or reset test resources
      */
@@ -71,7 +76,7 @@ class LoginManagerTest extends TestCase
 
         $this->passwordHash = sha1($this->password . $this->login . $this->salt);
 
-        $this->configManager = new \FakeConfigManager([
+        $this->configManager = new FakeConfigManager([
             'credentials.login' => $this->login,
             'credentials.hash' => $this->passwordHash,
             'credentials.salt' => $this->salt,
@@ -91,18 +96,29 @@ class LoginManagerTest extends TestCase
             return $this->cookie[$key] ?? null;
         });
         $this->sessionManager = new SessionManager($this->session, $this->configManager, 'session_path');
-        $this->loginManager = new LoginManager($this->configManager, $this->sessionManager, $this->cookieManager);
+        $this->banManager = $this->createMock(BanManager::class);
+        $this->loginManager = new LoginManager(
+            $this->configManager,
+            $this->sessionManager,
+            $this->cookieManager,
+            $this->banManager,
+            $this->createMock(LoggerInterface::class)
+        );
         $this->server['REMOTE_ADDR'] = $this->ipAddr;
     }
 
     /**
      * Record a failed login attempt
      */
-    public function testHandleFailedLogin()
+    public function testHandleFailedLogin(): void
     {
+        $this->banManager->expects(static::exactly(2))->method('handleFailedAttempt');
+        $this->banManager->method('isBanned')->willReturn(true);
+
         $this->loginManager->handleFailedLogin($this->server);
         $this->loginManager->handleFailedLogin($this->server);
-        $this->assertFalse($this->loginManager->canLogin($this->server));
+
+        static::assertFalse($this->loginManager->canLogin($this->server));
     }
 
     /**
@@ -114,8 +130,13 @@ class LoginManagerTest extends TestCase
             'REMOTE_ADDR' => $this->trustedProxy,
             'HTTP_X_FORWARDED_FOR' => $this->ipAddr,
         ];
+
+        $this->banManager->expects(static::exactly(2))->method('handleFailedAttempt');
+        $this->banManager->method('isBanned')->willReturn(true);
+
         $this->loginManager->handleFailedLogin($server);
         $this->loginManager->handleFailedLogin($server);
+
         $this->assertFalse($this->loginManager->canLogin($server));
     }
 
@@ -196,10 +217,16 @@ class LoginManagerTest extends TestCase
      */
     public function testCheckLoginStateNotConfigured()
     {
-        $configManager = new \FakeConfigManager([
+        $configManager = new FakeConfigManager([
             'resource.ban_file' => $this->banFile,
         ]);
-        $loginManager = new LoginManager($configManager, null, $this->cookieManager);
+        $loginManager = new LoginManager(
+            $configManager,
+            $this->sessionManager,
+            $this->cookieManager,
+            $this->banManager,
+            $this->createMock(LoggerInterface::class)
+        );
         $loginManager->checkLoginState('');
 
         $this->assertFalse($loginManager->isLoggedIn());
@@ -270,7 +297,7 @@ class LoginManagerTest extends TestCase
     public function testCheckCredentialsWrongLogin()
     {
         $this->assertFalse(
-            $this->loginManager->checkCredentials('', '', 'b4dl0g1n', $this->password)
+            $this->loginManager->checkCredentials('', 'b4dl0g1n', $this->password)
         );
     }
 
@@ -280,7 +307,7 @@ class LoginManagerTest extends TestCase
     public function testCheckCredentialsWrongPassword()
     {
         $this->assertFalse(
-            $this->loginManager->checkCredentials('', '', $this->login, 'b4dp455wd')
+            $this->loginManager->checkCredentials('', $this->login, 'b4dp455wd')
         );
     }
 
@@ -290,7 +317,7 @@ class LoginManagerTest extends TestCase
     public function testCheckCredentialsWrongLoginAndPassword()
     {
         $this->assertFalse(
-            $this->loginManager->checkCredentials('', '', 'b4dl0g1n', 'b4dp455wd')
+            $this->loginManager->checkCredentials('', 'b4dl0g1n', 'b4dp455wd')
         );
     }
 
@@ -300,7 +327,7 @@ class LoginManagerTest extends TestCase
     public function testCheckCredentialsGoodLoginAndPassword()
     {
         $this->assertTrue(
-            $this->loginManager->checkCredentials('', '', $this->login, $this->password)
+            $this->loginManager->checkCredentials('', $this->login, $this->password)
         );
     }
 
@@ -311,7 +338,7 @@ class LoginManagerTest extends TestCase
     {
         $this->configManager->set('ldap.host', 'dummy');
         $this->assertFalse(
-            $this->loginManager->checkCredentials('', '', $this->login, $this->password)
+            $this->loginManager->checkCredentials('', $this->login, $this->password)
         );
     }
 

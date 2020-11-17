@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Shaarli\Front\Controller\Visitor;
 
-use Shaarli\ApplicationUtils;
 use Shaarli\Container\ShaarliContainer;
 use Shaarli\Front\Exception\AlreadyInstalledException;
 use Shaarli\Front\Exception\ResourcePermissionException;
+use Shaarli\Helper\ApplicationUtils;
 use Shaarli\Languages;
 use Shaarli\Security\SessionManager;
 use Slim\Http\Request;
@@ -39,7 +39,8 @@ class InstallController extends ShaarliVisitorController
         // Before installation, we'll make sure that permissions are set properly, and sessions are working.
         $this->checkPermissions();
 
-        if (static::SESSION_TEST_VALUE
+        if (
+            static::SESSION_TEST_VALUE
             !== $this->container->sessionManager->getSessionParameter(static::SESSION_TEST_KEY)
         ) {
             $this->container->sessionManager->setSessionParameter(static::SESSION_TEST_KEY, static::SESSION_TEST_VALUE);
@@ -53,6 +54,16 @@ class InstallController extends ShaarliVisitorController
         $this->assignView('cities', $cities);
         $this->assignView('languages', Languages::getAvailableLanguages());
 
+        $phpEol = new \DateTimeImmutable(ApplicationUtils::getPhpEol(PHP_VERSION));
+
+        $this->assignView('php_version', PHP_VERSION);
+        $this->assignView('php_eol', format_date($phpEol, false));
+        $this->assignView('php_has_reached_eol', $phpEol < new \DateTimeImmutable());
+        $this->assignView('php_extensions', ApplicationUtils::getPhpExtensionsRequirement());
+        $this->assignView('permissions', ApplicationUtils::checkResourcePermissions($this->container->conf));
+
+        $this->assignView('pagetitle', t('Install Shaarli'));
+
         return $response->write($this->render('install'));
     }
 
@@ -65,17 +76,18 @@ class InstallController extends ShaarliVisitorController
         // This part makes sure sessions works correctly.
         // (Because on some hosts, session.save_path may not be set correctly,
         // or we may not have write access to it.)
-        if (static::SESSION_TEST_VALUE
+        if (
+            static::SESSION_TEST_VALUE
             !== $this->container->sessionManager->getSessionParameter(static::SESSION_TEST_KEY)
         ) {
             // Step 2: Check if data in session is correct.
             $msg = t(
-                '<pre>Sessions do not seem to work correctly on your server.<br>'.
-                'Make sure the variable "session.save_path" is set correctly in your PHP config, '.
-                'and that you have write access to it.<br>'.
-                'It currently points to %s.<br>'.
-                'On some browsers, accessing your server via a hostname like \'localhost\' '.
-                'or any custom hostname without a dot causes cookie storage to fail. '.
+                '<pre>Sessions do not seem to work correctly on your server.<br>' .
+                'Make sure the variable "session.save_path" is set correctly in your PHP config, ' .
+                'and that you have write access to it.<br>' .
+                'It currently points to %s.<br>' .
+                'On some browsers, accessing your server via a hostname like \'localhost\' ' .
+                'or any custom hostname without a dot causes cookie storage to fail. ' .
                 'We recommend accessing your server via it\'s IP address or Fully Qualified Domain Name.<br>'
             );
             $msg = sprintf($msg, $this->container->sessionManager->getSavePath());
@@ -94,7 +106,8 @@ class InstallController extends ShaarliVisitorController
     public function save(Request $request, Response $response): Response
     {
         $timezone = 'UTC';
-        if (!empty($request->getParam('continent'))
+        if (
+            !empty($request->getParam('continent'))
             && !empty($request->getParam('city'))
             && isTimeZoneValid($request->getParam('continent'), $request->getParam('city'))
         ) {
@@ -104,7 +117,7 @@ class InstallController extends ShaarliVisitorController
 
         $login = $request->getParam('setlogin');
         $this->container->conf->set('credentials.login', $login);
-        $salt = sha1(uniqid('', true) .'_'. mt_rand());
+        $salt = sha1(uniqid('', true) . '_' . mt_rand());
         $this->container->conf->set('credentials.salt', $salt);
         $this->container->conf->set('credentials.hash', sha1($request->getParam('setpassword') . $login . $salt));
 
@@ -113,7 +126,7 @@ class InstallController extends ShaarliVisitorController
         } else {
             $this->container->conf->set(
                 'general.title',
-                'Shared bookmarks on '.escape(index_url($this->container->environment))
+                'Shared bookmarks on ' . escape(index_url($this->container->environment))
             );
         }
 
@@ -150,7 +163,7 @@ class InstallController extends ShaarliVisitorController
     protected function checkPermissions(): bool
     {
         // Ensure Shaarli has proper access to its resources
-        $errors = ApplicationUtils::checkResourcePermissions($this->container->conf);
+        $errors = ApplicationUtils::checkResourcePermissions($this->container->conf, true);
         if (empty($errors)) {
             return true;
         }

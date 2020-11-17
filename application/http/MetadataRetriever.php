@@ -38,7 +38,6 @@ class MetadataRetriever
         $title = null;
         $description = null;
         $tags = null;
-        $retrieveDescription = $this->conf->get('general.retrieve_description');
 
         // Short timeout to keep the application responsive
         // The callback will fill $charset and $title with data from the downloaded page.
@@ -52,7 +51,8 @@ class MetadataRetriever
                 $title,
                 $description,
                 $tags,
-                $retrieveDescription
+                $this->conf->get('general.retrieve_description'),
+                $this->conf->get('general.tags_separator', ' ')
             )
         );
 

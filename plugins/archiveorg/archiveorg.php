@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Archive.org.
  *

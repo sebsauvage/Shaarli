@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Shaarli\Front\Controller\Admin\ManageShaareControllerTest;
+namespace Shaarli\Front\Controller\Admin\ShaareManageControllerTest;
 
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
@@ -10,7 +10,7 @@ use Shaarli\Formatter\BookmarkFormatter;
 use Shaarli\Formatter\BookmarkRawFormatter;
 use Shaarli\Formatter\FormatterFactory;
 use Shaarli\Front\Controller\Admin\FrontAdminControllerMockHelper;
-use Shaarli\Front\Controller\Admin\ManageShaareController;
+use Shaarli\Front\Controller\Admin\ShaareManageController;
 use Shaarli\Http\HttpAccess;
 use Shaarli\Security\SessionManager;
 use Shaarli\TestCase;
@@ -21,7 +21,7 @@ class ChangeVisibilityBookmarkTest extends TestCase
 {
     use FrontAdminControllerMockHelper;
 
-    /** @var ManageShaareController */
+    /** @var ShaareManageController */
     protected $controller;
 
     public function setUp(): void
@@ -29,7 +29,7 @@ class ChangeVisibilityBookmarkTest extends TestCase
         $this->createContainer();
 
         $this->container->httpAccess = $this->createMock(HttpAccess::class);
-        $this->controller = new ManageShaareController($this->container);
+        $this->controller = new ShaareManageController($this->container);
     }
 
     /**

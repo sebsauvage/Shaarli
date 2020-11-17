@@ -8,7 +8,7 @@ use DateTime;
 use Iterator;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Exceptions\IOException;
-use Shaarli\FileUtils;
+use Shaarli\Helper\FileUtils;
 use Shaarli\Render\PageCacheManager;
 
 /**
@@ -62,7 +62,7 @@ class LegacyLinkDB implements Iterator, Countable, ArrayAccess
     private $datastore;
 
     // Link date storage format
-    const LINK_DATE_FORMAT = 'Ymd_His';
+    public const LINK_DATE_FORMAT = 'Ymd_His';
 
     // List of bookmarks (associative array)
     //  - key:   link date (e.g. "20110823_124546"),
@@ -240,8 +240,8 @@ class LegacyLinkDB implements Iterator, Countable, ArrayAccess
         }
 
         // Create a dummy database for example
-        $this->links = array();
-        $link = array(
+        $this->links = [];
+        $link = [
             'id' => 1,
             'title' => t('The personal, minimalist, super-fast, database free, bookmarking service'),
             'url' => 'https://shaarli.readthedocs.io',
@@ -257,11 +257,11 @@ You use the community supported version of the original Shaarli project, by Seba
             'created' => new DateTime(),
             'tags' => 'opensource software',
             'sticky' => false,
-        );
+        ];
         $link['shorturl'] = link_small_hash($link['created'], $link['id']);
         $this->links[1] = $link;
 
-        $link = array(
+        $link = [
             'id' => 0,
             'title' => t('My secret stuff... - Pastebin.com'),
             'url' => 'http://sebsauvage.net/paste/?8434b27936c09649#bR7XsXhoTiLcqCpQbmOpBi3rq2zzQUC5hBI7ZT1O3x8=',
@@ -270,7 +270,7 @@ You use the community supported version of the original Shaarli project, by Seba
             'created' => new DateTime('1 minute ago'),
             'tags' => 'secretstuff',
             'sticky' => false,
-        );
+        ];
         $link['shorturl'] = link_small_hash($link['created'], $link['id']);
         $this->links[0] = $link;
 
@@ -285,7 +285,7 @@ You use the community supported version of the original Shaarli project, by Seba
     {
         // Public bookmarks are hidden and user not logged in => nothing to show
         if ($this->hidePublicLinks && !$this->loggedIn) {
-            $this->links = array();
+            $this->links = [];
             return;
         }
 
@@ -293,7 +293,7 @@ You use the community supported version of the original Shaarli project, by Seba
         $this->ids = [];
         $this->links = FileUtils::readFlatDB($this->datastore, []);
 
-        $toremove = array();
+        $toremove = [];
         foreach ($this->links as $key => &$link) {
             if (!$this->loggedIn && $link['private'] != 0) {
                 // Transition for not upgraded databases.
@@ -414,7 +414,7 @@ You use the community supported version of the original Shaarli project, by Seba
      * @return array filtered bookmarks, all bookmarks if no suitable filter was provided.
      */
     public function filterSearch(
-        $filterRequest = array(),
+        $filterRequest = [],
         $casesensitive = false,
         $visibility = 'all',
         $untaggedonly = false
@@ -512,7 +512,7 @@ You use the community supported version of the original Shaarli project, by Seba
      */
     public function days()
     {
-        $linkDays = array();
+        $linkDays = [];
         foreach ($this->links as $link) {
             $linkDays[$link['created']->format('Ymd')] = 0;
         }

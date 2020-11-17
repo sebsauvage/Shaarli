@@ -28,7 +28,7 @@ class ToolsController extends ShaarliAdminController
             $this->assignView($key, $value);
         }
 
-        $this->assignView('pagetitle', t('Tools') .' - '. $this->container->conf->get('general.title', 'Shaarli'));
+        $this->assignView('pagetitle', t('Tools') . ' - ' . $this->container->conf->get('general.title', 'Shaarli'));
 
         return $response->write($this->render(TemplatePage::TOOLS));
     }

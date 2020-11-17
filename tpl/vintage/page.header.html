@@ -54,6 +54,30 @@
     </ul>
 {/if}
 
+{if="!empty($global_errors)"}
+  <ul class="errors">
+    {loop="$global_errors"}
+      <li>{$value}</li>
+    {/loop}
+  </ul>
+{/if}
+
+{if="!empty($global_warnings)"}
+  <ul class="warnings">
+    {loop="$global_warnings"}
+      <li>{$value}</li>
+    {/loop}
+  </ul>
+{/if}
+
+{if="!empty($global_successes)"}
+  <ul class="successes">
+    {loop="$global_successes"}
+      <li>{$value}</li>
+    {/loop}
+  </ul>
+{/if}
+
 <div class="clear"></div>
 
 

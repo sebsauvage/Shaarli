@@ -44,7 +44,7 @@ class BookmarkFilterTest extends TestCase
         self::$refDB->write(self::$testDatastore);
         $history = new History('sandbox/history.php');
         self::$bookmarkService = new \FakeBookmarkService($conf, $history, $mutex, true);
-        self::$linkFilter = new BookmarkFilter(self::$bookmarkService->getBookmarks());
+        self::$linkFilter = new BookmarkFilter(self::$bookmarkService->getBookmarks(), $conf);
     }
 
     /**

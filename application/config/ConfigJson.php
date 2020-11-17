@@ -19,7 +19,7 @@ class ConfigJson implements ConfigIO
         $data = file_get_contents($filepath);
         $data = str_replace(self::getPhpHeaders(), '', $data);
         $data = str_replace(self::getPhpSuffix(), '', $data);
-        $data = json_decode($data, true);
+        $data = json_decode(trim($data), true);
         if ($data === null) {
             $errorCode = json_last_error();
             $error  = sprintf(
@@ -73,7 +73,7 @@ class ConfigJson implements ConfigIO
      */
     public static function getPhpHeaders()
     {
-        return '<?php /*'. PHP_EOL;
+        return '<?php /*';
     }
 
     /**
@@ -85,6 +85,6 @@ class ConfigJson implements ConfigIO
      */
     public static function getPhpSuffix()
     {
-        return PHP_EOL . '*/ ?>';
+        return '*/ ?>';
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 namespace Shaarli;
 
 use DateTime;
 use Exception;
 use Shaarli\Bookmark\Bookmark;
+use Shaarli\Helper\FileUtils;
 
 /**
  * Class History
@@ -30,27 +32,27 @@ class History
     /**
      * @var string Action key: a new link has been created.
      */
-    const CREATED = 'CREATED';
+    public const CREATED = 'CREATED';
 
     /**
      * @var string Action key: a link has been updated.
      */
-    const UPDATED = 'UPDATED';
+    public const UPDATED = 'UPDATED';
 
     /**
      * @var string Action key: a link has been deleted.
      */
-    const DELETED = 'DELETED';
+    public const DELETED = 'DELETED';
 
     /**
      * @var string Action key: settings have been updated.
      */
-    const SETTINGS = 'SETTINGS';
+    public const SETTINGS = 'SETTINGS';
 
     /**
      * @var string Action key: a bulk import has been processed.
      */
-    const IMPORT = 'IMPORT';
+    public const IMPORT = 'IMPORT';
 
     /**
      * @var string History file path.

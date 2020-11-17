@@ -195,7 +195,7 @@ class LoginControllerTest extends TestCase
         $this->container->loginManager
             ->expects(static::once())
             ->method('checkCredentials')
-            ->with('1.2.3.4', '1.2.3.4', 'bob', 'pass')
+            ->with('1.2.3.4', 'bob', 'pass')
             ->willReturn(true)
         ;
         $this->container->loginManager->method('getStaySignedInToken')->willReturn(bin2hex(random_bytes(8)));

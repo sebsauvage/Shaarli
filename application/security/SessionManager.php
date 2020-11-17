@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Security;
 
 use Shaarli\Config\ConfigManager;
@@ -79,7 +80,7 @@ class SessionManager
      */
     public function generateToken()
     {
-        $token = sha1(uniqid('', true) .'_'. mt_rand() . $this->conf->get('credentials.salt'));
+        $token = sha1(uniqid('', true) . '_' . mt_rand() . $this->conf->get('credentials.salt'));
         $this->session['tokens'][$token] = 1;
         return $token;
     }
@@ -293,9 +294,12 @@ class SessionManager
         return session_start();
     }
 
-    public function cookieParameters(int $lifeTime, string $path, string $domain): bool
+    /**
+     * Be careful, return type of session_set_cookie_params() changed between PHP 7.1 and 7.2.
+     */
+    public function cookieParameters(int $lifeTime, string $path, string $domain): void
     {
-        return session_set_cookie_params($lifeTime, $path, $domain);
+        session_set_cookie_params($lifeTime, $path, $domain);
     }
 
     public function regenerateId(bool $deleteOldSession = false): bool

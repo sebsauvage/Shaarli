@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2020-10-16 20:01+0200\n"
-"PO-Revision-Date: 2020-10-16 20:02+0200\n"
+"POT-Creation-Date: 2020-11-09 14:39+0100\n"
+"PO-Revision-Date: 2020-11-09 14:42+0100\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -20,38 +20,11 @@ msgstr ""
 "X-Poedit-SearchPath-3: init.php\n"
 "X-Poedit-SearchPath-4: plugins\n"
 
-#: application/ApplicationUtils.php:161
-#, php-format
-msgid ""
-"Your PHP version is obsolete! Shaarli requires at least PHP %s, and thus "
-"cannot run. Your PHP version has known security vulnerabilities and should "
-"be updated as soon as possible."
-msgstr ""
-"Votre version de PHP est obsolète ! Shaarli nécessite au moins PHP %s, et ne "
-"peut donc pas fonctionner. Votre version de PHP a des failles de sécurités "
-"connues et devrait être mise à jour au plus tôt."
-
-#: application/ApplicationUtils.php:192 application/ApplicationUtils.php:204
-msgid "directory is not readable"
-msgstr "le répertoire n'est pas accessible en lecture"
-
-#: application/ApplicationUtils.php:207
-msgid "directory is not writable"
-msgstr "le répertoire n'est pas accessible en écriture"
-
-#: application/ApplicationUtils.php:225
-msgid "file is not readable"
-msgstr "le fichier n'est pas accessible en lecture"
-
-#: application/ApplicationUtils.php:228
-msgid "file is not writable"
-msgstr "le fichier n'est pas accessible en écriture"
-
-#: application/History.php:179
+#: application/History.php:180
 msgid "History file isn't readable or writable"
 msgstr "Le fichier d'historique n'est pas accessible en lecture ou en écriture"
 
-#: application/History.php:190
+#: application/History.php:191
 msgid "Could not parse history file"
 msgstr "Format incorrect pour le fichier d'historique"
 
@@ -83,40 +56,40 @@ msgstr ""
 "l'extension php-gd doit être chargée pour utiliser les miniatures. Les "
 "miniatures sont désormais désactivées. Rechargez la page."
 
-#: application/Utils.php:383
+#: application/Utils.php:402
 msgid "Setting not set"
 msgstr "Paramètre non défini"
 
-#: application/Utils.php:390
+#: application/Utils.php:409
 msgid "Unlimited"
 msgstr "Illimité"
 
-#: application/Utils.php:393
+#: application/Utils.php:412
 msgid "B"
 msgstr "o"
 
-#: application/Utils.php:393
+#: application/Utils.php:412
 msgid "kiB"
 msgstr "ko"
 
-#: application/Utils.php:393
+#: application/Utils.php:412
 msgid "MiB"
 msgstr "Mo"
 
-#: application/Utils.php:393
+#: application/Utils.php:412
 msgid "GiB"
 msgstr "Go"
 
-#: application/bookmark/BookmarkFileService.php:180
-#: application/bookmark/BookmarkFileService.php:202
-#: application/bookmark/BookmarkFileService.php:224
-#: application/bookmark/BookmarkFileService.php:238
+#: application/bookmark/BookmarkFileService.php:183
+#: application/bookmark/BookmarkFileService.php:205
+#: application/bookmark/BookmarkFileService.php:227
+#: application/bookmark/BookmarkFileService.php:241
 msgid "You're not authorized to alter the datastore"
 msgstr "Vous n'êtes pas autorisé à modifier les données"
 
-#: application/bookmark/BookmarkFileService.php:205
+#: application/bookmark/BookmarkFileService.php:208
 msgid "This bookmarks already exists"
-msgstr "Ce marque-page existe déjà."
+msgstr "Ce marque-page existe déjà"
 
 #: application/bookmark/BookmarkInitializer.php:39
 msgid "(private bookmark with thumbnail demo)"
@@ -216,9 +189,9 @@ msgstr ""
 #: application/bookmark/BookmarkInitializer.php:91
 #: application/legacy/LegacyLinkDB.php:246
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:49
+#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
 #: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:15
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:49
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:48
 msgid ""
 "The personal, minimalist, super-fast, database free, bookmarking service"
 msgstr ""
@@ -314,7 +287,8 @@ msgid "Direct link"
 msgstr "Liens directs"
 
 #: application/feed/FeedBuilder.php:181
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:96
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:103
+#: tmp/dailyrss.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:179
 msgid "Permalink"
 msgstr "Permalien"
@@ -330,12 +304,13 @@ msgid "You have enabled or changed thumbnails mode."
 msgstr "Vous avez activé ou changé le mode de miniatures."
 
 #: application/front/controller/admin/ConfigureController.php:103
+#: application/front/controller/admin/ServerController.php:75
 #: application/legacy/LegacyUpdater.php:538
 msgid "Please synchronize them."
 msgstr "Merci de les synchroniser."
 
 #: application/front/controller/admin/ConfigureController.php:113
-#: application/front/controller/visitor/InstallController.php:136
+#: application/front/controller/visitor/InstallController.php:146
 msgid "Error while writing config file after configuration update."
 msgstr ""
 "Une erreur s'est produite lors de la sauvegarde du fichier de configuration."
@@ -372,70 +347,47 @@ msgstr ""
 "le serveur web peut accepter (%s). Merci de l'envoyer en parties plus "
 "légères."
 
-#: application/front/controller/admin/ManageShaareController.php:29
-#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
-msgid "Shaare a new link"
-msgstr "Partager un nouveau lien"
+#: application/front/controller/admin/ManageTagController.php:30
+msgid "whitespace"
+msgstr "espace"
 
-#: application/front/controller/admin/ManageShaareController.php:78
-msgid "Note: "
-msgstr "Note : "
-
-#: application/front/controller/admin/ManageShaareController.php:109
-#: application/front/controller/admin/ManageShaareController.php:206
-#: application/front/controller/admin/ManageShaareController.php:275
-#: application/front/controller/admin/ManageShaareController.php:315
-#, php-format
-msgid "Bookmark with identifier %s could not be found."
-msgstr "Le lien avec l'identifiant %s n'a pas pu être trouvé."
-
-#: application/front/controller/admin/ManageShaareController.php:194
-#: application/front/controller/admin/ManageShaareController.php:252
-msgid "Invalid bookmark ID provided."
-msgstr "ID du lien non valide."
-
-#: application/front/controller/admin/ManageShaareController.php:260
-msgid "Invalid visibility provided."
-msgstr "Visibilité du lien non valide."
-
-#: application/front/controller/admin/ManageShaareController.php:363
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:171
-msgid "Edit"
-msgstr "Modifier"
-
-#: application/front/controller/admin/ManageShaareController.php:366
-#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
-#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:28
-msgid "Shaare"
-msgstr "Shaare"
-
-#: application/front/controller/admin/ManageTagController.php:29
+#: application/front/controller/admin/ManageTagController.php:35
 #: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
 msgid "Manage tags"
 msgstr "Gérer les tags"
 
-#: application/front/controller/admin/ManageTagController.php:48
+#: application/front/controller/admin/ManageTagController.php:54
 msgid "Invalid tags provided."
 msgstr "Les tags fournis ne sont pas valides."
 
-#: application/front/controller/admin/ManageTagController.php:72
+#: application/front/controller/admin/ManageTagController.php:78
 #, php-format
 msgid "The tag was removed from %d bookmark."
 msgid_plural "The tag was removed from %d bookmarks."
 msgstr[0] "Le tag a été supprimé du %d lien."
 msgstr[1] "Le tag a été supprimé de %d liens."
 
-#: application/front/controller/admin/ManageTagController.php:77
+#: application/front/controller/admin/ManageTagController.php:83
 #, php-format
 msgid "The tag was renamed in %d bookmark."
 msgid_plural "The tag was renamed in %d bookmarks."
 msgstr[0] "Le tag a été renommé dans %d lien."
 msgstr[1] "Le tag a été renommé dans %d liens."
 
+#: application/front/controller/admin/ManageTagController.php:105
+msgid "Tags separator must be a single character."
+msgstr "Un séparateur de tags doit contenir un seul caractère."
+
+#: application/front/controller/admin/ManageTagController.php:111
+msgid "These characters are reserved and can't be used as tags separator: "
+msgstr ""
+"Ces caractères sont réservés et ne peuvent être utilisés comme des "
+"séparateurs de tags : "
+
 #: application/front/controller/admin/PasswordController.php:28
 #: tmp/changepassword.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
 msgid "Change password"
 msgstr "Modifier le mot de passe"
 
@@ -467,6 +419,61 @@ msgstr ""
 "Une erreur s'est produite lors de la sauvegarde de la configuration des "
 "plugins : "
 
+#: application/front/controller/admin/ServerController.php:35
+msgid "Check disabled"
+msgstr "Vérification désactivée"
+
+#: application/front/controller/admin/ServerController.php:57
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
+msgid "Server administration"
+msgstr "Administration serveur"
+
+#: application/front/controller/admin/ServerController.php:74
+msgid "Thumbnails cache has been cleared."
+msgstr "Le cache des miniatures a été vidé."
+
+#: application/front/controller/admin/ServerController.php:83
+msgid "Shaarli's cache folder has been cleared!"
+msgstr "Le dossier de cache de Shaarli a été vidé !"
+
+#: application/front/controller/admin/ShaareAddController.php:26
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
+msgid "Shaare a new link"
+msgstr "Partagez un nouveau lien"
+
+#: application/front/controller/admin/ShaareManageController.php:35
+#: application/front/controller/admin/ShaareManageController.php:93
+msgid "Invalid bookmark ID provided."
+msgstr "L'ID du marque-page fourni n'est pas valide."
+
+#: application/front/controller/admin/ShaareManageController.php:47
+#: application/front/controller/admin/ShaareManageController.php:116
+#: application/front/controller/admin/ShaareManageController.php:156
+#: application/front/controller/admin/ShaarePublishController.php:82
+#, php-format
+msgid "Bookmark with identifier %s could not be found."
+msgstr "Le lien avec l'identifiant %s n'a pas pu être trouvé."
+
+#: application/front/controller/admin/ShaareManageController.php:101
+msgid "Invalid visibility provided."
+msgstr "Visibilité du lien non valide."
+
+#: application/front/controller/admin/ShaarePublishController.php:171
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:171
+msgid "Edit"
+msgstr "Modifier"
+
+#: application/front/controller/admin/ShaarePublishController.php:174
+#: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
+#: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:28
+msgid "Shaare"
+msgstr "Shaare"
+
+#: application/front/controller/admin/ShaarePublishController.php:205
+msgid "Note: "
+msgstr "Note : "
+
 #: application/front/controller/admin/ThumbnailsController.php:37
 #: tmp/thumbnails.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
 msgid "Thumbnails update"
@@ -478,33 +485,62 @@ msgstr "Mise à jour des miniatures"
 msgid "Tools"
 msgstr "Outils"
 
-#: application/front/controller/visitor/BookmarkListController.php:116
+#: application/front/controller/visitor/BookmarkListController.php:120
 msgid "Search: "
 msgstr "Recherche : "
 
-#: application/front/controller/visitor/DailyController.php:45
-msgid "Today"
-msgstr "Aujourd'hui"
+#: application/front/controller/visitor/DailyController.php:200
+msgid "day"
+msgstr "jour"
 
-#: application/front/controller/visitor/DailyController.php:47
-msgid "Yesterday"
-msgstr "Hier"
-
-#: application/front/controller/visitor/DailyController.php:85
+#: application/front/controller/visitor/DailyController.php:200
+#: application/front/controller/visitor/DailyController.php:203
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:13
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:48
 msgid "Daily"
 msgstr "Quotidien"
 
-#: application/front/controller/visitor/ErrorController.php:36
+#: application/front/controller/visitor/DailyController.php:201
+msgid "week"
+msgstr "semaine"
+
+#: application/front/controller/visitor/DailyController.php:201
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
+msgid "Weekly"
+msgstr "Hebdomadaire"
+
+#: application/front/controller/visitor/DailyController.php:202
+msgid "month"
+msgstr "mois"
+
+#: application/front/controller/visitor/DailyController.php:202
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
+msgid "Monthly"
+msgstr "Mensuel"
+
+#: application/front/controller/visitor/ErrorController.php:30
+msgid "Error: "
+msgstr "Erreur : "
+
+#: application/front/controller/visitor/ErrorController.php:34
+msgid "Please report it on Github."
+msgstr "Merci de la rapporter sur Github."
+
+#: application/front/controller/visitor/ErrorController.php:39
 msgid "An unexpected error occurred."
 msgstr "Une erreur inattendue s'est produite."
 
 #: application/front/controller/visitor/ErrorNotFoundController.php:25
 msgid "Requested page could not be found."
-msgstr ""
+msgstr "La page demandée n'a pas pu être trouvée."
 
-#: application/front/controller/visitor/InstallController.php:73
+#: application/front/controller/visitor/InstallController.php:64
+#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:22
+msgid "Install Shaarli"
+msgstr "Installation de Shaarli"
+
+#: application/front/controller/visitor/InstallController.php:83
 #, php-format
 msgid ""
 "<pre>Sessions do not seem to work correctly on your server.<br>Make sure the "
@@ -523,14 +559,14 @@ msgstr ""
 "des cookies. Nous vous recommandons d'accéder à votre serveur depuis son "
 "adresse IP ou un <em>Fully Qualified Domain Name</em>.<br>"
 
-#: application/front/controller/visitor/InstallController.php:144
+#: application/front/controller/visitor/InstallController.php:154
 msgid ""
 "Shaarli is now configured. Please login and start shaaring your bookmarks!"
 msgstr ""
 "Shaarli est maintenant configuré. Vous pouvez vous connecter et commencez à "
 "shaare vos liens !"
 
-#: application/front/controller/visitor/InstallController.php:158
+#: application/front/controller/visitor/InstallController.php:168
 msgid "Insufficient permissions:"
 msgstr "Permissions insuffisantes :"
 
@@ -544,7 +580,7 @@ msgstr "Permissions insuffisantes :"
 msgid "Login"
 msgstr "Connexion"
 
-#: application/front/controller/visitor/LoginController.php:78
+#: application/front/controller/visitor/LoginController.php:77
 msgid "Wrong login/password."
 msgstr "Nom d'utilisateur ou mot de passe incorrect(s)."
 
@@ -554,9 +590,9 @@ msgstr "Nom d'utilisateur ou mot de passe incorrect(s)."
 msgid "Picture wall"
 msgstr "Mur d'images"
 
-#: application/front/controller/visitor/TagCloudController.php:88
+#: application/front/controller/visitor/TagCloudController.php:90
 msgid "Tag "
-msgstr "Tag"
+msgstr "Tag "
 
 #: application/front/exceptions/AlreadyInstalledException.php:11
 msgid "Shaarli has already been installed. Login to edit the configuration."
@@ -583,6 +619,86 @@ msgstr ""
 #: application/front/exceptions/WrongTokenException.php:16
 msgid "Wrong token."
 msgstr "Jeton invalide."
+
+#: application/helper/ApplicationUtils.php:162
+#, php-format
+msgid ""
+"Your PHP version is obsolete! Shaarli requires at least PHP %s, and thus "
+"cannot run. Your PHP version has known security vulnerabilities and should "
+"be updated as soon as possible."
+msgstr ""
+"Votre version de PHP est obsolète ! Shaarli nécessite au moins PHP %s, et ne "
+"peut donc pas fonctionner. Votre version de PHP a des failles de sécurités "
+"connues et devrait être mise à jour au plus tôt."
+
+#: application/helper/ApplicationUtils.php:195
+#: application/helper/ApplicationUtils.php:215
+msgid "directory is not readable"
+msgstr "le répertoire n'est pas accessible en lecture"
+
+#: application/helper/ApplicationUtils.php:218
+msgid "directory is not writable"
+msgstr "le répertoire n'est pas accessible en écriture"
+
+#: application/helper/ApplicationUtils.php:240
+msgid "file is not readable"
+msgstr "le fichier n'est pas accessible en lecture"
+
+#: application/helper/ApplicationUtils.php:243
+msgid "file is not writable"
+msgstr "le fichier n'est pas accessible en écriture"
+
+#: application/helper/ApplicationUtils.php:277
+msgid "Configuration parsing"
+msgstr "Chargement de la configuration"
+
+#: application/helper/ApplicationUtils.php:278
+msgid "Slim Framework (routing, etc.)"
+msgstr "Slim Framwork (routage, etc.)"
+
+#: application/helper/ApplicationUtils.php:279
+msgid "Multibyte (Unicode) string support"
+msgstr "Support des chaînes de caractère multibytes (Unicode)"
+
+#: application/helper/ApplicationUtils.php:280
+msgid "Required to use thumbnails"
+msgstr "Obligatoire pour utiliser les miniatures"
+
+#: application/helper/ApplicationUtils.php:281
+msgid "Localized text sorting (e.g. e->è->f)"
+msgstr "Tri des textes traduits (ex : e->è->f)"
+
+#: application/helper/ApplicationUtils.php:282
+msgid "Better retrieval of bookmark metadata and thumbnail"
+msgstr "Meilleure récupération des meta-données des marque-pages et minatures"
+
+#: application/helper/ApplicationUtils.php:283
+msgid "Use the translation system in gettext mode"
+msgstr "Utiliser le système de traduction en mode gettext"
+
+#: application/helper/ApplicationUtils.php:284
+msgid "Login using LDAP server"
+msgstr "Authentification via un serveur LDAP"
+
+#: application/helper/DailyPageHelper.php:172
+msgid "Week"
+msgstr "Semaine"
+
+#: application/helper/DailyPageHelper.php:176
+msgid "Today"
+msgstr "Aujourd'hui"
+
+#: application/helper/DailyPageHelper.php:178
+msgid "Yesterday"
+msgstr "Hier"
+
+#: application/helper/FileUtils.php:100
+msgid "Provided path is not a directory."
+msgstr "Le chemin fourni n'est pas un dossier."
+
+#: application/helper/FileUtils.php:104
+msgid "Trying to delete a folder outside of Shaarli path."
+msgstr "Tentative de supprimer un dossier en dehors du chemin de Shaarli."
 
 #: application/legacy/LegacyLinkDB.php:131
 msgid "You are not authorized to add a link."
@@ -678,7 +794,7 @@ msgstr "Impossible de purger %s : le répertoire n'existe pas"
 msgid "An error occurred while running the update "
 msgstr "Une erreur s'est produite lors de l'exécution de la mise à jour "
 
-#: index.php:65
+#: index.php:80
 msgid "Shared bookmarks on "
 msgstr "Liens partagés sur "
 
@@ -819,7 +935,7 @@ msgstr "Mauvaise réponse du hub %s"
 msgid "Enable PubSubHubbub feed publishing."
 msgstr "Active la publication de flux vers PubSubHubbub."
 
-#: plugins/qrcode/qrcode.php:73 plugins/wallabag/wallabag.php:70
+#: plugins/qrcode/qrcode.php:73 plugins/wallabag/wallabag.php:71
 msgid "For each link, add a QRCode icon."
 msgstr "Pour chaque lien, ajouter une icône de QRCode."
 
@@ -831,15 +947,15 @@ msgstr ""
 "Erreur de l'extension Wallabag : Merci de définir le paramètre « "
 "WALLABAG_URL » dans la page d'administration des extensions."
 
-#: plugins/wallabag/wallabag.php:47
+#: plugins/wallabag/wallabag.php:48
 msgid "Save to wallabag"
 msgstr "Sauvegarder dans Wallabag"
 
-#: plugins/wallabag/wallabag.php:71
+#: plugins/wallabag/wallabag.php:72
 msgid "Wallabag API URL"
 msgstr "URL de l'API Wallabag"
 
-#: plugins/wallabag/wallabag.php:72
+#: plugins/wallabag/wallabag.php:73
 msgid "Wallabag API version (1 or 2)"
 msgstr "Version de l'API Wallabag (1 ou 2)"
 
@@ -850,6 +966,48 @@ msgstr "Désolé, il y a rien à voir ici."
 #: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
 msgid "URL or leave empty to post a note"
 msgstr "URL ou laisser vide pour créer une note"
+
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
+msgid "BULK CREATION"
+msgstr "CRÉATION DE MASSE"
+
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:40
+msgid "Metadata asynchronous retrieval is disabled."
+msgstr "La récupération asynchrone des meta-données est désactivée."
+
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
+msgid ""
+"We recommend that you enable the setting <em>general > "
+"enable_async_metadata</em> in your configuration file to use bulk link "
+"creation."
+msgstr ""
+"Nous recommandons d'activer le paramètre <em>general > "
+"enable_async_metadata</em> dans votre fichier de configuration pour utiliser "
+"la création de masse."
+
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:56
+msgid "Shaare multiple new links"
+msgstr "Partagez plusieurs nouveaux liens"
+
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:59
+msgid "Add one URL per line to create multiple bookmarks."
+msgstr "Ajouter une URL par ligne pour créer plusieurs marque-pages."
+
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:63
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:67
+msgid "Tags"
+msgstr "Tags"
+
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:73
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:83
+#: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
+msgid "Private"
+msgstr "Privé"
+
+#: tmp/addlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:78
+msgid "Add links"
+msgstr "Ajouter des liens"
 
 #: tmp/changepassword.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
 msgid "Current password"
@@ -885,13 +1043,39 @@ msgstr "Renommer le tag"
 msgid "Delete tag"
 msgstr "Supprimer le tag"
 
-#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:39
+#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:40
 msgid "You can also edit tags in the"
 msgstr "Vous pouvez aussi modifier les tags dans la"
 
-#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:39
+#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:40
 msgid "tag list"
 msgstr "liste des tags"
+
+#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:47
+msgid "Change tags separator"
+msgstr "Changer le séparateur de tags"
+
+#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:50
+msgid "Your current tag separator is"
+msgstr "Votre séparateur actuel est"
+
+#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:53
+msgid "New separator"
+msgstr "Nouveau séparateur"
+
+#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:58
+#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:355
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:121
+#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:139
+#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:199
+msgid "Save"
+msgstr "Enregistrer"
+
+#: tmp/changetag.b91ef64efc3688266305ea9b42e5017e.rtpl.php:61
+msgid "Note that hashtags won't fully work with a non-whitespace separator."
+msgstr ""
+"Notez que les hashtags ne sont pas complètement fonctionnels avec un "
+"séparateur qui n'est pas un espace."
 
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
 msgid "title"
@@ -1016,71 +1200,72 @@ msgstr ""
 "miniatures."
 
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:328
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:56
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:122
 msgid "Synchronize thumbnails"
 msgstr "Synchroniser les miniatures"
 
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:339
 #: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:30
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:102
 msgid "All"
 msgstr "Tous"
 
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:343
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:106
 msgid "Only common media hosts"
 msgstr "Seulement les hébergeurs de média connus"
 
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:347
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:110
 msgid "None"
 msgstr "Aucune"
 
-#: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:355
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:88
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:139
-#: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:199
-msgid "Save"
-msgstr "Enregistrer"
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
+msgid "1 RSS entry per :type"
+msgid_plural ""
+msgstr[0] "1 entrée RSS par :type"
+msgstr[1] ""
 
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
-msgid "The Daily Shaarli"
-msgstr "Le Quotidien Shaarli"
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:49
+msgid "Previous :type"
+msgid_plural ""
+msgstr[0] ":type précédent"
+msgstr[1] "Jour précédent"
 
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:17
-msgid "1 RSS entry per day"
-msgstr "1 entrée RSS par jour"
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:56
+#: tmp/dailyrss.b91ef64efc3688266305ea9b42e5017e.rtpl.php:7
+msgid "All links of one :type in a single page."
+msgid_plural ""
+msgstr[0] "Tous les liens d'un :type sur une page."
+msgstr[1] "Tous les liens d'un jour sur une page."
 
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:37
-msgid "Previous day"
-msgstr "Jour précédent"
+#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:63
+msgid "Next :type"
+msgid_plural ""
+msgstr[0] ":type suivant"
+msgstr[1] ""
 
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:44
-msgid "All links of one day in a single page."
-msgstr "Tous les liens d'un jour sur une page."
-
-#: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:51
-msgid "Next day"
-msgstr "Jour suivant"
-
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:18
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:30
 msgid "Edit Shaare"
 msgstr "Modifier le Shaare"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:18
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:30
 msgid "New Shaare"
 msgstr "Nouveau Shaare"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:38
 msgid "Created:"
 msgstr "Création :"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:29
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
 msgid "URL"
 msgstr "URL"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:47
 msgid "Title"
 msgstr "Titre"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:58
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:75
 #: tmp/pluginsadmin.b91ef64efc3688266305ea9b42e5017e.rtpl.php:99
@@ -1088,39 +1273,38 @@ msgstr "Titre"
 msgid "Description"
 msgstr "Description"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:47
-msgid "Tags"
-msgstr "Tags"
-
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:60
-#: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
-#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
-msgid "Private"
-msgstr "Privé"
-
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:66
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:89
 msgid "Description will be rendered with"
 msgstr "La description sera générée avec"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:68
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:91
 msgid "Markdown syntax documentation"
 msgstr "Documentation sur la syntaxe Markdown"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:69
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:92
 msgid "Markdown syntax"
 msgstr "la syntaxe Markdown"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:88
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:115
+msgid "Cancel"
+msgstr "Annuler"
+
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:121
 msgid "Apply Changes"
 msgstr "Appliquer les changements"
 
-#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:93
+#: tmp/editlink.b91ef64efc3688266305ea9b42e5017e.rtpl.php:126
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:173
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:147
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:147
 #: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:67
 msgid "Delete"
 msgstr "Supprimer"
+
+#: tmp/editlink.batch.b91ef64efc3688266305ea9b42e5017e.rtpl.php:21
+#: tmp/editlink.batch.b91ef64efc3688266305ea9b42e5017e.rtpl.php:32
+msgid "Save all"
+msgstr "Tout enregistrer"
 
 #: tmp/export.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
 msgid "Export Database"
@@ -1179,10 +1363,6 @@ msgstr "Les doublons s'appuient sur les URL"
 msgid "Add default tags"
 msgstr "Ajouter des tags par défaut"
 
-#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:22
-msgid "Install Shaarli"
-msgstr "Installation de Shaarli"
-
 #: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:25
 msgid "It looks like it's the first time you run Shaarli. Please configure it."
 msgstr ""
@@ -1214,6 +1394,10 @@ msgstr "Mes liens"
 #: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:181
 msgid "Install"
 msgstr "Installer"
+
+#: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:190
+msgid "Server requirements"
+msgstr "Pré-requis serveur"
 
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:14
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:79
@@ -1288,8 +1472,8 @@ msgid "without any tag"
 msgstr "sans tag"
 
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:175
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:43
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:43
+#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:41
 msgid "Fold"
 msgstr "Replier"
 
@@ -1313,6 +1497,10 @@ msgstr "Changer statut épinglé"
 msgid "Sticky"
 msgstr "Épinglé"
 
+#: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:189
+msgid "Share a private link"
+msgstr "Partager un lien privé"
+
 #: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:5
 #: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:5
 msgid "Filters"
@@ -1331,7 +1519,7 @@ msgstr "Afficher uniquement les liens publics"
 #: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:18
 #: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:18
 msgid "Filter untagged links"
-msgstr "Filtrer par liens privés"
+msgstr "Filtrer par liens sans tag"
 
 #: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
 #: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:24
@@ -1342,8 +1530,8 @@ msgstr "Tout sélectionner"
 #: tmp/linklist.paging.b91ef64efc3688266305ea9b42e5017e.rtpl.php:89
 #: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:29
 #: tmp/linklist.paging.cedf684561d925457130839629000a81.rtpl.php:89
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:44
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:44
+#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:42
 msgid "Fold all"
 msgstr "Replier tout"
 
@@ -1359,9 +1547,9 @@ msgid "Remember me"
 msgstr "Rester connecté"
 
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:49
+#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
 #: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:15
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:49
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:48
 msgid "by the Shaarli community"
 msgstr "par la communauté Shaarli"
 
@@ -1370,18 +1558,23 @@ msgstr "par la communauté Shaarli"
 msgid "Documentation"
 msgstr "Documentation"
 
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:45
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:45
+#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:43
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:43
 msgid "Expand"
 msgstr "Déplier"
 
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:46
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:46
+#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:44
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:44
 msgid "Expand all"
 msgstr "Déplier tout"
 
-#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:47
-#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:47
+#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:45
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:45
+msgid "Are you sure you want to delete this link?"
+msgstr "Êtes-vous sûr de vouloir supprimer ce lien ?"
+
+#: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:46
+#: tmp/page.footer.cedf684561d925457130839629000a81.rtpl.php:46
 msgid "Are you sure you want to delete this tag?"
 msgstr "Êtes-vous sûr de vouloir supprimer ce tag ?"
 
@@ -1511,6 +1704,100 @@ msgstr "Configuration des extensions"
 msgid "No parameter available."
 msgstr "Aucun paramètre disponible."
 
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:16
+msgid "General"
+msgstr "Général"
+
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:20
+msgid "Index URL"
+msgstr "URL de l'index"
+
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
+msgid "Base path"
+msgstr "Chemin de base"
+
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
+msgid "Client IP"
+msgstr "IP du client"
+
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:44
+msgid "Trusted reverse proxies"
+msgstr "Reverse proxies de confiance"
+
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:58
+msgid "N/A"
+msgstr "N/A"
+
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:84
+msgid "Visit releases page on Github"
+msgstr "Visiter la page des releases sur Github"
+
+#: tmp/server.b91ef64efc3688266305ea9b42e5017e.rtpl.php:121
+msgid "Synchronize all link thumbnails"
+msgstr "Synchroniser toutes les miniatures"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:2
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:2
+msgid "Permissions"
+msgstr "Permissions"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:8
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:8
+msgid "There are permissions that need to be fixed."
+msgstr "Il y a des permissions qui doivent être corrigées."
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:23
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:23
+msgid "All read/write permissions are properly set."
+msgstr "Toutes les permissions de lecture/écriture sont définies correctement."
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:32
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:32
+msgid "Running PHP"
+msgstr "Fonctionnant avec PHP"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:36
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:36
+msgid "End of life: "
+msgstr "Fin de vie : "
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:48
+msgid "Extension"
+msgstr "Extension"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:49
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:49
+msgid "Usage"
+msgstr "Utilisation"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:50
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:50
+msgid "Status"
+msgstr "Statut"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:51
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:66
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:51
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:66
+msgid "Loaded"
+msgstr "Chargé"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:60
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:60
+msgid "Required"
+msgstr "Obligatoire"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:60
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:60
+msgid "Optional"
+msgstr "Optionnel"
+
+#: tmp/server.requirements.b91ef64efc3688266305ea9b42e5017e.rtpl.php:70
+#: tmp/server.requirements.cedf684561d925457130839629000a81.rtpl.php:70
+msgid "Not loaded"
+msgstr "Non chargé"
+
 #: tmp/tag.cloud.b91ef64efc3688266305ea9b42e5017e.rtpl.php:19
 #: tmp/tag.list.b91ef64efc3688266305ea9b42e5017e.rtpl.php:19
 msgid "tags"
@@ -1561,15 +1848,19 @@ msgstr "Configurer Shaarli"
 msgid "Enable, disable and configure plugins"
 msgstr "Activer, désactiver et configurer les extensions"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:27
+msgid "Check instance's server configuration"
+msgstr "Vérifier la configuration serveur de l'instance"
+
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:34
 msgid "Change your password"
 msgstr "Modifier le mot de passe"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:35
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
 msgid "Rename or delete a tag in all links"
 msgstr "Renommer ou supprimer un tag dans tous les liens"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:41
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:47
 msgid ""
 "Import Netscape HTML bookmarks (as exported from Firefox, Chrome, Opera, "
 "delicious...)"
@@ -1577,11 +1868,11 @@ msgstr ""
 "Importer des marques pages au format Netscape HTML (comme exportés depuis "
 "Firefox, Chrome, Opera, delicious...)"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:42
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
 msgid "Import links"
 msgstr "Importer des liens"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:47
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:53
 msgid ""
 "Export Netscape HTML bookmarks (which can be imported in Firefox, Chrome, "
 "Opera, delicious...)"
@@ -1589,15 +1880,11 @@ msgstr ""
 "Exporter les marques pages au format Netscape HTML (comme exportés depuis "
 "Firefox, Chrome, Opera, delicious...)"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:54
 msgid "Export database"
 msgstr "Exporter les données"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:55
-msgid "Synchronize all link thumbnails"
-msgstr "Synchroniser toutes les miniatures"
-
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:81
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:77
 msgid ""
 "Drag one of these button to your bookmarks toolbar or right-click it and "
 "\"Bookmark This Link\""
@@ -1605,13 +1892,13 @@ msgstr ""
 "Glisser un de ces boutons dans votre barre de favoris ou cliquer droit "
 "dessus et « Ajouter aux favoris »"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:82
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:78
 msgid "then click on the bookmarklet in any page you want to share."
 msgstr ""
 "puis cliquer sur le marque-page depuis un site que vous souhaitez partager."
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:86
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:110
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:82
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:106
 msgid ""
 "Drag this link to your bookmarks toolbar or right-click it and Bookmark This "
 "Link"
@@ -1619,40 +1906,40 @@ msgstr ""
 "Glisser ce lien dans votre barre de favoris ou cliquer droit dessus et « "
 "Ajouter aux favoris »"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:87
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:83
 msgid "then click ✚Shaare link button in any page you want to share"
 msgstr "puis cliquer sur ✚Shaare depuis un site que vous souhaitez partager"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:96
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:118
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:92
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:114
 msgid "The selected text is too long, it will be truncated."
 msgstr "Le texte sélectionné est trop long, il sera tronqué."
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:106
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:102
 msgid "Shaare link"
 msgstr "Shaare"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:111
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:107
 msgid ""
 "Then click ✚Add Note button anytime to start composing a private Note (text "
 "post) to your Shaarli"
 msgstr ""
 "Puis cliquer sur ✚Add Note pour commencer à rédiger une Note sur Shaarli"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:127
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:123
 msgid "Add Note"
 msgstr "Ajouter une Note"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:136
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:132
 msgid "3rd party"
 msgstr "Applications tierces"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:139
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:144
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:135
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:140
 msgid "plugin"
 msgstr "extension"
 
-#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:169
+#: tmp/tools.b91ef64efc3688266305ea9b42e5017e.rtpl.php:165
 msgid ""
 "Drag this link to your bookmarks toolbar, or right-click it and choose "
 "Bookmark This Link"
@@ -1660,11 +1947,11 @@ msgstr ""
 "Glisser ce lien dans votre barre de favoris ou cliquer droit dessus et « "
 "Ajouter aux favoris »"
 
-#~ msgid "Provided data is invalid"
-#~ msgstr "Les informations fournies ne sont pas valides"
+#~ msgid "Display:"
+#~ msgstr "Afficher :"
 
-#~ msgid "Rename"
-#~ msgstr "Renommer"
+#~ msgid "The Daily Shaarli"
+#~ msgstr "Le Quotidien Shaarli"
 
 #, fuzzy
 #~| msgid "Selection"

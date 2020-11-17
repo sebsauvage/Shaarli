@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shaarli - The personal, minimalist, super-fast, database free, bookmarking service.
  *
@@ -25,9 +26,12 @@ require_once 'application/Utils.php';
 
 require_once __DIR__ . '/init.php';
 
+use Katzgrau\KLogger\Logger;
+use Psr\Log\LogLevel;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Container\ContainerBuilder;
 use Shaarli\Languages;
+use Shaarli\Security\BanManager;
 use Shaarli\Security\CookieManager;
 use Shaarli\Security\LoginManager;
 use Shaarli\Security\SessionManager;
@@ -48,10 +52,22 @@ if ($conf->get('dev.debug', false)) {
     });
 }
 
+$logger = new Logger(
+    dirname($conf->get('resource.log')),
+    !$conf->get('dev.debug') ? LogLevel::INFO : LogLevel::DEBUG,
+    ['filename' => basename($conf->get('resource.log'))]
+);
 $sessionManager = new SessionManager($_SESSION, $conf, session_save_path());
 $sessionManager->initialize();
 $cookieManager = new CookieManager($_COOKIE);
-$loginManager = new LoginManager($conf, $sessionManager, $cookieManager);
+$banManager = new BanManager(
+    $conf->get('security.trusted_proxies', []),
+    $conf->get('security.ban_after'),
+    $conf->get('security.ban_duration'),
+    $conf->get('resource.ban_file', 'data/ipbans.php'),
+    $logger
+);
+$loginManager = new LoginManager($conf, $sessionManager, $cookieManager, $banManager, $logger);
 $loginManager->generateStaySignedInToken($_SERVER['REMOTE_ADDR']);
 
 // Sniff browser language and set date format accordingly.
@@ -62,16 +78,16 @@ if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
 new Languages(setlocale(LC_MESSAGES, 0), $conf);
 
 $conf->setEmpty('general.timezone', date_default_timezone_get());
-$conf->setEmpty('general.title', t('Shared bookmarks on '). escape(index_url($_SERVER)));
+$conf->setEmpty('general.title', t('Shared bookmarks on ') . escape(index_url($_SERVER)));
 
-RainTPL::$tpl_dir = $conf->get('resource.raintpl_tpl').'/'.$conf->get('resource.theme').'/'; // template directory
+RainTPL::$tpl_dir = $conf->get('resource.raintpl_tpl') . '/' . $conf->get('resource.theme') . '/'; // template directory
 RainTPL::$cache_dir = $conf->get('resource.raintpl_tmp'); // cache directory
 
 date_default_timezone_set($conf->get('general.timezone', 'UTC'));
 
 $loginManager->checkLoginState(client_ip_id($_SERVER));
 
-$containerBuilder = new ContainerBuilder($conf, $sessionManager, $cookieManager, $loginManager);
+$containerBuilder = new ContainerBuilder($conf, $sessionManager, $cookieManager, $loginManager, $logger);
 $container = $containerBuilder->build();
 $app = new App($container);
 
@@ -110,13 +126,16 @@ $app->group('/admin', function () {
     $this->post('/configure', '\Shaarli\Front\Controller\Admin\ConfigureController:save');
     $this->get('/tags', '\Shaarli\Front\Controller\Admin\ManageTagController:index');
     $this->post('/tags', '\Shaarli\Front\Controller\Admin\ManageTagController:save');
-    $this->get('/add-shaare', '\Shaarli\Front\Controller\Admin\ManageShaareController:addShaare');
-    $this->get('/shaare', '\Shaarli\Front\Controller\Admin\ManageShaareController:displayCreateForm');
-    $this->get('/shaare/{id:[0-9]+}', '\Shaarli\Front\Controller\Admin\ManageShaareController:displayEditForm');
-    $this->post('/shaare', '\Shaarli\Front\Controller\Admin\ManageShaareController:save');
-    $this->get('/shaare/delete', '\Shaarli\Front\Controller\Admin\ManageShaareController:deleteBookmark');
-    $this->get('/shaare/visibility', '\Shaarli\Front\Controller\Admin\ManageShaareController:changeVisibility');
-    $this->get('/shaare/{id:[0-9]+}/pin', '\Shaarli\Front\Controller\Admin\ManageShaareController:pinBookmark');
+    $this->post('/tags/change-separator', '\Shaarli\Front\Controller\Admin\ManageTagController:changeSeparator');
+    $this->get('/add-shaare', '\Shaarli\Front\Controller\Admin\ShaareAddController:addShaare');
+    $this->get('/shaare', '\Shaarli\Front\Controller\Admin\ShaarePublishController:displayCreateForm');
+    $this->get('/shaare/{id:[0-9]+}', '\Shaarli\Front\Controller\Admin\ShaarePublishController:displayEditForm');
+    $this->get('/shaare/private/{hash}', '\Shaarli\Front\Controller\Admin\ShaareManageController:sharePrivate');
+    $this->post('/shaare-batch', '\Shaarli\Front\Controller\Admin\ShaarePublishController:displayCreateBatchForms');
+    $this->post('/shaare', '\Shaarli\Front\Controller\Admin\ShaarePublishController:save');
+    $this->get('/shaare/delete', '\Shaarli\Front\Controller\Admin\ShaareManageController:deleteBookmark');
+    $this->get('/shaare/visibility', '\Shaarli\Front\Controller\Admin\ShaareManageController:changeVisibility');
+    $this->get('/shaare/{id:[0-9]+}/pin', '\Shaarli\Front\Controller\Admin\ShaareManageController:pinBookmark');
     $this->patch(
         '/shaare/{id:[0-9]+}/update-thumbnail',
         '\Shaarli\Front\Controller\Admin\ThumbnailsController:ajaxUpdate'
@@ -128,6 +147,8 @@ $app->group('/admin', function () {
     $this->get('/plugins', '\Shaarli\Front\Controller\Admin\PluginsController:index');
     $this->post('/plugins', '\Shaarli\Front\Controller\Admin\PluginsController:save');
     $this->get('/token', '\Shaarli\Front\Controller\Admin\TokenController:getToken');
+    $this->get('/server', '\Shaarli\Front\Controller\Admin\ServerController:index');
+    $this->get('/clear-cache', '\Shaarli\Front\Controller\Admin\ServerController:clearCache');
     $this->get('/thumbnails', '\Shaarli\Front\Controller\Admin\ThumbnailsController:index');
     $this->get('/metadata', '\Shaarli\Front\Controller\Admin\MetadataController:ajaxRetrieveTitle');
     $this->get('/visibility/{visibility}', '\Shaarli\Front\Controller\Admin\SessionFilterController:visibility');
@@ -157,6 +178,6 @@ try {
 } catch (Throwable $e) {
     die(nl2br(
         'An unexpected error happened, and the error template could not be displayed.' . PHP_EOL . PHP_EOL .
-       exception2text($e)
+        exception2text($e)
     ));
 }

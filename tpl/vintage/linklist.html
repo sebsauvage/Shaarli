@@ -61,7 +61,7 @@
                 for <em>{$search_term}</em>
             {/if}
             {if="!empty($search_tags)"}
-                {$exploded_tags=explode(' ', $search_tags)}
+                {$exploded_tags=tags_str2array($search_tags, $tags_separator)}
                 tagged
                 {loop="$exploded_tags"}
                     <span class="linktag" title="Remove tag">

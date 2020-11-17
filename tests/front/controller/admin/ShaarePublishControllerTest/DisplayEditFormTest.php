@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Shaarli\Front\Controller\Admin\ManageShaareControllerTest;
+namespace Shaarli\Front\Controller\Admin\ShaarePublishControllerTest;
 
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Front\Controller\Admin\FrontAdminControllerMockHelper;
-use Shaarli\Front\Controller\Admin\ManageShaareController;
+use Shaarli\Front\Controller\Admin\ShaarePublishController;
 use Shaarli\Http\HttpAccess;
 use Shaarli\Security\SessionManager;
 use Shaarli\TestCase;
@@ -18,7 +18,7 @@ class DisplayEditFormTest extends TestCase
 {
     use FrontAdminControllerMockHelper;
 
-    /** @var ManageShaareController */
+    /** @var ShaarePublishController */
     protected $controller;
 
     public function setUp(): void
@@ -26,7 +26,7 @@ class DisplayEditFormTest extends TestCase
         $this->createContainer();
 
         $this->container->httpAccess = $this->createMock(HttpAccess::class);
-        $this->controller = new ManageShaareController($this->container);
+        $this->controller = new ShaarePublishController($this->container);
     }
 
     /**
@@ -74,7 +74,7 @@ class DisplayEditFormTest extends TestCase
         static::assertSame($url, $assignedVariables['link']['url']);
         static::assertSame($title, $assignedVariables['link']['title']);
         static::assertSame($description, $assignedVariables['link']['description']);
-        static::assertSame(implode(' ', $tags), $assignedVariables['link']['tags']);
+        static::assertSame(implode('@', $tags) . '@', $assignedVariables['link']['tags']);
         static::assertTrue($assignedVariables['link']['private']);
         static::assertSame($createdAt, $assignedVariables['link']['created']);
     }

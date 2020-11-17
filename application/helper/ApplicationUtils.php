@@ -1,5 +1,6 @@
 <?php
-namespace Shaarli;
+
+namespace Shaarli\Helper;
 
 use Exception;
 use Shaarli\Config\ConfigManager;
@@ -14,8 +15,9 @@ class ApplicationUtils
      */
     public static $VERSION_FILE = 'shaarli_version.php';
 
-    private static $GIT_URL = 'https://raw.githubusercontent.com/shaarli/Shaarli';
-    private static $GIT_BRANCHES = array('latest', 'stable');
+    public static $GITHUB_URL = 'https://github.com/shaarli/Shaarli';
+    public static $GIT_RAW_URL = 'https://raw.githubusercontent.com/shaarli/Shaarli';
+    public static $GIT_BRANCHES = ['latest', 'stable'];
     private static $VERSION_START_TAG = '<?php /* ';
     private static $VERSION_END_TAG = ' */ ?>';
 
@@ -63,8 +65,8 @@ class ApplicationUtils
         }
 
         return str_replace(
-            array(self::$VERSION_START_TAG, self::$VERSION_END_TAG, PHP_EOL),
-            array('', '', ''),
+            [self::$VERSION_START_TAG, self::$VERSION_END_TAG, PHP_EOL],
+            ['', '', ''],
             $data
         );
     }
@@ -125,7 +127,7 @@ class ApplicationUtils
         // Late Static Binding allows overriding within tests
         // See http://php.net/manual/en/language.oop5.late-static-bindings.php
         $latestVersion = static::getVersion(
-            self::$GIT_URL . '/' . $branch . '/' . self::$VERSION_FILE
+            self::$GIT_RAW_URL . '/' . $branch . '/' . self::$VERSION_FILE
         );
 
         if (!$latestVersion) {
@@ -171,35 +173,47 @@ class ApplicationUtils
     /**
      * Checks Shaarli has the proper access permissions to its resources
      *
-     * @param ConfigManager $conf Configuration Manager instance.
+     * @param ConfigManager $conf        Configuration Manager instance.
+     * @param bool          $minimalMode In minimal mode we only check permissions to be able to display a template.
+     *                                   Currently we only need to be able to read the theme and write in raintpl cache.
      *
      * @return array A list of the detected configuration issues
      */
-    public static function checkResourcePermissions($conf)
+    public static function checkResourcePermissions(ConfigManager $conf, bool $minimalMode = false): array
     {
-        $errors = array();
+        $errors = [];
         $rainTplDir = rtrim($conf->get('resource.raintpl_tpl'), '/');
 
         // Check script and template directories are readable
-        foreach (array(
-                     'application',
-                     'inc',
-                     'plugins',
-                     $rainTplDir,
-                     $rainTplDir . '/' . $conf->get('resource.theme'),
-                 ) as $path) {
+        foreach (
+            [
+            'application',
+            'inc',
+            'plugins',
+            $rainTplDir,
+            $rainTplDir . '/' . $conf->get('resource.theme'),
+            ] as $path
+        ) {
             if (!is_readable(realpath($path))) {
                 $errors[] = '"' . $path . '" ' . t('directory is not readable');
             }
         }
 
         // Check cache and data directories are readable and writable
-        foreach (array(
-                     $conf->get('resource.thumbnails_cache'),
-                     $conf->get('resource.data_dir'),
-                     $conf->get('resource.page_cache'),
-                     $conf->get('resource.raintpl_tmp'),
-                 ) as $path) {
+        if ($minimalMode) {
+            $folders = [
+                $conf->get('resource.raintpl_tmp'),
+            ];
+        } else {
+            $folders = [
+            $conf->get('resource.thumbnails_cache'),
+            $conf->get('resource.data_dir'),
+            $conf->get('resource.page_cache'),
+            $conf->get('resource.raintpl_tmp'),
+            ];
+        }
+
+        foreach ($folders as $path) {
             if (!is_readable(realpath($path))) {
                 $errors[] = '"' . $path . '" ' . t('directory is not readable');
             }
@@ -208,14 +222,20 @@ class ApplicationUtils
             }
         }
 
+        if ($minimalMode) {
+            return $errors;
+        }
+
         // Check configuration files are readable and writable
-        foreach (array(
-                     $conf->getConfigFileExt(),
-                     $conf->get('resource.datastore'),
-                     $conf->get('resource.ban_file'),
-                     $conf->get('resource.log'),
-                     $conf->get('resource.update_check'),
-                 ) as $path) {
+        foreach (
+            [
+                 $conf->getConfigFileExt(),
+                 $conf->get('resource.datastore'),
+                 $conf->get('resource.ban_file'),
+                 $conf->get('resource.log'),
+                 $conf->get('resource.update_check'),
+             ] as $path
+        ) {
             if (!is_file(realpath($path))) {
                 # the file may not exist yet
                 continue;
@@ -245,5 +265,55 @@ class ApplicationUtils
     public static function getVersionHash($currentVersion, $salt)
     {
         return hash_hmac('sha256', $currentVersion, $salt);
+    }
+
+    /**
+     * Get a list of PHP extensions used by Shaarli.
+     *
+     * @return array[] List of extension with following keys:
+     *                   - name: extension name
+     *                   - required: whether the extension is required to use Shaarli
+     *                   - desc: short description of extension usage in Shaarli
+     *                   - loaded: whether the extension is properly loaded or not
+     */
+    public static function getPhpExtensionsRequirement(): array
+    {
+        $extensions = [
+            ['name' => 'json', 'required' => true, 'desc' => t('Configuration parsing')],
+            ['name' => 'simplexml', 'required' => true, 'desc' => t('Slim Framework (routing, etc.)')],
+            ['name' => 'mbstring', 'required' => true, 'desc' => t('Multibyte (Unicode) string support')],
+            ['name' => 'gd', 'required' => false, 'desc' => t('Required to use thumbnails')],
+            ['name' => 'intl', 'required' => false, 'desc' => t('Localized text sorting (e.g. e->è->f)')],
+            ['name' => 'curl', 'required' => false, 'desc' => t('Better retrieval of bookmark metadata and thumbnail')],
+            ['name' => 'gettext', 'required' => false, 'desc' => t('Use the translation system in gettext mode')],
+            ['name' => 'ldap', 'required' => false, 'desc' => t('Login using LDAP server')],
+        ];
+
+        foreach ($extensions as &$extension) {
+            $extension['loaded'] = extension_loaded($extension['name']);
+        }
+
+        return $extensions;
+    }
+
+    /**
+     * Return the EOL date of given PHP version. If the version is unknown,
+     * we return today + 2 years.
+     *
+     * @param string $fullVersion PHP version, e.g. 7.4.7
+     *
+     * @return string Date format: YYYY-MM-DD
+     */
+    public static function getPhpEol(string $fullVersion): string
+    {
+        preg_match('/(\d+\.\d+)\.\d+/', $fullVersion, $matches);
+
+        return [
+            '7.1' => '2019-12-01',
+            '7.2' => '2020-11-30',
+            '7.3' => '2021-12-06',
+            '7.4' => '2022-11-28',
+            '8.0' => '2023-12-01',
+        ][$matches[1]] ?? (new \DateTime('+2 year'))->format('Y-m-d');
     }
 }

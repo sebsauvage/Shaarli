@@ -19,9 +19,9 @@ function isso_init($conf)
 {
     $issoUrl = $conf->get('plugins.ISSO_SERVER');
     if (empty($issoUrl)) {
-        $error = t('Isso plugin error: '.
+        $error = t('Isso plugin error: ' .
             'Please define the "ISSO_SERVER" setting in the plugin administration page.');
-        return array($error);
+        return [$error];
     }
 }
 
@@ -49,12 +49,12 @@ function hook_isso_render_linklist($data, $conf)
         $isso = sprintf($issoHtml, $issoUrl, $issoUrl, $link['id'], $link['id']);
         $data['plugin_end_zone'][] = $isso;
     } else {
-        $button = '<span><a href="'. ($data['_BASE_PATH_'] ?? '') . '/shaare/%s#isso-thread">';
+        $button = '<span><a href="' . ($data['_BASE_PATH_'] ?? '') . '/shaare/%s#isso-thread">';
         // For the default theme we use a FontAwesome icon which is better than an image
         if ($conf->get('resource.theme') === 'default') {
             $button .= '<i class="linklist-plugin-icon fa fa-comment"></i>';
         } else {
-            $button .= '<img class="linklist-plugin-icon" src="'. $data['_ROOT_PATH_'].'/plugins/isso/comment.png" ';
+            $button .= '<img class="linklist-plugin-icon" src="' . $data['_ROOT_PATH_'] . '/plugins/isso/comment.png" ';
             $button .= 'title="Comment on this shaare" alt="Comments" />';
         }
         $button .= '</a></span>';

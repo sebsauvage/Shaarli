@@ -119,7 +119,8 @@ class Links extends ApiController
         $data = (array) ($request->getParsedBody() ?? []);
         $bookmark = ApiUtils::buildBookmarkFromRequest($data, $this->conf->get('privacy.default_private_links'));
         // duplicate by URL, return 409 Conflict
-        if (! empty($bookmark->getUrl())
+        if (
+            ! empty($bookmark->getUrl())
             && ! empty($dup = $this->bookmarkService->findByUrl($bookmark->getUrl()))
         ) {
             return $response->withJson(
@@ -131,7 +132,7 @@ class Links extends ApiController
 
         $this->bookmarkService->add($bookmark);
         $out = ApiUtils::formatLink($bookmark, index_url($this->ci['environment']));
-        $redirect = $this->ci->router->relativePathFor('getLink', ['id' => $bookmark->getId()]);
+        $redirect = $this->ci->router->pathFor('getLink', ['id' => $bookmark->getId()]);
         return $response->withAddedHeader('Location', $redirect)
                         ->withJson($out, 201, $this->jsonStyle);
     }
@@ -159,7 +160,8 @@ class Links extends ApiController
 
         $requestBookmark = ApiUtils::buildBookmarkFromRequest($data, $this->conf->get('privacy.default_private_links'));
         // duplicate URL on a different link, return 409 Conflict
-        if (! empty($requestBookmark->getUrl())
+        if (
+            ! empty($requestBookmark->getUrl())
             && ! empty($dup = $this->bookmarkService->findByUrl($requestBookmark->getUrl()))
             && $dup->getId() != $id
         ) {

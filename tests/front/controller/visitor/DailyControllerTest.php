@@ -28,52 +28,49 @@ class DailyControllerTest extends TestCase
     public function testValidIndexControllerInvokeDefault(): void
     {
         $currentDay = new \DateTimeImmutable('2020-05-13');
+        $previousDate = new \DateTime('2 days ago 00:00:00');
+        $nextDate = new \DateTime('today 00:00:00');
 
         $request = $this->createMock(Request::class);
-        $request->method('getQueryParam')->willReturn($currentDay->format('Ymd'));
+        $request->method('getQueryParam')->willReturnCallback(function (string $key) use ($currentDay): ?string {
+            return $key === 'day' ? $currentDay->format('Ymd') : null;
+        });
         $response = new Response();
 
         // Save RainTPL assigned variables
         $assignedVariables = [];
         $this->assignTemplateVars($assignedVariables);
 
-        // Links dataset: 2 links with thumbnails
         $this->container->bookmarkService
             ->expects(static::once())
-            ->method('days')
-            ->willReturnCallback(function () use ($currentDay): array {
-               return [
-                   '20200510',
-                   $currentDay->format('Ymd'),
-                   '20200516',
-               ];
-            })
-        ;
-        $this->container->bookmarkService
-            ->expects(static::once())
-            ->method('filterDay')
-            ->willReturnCallback(function (): array {
-                return [
-                    (new Bookmark())
-                        ->setId(1)
-                        ->setUrl('http://url.tld')
-                        ->setTitle(static::generateString(50))
-                        ->setDescription(static::generateString(500))
-                    ,
-                    (new Bookmark())
-                        ->setId(2)
-                        ->setUrl('http://url2.tld')
-                        ->setTitle(static::generateString(50))
-                        ->setDescription(static::generateString(500))
-                    ,
-                    (new Bookmark())
-                        ->setId(3)
-                        ->setUrl('http://url3.tld')
-                        ->setTitle(static::generateString(50))
-                        ->setDescription(static::generateString(500))
-                    ,
-                ];
-            })
+            ->method('findByDate')
+            ->willReturnCallback(
+                function ($from, $to, &$previous, &$next) use ($currentDay, $previousDate, $nextDate): array {
+                    $previous = $previousDate;
+                    $next = $nextDate;
+
+                    return [
+                        (new Bookmark())
+                            ->setId(1)
+                            ->setUrl('http://url.tld')
+                            ->setTitle(static::generateString(50))
+                            ->setDescription(static::generateString(500))
+                        ,
+                        (new Bookmark())
+                            ->setId(2)
+                            ->setUrl('http://url2.tld')
+                            ->setTitle(static::generateString(50))
+                            ->setDescription(static::generateString(500))
+                        ,
+                        (new Bookmark())
+                            ->setId(3)
+                            ->setUrl('http://url3.tld')
+                            ->setTitle(static::generateString(50))
+                            ->setDescription(static::generateString(500))
+                        ,
+                    ];
+                }
+            )
         ;
 
         // Make sure that PluginManager hook is triggered
@@ -81,20 +78,22 @@ class DailyControllerTest extends TestCase
             ->expects(static::atLeastOnce())
             ->method('executeHooks')
             ->withConsecutive(['render_daily'])
-            ->willReturnCallback(function (string $hook, array $data, array $param) use ($currentDay): array {
-                if ('render_daily' === $hook) {
-                    static::assertArrayHasKey('linksToDisplay', $data);
-                    static::assertCount(3, $data['linksToDisplay']);
-                    static::assertSame(1, $data['linksToDisplay'][0]['id']);
-                    static::assertSame($currentDay->getTimestamp(), $data['day']);
-                    static::assertSame('20200510', $data['previousday']);
-                    static::assertSame('20200516', $data['nextday']);
+            ->willReturnCallback(
+                function (string $hook, array $data, array $param) use ($currentDay, $previousDate, $nextDate): array {
+                    if ('render_daily' === $hook) {
+                        static::assertArrayHasKey('linksToDisplay', $data);
+                        static::assertCount(3, $data['linksToDisplay']);
+                        static::assertSame(1, $data['linksToDisplay'][0]['id']);
+                        static::assertSame($currentDay->getTimestamp(), $data['day']);
+                        static::assertSame($previousDate->format('Ymd'), $data['previousday']);
+                        static::assertSame($nextDate->format('Ymd'), $data['nextday']);
 
-                    static::assertArrayHasKey('loggedin', $param);
+                        static::assertArrayHasKey('loggedin', $param);
+                    }
+
+                    return $data;
                 }
-
-                return $data;
-            })
+            )
         ;
 
         $result = $this->controller->index($request, $response);
@@ -107,6 +106,11 @@ class DailyControllerTest extends TestCase
         );
         static::assertEquals($currentDay, $assignedVariables['dayDate']);
         static::assertEquals($currentDay->getTimestamp(), $assignedVariables['day']);
+        static::assertSame($previousDate->format('Ymd'), $assignedVariables['previousday']);
+        static::assertSame($nextDate->format('Ymd'), $assignedVariables['nextday']);
+        static::assertSame('day', $assignedVariables['type']);
+        static::assertSame('May 13, 2020', $assignedVariables['dayDesc']);
+        static::assertSame('Daily', $assignedVariables['localizedType']);
         static::assertCount(3, $assignedVariables['linksToDisplay']);
 
         $link = $assignedVariables['linksToDisplay'][0];
@@ -171,26 +175,19 @@ class DailyControllerTest extends TestCase
         $currentDay = new \DateTimeImmutable('2020-05-13');
 
         $request = $this->createMock(Request::class);
+        $request->method('getQueryParam')->willReturnCallback(function (string $key) use ($currentDay): ?string {
+            return $key === 'day' ? $currentDay->format('Ymd') : null;
+        });
         $response = new Response();
 
         // Save RainTPL assigned variables
         $assignedVariables = [];
         $this->assignTemplateVars($assignedVariables);
 
-        // Links dataset: 2 links with thumbnails
         $this->container->bookmarkService
             ->expects(static::once())
-            ->method('days')
+            ->method('findByDate')
             ->willReturnCallback(function () use ($currentDay): array {
-                return [
-                    $currentDay->format($currentDay->format('Ymd')),
-                ];
-            })
-        ;
-        $this->container->bookmarkService
-            ->expects(static::once())
-            ->method('filterDay')
-            ->willReturnCallback(function (): array {
                 return [
                     (new Bookmark())
                         ->setId(1)
@@ -250,20 +247,10 @@ class DailyControllerTest extends TestCase
         $assignedVariables = [];
         $this->assignTemplateVars($assignedVariables);
 
-        // Links dataset: 2 links with thumbnails
         $this->container->bookmarkService
             ->expects(static::once())
-            ->method('days')
+            ->method('findByDate')
             ->willReturnCallback(function () use ($currentDay): array {
-                return [
-                    $currentDay->format($currentDay->format('Ymd')),
-                ];
-            })
-        ;
-        $this->container->bookmarkService
-            ->expects(static::once())
-            ->method('filterDay')
-            ->willReturnCallback(function (): array {
                 return [
                     (new Bookmark())->setId(1)->setUrl('http://url.tld')->setTitle('title'),
                     (new Bookmark())
@@ -320,14 +307,7 @@ class DailyControllerTest extends TestCase
         // Links dataset: 2 links with thumbnails
         $this->container->bookmarkService
             ->expects(static::once())
-            ->method('days')
-            ->willReturnCallback(function (): array {
-                return [];
-            })
-        ;
-        $this->container->bookmarkService
-            ->expects(static::once())
-            ->method('filterDay')
+            ->method('findByDate')
             ->willReturnCallback(function (): array {
                 return [];
             })
@@ -347,7 +327,7 @@ class DailyControllerTest extends TestCase
         static::assertSame(200, $result->getStatusCode());
         static::assertSame('daily', (string) $result->getBody());
         static::assertCount(0, $assignedVariables['linksToDisplay']);
-        static::assertSame('Today', $assignedVariables['dayDesc']);
+        static::assertSame('Today - ' . (new \DateTime())->format('F j, Y'), $assignedVariables['dayDesc']);
         static::assertEquals((new \DateTime())->setTime(0, 0)->getTimestamp(), $assignedVariables['day']);
         static::assertEquals((new \DateTime())->setTime(0, 0), $assignedVariables['dayDate']);
     }
@@ -361,6 +341,7 @@ class DailyControllerTest extends TestCase
             new \DateTimeImmutable('2020-05-17'),
             new \DateTimeImmutable('2020-05-15'),
             new \DateTimeImmutable('2020-05-13'),
+            new \DateTimeImmutable('+1 month'),
         ];
 
         $request = $this->createMock(Request::class);
@@ -371,6 +352,7 @@ class DailyControllerTest extends TestCase
             (new Bookmark())->setId(2)->setCreated($dates[1])->setUrl('http://domain.tld/2'),
             (new Bookmark())->setId(3)->setCreated($dates[1])->setUrl('http://domain.tld/3'),
             (new Bookmark())->setId(4)->setCreated($dates[2])->setUrl('http://domain.tld/4'),
+            (new Bookmark())->setId(5)->setCreated($dates[3])->setUrl('http://domain.tld/5'),
         ]);
 
         $this->container->pageCacheManager
@@ -397,13 +379,14 @@ class DailyControllerTest extends TestCase
         static::assertSame('http://shaarli/subfolder/', $assignedVariables['index_url']);
         static::assertSame('http://shaarli/subfolder/daily-rss', $assignedVariables['page_url']);
         static::assertFalse($assignedVariables['hide_timestamps']);
-        static::assertCount(2, $assignedVariables['days']);
+        static::assertCount(3, $assignedVariables['days']);
 
         $day = $assignedVariables['days'][$dates[0]->format('Ymd')];
+        $date = $dates[0]->setTime(23, 59, 59);
 
-        static::assertEquals($dates[0], $day['date']);
-        static::assertSame($dates[0]->format(\DateTime::RSS), $day['date_rss']);
-        static::assertSame(format_date($dates[0], false), $day['date_human']);
+        static::assertEquals($date, $day['date']);
+        static::assertSame($date->format(\DateTime::RSS), $day['date_rss']);
+        static::assertSame(format_date($date, false), $day['date_human']);
         static::assertSame('http://shaarli/subfolder/daily?day='. $dates[0]->format('Ymd'), $day['absolute_url']);
         static::assertCount(1, $day['links']);
         static::assertSame(1, $day['links'][0]['id']);
@@ -411,10 +394,11 @@ class DailyControllerTest extends TestCase
         static::assertEquals($dates[0], $day['links'][0]['created']);
 
         $day = $assignedVariables['days'][$dates[1]->format('Ymd')];
+        $date = $dates[1]->setTime(23, 59, 59);
 
-        static::assertEquals($dates[1], $day['date']);
-        static::assertSame($dates[1]->format(\DateTime::RSS), $day['date_rss']);
-        static::assertSame(format_date($dates[1], false), $day['date_human']);
+        static::assertEquals($date, $day['date']);
+        static::assertSame($date->format(\DateTime::RSS), $day['date_rss']);
+        static::assertSame(format_date($date, false), $day['date_human']);
         static::assertSame('http://shaarli/subfolder/daily?day='. $dates[1]->format('Ymd'), $day['absolute_url']);
         static::assertCount(2, $day['links']);
 
@@ -424,6 +408,18 @@ class DailyControllerTest extends TestCase
         static::assertSame(3, $day['links'][1]['id']);
         static::assertSame('http://domain.tld/3', $day['links'][1]['url']);
         static::assertEquals($dates[1], $day['links'][1]['created']);
+
+        $day = $assignedVariables['days'][$dates[2]->format('Ymd')];
+        $date = $dates[2]->setTime(23, 59, 59);
+
+        static::assertEquals($date, $day['date']);
+        static::assertSame($date->format(\DateTime::RSS), $day['date_rss']);
+        static::assertSame(format_date($date, false), $day['date_human']);
+        static::assertSame('http://shaarli/subfolder/daily?day='. $dates[2]->format('Ymd'), $day['absolute_url']);
+        static::assertCount(1, $day['links']);
+        static::assertSame(4, $day['links'][0]['id']);
+        static::assertSame('http://domain.tld/4', $day['links'][0]['url']);
+        static::assertEquals($dates[2], $day['links'][0]['created']);
     }
 
     /**
@@ -474,5 +470,247 @@ class DailyControllerTest extends TestCase
         static::assertSame('http://shaarli/subfolder/daily-rss', $assignedVariables['page_url']);
         static::assertFalse($assignedVariables['hide_timestamps']);
         static::assertCount(0, $assignedVariables['days']);
+    }
+
+    /**
+     * Test simple display index with week parameter
+     */
+    public function testSimpleIndexWeekly(): void
+    {
+        $currentDay = new \DateTimeImmutable('2020-05-13');
+        $expectedDay = new \DateTimeImmutable('2020-05-11');
+
+        $request = $this->createMock(Request::class);
+        $request->method('getQueryParam')->willReturnCallback(function (string $key) use ($currentDay): ?string {
+            return $key === 'week' ? $currentDay->format('YW') : null;
+        });
+        $response = new Response();
+
+        // Save RainTPL assigned variables
+        $assignedVariables = [];
+        $this->assignTemplateVars($assignedVariables);
+
+        $this->container->bookmarkService
+            ->expects(static::once())
+            ->method('findByDate')
+            ->willReturnCallback(
+                function (): array {
+                    return [
+                        (new Bookmark())
+                            ->setId(1)
+                            ->setUrl('http://url.tld')
+                            ->setTitle(static::generateString(50))
+                            ->setDescription(static::generateString(500))
+                        ,
+                        (new Bookmark())
+                            ->setId(2)
+                            ->setUrl('http://url2.tld')
+                            ->setTitle(static::generateString(50))
+                            ->setDescription(static::generateString(500))
+                        ,
+                    ];
+                }
+            )
+        ;
+
+        $result = $this->controller->index($request, $response);
+
+        static::assertSame(200, $result->getStatusCode());
+        static::assertSame('daily', (string) $result->getBody());
+        static::assertSame(
+            'Weekly - Week 20 (May 11, 2020) - Shaarli',
+            $assignedVariables['pagetitle']
+        );
+
+        static::assertCount(2, $assignedVariables['linksToDisplay']);
+        static::assertEquals($expectedDay->setTime(0, 0), $assignedVariables['dayDate']);
+        static::assertSame($expectedDay->setTime(0, 0)->getTimestamp(), $assignedVariables['day']);
+        static::assertSame('', $assignedVariables['previousday']);
+        static::assertSame('', $assignedVariables['nextday']);
+        static::assertSame('Week 20 (May 11, 2020)', $assignedVariables['dayDesc']);
+        static::assertSame('week', $assignedVariables['type']);
+        static::assertSame('Weekly', $assignedVariables['localizedType']);
+    }
+
+    /**
+     * Test simple display index with month parameter
+     */
+    public function testSimpleIndexMonthly(): void
+    {
+        $currentDay = new \DateTimeImmutable('2020-05-13');
+        $expectedDay = new \DateTimeImmutable('2020-05-01');
+
+        $request = $this->createMock(Request::class);
+        $request->method('getQueryParam')->willReturnCallback(function (string $key) use ($currentDay): ?string {
+            return $key === 'month' ? $currentDay->format('Ym') : null;
+        });
+        $response = new Response();
+
+        // Save RainTPL assigned variables
+        $assignedVariables = [];
+        $this->assignTemplateVars($assignedVariables);
+
+        $this->container->bookmarkService
+            ->expects(static::once())
+            ->method('findByDate')
+            ->willReturnCallback(
+                function (): array {
+                    return [
+                        (new Bookmark())
+                            ->setId(1)
+                            ->setUrl('http://url.tld')
+                            ->setTitle(static::generateString(50))
+                            ->setDescription(static::generateString(500))
+                        ,
+                        (new Bookmark())
+                            ->setId(2)
+                            ->setUrl('http://url2.tld')
+                            ->setTitle(static::generateString(50))
+                            ->setDescription(static::generateString(500))
+                        ,
+                    ];
+                }
+            )
+        ;
+
+        $result = $this->controller->index($request, $response);
+
+        static::assertSame(200, $result->getStatusCode());
+        static::assertSame('daily', (string) $result->getBody());
+        static::assertSame(
+            'Monthly - May, 2020 - Shaarli',
+            $assignedVariables['pagetitle']
+        );
+
+        static::assertCount(2, $assignedVariables['linksToDisplay']);
+        static::assertEquals($expectedDay->setTime(0, 0), $assignedVariables['dayDate']);
+        static::assertSame($expectedDay->setTime(0, 0)->getTimestamp(), $assignedVariables['day']);
+        static::assertSame('', $assignedVariables['previousday']);
+        static::assertSame('', $assignedVariables['nextday']);
+        static::assertSame('May, 2020', $assignedVariables['dayDesc']);
+        static::assertSame('month', $assignedVariables['type']);
+        static::assertSame('Monthly', $assignedVariables['localizedType']);
+    }
+
+    /**
+     * Test simple display RSS with week parameter
+     */
+    public function testSimpleRssWeekly(): void
+    {
+        $dates = [
+            new \DateTimeImmutable('2020-05-19'),
+            new \DateTimeImmutable('2020-05-13'),
+        ];
+        $expectedDates = [
+            new \DateTimeImmutable('2020-05-24 23:59:59'),
+            new \DateTimeImmutable('2020-05-17 23:59:59'),
+        ];
+
+        $this->container->environment['QUERY_STRING'] = 'week';
+        $request = $this->createMock(Request::class);
+        $request->method('getQueryParam')->willReturnCallback(function (string $key): ?string {
+            return $key === 'week' ? '' : null;
+        });
+        $response = new Response();
+
+        $this->container->bookmarkService->expects(static::once())->method('search')->willReturn([
+            (new Bookmark())->setId(1)->setCreated($dates[0])->setUrl('http://domain.tld/1'),
+            (new Bookmark())->setId(2)->setCreated($dates[1])->setUrl('http://domain.tld/2'),
+            (new Bookmark())->setId(3)->setCreated($dates[1])->setUrl('http://domain.tld/3'),
+        ]);
+
+        // Save RainTPL assigned variables
+        $assignedVariables = [];
+        $this->assignTemplateVars($assignedVariables);
+
+        $result = $this->controller->rss($request, $response);
+
+        static::assertSame(200, $result->getStatusCode());
+        static::assertStringContainsString('application/rss', $result->getHeader('Content-Type')[0]);
+        static::assertSame('dailyrss', (string) $result->getBody());
+        static::assertSame('Shaarli', $assignedVariables['title']);
+        static::assertSame('http://shaarli/subfolder/', $assignedVariables['index_url']);
+        static::assertSame('http://shaarli/subfolder/daily-rss?week', $assignedVariables['page_url']);
+        static::assertFalse($assignedVariables['hide_timestamps']);
+        static::assertCount(2, $assignedVariables['days']);
+
+        $day = $assignedVariables['days'][$dates[0]->format('YW')];
+        $date = $expectedDates[0];
+
+        static::assertEquals($date, $day['date']);
+        static::assertSame($date->format(\DateTime::RSS), $day['date_rss']);
+        static::assertSame('Week 21 (May 18, 2020)', $day['date_human']);
+        static::assertSame('http://shaarli/subfolder/daily?week='. $dates[0]->format('YW'), $day['absolute_url']);
+        static::assertCount(1, $day['links']);
+
+        $day = $assignedVariables['days'][$dates[1]->format('YW')];
+        $date = $expectedDates[1];
+
+        static::assertEquals($date, $day['date']);
+        static::assertSame($date->format(\DateTime::RSS), $day['date_rss']);
+        static::assertSame('Week 20 (May 11, 2020)', $day['date_human']);
+        static::assertSame('http://shaarli/subfolder/daily?week='. $dates[1]->format('YW'), $day['absolute_url']);
+        static::assertCount(2, $day['links']);
+    }
+
+    /**
+     * Test simple display RSS with month parameter
+     */
+    public function testSimpleRssMonthly(): void
+    {
+        $dates = [
+            new \DateTimeImmutable('2020-05-19'),
+            new \DateTimeImmutable('2020-04-13'),
+        ];
+        $expectedDates = [
+            new \DateTimeImmutable('2020-05-31 23:59:59'),
+            new \DateTimeImmutable('2020-04-30 23:59:59'),
+        ];
+
+        $this->container->environment['QUERY_STRING'] = 'month';
+        $request = $this->createMock(Request::class);
+        $request->method('getQueryParam')->willReturnCallback(function (string $key): ?string {
+            return $key === 'month' ? '' : null;
+        });
+        $response = new Response();
+
+        $this->container->bookmarkService->expects(static::once())->method('search')->willReturn([
+            (new Bookmark())->setId(1)->setCreated($dates[0])->setUrl('http://domain.tld/1'),
+            (new Bookmark())->setId(2)->setCreated($dates[1])->setUrl('http://domain.tld/2'),
+            (new Bookmark())->setId(3)->setCreated($dates[1])->setUrl('http://domain.tld/3'),
+        ]);
+
+        // Save RainTPL assigned variables
+        $assignedVariables = [];
+        $this->assignTemplateVars($assignedVariables);
+
+        $result = $this->controller->rss($request, $response);
+
+        static::assertSame(200, $result->getStatusCode());
+        static::assertStringContainsString('application/rss', $result->getHeader('Content-Type')[0]);
+        static::assertSame('dailyrss', (string) $result->getBody());
+        static::assertSame('Shaarli', $assignedVariables['title']);
+        static::assertSame('http://shaarli/subfolder/', $assignedVariables['index_url']);
+        static::assertSame('http://shaarli/subfolder/daily-rss?month', $assignedVariables['page_url']);
+        static::assertFalse($assignedVariables['hide_timestamps']);
+        static::assertCount(2, $assignedVariables['days']);
+
+        $day = $assignedVariables['days'][$dates[0]->format('Ym')];
+        $date = $expectedDates[0];
+
+        static::assertEquals($date, $day['date']);
+        static::assertSame($date->format(\DateTime::RSS), $day['date_rss']);
+        static::assertSame('May, 2020', $day['date_human']);
+        static::assertSame('http://shaarli/subfolder/daily?month='. $dates[0]->format('Ym'), $day['absolute_url']);
+        static::assertCount(1, $day['links']);
+
+        $day = $assignedVariables['days'][$dates[1]->format('Ym')];
+        $date = $expectedDates[1];
+
+        static::assertEquals($date, $day['date']);
+        static::assertSame($date->format(\DateTime::RSS), $day['date_rss']);
+        static::assertSame('April, 2020', $day['date_human']);
+        static::assertSame('http://shaarli/subfolder/daily?month='. $dates[1]->format('Ym'), $day['absolute_url']);
+        static::assertCount(2, $day['links']);
     }
 }

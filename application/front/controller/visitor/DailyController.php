@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Shaarli\Front\Controller\Visitor;
 
 use DateTime;
-use DateTimeImmutable;
 use Shaarli\Bookmark\Bookmark;
+use Shaarli\Helper\DailyPageHelper;
 use Shaarli\Render\TemplatePage;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -26,32 +26,20 @@ class DailyController extends ShaarliVisitorController
      */
     public function index(Request $request, Response $response): Response
     {
-        $day = $request->getQueryParam('day') ?? date('Ymd');
+        $type = DailyPageHelper::extractRequestedType($request);
+        $format = DailyPageHelper::getFormatByType($type);
+        $latestBookmark = $this->container->bookmarkService->getLatest();
+        $dateTime = DailyPageHelper::extractRequestedDateTime($type, $request->getQueryParam($type), $latestBookmark);
+        $start = DailyPageHelper::getStartDateTimeByType($type, $dateTime);
+        $end = DailyPageHelper::getEndDateTimeByType($type, $dateTime);
+        $dailyDesc = DailyPageHelper::getDescriptionByType($type, $dateTime);
 
-        $availableDates = $this->container->bookmarkService->days();
-        $nbAvailableDates = count($availableDates);
-        $index = array_search($day, $availableDates);
-
-        if ($index === false) {
-            // no bookmarks for day, but at least one day with bookmarks
-            $day = $availableDates[$nbAvailableDates - 1] ?? $day;
-            $previousDay = $availableDates[$nbAvailableDates - 2] ?? '';
-        } else {
-            $previousDay = $availableDates[$index - 1] ?? '';
-            $nextDay = $availableDates[$index + 1] ?? '';
-        }
-
-        if ($day === date('Ymd')) {
-            $this->assignView('dayDesc', t('Today'));
-        } elseif ($day === date('Ymd', strtotime('-1 days'))) {
-            $this->assignView('dayDesc', t('Yesterday'));
-        }
-
-        try {
-            $linksToDisplay = $this->container->bookmarkService->filterDay($day);
-        } catch (\Exception $exc) {
-            $linksToDisplay = [];
-        }
+        $linksToDisplay = $this->container->bookmarkService->findByDate(
+            $start,
+            $end,
+            $previousDay,
+            $nextDay
+        );
 
         $formatter = $this->container->formatterFactory->getFormatter();
         $formatter->addContextData('base_path', $this->container->basePath);
@@ -63,13 +51,15 @@ class DailyController extends ShaarliVisitorController
             $linksToDisplay[$key]['description'] = $bookmark->getDescription();
         }
 
-        $dayDate = DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, $day.'_000000');
         $data = [
             'linksToDisplay' => $linksToDisplay,
-            'day' => $dayDate->getTimestamp(),
-            'dayDate' => $dayDate,
-            'previousday' => $previousDay ?? '',
-            'nextday' => $nextDay ?? '',
+            'dayDate' => $start,
+            'day' => $start->getTimestamp(),
+            'previousday' => $previousDay ? $previousDay->format($format) : '',
+            'nextday' => $nextDay ? $nextDay->format($format) : '',
+            'dayDesc' => $dailyDesc,
+            'type' => $type,
+            'localizedType' => $this->translateType($type),
         ];
 
         // Hooks are called before column construction so that plugins don't have to deal with columns.
@@ -82,7 +72,7 @@ class DailyController extends ShaarliVisitorController
         $mainTitle = $this->container->conf->get('general.title', 'Shaarli');
         $this->assignView(
             'pagetitle',
-            t('Daily') .' - '. format_date($dayDate, false) . ' - ' . $mainTitle
+            $data['localizedType'] . ' - ' . $data['dayDesc'] . ' - ' . $mainTitle
         );
 
         return $response->write($this->render(TemplatePage::DAILY));
@@ -106,11 +96,14 @@ class DailyController extends ShaarliVisitorController
         }
 
         $days = [];
+        $type = DailyPageHelper::extractRequestedType($request);
+        $format = DailyPageHelper::getFormatByType($type);
+        $length = DailyPageHelper::getRssLengthByType($type);
         foreach ($this->container->bookmarkService->search() as $bookmark) {
-            $day = $bookmark->getCreated()->format('Ymd');
+            $day = $bookmark->getCreated()->format($format);
 
             // Stop iterating after DAILY_RSS_NB_DAYS entries
-            if (count($days) === static::$DAILY_RSS_NB_DAYS && !isset($days[$day])) {
+            if (count($days) === $length && !isset($days[$day])) {
                 break;
             }
 
@@ -127,12 +120,19 @@ class DailyController extends ShaarliVisitorController
 
         /** @var Bookmark[] $bookmarks */
         foreach ($days as $day => $bookmarks) {
-            $dayDatetime = DateTimeImmutable::createFromFormat(Bookmark::LINK_DATE_FORMAT, $day.'_000000');
+            $dayDateTime = DailyPageHelper::extractRequestedDateTime($type, (string) $day);
+            $endDateTime = DailyPageHelper::getEndDateTimeByType($type, $dayDateTime);
+
+            // We only want the RSS entry to be published when the period is over.
+            if (new DateTime() < $endDateTime) {
+                continue;
+            }
+
             $dataPerDay[$day] = [
-                'date' => $dayDatetime,
-                'date_rss' => $dayDatetime->format(DateTime::RSS),
-                'date_human' => format_date($dayDatetime, false, true),
-                'absolute_url' => $indexUrl . 'daily?day=' . $day,
+                'date' => $endDateTime,
+                'date_rss' => $endDateTime->format(DateTime::RSS),
+                'date_human' => DailyPageHelper::getDescriptionByType($type, $dayDateTime),
+                'absolute_url' => $indexUrl . 'daily?' . $type . '=' . $day,
                 'links' => [],
             ];
 
@@ -141,16 +141,20 @@ class DailyController extends ShaarliVisitorController
 
                 // Make permalink URL absolute
                 if ($bookmark->isNote()) {
-                    $dataPerDay[$day]['links'][$key]['url'] = $indexUrl . $bookmark->getUrl();
+                    $dataPerDay[$day]['links'][$key]['url'] = rtrim($indexUrl, '/') . $bookmark->getUrl();
                 }
             }
         }
 
-        $this->assignView('title', $this->container->conf->get('general.title', 'Shaarli'));
-        $this->assignView('index_url', $indexUrl);
-        $this->assignView('page_url', $pageUrl);
-        $this->assignView('hide_timestamps', $this->container->conf->get('privacy.hide_timestamps', false));
-        $this->assignView('days', $dataPerDay);
+        $this->assignAllView([
+            'title' => $this->container->conf->get('general.title', 'Shaarli'),
+            'index_url' => $indexUrl,
+            'page_url' => $pageUrl,
+            'hide_timestamps' => $this->container->conf->get('privacy.hide_timestamps', false),
+            'days' => $dataPerDay,
+            'type' => $type,
+            'localizedType' => $this->translateType($type),
+        ]);
 
         $rssContent = $this->render(TemplatePage::DAILY_RSS);
 
@@ -188,5 +192,14 @@ class DailyController extends ShaarliVisitorController
         }
 
         return $columns;
+    }
+
+    protected function translateType($type): string
+    {
+        return [
+            t('day') => t('Daily'),
+            t('week') => t('Weekly'),
+            t('month') => t('Monthly'),
+        ][t($type)] ?? t('Daily');
     }
 }

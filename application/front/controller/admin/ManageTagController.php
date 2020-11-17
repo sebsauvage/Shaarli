@@ -24,9 +24,15 @@ class ManageTagController extends ShaarliAdminController
         $fromTag = $request->getParam('fromtag') ?? '';
 
         $this->assignView('fromtag', escape($fromTag));
+        $separator = escape($this->container->conf->get('general.tags_separator', ' '));
+        if ($separator === ' ') {
+            $separator = '&nbsp;';
+            $this->assignView('tags_separator_desc', t('whitespace'));
+        }
+        $this->assignView('tags_separator', $separator);
         $this->assignView(
             'pagetitle',
-            t('Manage tags') .' - '. $this->container->conf->get('general.title', 'Shaarli')
+            t('Manage tags') . ' - ' . $this->container->conf->get('general.title', 'Shaarli')
         );
 
         return $response->write($this->render(TemplatePage::CHANGE_TAG));
@@ -81,8 +87,35 @@ class ManageTagController extends ShaarliAdminController
 
         $this->saveSuccessMessage($alert);
 
-        $redirect = true === $isDelete ? '/admin/tags' : '/?searchtags='. urlencode($toTag);
+        $redirect = true === $isDelete ? '/admin/tags' : '/?searchtags=' . urlencode($toTag);
 
         return $this->redirect($response, $redirect);
+    }
+
+    /**
+     * POST /admin/tags/change-separator - Change tag separator
+     */
+    public function changeSeparator(Request $request, Response $response): Response
+    {
+        $this->checkToken($request);
+
+        $reservedCharacters = ['-', '.', '*'];
+        $newSeparator = $request->getParam('separator');
+        if ($newSeparator === null || mb_strlen($newSeparator) !== 1) {
+            $this->saveErrorMessage(t('Tags separator must be a single character.'));
+        } elseif (in_array($newSeparator, $reservedCharacters, true)) {
+            $reservedCharacters = implode(' ', array_map(function (string $character) {
+                return '<code>' . $character . '</code>';
+            }, $reservedCharacters));
+            $this->saveErrorMessage(
+                t('These characters are reserved and can\'t be used as tags separator: ') . $reservedCharacters
+            );
+        } else {
+            $this->container->conf->set('general.tags_separator', $newSeparator, true, true);
+
+            $this->saveSuccessMessage('Your tags separator setting has been updated!');
+        }
+
+        return $this->redirect($response, '/admin/tags');
     }
 }

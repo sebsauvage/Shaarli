@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Shaarli\Front\Controller\Admin\ManageShaareControllerTest;
+namespace Shaarli\Front\Controller\Admin\ShaareManageControllerTest;
 
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Formatter\BookmarkFormatter;
 use Shaarli\Formatter\FormatterFactory;
 use Shaarli\Front\Controller\Admin\FrontAdminControllerMockHelper;
-use Shaarli\Front\Controller\Admin\ManageShaareController;
+use Shaarli\Front\Controller\Admin\ShaareManageController;
 use Shaarli\Http\HttpAccess;
 use Shaarli\Security\SessionManager;
 use Shaarli\TestCase;
@@ -20,7 +20,7 @@ class DeleteBookmarkTest extends TestCase
 {
     use FrontAdminControllerMockHelper;
 
-    /** @var ManageShaareController */
+    /** @var ShaareManageController */
     protected $controller;
 
     public function setUp(): void
@@ -28,7 +28,7 @@ class DeleteBookmarkTest extends TestCase
         $this->createContainer();
 
         $this->container->httpAccess = $this->createMock(HttpAccess::class);
-        $this->controller = new ManageShaareController($this->container);
+        $this->controller = new ShaareManageController($this->container);
     }
 
     /**
@@ -37,6 +37,8 @@ class DeleteBookmarkTest extends TestCase
     public function testDeleteSingleBookmark(): void
     {
         $parameters = ['id' => '123'];
+
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/shaare/abcdef';
 
         $request = $this->createMock(Request::class);
         $request
@@ -89,6 +91,8 @@ class DeleteBookmarkTest extends TestCase
     public function testDeleteMultipleBookmarks(): void
     {
         $parameters = ['id' => '123 456 789'];
+
+        $this->container->environment['HTTP_REFERER'] = 'http://shaarli/subfolder/?searchtags=abcdef';
 
         $request = $this->createMock(Request::class);
         $request
@@ -152,7 +156,7 @@ class DeleteBookmarkTest extends TestCase
         $result = $this->controller->deleteBookmark($request, $response);
 
         static::assertSame(302, $result->getStatusCode());
-        static::assertSame(['/subfolder/'], $result->getHeader('location'));
+        static::assertSame(['/subfolder/?searchtags=abcdef'], $result->getHeader('location'));
     }
 
     /**

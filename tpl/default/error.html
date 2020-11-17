@@ -9,13 +9,17 @@
 <div id="pageError" class="page-error-container center">
   <h2>{$message}</h2>
 
+  <img src="{$asset_path}/img/sad_star.png#" alt="">
+
+  {if="!empty($text)"}
+  <p>{$text}</p>
+  {/if}
+
   {if="!empty($stacktrace)"}
       <pre>
         {$stacktrace}
       </pre>
   {/if}
-
-  <img src="{$asset_path}/img/sad_star.png#" alt="">
 </div>
 {include="page.footer"}
 </body>

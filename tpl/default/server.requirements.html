@@ -1,0 +1,68 @@
+<div class="server-tables">
+  <h3 class="window-subtitle">{'Permissions'|t}</h3>
+
+  {if="count($permissions) > 0"}
+    <p class="center">
+      <i class="fa fa-close fa-color-red" aria-hidden="true"></i>
+      {'There are permissions that need to be fixed.'|t}
+    </p>
+
+    <p>
+      {loop="$permissions"}
+        <div class="center">{$value}</div>
+      {/loop}
+    </p>
+  {else}
+    <p class="center">
+      <i class="fa fa-check fa-color-green" aria-hidden="true"></i>
+      {'All read/write permissions are properly set.'|t}
+    </p>
+  {/if}
+
+  <h3 class="window-subtitle">PHP</h3>
+
+  <p class="center">
+    <strong>{'Running PHP'|t} {$php_version}</strong>
+    {if="$php_has_reached_eol"}
+    <i class="fa fa-circle fa-color-orange" aria-label="hidden"></i><br>
+    {'End of life: '|t} {$php_eol}
+    {else}
+    <i class="fa fa-circle fa-color-green" aria-label="hidden"></i><br>
+    {/if}
+  </p>
+
+  <table class="center">
+    <thead>
+      <tr>
+        <th>{'Extension'|t}</th>
+        <th>{'Usage'|t}</th>
+        <th>{'Status'|t}</th>
+        <th>{'Loaded'|t}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {loop="$php_extensions"}
+        <tr>
+          <td>{$value.name}</td>
+          <td>{$value.desc}</td>
+          <td>{$value.required ? t('Required') : t('Optional')}</td>
+          <td>
+            {if="$value.loaded"}
+              {$classLoaded="fa-color-green"}
+              {$strLoaded=t('Loaded')}
+            {else}
+              {$strLoaded=t('Not loaded')}
+              {if="$value.required"}
+                {$classLoaded="fa-color-red"}
+              {else}
+                {$classLoaded="fa-color-orange"}
+              {/if}
+            {/if}
+
+            <i class="fa fa-circle {$classLoaded}" aria-label="{$strLoaded}" title="{$strLoaded}"></i>
+          </td>
+        </tr>
+      {/loop}
+    </tbody>
+  </table>
+</div>

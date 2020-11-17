@@ -7,7 +7,6 @@ use RainTPL;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
-use Shaarli\ApplicationUtils;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\BookmarkArray;
 use Shaarli\Bookmark\BookmarkFilter;
@@ -17,6 +16,7 @@ use Shaarli\Config\ConfigJson;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Config\ConfigPhp;
 use Shaarli\Exceptions\IOException;
+use Shaarli\Helper\ApplicationUtils;
 use Shaarli\Thumbnailer;
 use Shaarli\Updater\Exception\UpdaterException;
 
@@ -93,7 +93,7 @@ class LegacyUpdater
      */
     public function update()
     {
-        $updatesRan = array();
+        $updatesRan = [];
 
         // If the user isn't logged in, exit without updating.
         if ($this->isLoggedIn !== true) {
@@ -106,7 +106,8 @@ class LegacyUpdater
 
         foreach ($this->methods as $method) {
             // Not an update method or already done, pass.
-            if (!startsWith($method->getName(), 'updateMethod')
+            if (
+                !startsWith($method->getName(), 'updateMethod')
                 || in_array($method->getName(), $this->doneUpdates)
             ) {
                 continue;
@@ -189,7 +190,7 @@ class LegacyUpdater
         }
 
         // Set sub config keys (config and plugins)
-        $subConfig = array('config', 'plugins');
+        $subConfig = ['config', 'plugins'];
         foreach ($subConfig as $sub) {
             foreach ($oldConfig[$sub] as $key => $value) {
                 if (isset($legacyMap[$sub . '.' . $key])) {
@@ -259,7 +260,7 @@ class LegacyUpdater
         $save = $this->conf->get('resource.data_dir') . '/datastore.' . date('YmdHis') . '.php';
         copy($this->conf->get('resource.datastore'), $save);
 
-        $links = array();
+        $links = [];
         foreach ($this->linkDB as $offset => $value) {
             $links[] = $value;
             unset($this->linkDB[$offset]);
@@ -498,7 +499,8 @@ class LegacyUpdater
      */
     public function updateMethodDownloadSizeAndTimeoutConf()
     {
-        if ($this->conf->exists('general.download_max_size')
+        if (
+            $this->conf->exists('general.download_max_size')
             && $this->conf->exists('general.download_timeout')
         ) {
             return true;
@@ -585,7 +587,7 @@ class LegacyUpdater
 
         $linksArray = new BookmarkArray();
         foreach ($this->linkDB as $key => $link) {
-            $linksArray[$key] = (new Bookmark())->fromArray($link);
+            $linksArray[$key] = (new Bookmark())->fromArray($link, $this->conf->get('general.tags_separator', ' '));
         }
         $linksIo = new BookmarkIO($this->conf);
         $linksIo->write($linksArray);

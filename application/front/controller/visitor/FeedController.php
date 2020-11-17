@@ -27,7 +27,7 @@ class FeedController extends ShaarliVisitorController
 
     protected function processRequest(string $feedType, Request $request, Response $response): Response
     {
-        $response = $response->withHeader('Content-Type', 'application/'. $feedType .'+xml; charset=utf-8');
+        $response = $response->withHeader('Content-Type', 'application/' . $feedType . '+xml; charset=utf-8');
 
         $pageUrl = page_url($this->container->environment);
         $cache = $this->container->pageCacheManager->getCachePage($pageUrl);

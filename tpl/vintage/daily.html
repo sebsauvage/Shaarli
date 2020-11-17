@@ -14,9 +14,9 @@
 
     <div class="dailyAbout">
         All links of one day<br>in a single page.<br>
-        {if="$previousday"} <a href="{$base_path}/daily&amp;day={$previousday}"><b>&lt;</b>Previous day</a>{else}<b>&lt;</b>Previous day{/if}
+        {if="$previousday"} <a href="{$base_path}/daily?day={$previousday}"><b>&lt;</b>Previous day</a>{else}<b>&lt;</b>Previous day{/if}
         -
-        {if="$nextday"}<a href="{$base_path}/daily&amp;day={$nextday}">Next day<b>&gt;</b></a>{else}Next day<b>&gt;</b>{/if}
+        {if="$nextday"}<a href="{$base_path}/daily?day={$nextday}">Next day<b>&gt;</b></a>{else}Next day<b>&gt;</b>{/if}
         <br>
 
         {loop="$daily_about_plugin"}
@@ -52,13 +52,13 @@
                     {$link=$value}
                     <div class="dailyEntry">
                         <div class="dailyEntryPermalink">
-                            <a href="{$base_path}/?{$value.shorturl}">
+                            <a href="{$base_path}/shaare/{$value.shorturl}">
                                 <img src="{$asset_path}/img/squiggle.png#" width="25" height="26" title="permalink" alt="permalink">
                             </a>
                         </div>
                         {if="!$hide_timestamps || $is_logged_in"}
                             <div class="dailyEntryLinkdate">
-                                <a href="{$base_path}/?{$value.shorturl}">{function="strftime('%c', $link.timestamp)"}</a>
+                                <a href="{$base_path}/shaare/{$value.shorturl}">{function="strftime('%c', $link.timestamp)"}</a>
                             </div>
                         {/if}
                         {if="$link.tags"}

@@ -1122,6 +1122,16 @@ ul.errors {
     float: left;
 }
 
+ul.warnings {
+    color: orange;
+    float: left;
+}
+
+ul.successes {
+    color: green;
+    float: left;
+}
+
 #pluginsadmin {
     width: 80%;
     padding: 20px 0 0 20px;
@@ -1247,4 +1257,55 @@ ul.errors {
     );
     width: 0%;
     height: 10px;
+}
+
+.loading-input {
+    position: relative;
+}
+
+@keyframes around {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-input .icon-container {
+    position: absolute;
+    right: 60px;
+    top: calc(50% - 10px);
+}
+
+.loading-input .loader {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    animation: around 5.4s infinite;
+}
+
+.loading-input .loader::after,
+.loading-input .loader::before {
+     content: "";
+     background: #eee;
+     position: absolute;
+     display: inline-block;
+     width: 100%;
+     height: 100%;
+     border-width: 2px;
+     border-color: #333 #333 transparent transparent;
+     border-style: solid;
+     border-radius: 20px;
+     box-sizing: border-box;
+     top: 0;
+     left: 0;
+     animation: around 0.7s ease-in-out infinite;
+}
+
+.loading-input .loader::after {
+     animation: around 0.7s ease-in-out 0.1s infinite;
+     background: transparent;
 }

@@ -10,4 +10,6 @@ namespace Shaarli\Formatter;
  *
  * @package Shaarli\Formatter
  */
-class BookmarkRawFormatter extends BookmarkFormatter {}
+class BookmarkRawFormatter extends BookmarkFormatter
+{
+}

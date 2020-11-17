@@ -45,6 +45,4 @@ class SessionFilterController extends ShaarliAdminController
 
         return $this->redirectFromReferer($request, $response, ['visibility']);
     }
-
-
 }

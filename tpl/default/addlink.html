@@ -20,6 +20,62 @@
     </form>
   </div>
 </div>
+
+<div class="pure-g addlink-batch-show-more-block pure-u-0">
+  <div class="pure-u-lg-1-3 pure-u-1-24"></div>
+  <div class="pure-u-lg-1-3 pure-u-22-24 addlink-batch-show-more">
+    <a href="#">{'BULK CREATION'|t}&nbsp;<i class="fa fa-plus-circle" aria-hidden="true"></i></a>
+  </div>
+</div>
+
+<div class="addlink-batch-form-block">
+  {if="empty($async_metadata)"}
+    <div class="pure-g pure-alert pure-alert-warning pure-alert-closable">
+      <div class="pure-u-2-24"></div>
+      <div class="pure-u-20-24">
+        <p>
+          {'Metadata asynchronous retrieval is disabled.'|t}
+          {'We recommend that you enable the setting <em>general > enable_async_metadata</em> in your configuration file to use bulk link creation.'|t}
+        </p>
+      </div>
+      <div class="pure-u-2-24">
+        <i class="fa fa-times pure-alert-close"></i>
+      </div>
+    </div>
+  {/if}
+
+  <div class="pure-g">
+    <div class="pure-u-lg-1-3 pure-u-1-24"></div>
+    <div id="batch-addlink-form" class="page-form  page-form-light pure-u-lg-1-3 pure-u-22-24">
+      <h2 class="window-title">{"Shaare multiple new links"|t}</h2>
+      <form method="POST" action="{$base_path}/admin/shaare-batch" name="batch-addform" class="batch-addform">
+        <div>
+          <label for="urls">{'Add one URL per line to create multiple bookmarks.'|t}</label>
+          <textarea name="urls" id="urls"></textarea>
+
+          <div>
+            <label for="tags">{'Tags'|t}</label>
+          </div>
+          <div>
+            <input type="text" name="tags" id="tags" class="lf_input"
+                   data-list="{loop="$tags"}{$key}, {/loop}" data-multiple data-autofirst autocomplete="off">
+          </div>
+
+          <div>
+            <input type="hidden" name="private" value="0">
+            <input type="checkbox" name="private" {if="$default_private_links"} checked="checked"{/if}>
+          &nbsp; <label for="lf_private">{'Private'|t}</label>
+          </div>
+        </div>
+        <div>
+          <input type="hidden" name="token" value="{$token}">
+          <input type="submit" value="{'Add links'|t}">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 {include="page.footer"}
 </body>
 </html>

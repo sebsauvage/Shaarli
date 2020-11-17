@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Shaarli\Front\Controller\Admin\ManageShaareControllerTest;
+namespace Shaarli\Front\Controller\Admin\ShaarePublishControllerTest;
 
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Front\Controller\Admin\FrontAdminControllerMockHelper;
-use Shaarli\Front\Controller\Admin\ManageShaareController;
+use Shaarli\Front\Controller\Admin\ShaarePublishController;
 use Shaarli\Http\HttpAccess;
 use Shaarli\Http\MetadataRetriever;
 use Shaarli\TestCase;
@@ -18,7 +18,7 @@ class DisplayCreateFormTest extends TestCase
 {
     use FrontAdminControllerMockHelper;
 
-    /** @var ManageShaareController */
+    /** @var ShaarePublishController */
     protected $controller;
 
     public function setUp(): void
@@ -27,7 +27,7 @@ class DisplayCreateFormTest extends TestCase
 
         $this->container->httpAccess = $this->createMock(HttpAccess::class);
         $this->container->metadataRetriever = $this->createMock(MetadataRetriever::class);
-        $this->controller = new ManageShaareController($this->container);
+        $this->controller = new ShaarePublishController($this->container);
     }
 
     /**
@@ -101,7 +101,7 @@ class DisplayCreateFormTest extends TestCase
         static::assertSame($expectedUrl, $assignedVariables['link']['url']);
         static::assertSame($remoteTitle, $assignedVariables['link']['title']);
         static::assertSame($remoteDesc, $assignedVariables['link']['description']);
-        static::assertSame($remoteTags, $assignedVariables['link']['tags']);
+        static::assertSame($remoteTags . ' ', $assignedVariables['link']['tags']);
         static::assertFalse($assignedVariables['link']['private']);
 
         static::assertTrue($assignedVariables['link_is_new']);
@@ -192,7 +192,7 @@ class DisplayCreateFormTest extends TestCase
             'post' => 'http://url.tld/other?part=3&utm_ad=pay#hash',
             'title' => 'Provided Title',
             'description' => 'Provided description.',
-            'tags' => 'abc def',
+            'tags' => 'abc@def',
             'private' => '1',
             'source' => 'apps',
         ];
@@ -216,7 +216,7 @@ class DisplayCreateFormTest extends TestCase
         static::assertSame($expectedUrl, $assignedVariables['link']['url']);
         static::assertSame($parameters['title'], $assignedVariables['link']['title']);
         static::assertSame($parameters['description'], $assignedVariables['link']['description']);
-        static::assertSame($parameters['tags'], $assignedVariables['link']['tags']);
+        static::assertSame($parameters['tags'] . '@', $assignedVariables['link']['tags']);
         static::assertTrue($assignedVariables['link']['private']);
         static::assertTrue($assignedVariables['link_is_new']);
         static::assertSame($parameters['source'], $assignedVariables['source']);
@@ -360,7 +360,7 @@ class DisplayCreateFormTest extends TestCase
         static::assertSame($expectedUrl, $assignedVariables['link']['url']);
         static::assertSame($title, $assignedVariables['link']['title']);
         static::assertSame($description, $assignedVariables['link']['description']);
-        static::assertSame(implode(' ', $tags), $assignedVariables['link']['tags']);
+        static::assertSame(implode('@', $tags) . '@', $assignedVariables['link']['tags']);
         static::assertTrue($assignedVariables['link']['private']);
         static::assertSame($createdAt, $assignedVariables['link']['created']);
     }

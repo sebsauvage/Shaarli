@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Wallabag plugin
  */
@@ -18,10 +19,11 @@ function wallabag_init($conf)
 {
     $wallabagUrl = $conf->get('plugins.WALLABAG_URL');
     if (empty($wallabagUrl)) {
-        $error = t('Wallabag plugin error: '.
+        $error = t('Wallabag plugin error: ' .
             'Please define the "WALLABAG_URL" setting in the plugin administration page.');
-        return array($error);
+        return [$error];
     }
+    $conf->setEmpty('plugins.WALLABAG_URL', '2');
 }
 
 /**
@@ -35,7 +37,7 @@ function wallabag_init($conf)
 function hook_wallabag_render_linklist($data, $conf)
 {
     $wallabagUrl = $conf->get('plugins.WALLABAG_URL');
-    if (empty($wallabagUrl)) {
+    if (empty($wallabagUrl) || !$data['_LOGGEDIN_']) {
         return $data;
     }
 
@@ -51,7 +53,7 @@ function hook_wallabag_render_linklist($data, $conf)
         $wallabag = sprintf(
             $wallabagHtml,
             $wallabagInstance->getWallabagUrl(),
-            urlencode($value['url']),
+            urlencode(unescape($value['url'])),
             $path,
             $linkTitle
         );
