@@ -186,6 +186,7 @@ class Languages
             'en' => t('English'),
             'fr' => t('French'),
             'jp' => t('Japanese'),
+            'ru' => t('Russian'),
         ];
     }
 }
