@@ -56,11 +56,16 @@ class InstallController extends ShaarliVisitorController
 
         $phpEol = new \DateTimeImmutable(ApplicationUtils::getPhpEol(PHP_VERSION));
 
+        $permissions = array_merge(
+            ApplicationUtils::checkResourcePermissions($this->container->conf),
+            ApplicationUtils::checkDatastoreMutex()
+        );
+
         $this->assignView('php_version', PHP_VERSION);
         $this->assignView('php_eol', format_date($phpEol, false));
         $this->assignView('php_has_reached_eol', $phpEol < new \DateTimeImmutable());
         $this->assignView('php_extensions', ApplicationUtils::getPhpExtensionsRequirement());
-        $this->assignView('permissions', ApplicationUtils::checkResourcePermissions($this->container->conf));
+        $this->assignView('permissions', $permissions);
 
         $this->assignView('pagetitle', t('Install Shaarli'));
 

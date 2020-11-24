@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shaarli\Bookmark;
 
+use malkusch\lock\exception\LockAcquireException;
 use malkusch\lock\mutex\Mutex;
 use malkusch\lock\mutex\NoMutex;
 use Shaarli\Bookmark\Exception\DatastoreNotInitializedException;
@@ -80,7 +81,7 @@ class BookmarkIO
         }
 
         $content = null;
-        $this->mutex->synchronized(function () use (&$content) {
+        $this->synchronized(function () use (&$content) {
             $content = file_get_contents($this->datastore);
         });
 
@@ -119,11 +120,28 @@ class BookmarkIO
 
         $data = self::$phpPrefix . base64_encode(gzdeflate(serialize($links))) . self::$phpSuffix;
 
-        $this->mutex->synchronized(function () use ($data) {
+        $this->synchronized(function () use ($data) {
             file_put_contents(
                 $this->datastore,
                 $data
             );
         });
+    }
+
+    /**
+     * Wrapper applying mutex to provided function.
+     * If the lock can't be acquired (e.g. some shared hosting provider), we execute the function without mutex.
+     *
+     * @see https://github.com/shaarli/Shaarli/issues/1650
+     *
+     * @param callable $function
+     */
+    protected function synchronized(callable $function): void
+    {
+        try {
+            $this->mutex->synchronized($function);
+        } catch (LockAcquireException $exception) {
+            $function();
+        }
     }
 }
