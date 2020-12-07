@@ -46,8 +46,7 @@ RUN apk --update --no-cache add \
         php7-xml \
         php7-simplexml \
         php7-zlib \
-        s6 \
-	&& apk -U upgrade
+        s6
 
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
 COPY .docker/php-fpm.conf /etc/php7/php-fpm.conf
