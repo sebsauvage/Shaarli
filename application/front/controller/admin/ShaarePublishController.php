@@ -227,7 +227,7 @@ class ShaarePublishController extends ShaarliAdminController
 
     protected function buildFormData(array $link, bool $isNew, Request $request): array
     {
-        $link['tags'] = strlen($link['tags']) > 0
+        $link['tags'] = $link['tags'] !== null && strlen($link['tags']) > 0
             ? $link['tags'] . $this->container->conf->get('general.tags_separator', ' ')
             : $link['tags']
         ;
