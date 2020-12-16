@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
-"POT-Creation-Date: 2020-11-09 14:39+0100\n"
-"PO-Revision-Date: 2020-11-09 14:42+0100\n"
+"POT-Creation-Date: 2020-11-24 13:13+0100\n"
+"PO-Revision-Date: 2020-11-24 13:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: Shaarli\n"
 "Language: fr_FR\n"
@@ -20,31 +20,31 @@ msgstr ""
 "X-Poedit-SearchPath-3: init.php\n"
 "X-Poedit-SearchPath-4: plugins\n"
 
-#: application/History.php:180
+#: application/History.php:181
 msgid "History file isn't readable or writable"
 msgstr "Le fichier d'historique n'est pas accessible en lecture ou en écriture"
 
-#: application/History.php:191
+#: application/History.php:192
 msgid "Could not parse history file"
 msgstr "Format incorrect pour le fichier d'historique"
 
-#: application/Languages.php:181
+#: application/Languages.php:184
 msgid "Automatic"
 msgstr "Automatique"
 
-#: application/Languages.php:182
+#: application/Languages.php:185
 msgid "German"
 msgstr "Allemand"
 
-#: application/Languages.php:183
+#: application/Languages.php:186
 msgid "English"
 msgstr "Anglais"
 
-#: application/Languages.php:184
+#: application/Languages.php:187
 msgid "French"
 msgstr "Français"
 
-#: application/Languages.php:185
+#: application/Languages.php:188
 msgid "Japanese"
 msgstr "Japonais"
 
@@ -56,46 +56,46 @@ msgstr ""
 "l'extension php-gd doit être chargée pour utiliser les miniatures. Les "
 "miniatures sont désormais désactivées. Rechargez la page."
 
-#: application/Utils.php:402
+#: application/Utils.php:405
 msgid "Setting not set"
 msgstr "Paramètre non défini"
 
-#: application/Utils.php:409
+#: application/Utils.php:412
 msgid "Unlimited"
 msgstr "Illimité"
 
-#: application/Utils.php:412
+#: application/Utils.php:415
 msgid "B"
 msgstr "o"
 
-#: application/Utils.php:412
+#: application/Utils.php:415
 msgid "kiB"
 msgstr "ko"
 
-#: application/Utils.php:412
+#: application/Utils.php:415
 msgid "MiB"
 msgstr "Mo"
 
-#: application/Utils.php:412
+#: application/Utils.php:415
 msgid "GiB"
 msgstr "Go"
 
-#: application/bookmark/BookmarkFileService.php:183
-#: application/bookmark/BookmarkFileService.php:205
-#: application/bookmark/BookmarkFileService.php:227
-#: application/bookmark/BookmarkFileService.php:241
+#: application/bookmark/BookmarkFileService.php:185
+#: application/bookmark/BookmarkFileService.php:207
+#: application/bookmark/BookmarkFileService.php:229
+#: application/bookmark/BookmarkFileService.php:243
 msgid "You're not authorized to alter the datastore"
 msgstr "Vous n'êtes pas autorisé à modifier les données"
 
-#: application/bookmark/BookmarkFileService.php:208
+#: application/bookmark/BookmarkFileService.php:210
 msgid "This bookmarks already exists"
 msgstr "Ce marque-page existe déjà"
 
-#: application/bookmark/BookmarkInitializer.php:39
+#: application/bookmark/BookmarkInitializer.php:42
 msgid "(private bookmark with thumbnail demo)"
 msgstr "(marque page privé avec une miniature)"
 
-#: application/bookmark/BookmarkInitializer.php:42
+#: application/bookmark/BookmarkInitializer.php:45
 msgid ""
 "Shaarli will automatically pick up the thumbnail for links to a variety of "
 "websites.\n"
@@ -118,11 +118,11 @@ msgstr ""
 "\n"
 "Maintenant, vous pouvez modifier ou supprimer les shaares créés par défaut.\n"
 
-#: application/bookmark/BookmarkInitializer.php:55
+#: application/bookmark/BookmarkInitializer.php:58
 msgid "Note: Shaare descriptions"
 msgstr "Note : Description des Shaares"
 
-#: application/bookmark/BookmarkInitializer.php:57
+#: application/bookmark/BookmarkInitializer.php:60
 msgid ""
 "Adding a shaare without entering a URL creates a text-only \"note\" post "
 "such as this one.\n"
@@ -186,7 +186,7 @@ msgstr ""
 "| Citron   | Fruit     | Jaune | 30    |\n"
 "| Carotte  | Légume | Orange    | 14    |\n"
 
-#: application/bookmark/BookmarkInitializer.php:91
+#: application/bookmark/BookmarkInitializer.php:94
 #: application/legacy/LegacyLinkDB.php:246
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:15
 #: tmp/page.footer.b91ef64efc3688266305ea9b42e5017e.rtpl.php:48
@@ -198,7 +198,7 @@ msgstr ""
 "Le gestionnaire de marque-pages personnel, minimaliste, et sans base de "
 "données"
 
-#: application/bookmark/BookmarkInitializer.php:94
+#: application/bookmark/BookmarkInitializer.php:97
 msgid ""
 "Welcome to Shaarli!\n"
 "\n"
@@ -247,11 +247,11 @@ msgstr ""
 "issues) si vous avez une suggestion ou si vous rencontrez un problème.\n"
 " \n"
 
-#: application/bookmark/exception/BookmarkNotFoundException.php:13
+#: application/bookmark/exception/BookmarkNotFoundException.php:14
 msgid "The link you are trying to reach does not exist or has been deleted."
 msgstr "Le lien que vous essayez de consulter n'existe pas ou a été supprimé."
 
-#: application/config/ConfigJson.php:52 application/config/ConfigPhp.php:129
+#: application/config/ConfigJson.php:52 application/config/ConfigPhp.php:131
 msgid ""
 "Shaarli could not create the config file. Please make sure Shaarli has the "
 "right to write in the folder is it installed in."
@@ -259,12 +259,12 @@ msgstr ""
 "Shaarli n'a pas pu créer le fichier de configuration. Merci de vérifier que "
 "Shaarli a les droits d'écriture dans le dossier dans lequel il est installé."
 
-#: application/config/ConfigManager.php:136
-#: application/config/ConfigManager.php:163
+#: application/config/ConfigManager.php:137
+#: application/config/ConfigManager.php:164
 msgid "Invalid setting key parameter. String expected, got: "
 msgstr "Clé de paramétrage invalide. Chaîne de caractères obtenue, attendu : "
 
-#: application/config/exception/MissingFieldConfigException.php:21
+#: application/config/exception/MissingFieldConfigException.php:20
 #, php-format
 msgid "Configuration value is required for %s"
 msgstr "Le paramètre %s est obligatoire"
@@ -274,48 +274,48 @@ msgid "An error occurred while trying to save plugins loading order."
 msgstr ""
 "Une erreur s'est produite lors de la sauvegarde de l'ordre des extensions."
 
-#: application/config/exception/UnauthorizedConfigException.php:16
+#: application/config/exception/UnauthorizedConfigException.php:15
 msgid "You are not authorized to alter config."
 msgstr "Vous n'êtes pas autorisé à modifier la configuration."
 
-#: application/exceptions/IOException.php:22
+#: application/exceptions/IOException.php:23
 msgid "Error accessing"
 msgstr "Une erreur s'est produite en accédant à"
 
-#: application/feed/FeedBuilder.php:179
+#: application/feed/FeedBuilder.php:180
 msgid "Direct link"
 msgstr "Liens directs"
 
-#: application/feed/FeedBuilder.php:181
+#: application/feed/FeedBuilder.php:182
 #: tmp/daily.b91ef64efc3688266305ea9b42e5017e.rtpl.php:103
 #: tmp/dailyrss.b91ef64efc3688266305ea9b42e5017e.rtpl.php:26
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:179
 msgid "Permalink"
 msgstr "Permalien"
 
-#: application/front/controller/admin/ConfigureController.php:54
+#: application/front/controller/admin/ConfigureController.php:56
 #: tmp/configure.b91ef64efc3688266305ea9b42e5017e.rtpl.php:24
 msgid "Configure"
 msgstr "Configurer"
 
-#: application/front/controller/admin/ConfigureController.php:102
-#: application/legacy/LegacyUpdater.php:537
+#: application/front/controller/admin/ConfigureController.php:106
+#: application/legacy/LegacyUpdater.php:539
 msgid "You have enabled or changed thumbnails mode."
 msgstr "Vous avez activé ou changé le mode de miniatures."
 
-#: application/front/controller/admin/ConfigureController.php:103
-#: application/front/controller/admin/ServerController.php:75
-#: application/legacy/LegacyUpdater.php:538
+#: application/front/controller/admin/ConfigureController.php:108
+#: application/front/controller/admin/ServerController.php:76
+#: application/legacy/LegacyUpdater.php:540
 msgid "Please synchronize them."
 msgstr "Merci de les synchroniser."
 
-#: application/front/controller/admin/ConfigureController.php:113
-#: application/front/controller/visitor/InstallController.php:146
+#: application/front/controller/admin/ConfigureController.php:119
+#: application/front/controller/visitor/InstallController.php:149
 msgid "Error while writing config file after configuration update."
 msgstr ""
 "Une erreur s'est produite lors de la sauvegarde du fichier de configuration."
 
-#: application/front/controller/admin/ConfigureController.php:122
+#: application/front/controller/admin/ConfigureController.php:128
 msgid "Configuration was saved."
 msgstr "La configuration a été sauvegardée."
 
@@ -433,7 +433,7 @@ msgstr "Administration serveur"
 msgid "Thumbnails cache has been cleared."
 msgstr "Le cache des miniatures a été vidé."
 
-#: application/front/controller/admin/ServerController.php:83
+#: application/front/controller/admin/ServerController.php:85
 msgid "Shaarli's cache folder has been cleared!"
 msgstr "Le dossier de cache de Shaarli a été vidé !"
 
@@ -459,18 +459,18 @@ msgstr "Le lien avec l'identifiant %s n'a pas pu être trouvé."
 msgid "Invalid visibility provided."
 msgstr "Visibilité du lien non valide."
 
-#: application/front/controller/admin/ShaarePublishController.php:171
+#: application/front/controller/admin/ShaarePublishController.php:173
 #: tmp/linklist.b91ef64efc3688266305ea9b42e5017e.rtpl.php:171
 msgid "Edit"
 msgstr "Modifier"
 
-#: application/front/controller/admin/ShaarePublishController.php:174
+#: application/front/controller/admin/ShaarePublishController.php:176
 #: tmp/page.header.b91ef64efc3688266305ea9b42e5017e.rtpl.php:28
 #: tmp/page.header.cedf684561d925457130839629000a81.rtpl.php:28
 msgid "Shaare"
 msgstr "Shaare"
 
-#: application/front/controller/admin/ShaarePublishController.php:205
+#: application/front/controller/admin/ShaarePublishController.php:208
 msgid "Note: "
 msgstr "Note : "
 
@@ -485,7 +485,7 @@ msgstr "Mise à jour des miniatures"
 msgid "Tools"
 msgstr "Outils"
 
-#: application/front/controller/visitor/BookmarkListController.php:120
+#: application/front/controller/visitor/BookmarkListController.php:121
 msgid "Search: "
 msgstr "Recherche : "
 
@@ -535,12 +535,12 @@ msgstr "Une erreur inattendue s'est produite."
 msgid "Requested page could not be found."
 msgstr "La page demandée n'a pas pu être trouvée."
 
-#: application/front/controller/visitor/InstallController.php:64
+#: application/front/controller/visitor/InstallController.php:65
 #: tmp/install.b91ef64efc3688266305ea9b42e5017e.rtpl.php:22
 msgid "Install Shaarli"
 msgstr "Installation de Shaarli"
 
-#: application/front/controller/visitor/InstallController.php:83
+#: application/front/controller/visitor/InstallController.php:85
 #, php-format
 msgid ""
 "<pre>Sessions do not seem to work correctly on your server.<br>Make sure the "
@@ -559,14 +559,14 @@ msgstr ""
 "des cookies. Nous vous recommandons d'accéder à votre serveur depuis son "
 "adresse IP ou un <em>Fully Qualified Domain Name</em>.<br>"
 
-#: application/front/controller/visitor/InstallController.php:154
+#: application/front/controller/visitor/InstallController.php:157
 msgid ""
 "Shaarli is now configured. Please login and start shaaring your bookmarks!"
 msgstr ""
 "Shaarli est maintenant configuré. Vous pouvez vous connecter et commencez à "
 "shaare vos liens !"
 
-#: application/front/controller/visitor/InstallController.php:168
+#: application/front/controller/visitor/InstallController.php:171
 msgid "Insufficient permissions:"
 msgstr "Permissions insuffisantes :"
 
@@ -580,7 +580,7 @@ msgstr "Permissions insuffisantes :"
 msgid "Login"
 msgstr "Connexion"
 
-#: application/front/controller/visitor/LoginController.php:77
+#: application/front/controller/visitor/LoginController.php:78
 msgid "Wrong login/password."
 msgstr "Nom d'utilisateur ou mot de passe incorrect(s)."
 
@@ -620,7 +620,7 @@ msgstr ""
 msgid "Wrong token."
 msgstr "Jeton invalide."
 
-#: application/helper/ApplicationUtils.php:162
+#: application/helper/ApplicationUtils.php:165
 #, php-format
 msgid ""
 "Your PHP version is obsolete! Shaarli requires at least PHP %s, and thus "
@@ -631,52 +631,60 @@ msgstr ""
 "peut donc pas fonctionner. Votre version de PHP a des failles de sécurités "
 "connues et devrait être mise à jour au plus tôt."
 
-#: application/helper/ApplicationUtils.php:195
-#: application/helper/ApplicationUtils.php:215
+#: application/helper/ApplicationUtils.php:200
+#: application/helper/ApplicationUtils.php:220
 msgid "directory is not readable"
 msgstr "le répertoire n'est pas accessible en lecture"
 
-#: application/helper/ApplicationUtils.php:218
+#: application/helper/ApplicationUtils.php:223
 msgid "directory is not writable"
 msgstr "le répertoire n'est pas accessible en écriture"
 
-#: application/helper/ApplicationUtils.php:240
+#: application/helper/ApplicationUtils.php:247
 msgid "file is not readable"
 msgstr "le fichier n'est pas accessible en lecture"
 
-#: application/helper/ApplicationUtils.php:243
+#: application/helper/ApplicationUtils.php:250
 msgid "file is not writable"
 msgstr "le fichier n'est pas accessible en écriture"
 
-#: application/helper/ApplicationUtils.php:277
+#: application/helper/ApplicationUtils.php:260
+msgid ""
+"Lock can not be acquired on the datastore. You might encounter concurrent "
+"access issues."
+msgstr ""
+"Le fichier datastore ne peut pas être verrouillé. Vous pourriez rencontrer "
+"des problèmes d'accès concurrents."
+
+#: application/helper/ApplicationUtils.php:293
 msgid "Configuration parsing"
 msgstr "Chargement de la configuration"
 
-#: application/helper/ApplicationUtils.php:278
+#: application/helper/ApplicationUtils.php:294
 msgid "Slim Framework (routing, etc.)"
 msgstr "Slim Framwork (routage, etc.)"
 
-#: application/helper/ApplicationUtils.php:279
+#: application/helper/ApplicationUtils.php:295
 msgid "Multibyte (Unicode) string support"
 msgstr "Support des chaînes de caractère multibytes (Unicode)"
 
-#: application/helper/ApplicationUtils.php:280
+#: application/helper/ApplicationUtils.php:296
 msgid "Required to use thumbnails"
 msgstr "Obligatoire pour utiliser les miniatures"
 
-#: application/helper/ApplicationUtils.php:281
+#: application/helper/ApplicationUtils.php:297
 msgid "Localized text sorting (e.g. e->è->f)"
 msgstr "Tri des textes traduits (ex : e->è->f)"
 
-#: application/helper/ApplicationUtils.php:282
+#: application/helper/ApplicationUtils.php:298
 msgid "Better retrieval of bookmark metadata and thumbnail"
 msgstr "Meilleure récupération des meta-données des marque-pages et minatures"
 
-#: application/helper/ApplicationUtils.php:283
+#: application/helper/ApplicationUtils.php:299
 msgid "Use the translation system in gettext mode"
 msgstr "Utiliser le système de traduction en mode gettext"
 
-#: application/helper/ApplicationUtils.php:284
+#: application/helper/ApplicationUtils.php:300
 msgid "Login using LDAP server"
 msgstr "Authentification via un serveur LDAP"
 
@@ -750,7 +758,7 @@ msgstr ""
 msgid "Couldn't retrieve updater class methods."
 msgstr "Impossible de récupérer les méthodes de la classe Updater."
 
-#: application/legacy/LegacyUpdater.php:538
+#: application/legacy/LegacyUpdater.php:540
 msgid "<a href=\"./admin/thumbnails\">"
 msgstr "<a href=\"./admin/thumbnails\">"
 
@@ -776,11 +784,11 @@ msgstr ""
 "a été importé avec succès en %d secondes : %d liens importés, %d liens "
 "écrasés, %d liens ignorés."
 
-#: application/plugin/PluginManager.php:124
+#: application/plugin/PluginManager.php:125
 msgid " [plugin incompatibility]: "
 msgstr " [incompatibilité de l'extension] : "
 
-#: application/plugin/exception/PluginFileNotFoundException.php:21
+#: application/plugin/exception/PluginFileNotFoundException.php:22
 #, php-format
 msgid "Plugin \"%s\" files not found."
 msgstr "Les fichiers de l'extension \"%s\" sont introuvables."
@@ -794,7 +802,7 @@ msgstr "Impossible de purger %s : le répertoire n'existe pas"
 msgid "An error occurred while running the update "
 msgstr "Une erreur s'est produite lors de l'exécution de la mise à jour "
 
-#: index.php:80
+#: index.php:81
 msgid "Shared bookmarks on "
 msgstr "Liens partagés sur "
 
@@ -811,11 +819,11 @@ msgstr "Shaare"
 msgid "Adds the addlink input on the linklist page."
 msgstr "Ajoute le formulaire d'ajout de liens sur la page principale."
 
-#: plugins/archiveorg/archiveorg.php:28
+#: plugins/archiveorg/archiveorg.php:29
 msgid "View on archive.org"
 msgstr "Voir sur archive.org"
 
-#: plugins/archiveorg/archiveorg.php:41
+#: plugins/archiveorg/archiveorg.php:42
 msgid "For each link, add an Archive.org icon."
 msgstr "Pour chaque lien, ajoute une icône pour Archive.org."
 
@@ -845,7 +853,7 @@ msgstr "Couleur de fond (gris léger)"
 msgid "Dark main color (e.g. visited links)"
 msgstr "Couleur principale sombre (ex : les liens visités)"
 
-#: plugins/demo_plugin/demo_plugin.php:477
+#: plugins/demo_plugin/demo_plugin.php:478
 msgid ""
 "A demo plugin covering all use cases for template designers and plugin "
 "developers."
@@ -853,11 +861,11 @@ msgstr ""
 "Une extension de démonstration couvrant tous les cas d'utilisation pour les "
 "designers de thèmes et les développeurs d'extensions."
 
-#: plugins/demo_plugin/demo_plugin.php:478
+#: plugins/demo_plugin/demo_plugin.php:479
 msgid "This is a parameter dedicated to the demo plugin. It'll be suffixed."
 msgstr "Ceci est un paramètre dédié au plugin de démo. Il sera suffixé."
 
-#: plugins/demo_plugin/demo_plugin.php:479
+#: plugins/demo_plugin/demo_plugin.php:480
 msgid "Other demo parameter"
 msgstr "Un autre paramètre de démo"
 
@@ -879,7 +887,7 @@ msgstr ""
 msgid "Isso server URL (without 'http://')"
 msgstr "URL du serveur Isso (sans 'http://')"
 
-#: plugins/piwik/piwik.php:23
+#: plugins/piwik/piwik.php:24
 msgid ""
 "Piwik plugin error: Please define PIWIK_URL and PIWIK_SITEID in the plugin "
 "administration page."
@@ -887,27 +895,27 @@ msgstr ""
 "Erreur de l'extension Piwik : Merci de définir les paramètres PIWIK_URL et "
 "PIWIK_SITEID dans la page d'administration des extensions."
 
-#: plugins/piwik/piwik.php:72
+#: plugins/piwik/piwik.php:73
 msgid "A plugin that adds Piwik tracking code to Shaarli pages."
 msgstr "Ajoute le code de traçage de Piwik sur les pages de Shaarli."
 
-#: plugins/piwik/piwik.php:73
+#: plugins/piwik/piwik.php:74
 msgid "Piwik URL"
 msgstr "URL de Piwik"
 
-#: plugins/piwik/piwik.php:74
+#: plugins/piwik/piwik.php:75
 msgid "Piwik site ID"
 msgstr "Site ID de Piwik"
 
-#: plugins/playvideos/playvideos.php:25
+#: plugins/playvideos/playvideos.php:26
 msgid "Video player"
 msgstr "Lecteur vidéo"
 
-#: plugins/playvideos/playvideos.php:28
+#: plugins/playvideos/playvideos.php:29
 msgid "Play Videos"
 msgstr "Jouer les vidéos"
 
-#: plugins/playvideos/playvideos.php:59
+#: plugins/playvideos/playvideos.php:60
 msgid "Add a button in the toolbar allowing to watch all videos."
 msgstr ""
 "Ajoute un bouton dans la barre de menu pour regarder toutes les vidéos."
@@ -935,11 +943,11 @@ msgstr "Mauvaise réponse du hub %s"
 msgid "Enable PubSubHubbub feed publishing."
 msgstr "Active la publication de flux vers PubSubHubbub."
 
-#: plugins/qrcode/qrcode.php:73 plugins/wallabag/wallabag.php:71
+#: plugins/qrcode/qrcode.php:74 plugins/wallabag/wallabag.php:72
 msgid "For each link, add a QRCode icon."
 msgstr "Pour chaque lien, ajouter une icône de QRCode."
 
-#: plugins/wallabag/wallabag.php:21
+#: plugins/wallabag/wallabag.php:22
 msgid ""
 "Wallabag plugin error: Please define the \"WALLABAG_URL\" setting in the "
 "plugin administration page."
@@ -947,15 +955,15 @@ msgstr ""
 "Erreur de l'extension Wallabag : Merci de définir le paramètre « "
 "WALLABAG_URL » dans la page d'administration des extensions."
 
-#: plugins/wallabag/wallabag.php:48
+#: plugins/wallabag/wallabag.php:49
 msgid "Save to wallabag"
 msgstr "Sauvegarder dans Wallabag"
 
-#: plugins/wallabag/wallabag.php:72
+#: plugins/wallabag/wallabag.php:73
 msgid "Wallabag API URL"
 msgstr "URL de l'API Wallabag"
 
-#: plugins/wallabag/wallabag.php:73
+#: plugins/wallabag/wallabag.php:74
 msgid "Wallabag API version (1 or 2)"
 msgstr "Version de l'API Wallabag (1 ou 2)"
 

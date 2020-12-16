@@ -3,6 +3,8 @@
 namespace Shaarli\Helper;
 
 use Exception;
+use malkusch\lock\exception\LockAcquireException;
+use malkusch\lock\mutex\FlockMutex;
 use Shaarli\Config\ConfigManager;
 
 /**
@@ -250,6 +252,20 @@ class ApplicationUtils
         }
 
         return $errors;
+    }
+
+    public static function checkDatastoreMutex(): array
+    {
+        $mutex = new FlockMutex(fopen(SHAARLI_MUTEX_FILE, 'r'), 2);
+        try {
+            $mutex->synchronized(function () {
+                return true;
+            });
+        } catch (LockAcquireException $e) {
+            $errors[] = t('Lock can not be acquired on the datastore. You might encounter concurrent access issues.');
+        }
+
+        return $errors ?? [];
     }
 
     /**

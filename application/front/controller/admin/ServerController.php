@@ -39,11 +39,16 @@ class ServerController extends ShaarliAdminController
         $currentVersion = $currentVersion === 'dev' ? $currentVersion : 'v' . $currentVersion;
         $phpEol = new \DateTimeImmutable(ApplicationUtils::getPhpEol(PHP_VERSION));
 
+        $permissions = array_merge(
+            ApplicationUtils::checkResourcePermissions($this->container->conf),
+            ApplicationUtils::checkDatastoreMutex()
+        );
+
         $this->assignView('php_version', PHP_VERSION);
         $this->assignView('php_eol', format_date($phpEol, false));
         $this->assignView('php_has_reached_eol', $phpEol < new \DateTimeImmutable());
         $this->assignView('php_extensions', ApplicationUtils::getPhpExtensionsRequirement());
-        $this->assignView('permissions', ApplicationUtils::checkResourcePermissions($this->container->conf));
+        $this->assignView('permissions', $permissions);
         $this->assignView('release_url', $releaseUrl);
         $this->assignView('latest_version', $latestVersion);
         $this->assignView('current_version', $currentVersion);
