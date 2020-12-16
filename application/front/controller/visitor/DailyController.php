@@ -131,7 +131,7 @@ class DailyController extends ShaarliVisitorController
             $dataPerDay[$day] = [
                 'date' => $endDateTime,
                 'date_rss' => $endDateTime->format(DateTime::RSS),
-                'date_human' => DailyPageHelper::getDescriptionByType($type, $dayDateTime),
+                'date_human' => DailyPageHelper::getDescriptionByType($type, $dayDateTime, false),
                 'absolute_url' => $indexUrl . 'daily?' . $type . '=' . $day,
                 'links' => [],
             ];

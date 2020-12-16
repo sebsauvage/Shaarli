@@ -121,6 +121,19 @@ class DailyPageHelperTest extends TestCase
         static::assertEquals($expectedDescription, $description);
     }
 
+    /**
+     * @dataProvider getDescriptionsByTypeNotIncludeRelative
+     */
+    public function testGeDescriptionsByTypeNotIncludeRelative(
+        string $type,
+        \DateTimeImmutable $dateTime,
+        string $expectedDescription
+    ): void {
+        $description = DailyPageHelper::getDescriptionByType($type, $dateTime, false);
+
+        static::assertEquals($expectedDescription, $description);
+    }
+
     public function getDescriptionByTypeExceptionUnknownType(): void
     {
         $this->expectException(\Exception::class);
@@ -242,6 +255,20 @@ class DailyPageHelperTest extends TestCase
         return [
             [DailyPageHelper::DAY, $date = new \DateTimeImmutable(), 'Today - ' . $date->format('F j, Y')],
             [DailyPageHelper::DAY, $date = new \DateTimeImmutable('-1 day'), 'Yesterday - ' . $date->format('F j, Y')],
+            [DailyPageHelper::DAY, new \DateTimeImmutable('2020-10-09 04:05:06'), 'October 9, 2020'],
+            [DailyPageHelper::WEEK, new \DateTimeImmutable('2020-10-09 04:05:06'), 'Week 41 (October 5, 2020)'],
+            [DailyPageHelper::MONTH, new \DateTimeImmutable('2020-10-09 04:05:06'), 'October, 2020'],
+        ];
+    }
+
+    /**
+     * Data provider for testGeDescriptionsByTypeNotIncludeRelative() test method.
+     */
+    public function getDescriptionsByTypeNotIncludeRelative(): array
+    {
+        return [
+            [DailyPageHelper::DAY, $date = new \DateTimeImmutable(), $date->format('F j, Y')],
+            [DailyPageHelper::DAY, $date = new \DateTimeImmutable('-1 day'), $date->format('F j, Y')],
             [DailyPageHelper::DAY, new \DateTimeImmutable('2020-10-09 04:05:06'), 'October 9, 2020'],
             [DailyPageHelper::WEEK, new \DateTimeImmutable('2020-10-09 04:05:06'), 'Week 41 (October 5, 2020)'],
             [DailyPageHelper::MONTH, new \DateTimeImmutable('2020-10-09 04:05:06'), 'October, 2020'],
