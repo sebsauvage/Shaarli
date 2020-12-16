@@ -27,3 +27,19 @@ function hook_test_error()
 {
     new Unknown();
 }
+
+function test_register_routes(): array
+{
+    return [
+        [
+            'method' => 'GET',
+            'route' => '/test',
+            'callable' => 'getFunction',
+        ],
+        [
+            'method' => 'POST',
+            'route' => '/custom',
+            'callable' => 'postFunction',
+        ],
+    ];
+}

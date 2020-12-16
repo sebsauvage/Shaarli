@@ -31,6 +31,7 @@ use Psr\Log\LogLevel;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Container\ContainerBuilder;
 use Shaarli\Languages;
+use Shaarli\Plugin\PluginManager;
 use Shaarli\Security\BanManager;
 use Shaarli\Security\CookieManager;
 use Shaarli\Security\LoginManager;
@@ -87,7 +88,17 @@ date_default_timezone_set($conf->get('general.timezone', 'UTC'));
 
 $loginManager->checkLoginState(client_ip_id($_SERVER));
 
-$containerBuilder = new ContainerBuilder($conf, $sessionManager, $cookieManager, $loginManager, $logger);
+$pluginManager = new PluginManager($conf);
+$pluginManager->load($conf->get('general.enabled_plugins', []));
+
+$containerBuilder = new ContainerBuilder(
+    $conf,
+    $sessionManager,
+    $cookieManager,
+    $loginManager,
+    $pluginManager,
+    $logger
+);
 $container = $containerBuilder->build();
 $app = new App($container);
 
@@ -154,6 +165,15 @@ $app->group('/admin', function () {
     $this->get('/visibility/{visibility}', '\Shaarli\Front\Controller\Admin\SessionFilterController:visibility');
 })->add('\Shaarli\Front\ShaarliAdminMiddleware');
 
+$app->group('/plugin', function () use ($pluginManager) {
+    foreach ($pluginManager->getRegisteredRoutes() as $pluginName => $routes) {
+        $this->group('/' . $pluginName, function () use ($routes) {
+            foreach ($routes as $route) {
+                $this->{strtolower($route['method'])}('/' . ltrim($route['route'], '/'), $route['callable']);
+            }
+        });
+    }
+})->add('\Shaarli\Front\ShaarliMiddleware');
 
 // REST API routes
 $app->group('/api/v1', function () {

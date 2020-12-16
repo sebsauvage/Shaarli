@@ -43,11 +43,15 @@ class ContainerBuilderTest extends TestCase
     /** @var CookieManager */
     protected $cookieManager;
 
+    /** @var PluginManager */
+    protected $pluginManager;
+
     public function setUp(): void
     {
         $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->sessionManager = $this->createMock(SessionManager::class);
         $this->cookieManager = $this->createMock(CookieManager::class);
+        $this->pluginManager = $this->createMock(PluginManager::class);
 
         $this->loginManager = $this->createMock(LoginManager::class);
         $this->loginManager->method('isLoggedIn')->willReturn(true);
@@ -57,6 +61,7 @@ class ContainerBuilderTest extends TestCase
             $this->sessionManager,
             $this->cookieManager,
             $this->loginManager,
+            $this->pluginManager,
             $this->createMock(LoggerInterface::class)
         );
     }
