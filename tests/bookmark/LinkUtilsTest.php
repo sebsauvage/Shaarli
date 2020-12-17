@@ -245,6 +245,16 @@ class LinkUtilsTest extends TestCase
         $this->assertFalse(html_extract_tag('description', $html));
     }
 
+    public function testHtmlExtractDescriptionFromGoogleRealCase(): void
+    {
+        $html = 'id="gsr"><meta content="Fêtes de fin d\'année" property="twitter:title"><meta '.
+                'content="Bonnes fêtes de fin d\'année ! #GoogleDoodle" property="twitter:description">'.
+                '<meta content="Bonnes fêtes de fin d\'année ! #GoogleDoodle" property="og:description">'.
+                '<meta content="summary_large_image" property="twitter:card"><meta co'
+        ;
+        $this->assertSame('Bonnes fêtes de fin d\'année ! #GoogleDoodle', html_extract_tag('description', $html));
+    }
+
     /**
      * Test the header callback with valid value
      */
