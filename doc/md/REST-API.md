@@ -73,7 +73,7 @@ var_dump(getInfo($baseUrl, $secret));
 ### Authentication
 
 - All requests to Shaarli's API must include a **JWT token** to verify their authenticity.
-- This token must be included as an HTTP header called `Authentication: Bearer <jwt token>`.
+- This token must be included as an HTTP header called `Authorization: Bearer <jwt token>`.
 - JWT tokens are composed by three parts, separated by a dot `.` and encoded in base64:
 
 ```
