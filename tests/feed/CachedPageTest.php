@@ -40,10 +40,10 @@ class CachedPageTest extends \Shaarli\TestCase
      */
     public function testConstruct()
     {
-        new CachedPage(self::$testCacheDir, '', true);
-        new CachedPage(self::$testCacheDir, '', false);
-        new CachedPage(self::$testCacheDir, 'http://shaar.li/feed/rss', true);
-        new CachedPage(self::$testCacheDir, 'http://shaar.li/feed/atom', false);
+        new CachedPage(self::$testCacheDir, '', true, null);
+        new CachedPage(self::$testCacheDir, '', false, null);
+        new CachedPage(self::$testCacheDir, 'http://shaar.li/feed/rss', true, null);
+        new CachedPage(self::$testCacheDir, 'http://shaar.li/feed/atom', false, null);
         $this->addToAssertionCount(1);
     }
 
@@ -52,7 +52,7 @@ class CachedPageTest extends \Shaarli\TestCase
      */
     public function testCache()
     {
-        $page = new CachedPage(self::$testCacheDir, self::$url, true);
+        $page = new CachedPage(self::$testCacheDir, self::$url, true, null);
 
         $this->assertFileNotExists(self::$filename);
         $page->cache('<p>Some content</p>');
@@ -68,7 +68,7 @@ class CachedPageTest extends \Shaarli\TestCase
      */
     public function testShouldNotCache()
     {
-        $page = new CachedPage(self::$testCacheDir, self::$url, false);
+        $page = new CachedPage(self::$testCacheDir, self::$url, false, null);
 
         $this->assertFileNotExists(self::$filename);
         $page->cache('<p>Some content</p>');
@@ -80,7 +80,7 @@ class CachedPageTest extends \Shaarli\TestCase
      */
     public function testCachedVersion()
     {
-        $page = new CachedPage(self::$testCacheDir, self::$url, true);
+        $page = new CachedPage(self::$testCacheDir, self::$url, true, null);
 
         $this->assertFileNotExists(self::$filename);
         $page->cache('<p>Some content</p>');
@@ -96,7 +96,7 @@ class CachedPageTest extends \Shaarli\TestCase
      */
     public function testCachedVersionNoFile()
     {
-        $page = new CachedPage(self::$testCacheDir, self::$url, true);
+        $page = new CachedPage(self::$testCacheDir, self::$url, true, null);
 
         $this->assertFileNotExists(self::$filename);
         $this->assertEquals(
@@ -110,12 +110,51 @@ class CachedPageTest extends \Shaarli\TestCase
      */
     public function testNoCachedVersion()
     {
-        $page = new CachedPage(self::$testCacheDir, self::$url, false);
+        $page = new CachedPage(self::$testCacheDir, self::$url, false, null);
 
         $this->assertFileNotExists(self::$filename);
         $this->assertEquals(
             null,
             $page->cachedVersion()
         );
+    }
+
+    /**
+     * Return a page's cached content within date period
+     */
+    public function testCachedVersionInDatePeriod()
+    {
+        $period = new \DatePeriod(
+            new \DateTime('yesterday'),
+            new \DateInterval('P1D'),
+            new \DateTime('tomorrow')
+        );
+        $page = new CachedPage(self::$testCacheDir, self::$url, true, $period);
+
+        $this->assertFileNotExists(self::$filename);
+        $page->cache('<p>Some content</p>');
+        $this->assertFileExists(self::$filename);
+        $this->assertEquals(
+            '<p>Some content</p>',
+            $page->cachedVersion()
+        );
+    }
+
+    /**
+     * Return a page's cached content outside of date period
+     */
+    public function testCachedVersionNotInDatePeriod()
+    {
+        $period = new \DatePeriod(
+            new \DateTime('yesterday noon'),
+            new \DateInterval('P1D'),
+            new \DateTime('yesterday midnight')
+        );
+        $page = new CachedPage(self::$testCacheDir, self::$url, true, $period);
+
+        $this->assertFileNotExists(self::$filename);
+        $page->cache('<p>Some content</p>');
+        $this->assertFileExists(self::$filename);
+        $this->assertNull($page->cachedVersion());
     }
 }

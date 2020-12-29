@@ -2,6 +2,7 @@
 
 namespace Shaarli\Render;
 
+use DatePeriod;
 use Shaarli\Feed\CachedPage;
 
 /**
@@ -49,12 +50,21 @@ class PageCacheManager
         $this->purgeCachedPages();
     }
 
-    public function getCachePage(string $pageUrl): CachedPage
+    /**
+     * Get CachedPage instance for provided URL.
+     *
+     * @param string      $pageUrl
+     * @param ?DatePeriod $validityPeriod Optionally specify a time limit on requested cache
+     *
+     * @return CachedPage
+     */
+    public function getCachePage(string $pageUrl, DatePeriod $validityPeriod = null): CachedPage
     {
         return new CachedPage(
             $this->pageCacheDir,
             $pageUrl,
-            false === $this->isLoggedIn
+            false === $this->isLoggedIn,
+            $validityPeriod
         );
     }
 }

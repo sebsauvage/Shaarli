@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Shaarli\Helper;
 
+use DatePeriod;
+use DateTimeImmutable;
+use Exception;
 use Shaarli\Bookmark\Bookmark;
 use Slim\Http\Request;
 
@@ -40,31 +43,31 @@ class DailyPageHelper
      * @param string|null   $requestedDate  Input string extracted from the request
      * @param Bookmark|null $latestBookmark Latest bookmark found in the datastore (by date)
      *
-     * @return \DateTimeImmutable from input or latest bookmark.
+     * @return DateTimeImmutable from input or latest bookmark.
      *
-     * @throws \Exception Type not supported.
+     * @throws Exception Type not supported.
      */
     public static function extractRequestedDateTime(
         string $type,
         ?string $requestedDate,
         Bookmark $latestBookmark = null
-    ): \DateTimeImmutable {
+    ): DateTimeImmutable {
         $format = static::getFormatByType($type);
         if (empty($requestedDate)) {
             return $latestBookmark instanceof Bookmark
-                ? new \DateTimeImmutable($latestBookmark->getCreated()->format(\DateTime::ATOM))
-                : new \DateTimeImmutable()
+                ? new DateTimeImmutable($latestBookmark->getCreated()->format(\DateTime::ATOM))
+                : new DateTimeImmutable()
             ;
         }
 
         // W is not supported by createFromFormat...
         if ($type === static::WEEK) {
-            return (new \DateTimeImmutable())
+            return (new DateTimeImmutable())
                 ->setISODate((int) substr($requestedDate, 0, 4), (int) substr($requestedDate, 4, 2))
             ;
         }
 
-        return \DateTimeImmutable::createFromFormat($format, $requestedDate);
+        return DateTimeImmutable::createFromFormat($format, $requestedDate);
     }
 
     /**
@@ -80,7 +83,7 @@ class DailyPageHelper
      *
      * @see https://www.php.net/manual/en/datetime.format.php
      *
-     * @throws \Exception Type not supported.
+     * @throws Exception Type not supported.
      */
     public static function getFormatByType(string $type): string
     {
@@ -92,7 +95,7 @@ class DailyPageHelper
             case static::DAY:
                 return 'Ymd';
             default:
-                throw new \Exception('Unsupported daily format type');
+                throw new Exception('Unsupported daily format type');
         }
     }
 
@@ -102,14 +105,14 @@ class DailyPageHelper
      *       and we don't want to alter original datetime.
      *
      * @param string             $type      month/week/day
-     * @param \DateTimeImmutable $requested DateTime extracted from request input
+     * @param DateTimeImmutable $requested DateTime extracted from request input
      *                                      (should come from extractRequestedDateTime)
      *
      * @return \DateTimeInterface First DateTime of the time period
      *
-     * @throws \Exception Type not supported.
+     * @throws Exception Type not supported.
      */
-    public static function getStartDateTimeByType(string $type, \DateTimeImmutable $requested): \DateTimeInterface
+    public static function getStartDateTimeByType(string $type, DateTimeImmutable $requested): \DateTimeInterface
     {
         switch ($type) {
             case static::MONTH:
@@ -119,7 +122,7 @@ class DailyPageHelper
             case static::DAY:
                 return $requested->modify('Today midnight');
             default:
-                throw new \Exception('Unsupported daily format type');
+                throw new Exception('Unsupported daily format type');
         }
     }
 
@@ -129,14 +132,14 @@ class DailyPageHelper
      *       and we don't want to alter original datetime.
      *
      * @param string             $type      month/week/day
-     * @param \DateTimeImmutable $requested DateTime extracted from request input
+     * @param DateTimeImmutable $requested DateTime extracted from request input
      *                                      (should come from extractRequestedDateTime)
      *
      * @return \DateTimeInterface Last DateTime of the time period
      *
-     * @throws \Exception Type not supported.
+     * @throws Exception Type not supported.
      */
-    public static function getEndDateTimeByType(string $type, \DateTimeImmutable $requested): \DateTimeInterface
+    public static function getEndDateTimeByType(string $type, DateTimeImmutable $requested): \DateTimeInterface
     {
         switch ($type) {
             case static::MONTH:
@@ -146,7 +149,7 @@ class DailyPageHelper
             case static::DAY:
                 return $requested->modify('Today 23:59:59');
             default:
-                throw new \Exception('Unsupported daily format type');
+                throw new Exception('Unsupported daily format type');
         }
     }
 
@@ -161,7 +164,7 @@ class DailyPageHelper
      *
      * @return string Localized time period description
      *
-     * @throws \Exception Type not supported.
+     * @throws Exception Type not supported.
      */
     public static function getDescriptionByType(
         string $type,
@@ -183,7 +186,7 @@ class DailyPageHelper
                 }
                 return $out . format_date($requested, false);
             default:
-                throw new \Exception('Unsupported daily format type');
+                throw new Exception('Unsupported daily format type');
         }
     }
 
@@ -194,7 +197,7 @@ class DailyPageHelper
      *
      * @return int number of elements
      *
-     * @throws \Exception Type not supported.
+     * @throws Exception Type not supported.
      */
     public static function getRssLengthByType(string $type): int
     {
@@ -206,7 +209,28 @@ class DailyPageHelper
             case static::DAY:
                 return 30; // ~1 month
             default:
-                throw new \Exception('Unsupported daily format type');
+                throw new Exception('Unsupported daily format type');
         }
+    }
+
+    /**
+     * Get the number of items to display in the RSS feed depending on the given type.
+     *
+     * @param string             $type      month/week/day
+     * @param ?DateTimeImmutable $requested Currently only used for UT
+     *
+     * @return DatePeriod number of elements
+     *
+     * @throws Exception Type not supported.
+     */
+    public static function getCacheDatePeriodByType(string $type, DateTimeImmutable $requested = null): DatePeriod
+    {
+        $requested = $requested ?? new DateTimeImmutable();
+
+        return new DatePeriod(
+            static::getStartDateTimeByType($type, $requested),
+            new \DateInterval('P1D'),
+            static::getEndDateTimeByType($type, $requested)
+        );
     }
 }
