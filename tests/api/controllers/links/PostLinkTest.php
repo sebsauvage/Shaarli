@@ -229,4 +229,52 @@ class PostLinkTest extends TestCase
             \DateTime::createFromFormat(\DateTime::ATOM, $data['updated'])
         );
     }
+
+    /**
+     * Test link creation with a tag string provided
+     */
+    public function testPostLinkWithTagString(): void
+    {
+        $link = [
+            'tags' => 'one two',
+        ];
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'POST',
+            'CONTENT_TYPE' => 'application/json'
+        ]);
+
+        $request = Request::createFromEnvironment($env);
+        $request = $request->withParsedBody($link);
+        $response = $this->controller->postLink($request, new Response());
+
+        $this->assertEquals(201, $response->getStatusCode());
+        $this->assertEquals('/api/v1/bookmarks/1', $response->getHeader('Location')[0]);
+        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(self::NB_FIELDS_LINK, count($data));
+        $this->assertEquals(['one', 'two'], $data['tags']);
+    }
+
+    /**
+     * Test link creation with a tag string provided
+     */
+    public function testPostLinkWithTagString2(): void
+    {
+        $link = [
+            'tags' => ['one two'],
+        ];
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'POST',
+            'CONTENT_TYPE' => 'application/json'
+        ]);
+
+        $request = Request::createFromEnvironment($env);
+        $request = $request->withParsedBody($link);
+        $response = $this->controller->postLink($request, new Response());
+
+        $this->assertEquals(201, $response->getStatusCode());
+        $this->assertEquals('/api/v1/bookmarks/1', $response->getHeader('Location')[0]);
+        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(self::NB_FIELDS_LINK, count($data));
+        $this->assertEquals(['one', 'two'], $data['tags']);
+    }
 }
