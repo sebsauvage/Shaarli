@@ -68,11 +68,13 @@ function html_extract_tag($tag, $html)
     $properties = implode('|', $propertiesKey);
     // We need a OR here to accept either 'property=og:noquote' or 'property="og:unrelated og:my-tag"'
     $orCondition  = '["\']?(?:og:)?' . $tag . '["\']?|["\'][^\'"]*?(?:og:)?' . $tag . '[^\'"]*?[\'"]';
+    // Support quotes in double quoted content, and the other way around
+    $content = 'content=(["\'])((?:(?!\1).)*)\1';
     // Try to retrieve OpenGraph tag.
-    $ogRegex = '#<meta[^>]+(?:' . $properties . ')=(?:' . $orCondition . ')[^>]*content=(["\'])([^\1]*?)\1.*?>#';
+    $ogRegex = '#<meta[^>]+(?:' . $properties . ')=(?:' . $orCondition . ')[^>]*' . $content . '.*?>#';
     // If the attributes are not in the order property => content (e.g. Github)
     // New regex to keep this readable... more or less.
-    $ogRegexReverse = '#<meta[^>]+content=(["\'])([^\1]*?)\1[^>]+(?:' . $properties . ')=(?:' . $orCondition . ').*?>#';
+    $ogRegexReverse = '#<meta[^>]+' . $content . '[^>]+(?:' . $properties . ')=(?:' . $orCondition . ').*?>#';
 
     if (
         preg_match($ogRegex, $html, $matches) > 0
