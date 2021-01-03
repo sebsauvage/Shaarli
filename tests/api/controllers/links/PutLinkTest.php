@@ -233,4 +233,52 @@ class PutLinkTest extends \Shaarli\TestCase
 
         $this->controller->putLink($request, new Response(), ['id' => -1]);
     }
+
+    /**
+     * Test link creation with a tag string provided
+     */
+    public function testPutLinkWithTagString(): void
+    {
+        $link = [
+            'tags' => 'one two',
+        ];
+        $id = '41';
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'PUT',
+            'CONTENT_TYPE' => 'application/json'
+        ]);
+
+        $request = Request::createFromEnvironment($env);
+        $request = $request->withParsedBody($link);
+        $response = $this->controller->putLink($request, new Response(), ['id' => $id]);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(self::NB_FIELDS_LINK, count($data));
+        $this->assertEquals(['one', 'two'], $data['tags']);
+    }
+
+    /**
+     * Test link creation with a tag string provided
+     */
+    public function testPutLinkWithTagString2(): void
+    {
+        $link = [
+            'tags' => ['one two'],
+        ];
+        $id = '41';
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'PUT',
+            'CONTENT_TYPE' => 'application/json'
+        ]);
+
+        $request = Request::createFromEnvironment($env);
+        $request = $request->withParsedBody($link);
+        $response = $this->controller->putLink($request, new Response(), ['id' => $id]);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(self::NB_FIELDS_LINK, count($data));
+        $this->assertEquals(['one', 'two'], $data['tags']);
+    }
 }
