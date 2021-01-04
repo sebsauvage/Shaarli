@@ -1,4 +1,5 @@
 import Awesomplete from 'awesomplete';
+import he from 'he';
 
 /**
  * Find a parent element according to its tag and its attributes
@@ -41,19 +42,21 @@ function refreshToken(basePath, callback) {
   xhr.send();
 }
 
-function createAwesompleteInstance(element, tags = []) {
+function createAwesompleteInstance(element, separator, tags = []) {
   const awesome = new Awesomplete(Awesomplete.$(element));
-  // Tags are separated by a space
-  awesome.filter = (text, input) => Awesomplete.FILTER_CONTAINS(text, input.match(/[^ ]*$/)[0]);
+
+  // Tags are separated by separator
+  awesome.filter = (text, input) => Awesomplete.FILTER_CONTAINS(text, input.match(new RegExp(`[^${separator}]*$`))[0]);
   // Insert new selected tag in the input
   awesome.replace = (text) => {
-    const before = awesome.input.value.match(/^.+ \s*|/)[0];
-    awesome.input.value = `${before}${text} `;
+    const before = awesome.input.value.match(new RegExp(`^.+${separator}+|`))[0];
+    awesome.input.value = `${before}${text}${separator}`;
   };
   // Highlight found items
-  awesome.item = (text, input) => Awesomplete.ITEM(text, input.match(/[^ ]*$/)[0]);
+  awesome.item = (text, input) => Awesomplete.ITEM(text, input.match(new RegExp(`[^${separator}]*$`))[0]);
   // Don't display already selected items
-  const reg = /(\w+) /g;
+  // WARNING: pseudo classes does not seem to work with string litterals...
+  const reg = new RegExp(`([^${separator}]+)${separator}`, 'g');
   let match;
   awesome.data = (item, input) => {
     while ((match = reg.exec(input))) {
@@ -77,13 +80,14 @@ function createAwesompleteInstance(element, tags = []) {
  * @param selector  CSS selector
  * @param tags      Array of tags
  * @param instances List of existing awesomplete instances
+ * @param separator Tags separator character
  */
-function updateAwesompleteList(selector, tags, instances) {
+function updateAwesompleteList(selector, tags, instances, separator) {
   if (instances.length === 0) {
     // First load: create Awesomplete instances
     const elements = document.querySelectorAll(selector);
     [...elements].forEach((element) => {
-      instances.push(createAwesompleteInstance(element, tags));
+      instances.push(createAwesompleteInstance(element, separator, tags));
     });
   } else {
     // Update awesomplete tag list
@@ -93,15 +97,6 @@ function updateAwesompleteList(selector, tags, instances) {
     });
   }
   return instances;
-}
-
-/**
- * html_entities in JS
- *
- * @see http://stackoverflow.com/questions/18749591/encode-html-entities-in-javascript
- */
-function htmlEntities(str) {
-  return str.replace(/[\u00A0-\u9999<>&]/gim, (i) => `&#${i.charCodeAt(0)};`);
 }
 
 /**
@@ -222,6 +217,8 @@ function init(description) {
 
 (() => {
   const basePath = document.querySelector('input[name="js_base_path"]').value;
+  const tagsSeparatorElement = document.querySelector('input[name="tags_separator"]');
+  const tagsSeparator = tagsSeparatorElement ? tagsSeparatorElement.value || ' ' : ' ';
 
   /**
    * Handle responsive menu.
@@ -302,7 +299,8 @@ function init(description) {
   const deleteLinks = document.querySelectorAll('.confirm-delete');
   [...deleteLinks].forEach((deleteLink) => {
     deleteLink.addEventListener('click', (event) => {
-      if (!confirm(document.getElementById('translation-delete-tag').innerHTML)) {
+      const type = event.currentTarget.getAttribute('data-type') || 'link';
+      if (!confirm(document.getElementById(`translation-delete-${type}`).innerHTML)) {
         event.preventDefault();
       }
     });
@@ -569,7 +567,7 @@ function init(description) {
           input.setAttribute('name', totag);
           input.setAttribute('value', totag);
           findParent(input, 'div', { class: 'rename-tag-form' }).style.display = 'none';
-          block.querySelector('a.tag-link').innerHTML = htmlEntities(totag);
+          block.querySelector('a.tag-link').innerHTML = he.encode(totag);
           block
             .querySelector('a.tag-link')
             .setAttribute('href', `${basePath}/?searchtags=${encodeURIComponent(totag)}`);
@@ -582,7 +580,7 @@ function init(description) {
 
           // Refresh awesomplete values
           existingTags = existingTags.map((tag) => (tag === fromtag ? totag : tag));
-          awesomepletes = updateAwesompleteList('.rename-tag-input', existingTags, awesomepletes);
+          awesomepletes = updateAwesompleteList('.rename-tag-input', existingTags, awesomepletes, tagsSeparator);
         }
       };
       xhr.send(`renametag=1&fromtag=${fromtagUrl}&totag=${encodeURIComponent(totag)}&token=${refreshedToken}`);
@@ -622,14 +620,14 @@ function init(description) {
         refreshToken(basePath);
 
         existingTags = existingTags.filter((tagItem) => tagItem !== tag);
-        awesomepletes = updateAwesompleteList('.rename-tag-input', existingTags, awesomepletes);
+        awesomepletes = updateAwesompleteList('.rename-tag-input', existingTags, awesomepletes, tagsSeparator);
       }
     });
   });
 
   const autocompleteFields = document.querySelectorAll('input[data-multiple]');
   [...autocompleteFields].forEach((autocompleteField) => {
-    awesomepletes.push(createAwesompleteInstance(autocompleteField));
+    awesomepletes.push(createAwesompleteInstance(autocompleteField, tagsSeparator));
   });
 
   const exportForm = document.querySelector('#exportform');
@@ -641,5 +639,34 @@ function init(description) {
         event.target.submit();
       });
     });
+  }
+
+  const bulkCreationButton = document.querySelector('.addlink-batch-show-more-block');
+  if (bulkCreationButton != null) {
+    const toggleBulkCreationVisibility = (showMoreBlockElement, formElement) => {
+      if (bulkCreationButton.classList.contains('pure-u-0')) {
+        showMoreBlockElement.classList.remove('pure-u-0');
+        formElement.classList.add('pure-u-0');
+      } else {
+        showMoreBlockElement.classList.add('pure-u-0');
+        formElement.classList.remove('pure-u-0');
+      }
+    };
+
+    const bulkCreationForm = document.querySelector('.addlink-batch-form-block');
+
+    toggleBulkCreationVisibility(bulkCreationButton, bulkCreationForm);
+    bulkCreationButton.querySelector('a').addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleBulkCreationVisibility(bulkCreationButton, bulkCreationForm);
+    });
+
+    // Force to send falsy value if the checkbox is not checked.
+    const privateButton = bulkCreationForm.querySelector('input[type="checkbox"][name="private"]');
+    const privateHiddenButton = bulkCreationForm.querySelector('input[type="hidden"][name="private"]');
+    privateButton.addEventListener('click', () => {
+      privateHiddenButton.disabled = !privateHiddenButton.disabled;
+    });
+    privateHiddenButton.disabled = privateButton.checked;
   }
 })();

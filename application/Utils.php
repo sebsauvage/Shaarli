@@ -1,24 +1,27 @@
 <?php
+
 /**
  * Shaarli utilities
  */
 
 /**
- * Logs a message to a text file
+ * Format log using provided data.
  *
- * The log format is compatible with fail2ban.
+ * @param string      $message  the message to log
+ * @param string|null $clientIp the client's remote IPv4/IPv6 address
  *
- * @param string $logFile  where to write the logs
- * @param string $clientIp the client's remote IPv4/IPv6 address
- * @param string $message  the message to log
+ * @return string Formatted message to log
  */
-function logm($logFile, $clientIp, $message)
+function format_log(string $message, string $clientIp = null): string
 {
-    file_put_contents(
-        $logFile,
-        date('Y/m/d H:i:s').' - '.$clientIp.' - '.strval($message).PHP_EOL,
-        FILE_APPEND
-    );
+    $out = $message;
+
+    if (!empty($clientIp)) {
+        // Note: we keep the first dash to avoid breaking fail2ban configs
+        $out = '- ' . $clientIp . ' - ' . $out;
+    }
+
+    return $out;
 }
 
 /**
@@ -100,7 +103,7 @@ function escape($input)
     }
 
     if (is_array($input)) {
-        $out = array();
+        $out = [];
         foreach ($input as $key => $value) {
             $out[escape($key)] = escape($value);
         }
@@ -161,7 +164,7 @@ function checkDateFormat($format, $string)
  *
  * @return string $referer - final referer.
  */
-function generateLocation($referer, $host, $loopTerms = array())
+function generateLocation($referer, $host, $loopTerms = [])
 {
     $finalReferer = './?';
 
@@ -194,7 +197,7 @@ function generateLocation($referer, $host, $loopTerms = array())
 function autoLocale($headerLocale)
 {
     // Default if browser does not send HTTP_ACCEPT_LANGUAGE
-    $locales = array('en_US', 'en_US.utf8', 'en_US.UTF-8');
+    $locales = ['en_US', 'en_US.utf8', 'en_US.UTF-8'];
     if (! empty($headerLocale)) {
         if (preg_match_all('/([a-z]{2,3})[-_]?([a-z]{2})?,?/i', $headerLocale, $matches, PREG_SET_ORDER)) {
             $attempts = [];
@@ -325,6 +328,23 @@ function format_date($date, $time = true, $intl = true)
 }
 
 /**
+ * Format the date month according to the locale.
+ *
+ * @param DateTimeInterface $date to format.
+ *
+ * @return bool|string Formatted date, or false if the input is invalid.
+ */
+function format_month(DateTimeInterface $date)
+{
+    if (! $date instanceof DateTimeInterface) {
+        return false;
+    }
+
+    return strftime('%B', $date->getTimestamp());
+}
+
+
+/**
  * Check if the input is an integer, no matter its real type.
  *
  * PHP is a bit messy regarding this:
@@ -357,13 +377,15 @@ function return_bytes($val)
         return $val;
     }
     $val = trim($val);
-    $last = strtolower($val[strlen($val)-1]);
+    $last = strtolower($val[strlen($val) - 1]);
     $val = intval(substr($val, 0, -1));
     switch ($last) {
         case 'g':
             $val *= 1024;
+        // do no break in order 1024^2 for each unit
         case 'm':
             $val *= 1024;
+        // do no break in order 1024^2 for each unit
         case 'k':
             $val *= 1024;
     }
@@ -452,14 +474,28 @@ function alphabetical_sort(&$data, $reverse = false, $byKeys = false)
  * Wrapper function for translation which match the API
  * of gettext()/_() and ngettext().
  *
- * @param string $text   Text to translate.
- * @param string $nText  The plural message ID.
- * @param int    $nb     The number of items for plural forms.
- * @param string $domain The domain where the translation is stored (default: shaarli).
+ * @param string $text      Text to translate.
+ * @param string $nText     The plural message ID.
+ * @param int    $nb        The number of items for plural forms.
+ * @param string $domain    The domain where the translation is stored (default: shaarli).
+ * @param array  $variables Associative array of variables to replace in translated text.
+ * @param bool   $fixCase   Apply `ucfirst` on the translated string, might be useful for strings with variables.
  *
  * @return string Text translated.
  */
-function t($text, $nText = '', $nb = 1, $domain = 'shaarli')
+function t($text, $nText = '', $nb = 1, $domain = 'shaarli', $variables = [], $fixCase = false)
 {
-    return dn__($domain, $text, $nText, $nb);
+    $postFunction = $fixCase ? 'ucfirst' : function ($input) {
+        return $input;
+    };
+
+    return $postFunction(dn__($domain, $text, $nText, $nb, $variables));
+}
+
+/**
+ * Converts an exception into a printable stack trace string.
+ */
+function exception2text(Throwable $e): string
+{
+    return $e->getMessage() . PHP_EOL . $e->getFile() . $e->getLine() . PHP_EOL . $e->getTraceAsString();
 }

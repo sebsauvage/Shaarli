@@ -18,8 +18,10 @@ module.exports = [
   {
     mode: 'production',
     entry: {
+      shaare_batch: './assets/common/js/shaare-batch.js',
       thumbnails: './assets/common/js/thumbnails.js',
       thumbnails_update: './assets/common/js/thumbnails-update.js',
+      metadata: './assets/common/js/metadata.js',
       pluginsadmin: './assets/default/js/plugins-admin.js',
       shaarli: [
         './assets/default/js/base.js',
@@ -99,6 +101,7 @@ module.exports = [
       ].concat(glob.sync('./assets/vintage/img/*')),
       markdown: './assets/common/css/markdown.css',
       thumbnails: './assets/common/js/thumbnails.js',
+      metadata: './assets/common/js/metadata.js',
       thumbnails_update: './assets/common/js/thumbnails-update.js',
     },
     output: {
@@ -139,7 +142,8 @@ module.exports = [
               loader: 'file-loader',
               options: {
                 name: '../img/[name].[ext]',
-                publicPath: '',
+                // do not add a publicPath here because it's already handled by CSS's publicPath
+                publicPath: '../vintage',
               }
             }
           ],

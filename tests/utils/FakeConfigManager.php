@@ -1,9 +1,13 @@
 <?php
 
+namespace Shaarli;
+
+use Shaarli\Config\ConfigManager;
+
 /**
  * Fake ConfigManager
  */
-class FakeConfigManager
+class FakeConfigManager extends ConfigManager
 {
     protected $values = [];
 
@@ -23,7 +27,7 @@ class FakeConfigManager
      * @param string $key   Key of the value to set
      * @param mixed  $value Value to set
      */
-    public function set($key, $value)
+    public function set($key, $value, $write = false, $isLoggedIn = false)
     {
         $this->values[$key] = $value;
     }
@@ -35,7 +39,7 @@ class FakeConfigManager
      *
      * @return mixed The value if set, else the name of the key
      */
-    public function get($key)
+    public function get($key, $default = '')
     {
         if (isset($this->values[$key])) {
             return $this->values[$key];

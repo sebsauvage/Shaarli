@@ -1,6 +1,6 @@
 <?php
 
-namespace Shaarli;
+namespace Shaarli\Helper;
 
 use Shaarli\Exceptions\IOException;
 
@@ -80,5 +80,61 @@ class FileUtils
                 )
             )
         );
+    }
+
+    /**
+     * Recursively deletes a folder content, and deletes itself optionally.
+     * If an excluded file is found, folders won't be deleted.
+     *
+     * Additional security: raise an exception if it tries to delete a folder outside of Shaarli directory.
+     *
+     * @param string $path
+     * @param bool $selfDelete Delete the provided folder if true, only its content if false.
+     * @param array $exclude
+     */
+    public static function clearFolder(string $path, bool $selfDelete, array $exclude = []): bool
+    {
+        $skipped = false;
+
+        if (!is_dir($path)) {
+            throw new IOException(t('Provided path is not a directory.'));
+        }
+
+        if (!static::isPathInShaarliFolder($path)) {
+            throw new IOException(t('Trying to delete a folder outside of Shaarli path.'));
+        }
+
+        foreach (new \DirectoryIterator($path) as $file) {
+            if ($file->isDot()) {
+                continue;
+            }
+
+            if (in_array($file->getBasename(), $exclude, true)) {
+                $skipped = true;
+                continue;
+            }
+
+            if ($file->isFile()) {
+                unlink($file->getPathname());
+            } elseif ($file->isDir()) {
+                $skipped = static::clearFolder($file->getRealPath(), true, $exclude) || $skipped;
+            }
+        }
+
+        if ($selfDelete && !$skipped) {
+            rmdir($path);
+        }
+
+        return $skipped;
+    }
+
+    /**
+     * Checks that the given path is inside Shaarli directory.
+     */
+    public static function isPathInShaarliFolder(string $path): bool
+    {
+        $rootDirectory = dirname(dirname(dirname(__FILE__)));
+
+        return strpos(realpath($path), $rootDirectory) !== false;
     }
 }

@@ -23,7 +23,7 @@ class ExportController extends ShaarliAdminController
      */
     public function index(Request $request, Response $response): Response
     {
-        $this->assignView('pagetitle', t('Export') .' - '. $this->container->conf->get('general.title', 'Shaarli'));
+        $this->assignView('pagetitle', t('Export') . ' - ' . $this->container->conf->get('general.title', 'Shaarli'));
 
         return $response->write($this->render(TemplatePage::EXPORT));
     }
@@ -68,7 +68,7 @@ class ExportController extends ShaarliAdminController
         $response = $response->withHeader('Content-Type', 'text/html; charset=utf-8');
         $response = $response->withHeader(
             'Content-disposition',
-            'attachment; filename=bookmarks_'.$selection.'_'.$now->format(Bookmark::LINK_DATE_FORMAT).'.html'
+            'attachment; filename=bookmarks_' . $selection . '_' . $now->format(Bookmark::LINK_DATE_FORMAT) . '.html'
         );
 
         $this->assignView('date', $now->format(DateTime::RFC822));

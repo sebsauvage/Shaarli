@@ -26,19 +26,21 @@ class ErrorController extends ShaarliVisitorController
             $response = $response->withStatus($throwable->getCode());
         } else {
             // Internal error (any other Throwable)
-            if ($this->container->conf->get('dev.debug', false)) {
-                $this->assignView('message', $throwable->getMessage());
+            if ($this->container->conf->get('dev.debug', false) || $this->container->loginManager->isLoggedIn()) {
+                $this->assignView('message', t('Error: ') . $throwable->getMessage());
                 $this->assignView(
-                    'stacktrace',
-                    nl2br(get_class($throwable) .': '. PHP_EOL . $throwable->getTraceAsString())
+                    'text',
+                    '<a href="https://github.com/shaarli/Shaarli/issues/new">'
+                    . t('Please report it on Github.')
+                    . '</a>'
                 );
+                $this->assignView('stacktrace', exception2text($throwable));
             } else {
                 $this->assignView('message', t('An unexpected error occurred.'));
             }
 
             $response = $response->withStatus(500);
         }
-
 
         return $response->write($this->render('error'));
     }

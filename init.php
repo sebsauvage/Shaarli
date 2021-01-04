@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Shaarli\ApplicationUtils;
+use Shaarli\Helper\ApplicationUtils;
 use Shaarli\Security\SessionManager;
 
 // Set 'UTC' as the default timezone if it is not defined in php.ini

@@ -13,7 +13,7 @@ RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
 # Alternative (if the 2 lines above don't work)
 # SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
 
-# REST API
+# Slim URL Redirection
 # Ionos Hosting needs RewriteBase /
 # RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f

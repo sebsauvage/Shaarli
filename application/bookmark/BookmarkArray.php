@@ -72,7 +72,8 @@ class BookmarkArray implements \Iterator, \Countable, \ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        if (! $value instanceof Bookmark
+        if (
+            ! $value instanceof Bookmark
             || $value->getId() === null || empty($value->getUrl())
             || ($offset !== null && ! is_int($offset)) || ! is_int($value->getId())
             || $offset !== null && $offset !== $value->getId()
@@ -222,7 +223,8 @@ class BookmarkArray implements \Iterator, \Countable, \ArrayAccess
      */
     public function getByUrl(string $url): ?Bookmark
     {
-        if (! empty($url)
+        if (
+            ! empty($url)
             && isset($this->urls[$url])
             && isset($this->bookmarks[$this->urls[$url]])
         ) {

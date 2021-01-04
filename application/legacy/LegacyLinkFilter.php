@@ -120,7 +120,7 @@ class LegacyLinkFilter
             return $this->links;
         }
 
-        $out = array();
+        $out = [];
         foreach ($this->links as $key => $value) {
             if ($value['private'] && $visibility === 'private') {
                 $out[$key] = $value;
@@ -143,7 +143,7 @@ class LegacyLinkFilter
      */
     private function filterSmallHash($smallHash)
     {
-        $filtered = array();
+        $filtered = [];
         foreach ($this->links as $key => $l) {
             if ($smallHash == $l['shorturl']) {
                 // Yes, this is ugly and slow
@@ -186,7 +186,7 @@ class LegacyLinkFilter
             return $this->noFilter($visibility);
         }
 
-        $filtered = array();
+        $filtered = [];
         $search = mb_convert_case(html_entity_decode($searchterms), MB_CASE_LOWER, 'UTF-8');
         $exactRegex = '/"([^"]+)"/';
         // Retrieve exact search terms.
@@ -198,8 +198,8 @@ class LegacyLinkFilter
         $explodedSearchAnd = array_values(array_filter($explodedSearchAnd));
 
         // Filter excluding terms and update andSearch.
-        $excludeSearch = array();
-        $andSearch = array();
+        $excludeSearch = [];
+        $andSearch = [];
         foreach ($explodedSearchAnd as $needle) {
             if ($needle[0] == '-' && strlen($needle) > 1) {
                 $excludeSearch[] = substr($needle, 1);
@@ -208,7 +208,7 @@ class LegacyLinkFilter
             }
         }
 
-        $keys = array('title', 'description', 'url', 'tags');
+        $keys = ['title', 'description', 'url', 'tags'];
 
         // Iterate over every stored link.
         foreach ($this->links as $id => $link) {
@@ -336,7 +336,7 @@ class LegacyLinkFilter
         }
 
         // create resulting array
-        $filtered = array();
+        $filtered = [];
 
         // iterate over each link
         foreach ($this->links as $key => $link) {
@@ -352,7 +352,7 @@ class LegacyLinkFilter
             $search = $link['tags']; // build search string, start with tags of current link
             if (strlen(trim($link['description'])) && strpos($link['description'], '#') !== false) {
                 // description given and at least one possible tag found
-                $descTags = array();
+                $descTags = [];
                 // find all tags in the form of #tag in the description
                 preg_match_all(
                     '/(?<![' . self::$HASHTAG_CHARS . '])#([' . self::$HASHTAG_CHARS . ']+?)\b/sm',
@@ -419,7 +419,7 @@ class LegacyLinkFilter
             throw new Exception('Invalid date format');
         }
 
-        $filtered = array();
+        $filtered = [];
         foreach ($this->links as $key => $l) {
             if ($l['created']->format('Ymd') == $day) {
                 $filtered[$key] = $l;

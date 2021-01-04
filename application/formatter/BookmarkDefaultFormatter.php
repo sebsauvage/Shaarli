@@ -12,8 +12,8 @@ namespace Shaarli\Formatter;
  */
 class BookmarkDefaultFormatter extends BookmarkFormatter
 {
-    const SEARCH_HIGHLIGHT_OPEN = '|@@HIGHLIGHT';
-    const SEARCH_HIGHLIGHT_CLOSE = 'HIGHLIGHT@@|';
+    protected const SEARCH_HIGHLIGHT_OPEN = '|@@HIGHLIGHT';
+    protected const SEARCH_HIGHLIGHT_CLOSE = 'HIGHLIGHT@@|';
 
     /**
      * @inheritdoc
@@ -46,8 +46,13 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
             $bookmark->getDescription() ?? '',
             $bookmark->getAdditionalContentEntry('search_highlight')['description'] ?? []
         );
+        $description = format_description(
+            escape($description),
+            $indexUrl,
+            $this->conf->get('formatter_settings.autolink', true)
+        );
 
-        return $this->replaceTokens(format_description(escape($description), $indexUrl));
+        return $this->replaceTokens($description);
     }
 
     /**
@@ -63,15 +68,16 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
      */
     protected function formatTagListHtml($bookmark)
     {
+        $tagsSeparator = $this->conf->get('general.tags_separator', ' ');
         if (empty($bookmark->getAdditionalContentEntry('search_highlight')['tags'])) {
             return $this->formatTagList($bookmark);
         }
 
         $tags = $this->tokenizeSearchHighlightField(
-            $bookmark->getTagsString(),
+            $bookmark->getTagsString($tagsSeparator),
             $bookmark->getAdditionalContentEntry('search_highlight')['tags']
         );
-        $tags = $this->filterTagList(explode(' ', $tags));
+        $tags = $this->filterTagList(tags_str2array($tags, $tagsSeparator));
         $tags = escape($tags);
         $tags = $this->replaceTokensArray($tags);
 
@@ -83,7 +89,7 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
      */
     protected function formatTagString($bookmark)
     {
-        return implode(' ', $this->formatTagList($bookmark));
+        return implode($this->conf->get('general.tags_separator'), $this->formatTagList($bookmark));
     }
 
     /**

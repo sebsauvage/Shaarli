@@ -139,6 +139,16 @@ body,
   }
 }
 
+.page-form,
+.pure-alert {
+  code {
+    display: inline-block;
+    padding: 0 2px;
+    color: $dark-grey;
+    background-color: var(--background-color);
+  }
+}
+
 // Make pure-extras alert closable.
 .pure-alert-closable {
   .fa-times {
@@ -1023,6 +1033,10 @@ body,
     &.button-red {
       background: $red;
     }
+
+    &.button-grey {
+      background: $light-grey;
+    }
   }
 
   .submit-buttons {
@@ -1047,7 +1061,7 @@ body,
   }
 
   table {
-    margin: auto;
+    margin: 10px auto 25px auto;
     width: 90%;
 
     .order {
@@ -1082,6 +1096,11 @@ body,
         &.button-red {
           position: absolute;
           right: 5%;
+        }
+
+        &.button-grey {
+          position: absolute;
+          left: 5%;
         }
       }
     }
@@ -1257,11 +1276,15 @@ form {
     margin: 70px 0 25px;
   }
 
+  a {
+    color: var(--main-color);
+  }
+
   pre {
     margin: 0 20%;
     padding: 20px 0;
     text-align: left;
-    line-height: .7em;
+    line-height: 1em;
   }
 }
 
@@ -1270,6 +1293,57 @@ form {
   .created-date {
     margin-bottom: 10px;
     color: $light-grey;
+  }
+}
+
+.loading-input {
+  position: relative;
+
+  @keyframes around {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .icon-container {
+    position: absolute;
+    right: 60px;
+    top: calc(50% - 10px);
+  }
+
+  .loader {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    animation: around 5.4s infinite;
+
+    &::after,
+    &::before {
+      content: "";
+      background: $form-input-background;
+      position: absolute;
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      border-width: 2px;
+      border-color: #333 #333 transparent transparent;
+      border-style: solid;
+      border-radius: 20px;
+      box-sizing: border-box;
+      top: 0;
+      left: 0;
+      animation: around 0.7s ease-in-out infinite;
+    }
+
+    &::after {
+      animation: around 0.7s ease-in-out 0.1s infinite;
+      background: transparent;
+    }
   }
 }
 
@@ -1642,6 +1716,123 @@ form {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+}
+
+// SERVER PAGE
+
+.server-tables-page,
+.server-tables {
+  .window-subtitle {
+    &::before {
+      display: block;
+      margin: 8px auto;
+      background: linear-gradient(to right, var(--background-color), $dark-grey, var(--background-color));
+      width: 50%;
+      height: 1px;
+      content: '';
+    }
+  }
+
+  .server-row {
+    p {
+      height: 25px;
+      padding: 0 10px;
+    }
+  }
+
+  .server-label {
+    text-align: right;
+    font-weight: bold;
+  }
+
+  i {
+    &.fa-color-green {
+      color: $main-green;
+    }
+
+    &.fa-color-orange {
+      color: $orange;
+    }
+
+    &.fa-color-red {
+      color: $red;
+    }
+  }
+
+  @media screen and (max-width: 64em) {
+    .server-label {
+      text-align: center;
+    }
+
+    .server-row {
+      p {
+        text-align: center;
+      }
+    }
+  }
+}
+
+// Batch creation
+input[name='save_edit_batch'] {
+  @extend %page-form-button;
+}
+
+.addlink-batch-show-more {
+  display: flex;
+  align-items: center;
+  margin: 20px 0 8px;
+
+  a {
+    color: var(--main-color);
+    text-decoration: none;
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    flex-grow: 1;
+    background: rgba(0, 0, 0, 0.35);
+    height: 1px;
+    font-size: 0;
+    line-height: 0;
+  }
+
+  &::before {
+    margin: 0 16px 0 0;
+  }
+
+  &::after {
+    margin: 0 0 0 16px;
+  }
+}
+
+.dark-layer {
+  display: none;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 998;
+  background-color: rgba(0, 0, 0, .75);
+  color: #fff;
+
+  .screen-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+  }
+
+  .progressbar {
+    width: 33%;
+  }
+}
+
+.addlink-batch-form-block {
+  .pure-alert {
+    margin: 25px 0 0 0;
   }
 }
 

@@ -42,7 +42,7 @@ class PluginsController extends ShaarliAdminController
         $this->assignView('disabledPlugins', $disabledPlugins);
         $this->assignView(
             'pagetitle',
-            t('Plugin Administration') .' - '. $this->container->conf->get('general.title', 'Shaarli')
+            t('Plugin Administration') . ' - ' . $this->container->conf->get('general.title', 'Shaarli')
         );
 
         return $response->write($this->render(TemplatePage::PLUGINS_ADMIN));
@@ -64,7 +64,7 @@ class PluginsController extends ShaarliAdminController
                 unset($parameters['parameters_form']);
                 unset($parameters['token']);
                 foreach ($parameters as $param => $value) {
-                    $this->container->conf->set('plugins.'. $param, escape($value));
+                    $this->container->conf->set('plugins.' . $param, escape($value));
                 }
             } else {
                 $this->container->conf->set('general.enabled_plugins', save_plugin_config($parameters));

@@ -74,6 +74,7 @@ Some settings can be configured directly from a web browser by accesing the `Too
         "timezone": "Europe\/Paris",
         "title": "My Shaarli",
         "header_link": "?"
+        "tags_separator": " "
     },
     "dev": {
         "debug": false,
@@ -150,8 +151,10 @@ _These settings should not be edited_
 - **timezone**: See [the list of supported timezones](http://php.net/manual/en/timezones.php).
 - **enabled_plugins**: List of enabled plugins.
 - **default_note_title**: Default title of a new note.
+- **enable_async_metadata** (boolean): Retrieve external bookmark metadata asynchronously to prevent bookmark creation slowdown.
 - **retrieve_description** (boolean): If set to true, for every new Shaare Shaarli will try to retrieve the description and keywords from the HTML meta tags.
 - **root_url**: Overrides automatic discovery of Shaarli instance's URL (e.g.) `https://sub.domain.tld/shaarli-folder/`.
+- **tags_separator**: Defines your tags separator (default: whitespace).
 
 ### Security
 
@@ -162,6 +165,22 @@ _These settings should not be edited_
 - **open_shaarli**: Anyone can add a new Shaare while logged out if enabled.
 - **trusted_proxies**: List of trusted IP which won't be banned after failed login attemps. Useful if Shaarli is behind a reverse proxy.
 - **allowed_protocols**: List of allowed protocols in shaare URLs or markdown-rendered descriptions. Useful if you want to store `javascript:` links (bookmarklets) in Shaarli (default: `["ftp", "ftps", "magnet"]`).
+
+### Formatter
+
+Single string value. Default available:
+
+  - `default`: supports line breaks, URL and hashtag auto-links.
+  - `markdown`: supports [Markdown](https://daringfireball.net/projects/markdown/syntax).
+  - `markdownExtra`: adds [extra](https://michelf.ca/projects/php-markdown/extra/) flavor to Markdown.
+
+### Formatter Settings
+
+Additional settings applied to formatters.
+
+#### default
+
+  - **autolink**: boolean to enable or disable automatic linkification of URL and hashtags.
 
 ### Resources
 

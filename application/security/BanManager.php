@@ -1,9 +1,9 @@
 <?php
 
-
 namespace Shaarli\Security;
 
-use Shaarli\FileUtils;
+use Psr\Log\LoggerInterface;
+use Shaarli\Helper\FileUtils;
 
 /**
  * Class BanManager
@@ -28,8 +28,8 @@ class BanManager
     /** @var string Path to the file containing IP bans and failures */
     protected $banFile;
 
-    /** @var string Path to the log file, used to log bans */
-    protected $logFile;
+    /** @var LoggerInterface Path to the log file, used to log bans */
+    protected $logger;
 
     /** @var array List of IP with their associated number of failed attempts */
     protected $failures = [];
@@ -40,18 +40,20 @@ class BanManager
     /**
      * BanManager constructor.
      *
-     * @param array  $trustedProxies List of allowed proxies IP
-     * @param int    $nbAttempts     Number of allowed failed attempt before the ban
-     * @param int    $banDuration    Ban duration in seconds
-     * @param string $banFile        Path to the file containing IP bans and failures
-     * @param string $logFile        Path to the log file, used to log bans
+     * @param array           $trustedProxies List of allowed proxies IP
+     * @param int             $nbAttempts     Number of allowed failed attempt before the ban
+     * @param int             $banDuration    Ban duration in seconds
+     * @param string          $banFile        Path to the file containing IP bans and failures
+     * @param LoggerInterface $logger         PSR-3 logger to save login attempts in log directory
      */
-    public function __construct($trustedProxies, $nbAttempts, $banDuration, $banFile, $logFile) {
+    public function __construct($trustedProxies, $nbAttempts, $banDuration, $banFile, LoggerInterface $logger)
+    {
         $this->trustedProxies = $trustedProxies;
         $this->nbAttempts = $nbAttempts;
         $this->banDuration = $banDuration;
         $this->banFile = $banFile;
-        $this->logFile = $logFile;
+        $this->logger = $logger;
+
         $this->readBanFile();
     }
 
@@ -78,11 +80,7 @@ class BanManager
 
         if ($this->failures[$ip] >= $this->nbAttempts) {
             $this->bans[$ip] = time() + $this->banDuration;
-            logm(
-                $this->logFile,
-                $server['REMOTE_ADDR'],
-                'IP address banned from login: '. $ip
-            );
+            $this->logger->info(format_log('IP address banned from login: ' . $ip, $ip));
         }
         $this->writeBanFile();
     }
@@ -138,7 +136,7 @@ class BanManager
             unset($this->failures[$ip]);
         }
         unset($this->bans[$ip]);
-        logm($this->logFile, $server['REMOTE_ADDR'], 'Ban lifted for: '. $ip);
+        $this->logger->info(format_log('Ban lifted for: ' . $ip, $ip));
 
         $this->writeBanFile();
         return false;

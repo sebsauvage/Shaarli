@@ -1,6 +1,6 @@
 <?php
 
-use Shaarli\FileUtils;
+use Shaarli\Helper\FileUtils;
 use Shaarli\History;
 
 /**

@@ -25,7 +25,7 @@ class PasswordController extends ShaarliAdminController
 
         $this->assignView(
             'pagetitle',
-            t('Change password') .' - '. $this->container->conf->get('general.title', 'Shaarli')
+            t('Change password') . ' - ' . $this->container->conf->get('general.title', 'Shaarli')
         );
     }
 
@@ -78,7 +78,7 @@ class PasswordController extends ShaarliAdminController
 
         // Save new password
         // Salt renders rainbow-tables attacks useless.
-        $this->container->conf->set('credentials.salt', sha1(uniqid('', true) .'_'. mt_rand()));
+        $this->container->conf->set('credentials.salt', sha1(uniqid('', true) . '_' . mt_rand()));
         $this->container->conf->set(
             'credentials.hash',
             sha1(

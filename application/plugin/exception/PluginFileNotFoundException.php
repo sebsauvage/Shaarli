@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Plugin\Exception;
 
 use Exception;

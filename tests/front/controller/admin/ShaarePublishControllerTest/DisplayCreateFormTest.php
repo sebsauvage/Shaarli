@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Shaarli\Front\Controller\Admin\ManageShaareControllerTest;
+namespace Shaarli\Front\Controller\Admin\ShaarePublishControllerTest;
 
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Front\Controller\Admin\FrontAdminControllerMockHelper;
-use Shaarli\Front\Controller\Admin\ManageShaareController;
+use Shaarli\Front\Controller\Admin\ShaarePublishController;
 use Shaarli\Http\HttpAccess;
+use Shaarli\Http\MetadataRetriever;
 use Shaarli\TestCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -17,7 +18,7 @@ class DisplayCreateFormTest extends TestCase
 {
     use FrontAdminControllerMockHelper;
 
-    /** @var ManageShaareController */
+    /** @var ShaarePublishController */
     protected $controller;
 
     public function setUp(): void
@@ -25,14 +26,15 @@ class DisplayCreateFormTest extends TestCase
         $this->createContainer();
 
         $this->container->httpAccess = $this->createMock(HttpAccess::class);
-        $this->controller = new ManageShaareController($this->container);
+        $this->container->metadataRetriever = $this->createMock(MetadataRetriever::class);
+        $this->controller = new ShaarePublishController($this->container);
     }
 
     /**
      * Test displaying bookmark create form
      * Ensure that every step of the standard workflow works properly.
      */
-    public function testDisplayCreateFormWithUrl(): void
+    public function testDisplayCreateFormWithUrlAndWithMetadataRetrieval(): void
     {
         $this->container->environment = [
             'HTTP_REFERER' => $referer = 'http://shaarli/subfolder/controller/?searchtag=abc'
@@ -53,40 +55,20 @@ class DisplayCreateFormTest extends TestCase
         });
         $response = new Response();
 
-        $this->container->httpAccess
-            ->expects(static::once())
-            ->method('getCurlDownloadCallback')
-            ->willReturnCallback(
-                function (&$charset, &$title, &$description, &$tags) use (
-                    $remoteTitle,
-                    $remoteDesc,
-                    $remoteTags
-                ): callable {
-                    return function () use (
-                        &$charset,
-                        &$title,
-                        &$description,
-                        &$tags,
-                        $remoteTitle,
-                        $remoteDesc,
-                        $remoteTags
-                    ): void {
-                        $charset = 'ISO-8859-1';
-                        $title = $remoteTitle;
-                        $description = $remoteDesc;
-                        $tags = $remoteTags;
-                    };
-                }
-            )
-        ;
-        $this->container->httpAccess
-            ->expects(static::once())
-            ->method('getHttpResponse')
-            ->with($expectedUrl, 30, 4194304)
-            ->willReturnCallback(function($url, $timeout, $maxBytes, $callback): void {
-                $callback();
-            })
-        ;
+        $this->container->conf = $this->createMock(ConfigManager::class);
+        $this->container->conf->method('get')->willReturnCallback(function (string $param, $default) {
+            if ($param === 'general.enable_async_metadata') {
+                return false;
+            }
+
+            return $default;
+        });
+
+        $this->container->metadataRetriever->expects(static::once())->method('retrieve')->willReturn([
+            'title' => $remoteTitle,
+            'description' => $remoteDesc,
+            'tags' => $remoteTags,
+        ]);
 
         $this->container->bookmarkService
             ->expects(static::once())
@@ -119,7 +101,7 @@ class DisplayCreateFormTest extends TestCase
         static::assertSame($expectedUrl, $assignedVariables['link']['url']);
         static::assertSame($remoteTitle, $assignedVariables['link']['title']);
         static::assertSame($remoteDesc, $assignedVariables['link']['description']);
-        static::assertSame($remoteTags, $assignedVariables['link']['tags']);
+        static::assertSame($remoteTags . ' ', $assignedVariables['link']['tags']);
         static::assertFalse($assignedVariables['link']['private']);
 
         static::assertTrue($assignedVariables['link_is_new']);
@@ -127,6 +109,74 @@ class DisplayCreateFormTest extends TestCase
         static::assertSame($tags, $assignedVariables['tags']);
         static::assertArrayHasKey('source', $assignedVariables);
         static::assertArrayHasKey('default_private_links', $assignedVariables);
+        static::assertArrayHasKey('async_metadata', $assignedVariables);
+        static::assertArrayHasKey('retrieve_description', $assignedVariables);
+    }
+
+    /**
+     * Test displaying bookmark create form without any external metadata retrieval attempt
+     */
+    public function testDisplayCreateFormWithUrlAndWithoutMetadata(): void
+    {
+        $this->container->environment = [
+            'HTTP_REFERER' => $referer = 'http://shaarli/subfolder/controller/?searchtag=abc'
+        ];
+
+        $assignedVariables = [];
+        $this->assignTemplateVars($assignedVariables);
+
+        $url = 'http://url.tld/other?part=3&utm_ad=pay#hash';
+        $expectedUrl = str_replace('&utm_ad=pay', '', $url);
+
+        $request = $this->createMock(Request::class);
+        $request->method('getParam')->willReturnCallback(function (string $key) use ($url): ?string {
+            return $key === 'post' ? $url : null;
+        });
+        $response = new Response();
+
+        $this->container->metadataRetriever->expects(static::never())->method('retrieve');
+
+        $this->container->bookmarkService
+            ->expects(static::once())
+            ->method('bookmarksCountPerTag')
+            ->willReturn($tags = ['tag1' => 2, 'tag2' => 1])
+        ;
+
+        // Make sure that PluginManager hook is triggered
+        $this->container->pluginManager
+            ->expects(static::atLeastOnce())
+            ->method('executeHooks')
+            ->withConsecutive(['render_editlink'], ['render_includes'])
+            ->willReturnCallback(function (string $hook, array $data): array {
+                if ('render_editlink' === $hook) {
+                    static::assertSame('', $data['link']['title']);
+                    static::assertSame('', $data['link']['description']);
+                }
+
+                return $data;
+            })
+        ;
+
+        $result = $this->controller->displayCreateForm($request, $response);
+
+        static::assertSame(200, $result->getStatusCode());
+        static::assertSame('editlink', (string) $result->getBody());
+
+        static::assertSame('Shaare - Shaarli', $assignedVariables['pagetitle']);
+
+        static::assertSame($expectedUrl, $assignedVariables['link']['url']);
+        static::assertSame('', $assignedVariables['link']['title']);
+        static::assertSame('', $assignedVariables['link']['description']);
+        static::assertSame('', $assignedVariables['link']['tags']);
+        static::assertFalse($assignedVariables['link']['private']);
+
+        static::assertTrue($assignedVariables['link_is_new']);
+        static::assertSame($referer, $assignedVariables['http_referer']);
+        static::assertSame($tags, $assignedVariables['tags']);
+        static::assertArrayHasKey('source', $assignedVariables);
+        static::assertArrayHasKey('default_private_links', $assignedVariables);
+        static::assertArrayHasKey('async_metadata', $assignedVariables);
+        static::assertArrayHasKey('retrieve_description', $assignedVariables);
     }
 
     /**
@@ -142,7 +192,7 @@ class DisplayCreateFormTest extends TestCase
             'post' => 'http://url.tld/other?part=3&utm_ad=pay#hash',
             'title' => 'Provided Title',
             'description' => 'Provided description.',
-            'tags' => 'abc def',
+            'tags' => 'abc@def',
             'private' => '1',
             'source' => 'apps',
         ];
@@ -166,7 +216,7 @@ class DisplayCreateFormTest extends TestCase
         static::assertSame($expectedUrl, $assignedVariables['link']['url']);
         static::assertSame($parameters['title'], $assignedVariables['link']['title']);
         static::assertSame($parameters['description'], $assignedVariables['link']['description']);
-        static::assertSame($parameters['tags'], $assignedVariables['link']['tags']);
+        static::assertSame($parameters['tags'] . '@', $assignedVariables['link']['tags']);
         static::assertTrue($assignedVariables['link']['private']);
         static::assertTrue($assignedVariables['link_is_new']);
         static::assertSame($parameters['source'], $assignedVariables['source']);
@@ -310,7 +360,7 @@ class DisplayCreateFormTest extends TestCase
         static::assertSame($expectedUrl, $assignedVariables['link']['url']);
         static::assertSame($title, $assignedVariables['link']['title']);
         static::assertSame($description, $assignedVariables['link']['description']);
-        static::assertSame(implode(' ', $tags), $assignedVariables['link']['tags']);
+        static::assertSame(implode('@', $tags) . '@', $assignedVariables['link']['tags']);
         static::assertTrue($assignedVariables['link']['private']);
         static::assertSame($createdAt, $assignedVariables['link']['created']);
     }

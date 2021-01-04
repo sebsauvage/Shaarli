@@ -1,3 +1,4 @@
+{if="empty($batch_mode)"}
 <!DOCTYPE html>
 <html{if="$language !== 'auto'"} lang="{$language}"{/if}>
 <head>
@@ -5,6 +6,10 @@
 </head>
 <body>
   {include="page.header"}
+{else}
+  {ignore}Lil hack: when included in a loop in batch mode, `$value` is assigned by RainTPL with template vars.{/ignore}
+  {function="extract($value) ? '' : ''"}
+{/if}
   <div id="editlinkform" class="edit-link-container" class="pure-g">
     <div class="pure-u-lg-1-5 pure-u-1-24"></div>
     <form method="post"
@@ -12,6 +17,8 @@
           action="{$base_path}/admin/shaare"
           class="page-form pure-u-lg-3-5 pure-u-22-24 page-form page-form-light"
     >
+      {$asyncLoadClass=$link_is_new && $async_metadata && empty($link.title) ? 'loading-input' : ''}
+
       <h2 class="window-title">
         {if="!$link_is_new"}{'Edit Shaare'|t}{else}{'New Shaare'|t}{/if}
       </h2>
@@ -28,26 +35,37 @@
       <div>
       <label for="lf_title">{'Title'|t}</label>
       </div>
-      <div>
-        <input type="text" name="lf_title" id="lf_title" value="{$link.title}" class="lf_input autofocus">
+      <div class="{$asyncLoadClass}">
+        <input type="text" name="lf_title" id="lf_title" value="{$link.title}"
+         class="lf_input {if="!$async_metadata"}autofocus{/if}"
+        >
+        <div class="icon-container">
+          <i class="loader"></i>
+        </div>
       </div>
       <div>
         <label for="lf_description">{'Description'|t}</label>
       </div>
-      <div>
+      <div class="{if="$retrieve_description"}{$asyncLoadClass}{/if}">
         <textarea name="lf_description" id="lf_description" class="autofocus">{$link.description}</textarea>
+        <div class="icon-container">
+          <i class="loader"></i>
+        </div>
       </div>
       <div>
         <label for="lf_tags">{'Tags'|t}</label>
       </div>
-      <div>
+      <div class="{if="$retrieve_description"}{$asyncLoadClass}{/if}">
         <input type="text" name="lf_tags" id="lf_tags" value="{$link.tags}" class="lf_input autofocus"
           data-list="{loop="$tags"}{$key}, {/loop}" data-multiple data-autofirst autocomplete="off" >
+        <div class="icon-container">
+          <i class="loader"></i>
+        </div>
       </div>
 
       <div>
         <input type="checkbox"  name="lf_private" id="lf_private"
-        {if="($link_is_new && $default_private_links || $link.private == true)"}
+        {if="$link.private === true"}
           checked="checked"
         {/if}>
         &nbsp;<label for="lf_private">{'Private'|t}</label>
@@ -70,6 +88,13 @@
 
 
       <div class="submit-buttons center">
+        {if="!empty($batch_mode)"}
+          <a href="#" class="button button-grey" name="cancel-batch-link"
+            title="{'Remove this bookmark from batch creation/modification.'}"
+          >
+            {'Cancel'|t}
+          </a>
+        {/if}
         <input type="submit" name="save_edit" class="" id="button-save-edit"
                value="{if="$link_is_new"}{'Save'|t}{else}{'Apply Changes'|t}{/if}">
         {if="!$link_is_new"}
@@ -87,6 +112,10 @@
       {/if}
     </form>
   </div>
+
+{if="empty($batch_mode)"}
   {include="page.footer"}
+  {if="$link_is_new && $async_metadata"}<script src="{$asset_path}/js/metadata.min.js?v={$version_hash}#"></script>{/if}
 </body>
 </html>
+{/if}

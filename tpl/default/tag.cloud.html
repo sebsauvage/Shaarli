@@ -48,7 +48,7 @@
 
     <div id="cloudtag" class="cloudtag-container">
       {loop="tags"}
-        <a href="{$base_path}/?searchtags={$tags_url.$key1} {$search_tags_url}" style="font-size:{$value.size}em;">{$key}</a
+        <a href="{$base_path}/?searchtags={$tags_url.$key1}{$tags_separator|urlencode}{$search_tags_url}" style="font-size:{$value.size}em;">{$key}</a
         ><a href="{$base_path}/add-tag/{$tags_url.$key1}" title="{'Filter by tag'|t}" class="count">{$value.count}</a>
         {loop="$value.tag_plugin"}
           {$value}

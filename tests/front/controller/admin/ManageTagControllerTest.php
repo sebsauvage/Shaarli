@@ -6,6 +6,7 @@ namespace Shaarli\Front\Controller\Admin;
 
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\BookmarkFilter;
+use Shaarli\Config\ConfigManager;
 use Shaarli\Front\Exception\WrongTokenException;
 use Shaarli\Security\SessionManager;
 use Shaarli\TestCase;
@@ -44,7 +45,30 @@ class ManageTagControllerTest extends TestCase
         static::assertSame('changetag', (string) $result->getBody());
 
         static::assertSame('fromtag', $assignedVariables['fromtag']);
+        static::assertSame('@', $assignedVariables['tags_separator']);
         static::assertSame('Manage tags - Shaarli', $assignedVariables['pagetitle']);
+    }
+
+    /**
+     * Test displaying manage tag page
+     */
+    public function testIndexWhitespaceSeparator(): void
+    {
+        $assignedVariables = [];
+        $this->assignTemplateVars($assignedVariables);
+
+        $this->container->conf = $this->createMock(ConfigManager::class);
+        $this->container->conf->method('get')->willReturnCallback(function (string $key) {
+            return $key === 'general.tags_separator' ? ' ' : $key;
+        });
+
+        $request = $this->createMock(Request::class);
+        $response = new Response();
+
+        $this->controller->index($request, $response);
+
+        static::assertSame('&nbsp;', $assignedVariables['tags_separator']);
+        static::assertSame('whitespace', $assignedVariables['tags_separator_desc']);
     }
 
     /**
@@ -268,5 +292,117 @@ class ManageTagControllerTest extends TestCase
         static::assertArrayHasKey(SessionManager::KEY_WARNING_MESSAGES, $session);
         static::assertArrayNotHasKey(SessionManager::KEY_SUCCESS_MESSAGES, $session);
         static::assertSame(['Invalid tags provided.'], $session[SessionManager::KEY_WARNING_MESSAGES]);
+    }
+
+    /**
+     * Test changeSeparator to '#': redirection + success message.
+     */
+    public function testChangeSeparatorValid(): void
+    {
+        $toSeparator = '#';
+
+        $session = [];
+        $this->assignSessionVars($session);
+
+        $request = $this->createMock(Request::class);
+        $request
+            ->expects(static::atLeastOnce())
+            ->method('getParam')
+            ->willReturnCallback(function (string $key) use ($toSeparator): ?string {
+                return $key === 'separator' ? $toSeparator : $key;
+            })
+        ;
+        $response = new Response();
+
+        $this->container->conf
+            ->expects(static::once())
+            ->method('set')
+            ->with('general.tags_separator', $toSeparator, true, true)
+        ;
+
+        $result = $this->controller->changeSeparator($request, $response);
+
+        static::assertSame(302, $result->getStatusCode());
+        static::assertSame(['/subfolder/admin/tags'], $result->getHeader('location'));
+
+        static::assertArrayNotHasKey(SessionManager::KEY_ERROR_MESSAGES, $session);
+        static::assertArrayNotHasKey(SessionManager::KEY_WARNING_MESSAGES, $session);
+        static::assertArrayHasKey(SessionManager::KEY_SUCCESS_MESSAGES, $session);
+        static::assertSame(
+            ['Your tags separator setting has been updated!'],
+            $session[SessionManager::KEY_SUCCESS_MESSAGES]
+        );
+    }
+
+    /**
+     * Test changeSeparator to '#@' (too long): redirection + error message.
+     */
+    public function testChangeSeparatorInvalidTooLong(): void
+    {
+        $toSeparator = '#@';
+
+        $session = [];
+        $this->assignSessionVars($session);
+
+        $request = $this->createMock(Request::class);
+        $request
+            ->expects(static::atLeastOnce())
+            ->method('getParam')
+            ->willReturnCallback(function (string $key) use ($toSeparator): ?string {
+                return $key === 'separator' ? $toSeparator : $key;
+            })
+        ;
+        $response = new Response();
+
+        $this->container->conf->expects(static::never())->method('set');
+
+        $result = $this->controller->changeSeparator($request, $response);
+
+        static::assertSame(302, $result->getStatusCode());
+        static::assertSame(['/subfolder/admin/tags'], $result->getHeader('location'));
+
+        static::assertArrayNotHasKey(SessionManager::KEY_SUCCESS_MESSAGES, $session);
+        static::assertArrayNotHasKey(SessionManager::KEY_WARNING_MESSAGES, $session);
+        static::assertArrayHasKey(SessionManager::KEY_ERROR_MESSAGES, $session);
+        static::assertSame(
+            ['Tags separator must be a single character.'],
+            $session[SessionManager::KEY_ERROR_MESSAGES]
+        );
+    }
+
+    /**
+     * Test changeSeparator to '#@' (too long): redirection + error message.
+     */
+    public function testChangeSeparatorInvalidReservedCharacter(): void
+    {
+        $toSeparator = '*';
+
+        $session = [];
+        $this->assignSessionVars($session);
+
+        $request = $this->createMock(Request::class);
+        $request
+            ->expects(static::atLeastOnce())
+            ->method('getParam')
+            ->willReturnCallback(function (string $key) use ($toSeparator): ?string {
+                return $key === 'separator' ? $toSeparator : $key;
+            })
+        ;
+        $response = new Response();
+
+        $this->container->conf->expects(static::never())->method('set');
+
+        $result = $this->controller->changeSeparator($request, $response);
+
+        static::assertSame(302, $result->getStatusCode());
+        static::assertSame(['/subfolder/admin/tags'], $result->getHeader('location'));
+
+        static::assertArrayNotHasKey(SessionManager::KEY_SUCCESS_MESSAGES, $session);
+        static::assertArrayNotHasKey(SessionManager::KEY_WARNING_MESSAGES, $session);
+        static::assertArrayHasKey(SessionManager::KEY_ERROR_MESSAGES, $session);
+        static::assertStringStartsWith(
+            'These characters are reserved and can\'t be used as tags separator',
+            $session[SessionManager::KEY_ERROR_MESSAGES][0]
+        );
     }
 }

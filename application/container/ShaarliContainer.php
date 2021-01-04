@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Shaarli\Container;
 
+use Psr\Log\LoggerInterface;
 use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Feed\FeedBuilder;
 use Shaarli\Formatter\FormatterFactory;
 use Shaarli\History;
 use Shaarli\Http\HttpAccess;
+use Shaarli\Http\MetadataRetriever;
 use Shaarli\Netscape\NetscapeBookmarkUtils;
 use Shaarli\Plugin\PluginManager;
 use Shaarli\Render\PageBuilder;
@@ -35,6 +37,8 @@ use Slim\Container;
  * @property History                  $history
  * @property HttpAccess               $httpAccess
  * @property LoginManager             $loginManager
+ * @property LoggerInterface          $logger
+ * @property MetadataRetriever        $metadataRetriever
  * @property NetscapeBookmarkUtils    $netscapeBookmarkUtils
  * @property callable                 $notFoundHandler       Overrides default Slim exception display
  * @property PageBuilder              $pageBuilder

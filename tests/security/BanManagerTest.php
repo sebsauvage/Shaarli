@@ -3,7 +3,8 @@
 
 namespace Shaarli\Security;
 
-use Shaarli\FileUtils;
+use Psr\Log\LoggerInterface;
+use Shaarli\Helper\FileUtils;
 use Shaarli\TestCase;
 
 /**
@@ -387,7 +388,7 @@ class BanManagerTest extends TestCase
             3,
             1800,
             $this->banFile,
-            $this->logFile
+            $this->createMock(LoggerInterface::class)
         );
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Api;
 
 use malkusch\lock\mutex\FlockMutex;
@@ -108,7 +109,8 @@ class ApiMiddleware
      */
     protected function checkToken($request)
     {
-        if (!$request->hasHeader('Authorization')
+        if (
+            !$request->hasHeader('Authorization')
             && !isset($this->container->environment['REDIRECT_HTTP_AUTHORIZATION'])
         ) {
             throw new ApiAuthorizationException('JWT token not provided');

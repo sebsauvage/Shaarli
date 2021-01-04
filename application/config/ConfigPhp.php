@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Config;
 
 /**
@@ -12,7 +13,7 @@ class ConfigPhp implements ConfigIO
     /**
      * @var array List of config key without group.
      */
-    public static $ROOT_KEYS = array(
+    public static $ROOT_KEYS = [
         'login',
         'hash',
         'salt',
@@ -22,7 +23,7 @@ class ConfigPhp implements ConfigIO
         'redirector',
         'disablesessionprotection',
         'privateLinkByDefault',
-    );
+    ];
 
     /**
      * Map legacy config keys with the new ones.
@@ -31,7 +32,7 @@ class ConfigPhp implements ConfigIO
      *
      * @var array current key => legacy key.
      */
-    public static $LEGACY_KEYS_MAPPING = array(
+    public static $LEGACY_KEYS_MAPPING = [
         'credentials.login' => 'login',
         'credentials.hash' => 'hash',
         'credentials.salt' => 'salt',
@@ -68,7 +69,7 @@ class ConfigPhp implements ConfigIO
         'privacy.hide_public_links' => 'config.HIDE_PUBLIC_LINKS',
         'privacy.hide_timestamps' => 'config.HIDE_TIMESTAMPS',
         'security.open_shaarli' => 'config.OPEN_SHAARLI',
-    );
+    ];
 
     /**
      * @inheritdoc
@@ -76,12 +77,12 @@ class ConfigPhp implements ConfigIO
     public function read($filepath)
     {
         if (! file_exists($filepath) || ! is_readable($filepath)) {
-            return array();
+            return [];
         }
 
         include $filepath;
 
-        $out = array();
+        $out = [];
         foreach (self::$ROOT_KEYS as $key) {
             $out[$key] = isset($GLOBALS[$key]) ? $GLOBALS[$key] : '';
         }
@@ -95,7 +96,7 @@ class ConfigPhp implements ConfigIO
      */
     public function write($filepath, $conf)
     {
-        $configStr = '<?php '. PHP_EOL;
+        $configStr = '<?php ' . PHP_EOL;
         foreach (self::$ROOT_KEYS as $key) {
             if (isset($conf[$key])) {
                 $configStr .= '$GLOBALS[\'' . $key . '\'] = ' . var_export($conf[$key], true) . ';' . PHP_EOL;
@@ -106,8 +107,8 @@ class ConfigPhp implements ConfigIO
         foreach ($conf['config'] as $key => $value) {
             $configStr .= '$GLOBALS[\'config\'][\''
                 . $key
-                .'\'] = '
-                .var_export($conf['config'][$key], true).';'
+                . '\'] = '
+                . var_export($conf['config'][$key], true) . ';'
                 . PHP_EOL;
         }
 
@@ -115,18 +116,19 @@ class ConfigPhp implements ConfigIO
             foreach ($conf['plugins'] as $key => $value) {
                 $configStr .= '$GLOBALS[\'plugins\'][\''
                     . $key
-                    .'\'] = '
-                    .var_export($conf['plugins'][$key], true).';'
+                    . '\'] = '
+                    . var_export($conf['plugins'][$key], true) . ';'
                     . PHP_EOL;
             }
         }
 
-        if (!file_put_contents($filepath, $configStr)
+        if (
+            !file_put_contents($filepath, $configStr)
             || strcmp(file_get_contents($filepath), $configStr) != 0
         ) {
             throw new \Shaarli\Exceptions\IOException(
                 $filepath,
-                t('Shaarli could not create the config file. '.
+                t('Shaarli could not create the config file. ' .
                   'Please make sure Shaarli has the right to write in the folder is it installed in.')
             );
         }

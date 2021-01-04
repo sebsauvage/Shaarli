@@ -100,7 +100,7 @@ class TagCloudControllerTest extends TestCase
             ->with()
             ->willReturnCallback(function (string $key): ?string {
                 if ('searchtags' === $key) {
-                    return 'ghi def';
+                    return 'ghi@def';
                 }
 
                 return null;
@@ -131,7 +131,7 @@ class TagCloudControllerTest extends TestCase
             ->withConsecutive(['render_tagcloud'])
             ->willReturnCallback(function (string $hook, array $data, array $param): array {
                if ('render_tagcloud' === $hook) {
-                   static::assertSame('ghi def', $data['search_tags']);
+                   static::assertSame('ghi@def@', $data['search_tags']);
                    static::assertCount(1, $data['tags']);
 
                    static::assertArrayHasKey('loggedin', $param);
@@ -147,7 +147,7 @@ class TagCloudControllerTest extends TestCase
         static::assertSame('tag.cloud', (string) $result->getBody());
         static::assertSame('ghi def - Tag cloud - Shaarli', $assignedVariables['pagetitle']);
 
-        static::assertSame('ghi def', $assignedVariables['search_tags']);
+        static::assertSame('ghi@def@', $assignedVariables['search_tags']);
         static::assertCount(1, $assignedVariables['tags']);
 
         static::assertArrayHasKey('abc', $assignedVariables['tags']);
@@ -277,7 +277,7 @@ class TagCloudControllerTest extends TestCase
             ->with()
             ->willReturnCallback(function (string $key): ?string {
                 if ('searchtags' === $key) {
-                    return 'ghi def';
+                    return 'ghi@def';
                 } elseif ('sort' === $key) {
                     return 'alpha';
                 }
@@ -310,7 +310,7 @@ class TagCloudControllerTest extends TestCase
             ->withConsecutive(['render_taglist'])
             ->willReturnCallback(function (string $hook, array $data, array $param): array {
                 if ('render_taglist' === $hook) {
-                    static::assertSame('ghi def', $data['search_tags']);
+                    static::assertSame('ghi@def@', $data['search_tags']);
                     static::assertCount(1, $data['tags']);
 
                     static::assertArrayHasKey('loggedin', $param);
@@ -326,7 +326,7 @@ class TagCloudControllerTest extends TestCase
         static::assertSame('tag.list', (string) $result->getBody());
         static::assertSame('ghi def - Tag list - Shaarli', $assignedVariables['pagetitle']);
 
-        static::assertSame('ghi def', $assignedVariables['search_tags']);
+        static::assertSame('ghi@def@', $assignedVariables['search_tags']);
         static::assertCount(1, $assignedVariables['tags']);
         static::assertSame(3, $assignedVariables['tags']['abc']);
     }

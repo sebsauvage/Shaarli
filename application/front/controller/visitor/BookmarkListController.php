@@ -35,7 +35,8 @@ class BookmarkListController extends ShaarliVisitorController
         $formatter->addContextData('base_path', $this->container->basePath);
 
         $searchTags = normalize_spaces($request->getParam('searchtags') ?? '');
-        $searchTerm = escape(normalize_spaces($request->getParam('searchterm') ?? ''));;
+        $searchTerm = escape(normalize_spaces($request->getParam('searchterm') ?? ''));
+        ;
 
         // Filter bookmarks according search parameters.
         $visibility = $this->container->sessionManager->getSessionParameter('visibility');
@@ -95,6 +96,10 @@ class BookmarkListController extends ShaarliVisitorController
             $next_page_url = '?page=' . ($page - 1) . $searchtermUrl . $searchtagsUrl;
         }
 
+        $tagsSeparator = $this->container->conf->get('general.tags_separator', ' ');
+        $searchTagsUrlEncoded = array_map('urlencode', tags_str2array($searchTags, $tagsSeparator));
+        $searchTags = !empty($searchTags) ? trim($searchTags, $tagsSeparator) . $tagsSeparator : '';
+
         // Fill all template fields.
         $data = array_merge(
             $this->initializeTemplateVars(),
@@ -106,7 +111,7 @@ class BookmarkListController extends ShaarliVisitorController
                 'result_count' => count($linksToDisplay),
                 'search_term' => escape($searchTerm),
                 'search_tags' => escape($searchTags),
-                'search_tags_url' => array_map('urlencode', explode(' ', $searchTags)),
+                'search_tags_url' => $searchTagsUrlEncoded,
                 'visibility' => $visibility,
                 'links' => $linkDisp,
             ]
@@ -119,8 +124,9 @@ class BookmarkListController extends ShaarliVisitorController
                 return '[' . $tag . ']';
             };
             $data['pagetitle'] .= ! empty($searchTags)
-                ? implode(' ', array_map($bracketWrap, preg_split('/\s+/', $searchTags))) . ' '
-                : '';
+                ? implode(' ', array_map($bracketWrap, tags_str2array($searchTags, $tagsSeparator))) . ' '
+                : ''
+            ;
             $data['pagetitle'] .= '- ';
         }
 
@@ -137,8 +143,10 @@ class BookmarkListController extends ShaarliVisitorController
      */
     public function permalink(Request $request, Response $response, array $args): Response
     {
+        $privateKey = $request->getParam('key');
+
         try {
-            $bookmark = $this->container->bookmarkService->findByHash($args['hash']);
+            $bookmark = $this->container->bookmarkService->findByHash($args['hash'], $privateKey);
         } catch (BookmarkNotFoundException $e) {
             $this->assignView('error_message', $e->getMessage());
 
@@ -153,7 +161,7 @@ class BookmarkListController extends ShaarliVisitorController
         $data = array_merge(
             $this->initializeTemplateVars(),
             [
-                'pagetitle' => $bookmark->getTitle() .' - '. $this->container->conf->get('general.title', 'Shaarli'),
+                'pagetitle' => $bookmark->getTitle() . ' - ' . $this->container->conf->get('general.title', 'Shaarli'),
                 'links' => [$formatter->format($bookmark)],
             ]
         );
@@ -169,19 +177,25 @@ class BookmarkListController extends ShaarliVisitorController
      */
     protected function updateThumbnail(Bookmark $bookmark, bool $writeDatastore = true): bool
     {
-        // Logged in, thumbnails enabled, not a note, is HTTP
-        // and (never retrieved yet or no valid cache file)
-        if ($this->container->loginManager->isLoggedIn()
-            && $this->container->conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE
-            && false !== $bookmark->getThumbnail()
-            && !$bookmark->isNote()
-            && (null === $bookmark->getThumbnail() || !is_file($bookmark->getThumbnail()))
-            && startsWith(strtolower($bookmark->getUrl()), 'http')
-        ) {
-            $bookmark->setThumbnail($this->container->thumbnailer->get($bookmark->getUrl()));
-            $this->container->bookmarkService->set($bookmark, $writeDatastore);
+        if (false === $this->container->loginManager->isLoggedIn()) {
+            return false;
+        }
 
-            return true;
+        // If thumbnail should be updated, we reset it to null
+        if ($bookmark->shouldUpdateThumbnail()) {
+            $bookmark->setThumbnail(null);
+
+            // Requires an update, not async retrieval, thumbnails enabled
+            if (
+                $bookmark->shouldUpdateThumbnail()
+                && true !== $this->container->conf->get('general.enable_async_metadata', true)
+                && $this->container->conf->get('thumbnails.mode', Thumbnailer::MODE_NONE) !== Thumbnailer::MODE_NONE
+            ) {
+                $bookmark->setThumbnail($this->container->thumbnailer->get($bookmark->getUrl()));
+                $this->container->bookmarkService->set($bookmark, $writeDatastore);
+
+                return true;
+            }
         }
 
         return false;
@@ -198,6 +212,7 @@ class BookmarkListController extends ShaarliVisitorController
             'page_max' => '',
             'search_tags' => '',
             'result_count' => '',
+            'async_metadata' => $this->container->conf->get('general.enable_async_metadata', true)
         ];
     }
 

@@ -88,7 +88,8 @@ class Updater
 
         foreach ($this->methods as $method) {
             // Not an update method or already done, pass.
-            if (! startsWith($method->getName(), 'updateMethod')
+            if (
+                ! startsWith($method->getName(), 'updateMethod')
                 || in_array($method->getName(), $this->doneUpdates)
             ) {
                 continue;
@@ -121,12 +122,12 @@ class Updater
 
     public function readUpdates(string $updatesFilepath): array
     {
-        return UpdaterUtils::read_updates_file($updatesFilepath);
+        return UpdaterUtils::readUpdatesFile($updatesFilepath);
     }
 
     public function writeUpdates(string $updatesFilepath, array $updates): void
     {
-        UpdaterUtils::write_updates_file($updatesFilepath, $updates);
+        UpdaterUtils::writeUpdatesFile($updatesFilepath, $updates);
     }
 
     /**
@@ -152,7 +153,8 @@ class Updater
         $updated = false;
 
         foreach ($this->bookmarkService->search() as $bookmark) {
-            if ($bookmark->isNote()
+            if (
+                $bookmark->isNote()
                 && startsWith($bookmark->getUrl(), '?')
                 && 1 === preg_match('/^\?([a-zA-Z0-9-_@]{6})($|&|#)/', $bookmark->getUrl(), $match)
             ) {

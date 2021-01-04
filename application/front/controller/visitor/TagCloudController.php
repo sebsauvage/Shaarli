@@ -47,13 +47,14 @@ class TagCloudController extends ShaarliVisitorController
      */
     protected function processRequest(string $type, Request $request, Response $response): Response
     {
+        $tagsSeparator = $this->container->conf->get('general.tags_separator', ' ');
         if ($this->container->loginManager->isLoggedIn() === true) {
             $visibility = $this->container->sessionManager->getSessionParameter('visibility');
         }
 
         $sort = $request->getQueryParam('sort');
         $searchTags = $request->getQueryParam('searchtags');
-        $filteringTags = $searchTags !== null ? explode(' ', $searchTags) : [];
+        $filteringTags = $searchTags !== null ? explode($tagsSeparator, $searchTags) : [];
 
         $tags = $this->container->bookmarkService->bookmarksCountPerTag($filteringTags, $visibility ?? null);
 
@@ -71,8 +72,9 @@ class TagCloudController extends ShaarliVisitorController
             $tagsUrl[escape($tag)] = urlencode((string) $tag);
         }
 
-        $searchTags = implode(' ', escape($filteringTags));
-        $searchTagsUrl = urlencode(implode(' ', $filteringTags));
+        $searchTags = tags_array2str($filteringTags, $tagsSeparator);
+        $searchTags = !empty($searchTags) ? trim($searchTags, $tagsSeparator) . $tagsSeparator : '';
+        $searchTagsUrl = urlencode($searchTags);
         $data = [
             'search_tags' => escape($searchTags),
             'search_tags_url' => $searchTagsUrl,
@@ -82,10 +84,10 @@ class TagCloudController extends ShaarliVisitorController
         $this->executePageHooks('render_tag' . $type, $data, 'tag.' . $type);
         $this->assignAllView($data);
 
-        $searchTags = !empty($searchTags) ? $searchTags .' - ' : '';
+        $searchTags = !empty($searchTags) ? trim(str_replace($tagsSeparator, ' ', $searchTags)) . ' - ' : '';
         $this->assignView(
             'pagetitle',
-            $searchTags . t('Tag '. $type) .' - '. $this->container->conf->get('general.title', 'Shaarli')
+            $searchTags . t('Tag ' . $type) . ' - ' . $this->container->conf->get('general.title', 'Shaarli')
         );
 
         return $response->write($this->render('tag.' . $type));

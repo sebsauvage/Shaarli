@@ -29,13 +29,13 @@ class Info extends ApiController
         $info = [
             'global_counter' => $this->bookmarkService->count(),
             'private_counter' => $this->bookmarkService->count(BookmarkFilter::$PRIVATE),
-            'settings' => array(
+            'settings' => [
                 'title' => $this->conf->get('general.title', 'Shaarli'),
                 'header_link' => $this->conf->get('general.header_link', '?'),
                 'timezone' => $this->conf->get('general.timezone', 'UTC'),
                 'enabled_plugins' => $this->conf->get('general.enabled_plugins', []),
                 'default_private_links' => $this->conf->get('privacy.default_private_links', false),
-            ),
+            ],
         ];
 
         return $response->withJson($info, 200, $this->jsonStyle);

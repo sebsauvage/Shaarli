@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shaarli\Container;
 
 use malkusch\lock\mutex\FlockMutex;
+use Psr\Log\LoggerInterface;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Bookmark\BookmarkServiceInterface;
 use Shaarli\Config\ConfigManager;
@@ -14,6 +15,7 @@ use Shaarli\Front\Controller\Visitor\ErrorController;
 use Shaarli\Front\Controller\Visitor\ErrorNotFoundController;
 use Shaarli\History;
 use Shaarli\Http\HttpAccess;
+use Shaarli\Http\MetadataRetriever;
 use Shaarli\Netscape\NetscapeBookmarkUtils;
 use Shaarli\Plugin\PluginManager;
 use Shaarli\Render\PageBuilder;
@@ -48,6 +50,12 @@ class ContainerBuilder
     /** @var LoginManager */
     protected $login;
 
+    /** @var PluginManager */
+    protected $pluginManager;
+
+    /** @var LoggerInterface */
+    protected $logger;
+
     /** @var string|null */
     protected $basePath = null;
 
@@ -55,12 +63,16 @@ class ContainerBuilder
         ConfigManager $conf,
         SessionManager $session,
         CookieManager $cookieManager,
-        LoginManager $login
+        LoginManager $login,
+        PluginManager $pluginManager,
+        LoggerInterface $logger
     ) {
         $this->conf = $conf;
         $this->session = $session;
         $this->login = $login;
         $this->cookieManager = $cookieManager;
+        $this->pluginManager = $pluginManager;
+        $this->logger = $logger;
     }
 
     public function build(): ShaarliContainer
@@ -71,11 +83,10 @@ class ContainerBuilder
         $container['sessionManager'] = $this->session;
         $container['cookieManager'] = $this->cookieManager;
         $container['loginManager'] = $this->login;
+        $container['pluginManager'] = $this->pluginManager;
+        $container['logger'] = $this->logger;
         $container['basePath'] = $this->basePath;
 
-        $container['plugins'] = function (ShaarliContainer $container): PluginManager {
-            return new PluginManager($container->conf);
-        };
 
         $container['history'] = function (ShaarliContainer $container): History {
             return new History($container->conf->get('resource.history'));
@@ -90,22 +101,19 @@ class ContainerBuilder
             );
         };
 
+        $container['metadataRetriever'] = function (ShaarliContainer $container): MetadataRetriever {
+            return new MetadataRetriever($container->conf, $container->httpAccess);
+        };
+
         $container['pageBuilder'] = function (ShaarliContainer $container): PageBuilder {
             return new PageBuilder(
                 $container->conf,
                 $container->sessionManager->getSession(),
+                $container->logger,
                 $container->bookmarkService,
                 $container->sessionManager->generateToken(),
                 $container->loginManager->isLoggedIn()
             );
-        };
-
-        $container['pluginManager'] = function (ShaarliContainer $container): PluginManager {
-            $pluginManager = new PluginManager($container->conf);
-
-            $pluginManager->load($container->conf->get('general.enabled_plugins'));
-
-            return $pluginManager;
         };
 
         $container['formatterFactory'] = function (ShaarliContainer $container): FormatterFactory {
@@ -145,7 +153,7 @@ class ContainerBuilder
 
         $container['updater'] = function (ShaarliContainer $container): Updater {
             return new Updater(
-                UpdaterUtils::read_updates_file($container->conf->get('resource.updates')),
+                UpdaterUtils::readUpdatesFile($container->conf->get('resource.updates')),
                 $container->bookmarkService,
                 $container->conf,
                 $container->loginManager->isLoggedIn()

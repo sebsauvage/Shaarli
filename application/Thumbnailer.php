@@ -13,7 +13,7 @@ use WebThumbnailer\WebThumbnailer;
  */
 class Thumbnailer
 {
-    const COMMON_MEDIA_DOMAINS = [
+    protected const COMMON_MEDIA_DOMAINS = [
         'imgur.com',
         'flickr.com',
         'youtube.com',
@@ -31,9 +31,9 @@ class Thumbnailer
         'deviantart.com',
     ];
 
-    const MODE_ALL = 'all';
-    const MODE_COMMON = 'common';
-    const MODE_NONE = 'none';
+    public const MODE_ALL = 'all';
+    public const MODE_COMMON = 'common';
+    public const MODE_NONE = 'none';
 
     /**
      * @var WebThumbnailer instance.
@@ -60,7 +60,7 @@ class Thumbnailer
             // TODO: create a proper error handling system able to catch exceptions...
             die(t(
                 'php-gd extension must be loaded to use thumbnails. '
-                .'Thumbnails are now disabled. Please reload the page.'
+                . 'Thumbnails are now disabled. Please reload the page.'
             ));
         }
 
@@ -81,7 +81,8 @@ class Thumbnailer
      */
     public function get($url)
     {
-        if ($this->conf->get('thumbnails.mode') === self::MODE_COMMON
+        if (
+            $this->conf->get('thumbnails.mode') === self::MODE_COMMON
             && ! $this->isCommonMediaOrImage($url)
         ) {
             return false;

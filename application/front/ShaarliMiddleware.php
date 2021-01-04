@@ -42,7 +42,8 @@ class ShaarliMiddleware
         $this->initBasePath($request);
 
         try {
-            if (!is_file($this->container->conf->getConfigFileExt())
+            if (
+                !is_file($this->container->conf->getConfigFileExt())
                 && !in_array($next->getName(), ['displayInstall', 'saveInstall'], true)
             ) {
                 return $response->withRedirect($this->container->basePath . '/install');
@@ -86,7 +87,8 @@ class ShaarliMiddleware
      */
     protected function checkOpenShaarli(Request $request, Response $response, callable $next): bool
     {
-        if (// if the user isn't logged in
+        if (
+// if the user isn't logged in
             !$this->container->loginManager->isLoggedIn()
             // and Shaarli doesn't have public content...
             && $this->container->conf->get('privacy.hide_public_links')

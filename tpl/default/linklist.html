@@ -90,7 +90,7 @@
           {'for'|t} <em><strong>{$search_term}</strong></em>
         {/if}
         {if="!empty($search_tags)"}
-          {$exploded_tags=explode(' ', $search_tags)}
+          {$exploded_tags=tags_str2array($search_tags, $tags_separator)}
           {'tagged'|t}
           {loop="$exploded_tags"}
               <span class="label label-tag" title="{'Remove tag'|t}">
@@ -129,14 +129,19 @@
       {$strAddTag=t('Add tag')}
       {$strToggleSticky=t('Toggle sticky')}
       {$strSticky=t('Sticky')}
+      {$strShaarePrivate=t('Share a private link')}
       {ignore}End of translations{/ignore}
       {loop="links"}
         <div class="anchor" id="{$value.shorturl}"></div>
 
         <div class="linklist-item linklist-item{if="$value.class"} {$value.class}{/if}" data-id="{$value.id}">
           <div class="linklist-item-title">
-            {if="$thumbnails_enabled && !empty($value.thumbnail)"}
-              <div class="linklist-item-thumbnail" style="width:{$thumbnails_width}px;height:{$thumbnails_height}px;">
+            {if="$thumbnails_enabled && $value.thumbnail !== false"}
+              <div
+                class="linklist-item-thumbnail {if="$value.thumbnail === null"}hidden{/if}"
+                style="width:{$thumbnails_width}px;height:{$thumbnails_height}px;"
+                {if="$value.thumbnail === null"}data-async-thumbnail="1"{/if}
+              >
                 <div class="thumbnail">
                   {ignore}RainTPL hack: put the 2 src on two different line to avoid path replace bug{/ignore}
                   <a href="{$value.real_url}" aria-hidden="true" tabindex="-1">
@@ -158,7 +163,7 @@
             </div>
 
             <h2>
-              <a href="{$value.real_url}">
+              <a href="{$value.real_url}" class="linklist-real-url">
                 {if="strpos($value.url, $value.shorturl) === false"}
                   <i class="fa fa-external-link" aria-hidden="true"></i>
                 {else}
@@ -237,6 +242,12 @@
                   {$strPermalinkLc}
                 </a>
 
+                {if="$is_logged_in && $value.private"}
+                  <a href="{$base_path}/admin/shaare/private/{$value.shorturl}?token={$token}" title="{$strShaarePrivate}">
+                    <i class="fa fa-share-alt"></i>
+                  </a>
+                {/if}
+
                 <div class="pure-u-0 pure-u-lg-visible">
                   {if="isset($value.link_plugin)"}
                     &middot;
@@ -308,5 +319,6 @@
 
 {include="page.footer"}
 <script src="{$asset_path}/js/thumbnails.min.js?v={$version_hash}#"></script>
+{if="$is_logged_in && $async_metadata"}<script src="{$asset_path}/js/metadata.min.js?v={$version_hash}#"></script>{/if}
 </body>
 </html>

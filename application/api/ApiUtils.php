@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Api;
 
 use Shaarli\Api\Exceptions\ApiAuthorizationException;
@@ -27,7 +28,7 @@ class ApiUtils
             throw new ApiAuthorizationException('Malformed JWT token');
         }
 
-        $genSign = Base64Url::encode(hash_hmac('sha512', $parts[0] .'.'. $parts[1], $secret, true));
+        $genSign = Base64Url::encode(hash_hmac('sha512', $parts[0] . '.' . $parts[1], $secret, true));
         if ($parts[2] != $genSign) {
             throw new ApiAuthorizationException('Invalid JWT signature');
         }
@@ -42,7 +43,8 @@ class ApiUtils
             throw new ApiAuthorizationException('Invalid JWT payload');
         }
 
-        if (empty($payload->iat)
+        if (
+            empty($payload->iat)
             || $payload->iat > time()
             || time() - $payload->iat > ApiMiddleware::$TOKEN_DURATION
         ) {
@@ -89,13 +91,17 @@ class ApiUtils
      * If no URL is provided, it will generate a local note URL.
      * If no title is provided, it will use the URL as title.
      *
-     * @param array|null  $input          Request Link.
-     * @param bool        $defaultPrivate Setting defined if a bookmark is private by default.
+     * @param array|null $input          Request Link.
+     * @param bool       $defaultPrivate Setting defined if a bookmark is private by default.
+     * @param string     $tagsSeparator  Tags separator loaded from the config file.
      *
      * @return Bookmark instance.
      */
-    public static function buildBookmarkFromRequest(?array $input, bool $defaultPrivate): Bookmark
-    {
+    public static function buildBookmarkFromRequest(
+        ?array $input,
+        bool $defaultPrivate,
+        string $tagsSeparator
+    ): Bookmark {
         $bookmark = new Bookmark();
         $url = ! empty($input['url']) ? cleanup_url($input['url']) : '';
         if (isset($input['private'])) {
@@ -107,6 +113,15 @@ class ApiUtils
         $bookmark->setTitle(! empty($input['title']) ? $input['title'] : '');
         $bookmark->setUrl($url);
         $bookmark->setDescription(! empty($input['description']) ? $input['description'] : '');
+
+        // Be permissive with provided tags format
+        if (is_string($input['tags'] ?? null)) {
+            $input['tags'] = tags_str2array($input['tags'], $tagsSeparator);
+        }
+        if (is_array($input['tags'] ?? null) && count($input['tags']) === 1 && is_string($input['tags'][0])) {
+            $input['tags'] = tags_str2array($input['tags'][0], $tagsSeparator);
+        }
+
         $bookmark->setTags(! empty($input['tags']) ? $input['tags'] : []);
         $bookmark->setPrivate($private);
 

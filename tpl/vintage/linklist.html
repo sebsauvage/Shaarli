@@ -61,7 +61,7 @@
                 for <em>{$search_term}</em>
             {/if}
             {if="!empty($search_tags)"}
-                {$exploded_tags=explode(' ', $search_tags)}
+                {$exploded_tags=tags_str2array($search_tags, $tags_separator)}
                 tagged
                 {loop="$exploded_tags"}
                     <span class="linktag" title="Remove tag">
@@ -77,10 +77,10 @@
     {/if}
     <ul>
         {loop="$links"}
-        <li{if="$value.class"} class="{$value.class}"{/if}>
+        <li{if="$value.class"} class="{$value.class}"{/if} data-id="{$value.id}">
             <a id="{$value.shorturl}"></a>
-            {if="$thumbnails_enabled && !empty($value.thumbnail)"}
-                <div class="thumbnail">
+            {if="$thumbnails_enabled && $value.thumbnail !== false"}
+                <div class="thumbnail" {if="$value.thumbnail === null"}data-async-thumbnail="1"{/if}>
                     <a href="{$value.real_url}">
                         {ignore}RainTPL hack: put the 2 src on two different line to avoid path replace bug{/ignore}
                         <img data-src="{$base_path}/{$value.thumbnail}#" class="b-lazy"
@@ -153,6 +153,7 @@
 
     {include="page.footer"}
 <script src="{$asset_path}/js/thumbnails.min.js#"></script>
+{if="$is_logged_in && $async_metadata"}<script src="{$asset_path}/js/metadata.min.js?v={$version_hash}#"></script>{/if}
 
 </body>
 </html>

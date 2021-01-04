@@ -169,6 +169,36 @@ class LinkUtilsTest extends TestCase
     }
 
     /**
+     * Test html_extract_tag() with double quoted content containing single quote, and the opposite.
+     */
+    public function testHtmlExtractExistentNameTagWithMixedQuotes(): void
+    {
+        $description = 'Bob and Alice share M&M\'s.';
+
+        $html = '<meta property="og:description" content="' . $description . '">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        $html = '<meta tag1="content1" property="og:unrelated1 og:description og:unrelated2" '.
+            'tag2="content2" content="' . $description . '" tag3="content3">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        $html = '<meta property="og:description" name="description" content="' . $description . '">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        $description = 'Bob and Alice share "cookies".';
+
+        $html = '<meta property="og:description" content=\'' . $description . '\'>';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        $html = '<meta tag1="content1" property="og:unrelated1 og:description og:unrelated2" '.
+            'tag2="content2" content=\'' . $description . '\' tag3="content3">';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+
+        $html = '<meta property="og:description" name="description" content=\'' . $description . '\'>';
+        $this->assertEquals($description, html_extract_tag('description', $html));
+    }
+
+    /**
      * Test html_extract_tag() when the tag <meta name= is not found.
      */
     public function testHtmlExtractNonExistentNameTag()
@@ -215,61 +245,104 @@ class LinkUtilsTest extends TestCase
         $this->assertFalse(html_extract_tag('description', $html));
     }
 
-    /**
-     * Test the download callback with valid value
-     */
-    public function testCurlDownloadCallbackOk()
+    public function testHtmlExtractDescriptionFromGoogleRealCase(): void
     {
-        $callback = get_curl_download_callback(
-            $charset,
-            $title,
-            $desc,
-            $keywords,
-            false,
-            'ut_curl_getinfo_ok'
-        );
+        $html = 'id="gsr"><meta content="Fêtes de fin d\'année" property="twitter:title"><meta '.
+                'content="Bonnes fêtes de fin d\'année ! #GoogleDoodle" property="twitter:description">'.
+                '<meta content="Bonnes fêtes de fin d\'année ! #GoogleDoodle" property="og:description">'.
+                '<meta content="summary_large_image" property="twitter:card"><meta co'
+        ;
+        $this->assertSame('Bonnes fêtes de fin d\'année ! #GoogleDoodle', html_extract_tag('description', $html));
+    }
+
+    /**
+     * Test the header callback with valid value
+     */
+    public function testCurlHeaderCallbackOk(): void
+    {
+        $callback = get_curl_header_callback($charset, 'ut_curl_getinfo_ok');
         $data = [
             'HTTP/1.1 200 OK',
             'Server: GitHub.com',
             'Date: Sat, 28 Oct 2017 12:01:33 GMT',
             'Content-Type: text/html; charset=utf-8',
             'Status: 200 OK',
-            'end' => 'th=device-width">'
-                . '<title>Refactoring · GitHub</title>'
-                . '<link rel="search" type="application/opensea',
-            '<title>ignored</title>'
-                . '<meta name="description" content="desc" />'
-                . '<meta name="keywords" content="key1,key2" />',
         ];
-        foreach ($data as $key => $line) {
-            $ignore = null;
-            $expected = $key !== 'end' ? strlen($line) : false;
-            $this->assertEquals($expected, $callback($ignore, $line));
-            if ($expected === false) {
-                break;
-            }
+
+        foreach ($data as $chunk) {
+            static::assertIsInt($callback(null, $chunk));
         }
-        $this->assertEquals('utf-8', $charset);
-        $this->assertEquals('Refactoring · GitHub', $title);
-        $this->assertEmpty($desc);
-        $this->assertEmpty($keywords);
+
+        static::assertSame('utf-8', $charset);
     }
 
     /**
-     * Test the download callback with valid values and no charset
+     * Test the download callback with valid value
      */
-    public function testCurlDownloadCallbackOkNoCharset()
+    public function testCurlDownloadCallbackOk(): void
     {
+        $charset = 'utf-8';
         $callback = get_curl_download_callback(
             $charset,
             $title,
             $desc,
             $keywords,
             false,
-            'ut_curl_getinfo_no_charset'
+            ' '
         );
+
+        $data = [
+            'th=device-width">'
+                . '<title>Refactoring · GitHub</title>'
+                . '<link rel="search" type="application/opensea',
+            '<title>ignored</title>'
+                . '<meta name="description" content="desc" />'
+                . '<meta name="keywords" content="key1,key2" />',
+        ];
+
+        foreach ($data as $chunk) {
+            static::assertSame(strlen($chunk), $callback(null, $chunk));
+        }
+
+        static::assertSame('utf-8', $charset);
+        static::assertSame('Refactoring · GitHub', $title);
+        static::assertEmpty($desc);
+        static::assertEmpty($keywords);
+    }
+
+    /**
+     * Test the header callback with valid value
+     */
+    public function testCurlHeaderCallbackNoCharset(): void
+    {
+        $callback = get_curl_header_callback($charset, 'ut_curl_getinfo_no_charset');
         $data = [
             'HTTP/1.1 200 OK',
+        ];
+
+        foreach ($data as $chunk) {
+            static::assertSame(strlen($chunk), $callback(null, $chunk));
+        }
+
+        static::assertFalse($charset);
+    }
+
+    /**
+     * Test the download callback with valid values and no charset
+     */
+    public function testCurlDownloadCallbackOkNoCharset(): void
+    {
+        $charset = null;
+        $callback = get_curl_download_callback(
+            $charset,
+            $title,
+            $desc,
+            $keywords,
+            false,
+            ' '
+        );
+
+        $data = [
             'end' => 'th=device-width">'
                 . '<title>Refactoring · GitHub</title>'
                 . '<link rel="search" type="application/opensea',
@@ -277,10 +350,11 @@ class LinkUtilsTest extends TestCase
             . '<meta name="description" content="desc" />'
             . '<meta name="keywords" content="key1,key2" />',
         ];
-        foreach ($data as $key => $line) {
-            $ignore = null;
-            $this->assertEquals(strlen($line), $callback($ignore, $line));
+
+        foreach ($data as $chunk) {
+            static::assertSame(strlen($chunk), $callback(null, $chunk));
         }
+
         $this->assertEmpty($charset);
         $this->assertEquals('Refactoring · GitHub', $title);
         $this->assertEmpty($desc);
@@ -290,18 +364,19 @@ class LinkUtilsTest extends TestCase
     /**
      * Test the download callback with valid values and no charset
      */
-    public function testCurlDownloadCallbackOkHtmlCharset()
+    public function testCurlDownloadCallbackOkHtmlCharset(): void
     {
+        $charset = null;
         $callback = get_curl_download_callback(
             $charset,
             $title,
             $desc,
             $keywords,
             false,
-            'ut_curl_getinfo_no_charset'
+            ' '
         );
+
         $data = [
-            'HTTP/1.1 200 OK',
             '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
             'end' => 'th=device-width">'
                 . '<title>Refactoring · GitHub</title>'
@@ -310,14 +385,10 @@ class LinkUtilsTest extends TestCase
             . '<meta name="description" content="desc" />'
             . '<meta name="keywords" content="key1,key2" />',
         ];
-        foreach ($data as $key => $line) {
-            $ignore = null;
-            $expected = $key !== 'end' ? strlen($line) : false;
-            $this->assertEquals($expected, $callback($ignore, $line));
-            if ($expected === false) {
-                break;
-            }
+        foreach ($data as $chunk) {
+            static::assertSame(strlen($chunk), $callback(null, $chunk));
         }
+
         $this->assertEquals('utf-8', $charset);
         $this->assertEquals('Refactoring · GitHub', $title);
         $this->assertEmpty($desc);
@@ -327,25 +398,27 @@ class LinkUtilsTest extends TestCase
     /**
      * Test the download callback with valid values and no title
      */
-    public function testCurlDownloadCallbackOkNoTitle()
+    public function testCurlDownloadCallbackOkNoTitle(): void
     {
+        $charset = 'utf-8';
         $callback = get_curl_download_callback(
             $charset,
             $title,
             $desc,
             $keywords,
             false,
-            'ut_curl_getinfo_ok'
+            ' '
         );
+
         $data = [
-            'HTTP/1.1 200 OK',
             'end' => 'th=device-width">Refactoring · GitHub<link rel="search" type="application/opensea',
             'ignored',
         ];
-        foreach ($data as $key => $line) {
-            $ignore = null;
-            $this->assertEquals(strlen($line), $callback($ignore, $line));
+
+        foreach ($data as $chunk) {
+            static::assertSame(strlen($chunk), $callback(null, $chunk));
         }
+
         $this->assertEquals('utf-8', $charset);
         $this->assertEmpty($title);
         $this->assertEmpty($desc);
@@ -353,81 +426,56 @@ class LinkUtilsTest extends TestCase
     }
 
     /**
-     * Test the download callback with an invalid content type.
+     * Test the header callback with an invalid content type.
      */
-    public function testCurlDownloadCallbackInvalidContentType()
+    public function testCurlHeaderCallbackInvalidContentType(): void
     {
-        $callback = get_curl_download_callback(
-            $charset,
-            $title,
-            $desc,
-            $keywords,
-            false,
-            'ut_curl_getinfo_ct_ko'
-        );
-        $ignore = null;
-        $this->assertFalse($callback($ignore, ''));
-        $this->assertEmpty($charset);
-        $this->assertEmpty($title);
+        $callback = get_curl_header_callback($charset, 'ut_curl_getinfo_ct_ko');
+        $data = [
+            'HTTP/1.1 200 OK',
+        ];
+
+        static::assertFalse($callback(null, $data[0]));
+        static::assertNull($charset);
     }
 
     /**
-     * Test the download callback with an invalid response code.
+     * Test the header callback with an invalid response code.
      */
-    public function testCurlDownloadCallbackInvalidResponseCode()
+    public function testCurlHeaderCallbackInvalidResponseCode(): void
     {
-        $callback = $callback = get_curl_download_callback(
-            $charset,
-            $title,
-            $desc,
-            $keywords,
-            false,
-            'ut_curl_getinfo_rc_ko'
-        );
-        $ignore = null;
-        $this->assertFalse($callback($ignore, ''));
-        $this->assertEmpty($charset);
-        $this->assertEmpty($title);
+        $callback = get_curl_header_callback($charset, 'ut_curl_getinfo_rc_ko');
+
+        static::assertFalse($callback(null, ''));
+        static::assertNull($charset);
     }
 
     /**
-     * Test the download callback with an invalid content type and response code.
+     * Test the header callback with an invalid content type and response code.
      */
-    public function testCurlDownloadCallbackInvalidContentTypeAndResponseCode()
+    public function testCurlHeaderCallbackInvalidContentTypeAndResponseCode(): void
     {
-        $callback = $callback = get_curl_download_callback(
-            $charset,
-            $title,
-            $desc,
-            $keywords,
-            false,
-            'ut_curl_getinfo_rs_ct_ko'
-        );
-        $ignore = null;
-        $this->assertFalse($callback($ignore, ''));
-        $this->assertEmpty($charset);
-        $this->assertEmpty($title);
+        $callback = get_curl_header_callback($charset, 'ut_curl_getinfo_rs_ct_ko');
+
+        static::assertFalse($callback(null, ''));
+        static::assertNull($charset);
     }
 
     /**
      * Test the download callback with valid value, and retrieve_description option enabled.
      */
-    public function testCurlDownloadCallbackOkWithDesc()
+    public function testCurlDownloadCallbackOkWithDesc(): void
     {
+        $charset = 'utf-8';
         $callback = get_curl_download_callback(
             $charset,
             $title,
             $desc,
             $keywords,
             true,
-            'ut_curl_getinfo_ok'
+            ' '
         );
         $data = [
-            'HTTP/1.1 200 OK',
-            'Server: GitHub.com',
-            'Date: Sat, 28 Oct 2017 12:01:33 GMT',
-            'Content-Type: text/html; charset=utf-8',
-            'Status: 200 OK',
             'th=device-width">'
                 . '<title>Refactoring · GitHub</title>'
                 . '<link rel="search" type="application/opensea',
@@ -435,14 +483,11 @@ class LinkUtilsTest extends TestCase
             . '<meta name="description" content="link desc" />'
             . '<meta name="keywords" content="key1,key2" />',
         ];
-        foreach ($data as $key => $line) {
-            $ignore = null;
-            $expected = $key !== 'end' ? strlen($line) : false;
-            $this->assertEquals($expected, $callback($ignore, $line));
-            if ($expected === false) {
-                break;
-            }
+
+        foreach ($data as $chunk) {
+            static::assertSame(strlen($chunk), $callback(null, $chunk));
         }
+
         $this->assertEquals('utf-8', $charset);
         $this->assertEquals('Refactoring · GitHub', $title);
         $this->assertEquals('link desc', $desc);
@@ -453,8 +498,9 @@ class LinkUtilsTest extends TestCase
      * Test the download callback with valid value, and retrieve_description option enabled,
      * but no desc or keyword defined in the page.
      */
-    public function testCurlDownloadCallbackOkWithDescNotFound()
+    public function testCurlDownloadCallbackOkWithDescNotFound(): void
     {
+        $charset = 'utf-8';
         $callback = get_curl_download_callback(
             $charset,
             $title,
@@ -464,24 +510,16 @@ class LinkUtilsTest extends TestCase
             'ut_curl_getinfo_ok'
         );
         $data = [
-            'HTTP/1.1 200 OK',
-            'Server: GitHub.com',
-            'Date: Sat, 28 Oct 2017 12:01:33 GMT',
-            'Content-Type: text/html; charset=utf-8',
-            'Status: 200 OK',
             'th=device-width">'
                 . '<title>Refactoring · GitHub</title>'
                 . '<link rel="search" type="application/opensea',
             'end' => '<title>ignored</title>',
         ];
-        foreach ($data as $key => $line) {
-            $ignore = null;
-            $expected = $key !== 'end' ? strlen($line) : false;
-            $this->assertEquals($expected, $callback($ignore, $line));
-            if ($expected === false) {
-                break;
-            }
+
+        foreach ($data as $chunk) {
+            static::assertSame(strlen($chunk), $callback(null, $chunk));
         }
+
         $this->assertEquals('utf-8', $charset);
         $this->assertEquals('Refactoring · GitHub', $title);
         $this->assertEmpty($desc);
@@ -579,6 +617,115 @@ class LinkUtilsTest extends TestCase
         $this->assertFalse(is_note(''));
         $this->assertFalse(is_note('nope'));
         $this->assertFalse(is_note('https://github.com/shaarli/Shaarli/?hi'));
+    }
+
+    /**
+     * Test tags_str2array with whitespace separator.
+     */
+    public function testTagsStr2ArrayWithSpaceSeparator(): void
+    {
+        $separator = ' ';
+
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_str2array('tag1 tag2 tag3', $separator));
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_str2array('tag1  tag2     tag3', $separator));
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_str2array('   tag1  tag2     tag3   ', $separator));
+        static::assertSame(['tag1@', 'tag2,', '.tag3'], tags_str2array('   tag1@  tag2,     .tag3   ', $separator));
+        static::assertSame([], tags_str2array('', $separator));
+        static::assertSame([], tags_str2array('   ', $separator));
+        static::assertSame([], tags_str2array(null, $separator));
+    }
+
+    /**
+     * Test tags_str2array with @ separator.
+     */
+    public function testTagsStr2ArrayWithCharSeparator(): void
+    {
+        $separator = '@';
+
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_str2array('tag1@tag2@tag3', $separator));
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_str2array('tag1@@@@tag2@@@@tag3', $separator));
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_str2array('@@@tag1@@@tag2@@@@tag3@@', $separator));
+        static::assertSame(
+            ['tag1#', 'tag2, and other', '.tag3'],
+            tags_str2array('@@@   tag1#     @@@ tag2, and other @@@@.tag3@@', $separator)
+        );
+        static::assertSame([], tags_str2array('', $separator));
+        static::assertSame([], tags_str2array('   ', $separator));
+        static::assertSame([], tags_str2array(null, $separator));
+    }
+
+    /**
+     * Test tags_array2str with ' ' separator.
+     */
+    public function testTagsArray2StrWithSpaceSeparator(): void
+    {
+        $separator = ' ';
+
+        static::assertSame('tag1 tag2 tag3', tags_array2str(['tag1', 'tag2', 'tag3'], $separator));
+        static::assertSame('tag1, tag2@ tag3', tags_array2str(['tag1,', 'tag2@', 'tag3'], $separator));
+        static::assertSame('tag1 tag2 tag3', tags_array2str(['   tag1   ', 'tag2', 'tag3   '], $separator));
+        static::assertSame('tag1 tag2 tag3', tags_array2str(['   tag1   ', ' ', 'tag2', '   ', 'tag3   '], $separator));
+        static::assertSame('tag1', tags_array2str(['   tag1   '], $separator));
+        static::assertSame('', tags_array2str(['  '], $separator));
+        static::assertSame('', tags_array2str([], $separator));
+        static::assertSame('', tags_array2str(null, $separator));
+    }
+
+    /**
+     * Test tags_array2str with @ separator.
+     */
+    public function testTagsArray2StrWithCharSeparator(): void
+    {
+        $separator = '@';
+
+        static::assertSame('tag1@tag2@tag3', tags_array2str(['tag1', 'tag2', 'tag3'], $separator));
+        static::assertSame('tag1,@tag2@tag3', tags_array2str(['tag1,', 'tag2@', 'tag3'], $separator));
+        static::assertSame(
+            'tag1@tag2, and other@tag3',
+            tags_array2str(['@@@@ tag1@@@', ' @tag2, and other @', 'tag3@@@@'], $separator)
+        );
+        static::assertSame('tag1@tag2@tag3', tags_array2str(['@@@tag1@@@', '@', 'tag2', '@@@', 'tag3@@@'], $separator));
+        static::assertSame('tag1', tags_array2str(['@@@@tag1@@@@'], $separator));
+        static::assertSame('', tags_array2str(['@@@'], $separator));
+        static::assertSame('', tags_array2str([], $separator));
+        static::assertSame('', tags_array2str(null, $separator));
+    }
+
+    /**
+     * Test tags_array2str with @ separator.
+     */
+    public function testTagsFilterWithSpaceSeparator(): void
+    {
+        $separator = ' ';
+
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_filter(['tag1', 'tag2', 'tag3'], $separator));
+        static::assertSame(['tag1,', 'tag2@', 'tag3'], tags_filter(['tag1,', 'tag2@', 'tag3'], $separator));
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_filter(['   tag1   ', 'tag2', 'tag3   '], $separator));
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_filter(['   tag1   ', ' ', 'tag2', '   ', 'tag3   '], $separator));
+        static::assertSame(['tag1'], tags_filter(['   tag1   '], $separator));
+        static::assertSame([], tags_filter(['  '], $separator));
+        static::assertSame([], tags_filter([], $separator));
+        static::assertSame([], tags_filter(null, $separator));
+    }
+
+    /**
+     * Test tags_array2str with @ separator.
+     */
+    public function testTagsArrayFilterWithSpaceSeparator(): void
+    {
+        $separator = '@';
+
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_filter(['tag1', 'tag2', 'tag3'], $separator));
+        static::assertSame(['tag1,', 'tag2#', 'tag3'], tags_filter(['tag1,', 'tag2#', 'tag3'], $separator));
+        static::assertSame(
+            ['tag1', 'tag2, and other', 'tag3'],
+            tags_filter(['@@@@ tag1@@@', ' @tag2, and other @', 'tag3@@@@'], $separator)
+        );
+        static::assertSame(['tag1', 'tag2', 'tag3'], tags_filter(['@@@tag1@@@', '@', 'tag2', '@@@', 'tag3@@@'], $separator));
+        static::assertSame(['tag1'], tags_filter(['@@@@tag1@@@@'], $separator));
+        static::assertSame([], tags_filter(['@@@'], $separator));
+        static::assertSame([], tags_filter([], $separator));
+        static::assertSame([], tags_filter(null, $separator));
     }
 
     /**

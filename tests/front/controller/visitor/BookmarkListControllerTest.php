@@ -173,7 +173,7 @@ class BookmarkListControllerTest extends TestCase
         $request = $this->createMock(Request::class);
         $request->method('getParam')->willReturnCallback(function (string $key) {
             if ('searchtags' === $key) {
-                return 'abc def';
+                return 'abc@def';
             }
             if ('searchterm' === $key) {
                 return 'ghi jkl';
@@ -204,7 +204,7 @@ class BookmarkListControllerTest extends TestCase
             ->expects(static::once())
             ->method('search')
             ->with(
-                ['searchtags' => 'abc def', 'searchterm' => 'ghi jkl'],
+                ['searchtags' => 'abc@def', 'searchterm' => 'ghi jkl'],
                 'private',
                 false,
                 true
@@ -222,7 +222,7 @@ class BookmarkListControllerTest extends TestCase
         static::assertSame('linklist', (string) $result->getBody());
 
         static::assertSame('Search: ghi jkl [abc] [def] - Shaarli', $assignedVariables['pagetitle']);
-        static::assertSame('?page=2&searchterm=ghi+jkl&searchtags=abc+def', $assignedVariables['previous_page_url']);
+        static::assertSame('?page=2&searchterm=ghi+jkl&searchtags=abc%40def', $assignedVariables['previous_page_url']);
     }
 
     /**
@@ -292,6 +292,37 @@ class BookmarkListControllerTest extends TestCase
     }
 
     /**
+     * Test GET /shaare/{hash}?key={key} - Find a link by hash using a private link.
+     */
+    public function testPermalinkWithPrivateKey(): void
+    {
+        $hash = 'abcdef';
+        $privateKey = 'this is a private key';
+
+        $assignedVariables = [];
+        $this->assignTemplateVars($assignedVariables);
+
+        $request = $this->createMock(Request::class);
+        $request->method('getParam')->willReturnCallback(function (string $key, $default = null) use ($privateKey) {
+            return $key === 'key' ? $privateKey : $default;
+        });
+        $response = new Response();
+
+        $this->container->bookmarkService
+            ->expects(static::once())
+            ->method('findByHash')
+            ->with($hash, $privateKey)
+            ->willReturn((new Bookmark())->setId(123)->setTitle('Title 1')->setUrl('http://url1.tld'))
+        ;
+
+        $result = $this->controller->permalink($request, $response, ['hash' => $hash]);
+
+        static::assertSame(200, $result->getStatusCode());
+        static::assertSame('linklist', (string) $result->getBody());
+        static::assertCount(1, $assignedVariables['links']);
+    }
+
+    /**
      * Test getting link list with thumbnail updates.
      *   -> 2 thumbnails update, only 1 datastore write
      */
@@ -307,7 +338,13 @@ class BookmarkListControllerTest extends TestCase
         $this->container->conf
             ->method('get')
             ->willReturnCallback(function (string $key, $default) {
-                return $key === 'thumbnails.mode' ? Thumbnailer::MODE_ALL : $default;
+                if ($key === 'thumbnails.mode') {
+                    return Thumbnailer::MODE_ALL;
+                } elseif ($key === 'general.enable_async_metadata') {
+                    return false;
+                }
+
+                return $default;
             })
         ;
 
@@ -357,7 +394,13 @@ class BookmarkListControllerTest extends TestCase
         $this->container->conf
             ->method('get')
             ->willReturnCallback(function (string $key, $default) {
-                return $key === 'thumbnails.mode' ? Thumbnailer::MODE_ALL : $default;
+                if ($key === 'thumbnails.mode') {
+                    return Thumbnailer::MODE_ALL;
+                } elseif ($key === 'general.enable_async_metadata') {
+                    return false;
+                }
+
+                return $default;
             })
         ;
 
@@ -376,6 +419,47 @@ class BookmarkListControllerTest extends TestCase
 
         static::assertSame(200, $result->getStatusCode());
         static::assertSame('linklist', (string) $result->getBody());
+    }
+
+    /**
+     * Test getting a permalink with thumbnail update with async setting: no update should run.
+     */
+    public function testThumbnailUpdateFromPermalinkAsync(): void
+    {
+        $request = $this->createMock(Request::class);
+        $response = new Response();
+
+        $this->container->loginManager = $this->createMock(LoginManager::class);
+        $this->container->loginManager->method('isLoggedIn')->willReturn(true);
+
+        $this->container->conf = $this->createMock(ConfigManager::class);
+        $this->container->conf
+            ->method('get')
+            ->willReturnCallback(function (string $key, $default) {
+                if ($key === 'thumbnails.mode') {
+                    return Thumbnailer::MODE_ALL;
+                } elseif ($key === 'general.enable_async_metadata') {
+                    return true;
+                }
+
+                return $default;
+            })
+        ;
+
+        $this->container->thumbnailer = $this->createMock(Thumbnailer::class);
+        $this->container->thumbnailer->expects(static::never())->method('get');
+
+        $this->container->bookmarkService
+            ->expects(static::once())
+            ->method('findByHash')
+            ->willReturn((new Bookmark())->setId(2)->setUrl('https://url.tld')->setTitle('Title 1'))
+        ;
+        $this->container->bookmarkService->expects(static::never())->method('set');
+        $this->container->bookmarkService->expects(static::never())->method('save');
+
+        $result = $this->controller->permalink($request, $response, ['hash' => 'abc']);
+
+        static::assertSame(200, $result->getStatusCode());
     }
 
     /**

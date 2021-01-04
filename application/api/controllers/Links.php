@@ -117,9 +117,14 @@ class Links extends ApiController
     public function postLink($request, $response)
     {
         $data = (array) ($request->getParsedBody() ?? []);
-        $bookmark = ApiUtils::buildBookmarkFromRequest($data, $this->conf->get('privacy.default_private_links'));
+        $bookmark = ApiUtils::buildBookmarkFromRequest(
+            $data,
+            $this->conf->get('privacy.default_private_links'),
+            $this->conf->get('general.tags_separator', ' ')
+        );
         // duplicate by URL, return 409 Conflict
-        if (! empty($bookmark->getUrl())
+        if (
+            ! empty($bookmark->getUrl())
             && ! empty($dup = $this->bookmarkService->findByUrl($bookmark->getUrl()))
         ) {
             return $response->withJson(
@@ -131,7 +136,7 @@ class Links extends ApiController
 
         $this->bookmarkService->add($bookmark);
         $out = ApiUtils::formatLink($bookmark, index_url($this->ci['environment']));
-        $redirect = $this->ci->router->relativePathFor('getLink', ['id' => $bookmark->getId()]);
+        $redirect = $this->ci->router->pathFor('getLink', ['id' => $bookmark->getId()]);
         return $response->withAddedHeader('Location', $redirect)
                         ->withJson($out, 201, $this->jsonStyle);
     }
@@ -157,9 +162,14 @@ class Links extends ApiController
         $index = index_url($this->ci['environment']);
         $data = $request->getParsedBody();
 
-        $requestBookmark = ApiUtils::buildBookmarkFromRequest($data, $this->conf->get('privacy.default_private_links'));
+        $requestBookmark = ApiUtils::buildBookmarkFromRequest(
+            $data,
+            $this->conf->get('privacy.default_private_links'),
+            $this->conf->get('general.tags_separator', ' ')
+        );
         // duplicate URL on a different link, return 409 Conflict
-        if (! empty($requestBookmark->getUrl())
+        if (
+            ! empty($requestBookmark->getUrl())
             && ! empty($dup = $this->bookmarkService->findByUrl($requestBookmark->getUrl()))
             && $dup->getId() != $id
         ) {

@@ -38,7 +38,7 @@ class ImportController extends ShaarliAdminController
                 true
             )
         );
-        $this->assignView('pagetitle', t('Import') .' - '. $this->container->conf->get('general.title', 'Shaarli'));
+        $this->assignView('pagetitle', t('Import') . ' - ' . $this->container->conf->get('general.title', 'Shaarli'));
 
         return $response->write($this->render(TemplatePage::IMPORT));
     }
@@ -64,7 +64,7 @@ class ImportController extends ShaarliAdminController
             $msg = sprintf(
                 t(
                     'The file you are trying to upload is probably bigger than what this webserver can accept'
-                    .' (%s). Please upload in smaller chunks.'
+                    . ' (%s). Please upload in smaller chunks.'
                 ),
                 get_max_upload_size(ini_get('post_max_size'), ini_get('upload_max_filesize'))
             );

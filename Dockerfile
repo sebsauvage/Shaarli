@@ -26,7 +26,7 @@ RUN cd shaarli \
 
 # Stage 4:
 # - Shaarli image
-FROM alpine:3.8
+FROM alpine:3.12
 LABEL maintainer="Shaarli Community"
 
 RUN apk --update --no-cache add \
@@ -44,6 +44,7 @@ RUN apk --update --no-cache add \
         php7-openssl \
         php7-session \
         php7-xml \
+        php7-simplexml \
         php7-zlib \
         s6
 

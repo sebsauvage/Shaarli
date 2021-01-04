@@ -1,7 +1,8 @@
 <?php
-namespace Shaarli;
+namespace Shaarli\Helper;
 
 use Shaarli\Config\ConfigManager;
+use Shaarli\FakeApplicationUtils;
 
 require_once 'tests/utils/FakeApplicationUtils.php';
 
@@ -340,6 +341,35 @@ class ApplicationUtilsTest extends \Shaarli\TestCase
     }
 
     /**
+     * Checks resource permissions in minimal mode.
+     */
+    public function testCheckCurrentResourcePermissionsErrorsMinimalMode(): void
+    {
+        $conf = new ConfigManager('');
+        $conf->set('resource.thumbnails_cache', 'null/cache');
+        $conf->set('resource.config', 'null/data/config.php');
+        $conf->set('resource.data_dir', 'null/data');
+        $conf->set('resource.datastore', 'null/data/store.php');
+        $conf->set('resource.ban_file', 'null/data/ipbans.php');
+        $conf->set('resource.log', 'null/data/log.txt');
+        $conf->set('resource.page_cache', 'null/pagecache');
+        $conf->set('resource.raintpl_tmp', 'null/tmp');
+        $conf->set('resource.raintpl_tpl', 'null/tpl');
+        $conf->set('resource.raintpl_theme', 'null/tpl/default');
+        $conf->set('resource.update_check', 'null/data/lastupdatecheck.txt');
+
+        static::assertSame(
+            [
+                '"null/tpl" directory is not readable',
+                '"null/tpl/default" directory is not readable',
+                '"null/tmp" directory is not readable',
+                '"null/tmp" directory is not writable'
+            ],
+            ApplicationUtils::checkResourcePermissions($conf, true)
+        );
+    }
+
+    /**
      * Check update with 'dev' as curent version (master branch).
      * It should always return false.
      */
@@ -347,6 +377,39 @@ class ApplicationUtilsTest extends \Shaarli\TestCase
     {
         $this->assertFalse(
             ApplicationUtils::checkUpdate('dev', self::$testUpdateFile, 100, true, true)
+        );
+    }
+
+    /**
+     * Basic test of getPhpExtensionsRequirement()
+     */
+    public function testGetPhpExtensionsRequirementSimple(): void
+    {
+        static::assertCount(8, ApplicationUtils::getPhpExtensionsRequirement());
+        static::assertSame([
+            'name' => 'json',
+            'required' => true,
+            'desc' => 'Configuration parsing',
+            'loaded' => true,
+        ], ApplicationUtils::getPhpExtensionsRequirement()[0]);
+    }
+
+    /**
+     * Test getPhpEol with a known version: 7.4 -> 2022
+     */
+    public function testGetKnownPhpEol(): void
+    {
+        static::assertSame('2022-11-28', ApplicationUtils::getPhpEol('7.4.7'));
+    }
+
+    /**
+     * Test getPhpEol with an unknown version: 7.4 -> 2022
+     */
+    public function testGetUnknownPhpEol(): void
+    {
+        static::assertSame(
+            (((int) (new \DateTime())->format('Y')) + 2) . (new \DateTime())->format('-m-d'),
+            ApplicationUtils::getPhpEol('7.51.34')
         );
     }
 }

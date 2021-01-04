@@ -27,10 +27,6 @@ PHPCS := $(BIN)/phpcs
 code_sniffer:
 	@$(PHPCS)
 
-### - errors filtered by coding standard: PEAR, PSR1, PSR2, Zend...
-PHPCS_%:
-	@$(PHPCS) --report-full --report-width=200 --standard=$*
-
 ### - errors by Git author
 code_sniffer_blame:
 	@$(PHPCS) --report-gitblame
@@ -175,6 +171,7 @@ translate:
 eslint:
 	@yarn run eslint -c .dev/.eslintrc.js assets/vintage/js/
 	@yarn run eslint -c .dev/.eslintrc.js assets/default/js/
+	@yarn run eslint -c .dev/.eslintrc.js assets/common/js/
 
 ### Run CSSLint check against Shaarli's SCSS files
 sasslint:
