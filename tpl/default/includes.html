@@ -19,7 +19,7 @@
 {/if}
 <link rel="search" type="application/opensearchdescription+xml" href="{$base_path}/open-search#"
       title="Shaarli search - {$shaarlititle}" />
-{if="! empty($links) && count($links) === 1"}
+{if="$template === 'linklist' && ! empty($links) && count($links) === 1"}
   {$link=reset($links)}
   <meta property="og:title" content="{$link.title}" />
   <meta property="og:type" content="article" />
