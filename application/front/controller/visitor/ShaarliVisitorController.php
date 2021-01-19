@@ -56,6 +56,10 @@ abstract class ShaarliVisitorController
 
     protected function render(string $template): string
     {
+        // Legacy key that used to be injected by PluginManager
+        $this->assignView('_PAGE_', $template);
+        $this->assignView('template', $template);
+
         $this->assignView('linkcount', $this->container->bookmarkService->count(BookmarkFilter::$ALL));
         $this->assignView('privateLinkcount', $this->container->bookmarkService->count(BookmarkFilter::$PRIVATE));
 
