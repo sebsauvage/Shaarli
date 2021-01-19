@@ -37,7 +37,7 @@ class ApplicationUtils
     {
         list($headers, $data) = get_http_response($url, $timeout);
 
-        if (strpos($headers[0], '200 OK') === false) {
+        if (preg_match('#HTTP/[\d\.]+ 200(?: OK)?#', $headers[0]) !== 1) {
             error_log('Failed to retrieve ' . $url);
             return false;
         }
