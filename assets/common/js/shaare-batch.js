@@ -30,9 +30,9 @@ const sendBookmarkForm = (basePath, formElement) => {
 const sendBookmarkDelete = (buttonElement, formElement) => (
   new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', buttonElement.href);
+    xhr.open('GET', `${buttonElement.href}&source=batch`);
     xhr.onload = () => {
-      if (xhr.status !== 200) {
+      if (xhr.status !== 204) {
         alert(`An error occurred. Return code: ${xhr.status}`);
         reject();
       } else {

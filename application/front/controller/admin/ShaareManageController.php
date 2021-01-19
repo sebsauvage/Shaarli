@@ -66,6 +66,10 @@ class ShaareManageController extends ShaarliAdminController
             return $response->write('<script>self.close();</script>');
         }
 
+        if ($request->getParam('source') === 'batch') {
+            return $response->withStatus(204);
+        }
+
         // Don't redirect to permalink after deletion.
         return $this->redirectFromReferer($request, $response, ['shaare/']);
     }
