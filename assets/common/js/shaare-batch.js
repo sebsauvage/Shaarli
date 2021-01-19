@@ -4,7 +4,11 @@ const sendBookmarkForm = (basePath, formElement) => {
 
   const formData = new FormData();
   [...inputs].forEach((input) => {
-    formData.append(input.getAttribute('name'), input.value);
+    if (input.getAttribute('type') === 'checkbox') {
+      formData.append(input.getAttribute('name'), input.checked);
+    } else {
+      formData.append(input.getAttribute('name'), input.value);
+    }
   });
 
   return new Promise((resolve, reject) => {
