@@ -363,6 +363,7 @@ class DeleteBookmarkTest extends TestCase
         $this->container->bookmarkService->method('get')->with('123')->willReturn(
             (new Bookmark())->setId(123)->setUrl('http://domain.tld')->setTitle('Title 123')
         );
+        $this->container->bookmarkService->expects(static::once())->method('remove');
 
         $this->container->formatterFactory = $this->createMock(FormatterFactory::class);
         $this->container->formatterFactory
@@ -379,6 +380,48 @@ class DeleteBookmarkTest extends TestCase
         $result = $this->controller->deleteBookmark($request, $response);
 
         static::assertSame(200, $result->getStatusCode());
-        static::assertSame('<script>self.close();</script>', (string) $result->getBody('location'));
+        static::assertSame('<script>self.close();</script>', (string) $result->getBody());
+    }
+
+    /**
+     * Delete bookmark - from batch view
+     */
+    public function testDeleteBookmarkFromBatch(): void
+    {
+        $parameters = [
+            'id' => '123',
+            'source' => 'batch',
+        ];
+
+        $request = $this->createMock(Request::class);
+        $request
+            ->method('getParam')
+            ->willReturnCallback(function (string $key) use ($parameters): ?string {
+                return $parameters[$key] ?? null;
+            })
+        ;
+        $response = new Response();
+
+        $this->container->bookmarkService->method('get')->with('123')->willReturn(
+            (new Bookmark())->setId(123)->setUrl('http://domain.tld')->setTitle('Title 123')
+        );
+        $this->container->bookmarkService->expects(static::once())->method('remove');
+
+        $this->container->formatterFactory = $this->createMock(FormatterFactory::class);
+        $this->container->formatterFactory
+            ->expects(static::once())
+            ->method('getFormatter')
+            ->willReturnCallback(function (): BookmarkFormatter {
+                $formatter = $this->createMock(BookmarkFormatter::class);
+                $formatter->method('format')->willReturn(['formatted']);
+
+                return $formatter;
+            })
+        ;
+
+        $result = $this->controller->deleteBookmark($request, $response);
+
+        static::assertSame(204, $result->getStatusCode());
+        static::assertEmpty((string) $result->getBody());
     }
 }
