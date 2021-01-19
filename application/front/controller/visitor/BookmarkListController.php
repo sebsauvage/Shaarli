@@ -33,6 +33,7 @@ class BookmarkListController extends ShaarliVisitorController
 
         $formatter = $this->container->formatterFactory->getFormatter();
         $formatter->addContextData('base_path', $this->container->basePath);
+        $formatter->addContextData('index_url', index_url($this->container->environment));
 
         $searchTags = normalize_spaces($request->getParam('searchtags') ?? '');
         $searchTerm = escape(normalize_spaces($request->getParam('searchterm') ?? ''));
@@ -157,6 +158,7 @@ class BookmarkListController extends ShaarliVisitorController
 
         $formatter = $this->container->formatterFactory->getFormatter();
         $formatter->addContextData('base_path', $this->container->basePath);
+        $formatter->addContextData('index_url', index_url($this->container->environment));
 
         $data = array_merge(
             $this->initializeTemplateVars(),

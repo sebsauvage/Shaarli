@@ -3,6 +3,7 @@
 namespace Shaarli\Formatter;
 
 use Shaarli\Config\ConfigManager;
+use Shaarli\Formatter\Parsedown\ShaarliParsedownExtra;
 
 /**
  * Class BookmarkMarkdownExtraFormatter
@@ -18,7 +19,6 @@ class BookmarkMarkdownExtraFormatter extends BookmarkMarkdownFormatter
     public function __construct(ConfigManager $conf, bool $isLoggedIn)
     {
         parent::__construct($conf, $isLoggedIn);
-
-        $this->parsedown = new \ParsedownExtra();
+        $this->parsedown = new ShaarliParsedownExtra();
     }
 }
