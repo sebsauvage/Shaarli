@@ -2,6 +2,7 @@
 
 namespace Shaarli\Plugin;
 
+use Shaarli\Bookmark\Bookmark;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Plugin\Exception\PluginFileNotFoundException;
 use Shaarli\Plugin\Exception\PluginInvalidRouteException;
@@ -44,6 +45,9 @@ class PluginManager
      * @var array List of plugin errors.
      */
     protected $errors;
+
+    /** @var callable[]|null Preloaded list of hook function for filterSearchEntry() */
+    protected $filterSearchEntryHooks = null;
 
     /**
      * Plugins subdirectory.
@@ -274,6 +278,14 @@ class PluginManager
     }
 
     /**
+     * @return array List of registered filter_search_entry hooks
+     */
+    public function getFilterSearchEntryHooks(): ?array
+    {
+        return $this->filterSearchEntryHooks;
+    }
+
+    /**
      * Return the list of encountered errors.
      *
      * @return array List of errors (empty array if none exists).
@@ -281,6 +293,50 @@ class PluginManager
     public function getErrors()
     {
         return $this->errors;
+    }
+
+    /**
+     * Apply additional filter on every search result of BookmarkFilter calling plugins hooks.
+     *
+     * @param Bookmark $bookmark To check.
+     * @param array    $context  Additional info about search context, depends on the search source.
+     *
+     * @return bool True if the result must be kept in search results, false otherwise.
+     */
+    public function filterSearchEntry(Bookmark $bookmark, array $context): bool
+    {
+        if ($this->filterSearchEntryHooks === null) {
+            $this->loadFilterSearchEntryHooks();
+        }
+
+        if ($this->filterSearchEntryHooks === []) {
+            return true;
+        }
+
+        foreach ($this->filterSearchEntryHooks as $filterSearchEntryHook) {
+            if ($filterSearchEntryHook($bookmark, $context) === false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * filterSearchEntry() method will be called for every search result,
+     * so for performances we preload existing functions to invoke them directly.
+     */
+    protected function loadFilterSearchEntryHooks(): void
+    {
+        $this->filterSearchEntryHooks = [];
+
+        foreach ($this->loadedPlugins as $plugin) {
+            $hookFunction = $this->buildHookName('filter_search_entry', $plugin);
+
+            if (function_exists($hookFunction)) {
+                $this->filterSearchEntryHooks[] = $hookFunction;
+            }
+        }
     }
 
     /**

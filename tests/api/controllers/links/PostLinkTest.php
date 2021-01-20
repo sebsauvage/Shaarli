@@ -7,6 +7,7 @@ use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
+use Shaarli\Plugin\PluginManager;
 use Shaarli\TestCase;
 use Slim\Container;
 use Slim\Http\Environment;
@@ -81,8 +82,14 @@ class PostLinkTest extends TestCase
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
         $this->history = new History(self::$testHistory);
-        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, $mutex, true);
-
+        $pluginManager = new PluginManager($this->conf);
+        $this->bookmarkService = new BookmarkFileService(
+            $this->conf,
+            $pluginManager,
+            $this->history,
+            $mutex,
+            true
+        );
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
         $this->container['db'] = $this->bookmarkService;

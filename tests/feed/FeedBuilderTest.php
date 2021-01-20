@@ -11,6 +11,7 @@ use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Formatter\FormatterFactory;
 use Shaarli\History;
+use Shaarli\Plugin\PluginManager;
 use Shaarli\TestCase;
 
 /**
@@ -55,8 +56,15 @@ class FeedBuilderTest extends TestCase
         $refLinkDB->write(self::$testDatastore);
         $history = new History('sandbox/history.php');
         $factory = new FormatterFactory($conf, true);
+        $pluginManager = new PluginManager($conf);
         self::$formatter = $factory->getFormatter();
-        self::$bookmarkService = new BookmarkFileService($conf, $history, $mutex, true);
+        self::$bookmarkService = new BookmarkFileService(
+            $conf,
+            $pluginManager,
+            $history,
+            $mutex,
+            true
+        );
 
         self::$serverInfo = array(
             'HTTPS' => 'Off',

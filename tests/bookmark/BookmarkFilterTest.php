@@ -6,6 +6,7 @@ use malkusch\lock\mutex\NoMutex;
 use ReferenceLinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
+use Shaarli\Plugin\PluginManager;
 use Shaarli\TestCase;
 
 /**
@@ -32,19 +33,24 @@ class BookmarkFilterTest extends TestCase
      */
     protected static $bookmarkService;
 
+    /** @var PluginManager */
+    protected static $pluginManager;
+
     /**
      * Instantiate linkFilter with ReferenceLinkDB data.
      */
     public static function setUpBeforeClass(): void
     {
+
         $mutex = new NoMutex();
         $conf = new ConfigManager('tests/utils/config/configJson');
         $conf->set('resource.datastore', self::$testDatastore);
+        static::$pluginManager = new PluginManager($conf);
         self::$refDB = new \ReferenceLinkDB();
         self::$refDB->write(self::$testDatastore);
         $history = new History('sandbox/history.php');
-        self::$bookmarkService = new \FakeBookmarkService($conf, $history, $mutex, true);
-        self::$linkFilter = new BookmarkFilter(self::$bookmarkService->getBookmarks(), $conf);
+        self::$bookmarkService = new \FakeBookmarkService($conf, static::$pluginManager, $history, $mutex, true);
+        self::$linkFilter = new BookmarkFilter(self::$bookmarkService->getBookmarks(), $conf, static::$pluginManager);
     }
 
     /**
@@ -176,61 +182,6 @@ class BookmarkFilterTest extends TestCase
             0,
             count(self::$linkFilter->filter(BookmarkFilter::$FILTER_TAG, 'null', false))
         );
-    }
-
-    /**
-     * Return bookmarks for a given day
-     */
-    public function testFilterDay()
-    {
-        $this->assertEquals(
-            4,
-            count(self::$linkFilter->filter(BookmarkFilter::$FILTER_DAY, '20121206'))
-        );
-    }
-
-    /**
-     * Return bookmarks for a given day
-     */
-    public function testFilterDayRestrictedVisibility(): void
-    {
-        $this->assertEquals(
-            3,
-            count(self::$linkFilter->filter(BookmarkFilter::$FILTER_DAY, '20121206', false, BookmarkFilter::$PUBLIC))
-        );
-    }
-
-    /**
-     * 404 - day not found
-     */
-    public function testFilterUnknownDay()
-    {
-        $this->assertEquals(
-            0,
-            count(self::$linkFilter->filter(BookmarkFilter::$FILTER_DAY, '19700101'))
-        );
-    }
-
-    /**
-     * Use an invalid date format
-     */
-    public function testFilterInvalidDayWithChars()
-    {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessageRegExp('/Invalid date format/');
-
-        self::$linkFilter->filter(BookmarkFilter::$FILTER_DAY, 'Rainy day, dream away');
-    }
-
-    /**
-     * Use an invalid date format
-     */
-    public function testFilterInvalidDayDigits()
-    {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessageRegExp('/Invalid date format/');
-
-        self::$linkFilter->filter(BookmarkFilter::$FILTER_DAY, '20');
     }
 
     /**

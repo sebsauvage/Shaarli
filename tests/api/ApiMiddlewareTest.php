@@ -3,6 +3,7 @@ namespace Shaarli\Api;
 
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
+use Shaarli\Plugin\PluginManager;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -56,6 +57,7 @@ class ApiMiddlewareTest extends \Shaarli\TestCase
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
         $this->container['history'] = $history;
+        $this->container['pluginManager'] = new PluginManager($this->conf);
     }
 
     /**
