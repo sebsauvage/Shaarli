@@ -807,7 +807,7 @@ class BookmarkFileServiceTest extends TestCase
         $request = ['searchtags' => $tags];
         $this->assertEquals(
             2,
-            count($this->privateLinkDB->search($request, null, true))
+            count($this->privateLinkDB->search($request, null, true)->getBookmarks())
         );
     }
 
@@ -820,7 +820,7 @@ class BookmarkFileServiceTest extends TestCase
         $request = ['searchtags' => $tags];
         $this->assertEquals(
             2,
-            count($this->privateLinkDB->search($request, null, true))
+            count($this->privateLinkDB->search($request, null, true)->getBookmarks())
         );
     }
 
@@ -834,12 +834,12 @@ class BookmarkFileServiceTest extends TestCase
         $request = ['searchtags' => $tags];
         $this->assertEquals(
             1,
-            count($this->privateLinkDB->search($request, 'all', true))
+            count($this->privateLinkDB->search($request, 'all', true)->getBookmarks())
         );
 
         $this->assertEquals(
             0,
-            count($this->publicLinkDB->search($request, 'public', true))
+            count($this->publicLinkDB->search($request, 'public', true)->getBookmarks())
         );
     }
 

@@ -102,22 +102,16 @@ class FeedBuilder
             $userInput['searchtags'] = false;
         }
 
+        $limit = $this->getLimit($userInput);
+
         // Optionally filter the results:
-        $linksToDisplay = $this->linkDB->search($userInput ?? [], null, false, false, true);
-
-        $nblinksToDisplay = $this->getNbLinks(count($linksToDisplay), $userInput);
-
-        // Can't use array_keys() because $link is a LinkDB instance and not a real array.
-        $keys = [];
-        foreach ($linksToDisplay as $key => $value) {
-            $keys[] = $key;
-        }
+        $searchResult = $this->linkDB->search($userInput ?? [], null, false, false, true, ['limit' => $limit]);
 
         $pageaddr = escape(index_url($this->serverInfo));
         $this->formatter->addContextData('index_url', $pageaddr);
-        $linkDisplayed = [];
-        for ($i = 0; $i < $nblinksToDisplay && $i < count($keys); $i++) {
-            $linkDisplayed[$keys[$i]] = $this->buildItem($feedType, $linksToDisplay[$keys[$i]], $pageaddr);
+        $links = [];
+        foreach ($searchResult->getBookmarks() as $key => $bookmark) {
+            $links[$key] = $this->buildItem($feedType, $bookmark, $pageaddr);
         }
 
         $data['language'] = $this->getTypeLanguage($feedType);
@@ -128,7 +122,7 @@ class FeedBuilder
         $data['self_link'] = $pageaddr . $requestUri;
         $data['index_url'] = $pageaddr;
         $data['usepermalinks'] = $this->usePermalinks === true;
-        $data['links'] = $linkDisplayed;
+        $data['links'] = $links;
 
         return $data;
     }
@@ -268,19 +262,18 @@ class FeedBuilder
      * If 'nb' not set or invalid, default value: $DEFAULT_NB_LINKS.
      * If 'nb' is set to 'all', display all filtered bookmarks (max parameter).
      *
-     * @param int   $max       maximum number of bookmarks to display.
      * @param array $userInput $_GET.
      *
      * @return int number of bookmarks to display.
      */
-    protected function getNbLinks($max, ?array $userInput)
+    protected function getLimit(?array $userInput)
     {
         if (empty($userInput['nb'])) {
             return self::$DEFAULT_NB_LINKS;
         }
 
         if ($userInput['nb'] == 'all') {
-            return $max;
+            return null;
         }
 
         $intNb = intval($userInput['nb']);

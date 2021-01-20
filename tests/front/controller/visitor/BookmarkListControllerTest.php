@@ -6,6 +6,7 @@ namespace Shaarli\Front\Controller\Visitor;
 
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
+use Shaarli\Bookmark\SearchResult;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Security\LoginManager;
 use Shaarli\TestCase;
@@ -45,13 +46,15 @@ class BookmarkListControllerTest extends TestCase
                 ['searchtags' => '', 'searchterm' => ''],
                 null,
                 false,
-                false
+                false,
+                false,
+                ['offset' => 0, 'limit' => 2]
             )
-            ->willReturn([
+            ->willReturn(SearchResult::getSearchResult([
                 (new Bookmark())->setId(1)->setUrl('http://url1.tld')->setTitle('Title 1'),
                 (new Bookmark())->setId(2)->setUrl('http://url2.tld')->setTitle('Title 2'),
                 (new Bookmark())->setId(3)->setUrl('http://url3.tld')->setTitle('Title 3'),
-            ]
+            ], 0, 2)
         );
 
         $this->container->sessionManager
@@ -119,13 +122,15 @@ class BookmarkListControllerTest extends TestCase
                 ['searchtags' => '', 'searchterm' => ''],
                 null,
                 false,
-                false
+                false,
+                false,
+                ['offset' => 2, 'limit' => 2]
             )
-            ->willReturn([
+            ->willReturn(SearchResult::getSearchResult([
                 (new Bookmark())->setId(1)->setUrl('http://url1.tld')->setTitle('Title 1'),
                 (new Bookmark())->setId(2)->setUrl('http://url2.tld')->setTitle('Title 2'),
                 (new Bookmark())->setId(3)->setUrl('http://url3.tld')->setTitle('Title 3'),
-            ])
+            ], 2, 2))
         ;
 
         $this->container->sessionManager
@@ -207,13 +212,15 @@ class BookmarkListControllerTest extends TestCase
                 ['searchtags' => 'abc@def', 'searchterm' => 'ghi jkl'],
                 'private',
                 false,
-                true
+                true,
+                false,
+                ['offset' => 0, 'limit' => 2]
             )
-            ->willReturn([
+            ->willReturn(SearchResult::getSearchResult([
                 (new Bookmark())->setId(1)->setUrl('http://url1.tld')->setTitle('Title 1'),
                 (new Bookmark())->setId(2)->setUrl('http://url2.tld')->setTitle('Title 2'),
                 (new Bookmark())->setId(3)->setUrl('http://url3.tld')->setTitle('Title 3'),
-            ])
+            ], 0, 2))
         ;
 
         $result = $this->controller->index($request, $response);
@@ -358,13 +365,13 @@ class BookmarkListControllerTest extends TestCase
         $this->container->bookmarkService
             ->expects(static::once())
             ->method('search')
-            ->willReturn([
+            ->willReturn(SearchResult::getSearchResult([
                 (new Bookmark())->setId(1)->setUrl('https://url1.tld')->setTitle('Title 1')->setThumbnail(false),
                 $b1 = (new Bookmark())->setId(2)->setUrl('https://url2.tld')->setTitle('Title 2'),
                 (new Bookmark())->setId(3)->setUrl('https://url3.tld')->setTitle('Title 3')->setThumbnail(false),
                 $b2 = (new Bookmark())->setId(2)->setUrl('https://url4.tld')->setTitle('Title 4'),
                 (new Bookmark())->setId(2)->setUrl('ftp://url5.tld', ['ftp'])->setTitle('Title 5'),
-            ])
+            ]))
         ;
         $this->container->bookmarkService
             ->expects(static::exactly(2))

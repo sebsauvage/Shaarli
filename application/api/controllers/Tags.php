@@ -122,12 +122,12 @@ class Tags extends ApiController
             throw new ApiBadParametersException('New tag name is required in the request body');
         }
 
-        $bookmarks = $this->bookmarkService->search(
+        $searchResult = $this->bookmarkService->search(
             ['searchtags' => $args['tagName']],
             BookmarkFilter::$ALL,
             true
         );
-        foreach ($bookmarks as $bookmark) {
+        foreach ($searchResult->getBookmarks() as $bookmark) {
             $bookmark->renameTag($args['tagName'], $data['name']);
             $this->bookmarkService->set($bookmark, false);
             $this->history->updateLink($bookmark);
@@ -157,12 +157,12 @@ class Tags extends ApiController
             throw new ApiTagNotFoundException();
         }
 
-        $bookmarks = $this->bookmarkService->search(
+        $searchResult = $this->bookmarkService->search(
             ['searchtags' => $args['tagName']],
             BookmarkFilter::$ALL,
             true
         );
-        foreach ($bookmarks as $bookmark) {
+        foreach ($searchResult->getBookmarks() as $bookmark) {
             $bookmark->deleteTag($args['tagName']);
             $this->bookmarkService->set($bookmark, false);
             $this->history->updateLink($bookmark);

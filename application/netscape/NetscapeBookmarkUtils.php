@@ -64,7 +64,7 @@ class NetscapeBookmarkUtils
         }
 
         $bookmarkLinks = [];
-        foreach ($this->bookmarkService->search([], $selection) as $bookmark) {
+        foreach ($this->bookmarkService->search([], $selection)->getBookmarks() as $bookmark) {
             $link = $formatter->format($bookmark);
             $link['taglist'] = implode(',', $bookmark->getTags());
             if ($bookmark->isNote() && $prependNoteUrl) {
