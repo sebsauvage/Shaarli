@@ -56,11 +56,11 @@
 
     {include="server.requirements"}
 
-    <h3 class="window-subtitle">Version</h3>
+    <h3 class="window-subtitle">{'Version'|t}</h3>
 
     <div class="pure-g server-row">
       <div class="pure-u-lg-1-2 pure-u-1 server-label">
-        <p>Current version</p>
+        <p>{'Current version'|t}</p>
       </div>
       <div class="pure-u-lg-1-2 pure-u-1">
         <p>{$current_version}</p>
@@ -69,7 +69,7 @@
 
     <div class="pure-g server-row">
       <div class="pure-u-lg-1-2 pure-u-1 server-label">
-        <p>Latest release</p>
+        <p>{'Latest release'|t}</p>
       </div>
       <div class="pure-u-lg-1-2 pure-u-1">
         <p>
@@ -80,11 +80,11 @@
       </div>
     </div>
 
-    <h3 class="window-subtitle">Thumbnails</h3>
+    <h3 class="window-subtitle">{'Thumbnails'|t}</h3>
 
     <div class="pure-g server-row">
       <div class="pure-u-lg-1-2 pure-u-1 server-label">
-        <p>Thumbnails status</p>
+        <p>{'Thumbnails status'|t}</p>
       </div>
       <div class="pure-u-lg-1-2 pure-u-1">
         <p>
@@ -107,17 +107,17 @@
     </div>
     {/if}
 
-    <h3 class="window-subtitle">Cache</h3>
+    <h3 class="window-subtitle">{'Cache'|t}</h3>
 
     <div class="center tools-item">
       <a href="{$base_path}/admin/clear-cache?type=main">
-        <span class="pure-button pure-u-lg-2-3 pure-u-3-4">Clear main cache</span>
+        <span class="pure-button pure-u-lg-2-3 pure-u-3-4">{'Clear main cache'|t}</span>
       </a>
     </div>
 
     <div class="center tools-item">
       <a href="{$base_path}/admin/clear-cache?type=thumbnails">
-        <span class="pure-button pure-u-lg-2-3 pure-u-3-4">Clear thumbnails cache</span>
+        <span class="pure-button pure-u-lg-2-3 pure-u-3-4">{'Clear thumbnails cache'|t}</span>
       </a>
     </div>
   </div>
