@@ -104,7 +104,7 @@ const redirectIfEmptyBatch = (basePath, formElements, path) => {
         });
 
         Promise.all(promises).then(() => {
-          window.location.href = basePath || '/';
+          window.location.href = `${basePath}/`;
         });
       });
     });
