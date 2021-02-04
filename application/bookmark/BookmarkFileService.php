@@ -15,6 +15,7 @@ use Shaarli\Formatter\BookmarkMarkdownFormatter;
 use Shaarli\History;
 use Shaarli\Legacy\LegacyLinkDB;
 use Shaarli\Legacy\LegacyUpdater;
+use Shaarli\Plugin\PluginManager;
 use Shaarli\Render\PageCacheManager;
 use Shaarli\Updater\UpdaterUtils;
 
@@ -40,6 +41,9 @@ class BookmarkFileService implements BookmarkServiceInterface
     /** @var ConfigManager instance */
     protected $conf;
 
+    /** @var PluginManager */
+    protected $pluginManager;
+
     /** @var History instance */
     protected $history;
 
@@ -57,6 +61,7 @@ class BookmarkFileService implements BookmarkServiceInterface
      */
     public function __construct(
         ConfigManager $conf,
+        PluginManager $pluginManager,
         History $history,
         Mutex $mutex,
         bool $isLoggedIn
@@ -95,7 +100,8 @@ class BookmarkFileService implements BookmarkServiceInterface
             }
         }
 
-        $this->bookmarkFilter = new BookmarkFilter($this->bookmarks, $this->conf);
+        $this->pluginManager = $pluginManager;
+        $this->bookmarkFilter = new BookmarkFilter($this->bookmarks, $this->conf, $this->pluginManager);
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+use Shaarli\Bookmark\Bookmark;
+
 /**
  * Hook for test.
  *
@@ -42,4 +44,9 @@ function test_register_routes(): array
             'callable' => 'postFunction',
         ],
     ];
+}
+
+function hook_test_filter_search_entry(Bookmark $bookmark, array $context): bool
+{
+    return $context['_result'];
 }

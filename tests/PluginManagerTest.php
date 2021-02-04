@@ -2,6 +2,7 @@
 
 namespace Shaarli\Plugin;
 
+use Shaarli\Bookmark\Bookmark;
 use Shaarli\Config\ConfigManager;
 
 /**
@@ -158,5 +159,20 @@ class PluginManagerTest extends \Shaarli\TestCase
 
         $errors = $this->pluginManager->getErrors();
         static::assertSame(['test_route_invalid [plugin incompatibility]: trying to register invalid route.'], $errors);
+    }
+
+    public function testSearchFilterPlugin(): void
+    {
+        PluginManager::$PLUGINS_PATH = self::$pluginPath;
+        $this->pluginManager->load([self::$pluginName]);
+
+        static::assertNull($this->pluginManager->getFilterSearchEntryHooks());
+
+        static::assertTrue($this->pluginManager->filterSearchEntry(new Bookmark(), ['_result' => true]));
+
+        static::assertCount(1, $this->pluginManager->getFilterSearchEntryHooks());
+        static::assertSame('hook_test_filter_search_entry', $this->pluginManager->getFilterSearchEntryHooks()[0]);
+
+        static::assertFalse($this->pluginManager->filterSearchEntry(new Bookmark(), ['_result' => false]));
     }
 }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Shaarli\Bookmark;
 
-use Exception;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
 use Shaarli\Config\ConfigManager;
+use Shaarli\Plugin\PluginManager;
 
 /**
  * Class LinkFilter.
@@ -29,11 +29,6 @@ class BookmarkFilter
      * @var string tag filter.
      */
     public static $FILTER_TAG = 'tags';
-
-    /**
-     * @var string filter by day.
-     */
-    public static $FILTER_DAY = 'FILTER_DAY';
 
     /**
      * @var string filter by day.
@@ -62,13 +57,17 @@ class BookmarkFilter
     /** @var ConfigManager */
     protected $conf;
 
+    /** @var PluginManager */
+    protected $pluginManager;
+
     /**
      * @param Bookmark[] $bookmarks initialization.
      */
-    public function __construct($bookmarks, ConfigManager $conf)
+    public function __construct($bookmarks, ConfigManager $conf, PluginManager $pluginManager)
     {
         $this->bookmarks = $bookmarks;
         $this->conf = $conf;
+        $this->pluginManager = $pluginManager;
     }
 
     /**
@@ -112,12 +111,12 @@ class BookmarkFilter
                     $filtered = $this->bookmarks;
                 }
                 if (!empty($request[0])) {
-                    $filtered = (new BookmarkFilter($filtered, $this->conf))
+                    $filtered = (new BookmarkFilter($filtered, $this->conf, $this->pluginManager))
                         ->filterTags($request[0], $casesensitive, $visibility)
                     ;
                 }
                 if (!empty($request[1])) {
-                    $filtered = (new BookmarkFilter($filtered, $this->conf))
+                    $filtered = (new BookmarkFilter($filtered, $this->conf, $this->pluginManager))
                         ->filterFulltext($request[1], $visibility)
                     ;
                 }
@@ -130,8 +129,6 @@ class BookmarkFilter
                 } else {
                     return $this->filterTags($request, $casesensitive, $visibility);
                 }
-            case self::$FILTER_DAY:
-                return $this->filterDay($request, $visibility);
             default:
                 return $this->noFilter($visibility);
         }
@@ -146,13 +143,20 @@ class BookmarkFilter
      */
     private function noFilter(string $visibility = 'all')
     {
-        if ($visibility === 'all') {
-            return $this->bookmarks;
-        }
-
         $out = [];
         foreach ($this->bookmarks as $key => $value) {
-            if ($value->isPrivate() && $visibility === 'private') {
+            if (
+                !$this->pluginManager->filterSearchEntry(
+                    $value,
+                    ['source' => 'no_filter', 'visibility' => $visibility]
+                )
+            ) {
+                continue;
+            }
+
+            if ($visibility === 'all') {
+                $out[$key] = $value;
+            } elseif ($value->isPrivate() && $visibility === 'private') {
                 $out[$key] = $value;
             } elseif (!$value->isPrivate() && $visibility === 'public') {
                 $out[$key] = $value;
@@ -233,18 +237,34 @@ class BookmarkFilter
         }
 
         // Iterate over every stored link.
-        foreach ($this->bookmarks as $id => $link) {
+        foreach ($this->bookmarks as $id => $bookmark) {
+            if (
+                !$this->pluginManager->filterSearchEntry(
+                    $bookmark,
+                    [
+                    'source' => 'fulltext',
+                    'searchterms' => $searchterms,
+                    'andSearch' => $andSearch,
+                    'exactSearch' => $exactSearch,
+                    'excludeSearch' => $excludeSearch,
+                    'visibility' => $visibility
+                    ]
+                )
+            ) {
+                continue;
+            }
+
             // ignore non private bookmarks when 'privatonly' is on.
             if ($visibility !== 'all') {
-                if (!$link->isPrivate() && $visibility === 'private') {
+                if (!$bookmark->isPrivate() && $visibility === 'private') {
                     continue;
-                } elseif ($link->isPrivate() && $visibility === 'public') {
+                } elseif ($bookmark->isPrivate() && $visibility === 'public') {
                     continue;
                 }
             }
 
             $lengths = [];
-            $content = $this->buildFullTextSearchableLink($link, $lengths);
+            $content = $this->buildFullTextSearchableLink($bookmark, $lengths);
 
             // Be optimistic
             $found = true;
@@ -270,66 +290,16 @@ class BookmarkFilter
             }
 
             if ($found !== false) {
-                $link->addAdditionalContentEntry(
+                $bookmark->addAdditionalContentEntry(
                     'search_highlight',
                     $this->postProcessFoundPositions($lengths, $foundPositions)
                 );
 
-                $filtered[$id] = $link;
+                $filtered[$id] = $bookmark;
             }
         }
 
         return $filtered;
-    }
-
-    /**
-     * generate a regex fragment out of a tag
-     *
-     * @param string $tag to to generate regexs from. may start with '-' to negate, contain '*' as wildcard
-     *
-     * @return string generated regex fragment
-     */
-    protected function tag2regex(string $tag): string
-    {
-        $tagsSeparator = $this->conf->get('general.tags_separator', ' ');
-        $len = strlen($tag);
-        if (!$len || $tag === "-" || $tag === "*") {
-            // nothing to search, return empty regex
-            return '';
-        }
-        if ($tag[0] === "-") {
-            // query is negated
-            $i = 1; // use offset to start after '-' character
-            $regex = '(?!'; // create negative lookahead
-        } else {
-            $i = 0; // start at first character
-            $regex = '(?='; // use positive lookahead
-        }
-        // before tag may only be the separator or the beginning
-        $regex .= '.*(?:^|' . $tagsSeparator . ')';
-        // iterate over string, separating it into placeholder and content
-        for (; $i < $len; $i++) {
-            if ($tag[$i] === '*') {
-                // placeholder found
-                $regex .= '[^' . $tagsSeparator . ']*?';
-            } else {
-                // regular characters
-                $offset = strpos($tag, '*', $i);
-                if ($offset === false) {
-                    // no placeholder found, set offset to end of string
-                    $offset = $len;
-                }
-                // subtract one, as we want to get before the placeholder or end of string
-                $offset -= 1;
-                // we got a tag name that we want to search for. escape any regex characters to prevent conflicts.
-                $regex .= preg_quote(substr($tag, $i, $offset - $i + 1), '/');
-                // move $i on
-                $i = $offset;
-            }
-        }
-        // after the tag may only be the separator or the end
-        $regex .= '(?:$|' . $tagsSeparator . '))';
-        return $regex;
     }
 
     /**
@@ -381,25 +351,39 @@ class BookmarkFilter
         $filtered = [];
 
         // iterate over each link
-        foreach ($this->bookmarks as $key => $link) {
+        foreach ($this->bookmarks as $key => $bookmark) {
+            if (
+                !$this->pluginManager->filterSearchEntry(
+                    $bookmark,
+                    [
+                    'source' => 'tags',
+                    'tags' => $tags,
+                    'casesensitive' => $casesensitive,
+                    'visibility' => $visibility
+                    ]
+                )
+            ) {
+                continue;
+            }
+
             // check level of visibility
             // ignore non private bookmarks when 'privateonly' is on.
             if ($visibility !== 'all') {
-                if (!$link->isPrivate() && $visibility === 'private') {
+                if (!$bookmark->isPrivate() && $visibility === 'private') {
                     continue;
-                } elseif ($link->isPrivate() && $visibility === 'public') {
+                } elseif ($bookmark->isPrivate() && $visibility === 'public') {
                     continue;
                 }
             }
             // build search string, start with tags of current link
-            $search = $link->getTagsString($tagsSeparator);
-            if (strlen(trim($link->getDescription())) && strpos($link->getDescription(), '#') !== false) {
+            $search = $bookmark->getTagsString($tagsSeparator);
+            if (strlen(trim($bookmark->getDescription())) && strpos($bookmark->getDescription(), '#') !== false) {
                 // description given and at least one possible tag found
                 $descTags = [];
                 // find all tags in the form of #tag in the description
                 preg_match_all(
                     '/(?<![' . self::$HASHTAG_CHARS . '])#([' . self::$HASHTAG_CHARS . ']+?)\b/sm',
-                    $link->getDescription(),
+                    $bookmark->getDescription(),
                     $descTags
                 );
                 if (count($descTags[1])) {
@@ -412,8 +396,9 @@ class BookmarkFilter
                 // this entry does _not_ match our regex
                 continue;
             }
-            $filtered[$key] = $link;
+            $filtered[$key] = $bookmark;
         }
+
         return $filtered;
     }
 
@@ -427,55 +412,30 @@ class BookmarkFilter
     public function filterUntagged(string $visibility)
     {
         $filtered = [];
-        foreach ($this->bookmarks as $key => $link) {
+        foreach ($this->bookmarks as $key => $bookmark) {
+            if (
+                !$this->pluginManager->filterSearchEntry(
+                    $bookmark,
+                    ['source' => 'untagged', 'visibility' => $visibility]
+                )
+            ) {
+                continue;
+            }
+
             if ($visibility !== 'all') {
-                if (!$link->isPrivate() && $visibility === 'private') {
+                if (!$bookmark->isPrivate() && $visibility === 'private') {
                     continue;
-                } elseif ($link->isPrivate() && $visibility === 'public') {
+                } elseif ($bookmark->isPrivate() && $visibility === 'public') {
                     continue;
                 }
             }
 
-            if (empty($link->getTags())) {
-                $filtered[$key] = $link;
-            }
-        }
-
-        return $filtered;
-    }
-
-    /**
-     * Returns the list of articles for a given day, chronologically sorted
-     *
-     * Day must be in the form 'YYYYMMDD' (e.g. '20120125'), e.g.
-     *  print_r($mydb->filterDay('20120125'));
-     *
-     * @param string $day day to filter.
-     * @param string $visibility return only all/private/public bookmarks.
-
-     * @return Bookmark[] all link matching given day.
-     *
-     * @throws Exception if date format is invalid.
-     */
-    public function filterDay(string $day, string $visibility)
-    {
-        if (!checkDateFormat('Ymd', $day)) {
-            throw new Exception('Invalid date format');
-        }
-
-        $filtered = [];
-        foreach ($this->bookmarks as $key => $bookmark) {
-            if ($visibility === static::$PUBLIC && $bookmark->isPrivate()) {
-                continue;
-            }
-
-            if ($bookmark->getCreated()->format('Ymd') == $day) {
+            if (empty($bookmark->getTags())) {
                 $filtered[$key] = $bookmark;
             }
         }
 
-        // sort by date ASC
-        return array_reverse($filtered, true);
+        return $filtered;
     }
 
     /**
@@ -495,6 +455,56 @@ class BookmarkFilter
         $tagsOut = str_replace(',', ' ', $tagsOut);
 
         return preg_split('/\s+/', $tagsOut, -1, PREG_SPLIT_NO_EMPTY);
+    }
+
+    /**
+     * generate a regex fragment out of a tag
+     *
+     * @param string $tag to to generate regexs from. may start with '-' to negate, contain '*' as wildcard
+     *
+     * @return string generated regex fragment
+     */
+    protected function tag2regex(string $tag): string
+    {
+        $tagsSeparator = $this->conf->get('general.tags_separator', ' ');
+        $len = strlen($tag);
+        if (!$len || $tag === "-" || $tag === "*") {
+            // nothing to search, return empty regex
+            return '';
+        }
+        if ($tag[0] === "-") {
+            // query is negated
+            $i = 1; // use offset to start after '-' character
+            $regex = '(?!'; // create negative lookahead
+        } else {
+            $i = 0; // start at first character
+            $regex = '(?='; // use positive lookahead
+        }
+        // before tag may only be the separator or the beginning
+        $regex .= '.*(?:^|' . $tagsSeparator . ')';
+        // iterate over string, separating it into placeholder and content
+        for (; $i < $len; $i++) {
+            if ($tag[$i] === '*') {
+                // placeholder found
+                $regex .= '[^' . $tagsSeparator . ']*?';
+            } else {
+                // regular characters
+                $offset = strpos($tag, '*', $i);
+                if ($offset === false) {
+                    // no placeholder found, set offset to end of string
+                    $offset = $len;
+                }
+                // subtract one, as we want to get before the placeholder or end of string
+                $offset -= 1;
+                // we got a tag name that we want to search for. escape any regex characters to prevent conflicts.
+                $regex .= preg_quote(substr($tag, $i, $offset - $i + 1), '/');
+                // move $i on
+                $i = $offset;
+            }
+        }
+        // after the tag may only be the separator or the end
+        $regex .= '(?:$|' . $tagsSeparator . '))';
+        return $regex;
     }
 
     /**
