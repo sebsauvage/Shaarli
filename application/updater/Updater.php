@@ -152,7 +152,7 @@ class Updater
     {
         $updated = false;
 
-        foreach ($this->bookmarkService->search() as $bookmark) {
+        foreach ($this->bookmarkService->search()->getBookmarks() as $bookmark) {
             if (
                 $bookmark->isNote()
                 && startsWith($bookmark->getUrl(), '?')

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shaarli\Front\Controller\Visitor;
 
 use Shaarli\Bookmark\Bookmark;
+use Shaarli\Bookmark\SearchResult;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Front\Exception\ThumbnailsDisabledException;
 use Shaarli\TestCase;
@@ -50,17 +51,17 @@ class PictureWallControllerTest extends TestCase
         $this->container->bookmarkService
             ->expects(static::once())
             ->method('search')
-            ->willReturnCallback(function (array $parameters, ?string $visibility): array {
+            ->willReturnCallback(function (array $parameters, ?string $visibility): SearchResult {
                 // Visibility is set through the container, not the call
                 static::assertNull($visibility);
 
                 // No query parameters
                 if (count($parameters) === 0) {
-                    return [
+                    return SearchResult::getSearchResult([
                         (new Bookmark())->setId(1)->setUrl('http://url.tld')->setThumbnail('thumb1'),
                         (new Bookmark())->setId(2)->setUrl('http://url2.tld'),
                         (new Bookmark())->setId(3)->setUrl('http://url3.tld')->setThumbnail('thumb2'),
-                    ];
+                    ]);
                 }
             })
         ;

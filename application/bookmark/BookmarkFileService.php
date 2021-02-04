@@ -55,8 +55,12 @@ class BookmarkFileService implements BookmarkServiceInterface
     /**
      * @inheritDoc
      */
-    public function __construct(ConfigManager $conf, History $history, Mutex $mutex, bool $isLoggedIn)
-    {
+    public function __construct(
+        ConfigManager $conf,
+        History $history,
+        Mutex $mutex,
+        bool $isLoggedIn
+    ) {
         $this->conf = $conf;
         $this->history = $history;
         $this->mutex = $mutex;
@@ -129,8 +133,9 @@ class BookmarkFileService implements BookmarkServiceInterface
         string $visibility = null,
         bool $caseSensitive = false,
         bool $untaggedOnly = false,
-        bool $ignoreSticky = false
-    ) {
+        bool $ignoreSticky = false,
+        array $pagination = []
+    ): SearchResult {
         if ($visibility === null) {
             $visibility = $this->isLoggedIn ? BookmarkFilter::$ALL : BookmarkFilter::$PUBLIC;
         }
@@ -143,12 +148,19 @@ class BookmarkFileService implements BookmarkServiceInterface
             $this->bookmarks->reorder('DESC', true);
         }
 
-        return $this->bookmarkFilter->filter(
+        $bookmarks = $this->bookmarkFilter->filter(
             BookmarkFilter::$FILTER_TAG | BookmarkFilter::$FILTER_TEXT,
             [$searchTags, $searchTerm],
             $caseSensitive,
             $visibility,
             $untaggedOnly
+        );
+
+        return SearchResult::getSearchResult(
+            $bookmarks,
+            $pagination['offset'] ?? 0,
+            $pagination['limit'] ?? null,
+            $pagination['allowOutOfBounds'] ?? false
         );
     }
 
@@ -282,7 +294,7 @@ class BookmarkFileService implements BookmarkServiceInterface
      */
     public function count(string $visibility = null): int
     {
-        return count($this->search([], $visibility));
+        return $this->search([], $visibility)->getResultCount();
     }
 
     /**
@@ -305,10 +317,10 @@ class BookmarkFileService implements BookmarkServiceInterface
      */
     public function bookmarksCountPerTag(array $filteringTags = [], string $visibility = null): array
     {
-        $bookmarks = $this->search(['searchtags' => $filteringTags], $visibility);
+        $searchResult = $this->search(['searchtags' => $filteringTags], $visibility);
         $tags = [];
         $caseMapping = [];
-        foreach ($bookmarks as $bookmark) {
+        foreach ($searchResult->getBookmarks() as $bookmark) {
             foreach ($bookmark->getTags() as $tag) {
                 if (
                     empty($tag)
@@ -357,7 +369,7 @@ class BookmarkFileService implements BookmarkServiceInterface
         $previous = null;
         $next = null;
 
-        foreach ($this->search([], null, false, false, true) as $bookmark) {
+        foreach ($this->search([], null, false, false, true)->getBookmarks() as $bookmark) {
             if ($to < $bookmark->getCreated()) {
                 $next = $bookmark->getCreated();
             } elseif ($from < $bookmark->getCreated() && $to > $bookmark->getCreated()) {
@@ -378,7 +390,7 @@ class BookmarkFileService implements BookmarkServiceInterface
      */
     public function getLatest(): ?Bookmark
     {
-        foreach ($this->search([], null, false, false, true) as $bookmark) {
+        foreach ($this->search([], null, false, false, true)->getBookmarks() as $bookmark) {
             return $bookmark;
         }
 
