@@ -1,34 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shaarli\Feed;
+
+use DatePeriod;
 
 /**
  * Simple cache system, mainly for the RSS/ATOM feeds
  */
 class CachedPage
 {
-    // Directory containing page caches
-    private $cacheDir;
+    /** Directory containing page caches */
+    protected $cacheDir;
 
-    // Should this URL be cached (boolean)?
-    private $shouldBeCached;
+    /** Should this URL be cached (boolean)? */
+    protected $shouldBeCached;
 
-    // Name of the cache file for this URL
-    private $filename;
+    /** Name of the cache file for this URL */
+    protected $filename;
+
+    /** @var DatePeriod|null Optionally specify a period of time for cache validity */
+    protected $validityPeriod;
 
     /**
      * Creates a new CachedPage
      *
-     * @param string $cacheDir       page cache directory
-     * @param string $url            page URL
-     * @param bool   $shouldBeCached whether this page needs to be cached
+     * @param string      $cacheDir       page cache directory
+     * @param string      $url            page URL
+     * @param bool        $shouldBeCached whether this page needs to be cached
+     * @param ?DatePeriod $validityPeriod Optionally specify a time limit on requested cache
      */
-    public function __construct($cacheDir, $url, $shouldBeCached)
+    public function __construct($cacheDir, $url, $shouldBeCached, ?DatePeriod $validityPeriod)
     {
         // TODO: check write access to the cache directory
         $this->cacheDir = $cacheDir;
         $this->filename = $this->cacheDir . '/' . sha1($url) . '.cache';
         $this->shouldBeCached = $shouldBeCached;
+        $this->validityPeriod = $validityPeriod;
     }
 
     /**
@@ -41,10 +50,20 @@ class CachedPage
         if (!$this->shouldBeCached) {
             return null;
         }
-        if (is_file($this->filename)) {
-            return file_get_contents($this->filename);
+        if (!is_file($this->filename)) {
+            return null;
         }
-        return null;
+        if ($this->validityPeriod !== null) {
+            $cacheDate = \DateTime::createFromFormat('U', (string) filemtime($this->filename));
+            if (
+                $cacheDate < $this->validityPeriod->getStartDate()
+                || $cacheDate > $this->validityPeriod->getEndDate()
+            ) {
+                return null;
+            }
+        }
+
+        return file_get_contents($this->filename);
     }
 
     /**

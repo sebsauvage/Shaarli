@@ -47,6 +47,20 @@ function default_colors_init($conf)
 }
 
 /**
+ * When plugin parameters are saved, we regenerate the custom CSS file with provided settings.
+ *
+ * @param array         $data $_POST array
+ *
+ * @return array Updated $_POST array
+ */
+function hook_default_colors_save_plugin_parameters($data)
+{
+    default_colors_generate_css_file($data);
+
+    return $data;
+}
+
+/**
  * When linklist is displayed, include default_colors CSS file.
  *
  * @param array $data - header data.

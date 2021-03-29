@@ -10,6 +10,7 @@ use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Bookmark\BookmarkFilter;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
+use Shaarli\Plugin\PluginManager;
 use Shaarli\TestCase;
 use Slim\Http\UploadedFile;
 
@@ -71,6 +72,9 @@ class BookmarkImportTest extends TestCase
      */
     protected $netscapeBookmarkUtils;
 
+    /** @var PluginManager */
+    protected $pluginManager;
+
     /**
      * @var string Save the current timezone.
      */
@@ -99,7 +103,14 @@ class BookmarkImportTest extends TestCase
         $this->conf->set('resource.page_cache', $this->pagecache);
         $this->conf->set('resource.datastore', self::$testDatastore);
         $this->history = new History(self::$historyFilePath);
-        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, $mutex, true);
+        $this->pluginManager = new PluginManager($this->conf);
+        $this->bookmarkService = new BookmarkFileService(
+            $this->conf,
+            $this->pluginManager,
+            $this->history,
+            $mutex,
+            true
+        );
         $this->netscapeBookmarkUtils = new NetscapeBookmarkUtils($this->bookmarkService, $this->conf, $this->history);
     }
 

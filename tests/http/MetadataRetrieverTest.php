@@ -41,7 +41,7 @@ class MetadataRetrieverTest extends TestCase
         $remoteCharset = 'utf-8';
 
         $expectedResult = [
-            'title' => $remoteTitle,
+            'title' => trim($remoteTitle),
             'description' => $remoteDesc,
             'tags' => $remoteTags,
         ];

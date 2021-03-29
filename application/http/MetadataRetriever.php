@@ -60,10 +60,15 @@ class MetadataRetriever
             $title = mb_convert_encoding($title, 'utf-8', $charset);
         }
 
-        return [
+        return array_map([$this, 'cleanMetadata'], [
             'title' => $title,
             'description' => $description,
             'tags' => $tags,
-        ];
+        ]);
+    }
+
+    protected function cleanMetadata($data): ?string
+    {
+        return !is_string($data) || empty(trim($data)) ? null : trim($data);
     }
 }

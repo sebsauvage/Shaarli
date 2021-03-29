@@ -1,3 +1,4 @@
+{$batchId=isset($batchId) ? $batchId : ''}
 {if="empty($batch_mode)"}
 <!DOCTYPE html>
 <html{if="$language !== 'auto'"} lang="{$language}"{/if}>
@@ -10,7 +11,7 @@
   {ignore}Lil hack: when included in a loop in batch mode, `$value` is assigned by RainTPL with template vars.{/ignore}
   {function="extract($value) ? '' : ''"}
 {/if}
-  <div id="editlinkform" class="edit-link-container" class="pure-g">
+  <div id="editlinkform{$batchId}" class="edit-link-container" class="pure-g">
     <div class="pure-u-lg-1-5 pure-u-1-24"></div>
     <form method="post"
           name="linkform"
@@ -27,16 +28,16 @@
       {/if}
       {if="!$link_is_new"}<div class="created-date">{'Created:'|t} {$link.created|format_date}</div>{/if}
       <div>
-        <label for="lf_url">{'URL'|t}</label>
+        <label for="lf_url{$batchId}">{'URL'|t}</label>
       </div>
       <div>
-        <input type="text" name="lf_url" id="lf_url" value="{$link.url}" class="lf_input">
+        <input type="text" name="lf_url" id="lf_url{$batchId}" value="{$link.url}" class="lf_input">
       </div>
       <div>
-      <label for="lf_title">{'Title'|t}</label>
+      <label for="lf_title{$batchId}">{'Title'|t}</label>
       </div>
       <div class="{$asyncLoadClass}">
-        <input type="text" name="lf_title" id="lf_title" value="{$link.title}"
+        <input type="text" name="lf_title" id="lf_title{$batchId}" value="{$link.title}"
          class="lf_input {if="!$async_metadata"}autofocus{/if}"
         >
         <div class="icon-container">
@@ -44,19 +45,19 @@
         </div>
       </div>
       <div>
-        <label for="lf_description">{'Description'|t}</label>
+        <label for="lf_description{$batchId}">{'Description'|t}</label>
       </div>
       <div class="{if="$retrieve_description"}{$asyncLoadClass}{/if}">
-        <textarea name="lf_description" id="lf_description" class="autofocus">{$link.description}</textarea>
+        <textarea name="lf_description" id="lf_description{$batchId}" class="autofocus">{$link.description}</textarea>
         <div class="icon-container">
           <i class="loader"></i>
         </div>
       </div>
       <div>
-        <label for="lf_tags">{'Tags'|t}</label>
+        <label for="lf_tags{$batchId}">{'Tags'|t}</label>
       </div>
       <div class="{if="$retrieve_description"}{$asyncLoadClass}{/if}">
-        <input type="text" name="lf_tags" id="lf_tags" value="{$link.tags}" class="lf_input autofocus"
+        <input type="text" name="lf_tags" id="lf_tags{$batchId}" value="{$link.tags}" class="lf_input autofocus"
           data-list="{loop="$tags"}{$key}, {/loop}" data-multiple data-autofirst autocomplete="off" >
         <div class="icon-container">
           <i class="loader"></i>
@@ -64,11 +65,11 @@
       </div>
 
       <div>
-        <input type="checkbox"  name="lf_private" id="lf_private"
+        <input type="checkbox"  name="lf_private" id="lf_private{$batchId}"
         {if="$link.private === true"}
           checked="checked"
         {/if}>
-        &nbsp;<label for="lf_private">{'Private'|t}</label>
+        &nbsp;<label for="lf_private{$batchId}">{'Private'|t}</label>
       </div>
 
       {if="$formatter==='markdown'"}

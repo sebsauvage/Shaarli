@@ -5,6 +5,7 @@ use malkusch\lock\mutex\NoMutex;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
+use Shaarli\Plugin\PluginManager;
 use Shaarli\TestCase;
 use Slim\Container;
 use Slim\Http\Environment;
@@ -55,12 +56,18 @@ class InfoTest extends TestCase
         $this->conf->set('resource.datastore', self::$testDatastore);
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
-
+        $this->pluginManager = new PluginManager($this->conf);
         $history = new History('sandbox/history.php');
 
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
-        $this->container['db'] = new BookmarkFileService($this->conf, $history, $mutex, true);
+        $this->container['db'] = new BookmarkFileService(
+            $this->conf,
+            $this->pluginManager,
+            $history,
+            $mutex,
+            true
+        );
         $this->container['history'] = null;
 
         $this->controller = new Info($this->container);

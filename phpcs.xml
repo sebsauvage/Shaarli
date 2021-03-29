@@ -18,5 +18,6 @@
   <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
     <!--  index.php bootstraps everything, so yes mixed symbols with side effects  -->
     <exclude-pattern>index.php</exclude-pattern>
+    <exclude-pattern>plugins/*</exclude-pattern>
   </rule>
 </ruleset>

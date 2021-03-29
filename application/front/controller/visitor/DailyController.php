@@ -86,9 +86,11 @@ class DailyController extends ShaarliVisitorController
     public function rss(Request $request, Response $response): Response
     {
         $response = $response->withHeader('Content-Type', 'application/rss+xml; charset=utf-8');
+        $type = DailyPageHelper::extractRequestedType($request);
+        $cacheDuration = DailyPageHelper::getCacheDatePeriodByType($type);
 
         $pageUrl = page_url($this->container->environment);
-        $cache = $this->container->pageCacheManager->getCachePage($pageUrl);
+        $cache = $this->container->pageCacheManager->getCachePage($pageUrl, $cacheDuration);
 
         $cached = $cache->cachedVersion();
         if (!empty($cached)) {
@@ -96,10 +98,9 @@ class DailyController extends ShaarliVisitorController
         }
 
         $days = [];
-        $type = DailyPageHelper::extractRequestedType($request);
         $format = DailyPageHelper::getFormatByType($type);
         $length = DailyPageHelper::getRssLengthByType($type);
-        foreach ($this->container->bookmarkService->search() as $bookmark) {
+        foreach ($this->container->bookmarkService->search()->getBookmarks() as $bookmark) {
             $day = $bookmark->getCreated()->format($format);
 
             // Stop iterating after DAILY_RSS_NB_DAYS entries
@@ -131,7 +132,7 @@ class DailyController extends ShaarliVisitorController
             $dataPerDay[$day] = [
                 'date' => $endDateTime,
                 'date_rss' => $endDateTime->format(DateTime::RSS),
-                'date_human' => DailyPageHelper::getDescriptionByType($type, $dayDateTime),
+                'date_human' => DailyPageHelper::getDescriptionByType($type, $dayDateTime, false),
                 'absolute_url' => $indexUrl . 'daily?' . $type . '=' . $day,
                 'links' => [],
             ];

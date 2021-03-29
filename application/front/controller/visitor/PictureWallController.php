@@ -30,19 +30,19 @@ class PictureWallController extends ShaarliVisitorController
         );
 
         // Optionally filter the results:
-        $links = $this->container->bookmarkService->search($request->getQueryParams());
-        $linksToDisplay = [];
+        $bookmarks = $this->container->bookmarkService->search($request->getQueryParams())->getBookmarks();
+        $links = [];
 
         // Get only bookmarks which have a thumbnail.
         // Note: we do not retrieve thumbnails here, the request is too heavy.
         $formatter = $this->container->formatterFactory->getFormatter('raw');
-        foreach ($links as $key => $link) {
-            if (!empty($link->getThumbnail())) {
-                $linksToDisplay[] = $formatter->format($link);
+        foreach ($bookmarks as $key => $bookmark) {
+            if (!empty($bookmark->getThumbnail())) {
+                $links[] = $formatter->format($bookmark);
             }
         }
 
-        $data = ['linksToDisplay' => $linksToDisplay];
+        $data = ['linksToDisplay' => $links];
         $this->executePageHooks('render_picwall', $data, TemplatePage::PICTURE_WALL);
 
         foreach ($data as $key => $value) {

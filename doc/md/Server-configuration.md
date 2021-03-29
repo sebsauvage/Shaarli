@@ -199,6 +199,8 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
         Require all denied
     </FilesMatch>
 
+    DirectoryIndex index.php
+
     <Files "index.php">
         Require all granted
     </Files>

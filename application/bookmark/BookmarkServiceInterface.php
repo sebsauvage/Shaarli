@@ -44,16 +44,18 @@ interface BookmarkServiceInterface
      * @param bool    $caseSensitive
      * @param bool    $untaggedOnly
      * @param bool    $ignoreSticky
+     * @param array   $pagination     This array can contain the following keys for pagination: limit, offset.
      *
-     * @return Bookmark[]
+     * @return SearchResult
      */
     public function search(
         array $request = [],
         string $visibility = null,
         bool $caseSensitive = false,
         bool $untaggedOnly = false,
-        bool $ignoreSticky = false
-    );
+        bool $ignoreSticky = false,
+        array $pagination = []
+    ): SearchResult;
 
     /**
      * Get a single bookmark by its ID.

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Shaarli\Helper;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\TestCase;
 use Slim\Http\Request;
@@ -32,7 +34,7 @@ class DailyPageHelperTest extends TestCase
         string $type,
         string $input,
         ?Bookmark $bookmark,
-        \DateTimeInterface $expectedDateTime,
+        DateTimeInterface $expectedDateTime,
         string $compareFormat = 'Ymd'
     ): void {
         $dateTime = DailyPageHelper::extractRequestedDateTime($type, $input, $bookmark);
@@ -71,8 +73,8 @@ class DailyPageHelperTest extends TestCase
      */
     public function testGetStartDatesByType(
         string $type,
-        \DateTimeImmutable $dateTime,
-        \DateTimeInterface $expectedDateTime
+        DateTimeImmutable $dateTime,
+        DateTimeInterface $expectedDateTime
     ): void {
         $startDateTime = DailyPageHelper::getStartDateTimeByType($type, $dateTime);
 
@@ -84,7 +86,7 @@ class DailyPageHelperTest extends TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Unsupported daily format type');
 
-        DailyPageHelper::getStartDateTimeByType('nope', new \DateTimeImmutable());
+        DailyPageHelper::getStartDateTimeByType('nope', new DateTimeImmutable());
     }
 
     /**
@@ -92,8 +94,8 @@ class DailyPageHelperTest extends TestCase
      */
     public function testGetEndDatesByType(
         string $type,
-        \DateTimeImmutable $dateTime,
-        \DateTimeInterface $expectedDateTime
+        DateTimeImmutable $dateTime,
+        DateTimeInterface $expectedDateTime
     ): void {
         $endDateTime = DailyPageHelper::getEndDateTimeByType($type, $dateTime);
 
@@ -105,7 +107,7 @@ class DailyPageHelperTest extends TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Unsupported daily format type');
 
-        DailyPageHelper::getEndDateTimeByType('nope', new \DateTimeImmutable());
+        DailyPageHelper::getEndDateTimeByType('nope', new DateTimeImmutable());
     }
 
     /**
@@ -113,10 +115,23 @@ class DailyPageHelperTest extends TestCase
      */
     public function testGeDescriptionsByType(
         string $type,
-        \DateTimeImmutable $dateTime,
+        DateTimeImmutable $dateTime,
         string $expectedDescription
     ): void {
         $description = DailyPageHelper::getDescriptionByType($type, $dateTime);
+
+        static::assertEquals($expectedDescription, $description);
+    }
+
+    /**
+     * @dataProvider getDescriptionsByTypeNotIncludeRelative
+     */
+    public function testGeDescriptionsByTypeNotIncludeRelative(
+        string $type,
+        \DateTimeImmutable $dateTime,
+        string $expectedDescription
+    ): void {
+        $description = DailyPageHelper::getDescriptionByType($type, $dateTime, false);
 
         static::assertEquals($expectedDescription, $description);
     }
@@ -126,7 +141,7 @@ class DailyPageHelperTest extends TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Unsupported daily format type');
 
-        DailyPageHelper::getDescriptionByType('nope', new \DateTimeImmutable());
+        DailyPageHelper::getDescriptionByType('nope', new DateTimeImmutable());
     }
 
     /**
@@ -144,6 +159,29 @@ class DailyPageHelperTest extends TestCase
         $this->expectExceptionMessage('Unsupported daily format type');
 
         DailyPageHelper::getRssLengthByType('nope');
+    }
+
+    /**
+     * @dataProvider getCacheDatePeriodByType
+     */
+    public function testGetCacheDatePeriodByType(
+        string $type,
+        DateTimeImmutable $requested,
+        DateTimeInterface $start,
+        DateTimeInterface $end
+    ): void {
+        $period = DailyPageHelper::getCacheDatePeriodByType($type, $requested);
+
+        static::assertEquals($start, $period->getStartDate());
+        static::assertEquals($end, $period->getEndDate());
+    }
+
+    public function testGetCacheDatePeriodByTypeExceptionUnknownType(): void
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Unsupported daily format type');
+
+        DailyPageHelper::getCacheDatePeriodByType('nope');
     }
 
     /**
@@ -216,9 +254,9 @@ class DailyPageHelperTest extends TestCase
     public function getStartDatesByType(): array
     {
         return [
-            [DailyPageHelper::DAY, new \DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-09 00:00:00')],
-            [DailyPageHelper::WEEK, new \DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-05 00:00:00')],
-            [DailyPageHelper::MONTH, new \DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-01 00:00:00')],
+            [DailyPageHelper::DAY, new DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-09 00:00:00')],
+            [DailyPageHelper::WEEK, new DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-05 00:00:00')],
+            [DailyPageHelper::MONTH, new DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-01 00:00:00')],
         ];
     }
 
@@ -228,9 +266,9 @@ class DailyPageHelperTest extends TestCase
     public function getEndDatesByType(): array
     {
         return [
-            [DailyPageHelper::DAY, new \DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-09 23:59:59')],
-            [DailyPageHelper::WEEK, new \DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-11 23:59:59')],
-            [DailyPageHelper::MONTH, new \DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-31 23:59:59')],
+            [DailyPageHelper::DAY, new DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-09 23:59:59')],
+            [DailyPageHelper::WEEK, new DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-11 23:59:59')],
+            [DailyPageHelper::MONTH, new DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-31 23:59:59')],
         ];
     }
 
@@ -240,8 +278,22 @@ class DailyPageHelperTest extends TestCase
     public function getDescriptionsByType(): array
     {
         return [
-            [DailyPageHelper::DAY, $date = new \DateTimeImmutable(), 'Today - ' . $date->format('F j, Y')],
-            [DailyPageHelper::DAY, $date = new \DateTimeImmutable('-1 day'), 'Yesterday - ' . $date->format('F j, Y')],
+            [DailyPageHelper::DAY, $date = new DateTimeImmutable(), 'Today - ' . $date->format('F j, Y')],
+            [DailyPageHelper::DAY, $date = new DateTimeImmutable('-1 day'), 'Yesterday - ' . $date->format('F j, Y')],
+            [DailyPageHelper::DAY, new DateTimeImmutable('2020-10-09 04:05:06'), 'October 9, 2020'],
+            [DailyPageHelper::WEEK, new DateTimeImmutable('2020-10-09 04:05:06'), 'Week 41 (October 5, 2020)'],
+            [DailyPageHelper::MONTH, new DateTimeImmutable('2020-10-09 04:05:06'), 'October, 2020'],
+        ];
+    }
+
+    /**
+     * Data provider for testGeDescriptionsByTypeNotIncludeRelative() test method.
+     */
+    public function getDescriptionsByTypeNotIncludeRelative(): array
+    {
+        return [
+            [DailyPageHelper::DAY, $date = new \DateTimeImmutable(), $date->format('F j, Y')],
+            [DailyPageHelper::DAY, $date = new \DateTimeImmutable('-1 day'), $date->format('F j, Y')],
             [DailyPageHelper::DAY, new \DateTimeImmutable('2020-10-09 04:05:06'), 'October 9, 2020'],
             [DailyPageHelper::WEEK, new \DateTimeImmutable('2020-10-09 04:05:06'), 'Week 41 (October 5, 2020)'],
             [DailyPageHelper::MONTH, new \DateTimeImmutable('2020-10-09 04:05:06'), 'October, 2020'],
@@ -249,7 +301,7 @@ class DailyPageHelperTest extends TestCase
     }
 
     /**
-     * Data provider for testGetDescriptionsByType() test method.
+     * Data provider for testGetRssLengthsByType() test method.
      */
     public function getRssLengthsByType(): array
     {
@@ -257,6 +309,33 @@ class DailyPageHelperTest extends TestCase
             [DailyPageHelper::DAY],
             [DailyPageHelper::WEEK],
             [DailyPageHelper::MONTH],
+        ];
+    }
+
+    /**
+     * Data provider for testGetCacheDatePeriodByType() test method.
+     */
+    public function getCacheDatePeriodByType(): array
+    {
+        return [
+            [
+                DailyPageHelper::DAY,
+                new DateTimeImmutable('2020-10-09 04:05:06'),
+                new \DateTime('2020-10-09 00:00:00'),
+                new \DateTime('2020-10-09 23:59:59'),
+            ],
+            [
+                DailyPageHelper::WEEK,
+                new DateTimeImmutable('2020-10-09 04:05:06'),
+                new \DateTime('2020-10-05 00:00:00'),
+                new \DateTime('2020-10-11 23:59:59'),
+            ],
+            [
+                DailyPageHelper::MONTH,
+                new DateTimeImmutable('2020-10-09 04:05:06'),
+                new \DateTime('2020-10-01 00:00:00'),
+                new \DateTime('2020-10-31 23:59:59'),
+            ],
         ];
     }
 }

@@ -6,6 +6,7 @@ use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
+use Shaarli\Plugin\PluginManager;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -50,6 +51,9 @@ class GetTagsTest extends \Shaarli\TestCase
      */
     protected $controller;
 
+    /** @var PluginManager */
+    protected $pluginManager;
+
     /**
      * Number of JSON field per link.
      */
@@ -66,9 +70,14 @@ class GetTagsTest extends \Shaarli\TestCase
         $this->refDB = new \ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
         $history = new History('sandbox/history.php');
-
-        $this->bookmarkService = new BookmarkFileService($this->conf, $history, $mutex, true);
-
+        $this->pluginManager = new PluginManager($this->conf);
+        $this->bookmarkService = new BookmarkFileService(
+            $this->conf,
+            $this->pluginManager,
+            $history,
+            $mutex,
+            true
+        );
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
         $this->container['db'] = $this->bookmarkService;

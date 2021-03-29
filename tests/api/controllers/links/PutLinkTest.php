@@ -8,6 +8,7 @@ use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
+use Shaarli\Plugin\PluginManager;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -73,8 +74,14 @@ class PutLinkTest extends \Shaarli\TestCase
         $refHistory = new \ReferenceHistory();
         $refHistory->write(self::$testHistory);
         $this->history = new History(self::$testHistory);
-        $this->bookmarkService = new BookmarkFileService($this->conf, $this->history, $mutex, true);
-
+        $pluginManager = new PluginManager($this->conf);
+        $this->bookmarkService = new BookmarkFileService(
+            $this->conf,
+            $pluginManager,
+            $this->history,
+            $mutex,
+            true
+        );
         $this->container = new Container();
         $this->container['conf'] = $this->conf;
         $this->container['db'] = $this->bookmarkService;
@@ -232,5 +239,53 @@ class PutLinkTest extends \Shaarli\TestCase
         $request = Request::createFromEnvironment($env);
 
         $this->controller->putLink($request, new Response(), ['id' => -1]);
+    }
+
+    /**
+     * Test link creation with a tag string provided
+     */
+    public function testPutLinkWithTagString(): void
+    {
+        $link = [
+            'tags' => 'one two',
+        ];
+        $id = '41';
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'PUT',
+            'CONTENT_TYPE' => 'application/json'
+        ]);
+
+        $request = Request::createFromEnvironment($env);
+        $request = $request->withParsedBody($link);
+        $response = $this->controller->putLink($request, new Response(), ['id' => $id]);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(self::NB_FIELDS_LINK, count($data));
+        $this->assertEquals(['one', 'two'], $data['tags']);
+    }
+
+    /**
+     * Test link creation with a tag string provided
+     */
+    public function testPutLinkWithTagString2(): void
+    {
+        $link = [
+            'tags' => ['one two'],
+        ];
+        $id = '41';
+        $env = Environment::mock([
+            'REQUEST_METHOD' => 'PUT',
+            'CONTENT_TYPE' => 'application/json'
+        ]);
+
+        $request = Request::createFromEnvironment($env);
+        $request = $request->withParsedBody($link);
+        $response = $this->controller->putLink($request, new Response(), ['id' => $id]);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(self::NB_FIELDS_LINK, count($data));
+        $this->assertEquals(['one', 'two'], $data['tags']);
     }
 }

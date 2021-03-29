@@ -4,7 +4,11 @@ const sendBookmarkForm = (basePath, formElement) => {
 
   const formData = new FormData();
   [...inputs].forEach((input) => {
-    formData.append(input.getAttribute('name'), input.value);
+    if (input.getAttribute('type') === 'checkbox') {
+      formData.append(input.getAttribute('name'), input.checked);
+    } else {
+      formData.append(input.getAttribute('name'), input.value);
+    }
   });
 
   return new Promise((resolve, reject) => {
@@ -26,9 +30,9 @@ const sendBookmarkForm = (basePath, formElement) => {
 const sendBookmarkDelete = (buttonElement, formElement) => (
   new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', buttonElement.href);
+    xhr.open('GET', `${buttonElement.href}&source=batch`);
     xhr.onload = () => {
-      if (xhr.status !== 200) {
+      if (xhr.status !== 204) {
         alert(`An error occurred. Return code: ${xhr.status}`);
         reject();
       } else {
@@ -100,7 +104,7 @@ const redirectIfEmptyBatch = (basePath, formElements, path) => {
         });
 
         Promise.all(promises).then(() => {
-          window.location.href = basePath || '/';
+          window.location.href = `${basePath}/`;
         });
       });
     });

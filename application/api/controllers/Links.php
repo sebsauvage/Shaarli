@@ -36,13 +36,6 @@ class Links extends ApiController
     public function getLinks($request, $response)
     {
         $private = $request->getParam('visibility');
-        $bookmarks = $this->bookmarkService->search(
-            [
-                'searchtags' => $request->getParam('searchtags', ''),
-                'searchterm' => $request->getParam('searchterm', ''),
-            ],
-            $private
-        );
 
         // Return bookmarks from the {offset}th link, starting from 0.
         $offset = $request->getParam('offset');
@@ -50,9 +43,6 @@ class Links extends ApiController
             throw new ApiBadParametersException('Invalid offset');
         }
         $offset = ! empty($offset) ? intval($offset) : 0;
-        if ($offset > count($bookmarks)) {
-            return $response->withJson([], 200, $this->jsonStyle);
-        }
 
         // limit parameter is either a number of bookmarks or 'all' for everything.
         $limit = $request->getParam('limit');
@@ -61,23 +51,33 @@ class Links extends ApiController
         } elseif (ctype_digit($limit)) {
             $limit = intval($limit);
         } elseif ($limit === 'all') {
-            $limit = count($bookmarks);
+            $limit = null;
         } else {
             throw new ApiBadParametersException('Invalid limit');
         }
+
+        $searchResult = $this->bookmarkService->search(
+            [
+                'searchtags' => $request->getParam('searchtags', ''),
+                'searchterm' => $request->getParam('searchterm', ''),
+            ],
+            $private,
+            false,
+            false,
+            false,
+            [
+                'limit' => $limit,
+                'offset' => $offset,
+                'allowOutOfBounds' => true,
+            ]
+        );
 
         // 'environment' is set by Slim and encapsulate $_SERVER.
         $indexUrl = index_url($this->ci['environment']);
 
         $out = [];
-        $index = 0;
-        foreach ($bookmarks as $bookmark) {
-            if (count($out) >= $limit) {
-                break;
-            }
-            if ($index++ >= $offset) {
-                $out[] = ApiUtils::formatLink($bookmark, $indexUrl);
-            }
+        foreach ($searchResult->getBookmarks() as $bookmark) {
+            $out[] = ApiUtils::formatLink($bookmark, $indexUrl);
         }
 
         return $response->withJson($out, 200, $this->jsonStyle);
@@ -117,7 +117,11 @@ class Links extends ApiController
     public function postLink($request, $response)
     {
         $data = (array) ($request->getParsedBody() ?? []);
-        $bookmark = ApiUtils::buildBookmarkFromRequest($data, $this->conf->get('privacy.default_private_links'));
+        $bookmark = ApiUtils::buildBookmarkFromRequest(
+            $data,
+            $this->conf->get('privacy.default_private_links'),
+            $this->conf->get('general.tags_separator', ' ')
+        );
         // duplicate by URL, return 409 Conflict
         if (
             ! empty($bookmark->getUrl())
@@ -158,7 +162,11 @@ class Links extends ApiController
         $index = index_url($this->ci['environment']);
         $data = $request->getParsedBody();
 
-        $requestBookmark = ApiUtils::buildBookmarkFromRequest($data, $this->conf->get('privacy.default_private_links'));
+        $requestBookmark = ApiUtils::buildBookmarkFromRequest(
+            $data,
+            $this->conf->get('privacy.default_private_links'),
+            $this->conf->get('general.tags_separator', ' ')
+        );
         // duplicate URL on a different link, return 409 Conflict
         if (
             ! empty($requestBookmark->getUrl())

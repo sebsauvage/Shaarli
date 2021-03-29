@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shaarli\Front\Controller\Visitor;
 
 use Shaarli\Bookmark\Bookmark;
+use Shaarli\Bookmark\SearchResult;
 use Shaarli\Feed\CachedPage;
 use Shaarli\TestCase;
 use Slim\Http\Request;
@@ -347,13 +348,15 @@ class DailyControllerTest extends TestCase
         $request = $this->createMock(Request::class);
         $response = new Response();
 
-        $this->container->bookmarkService->expects(static::once())->method('search')->willReturn([
-            (new Bookmark())->setId(1)->setCreated($dates[0])->setUrl('http://domain.tld/1'),
-            (new Bookmark())->setId(2)->setCreated($dates[1])->setUrl('http://domain.tld/2'),
-            (new Bookmark())->setId(3)->setCreated($dates[1])->setUrl('http://domain.tld/3'),
-            (new Bookmark())->setId(4)->setCreated($dates[2])->setUrl('http://domain.tld/4'),
-            (new Bookmark())->setId(5)->setCreated($dates[3])->setUrl('http://domain.tld/5'),
-        ]);
+        $this->container->bookmarkService->expects(static::once())->method('search')->willReturn(
+            SearchResult::getSearchResult([
+                (new Bookmark())->setId(1)->setCreated($dates[0])->setUrl('http://domain.tld/1'),
+                (new Bookmark())->setId(2)->setCreated($dates[1])->setUrl('http://domain.tld/2'),
+                (new Bookmark())->setId(3)->setCreated($dates[1])->setUrl('http://domain.tld/3'),
+                (new Bookmark())->setId(4)->setCreated($dates[2])->setUrl('http://domain.tld/4'),
+                (new Bookmark())->setId(5)->setCreated($dates[3])->setUrl('http://domain.tld/5'),
+            ])
+        );
 
         $this->container->pageCacheManager
             ->expects(static::once())
@@ -454,7 +457,9 @@ class DailyControllerTest extends TestCase
         $request = $this->createMock(Request::class);
         $response = new Response();
 
-        $this->container->bookmarkService->expects(static::once())->method('search')->willReturn([]);
+        $this->container->bookmarkService
+            ->expects(static::once())->method('search')
+            ->willReturn(SearchResult::getSearchResult([]));
 
         // Save RainTPL assigned variables
         $assignedVariables = [];
@@ -613,11 +618,13 @@ class DailyControllerTest extends TestCase
         });
         $response = new Response();
 
-        $this->container->bookmarkService->expects(static::once())->method('search')->willReturn([
-            (new Bookmark())->setId(1)->setCreated($dates[0])->setUrl('http://domain.tld/1'),
-            (new Bookmark())->setId(2)->setCreated($dates[1])->setUrl('http://domain.tld/2'),
-            (new Bookmark())->setId(3)->setCreated($dates[1])->setUrl('http://domain.tld/3'),
-        ]);
+        $this->container->bookmarkService->expects(static::once())->method('search')->willReturn(
+            SearchResult::getSearchResult([
+                (new Bookmark())->setId(1)->setCreated($dates[0])->setUrl('http://domain.tld/1'),
+                (new Bookmark())->setId(2)->setCreated($dates[1])->setUrl('http://domain.tld/2'),
+                (new Bookmark())->setId(3)->setCreated($dates[1])->setUrl('http://domain.tld/3'),
+            ])
+        );
 
         // Save RainTPL assigned variables
         $assignedVariables = [];
@@ -674,11 +681,13 @@ class DailyControllerTest extends TestCase
         });
         $response = new Response();
 
-        $this->container->bookmarkService->expects(static::once())->method('search')->willReturn([
-            (new Bookmark())->setId(1)->setCreated($dates[0])->setUrl('http://domain.tld/1'),
-            (new Bookmark())->setId(2)->setCreated($dates[1])->setUrl('http://domain.tld/2'),
-            (new Bookmark())->setId(3)->setCreated($dates[1])->setUrl('http://domain.tld/3'),
-        ]);
+        $this->container->bookmarkService->expects(static::once())->method('search')->willReturn(
+            SearchResult::getSearchResult([
+                (new Bookmark())->setId(1)->setCreated($dates[0])->setUrl('http://domain.tld/1'),
+                (new Bookmark())->setId(2)->setCreated($dates[1])->setUrl('http://domain.tld/2'),
+                (new Bookmark())->setId(3)->setCreated($dates[1])->setUrl('http://domain.tld/3'),
+            ])
+        );
 
         // Save RainTPL assigned variables
         $assignedVariables = [];

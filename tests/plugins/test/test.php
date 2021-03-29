@@ -1,5 +1,7 @@
 <?php
 
+use Shaarli\Bookmark\Bookmark;
+
 /**
  * Hook for test.
  *
@@ -26,4 +28,25 @@ function hook_test_random($data)
 function hook_test_error()
 {
     new Unknown();
+}
+
+function test_register_routes(): array
+{
+    return [
+        [
+            'method' => 'GET',
+            'route' => '/test',
+            'callable' => 'getFunction',
+        ],
+        [
+            'method' => 'POST',
+            'route' => '/custom',
+            'callable' => 'postFunction',
+        ],
+    ];
+}
+
+function hook_test_filter_search_entry(Bookmark $bookmark, array $context): bool
+{
+    return $context['_result'];
 }

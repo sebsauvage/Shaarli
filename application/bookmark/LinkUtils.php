@@ -1,6 +1,7 @@
 <?php
 
 use Shaarli\Bookmark\Bookmark;
+use Shaarli\Formatter\BookmarkDefaultFormatter;
 
 /**
  * Extract title from an HTML document.
@@ -68,11 +69,13 @@ function html_extract_tag($tag, $html)
     $properties = implode('|', $propertiesKey);
     // We need a OR here to accept either 'property=og:noquote' or 'property="og:unrelated og:my-tag"'
     $orCondition  = '["\']?(?:og:)?' . $tag . '["\']?|["\'][^\'"]*?(?:og:)?' . $tag . '[^\'"]*?[\'"]';
+    // Support quotes in double quoted content, and the other way around
+    $content = 'content=(["\'])((?:(?!\1).)*)\1';
     // Try to retrieve OpenGraph tag.
-    $ogRegex = '#<meta[^>]+(?:' . $properties . ')=(?:' . $orCondition . ')[^>]*content=(["\'])([^\1]*?)\1.*?>#';
+    $ogRegex = '#<meta[^>]+(?:' . $properties . ')=(?:' . $orCondition . ')[^>]*' . $content . '.*?>#';
     // If the attributes are not in the order property => content (e.g. Github)
     // New regex to keep this readable... more or less.
-    $ogRegexReverse = '#<meta[^>]+content=(["\'])([^\1]*?)\1[^>]+(?:' . $properties . ')=(?:' . $orCondition . ').*?>#';
+    $ogRegexReverse = '#<meta[^>]+' . $content . '[^>]+(?:' . $properties . ')=(?:' . $orCondition . ').*?>#';
 
     if (
         preg_match($ogRegex, $html, $matches) > 0
@@ -96,7 +99,18 @@ function html_extract_tag($tag, $html)
 function text2clickable($text)
 {
     $regex = '!(((?:https?|ftp|file)://|apt:|magnet:)\S+[a-z0-9\(\)]/?)!si';
-    return preg_replace($regex, '<a href="$1">$1</a>', $text);
+    $format = function (array $match): string {
+        return '<a href="' .
+            str_replace(
+                BookmarkDefaultFormatter::SEARCH_HIGHLIGHT_OPEN,
+                '',
+                str_replace(BookmarkDefaultFormatter::SEARCH_HIGHLIGHT_CLOSE, '', $match[1])
+            ) .
+            '">' . $match[1] . '</a>'
+        ;
+    };
+
+    return preg_replace_callback($regex, $format, $text);
 }
 
 /**
@@ -109,6 +123,9 @@ function text2clickable($text)
  */
 function hashtag_autolink($description, $indexUrl = '')
 {
+    $tokens = '(?:' . BookmarkDefaultFormatter::SEARCH_HIGHLIGHT_OPEN . ')' .
+              '(?:' . BookmarkDefaultFormatter::SEARCH_HIGHLIGHT_CLOSE . ')'
+    ;
     /*
      * To support unicode: http://stackoverflow.com/a/35498078/1484919
      * \p{Pc} - to match underscore
@@ -116,9 +133,20 @@ function hashtag_autolink($description, $indexUrl = '')
      * \p{L} - letter from any language
      * \p{Mn} - any non marking space (accents, umlauts, etc)
      */
-    $regex = '/(^|\s)#([\p{Pc}\p{N}\p{L}\p{Mn}]+)/mui';
-    $replacement = '$1<a href="' . $indexUrl . './add-tag/$2" title="Hashtag $2">#$2</a>';
-    return preg_replace($regex, $replacement, $description);
+    $regex = '/(^|\s)#([\p{Pc}\p{N}\p{L}\p{Mn}' . $tokens . ']+)/mui';
+    $format = function (array $match) use ($indexUrl): string {
+        $cleanMatch = str_replace(
+            BookmarkDefaultFormatter::SEARCH_HIGHLIGHT_OPEN,
+            '',
+            str_replace(BookmarkDefaultFormatter::SEARCH_HIGHLIGHT_CLOSE, '', $match[2])
+        );
+        return $match[1] . '<a href="' . $indexUrl . './add-tag/' . $cleanMatch . '"' .
+            ' title="Hashtag ' . $cleanMatch . '">' .
+                '#' . $match[2] .
+        '</a>';
+    };
+
+    return preg_replace_callback($regex, $format, $description);
 }
 
 /**

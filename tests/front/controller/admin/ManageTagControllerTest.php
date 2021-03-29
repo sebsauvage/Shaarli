@@ -6,6 +6,7 @@ namespace Shaarli\Front\Controller\Admin;
 
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\BookmarkFilter;
+use Shaarli\Bookmark\SearchResult;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Front\Exception\WrongTokenException;
 use Shaarli\Security\SessionManager;
@@ -100,11 +101,11 @@ class ManageTagControllerTest extends TestCase
             ->expects(static::once())
             ->method('search')
             ->with(['searchtags' => 'old-tag'], BookmarkFilter::$ALL, true)
-            ->willReturnCallback(function () use ($bookmark1, $bookmark2): array {
+            ->willReturnCallback(function () use ($bookmark1, $bookmark2): SearchResult {
                 $bookmark1->expects(static::once())->method('renameTag')->with('old-tag', 'new-tag');
                 $bookmark2->expects(static::once())->method('renameTag')->with('old-tag', 'new-tag');
 
-                return [$bookmark1, $bookmark2];
+                return SearchResult::getSearchResult([$bookmark1, $bookmark2]);
             })
         ;
         $this->container->bookmarkService
@@ -153,11 +154,11 @@ class ManageTagControllerTest extends TestCase
             ->expects(static::once())
             ->method('search')
             ->with(['searchtags' => 'old-tag'], BookmarkFilter::$ALL, true)
-            ->willReturnCallback(function () use ($bookmark1, $bookmark2): array {
+            ->willReturnCallback(function () use ($bookmark1, $bookmark2): SearchResult {
                 $bookmark1->expects(static::once())->method('deleteTag')->with('old-tag');
                 $bookmark2->expects(static::once())->method('deleteTag')->with('old-tag');
 
-                return [$bookmark1, $bookmark2];
+                return SearchResult::getSearchResult([$bookmark1, $bookmark2]);
             })
         ;
         $this->container->bookmarkService

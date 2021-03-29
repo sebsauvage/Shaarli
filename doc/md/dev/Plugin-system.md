@@ -27,7 +27,6 @@ You should have the following tree view:
 |   |---| demo_plugin.php
 ```
 
-
 ### Plugin initialization
 
 At the beginning of Shaarli execution, all enabled plugins are loaded. At this point, the plugin system looks for an `init()` function in the <plugin_name>.php to execute and run it if it exists. This function must be named this way, and takes the `ConfigManager` as parameter.
@@ -139,6 +138,31 @@ Each file contain two keys:
 
 > Note: In PHP, `parse_ini_file()` seems to want strings to be between by quotes `"` in the ini file.
 
+### Register plugin's routes
+
+Shaarli lets you register custom Slim routes for your plugin.
+
+To register a route, the plugin must include a function called `function <plugin_name>_register_routes(): array`.
+
+This method must return an array of routes, each entry must contain the following keys:
+
+  - `method`: HTTP method, `GET/POST/PUT/PATCH/DELETE`
+  - `route` (path): without prefix, e.g. `/up/{variable}`
+     It will be later prefixed by `/plugin/<plugin name>/`.
+  - `callable` string, function name or FQN class's method to execute, e.g. `demo_plugin_custom_controller`.
+
+Callable functions or methods must have `Slim\Http\Request` and `Slim\Http\Response` parameters
+and return a `Slim\Http\Response`. We recommend creating a dedicated class and extend either
+`ShaarliVisitorController` or `ShaarliAdminController` to use helper functions they provide.
+
+A dedicated plugin template is available for rendering content: `pluginscontent.html` using `content` placeholder.
+
+> **Warning**: plugins are not able to use RainTPL template engine for their content due to technical restrictions.
+> RainTPL does not allow to register multiple template folders, so all HTML rendering must be done within plugin
+> custom controller.
+
+Check out the `demo_plugin` for a live example: `GET <shaarli_url>/plugin/demo_plugin/custom`.
+
 ### Understanding relative paths
 
 Because Shaarli is a self-hosted tool, an instance can either be installed at the root directory, or under a subfolder.
@@ -184,6 +208,7 @@ If it's still not working, please [open an issue](https://github.com/shaarli/Sha
 | [save_link](#save_link) | Allow to alter the link being saved in the datastore. |
 | [delete_link](#delete_link) | Allow to do an action before a link is deleted from the datastore. |
 | [save_plugin_parameters](#save_plugin_parameters) | Allow to manipulate plugin parameters before they're saved. |
+| [filter_search_entry](#filter_search_entry) | Add custom filters to Shaarli search engine |
 
 
 #### render_header
@@ -539,6 +564,23 @@ So if the plugin has a parameter called `MYPLUGIN_PARAMETER`,
 the array will contain an entry with `MYPLUGIN_PARAMETER` as a key.
 
 Also [special data](#special-data).
+
+#### filter_search_entry
+
+Triggered for *every* bookmark when Shaarli's BookmarkService method `search()` is used.
+Any custom filter can be added to filter out bookmarks from search results.
+
+The hook **must** return either:
+  - `true` to keep bookmark entry in search result set
+  - `false` to discard bookmark entry in result set
+
+> Note: custom filters are called *before* default filters are applied.
+
+##### Parameters
+
+- `Shaarli\Bookmark\Bookmark` object: entry to evaluate
+- $context `array`: additional information provided depending on what search is currently used,
+the user request, etc.
 
 ## Guide for template designers
 

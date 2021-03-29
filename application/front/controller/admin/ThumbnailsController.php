@@ -22,7 +22,7 @@ class ThumbnailsController extends ShaarliAdminController
     public function index(Request $request, Response $response): Response
     {
         $ids = [];
-        foreach ($this->container->bookmarkService->search() as $bookmark) {
+        foreach ($this->container->bookmarkService->search()->getBookmarks() as $bookmark) {
             // A note or not HTTP(S)
             if ($bookmark->isNote() || !startsWith(strtolower($bookmark->getUrl()), 'http')) {
                 continue;

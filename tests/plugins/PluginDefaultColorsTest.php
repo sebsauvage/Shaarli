@@ -193,4 +193,27 @@ class PluginDefaultColorsTest extends TestCase
         $result = default_colors_format_css_rule($data, '');
         $this->assertEmpty($result);
     }
+
+    /**
+     * Make sure that a new CSS file is generated when save_plugin_parameters hook is triggered.
+     */
+    public function testHookSavePluginParameters(): void
+    {
+        $params = [
+            'other1' => true,
+            'DEFAULT_COLORS_BACKGROUND' => 'pink',
+            'other2' => ['yep'],
+            'DEFAULT_COLORS_DARK_MAIN' => '',
+        ];
+
+        hook_default_colors_save_plugin_parameters($params);
+        $this->assertFileExists($file = 'sandbox/default_colors/default_colors.css');
+        $content = file_get_contents($file);
+        $expected = ':root {
+  --background-color: pink;
+
+}
+';
+        $this->assertEquals($expected, $content);
+    }
 }
