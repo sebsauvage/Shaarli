@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Shaarli\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-19 10:19+0900\n"
-"PO-Revision-Date: 2021-01-04 18:54+0900\n"
+"POT-Creation-Date: 2021-04-04 11:29+0900\n"
+"PO-Revision-Date: 2021-04-04 13:20+0900\n"
 "Last-Translator: yude <yudesleepy@gmail.com>\n"
 "Language-Team: Shaarli\n"
 "Language: ja\n"
@@ -19,60 +19,37 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: node_modules\n"
 "X-Poedit-SearchPathExcluded-1: vendor\n"
 
-#: application/ApplicationUtils.php:161
-#, php-format
-msgid ""
-"Your PHP version is obsolete! Shaarli requires at least PHP %s, and thus "
-"cannot run. Your PHP version has known security vulnerabilities and should "
-"be updated as soon as possible."
-msgstr ""
-"使用している PHP のバージョンが古すぎます! Shaarli の実行には最低でも PHP %s "
-"が必要です。 現在使用している PHP のバージョンには脆弱性があり、できるだけ速"
-"やかにアップデートするべきです。"
-
-#: application/ApplicationUtils.php:192 application/ApplicationUtils.php:204
-msgid "directory is not readable"
-msgstr "ディレクトリを読み込めません"
-
-#: application/ApplicationUtils.php:207
-msgid "directory is not writable"
-msgstr "ディレクトリに書き込めません"
-
-#: application/ApplicationUtils.php:225
-msgid "file is not readable"
-msgstr "ファイルを読み取る権限がありません"
-
-#: application/ApplicationUtils.php:228
-msgid "file is not writable"
-msgstr "ファイルを書き込む権限がありません"
-
-#: application/History.php:179
+#: application/History.php:181
 msgid "History file isn't readable or writable"
 msgstr "履歴ファイルを読み込む、または書き込むための権限がありません"
 
-#: application/History.php:190
+#: application/History.php:192
 msgid "Could not parse history file"
 msgstr "履歴ファイルを正常に復元できませんでした"
 
-#: application/Languages.php:181
+#: application/Languages.php:184
 msgid "Automatic"
 msgstr "自動"
 
-#: application/Languages.php:182
+#: application/Languages.php:185
 msgid "German"
 msgstr "ドイツ語"
 
-#: application/Languages.php:183
+#: application/Languages.php:186
 msgid "English"
 msgstr "英語"
 
-#: application/Languages.php:184
+#: application/Languages.php:187
 msgid "French"
 msgstr "フランス語"
 
-#: application/Languages.php:185
+#: application/Languages.php:188
 msgid "Japanese"
 msgstr "日本語"
+
+#: application/Languages.php:189
+msgid "Russian"
+msgstr "ロシア語"
 
 #: application/Thumbnailer.php:62
 msgid ""
@@ -82,49 +59,49 @@ msgstr ""
 "サムネイルを使用するには、php-gd 拡張機能が読み込まれている必要があります。サ"
 "ムネイルは無効化されました。ページを再読込してください。"
 
-#: application/Utils.php:383 tests/UtilsTest.php:343
+#: application/Utils.php:406 tests/UtilsTest.php:327
 msgid "Setting not set"
 msgstr "未設定"
 
-#: application/Utils.php:390 tests/UtilsTest.php:341 tests/UtilsTest.php:342
+#: application/Utils.php:413 tests/UtilsTest.php:325 tests/UtilsTest.php:326
 msgid "Unlimited"
 msgstr "無制限"
 
-#: application/Utils.php:393 tests/UtilsTest.php:338 tests/UtilsTest.php:339
-#: tests/UtilsTest.php:353
+#: application/Utils.php:416 tests/UtilsTest.php:322 tests/UtilsTest.php:323
+#: tests/UtilsTest.php:337
 msgid "B"
 msgstr "B"
 
-#: application/Utils.php:393 tests/UtilsTest.php:332 tests/UtilsTest.php:333
-#: tests/UtilsTest.php:340
+#: application/Utils.php:416 tests/UtilsTest.php:316 tests/UtilsTest.php:317
+#: tests/UtilsTest.php:324
 msgid "kiB"
 msgstr "kiB"
 
-#: application/Utils.php:393 tests/UtilsTest.php:334 tests/UtilsTest.php:335
-#: tests/UtilsTest.php:351 tests/UtilsTest.php:352
+#: application/Utils.php:416 tests/UtilsTest.php:318 tests/UtilsTest.php:319
+#: tests/UtilsTest.php:335 tests/UtilsTest.php:336
 msgid "MiB"
 msgstr "MiB"
 
-#: application/Utils.php:393 tests/UtilsTest.php:336 tests/UtilsTest.php:337
+#: application/Utils.php:416 tests/UtilsTest.php:320 tests/UtilsTest.php:321
 msgid "GiB"
 msgstr "GiB"
 
-#: application/bookmark/BookmarkFileService.php:180
-#: application/bookmark/BookmarkFileService.php:202
-#: application/bookmark/BookmarkFileService.php:224
-#: application/bookmark/BookmarkFileService.php:238
+#: application/bookmark/BookmarkFileService.php:203
+#: application/bookmark/BookmarkFileService.php:225
+#: application/bookmark/BookmarkFileService.php:247
+#: application/bookmark/BookmarkFileService.php:261
 msgid "You're not authorized to alter the datastore"
 msgstr "設定を変更する権限がありません"
 
-#: application/bookmark/BookmarkFileService.php:205
+#: application/bookmark/BookmarkFileService.php:228
 msgid "This bookmarks already exists"
 msgstr "このブックマークは既に存在します"
 
-#: application/bookmark/BookmarkInitializer.php:39
+#: application/bookmark/BookmarkInitializer.php:42
 msgid "(private bookmark with thumbnail demo)"
 msgstr "(サムネイルデモが付属しているプライベートブックマーク)"
 
-#: application/bookmark/BookmarkInitializer.php:42
+#: application/bookmark/BookmarkInitializer.php:45
 msgid ""
 "Shaarli will automatically pick up the thumbnail for links to a variety of "
 "websites.\n"
@@ -146,11 +123,11 @@ msgstr ""
 "\n"
 "今から、既定の shaares を編集したり、削除したりすることができます。\n"
 
-#: application/bookmark/BookmarkInitializer.php:55
+#: application/bookmark/BookmarkInitializer.php:58
 msgid "Note: Shaare descriptions"
 msgstr "説明: Shaare の概要"
 
-#: application/bookmark/BookmarkInitializer.php:57
+#: application/bookmark/BookmarkInitializer.php:60
 msgid ""
 "Adding a shaare without entering a URL creates a text-only \"note\" post "
 "such as this one.\n"
@@ -214,14 +191,14 @@ msgstr ""
 "| レモン   | 果物     | 黄 | 30    |\n"
 "| 人参  | 野菜 | 赤    | 14    |\n"
 
-#: application/bookmark/BookmarkInitializer.php:91
+#: application/bookmark/BookmarkInitializer.php:94
 #: application/legacy/LegacyLinkDB.php:246
 msgid ""
 "The personal, minimalist, super-fast, database free, bookmarking service"
 msgstr ""
 "個人向けの、ミニマムで高速でかつデータベースのいらないブックマークサービス"
 
-#: application/bookmark/BookmarkInitializer.php:94
+#: application/bookmark/BookmarkInitializer.php:97
 msgid ""
 "Welcome to Shaarli!\n"
 "\n"
@@ -269,11 +246,11 @@ msgstr ""
 "何か問題に遭遇したり、提案があれば、気軽に  [Issue](https://github.com/"
 "shaarli/Shaarli/issues) を開いてください。\n"
 
-#: application/bookmark/exception/BookmarkNotFoundException.php:13
+#: application/bookmark/exception/BookmarkNotFoundException.php:14
 msgid "The link you are trying to reach does not exist or has been deleted."
 msgstr "開こうとしたリンクは存在しないか、削除されています。"
 
-#: application/config/ConfigJson.php:52 application/config/ConfigPhp.php:129
+#: application/config/ConfigJson.php:52 application/config/ConfigPhp.php:131
 msgid ""
 "Shaarli could not create the config file. Please make sure Shaarli has the "
 "right to write in the folder is it installed in."
@@ -282,13 +259,13 @@ msgstr ""
 "ていて、インストールされているディレクトリに書き込みできることを確認してくだ"
 "さい。"
 
-#: application/config/ConfigManager.php:136
-#: application/config/ConfigManager.php:163
+#: application/config/ConfigManager.php:137
+#: application/config/ConfigManager.php:164
 msgid "Invalid setting key parameter. String expected, got: "
 msgstr ""
 "不正なキーの値です。文字列が想定されていますが、次のように入力されました: "
 
-#: application/config/exception/MissingFieldConfigException.php:21
+#: application/config/exception/MissingFieldConfigException.php:20
 #, php-format
 msgid "Configuration value is required for %s"
 msgstr "%s には設定が必要です"
@@ -297,42 +274,43 @@ msgstr "%s には設定が必要です"
 msgid "An error occurred while trying to save plugins loading order."
 msgstr "プラグインの読込順を変更する際にエラーが発生しました。"
 
-#: application/config/exception/UnauthorizedConfigException.php:16
+#: application/config/exception/UnauthorizedConfigException.php:15
 msgid "You are not authorized to alter config."
 msgstr "設定を変更する権限がありません。"
 
-#: application/exceptions/IOException.php:22
+#: application/exceptions/IOException.php:23
 msgid "Error accessing"
 msgstr "読込中にエラーが発生しました"
 
-#: application/feed/FeedBuilder.php:179
+#: application/feed/FeedBuilder.php:174
 msgid "Direct link"
 msgstr "ダイレクトリンク"
 
-#: application/feed/FeedBuilder.php:181
+#: application/feed/FeedBuilder.php:176
 msgid "Permalink"
 msgstr "パーマリンク"
 
-#: application/front/controller/admin/ConfigureController.php:54
+#: application/front/controller/admin/ConfigureController.php:56
 msgid "Configure"
 msgstr "設定"
 
-#: application/front/controller/admin/ConfigureController.php:102
-#: application/legacy/LegacyUpdater.php:537
+#: application/front/controller/admin/ConfigureController.php:106
+#: application/legacy/LegacyUpdater.php:539
 msgid "You have enabled or changed thumbnails mode."
 msgstr "サムネイルのモードを有効化、または変更しました。"
 
-#: application/front/controller/admin/ConfigureController.php:103
-#: application/legacy/LegacyUpdater.php:538
+#: application/front/controller/admin/ConfigureController.php:108
+#: application/front/controller/admin/ServerController.php:81
+#: application/legacy/LegacyUpdater.php:540
 msgid "Please synchronize them."
 msgstr "それらを同期してください。"
 
-#: application/front/controller/admin/ConfigureController.php:113
-#: application/front/controller/visitor/InstallController.php:136
+#: application/front/controller/admin/ConfigureController.php:119
+#: application/front/controller/visitor/InstallController.php:154
 msgid "Error while writing config file after configuration update."
 msgstr "設定ファイルを更新した後の書き込みに失敗しました。"
 
-#: application/front/controller/admin/ConfigureController.php:122
+#: application/front/controller/admin/ConfigureController.php:128
 msgid "Configuration was saved."
 msgstr "設定は保存されました。"
 
@@ -362,60 +340,41 @@ msgstr ""
 "ルサイズ (%s) よりも大きいです。もう少し小さいものをアップロードしてくださ"
 "い。"
 
-#: application/front/controller/admin/ManageShaareController.php:29
-msgid "Shaare a new link"
-msgstr "新しいリンクを追加"
+#: application/front/controller/admin/ManageTagController.php:30
+msgid "whitespace"
+msgstr "空白"
 
-#: application/front/controller/admin/ManageShaareController.php:78
-msgid "Note: "
-msgstr "注: "
-
-#: application/front/controller/admin/ManageShaareController.php:109
-#: application/front/controller/admin/ManageShaareController.php:206
-#: application/front/controller/admin/ManageShaareController.php:275
-#: application/front/controller/admin/ManageShaareController.php:315
-#, php-format
-msgid "Bookmark with identifier %s could not be found."
-msgstr "%s という識別子を持ったブックマークは見つかりませんでした。"
-
-#: application/front/controller/admin/ManageShaareController.php:194
-#: application/front/controller/admin/ManageShaareController.php:252
-msgid "Invalid bookmark ID provided."
-msgstr "不正なブックマーク ID が入力されました。"
-
-#: application/front/controller/admin/ManageShaareController.php:260
-msgid "Invalid visibility provided."
-msgstr "不正な公開設定が入力されました。"
-
-#: application/front/controller/admin/ManageShaareController.php:363
-msgid "Edit"
-msgstr "共有"
-
-#: application/front/controller/admin/ManageShaareController.php:366
-msgid "Shaare"
-msgstr "Shaare"
-
-#: application/front/controller/admin/ManageTagController.php:29
+#: application/front/controller/admin/ManageTagController.php:35
 msgid "Manage tags"
 msgstr "タグを設定"
 
-#: application/front/controller/admin/ManageTagController.php:48
+#: application/front/controller/admin/ManageTagController.php:54
 msgid "Invalid tags provided."
 msgstr "不正なタグが入力されました。"
 
-#: application/front/controller/admin/ManageTagController.php:72
+#: application/front/controller/admin/ManageTagController.php:81
 #, php-format
 msgid "The tag was removed from %d bookmark."
 msgid_plural "The tag was removed from %d bookmarks."
 msgstr[0] "%d 件のリンクからタグが削除されました。"
 msgstr[1] "%d 件のリンクからタグが削除されました。"
 
-#: application/front/controller/admin/ManageTagController.php:77
+#: application/front/controller/admin/ManageTagController.php:86
 #, php-format
 msgid "The tag was renamed in %d bookmark."
 msgid_plural "The tag was renamed in %d bookmarks."
 msgstr[0] "このタグを持つ %d 件のリンクにおいて、名前が変更されました。"
 msgstr[1] "このタグを持つ %d 件のリンクにおいて、名前が変更されました。"
+
+#: application/front/controller/admin/ManageTagController.php:108
+msgid "Tags separator must be a single character."
+msgstr "タグを分離する文字は1つでなければいけません。"
+
+#: application/front/controller/admin/ManageTagController.php:114
+msgid "These characters are reserved and can't be used as tags separator: "
+msgstr ""
+"それらの文字は予約文字であり、タグを分離するための文字として使うことはできま"
+"せん: "
 
 #: application/front/controller/admin/PasswordController.php:28
 msgid "Change password"
@@ -447,6 +406,55 @@ msgstr "設定が正常に保存されました。"
 msgid "Error while saving plugin configuration: "
 msgstr "プラグインの設定ファイルを保存するときにエラーが発生しました: "
 
+#: application/front/controller/admin/ServerController.php:35
+msgid "Check disabled"
+msgstr "無効になっている項目をチェック"
+
+#: application/front/controller/admin/ServerController.php:62
+msgid "Server administration"
+msgstr "サーバー管理"
+
+#: application/front/controller/admin/ServerController.php:79
+msgid "Thumbnails cache has been cleared."
+msgstr "サムネイルのキャッシュがクリアされました。"
+
+#: application/front/controller/admin/ServerController.php:90
+msgid "Shaarli's cache folder has been cleared!"
+msgstr "Shaarli のキャッシュのフォルダーがクリアされました!"
+
+#: application/front/controller/admin/ShaareAddController.php:26
+msgid "Shaare a new link"
+msgstr "新しいリンクを追加"
+
+#: application/front/controller/admin/ShaareManageController.php:35
+#: application/front/controller/admin/ShaareManageController.php:97
+msgid "Invalid bookmark ID provided."
+msgstr "不正なブックマーク ID が入力されました。"
+
+#: application/front/controller/admin/ShaareManageController.php:47
+#: application/front/controller/admin/ShaareManageController.php:120
+#: application/front/controller/admin/ShaareManageController.php:160
+#: application/front/controller/admin/ShaarePublishController.php:82
+#, php-format
+msgid "Bookmark with identifier %s could not be found."
+msgstr "%s という識別子を持ったブックマークは見つかりませんでした。"
+
+#: application/front/controller/admin/ShaareManageController.php:105
+msgid "Invalid visibility provided."
+msgstr "不正な公開設定が入力されました。"
+
+#: application/front/controller/admin/ShaarePublishController.php:173
+msgid "Edit"
+msgstr "共有"
+
+#: application/front/controller/admin/ShaarePublishController.php:176
+msgid "Shaare"
+msgstr "Shaare"
+
+#: application/front/controller/admin/ShaarePublishController.php:208
+msgid "Note: "
+msgstr "注: "
+
 #: application/front/controller/admin/ThumbnailsController.php:37
 msgid "Thumbnails update"
 msgstr "サムネイルの更新"
@@ -455,23 +463,44 @@ msgstr "サムネイルの更新"
 msgid "Tools"
 msgstr "ツール"
 
-#: application/front/controller/visitor/BookmarkListController.php:116
+#: application/front/controller/visitor/BookmarkListController.php:103
 msgid "Search: "
 msgstr "検索: "
 
-#: application/front/controller/visitor/DailyController.php:45
-msgid "Today"
-msgstr "今日"
+#: application/front/controller/visitor/DailyController.php:201
+msgid "day"
+msgstr "日"
 
-#: application/front/controller/visitor/DailyController.php:47
-msgid "Yesterday"
-msgstr "昨日"
-
-#: application/front/controller/visitor/DailyController.php:85
+#: application/front/controller/visitor/DailyController.php:201
+#: application/front/controller/visitor/DailyController.php:204
 msgid "Daily"
 msgstr "デイリー"
 
-#: application/front/controller/visitor/ErrorController.php:36
+#: application/front/controller/visitor/DailyController.php:202
+msgid "week"
+msgstr "週"
+
+#: application/front/controller/visitor/DailyController.php:202
+msgid "Weekly"
+msgstr "週間"
+
+#: application/front/controller/visitor/DailyController.php:203
+msgid "month"
+msgstr "月"
+
+#: application/front/controller/visitor/DailyController.php:203
+msgid "Monthly"
+msgstr "月間"
+
+#: application/front/controller/visitor/ErrorController.php:30
+msgid "Error: "
+msgstr "エラー: "
+
+#: application/front/controller/visitor/ErrorController.php:34
+msgid "Please report it on Github."
+msgstr "GitHub で報告してください。"
+
+#: application/front/controller/visitor/ErrorController.php:39
 msgid "An unexpected error occurred."
 msgstr "予期しないエラーが発生しました。"
 
@@ -479,7 +508,11 @@ msgstr "予期しないエラーが発生しました。"
 msgid "Requested page could not be found."
 msgstr "リクエストされたページは存在しません。"
 
-#: application/front/controller/visitor/InstallController.php:73
+#: application/front/controller/visitor/InstallController.php:70
+msgid "Install Shaarli"
+msgstr "Shaarli をインストール"
+
+#: application/front/controller/visitor/InstallController.php:90
 #, php-format
 msgid ""
 "<pre>Sessions do not seem to work correctly on your server.<br>Make sure the "
@@ -497,14 +530,14 @@ msgstr ""
 "ります。IP アドレスや完全なドメイン名でサーバーにアクセスすることをおすすめし"
 "ます。<br>"
 
-#: application/front/controller/visitor/InstallController.php:144
+#: application/front/controller/visitor/InstallController.php:162
 msgid ""
 "Shaarli is now configured. Please login and start shaaring your bookmarks!"
 msgstr ""
 "Shaarli の設定が完了しました。ログインして、あなたのブックマークを登録しま"
 "しょう！"
 
-#: application/front/controller/visitor/InstallController.php:158
+#: application/front/controller/visitor/InstallController.php:176
 msgid "Insufficient permissions:"
 msgstr "権限がありません:"
 
@@ -520,7 +553,7 @@ msgstr "不正なユーザー名、またはパスワードです。"
 msgid "Picture wall"
 msgstr "ピクチャウォール"
 
-#: application/front/controller/visitor/TagCloudController.php:88
+#: application/front/controller/visitor/TagCloudController.php:90
 msgid "Tag "
 msgstr "タグ "
 
@@ -546,6 +579,94 @@ msgstr "ピクチャ ウォールは利用できません (サムネイルが無
 #: application/front/exceptions/WrongTokenException.php:16
 msgid "Wrong token."
 msgstr "不正なトークンです。"
+
+#: application/helper/ApplicationUtils.php:165
+#, php-format
+msgid ""
+"Your PHP version is obsolete! Shaarli requires at least PHP %s, and thus "
+"cannot run. Your PHP version has known security vulnerabilities and should "
+"be updated as soon as possible."
+msgstr ""
+"使用している PHP のバージョンが古すぎます! Shaarli の実行には最低でも PHP %s "
+"が必要です。 現在使用している PHP のバージョンには脆弱性があり、できるだけ速"
+"やかにアップデートするべきです。"
+
+#: application/helper/ApplicationUtils.php:200
+#: application/helper/ApplicationUtils.php:220
+msgid "directory is not readable"
+msgstr "ディレクトリを読み込めません"
+
+#: application/helper/ApplicationUtils.php:223
+msgid "directory is not writable"
+msgstr "ディレクトリに書き込めません"
+
+#: application/helper/ApplicationUtils.php:247
+msgid "file is not readable"
+msgstr "ファイルを読み取る権限がありません"
+
+#: application/helper/ApplicationUtils.php:250
+msgid "file is not writable"
+msgstr "ファイルを書き込む権限がありません"
+
+#: application/helper/ApplicationUtils.php:265
+msgid ""
+"Lock can not be acquired on the datastore. You might encounter concurrent "
+"access issues."
+msgstr ""
+"ロックはデータストアでは取得できません。同時にアクセスしたことによってエラー"
+"が発生した可能性があります。"
+
+#: application/helper/ApplicationUtils.php:298
+msgid "Configuration parsing"
+msgstr "設定ファイルのパース"
+
+#: application/helper/ApplicationUtils.php:299
+msgid "Slim Framework (routing, etc.)"
+msgstr "軽量なフレームワーク (ルーティングなど)"
+
+#: application/helper/ApplicationUtils.php:300
+msgid "Multibyte (Unicode) string support"
+msgstr "マルチバイト (Unicode) の文字のサポート"
+
+#: application/helper/ApplicationUtils.php:301
+msgid "Required to use thumbnails"
+msgstr "サムネイルを使うことは必須です"
+
+#: application/helper/ApplicationUtils.php:302
+msgid "Localized text sorting (e.g. e->è->f)"
+msgstr "ローカライズされた文字のソート (例: e->è->f)"
+
+#: application/helper/ApplicationUtils.php:303
+msgid "Better retrieval of bookmark metadata and thumbnail"
+msgstr "ブックマークのメタデータとサムネイルの改善された検索"
+
+#: application/helper/ApplicationUtils.php:304
+msgid "Use the translation system in gettext mode"
+msgstr "gettext モードで翻訳システムを使用"
+
+#: application/helper/ApplicationUtils.php:305
+msgid "Login using LDAP server"
+msgstr "LDAP サーバーを使用してログイン"
+
+#: application/helper/DailyPageHelper.php:179
+msgid "Week"
+msgstr "週"
+
+#: application/helper/DailyPageHelper.php:183
+msgid "Today"
+msgstr "今日"
+
+#: application/helper/DailyPageHelper.php:185
+msgid "Yesterday"
+msgstr "昨日"
+
+#: application/helper/FileUtils.php:100
+msgid "Provided path is not a directory."
+msgstr "入力されたパスはディレクトリではありません。"
+
+#: application/helper/FileUtils.php:104
+msgid "Trying to delete a folder outside of Shaarli path."
+msgstr "Shaarli のパスの外にあるフォルダを削除しようとしています。"
 
 #: application/legacy/LegacyLinkDB.php:131
 msgid "You are not authorized to add a link."
@@ -597,7 +718,7 @@ msgstr ""
 msgid "Couldn't retrieve updater class methods."
 msgstr "アップデーターのクラスメゾットを受信できませんでした。"
 
-#: application/legacy/LegacyUpdater.php:538
+#: application/legacy/LegacyUpdater.php:540
 msgid "<a href=\"./admin/thumbnails\">"
 msgstr "<a href=\"./admin/thumbnails\">"
 
@@ -623,16 +744,17 @@ msgstr ""
 "が %d 秒で処理され、%d 件のリンクがインポートされ、%d 件のリンクが上書きさ"
 "れ、%d 件のリンクがスキップされました。"
 
-#: application/plugin/PluginManager.php:124
+#: application/plugin/PluginManager.php:103
+#: application/plugin/PluginManager.php:141
 msgid " [plugin incompatibility]: "
 msgstr " [非対応のプラグイン]: "
 
-#: application/plugin/exception/PluginFileNotFoundException.php:21
+#: application/plugin/exception/PluginFileNotFoundException.php:22
 #, php-format
 msgid "Plugin \"%s\" files not found."
 msgstr "プラグイン「%s」のファイルが存在しません。"
 
-#: application/render/PageCacheManager.php:32
+#: application/render/PageCacheManager.php:33
 #, php-format
 msgid "Cannot purge %s: no directory"
 msgstr "%s を削除できません: ディレクトリが存在しません"
@@ -641,7 +763,7 @@ msgstr "%s を削除できません: ディレクトリが存在しません"
 msgid "An error occurred while running the update "
 msgstr "更新中に問題が発生しました "
 
-#: index.php:65
+#: index.php:82
 msgid "Shared bookmarks on "
 msgstr "次において共有されたリンク "
 
@@ -657,11 +779,11 @@ msgstr "リンクを追加"
 msgid "Adds the addlink input on the linklist page."
 msgstr "リンク一覧のページに、リンクを追加するためのフォームを表示する。"
 
-#: plugins/archiveorg/archiveorg.php:28
+#: plugins/archiveorg/archiveorg.php:29
 msgid "View on archive.org"
 msgstr "archive.org 上で表示する"
 
-#: plugins/archiveorg/archiveorg.php:41
+#: plugins/archiveorg/archiveorg.php:42
 msgid "For each link, add an Archive.org icon."
 msgstr "それぞれのリンクに、Archive.org のアイコンを追加する。"
 
@@ -673,24 +795,24 @@ msgstr ""
 "既定の色のプラグインにおけるエラー: このプラグインは有効なので、カスタム カ"
 "ラーは適用されません。"
 
-#: plugins/default_colors/default_colors.php:113
+#: plugins/default_colors/default_colors.php:127
 msgid "Override default theme colors. Use any CSS valid color."
 msgstr ""
 "既定のテーマの色を上書きします。どのような CSS カラーコードでも使えます。"
 
-#: plugins/default_colors/default_colors.php:114
+#: plugins/default_colors/default_colors.php:128
 msgid "Main color (navbar green)"
 msgstr "メイン カラー (ナビバーの緑)"
 
-#: plugins/default_colors/default_colors.php:115
+#: plugins/default_colors/default_colors.php:129
 msgid "Background color (light grey)"
 msgstr "背景色 (灰色)"
 
-#: plugins/default_colors/default_colors.php:116
+#: plugins/default_colors/default_colors.php:130
 msgid "Dark main color (e.g. visited links)"
 msgstr "暗い方の メイン カラー (例: 閲覧済みリンク)"
 
-#: plugins/demo_plugin/demo_plugin.php:477
+#: plugins/demo_plugin/demo_plugin.php:528
 msgid ""
 "A demo plugin covering all use cases for template designers and plugin "
 "developers."
@@ -698,11 +820,11 @@ msgstr ""
 "テンプレートのデザイナーや、プラグインの開発者のためのすべての状況に対応でき"
 "るデモプラグインです。"
 
-#: plugins/demo_plugin/demo_plugin.php:478
+#: plugins/demo_plugin/demo_plugin.php:529
 msgid "This is a parameter dedicated to the demo plugin. It'll be suffixed."
 msgstr "これはデモプラグイン専用のパラメーターです。末尾に追加されます。"
 
-#: plugins/demo_plugin/demo_plugin.php:479
+#: plugins/demo_plugin/demo_plugin.php:530
 msgid "Other demo parameter"
 msgstr "他のデモ パラメーター"
 
@@ -724,7 +846,7 @@ msgstr ""
 msgid "Isso server URL (without 'http://')"
 msgstr "Isso server URL ('http://' 抜き)"
 
-#: plugins/piwik/piwik.php:23
+#: plugins/piwik/piwik.php:24
 msgid ""
 "Piwik plugin error: Please define PIWIK_URL and PIWIK_SITEID in the plugin "
 "administration page."
@@ -732,27 +854,27 @@ msgstr ""
 "Piwik プラグインエラー: PIWIK_URL と PIWIK_SITEID の値をプラグイン管理ページ"
 "で指定してください。"
 
-#: plugins/piwik/piwik.php:72
+#: plugins/piwik/piwik.php:73
 msgid "A plugin that adds Piwik tracking code to Shaarli pages."
 msgstr "Piwik のトラッキングコードをShaarliに追加するプラグインです。"
 
-#: plugins/piwik/piwik.php:73
+#: plugins/piwik/piwik.php:74
 msgid "Piwik URL"
 msgstr "Piwik URL"
 
-#: plugins/piwik/piwik.php:74
+#: plugins/piwik/piwik.php:75
 msgid "Piwik site ID"
 msgstr "Piwik サイトID"
 
-#: plugins/playvideos/playvideos.php:25
+#: plugins/playvideos/playvideos.php:26
 msgid "Video player"
 msgstr "動画プレイヤー"
 
-#: plugins/playvideos/playvideos.php:28
+#: plugins/playvideos/playvideos.php:29
 msgid "Play Videos"
 msgstr "動画を再生"
 
-#: plugins/playvideos/playvideos.php:59
+#: plugins/playvideos/playvideos.php:60
 msgid "Add a button in the toolbar allowing to watch all videos."
 msgstr "すべての動画を閲覧するボタンをツールバーに追加します。"
 
@@ -779,11 +901,11 @@ msgstr "ハブ %s からの不正なレスポンス"
 msgid "Enable PubSubHubbub feed publishing."
 msgstr "PubSubHubbub へのフィードを公開する。"
 
-#: plugins/qrcode/qrcode.php:73 plugins/wallabag/wallabag.php:70
+#: plugins/qrcode/qrcode.php:74 plugins/wallabag/wallabag.php:72
 msgid "For each link, add a QRCode icon."
 msgstr "それぞれのリンクについて、QRコードのアイコンを追加する。"
 
-#: plugins/wallabag/wallabag.php:21
+#: plugins/wallabag/wallabag.php:22
 msgid ""
 "Wallabag plugin error: Please define the \"WALLABAG_URL\" setting in the "
 "plugin administration page."
@@ -791,15 +913,15 @@ msgstr ""
 "Wallabag プラグインエラー: \"WALLABAG_URL\" の値をプラグイン管理ページにおい"
 "て指定してください。"
 
-#: plugins/wallabag/wallabag.php:47
+#: plugins/wallabag/wallabag.php:49
 msgid "Save to wallabag"
 msgstr "Wallabag に保存"
 
-#: plugins/wallabag/wallabag.php:71
+#: plugins/wallabag/wallabag.php:73
 msgid "Wallabag API URL"
 msgstr "Wallabag のAPIのURL"
 
-#: plugins/wallabag/wallabag.php:72
+#: plugins/wallabag/wallabag.php:74
 msgid "Wallabag API version (1 or 2)"
 msgstr "Wallabag のAPIのバージョン (1 または 2)"
 
@@ -944,9 +1066,6 @@ msgstr[1] "検索"
 #~ msgid "Do not show any links if the user is not logged in"
 #~ msgstr "ログインしていないユーザーには何のリンクも表示しない"
 
-#~ msgid "Check updates"
-#~ msgstr "更新を確認"
-
 #~ msgid "Notify me when a new release is ready"
 #~ msgstr "新しいバージョンがリリースされたときに通知"
 
@@ -1042,9 +1161,6 @@ msgstr[1] "検索"
 
 #~ msgid "Add default tags"
 #~ msgstr "既定のタグを追加"
-
-#~ msgid "Install Shaarli"
-#~ msgstr "Shaarli をインストール"
 
 #~ msgid ""
 #~ "It looks like it's the first time you run Shaarli. Please configure it."
@@ -1160,9 +1276,6 @@ msgstr[1] "検索"
 
 #~ msgid "is available"
 #~ msgstr "が利用可能"
-
-#~ msgid "Error"
-#~ msgstr "エラー"
 
 #~ msgid "Picture Wall"
 #~ msgstr "ピクチャーウォール"
