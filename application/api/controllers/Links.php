@@ -36,13 +36,6 @@ class Links extends ApiController
     public function getLinks($request, $response)
     {
         $private = $request->getParam('visibility');
-        $bookmarks = $this->bookmarkService->search(
-            [
-                'searchtags' => $request->getParam('searchtags', ''),
-                'searchterm' => $request->getParam('searchterm', ''),
-            ],
-            $private
-        );
 
         // Return bookmarks from the {offset}th link, starting from 0.
         $offset = $request->getParam('offset');
@@ -50,9 +43,6 @@ class Links extends ApiController
             throw new ApiBadParametersException('Invalid offset');
         }
         $offset = ! empty($offset) ? intval($offset) : 0;
-        if ($offset > count($bookmarks)) {
-            return $response->withJson([], 200, $this->jsonStyle);
-        }
 
         // limit parameter is either a number of bookmarks or 'all' for everything.
         $limit = $request->getParam('limit');
@@ -61,23 +51,33 @@ class Links extends ApiController
         } elseif (ctype_digit($limit)) {
             $limit = intval($limit);
         } elseif ($limit === 'all') {
-            $limit = count($bookmarks);
+            $limit = null;
         } else {
             throw new ApiBadParametersException('Invalid limit');
         }
+
+        $searchResult = $this->bookmarkService->search(
+            [
+                'searchtags' => $request->getParam('searchtags', ''),
+                'searchterm' => $request->getParam('searchterm', ''),
+            ],
+            $private,
+            false,
+            false,
+            false,
+            [
+                'limit' => $limit,
+                'offset' => $offset,
+                'allowOutOfBounds' => true,
+            ]
+        );
 
         // 'environment' is set by Slim and encapsulate $_SERVER.
         $indexUrl = index_url($this->ci['environment']);
 
         $out = [];
-        $index = 0;
-        foreach ($bookmarks as $bookmark) {
-            if (count($out) >= $limit) {
-                break;
-            }
-            if ($index++ >= $offset) {
-                $out[] = ApiUtils::formatLink($bookmark, $indexUrl);
-            }
+        foreach ($searchResult->getBookmarks() as $bookmark) {
+            $out[] = ApiUtils::formatLink($bookmark, $indexUrl);
         }
 
         return $response->withJson($out, 200, $this->jsonStyle);

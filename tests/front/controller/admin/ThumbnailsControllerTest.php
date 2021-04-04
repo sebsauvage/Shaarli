@@ -6,6 +6,7 @@ namespace Shaarli\Front\Controller\Admin;
 
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
+use Shaarli\Bookmark\SearchResult;
 use Shaarli\TestCase;
 use Shaarli\Thumbnailer;
 use Slim\Http\Request;
@@ -40,12 +41,12 @@ class ThumbnailsControllerTest extends TestCase
         $this->container->bookmarkService
             ->expects(static::once())
             ->method('search')
-            ->willReturn([
+            ->willReturn(SearchResult::getSearchResult([
                 (new Bookmark())->setId(1)->setUrl('http://url1.tld')->setTitle('Title 1'),
                 (new Bookmark())->setId(2)->setUrl('?abcdef')->setTitle('Note 1'),
                 (new Bookmark())->setId(3)->setUrl('http://url2.tld')->setTitle('Title 2'),
                 (new Bookmark())->setId(4)->setUrl('ftp://domain.tld', ['ftp'])->setTitle('FTP'),
-            ])
+            ]))
         ;
 
         $result = $this->controller->index($request, $response);

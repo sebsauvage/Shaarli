@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "arthurhoaro/web-thumbnailer",
-            "version": "v2.0.3",
+            "version": "v2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ArthurHoaro/web-thumbnailer.git",
-                "reference": "39bfd4f3136d9e6096496b9720e877326cfe4775"
+                "reference": "7780ddc0f44fccdce6cddb86d1db0354810290d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ArthurHoaro/web-thumbnailer/zipball/39bfd4f3136d9e6096496b9720e877326cfe4775",
-                "reference": "39bfd4f3136d9e6096496b9720e877326cfe4775",
+                "url": "https://api.github.com/repos/ArthurHoaro/web-thumbnailer/zipball/7780ddc0f44fccdce6cddb86d1db0354810290d0",
+                "reference": "7780ddc0f44fccdce6cddb86d1db0354810290d0",
                 "shasum": ""
             },
             "require": {
@@ -53,9 +53,9 @@
             "description": "PHP library which will retrieve a thumbnail for any given URL",
             "support": {
                 "issues": "https://github.com/ArthurHoaro/web-thumbnailer/issues",
-                "source": "https://github.com/ArthurHoaro/web-thumbnailer/tree/v2.0.3"
+                "source": "https://github.com/ArthurHoaro/web-thumbnailer/tree/v2.0.4"
             },
-            "time": "2020-09-29T15:51:03+00:00"
+            "time": "2021-02-22T10:43:01+00:00"
         },
         {
             "name": "erusev/parsedown",

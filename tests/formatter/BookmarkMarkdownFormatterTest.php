@@ -133,6 +133,49 @@ class BookmarkMarkdownFormatterTest extends TestCase
     }
 
     /**
+     * Make sure that the description is properly formatted by the default formatter.
+     */
+    public function testFormatDescriptionWithSearchHighlight()
+    {
+        $description = 'This a <strong>description</strong>'. PHP_EOL;
+        $description .= 'text https://sub.domain.tld?query=here&for=real#hash more text'. PHP_EOL;
+        $description .= 'Also, there is an #hashtag added'. PHP_EOL;
+        $description .= '    A  N  D KEEP     SPACES    !   '. PHP_EOL;
+        $description .= 'And [yet another link](https://other.domain.tld)'. PHP_EOL;
+
+        $bookmark = new Bookmark();
+        $bookmark->setDescription($description);
+        $bookmark->addAdditionalContentEntry(
+            'search_highlight',
+            ['description' => [
+                ['start' => 18, 'end' => 26], // cription
+                ['start' => 49, 'end' => 52], // sub
+                ['start' => 84, 'end' => 88], // hash
+                ['start' => 118, 'end' => 123], // hasht
+                ['start' => 203, 'end' => 215], // other.domain
+            ]]
+        );
+
+        $link = $this->formatter->format($bookmark);
+
+        $description = '<div class="markdown"><p>';
+        $description .= 'This a &lt;strong&gt;des<span class="search-highlight">cription</span>&lt;/strong&gt;<br />' .
+            PHP_EOL;
+        $url = 'https://sub.domain.tld?query=here&amp;for=real#hash';
+        $highlighted = 'https://<span class="search-highlight">sub</span>.domain.tld';
+        $highlighted .= '?query=here&amp;for=real#<span class="search-highlight">hash</span>';
+        $description .= 'text <a href="'. $url .'">'. $highlighted .'</a> more text<br />'. PHP_EOL;
+        $description .= 'Also, there is an <a href="./add-tag/hashtag">#<span class="search-highlight">hasht</span>' .
+            'ag</a> added<br />'. PHP_EOL;
+        $description .= 'A  N  D KEEP     SPACES    !<br />' . PHP_EOL;
+        $description .= 'And <a href="https://other.domain.tld">' .
+            '<span class="search-highlight">yet another link</span></a>';
+        $description .= '</p></div>';
+
+        $this->assertEquals($description, $link['description']);
+    }
+
+    /**
      * Test formatting URL with an index_url set
      * It should prepend relative links.
      */

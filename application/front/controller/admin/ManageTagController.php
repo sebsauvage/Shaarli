@@ -57,9 +57,12 @@ class ManageTagController extends ShaarliAdminController
         }
 
         // TODO: move this to bookmark service
-        $count = 0;
-        $bookmarks = $this->container->bookmarkService->search(['searchtags' => $fromTag], BookmarkFilter::$ALL, true);
-        foreach ($bookmarks as $bookmark) {
+        $searchResult = $this->container->bookmarkService->search(
+            ['searchtags' => $fromTag],
+            BookmarkFilter::$ALL,
+            true
+        );
+        foreach ($searchResult->getBookmarks() as $bookmark) {
             if (false === $isDelete) {
                 $bookmark->renameTag($fromTag, $toTag);
             } else {
@@ -68,11 +71,11 @@ class ManageTagController extends ShaarliAdminController
 
             $this->container->bookmarkService->set($bookmark, false);
             $this->container->history->updateLink($bookmark);
-            $count++;
         }
 
         $this->container->bookmarkService->save();
 
+        $count = $searchResult->getResultCount();
         if (true === $isDelete) {
             $alert = sprintf(
                 t('The tag was removed from %d bookmark.', 'The tag was removed from %d bookmarks.', $count),

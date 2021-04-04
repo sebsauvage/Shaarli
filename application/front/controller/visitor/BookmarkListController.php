@@ -33,10 +33,10 @@ class BookmarkListController extends ShaarliVisitorController
 
         $formatter = $this->container->formatterFactory->getFormatter();
         $formatter->addContextData('base_path', $this->container->basePath);
+        $formatter->addContextData('index_url', index_url($this->container->environment));
 
         $searchTags = normalize_spaces($request->getParam('searchtags') ?? '');
         $searchTerm = escape(normalize_spaces($request->getParam('searchterm') ?? ''));
-        ;
 
         // Filter bookmarks according search parameters.
         $visibility = $this->container->sessionManager->getSessionParameter('visibility');
@@ -44,39 +44,26 @@ class BookmarkListController extends ShaarliVisitorController
             'searchtags' => $searchTags,
             'searchterm' => $searchTerm,
         ];
-        $linksToDisplay = $this->container->bookmarkService->search(
+
+        // Select articles according to paging.
+        $page = (int) ($request->getParam('page') ?? 1);
+        $page = $page < 1 ? 1 : $page;
+        $linksPerPage = $this->container->sessionManager->getSessionParameter('LINKS_PER_PAGE', 20) ?: 20;
+
+        $searchResult = $this->container->bookmarkService->search(
             $search,
             $visibility,
             false,
-            !!$this->container->sessionManager->getSessionParameter('untaggedonly')
+            !!$this->container->sessionManager->getSessionParameter('untaggedonly'),
+            false,
+            ['offset' => $linksPerPage * ($page - 1), 'limit' => $linksPerPage]
         ) ?? [];
 
-        // ---- Handle paging.
-        $keys = [];
-        foreach ($linksToDisplay as $key => $value) {
-            $keys[] = $key;
-        }
-
-        $linksPerPage = $this->container->sessionManager->getSessionParameter('LINKS_PER_PAGE', 20) ?: 20;
-
-        // Select articles according to paging.
-        $pageCount = (int) ceil(count($keys) / $linksPerPage) ?: 1;
-        $page = (int) $request->getParam('page') ?? 1;
-        $page = $page < 1 ? 1 : $page;
-        $page = $page > $pageCount ? $pageCount : $page;
-
-        // Start index.
-        $i = ($page - 1) * $linksPerPage;
-        $end = $i + $linksPerPage;
-
-        $linkDisp = [];
         $save = false;
-        while ($i < $end && $i < count($keys)) {
-            $save = $this->updateThumbnail($linksToDisplay[$keys[$i]], false) || $save;
-            $link = $formatter->format($linksToDisplay[$keys[$i]]);
-
-            $linkDisp[$keys[$i]] = $link;
-            $i++;
+        $links = [];
+        foreach ($searchResult->getBookmarks() as $key => $bookmark) {
+            $save = $this->updateThumbnail($bookmark, false) || $save;
+            $links[$key] = $formatter->format($bookmark);
         }
 
         if ($save) {
@@ -86,15 +73,10 @@ class BookmarkListController extends ShaarliVisitorController
         // Compute paging navigation
         $searchtagsUrl = $searchTags === '' ? '' : '&searchtags=' . urlencode($searchTags);
         $searchtermUrl = $searchTerm === '' ? '' : '&searchterm=' . urlencode($searchTerm);
+        $page = $searchResult->getPage();
 
-        $previous_page_url = '';
-        if ($i !== count($keys)) {
-            $previous_page_url = '?page=' . ($page + 1) . $searchtermUrl . $searchtagsUrl;
-        }
-        $next_page_url = '';
-        if ($page > 1) {
-            $next_page_url = '?page=' . ($page - 1) . $searchtermUrl . $searchtagsUrl;
-        }
+        $previousPageUrl = !$searchResult->isLastPage() ? '?page=' . ($page + 1) . $searchtermUrl . $searchtagsUrl : '';
+        $nextPageUrl = !$searchResult->isFirstPage() ? '?page=' . ($page - 1) . $searchtermUrl . $searchtagsUrl : '';
 
         $tagsSeparator = $this->container->conf->get('general.tags_separator', ' ');
         $searchTagsUrlEncoded = array_map('urlencode', tags_str2array($searchTags, $tagsSeparator));
@@ -104,16 +86,16 @@ class BookmarkListController extends ShaarliVisitorController
         $data = array_merge(
             $this->initializeTemplateVars(),
             [
-                'previous_page_url' => $previous_page_url,
-                'next_page_url' => $next_page_url,
+                'previous_page_url' => $previousPageUrl,
+                'next_page_url' => $nextPageUrl,
                 'page_current' => $page,
-                'page_max' => $pageCount,
-                'result_count' => count($linksToDisplay),
+                'page_max' => $searchResult->getLastPage(),
+                'result_count' => $searchResult->getTotalCount(),
                 'search_term' => escape($searchTerm),
                 'search_tags' => escape($searchTags),
                 'search_tags_url' => $searchTagsUrlEncoded,
                 'visibility' => $visibility,
-                'links' => $linkDisp,
+                'links' => $links,
             ]
         );
 
@@ -157,6 +139,7 @@ class BookmarkListController extends ShaarliVisitorController
 
         $formatter = $this->container->formatterFactory->getFormatter();
         $formatter->addContextData('base_path', $this->container->basePath);
+        $formatter->addContextData('index_url', index_url($this->container->environment));
 
         $data = array_merge(
             $this->initializeTemplateVars(),

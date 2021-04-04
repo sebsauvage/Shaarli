@@ -194,7 +194,7 @@ $ docker logs -f <container-name-or-first-letters-of-id>
 # delete unused images to free up disk space
 $ docker system prune --images
 # delete unused volumes to free up disk space (CAUTION all data in unused volumes will be lost)
-$ docker system prunt --volumes
+$ docker system prune --volumes
 # delete unused containers
 $ docker system prune
 ```

@@ -27,7 +27,6 @@ You should have the following tree view:
 |   |---| demo_plugin.php
 ```
 
-
 ### Plugin initialization
 
 At the beginning of Shaarli execution, all enabled plugins are loaded. At this point, the plugin system looks for an `init()` function in the <plugin_name>.php to execute and run it if it exists. This function must be named this way, and takes the `ConfigManager` as parameter.
@@ -209,6 +208,7 @@ If it's still not working, please [open an issue](https://github.com/shaarli/Sha
 | [save_link](#save_link) | Allow to alter the link being saved in the datastore. |
 | [delete_link](#delete_link) | Allow to do an action before a link is deleted from the datastore. |
 | [save_plugin_parameters](#save_plugin_parameters) | Allow to manipulate plugin parameters before they're saved. |
+| [filter_search_entry](#filter_search_entry) | Add custom filters to Shaarli search engine |
 
 
 #### render_header
@@ -564,6 +564,23 @@ So if the plugin has a parameter called `MYPLUGIN_PARAMETER`,
 the array will contain an entry with `MYPLUGIN_PARAMETER` as a key.
 
 Also [special data](#special-data).
+
+#### filter_search_entry
+
+Triggered for *every* bookmark when Shaarli's BookmarkService method `search()` is used.
+Any custom filter can be added to filter out bookmarks from search results.
+
+The hook **must** return either:
+  - `true` to keep bookmark entry in search result set
+  - `false` to discard bookmark entry in result set
+
+> Note: custom filters are called *before* default filters are applied.
+
+##### Parameters
+
+- `Shaarli\Bookmark\Bookmark` object: entry to evaluate
+- $context `array`: additional information provided depending on what search is currently used,
+the user request, etc.
 
 ## Guide for template designers
 

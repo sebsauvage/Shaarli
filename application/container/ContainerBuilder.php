@@ -95,6 +95,7 @@ class ContainerBuilder
         $container['bookmarkService'] = function (ShaarliContainer $container): BookmarkServiceInterface {
             return new BookmarkFileService(
                 $container->conf,
+                $container->pluginManager,
                 $container->history,
                 new FlockMutex(fopen(SHAARLI_MUTEX_FILE, 'r'), 2),
                 $container->loginManager->isLoggedIn()

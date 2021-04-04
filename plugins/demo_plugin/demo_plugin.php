@@ -17,6 +17,7 @@ require_once __DIR__ . '/DemoPluginController.php';
  * and check user status with _LOGGEDIN_.
  */
 
+use Shaarli\Bookmark\Bookmark;
 use Shaarli\Config\ConfigManager;
 use Shaarli\Plugin\PluginManager;
 use Shaarli\Render\TemplatePage;
@@ -263,6 +264,17 @@ function hook_demo_plugin_render_linklist($data)
     }
     $data['action_plugin'][] = $action;
 
+    // Action to trigger custom filter hiding bookmarks not containing 'e' letter in their description
+    $action = [
+        'attr' => [
+            'href' => '?e',
+            'title' => 'Hide bookmarks without "e" in their description.',
+        ],
+        'html' => 'e',
+        'on' => isset($_GET['e'])
+    ];
+    $data['action_plugin'][] = $action;
+
     // link_plugin (for each link)
     foreach ($data['links'] as &$value) {
         $value['link_plugin'][] = ' DEMO \o/';
@@ -484,6 +496,27 @@ function hook_demo_plugin_save_plugin_parameters($data)
     }
 
     return $data;
+}
+
+/**
+ * This hook is called when a search is performed, on every search entry.
+ * It allows to add custom filters, and filter out additional link.
+ *
+ * For exemple here, we hide all bookmarks not containing the letter 'e' in their description.
+ *
+ * @param Bookmark $bookmark Search entry. Note that this is a Bookmark object, and not a link array.
+ *                           It should NOT be altered.
+ * @param array    $context  Additional info on the search performed.
+ *
+ * @return bool True if the bookmark should be kept in the search result, false to discard it.
+ */
+function hook_demo_plugin_filter_search_entry(Bookmark $bookmark, array $context): bool
+{
+    if (isset($_GET['e'])) {
+        return strpos($bookmark->getDescription(), 'e') !== false;
+    }
+
+    return true;
 }
 
 /**

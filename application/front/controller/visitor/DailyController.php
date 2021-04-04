@@ -100,7 +100,7 @@ class DailyController extends ShaarliVisitorController
         $days = [];
         $format = DailyPageHelper::getFormatByType($type);
         $length = DailyPageHelper::getRssLengthByType($type);
-        foreach ($this->container->bookmarkService->search() as $bookmark) {
+        foreach ($this->container->bookmarkService->search()->getBookmarks() as $bookmark) {
             $day = $bookmark->getCreated()->format($format);
 
             // Stop iterating after DAILY_RSS_NB_DAYS entries

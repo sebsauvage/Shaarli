@@ -211,13 +211,17 @@ class BookmarkDefaultFormatterTest extends TestCase
         $this->formatter = new BookmarkDefaultFormatter($this->conf, false);
 
         $bookmark = new Bookmark();
-        $bookmark->setDescription('This guide extends and expands on PSR-1, the basic coding standard.');
+        $bookmark->setDescription(
+            'This guide extends and expands on PSR-1, the basic coding standard.' . PHP_EOL .
+            'https://www.php-fig.org/psr/psr-1/'
+        );
         $bookmark->addAdditionalContentEntry(
             'search_highlight',
             ['description' => [
                 ['start' => 0, 'end' => 10], // "This guide"
                 ['start' => 45, 'end' => 50], // basic
                 ['start' => 58, 'end' => 67], // standard.
+                ['start' => 84, 'end' => 87], // fig
             ]]
         );
 
@@ -226,7 +230,10 @@ class BookmarkDefaultFormatterTest extends TestCase
         $this->assertSame(
             '<span class="search-highlight">This guide</span> extends and expands on PSR-1, the ' .
             '<span class="search-highlight">basic</span> coding ' .
-            '<span class="search-highlight">standard.</span>',
+            '<span class="search-highlight">standard.</span><br />' . PHP_EOL .
+            '<a href="https://www.php-fig.org/psr/psr-1/">' .
+                'https://www.php-<span class="search-highlight">fig</span>.org/psr/psr-1/' .
+            '</a>',
             $link['description']
         );
     }
