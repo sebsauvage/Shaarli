@@ -1,5 +1,8 @@
 <?php
 
+namespace Shaarli\Tests\Utils;
+
+use DateTime;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\BookmarkArray;
 
@@ -10,11 +13,11 @@ class ReferenceLinkDB
 {
     public static $NB_LINKS_TOTAL = 11;
 
-    private $bookmarks = [];
-    private $_publicCount = 0;
-    private $_privateCount = 0;
+    protected $bookmarks = [];
+    protected $publicCount = 0;
+    protected $privateCount = 0;
 
-    private $isLegacy;
+    protected $isLegacy;
 
     /**
      * Populates the test DB with reference data
@@ -184,10 +187,10 @@ class ReferenceLinkDB
         }
 
         if ($private) {
-            $this->_privateCount++;
+            $this->privateCount++;
             return;
         }
-        $this->_publicCount++;
+        $this->publicCount++;
     }
 
     /**
@@ -233,7 +236,7 @@ class ReferenceLinkDB
      */
     public function countLinks()
     {
-        return $this->_publicCount + $this->_privateCount;
+        return $this->publicCount + $this->privateCount;
     }
 
     /**
@@ -241,7 +244,7 @@ class ReferenceLinkDB
      */
     public function countPublicLinks()
     {
-        return $this->_publicCount;
+        return $this->publicCount;
     }
 
     /**
@@ -249,7 +252,7 @@ class ReferenceLinkDB
      */
     public function countPrivateLinks()
     {
-        return $this->_privateCount;
+        return $this->privateCount;
     }
 
     /**

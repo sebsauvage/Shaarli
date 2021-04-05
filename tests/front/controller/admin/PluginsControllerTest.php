@@ -16,7 +16,7 @@ class PluginsControllerTest extends TestCase
 {
     use FrontAdminControllerMockHelper;
 
-    const PLUGIN_NAMES = ['plugin1', 'plugin2', 'plugin3', 'plugin4'];
+    protected const PLUGIN_NAMES = ['plugin1', 'plugin2', 'plugin3', 'plugin4'];
 
     /** @var PluginsController */
     protected $controller;

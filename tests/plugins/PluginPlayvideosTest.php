@@ -2,10 +2,6 @@
 
 namespace Shaarli\Plugin\Playvideos;
 
-/**
- * PluginPlayvideosTest.php
- */
-
 use Shaarli\Plugin\PluginManager;
 use Shaarli\Render\TemplatePage;
 

@@ -117,8 +117,14 @@ class PluginIssoTest extends TestCase
 
         $processed = hook_isso_render_linklist($data, $conf);
         // link_plugin should be added for the icon
-        $this->assertContainsPolyfill('<a href="/shaare/' . $short1 . '#isso-thread">', $processed['links'][0]['link_plugin'][0]);
-        $this->assertContainsPolyfill('<a href="/shaare/' . $short2 . '#isso-thread">', $processed['links'][1]['link_plugin'][0]);
+        $this->assertContainsPolyfill(
+            '<a href="/shaare/' . $short1 . '#isso-thread">',
+            $processed['links'][0]['link_plugin'][0]
+        );
+        $this->assertContainsPolyfill(
+            '<a href="/shaare/' . $short2 . '#isso-thread">',
+            $processed['links'][1]['link_plugin'][0]
+        );
     }
 
     /**
@@ -147,7 +153,10 @@ class PluginIssoTest extends TestCase
         $processed = hook_isso_render_linklist($data, $conf);
 
         // link_plugin should be added for the icon
-        $this->assertContainsPolyfill('<a href="/shaare/' . $short1 . '#isso-thread">', $processed['links'][0]['link_plugin'][0]);
+        $this->assertContainsPolyfill(
+            '<a href="/shaare/' . $short1 . '#isso-thread">',
+            $processed['links'][0]['link_plugin'][0]
+        );
     }
 
     /**

@@ -4,14 +4,15 @@
  * Utilities' tests
  */
 
-require_once 'application/Utils.php';
-require_once 'application/Languages.php';
+namespace Shaarli\Tests;
 
+use DateTime;
+use Shaarli\TestCase;
 
 /**
  * Unitary tests for Shaarli utilities
  */
-class UtilsTest extends \Shaarli\TestCase
+class UtilsTest extends TestCase
 {
     // Log file
     protected static $testLogFile = 'tests.log';
@@ -55,7 +56,7 @@ class UtilsTest extends \Shaarli\TestCase
     /**
      * Returns a list of the elements from the last logged entry
      *
-     * @return list (date, ip address, message)
+     * @return array (date, ip address, message)
      */
     protected function getLastLogEntry()
     {

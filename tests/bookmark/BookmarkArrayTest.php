@@ -3,6 +3,7 @@
 namespace Shaarli\Bookmark;
 
 use Shaarli\TestCase;
+use Shaarli\Tests\Utils\ReferenceLinkDB;
 
 /**
  * Class BookmarkArrayTest
@@ -194,7 +195,7 @@ class BookmarkArrayTest extends TestCase
      */
     public function testReorder()
     {
-        $refDB = new \ReferenceLinkDB();
+        $refDB = new ReferenceLinkDB();
         $refDB->write('sandbox/datastore.php');
 
 

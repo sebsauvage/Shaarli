@@ -6,8 +6,6 @@
 
 namespace Shaarli\Http;
 
-require_once 'application/http/HttpUtils.php';
-
 /**
  * Unitary tests for get_http_response()
  */

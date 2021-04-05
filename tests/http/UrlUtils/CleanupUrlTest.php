@@ -6,8 +6,6 @@
 
 namespace Shaarli\Http;
 
-require_once 'application/http/UrlUtils.php';
-
 class CleanupUrlTest extends \Shaarli\TestCase
 {
     /**

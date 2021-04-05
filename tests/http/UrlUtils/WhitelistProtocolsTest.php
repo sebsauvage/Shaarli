@@ -2,14 +2,14 @@
 
 namespace Shaarli\Http;
 
-require_once 'application/http/UrlUtils.php';
+use Shaarli\TestCase;
 
 /**
  * Class WhitelistProtocolsTest
  *
  * Test whitelist_protocols() function of UrlUtils.
  */
-class WhitelistProtocolsTest extends \Shaarli\TestCase
+class WhitelistProtocolsTest extends TestCase
 {
     /**
      * Test whitelist_protocols() on a note (relative URL).

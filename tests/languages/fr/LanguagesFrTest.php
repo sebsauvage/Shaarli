@@ -1,8 +1,10 @@
 <?php
 
-namespace Shaarli;
+namespace Shaarli\Tests;
 
 use Shaarli\Config\ConfigManager;
+use Shaarli\Languages;
+use Shaarli\TestCase;
 
 /**
  * Class LanguagesFrTest
@@ -11,7 +13,7 @@ use Shaarli\Config\ConfigManager;
  *
  * @package Shaarli
  */
-class LanguagesFrTest extends \Shaarli\TestCase
+class LanguagesFrTest extends TestCase
 {
     /**
      * @var string Config file path (without extension).

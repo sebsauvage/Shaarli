@@ -7,6 +7,7 @@ use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 use Shaarli\Plugin\PluginManager;
 use Shaarli\TestCase;
+use Shaarli\Tests\Utils\ReferenceLinkDB;
 
 /**
  * Class BookmarkInitializerTest
@@ -73,7 +74,7 @@ class BookmarkInitializerTest extends TestCase
      */
     public function testInitializeNotEmptyDataStore(): void
     {
-        $refDB = new \ReferenceLinkDB();
+        $refDB = new ReferenceLinkDB();
         $refDB->write(self::$testDatastore);
         $this->bookmarkService = new BookmarkFileService(
             $this->conf,

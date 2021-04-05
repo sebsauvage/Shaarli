@@ -9,6 +9,8 @@ use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 use Shaarli\Plugin\PluginManager;
 use Shaarli\TestCase;
+use Shaarli\Tests\Utils\ReferenceHistory;
+use Shaarli\Tests\Utils\ReferenceLinkDB;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -40,7 +42,7 @@ class PostLinkTest extends TestCase
     protected $conf;
 
     /**
-     * @var \ReferenceLinkDB instance.
+     * @var ReferenceLinkDB instance.
      */
     protected $refDB = null;
 
@@ -67,7 +69,7 @@ class PostLinkTest extends TestCase
     /**
      * Number of JSON field per link.
      */
-    const NB_FIELDS_LINK = 9;
+    protected const NB_FIELDS_LINK = 9;
 
     /**
      * Before every test, instantiate a new Api with its config, plugins and bookmarks.
@@ -77,9 +79,9 @@ class PostLinkTest extends TestCase
         $mutex = new NoMutex();
         $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->conf->set('resource.datastore', self::$testDatastore);
-        $this->refDB = new \ReferenceLinkDB();
+        $this->refDB = new ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
-        $refHistory = new \ReferenceHistory();
+        $refHistory = new ReferenceHistory();
         $refHistory->write(self::$testHistory);
         $this->history = new History(self::$testHistory);
         $pluginManager = new PluginManager($this->conf);

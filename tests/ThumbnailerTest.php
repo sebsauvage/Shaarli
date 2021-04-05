@@ -15,9 +15,9 @@ use WebThumbnailer\Application\ConfigManager as WTConfigManager;
  */
 class ThumbnailerTest extends TestCase
 {
-    const WIDTH = 190;
+    protected const WIDTH = 190;
 
-    const HEIGHT = 210;
+    protected const HEIGHT = 210;
 
     /**
      * @var Thumbnailer;

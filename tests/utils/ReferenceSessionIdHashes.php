@@ -1,5 +1,7 @@
 <?php
 
+namespace Shaarli\Tests\Utils;
+
 /**
  * Testing the untestable - Session ID generation
  */

@@ -1,6 +1,6 @@
 <?php
 
-namespace Shaarli;
+namespace Shaarli\Tests\Utils;
 
 use Shaarli\Helper\ApplicationUtils;
 

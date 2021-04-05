@@ -4,6 +4,7 @@ namespace Shaarli\Security;
 
 use Shaarli\FakeConfigManager;
 use Shaarli\TestCase;
+use Shaarli\Tests\Utils\ReferenceSessionIdHashes;
 
 /**
  * Test coverage for SessionManager
@@ -27,7 +28,7 @@ class SessionManagerTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$sidHashes = \ReferenceSessionIdHashes::getHashes();
+        self::$sidHashes = ReferenceSessionIdHashes::getHashes();
     }
 
     /**

@@ -10,6 +10,8 @@ use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 use Shaarli\Plugin\PluginManager;
 use Shaarli\TestCase;
+use Shaarli\Tests\updater\DummyUpdater;
+use Shaarli\Tests\Utils\ReferenceLinkDB;
 
 /**
  * Class UpdaterTest.
@@ -35,7 +37,7 @@ class UpdaterTest extends TestCase
     /** @var BookmarkServiceInterface */
     protected $bookmarkService;
 
-    /** @var \ReferenceLinkDB */
+    /** @var ReferenceLinkDB */
     protected $refDB;
 
     /** @var Updater */
@@ -47,7 +49,7 @@ class UpdaterTest extends TestCase
     protected function setUp(): void
     {
         $mutex = new NoMutex();
-        $this->refDB = new \ReferenceLinkDB();
+        $this->refDB = new ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
 
         copy('tests/utils/config/configJson.json.php', self::$configFile . '.json.php');

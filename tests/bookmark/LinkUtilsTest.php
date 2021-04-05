@@ -4,8 +4,6 @@ namespace Shaarli\Bookmark;
 
 use Shaarli\TestCase;
 
-require_once 'tests/utils/CurlUtils.php';
-
 /**
  * Class LinkUtilsTest.
  */
@@ -701,7 +699,10 @@ class LinkUtilsTest extends TestCase
         static::assertSame(['tag1', 'tag2', 'tag3'], tags_filter(['tag1', 'tag2', 'tag3'], $separator));
         static::assertSame(['tag1,', 'tag2@', 'tag3'], tags_filter(['tag1,', 'tag2@', 'tag3'], $separator));
         static::assertSame(['tag1', 'tag2', 'tag3'], tags_filter(['   tag1   ', 'tag2', 'tag3   '], $separator));
-        static::assertSame(['tag1', 'tag2', 'tag3'], tags_filter(['   tag1   ', ' ', 'tag2', '   ', 'tag3   '], $separator));
+        static::assertSame(
+            ['tag1', 'tag2', 'tag3'],
+            tags_filter(['   tag1   ', ' ', 'tag2', '   ', 'tag3   '], $separator)
+        );
         static::assertSame(['tag1'], tags_filter(['   tag1   '], $separator));
         static::assertSame([], tags_filter(['  '], $separator));
         static::assertSame([], tags_filter([], $separator));
@@ -721,7 +722,10 @@ class LinkUtilsTest extends TestCase
             ['tag1', 'tag2, and other', 'tag3'],
             tags_filter(['@@@@ tag1@@@', ' @tag2, and other @', 'tag3@@@@'], $separator)
         );
-        static::assertSame(['tag1', 'tag2', 'tag3'], tags_filter(['@@@tag1@@@', '@', 'tag2', '@@@', 'tag3@@@'], $separator));
+        static::assertSame(
+            ['tag1', 'tag2', 'tag3'],
+            tags_filter(['@@@tag1@@@', '@', 'tag2', '@@@', 'tag3@@@'], $separator)
+        );
         static::assertSame(['tag1'], tags_filter(['@@@@tag1@@@@'], $separator));
         static::assertSame([], tags_filter(['@@@'], $separator));
         static::assertSame([], tags_filter([], $separator));

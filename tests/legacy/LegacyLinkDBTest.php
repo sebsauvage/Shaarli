@@ -7,14 +7,10 @@
 namespace Shaarli\Legacy;
 
 use DateTime;
-use ReferenceLinkDB;
 use ReflectionClass;
 use Shaarli;
 use Shaarli\Bookmark\Bookmark;
-
-require_once 'application/Utils.php';
-require_once 'tests/utils/ReferenceLinkDB.php';
-
+use Shaarli\Tests\Utils\ReferenceLinkDB;
 
 /**
  * Unitary tests for LegacyLinkDBTest

@@ -6,8 +6,6 @@
 
 namespace Shaarli\Http;
 
-require_once 'application/http/HttpUtils.php';
-
 /**
  * Unitary tests for client_ip_id()
  */

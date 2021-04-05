@@ -4,12 +4,14 @@
  * TimeZone's tests
  */
 
-require_once 'application/TimeZone.php';
+namespace Shaarli\Tests;
+
+use Shaarli\TestCase;
 
 /**
  * Unitary tests for timezone utilities
  */
-class TimeZoneTest extends \Shaarli\TestCase
+class TimeZoneTest extends TestCase
 {
     /**
      * @var array of timezones

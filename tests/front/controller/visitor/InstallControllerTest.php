@@ -15,7 +15,7 @@ class InstallControllerTest extends TestCase
 {
     use FrontControllerMockHelper;
 
-    const MOCK_FILE = '.tmp';
+    protected const MOCK_FILE = '.tmp';
 
     /** @var InstallController */
     protected $controller;

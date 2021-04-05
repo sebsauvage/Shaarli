@@ -10,18 +10,16 @@ use Shaarli\Config\ConfigManager;
 use Shaarli\Config\ConfigPhp;
 use Shaarli\Legacy\LegacyLinkDB;
 use Shaarli\Legacy\LegacyUpdater;
+use Shaarli\TestCase;
+use Shaarli\Tests\updater\DummyUpdater;
+use Shaarli\Tests\Utils\ReferenceLinkDB;
 use Shaarli\Thumbnailer;
-
-require_once 'application/updater/UpdaterUtils.php';
-require_once 'tests/updater/DummyUpdater.php';
-require_once 'tests/utils/ReferenceLinkDB.php';
-require_once 'inc/rain.tpl.class.php';
 
 /**
  * Class UpdaterTest.
  * Runs unit tests against the updater class.
  */
-class LegacyUpdaterTest extends \Shaarli\TestCase
+class LegacyUpdaterTest extends TestCase
 {
     /**
      * @var string Path to test datastore.
@@ -226,7 +224,7 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
      */
     public function testRenameDashTags()
     {
-        $refDB = new \ReferenceLinkDB(true);
+        $refDB = new ReferenceLinkDB(true);
         $refDB->write(self::$testDatastore);
         $linkDB = new LegacyLinkDB(self::$testDatastore, true, false);
 
@@ -369,7 +367,7 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
                 'private' => true,
             ],
         ];
-        $refDB = new \ReferenceLinkDB(true);
+        $refDB = new ReferenceLinkDB(true);
         $refDB->setLinks($links);
         $refDB->write(self::$testDatastore);
         $linkDB = new LegacyLinkDB(self::$testDatastore, true, false);
@@ -438,7 +436,7 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
      */
     public function testDatastoreIdsNothingToDo()
     {
-        $refDB = new \ReferenceLinkDB(true);
+        $refDB = new ReferenceLinkDB(true);
         $refDB->write(self::$testDatastore);
         $linkDB = new LegacyLinkDB(self::$testDatastore, true, false);
 
@@ -782,7 +780,7 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
             1 => ['id' => 1] + $blank,
             2 => ['id' => 2] + $blank,
         ];
-        $refDB = new \ReferenceLinkDB(true);
+        $refDB = new ReferenceLinkDB(true);
         $refDB->setLinks($links);
         $refDB->write(self::$testDatastore);
         $linkDB = new LegacyLinkDB(self::$testDatastore, true, false);
@@ -813,7 +811,7 @@ $GLOBALS[\'privateLinkByDefault\'] = true;';
             1 => ['id' => 1, 'sticky' => true] + $blank,
             2 => ['id' => 2] + $blank,
         ];
-        $refDB = new \ReferenceLinkDB(true);
+        $refDB = new ReferenceLinkDB(true);
         $refDB->setLinks($links);
         $refDB->write(self::$testDatastore);
         $linkDB = new LegacyLinkDB(self::$testDatastore, true, false);

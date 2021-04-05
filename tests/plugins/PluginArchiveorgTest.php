@@ -2,10 +2,6 @@
 
 namespace Shaarli\Plugin\Archiveorg;
 
-/**
- * PluginArchiveorgTest.php
- */
-
 use Shaarli\Plugin\PluginManager;
 use Shaarli\TestCase;
 

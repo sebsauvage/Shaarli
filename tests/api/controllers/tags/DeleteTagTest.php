@@ -8,6 +8,8 @@ use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 use Shaarli\Plugin\PluginManager;
+use Shaarli\Tests\Utils\ReferenceHistory;
+use Shaarli\Tests\Utils\ReferenceLinkDB;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -31,7 +33,7 @@ class DeleteTagTest extends \Shaarli\TestCase
     protected $conf;
 
     /**
-     * @var \ReferenceLinkDB instance.
+     * @var ReferenceLinkDB instance.
      */
     protected $refDB = null;
 
@@ -69,9 +71,9 @@ class DeleteTagTest extends \Shaarli\TestCase
         $this->mutex = new NoMutex();
         $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->conf->set('resource.datastore', self::$testDatastore);
-        $this->refDB = new \ReferenceLinkDB();
+        $this->refDB = new ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
-        $refHistory = new \ReferenceHistory();
+        $refHistory = new ReferenceHistory();
         $refHistory->write(self::$testHistory);
         $this->history = new History(self::$testHistory);
         $this->pluginManager = new PluginManager($this->conf);

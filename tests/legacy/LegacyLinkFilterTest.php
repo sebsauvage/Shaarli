@@ -2,10 +2,9 @@
 
 namespace Shaarli\Bookmark;
 
-use Exception;
-use ReferenceLinkDB;
 use Shaarli\Legacy\LegacyLinkDB;
 use Shaarli\Legacy\LegacyLinkFilter;
+use Shaarli\Tests\Utils\ReferenceLinkDB;
 
 /**
  * Class LegacyLinkFilterTest.

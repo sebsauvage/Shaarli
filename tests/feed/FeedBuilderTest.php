@@ -4,7 +4,6 @@ namespace Shaarli\Feed;
 
 use DateTime;
 use malkusch\lock\mutex\NoMutex;
-use ReferenceLinkDB;
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Bookmark\LinkDB;
@@ -13,6 +12,7 @@ use Shaarli\Formatter\FormatterFactory;
 use Shaarli\History;
 use Shaarli\Plugin\PluginManager;
 use Shaarli\TestCase;
+use Shaarli\Tests\Utils\ReferenceLinkDB;
 
 /**
  * FeedBuilderTest class.
@@ -52,7 +52,7 @@ class FeedBuilderTest extends TestCase
         $mutex = new NoMutex();
         $conf = new ConfigManager('tests/utils/config/configJson');
         $conf->set('resource.datastore', self::$testDatastore);
-        $refLinkDB = new \ReferenceLinkDB();
+        $refLinkDB = new ReferenceLinkDB();
         $refLinkDB->write(self::$testDatastore);
         $history = new History('sandbox/history.php');
         $factory = new FormatterFactory($conf, true);
@@ -100,7 +100,10 @@ class FeedBuilderTest extends TestCase
         // Test first not pinned link (note link)
         $link = $data['links'][array_keys($data['links'])[0]];
         $this->assertEquals(41, $link['id']);
-        $this->assertEquals(DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114651'), $link['created']);
+        $this->assertEquals(
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114651'),
+            $link['created']
+        );
         $this->assertEquals('http://host.tld/shaare/WDWyig', $link['guid']);
         $this->assertEquals('http://host.tld/shaare/WDWyig', $link['url']);
         $this->assertRegExp('/Tue, 10 Mar 2015 11:46:51 \+\d{4}/', $link['pub_iso_date']);
@@ -164,7 +167,10 @@ class FeedBuilderTest extends TestCase
         $this->assertEquals(1, count($data['links']));
         $link = array_shift($data['links']);
         $this->assertEquals(41, $link['id']);
-        $this->assertEquals(DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114651'), $link['created']);
+        $this->assertEquals(
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114651'),
+            $link['created']
+        );
     }
 
     /**
@@ -186,7 +192,10 @@ class FeedBuilderTest extends TestCase
         $this->assertEquals(3, count($data['links']));
         $link = $data['links'][array_keys($data['links'])[0]];
         $this->assertEquals(41, $link['id']);
-        $this->assertEquals(DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114651'), $link['created']);
+        $this->assertEquals(
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114651'),
+            $link['created']
+        );
     }
 
     /**
@@ -208,7 +217,10 @@ class FeedBuilderTest extends TestCase
         // First link is a permalink
         $link = $data['links'][array_keys($data['links'])[0]];
         $this->assertEquals(41, $link['id']);
-        $this->assertEquals(DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114651'), $link['created']);
+        $this->assertEquals(
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114651'),
+            $link['created']
+        );
         $this->assertEquals('http://host.tld/shaare/WDWyig', $link['guid']);
         $this->assertEquals('http://host.tld/shaare/WDWyig', $link['url']);
         $this->assertContainsPolyfill('Direct link', $link['description']);
@@ -216,7 +228,10 @@ class FeedBuilderTest extends TestCase
         // Second link is a direct link
         $link = $data['links'][array_keys($data['links'])[1]];
         $this->assertEquals(8, $link['id']);
-        $this->assertEquals(DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114633'), $link['created']);
+        $this->assertEquals(
+            DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150310_114633'),
+            $link['created']
+        );
         $this->assertEquals('http://host.tld/shaare/RttfEw', $link['guid']);
         $this->assertEquals('https://static.fsf.org/nosvn/faif-2.0.pdf', $link['url']);
         $this->assertContainsPolyfill('Direct link', $link['description']);

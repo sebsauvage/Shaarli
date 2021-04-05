@@ -2,10 +2,6 @@
 
 namespace Shaarli\Plugin\Qrcode;
 
-/**
- * PluginQrcodeTest.php
- */
-
 use Shaarli\Plugin\PluginManager;
 use Shaarli\Render\TemplatePage;
 

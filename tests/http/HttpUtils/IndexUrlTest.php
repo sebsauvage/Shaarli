@@ -8,8 +8,6 @@ namespace Shaarli\Http;
 
 use Shaarli\TestCase;
 
-require_once 'application/http/HttpUtils.php';
-
 /**
  * Unitary tests for index_url()
  */
