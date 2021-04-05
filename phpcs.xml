@@ -5,7 +5,7 @@
   <file>index.php</file>
   <file>application</file>
   <file>plugins</file>
-<!--  <file>tests</file>-->
+  <file>tests</file>
 
   <exclude-pattern>*/*.css</exclude-pattern>
   <exclude-pattern>*/*.js</exclude-pattern>
@@ -19,5 +19,11 @@
     <!--  index.php bootstraps everything, so yes mixed symbols with side effects  -->
     <exclude-pattern>index.php</exclude-pattern>
     <exclude-pattern>plugins/*</exclude-pattern>
+    <exclude-pattern>tests/bootstrap.php</exclude-pattern>
+    <exclude-pattern>tests/utils/RainTPL.php</exclude-pattern>
+  </rule>
+
+  <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
+    <exclude-pattern>tests/utils/RainTPL.php</exclude-pattern>
   </rule>
 </ruleset>

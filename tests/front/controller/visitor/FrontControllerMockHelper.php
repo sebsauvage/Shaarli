@@ -118,5 +118,5 @@ trait FrontControllerMockHelper
     /**
      * Force to be used in PHPUnit context.
      */
-    protected abstract function isInTestsContext(): bool;
+    abstract protected function isInTestsContext(): bool;
 }

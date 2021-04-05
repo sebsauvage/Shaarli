@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Api\Controllers;
 
 use malkusch\lock\mutex\NoMutex;
@@ -7,6 +8,7 @@ use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 use Shaarli\Plugin\PluginManager;
 use Shaarli\TestCase;
+use Shaarli\Tests\Utils\ReferenceLinkDB;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -32,7 +34,7 @@ class InfoTest extends TestCase
     protected $conf;
 
     /**
-     * @var \ReferenceLinkDB instance.
+     * @var ReferenceLinkDB instance.
      */
     protected $refDB = null;
 
@@ -54,7 +56,7 @@ class InfoTest extends TestCase
         $mutex = new NoMutex();
         $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->conf->set('resource.datastore', self::$testDatastore);
-        $this->refDB = new \ReferenceLinkDB();
+        $this->refDB = new ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
         $this->pluginManager = new PluginManager($this->conf);
         $history = new History('sandbox/history.php');
@@ -95,7 +97,7 @@ class InfoTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $data = json_decode((string) $response->getBody(), true);
 
-        $this->assertEquals(\ReferenceLinkDB::$NB_LINKS_TOTAL, $data['global_counter']);
+        $this->assertEquals(ReferenceLinkDB::$NB_LINKS_TOTAL, $data['global_counter']);
         $this->assertEquals(2, $data['private_counter']);
         $this->assertEquals('Shaarli', $data['settings']['title']);
         $this->assertEquals('?', $data['settings']['header_link']);
@@ -106,7 +108,7 @@ class InfoTest extends TestCase
         $title = 'My bookmarks';
         $headerLink = 'http://shaarli.tld';
         $timezone = 'Europe/Paris';
-        $enabledPlugins = array('foo', 'bar');
+        $enabledPlugins = ['foo', 'bar'];
         $defaultPrivateLinks = true;
         $this->conf->set('general.title', $title);
         $this->conf->set('general.header_link', $headerLink);
@@ -118,7 +120,7 @@ class InfoTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $data = json_decode((string) $response->getBody(), true);
 
-        $this->assertEquals(\ReferenceLinkDB::$NB_LINKS_TOTAL, $data['global_counter']);
+        $this->assertEquals(ReferenceLinkDB::$NB_LINKS_TOTAL, $data['global_counter']);
         $this->assertEquals(2, $data['private_counter']);
         $this->assertEquals($title, $data['settings']['title']);
         $this->assertEquals($headerLink, $data['settings']['header_link']);

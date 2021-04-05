@@ -27,7 +27,7 @@ class BookmarkDefaultFormatterTest extends TestCase
      */
     protected function setUp(): void
     {
-        copy('tests/utils/config/configJson.json.php', self::$testConf .'.json.php');
+        copy('tests/utils/config/configJson.json.php', self::$testConf . '.json.php');
         $this->conf = new ConfigManager(self::$testConf);
         $this->formatter = new BookmarkDefaultFormatter($this->conf, true);
     }
@@ -112,9 +112,9 @@ class BookmarkDefaultFormatterTest extends TestCase
     {
         $description = [];
         $description[] = 'This a <strong>description</strong>' . PHP_EOL;
-        $description[] = 'text https://sub.domain.tld?query=here&for=real#hash more text'. PHP_EOL;
-        $description[] = 'Also, there is an #hashtag added'. PHP_EOL;
-        $description[] = '    A  N  D KEEP     SPACES    !   '. PHP_EOL;
+        $description[] = 'text https://sub.domain.tld?query=here&for=real#hash more text' . PHP_EOL;
+        $description[] = 'Also, there is an #hashtag added' . PHP_EOL;
+        $description[] = '    A  N  D KEEP     SPACES    !   ' . PHP_EOL;
 
         $bookmark = new Bookmark();
         $bookmark->setDescription(implode('', $description));
@@ -122,10 +122,10 @@ class BookmarkDefaultFormatterTest extends TestCase
 
         $description[0] = 'This a &lt;strong&gt;description&lt;/strong&gt;<br />';
         $url = 'https://sub.domain.tld?query=here&amp;for=real#hash';
-        $description[1] = 'text <a href="'. $url .'">'. $url .'</a> more text<br />';
-        $description[2] = 'Also, there is an <a href="./add-tag/hashtag" '.
+        $description[1] = 'text <a href="' . $url . '">' . $url . '</a> more text<br />';
+        $description[2] = 'Also, there is an <a href="./add-tag/hashtag" ' .
             'title="Hashtag hashtag">#hashtag</a> added<br />';
-        $description[3] = '&nbsp; &nbsp; A &nbsp;N &nbsp;D KEEP &nbsp; &nbsp; '.
+        $description[3] = '&nbsp; &nbsp; A &nbsp;N &nbsp;D KEEP &nbsp; &nbsp; ' .
             'SPACES &nbsp; &nbsp;! &nbsp; <br />';
 
         $this->assertEquals(implode(PHP_EOL, $description) . PHP_EOL, $link['description']);
@@ -148,7 +148,7 @@ class BookmarkDefaultFormatterTest extends TestCase
         $this->assertEquals($root . $short, $link['url']);
         $this->assertEquals($root . $short, $link['real_url']);
         $this->assertEquals(
-            'Text <a href="'. $root .'./add-tag/hashtag" title="Hashtag hashtag">'.
+            'Text <a href="' . $root . './add-tag/hashtag" title="Hashtag hashtag">' .
             '#hashtag</a> more text',
             $link['description']
         );

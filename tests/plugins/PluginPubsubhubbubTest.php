@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Plugin\Pubsubhubbub;
 
 use Shaarli\Config\ConfigManager;
@@ -37,7 +38,7 @@ class PluginPubsubhubbubTest extends \Shaarli\TestCase
         $data['_PAGE_'] = TemplatePage::FEED_RSS;
 
         $data = hook_pubsubhubbub_render_feed($data, $conf);
-        $expected = '<atom:link rel="hub" href="'. $hub .'" />';
+        $expected = '<atom:link rel="hub" href="' . $hub . '" />';
         $this->assertEquals($expected, $data['feed_plugins_header'][0]);
     }
 
@@ -52,7 +53,7 @@ class PluginPubsubhubbubTest extends \Shaarli\TestCase
         $data['_PAGE_'] = TemplatePage::FEED_ATOM;
 
         $data = hook_pubsubhubbub_render_feed($data, $conf);
-        $expected = '<link rel="hub" href="'. $hub .'" />';
+        $expected = '<link rel="hub" href="' . $hub . '" />';
         $this->assertEquals($expected, $data['feed_plugins_header'][0]);
     }
 }

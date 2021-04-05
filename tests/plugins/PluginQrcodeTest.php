@@ -1,9 +1,6 @@
 <?php
-namespace Shaarli\Plugin\Qrcode;
 
-/**
- * PluginQrcodeTest.php
- */
+namespace Shaarli\Plugin\Qrcode;
 
 use Shaarli\Plugin\PluginManager;
 use Shaarli\Render\TemplatePage;
@@ -30,14 +27,14 @@ class PluginQrcodeTest extends \Shaarli\TestCase
     public function testQrcodeLinklist()
     {
         $str = 'http://randomstr.com/test';
-        $data = array(
+        $data = [
             'title' => $str,
-            'links' => array(
-                array(
+            'links' => [
+                [
                     'url' => $str,
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         $data = hook_qrcode_render_linklist($data);
         $link = $data['links'][0];
@@ -56,14 +53,14 @@ class PluginQrcodeTest extends \Shaarli\TestCase
     public function testQrcodeFooter()
     {
         $str = 'stuff';
-        $data = array($str => $str);
+        $data = [$str => $str];
         $data['_PAGE_'] = TemplatePage::LINKLIST;
 
         $data = hook_qrcode_render_footer($data);
         $this->assertEquals($str, $data[$str]);
         $this->assertEquals(1, count($data['js_files']));
 
-        $data = array($str => $str);
+        $data = [$str => $str];
         $data['_PAGE_'] = $str;
         $this->assertEquals($str, $data[$str]);
         $this->assertArrayNotHasKey('js_files', $data);

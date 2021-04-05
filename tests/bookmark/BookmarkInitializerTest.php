@@ -7,6 +7,7 @@ use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 use Shaarli\Plugin\PluginManager;
 use Shaarli\TestCase;
+use Shaarli\Tests\Utils\ReferenceLinkDB;
 
 /**
  * Class BookmarkInitializerTest
@@ -52,7 +53,7 @@ class BookmarkInitializerTest extends TestCase
             unlink(self::$testDatastore);
         }
 
-        copy('tests/utils/config/configJson.json.php', self::$testConf .'.json.php');
+        copy('tests/utils/config/configJson.json.php', self::$testConf . '.json.php');
         $this->conf = new ConfigManager(self::$testConf);
         $this->conf->set('resource.datastore', self::$testDatastore);
         $this->pluginManager = new PluginManager($this->conf);
@@ -73,7 +74,7 @@ class BookmarkInitializerTest extends TestCase
      */
     public function testInitializeNotEmptyDataStore(): void
     {
-        $refDB = new \ReferenceLinkDB();
+        $refDB = new ReferenceLinkDB();
         $refDB->write(self::$testDatastore);
         $this->bookmarkService = new BookmarkFileService(
             $this->conf,

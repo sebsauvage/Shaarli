@@ -26,7 +26,7 @@ class ShaarliAdminControllerTest extends TestCase
     {
         $this->createContainer();
 
-        $this->controller = new class($this->container) extends ShaarliAdminController
+        $this->controller = new class ($this->container) extends ShaarliAdminController
         {
             public function checkToken(Request $request): bool
             {

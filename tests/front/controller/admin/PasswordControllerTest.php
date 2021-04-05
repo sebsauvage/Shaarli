@@ -52,12 +52,12 @@ class PasswordControllerTest extends TestCase
     {
         $request = $this->createMock(Request::class);
         $request->method('getParam')->willReturnCallback(function (string $key): string {
-             if ('oldpassword' === $key) {
-                 return 'old';
-             }
-             if ('setpassword' === $key) {
-                 return 'new';
-             }
+            if ('oldpassword' === $key) {
+                return 'old';
+            }
+            if ('setpassword' === $key) {
+                return 'new';
+            }
 
              return $key;
         });

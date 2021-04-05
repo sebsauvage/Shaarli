@@ -365,5 +365,4 @@ class SaveBookmarkTest extends TestCase
 
         $this->controller->save($request, $response);
     }
-
 }

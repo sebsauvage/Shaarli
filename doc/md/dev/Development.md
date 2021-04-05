@@ -169,13 +169,11 @@ Patches should try to stick to the [PHP Standard Recommendations](http://www.php
 - [PSR-2](http://www.php-fig.org/psr/psr-2/) - Coding Style Guide
 - [PSR-12](http://www.php-fig.org/psr/psr-12/) - Extended Coding Style  Guide
 
-These are enforced on pull requests using our Continuous Integration tools.
+These are enforced on pull requests using our Continuous Integration tools with [PHP Code Sniffer](https://github.com/squizlabs/PHP_CodeSniffer).
 
-**Work in progress:** Static analysis is currently being discussed here: in [#95 - Fix coding style (static analysis)](https://github.com/shaarli/Shaarli/issues/95), [#130 - Continuous Integration tools & features](https://github.com/shaarli/Shaarli/issues/130)
-
-Static analysis tools can be installed with Composer, and used through Shaarli's [Makefile](https://github.com/shaarli/Shaarli/blob/master/Makefile).
+Static analysis tools are installed with Composer dependencies, and used through Shaarli's [Makefile](https://github.com/shaarli/Shaarli/blob/master/Makefile) with `make code_sniffer`.
 
 For an overview of the available features, see:
 
 - [Code quality: Makefile to run static code checkers](https://github.com/shaarli/Shaarli/pull/124) (#124)
-- [Run PHPCS against different coding standards](https://github.com/shaarli/Shaarli/pull/276) (#276)
+- [Apply PHP Code Sniffer to Shaarli code base](https://github.com/shaarli/Shaarli/pull/1635) (#1635)

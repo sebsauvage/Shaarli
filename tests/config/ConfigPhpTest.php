@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Config;
 
 /**
@@ -37,7 +38,7 @@ class ConfigPhpTest extends \Shaarli\TestCase
      */
     public function testReadNonExistent()
     {
-        $this->assertEquals(array(), $this->configIO->read('nope'));
+        $this->assertEquals([], $this->configIO->read('nope'));
     }
 
     /**
@@ -60,16 +61,16 @@ class ConfigPhpTest extends \Shaarli\TestCase
     public function testWriteNew()
     {
         $dataFile = 'tests/utils/config/configWrite.php';
-        $data = array(
+        $data = [
             'login' => 'root',
             'redirector' => 'lala',
-            'config' => array(
+            'config' => [
                 'DATASTORE' => 'data/datastore.php',
-            ),
-            'plugins' => array(
+            ],
+            'plugins' => [
                 'WALLABAG_VERSION' => '1',
-            )
-        );
+            ]
+        ];
         $this->configIO->write($dataFile, $data);
         $expected = '<?php 
 $GLOBALS[\'login\'] = \'root\';

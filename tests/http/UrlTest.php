@@ -1,4 +1,5 @@
 <?php
+
 /**
  * UrlUtils's tests
  */

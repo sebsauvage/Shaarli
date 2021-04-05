@@ -32,10 +32,10 @@ class ApiUtilsTest extends \Shaarli\TestCase
             "alg": "HS512"
         }');
         $payload = Base64Url::encode('{
-            "iat": '. time() .'
+            "iat": ' . time() . '
         }');
-        $signature = Base64Url::encode(hash_hmac('sha512', $header .'.'. $payload, $secret, true));
-        return $header .'.'. $payload .'.'. $signature;
+        $signature = Base64Url::encode(hash_hmac('sha512', $header . '.' . $payload, $secret, true));
+        return $header . '.' . $payload . '.' . $signature;
     }
 
     /**

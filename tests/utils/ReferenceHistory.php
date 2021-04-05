@@ -1,5 +1,8 @@
 <?php
 
+namespace Shaarli\Tests\Utils;
+
+use DateTime;
 use Shaarli\Helper\FileUtils;
 use Shaarli\History;
 

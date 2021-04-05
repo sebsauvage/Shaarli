@@ -122,8 +122,7 @@ class ConfigureControllerTest extends TestCase
                 }
 
                 return $parameters[$key];
-            }
-        );
+            });
 
         $response = new Response();
 
@@ -137,8 +136,7 @@ class ConfigureControllerTest extends TestCase
                 }
 
                 static::assertSame($parametersConfigMapping[$key], $value);
-            }
-        );
+            });
 
         $result = $this->controller->save($request, $response);
         static::assertSame(302, $result->getStatusCode());

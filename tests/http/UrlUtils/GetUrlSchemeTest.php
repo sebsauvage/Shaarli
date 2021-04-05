@@ -1,13 +1,14 @@
 <?php
+
 /**
  * Unitary tests for get_url_scheme()
  */
 
 namespace Shaarli\Http;
 
-require_once 'application/http/UrlUtils.php';
+use Shaarli\TestCase;
 
-class GetUrlSchemeTest extends \Shaarli\TestCase
+class GetUrlSchemeTest extends TestCase
 {
     /**
      * Get empty scheme string for empty UrlUtils

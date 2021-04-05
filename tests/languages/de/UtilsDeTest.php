@@ -1,7 +1,8 @@
 <?php
 
-require_once 'tests/UtilsTest.php';
+namespace Shaarli\Tests;
 
+use DateTime;
 
 class UtilsDeTest extends UtilsTest
 {

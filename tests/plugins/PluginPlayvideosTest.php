@@ -1,9 +1,6 @@
 <?php
-namespace Shaarli\Plugin\Playvideos;
 
-/**
- * PluginPlayvideosTest.php
- */
+namespace Shaarli\Plugin\Playvideos;
 
 use Shaarli\Plugin\PluginManager;
 use Shaarli\Render\TemplatePage;
@@ -30,14 +27,14 @@ class PluginPlayvideosTest extends \Shaarli\TestCase
     public function testPlayvideosHeader()
     {
         $str = 'stuff';
-        $data = array($str => $str);
+        $data = [$str => $str];
         $data['_PAGE_'] = TemplatePage::LINKLIST;
 
         $data = hook_playvideos_render_header($data);
         $this->assertEquals($str, $data[$str]);
         $this->assertEquals(1, count($data['buttons_toolbar']));
 
-        $data = array($str => $str);
+        $data = [$str => $str];
         $data['_PAGE_'] = $str;
         $this->assertEquals($str, $data[$str]);
         $this->assertArrayNotHasKey('buttons_toolbar', $data);
@@ -49,14 +46,14 @@ class PluginPlayvideosTest extends \Shaarli\TestCase
     public function testPlayvideosFooter()
     {
         $str = 'stuff';
-        $data = array($str => $str);
+        $data = [$str => $str];
         $data['_PAGE_'] = TemplatePage::LINKLIST;
 
         $data = hook_playvideos_render_footer($data);
         $this->assertEquals($str, $data[$str]);
         $this->assertEquals(2, count($data['js_files']));
 
-        $data = array($str => $str);
+        $data = [$str => $str];
         $data['_PAGE_'] = $str;
         $this->assertEquals($str, $data[$str]);
         $this->assertArrayNotHasKey('js_files', $data);
