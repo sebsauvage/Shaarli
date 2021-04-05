@@ -30,7 +30,7 @@ class WhitelistProtocolsTest extends \Shaarli\TestCase
     {
         $whitelist = ['ftp', 'magnet'];
         $url = 'test.tld/path/?query=value#hash';
-        $this->assertEquals('http://'. $url, whitelist_protocols($url, $whitelist));
+        $this->assertEquals('http://' . $url, whitelist_protocols($url, $whitelist));
     }
 
     /**

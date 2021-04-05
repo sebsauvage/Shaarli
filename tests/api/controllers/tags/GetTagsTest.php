@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Api\Controllers;
 
 use malkusch\lock\mutex\NoMutex;

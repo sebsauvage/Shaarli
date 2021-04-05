@@ -47,16 +47,16 @@ class PluginArchiveorgTest extends TestCase
     {
         $str = 'http://randomstr.com/test';
 
-        $data = array(
+        $data = [
             'title' => $str,
-            'links' => array(
-                array(
+            'links' => [
+                [
                     'url' => $str,
                     'private' => 0,
                     'real_url' => $str
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         $data = hook_archiveorg_render_linklist($data);
 
@@ -84,41 +84,41 @@ class PluginArchiveorgTest extends TestCase
         $internalLink3 = 'http://shaarli.shaarli/shaare/z7u-_Q';
         $internalLinkRealURL3 = '/shaare/z7u-_Q';
 
-        $data = array(
+        $data = [
             'title' => $internalLink1,
-            'links' => array(
-                array(
+            'links' => [
+                [
                     'url' => $internalLink1,
                     'private' => 0,
                     'real_url' => $internalLinkRealURL1
-                ),
-                array(
+                ],
+                [
                     'url' => $internalLink1,
                     'private' => 1,
                     'real_url' => $internalLinkRealURL1
-                ),
-                array(
+                ],
+                [
                     'url' => $internalLink2,
                     'private' => 0,
                     'real_url' => $internalLinkRealURL2
-                ),
-                array(
+                ],
+                [
                     'url' => $internalLink2,
                     'private' => 1,
                     'real_url' => $internalLinkRealURL2
-                ),
-                array(
+                ],
+                [
                     'url' => $internalLink3,
                     'private' => 0,
                     'real_url' => $internalLinkRealURL3
-                ),
-                array(
+                ],
+                [
                     'url' => $internalLink3,
                     'private' => 1,
                     'real_url' => $internalLinkRealURL3
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         $data = hook_archiveorg_render_linklist($data);
 

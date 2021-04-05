@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Shaarli;
 
 use Shaarli\Config\ConfigManager;

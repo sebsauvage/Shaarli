@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Config;
 
 /**
@@ -29,13 +30,13 @@ class ConfigManagerTest extends \Shaarli\TestCase
         $this->conf->set('paramInt', 42);
         $this->conf->set('paramString', 'value1');
         $this->conf->set('paramBool', false);
-        $this->conf->set('paramArray', array('foo' => 'bar'));
+        $this->conf->set('paramArray', ['foo' => 'bar']);
         $this->conf->set('paramNull', null);
 
         $this->assertEquals(42, $this->conf->get('paramInt'));
         $this->assertEquals('value1', $this->conf->get('paramString'));
         $this->assertFalse($this->conf->get('paramBool'));
-        $this->assertEquals(array('foo' => 'bar'), $this->conf->get('paramArray'));
+        $this->assertEquals(['foo' => 'bar'], $this->conf->get('paramArray'));
         $this->assertEquals(null, $this->conf->get('paramNull'));
     }
 
@@ -51,7 +52,7 @@ class ConfigManagerTest extends \Shaarli\TestCase
         $this->conf->set('paramInt', 42);
         $this->conf->set('paramString', 'value1');
         $this->conf->set('paramBool', false);
-        $this->conf->set('paramArray', array('foo' => 'bar'));
+        $this->conf->set('paramArray', ['foo' => 'bar']);
         $this->conf->set('paramNull', null);
 
         $this->conf->setConfigFile('tests/utils/config/configTmp');
@@ -62,7 +63,7 @@ class ConfigManagerTest extends \Shaarli\TestCase
         $this->assertEquals(42, $this->conf->get('paramInt'));
         $this->assertEquals('value1', $this->conf->get('paramString'));
         $this->assertFalse($this->conf->get('paramBool'));
-        $this->assertEquals(array('foo' => 'bar'), $this->conf->get('paramArray'));
+        $this->assertEquals(['foo' => 'bar'], $this->conf->get('paramArray'));
         $this->assertEquals(null, $this->conf->get('paramNull'));
     }
 
@@ -112,7 +113,7 @@ class ConfigManagerTest extends \Shaarli\TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('#^Invalid setting key parameter. String expected, got.*#');
 
-        $this->conf->set(array('foo' => 'bar'), 'stuff');
+        $this->conf->set(['foo' => 'bar'], 'stuff');
     }
 
     /**

@@ -349,7 +349,11 @@ class LoginManagerTest extends TestCase
     {
         $this->configManager->set('ldap.host', 'dummy');
         $this->assertFalse(
-            $this->loginManager->checkCredentialsFromLdap($this->login, $this->password, function() { return null; }, function() { return false; })
+            $this->loginManager->checkCredentialsFromLdap($this->login, $this->password, function () {
+                return null;
+            }, function () {
+                return false;
+            })
         );
     }
 
@@ -360,7 +364,11 @@ class LoginManagerTest extends TestCase
     {
         $this->configManager->set('ldap.host', 'dummy');
         $this->assertTrue(
-            $this->loginManager->checkCredentialsFromLdap($this->login, $this->password, function() { return null; }, function() { return true; })
+            $this->loginManager->checkCredentialsFromLdap($this->login, $this->password, function () {
+                return null;
+            }, function () {
+                return true;
+            })
         );
     }
 }

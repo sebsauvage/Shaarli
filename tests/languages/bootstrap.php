@@ -1,4 +1,5 @@
 <?php
+
 require_once 'tests/bootstrap.php';
 
 if (! empty(getenv('UT_LOCALE'))) {

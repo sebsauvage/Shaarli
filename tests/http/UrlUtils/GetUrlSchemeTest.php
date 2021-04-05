@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Unitary tests for get_url_scheme()
  */

@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Api\Controllers;
 
 use malkusch\lock\mutex\NoMutex;
@@ -329,7 +330,7 @@ class GetLinksTest extends \Shaarli\TestCase
         // URL encoding
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
-            'QUERY_STRING' => 'searchterm='. urlencode('@web')
+            'QUERY_STRING' => 'searchterm=' . urlencode('@web')
         ]);
         $request = Request::createFromEnvironment($env);
         $response = $this->controller->getLinks($request, new Response());

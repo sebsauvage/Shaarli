@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Unpares UrlUtils's tests
  */
@@ -17,7 +18,7 @@ class UnparseUrlTest extends \Shaarli\TestCase
      */
     public function testUnparseEmptyArray()
     {
-        $this->assertEquals('', unparse_url(array()));
+        $this->assertEquals('', unparse_url([]));
     }
 
     /**
@@ -26,7 +27,7 @@ class UnparseUrlTest extends \Shaarli\TestCase
     public function testUnparseFull()
     {
         $ref = 'http://username:password@hostname:9090/path'
-              .'?arg1=value1&arg2=value2#anchor';
+              . '?arg1=value1&arg2=value2#anchor';
         $this->assertEquals($ref, unparse_url(parse_url($ref)));
     }
 }

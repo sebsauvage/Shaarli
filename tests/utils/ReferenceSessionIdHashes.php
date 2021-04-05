@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Testing the untestable - Session ID generation
  */
@@ -13,9 +14,9 @@ class ReferenceSessionIdHashes
     public static function genAllHashes()
     {
         foreach (hash_algos() as $algo) {
-            self::$sidHashes[$algo] = array();
+            self::$sidHashes[$algo] = [];
 
-            foreach (array(4, 5, 6) as $bpc) {
+            foreach ([4, 5, 6] as $bpc) {
                 self::$sidHashes[$algo][$bpc] = self::genSidHash($algo, $bpc);
             }
         }

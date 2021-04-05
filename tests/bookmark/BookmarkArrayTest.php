@@ -185,7 +185,7 @@ class BookmarkArrayTest extends TestCase
         $this->assertCount(3, $array);
 
         foreach ($array as $id => $bookmark) {
-            $this->assertEquals(${'bookmark'. $id}, $bookmark);
+            $this->assertEquals(${'bookmark' . $id}, $bookmark);
         }
     }
 

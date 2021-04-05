@@ -1,6 +1,5 @@
 <?php
 
-
 use Shaarli\Bookmark\BookmarkArray;
 use Shaarli\Bookmark\BookmarkFilter;
 use Shaarli\Bookmark\BookmarkIO;

@@ -5,7 +5,7 @@
   <file>index.php</file>
   <file>application</file>
   <file>plugins</file>
-<!--  <file>tests</file>-->
+  <file>tests</file>
 
   <exclude-pattern>*/*.css</exclude-pattern>
   <exclude-pattern>*/*.js</exclude-pattern>

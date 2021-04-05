@@ -15,7 +15,7 @@ class GetIpAdressFromProxyTest extends \Shaarli\TestCase
      */
     public function testWithoutProxy()
     {
-        $this->assertFalse(getIpAddressFromProxy(array(), array()));
+        $this->assertFalse(getIpAddressFromProxy([], []));
     }
 
     /**
@@ -24,8 +24,8 @@ class GetIpAdressFromProxyTest extends \Shaarli\TestCase
     public function testWithOneForwardedIp()
     {
         $ip = '1.1.1.1';
-        $server = array('HTTP_X_FORWARDED_FOR' => $ip);
-        $this->assertEquals($ip, getIpAddressFromProxy($server, array()));
+        $server = ['HTTP_X_FORWARDED_FOR' => $ip];
+        $this->assertEquals($ip, getIpAddressFromProxy($server, []));
     }
 
     /**
@@ -36,11 +36,11 @@ class GetIpAdressFromProxyTest extends \Shaarli\TestCase
         $ip = '1.1.1.1';
         $ip2 = '2.2.2.2';
 
-        $server = array('HTTP_X_FORWARDED_FOR' => $ip .','. $ip2);
-        $this->assertEquals($ip2, getIpAddressFromProxy($server, array()));
+        $server = ['HTTP_X_FORWARDED_FOR' => $ip . ',' . $ip2];
+        $this->assertEquals($ip2, getIpAddressFromProxy($server, []));
 
-        $server = array('HTTP_X_FORWARDED_FOR' => $ip .' ,   '. $ip2);
-        $this->assertEquals($ip2, getIpAddressFromProxy($server, array()));
+        $server = ['HTTP_X_FORWARDED_FOR' => $ip . ' ,   ' . $ip2];
+        $this->assertEquals($ip2, getIpAddressFromProxy($server, []));
     }
 
     /**
@@ -51,11 +51,11 @@ class GetIpAdressFromProxyTest extends \Shaarli\TestCase
         $ip = '1.1.1.1';
         $ip2 = '2.2.2.2';
 
-        $server = array('HTTP_X_FORWARDED_FOR' => $ip);
-        $this->assertFalse(getIpAddressFromProxy($server, array($ip)));
+        $server = ['HTTP_X_FORWARDED_FOR' => $ip];
+        $this->assertFalse(getIpAddressFromProxy($server, [$ip]));
 
-        $server = array('HTTP_X_FORWARDED_FOR' => $ip .','. $ip2);
-        $this->assertEquals($ip2, getIpAddressFromProxy($server, array($ip)));
-        $this->assertFalse(getIpAddressFromProxy($server, array($ip, $ip2)));
+        $server = ['HTTP_X_FORWARDED_FOR' => $ip . ',' . $ip2];
+        $this->assertEquals($ip2, getIpAddressFromProxy($server, [$ip]));
+        $this->assertFalse(getIpAddressFromProxy($server, [$ip, $ip2]));
     }
 }

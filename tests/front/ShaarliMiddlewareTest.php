@@ -91,7 +91,7 @@ class ShaarliMiddlewareTest extends TestCase
         $controller = function (): void {
             $exception = new LoginBannedException();
 
-            throw new $exception;
+            throw new $exception();
         };
 
         $pageBuilder = $this->createMock(PageBuilder::class);
@@ -148,7 +148,8 @@ class ShaarliMiddlewareTest extends TestCase
             return $uri;
         });
 
-        $dummyException = new class() extends \Exception {};
+        $dummyException = new class () extends \Exception {
+        };
 
         $response = new Response();
         $controller = function () use ($dummyException): void {

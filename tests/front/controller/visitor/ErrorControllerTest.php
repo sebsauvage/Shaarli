@@ -41,7 +41,8 @@ class ErrorControllerTest extends TestCase
         $result = ($this->controller)(
             $request,
             $response,
-            new class($message, $errorCode) extends ShaarliFrontException {}
+            new class ($message, $errorCode) extends ShaarliFrontException {
+            }
         );
 
         static::assertSame($errorCode, $result->getStatusCode());

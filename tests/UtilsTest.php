@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Utilities' tests
  */
@@ -187,7 +188,7 @@ class UtilsTest extends \Shaarli\TestCase
     public function testGenerateLocationLoop()
     {
         $ref = 'http://localhost/?test';
-        $this->assertEquals('./?', generateLocation($ref, 'localhost', array('test')));
+        $this->assertEquals('./?', generateLocation($ref, 'localhost', ['test']));
     }
 
     /**
@@ -313,15 +314,15 @@ class UtilsTest extends \Shaarli\TestCase
      */
     public function testHumanBytes()
     {
-        $this->assertEquals('2'. t('kiB'), human_bytes(2 * 1024));
-        $this->assertEquals('2'. t('kiB'), human_bytes(strval(2 * 1024)));
-        $this->assertEquals('2'. t('MiB'), human_bytes(2 * (pow(1024, 2))));
-        $this->assertEquals('2'. t('MiB'), human_bytes(strval(2 * (pow(1024, 2)))));
-        $this->assertEquals('2'. t('GiB'), human_bytes(2 * (pow(1024, 3))));
-        $this->assertEquals('2'. t('GiB'), human_bytes(strval(2 * (pow(1024, 3)))));
-        $this->assertEquals('374'. t('B'), human_bytes(374));
-        $this->assertEquals('374'. t('B'), human_bytes('374'));
-        $this->assertEquals('232'. t('kiB'), human_bytes(237481));
+        $this->assertEquals('2' . t('kiB'), human_bytes(2 * 1024));
+        $this->assertEquals('2' . t('kiB'), human_bytes(strval(2 * 1024)));
+        $this->assertEquals('2' . t('MiB'), human_bytes(2 * (pow(1024, 2))));
+        $this->assertEquals('2' . t('MiB'), human_bytes(strval(2 * (pow(1024, 2)))));
+        $this->assertEquals('2' . t('GiB'), human_bytes(2 * (pow(1024, 3))));
+        $this->assertEquals('2' . t('GiB'), human_bytes(strval(2 * (pow(1024, 3)))));
+        $this->assertEquals('374' . t('B'), human_bytes(374));
+        $this->assertEquals('374' . t('B'), human_bytes('374'));
+        $this->assertEquals('232' . t('kiB'), human_bytes(237481));
         $this->assertEquals(t('Unlimited'), human_bytes('0'));
         $this->assertEquals(t('Unlimited'), human_bytes(0));
         $this->assertEquals(t('Setting not set'), human_bytes(''));
@@ -332,9 +333,9 @@ class UtilsTest extends \Shaarli\TestCase
      */
     public function testGetMaxUploadSize()
     {
-        $this->assertEquals('1'. t('MiB'), get_max_upload_size(2097152, '1024k'));
-        $this->assertEquals('1'. t('MiB'), get_max_upload_size('1m', '2m'));
-        $this->assertEquals('100'. t('B'), get_max_upload_size(100, 100));
+        $this->assertEquals('1' . t('MiB'), get_max_upload_size(2097152, '1024k'));
+        $this->assertEquals('1' . t('MiB'), get_max_upload_size('1m', '2m'));
+        $this->assertEquals('100' . t('B'), get_max_upload_size(100, 100));
     }
 
     /**

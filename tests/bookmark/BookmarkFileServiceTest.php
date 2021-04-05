@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Link datastore tests
  */
@@ -82,15 +83,15 @@ class BookmarkFileServiceTest extends TestCase
             unlink(self::$testDatastore);
         }
 
-        if (file_exists(self::$testConf .'.json.php')) {
-            unlink(self::$testConf .'.json.php');
+        if (file_exists(self::$testConf . '.json.php')) {
+            unlink(self::$testConf . '.json.php');
         }
 
         if (file_exists(self::$testUpdates)) {
             unlink(self::$testUpdates);
         }
 
-        copy('tests/utils/config/configJson.json.php', self::$testConf .'.json.php');
+        copy('tests/utils/config/configJson.json.php', self::$testConf . '.json.php');
         $this->conf = new ConfigManager(self::$testConf);
         $this->conf->set('resource.datastore', self::$testDatastore);
         $this->conf->set('resource.updates', self::$testUpdates);

@@ -1,7 +1,9 @@
 <?php
+
 /**
  * PageCache tests
  */
+
 namespace Shaarli\Feed;
 
 /**

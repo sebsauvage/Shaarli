@@ -66,7 +66,12 @@ class MetadataRetrieverTest extends TestCase
             ->expects(static::once())
             ->method('getCurlDownloadCallback')
             ->willReturnCallback(
-                function (&$charset, &$title, &$description, &$tags) use (
+                function (
+                    &$charset,
+                    &$title,
+                    &$description,
+                    &$tags
+                ) use (
                     $remoteCharset,
                     $remoteTitle,
                     $remoteDesc,
@@ -95,7 +100,7 @@ class MetadataRetrieverTest extends TestCase
             ->expects(static::once())
             ->method('getHttpResponse')
             ->with($url, 30, 4194304)
-            ->willReturnCallback(function($url, $timeout, $maxBytes, $headerCallback, $dlCallback): void {
+            ->willReturnCallback(function ($url, $timeout, $maxBytes, $headerCallback, $dlCallback): void {
                 $headerCallback();
                 $dlCallback();
             })
@@ -124,7 +129,8 @@ class MetadataRetrieverTest extends TestCase
             ->method('getCurlDownloadCallback')
             ->willReturnCallback(
                 function (): callable {
-                    return function (): void {};
+                    return function (): void {
+                    };
                 }
             )
         ;
@@ -133,7 +139,8 @@ class MetadataRetrieverTest extends TestCase
             ->method('getCurlHeaderCallback')
             ->willReturnCallback(
                 function (): callable {
-                    return function (): void {};
+                    return function (): void {
+                    };
                 }
             )
         ;
@@ -141,7 +148,7 @@ class MetadataRetrieverTest extends TestCase
             ->expects(static::once())
             ->method('getHttpResponse')
             ->with($url, 30, 4194304)
-            ->willReturnCallback(function($url, $timeout, $maxBytes, $headerCallback, $dlCallback): void {
+            ->willReturnCallback(function ($url, $timeout, $maxBytes, $headerCallback, $dlCallback): void {
                 $headerCallback();
                 $dlCallback();
             })

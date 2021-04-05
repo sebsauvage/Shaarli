@@ -66,13 +66,13 @@ class FeedBuilderTest extends TestCase
             true
         );
 
-        self::$serverInfo = array(
+        self::$serverInfo = [
             'HTTPS' => 'Off',
             'SERVER_NAME' => 'host.tld',
             'SERVER_PORT' => '80',
             'SCRIPT_NAME' => '/index.php',
             'REQUEST_URI' => '/feed/atom',
-        );
+        ];
     }
 
     /**
@@ -149,10 +149,10 @@ class FeedBuilderTest extends TestCase
      */
     public function testBuildDataFiltered()
     {
-        $criteria = array(
+        $criteria = [
             'searchtags' => 'stuff',
             'searchterm' => 'beard',
-        );
+        ];
         $feedBuilder = new FeedBuilder(
             self::$bookmarkService,
             self::$formatter,
@@ -172,9 +172,9 @@ class FeedBuilderTest extends TestCase
      */
     public function testBuildDataCount()
     {
-        $criteria = array(
+        $criteria = [
             'nb' => '3',
-        );
+        ];
         $feedBuilder = new FeedBuilder(
             self::$bookmarkService,
             self::$formatter,
@@ -259,13 +259,13 @@ class FeedBuilderTest extends TestCase
      */
     public function testBuildDataServerSubdir()
     {
-        $serverInfo = array(
+        $serverInfo = [
             'HTTPS' => 'Off',
             'SERVER_NAME' => 'host.tld',
             'SERVER_PORT' => '8080',
             'SCRIPT_NAME' => '/~user/shaarli/index.php',
             'REQUEST_URI' => '/~user/shaarli/feed/atom',
-        );
+        ];
         $feedBuilder = new FeedBuilder(
             self::$bookmarkService,
             self::$formatter,

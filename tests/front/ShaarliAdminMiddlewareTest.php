@@ -63,7 +63,8 @@ class ShaarliAdminMiddlewareTest extends TestCase
         $response = new Response();
 
         /** @var Response $result */
-        $result = $this->middleware->__invoke($request, $response, function () {});
+        $result = $this->middleware->__invoke($request, $response, function () {
+        });
 
         static::assertSame(302, $result->getStatusCode());
         static::assertSame(

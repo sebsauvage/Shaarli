@@ -1,4 +1,5 @@
 <?php
+
 /**
  * TimeZone's tests
  */

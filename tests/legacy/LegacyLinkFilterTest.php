@@ -450,28 +450,28 @@ class LegacyLinkFilterTest extends \Shaarli\TestCase
             1,
             count(self::$linkFilter->filter(
                 LegacyLinkFilter::$FILTER_TAG | LegacyLinkFilter::$FILTER_TEXT,
-                array($tags, $terms)
+                [$tags, $terms]
             ))
         );
         $this->assertEquals(
             2,
             count(self::$linkFilter->filter(
                 LegacyLinkFilter::$FILTER_TAG | LegacyLinkFilter::$FILTER_TEXT,
-                array('', $terms)
+                ['', $terms]
             ))
         );
         $this->assertEquals(
             1,
             count(self::$linkFilter->filter(
                 LegacyLinkFilter::$FILTER_TAG | LegacyLinkFilter::$FILTER_TEXT,
-                array(false, 'PSR-2')
+                [false, 'PSR-2']
             ))
         );
         $this->assertEquals(
             1,
             count(self::$linkFilter->filter(
                 LegacyLinkFilter::$FILTER_TAG | LegacyLinkFilter::$FILTER_TEXT,
-                array($tags, '')
+                [$tags, '']
             ))
         );
         $this->assertEquals(

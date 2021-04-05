@@ -18,7 +18,7 @@ class PageCacheManagerTest extends TestCase
     protected static $testCacheDir = 'sandbox/dummycache';
 
     // dummy cached file names / content
-    protected static $pages = array('a', 'toto', 'd7b59c');
+    protected static $pages = ['a', 'toto', 'd7b59c'];
 
     /** @var PageCacheManager */
     protected $cacheManager;

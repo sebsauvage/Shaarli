@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Helper;
 
 use Shaarli\Config\ConfigManager;
@@ -49,7 +50,7 @@ class ApplicationUtilsTest extends \Shaarli\TestCase
             '0.5.4',
             ApplicationUtils::getVersion(
                 'https://raw.githubusercontent.com/shaarli/Shaarli/'
-                .'v0.5.4/shaarli_version.php',
+                . 'v0.5.4/shaarli_version.php',
                 $testTimeout
             )
         );
@@ -57,7 +58,7 @@ class ApplicationUtilsTest extends \Shaarli\TestCase
             self::$versionPattern,
             ApplicationUtils::getVersion(
                 'https://raw.githubusercontent.com/shaarli/Shaarli/'
-                .'latest/shaarli_version.php',
+                . 'latest/shaarli_version.php',
                 $testTimeout
             )
         );
@@ -68,7 +69,7 @@ class ApplicationUtilsTest extends \Shaarli\TestCase
      */
     public function testGetVersionCodeFromFile()
     {
-        file_put_contents('sandbox/version.php', '<?php /* 1.2.3 */ ?>'. PHP_EOL);
+        file_put_contents('sandbox/version.php', '<?php /* 1.2.3 */ ?>' . PHP_EOL);
         $this->assertEquals(
             '1.2.3',
             ApplicationUtils::getVersion('sandbox/version.php', 1)
@@ -301,7 +302,7 @@ class ApplicationUtilsTest extends \Shaarli\TestCase
         $conf->set('resource.update_check', 'data/lastupdatecheck.txt');
 
         $this->assertEquals(
-            array(),
+            [],
             ApplicationUtils::checkResourcePermissions($conf)
         );
     }
@@ -324,7 +325,7 @@ class ApplicationUtilsTest extends \Shaarli\TestCase
         $conf->set('resource.raintpl_theme', 'null/tpl/default');
         $conf->set('resource.update_check', 'null/data/lastupdatecheck.txt');
         $this->assertEquals(
-            array(
+            [
                 '"null/tpl" directory is not readable',
                 '"null/tpl/default" directory is not readable',
                 '"null/cache" directory is not readable',
@@ -335,7 +336,7 @@ class ApplicationUtilsTest extends \Shaarli\TestCase
                 '"null/pagecache" directory is not writable',
                 '"null/tmp" directory is not readable',
                 '"null/tmp" directory is not writable'
-            ),
+            ],
             ApplicationUtils::checkResourcePermissions($conf)
         );
     }

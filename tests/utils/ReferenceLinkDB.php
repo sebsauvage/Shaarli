@@ -10,7 +10,7 @@ class ReferenceLinkDB
 {
     public static $NB_LINKS_TOTAL = 11;
 
-    private $bookmarks = array();
+    private $bookmarks = [];
     private $_publicCount = 0;
     private $_privateCount = 0;
 
@@ -164,7 +164,7 @@ class ReferenceLinkDB
         $shorturl = '',
         $pinned = false
     ) {
-        $link = array(
+        $link = [
             'id' => $id,
             'title' => $title,
             'url' => $url,
@@ -175,7 +175,7 @@ class ReferenceLinkDB
             'updated' => $updated,
             'shorturl' => $shorturl ? $shorturl : smallHash($date->format(Bookmark::LINK_DATE_FORMAT) . $id),
             'sticky' => $pinned
-        );
+        ];
         if (! $this->isLegacy) {
             $bookmark = new Bookmark();
             $this->bookmarks[$id] = $bookmark->fromArray($link);
@@ -198,7 +198,7 @@ class ReferenceLinkDB
         $this->reorder();
         file_put_contents(
             $filename,
-            '<?php /* '.base64_encode(gzdeflate(serialize($this->bookmarks))).' */ ?>'
+            '<?php /* ' . base64_encode(gzdeflate(serialize($this->bookmarks))) . ' */ ?>'
         );
     }
 

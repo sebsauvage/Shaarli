@@ -135,7 +135,7 @@ class BookmarkImportTest extends TestCase
         $files = file2array('empty.htm');
         $this->assertEquals(
             'File empty.htm (0 bytes) has an unknown file format.'
-            .' Nothing was imported.',
+            . ' Nothing was imported.',
             $this->netscapeBookmarkUtils->import(null, $files)
         );
         $this->assertEquals(0, $this->bookmarkService->count());
@@ -162,7 +162,7 @@ class BookmarkImportTest extends TestCase
         $files = file2array('lowercase_doctype.htm');
         $this->assertStringMatchesFormat(
             'File lowercase_doctype.htm (386 bytes) was successfully processed in %d seconds:'
-            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            . ' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import(null, $files)
         );
         $this->assertEquals(2, $this->bookmarkService->count());
@@ -177,7 +177,7 @@ class BookmarkImportTest extends TestCase
         $files = file2array('internet_explorer_encoding.htm');
         $this->assertStringMatchesFormat(
             'File internet_explorer_encoding.htm (356 bytes) was successfully processed in %d seconds:'
-            .' 1 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            . ' 1 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import([], $files)
         );
         $this->assertEquals(1, $this->bookmarkService->count());
@@ -205,7 +205,7 @@ class BookmarkImportTest extends TestCase
         $files = file2array('netscape_nested.htm');
         $this->assertStringMatchesFormat(
             'File netscape_nested.htm (1337 bytes) was successfully processed in %d seconds:'
-            .' 8 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            . ' 8 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import([], $files)
         );
         $this->assertEquals(8, $this->bookmarkService->count());
@@ -326,7 +326,7 @@ class BookmarkImportTest extends TestCase
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            . ' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import([], $files)
         );
 
@@ -365,11 +365,11 @@ class BookmarkImportTest extends TestCase
      */
     public function testImportKeepPrivacy()
     {
-        $post = array('privacy' => 'default');
+        $post = ['privacy' => 'default'];
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            . ' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import($post, $files)
         );
 
@@ -408,11 +408,11 @@ class BookmarkImportTest extends TestCase
      */
     public function testImportAsPublic()
     {
-        $post = array('privacy' => 'public');
+        $post = ['privacy' => 'public'];
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            . ' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import($post, $files)
         );
         $this->assertEquals(2, $this->bookmarkService->count());
@@ -426,11 +426,11 @@ class BookmarkImportTest extends TestCase
      */
     public function testImportAsPrivate()
     {
-        $post = array('privacy' => 'private');
+        $post = ['privacy' => 'private'];
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            . ' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import($post, $files)
         );
         $this->assertEquals(2, $this->bookmarkService->count());
@@ -447,10 +447,10 @@ class BookmarkImportTest extends TestCase
         $files = file2array('netscape_basic.htm');
 
         // import bookmarks as private
-        $post = array('privacy' => 'private');
+        $post = ['privacy' => 'private'];
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            . ' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import($post, $files)
         );
         $this->assertEquals(2, $this->bookmarkService->count());
@@ -459,13 +459,13 @@ class BookmarkImportTest extends TestCase
         $this->assertTrue($this->bookmarkService->get(1)->isPrivate());
 
         // re-import as public, enable overwriting
-        $post = array(
+        $post = [
             'privacy' => 'public',
             'overwrite' => 'true'
-        );
+        ];
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 bookmarks imported, 2 bookmarks overwritten, 0 bookmarks skipped.',
+            . ' 2 bookmarks imported, 2 bookmarks overwritten, 0 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import($post, $files)
         );
         $this->assertEquals(2, $this->bookmarkService->count());
@@ -482,10 +482,10 @@ class BookmarkImportTest extends TestCase
         $files = file2array('netscape_basic.htm');
 
         // import bookmarks as public
-        $post = array('privacy' => 'public');
+        $post = ['privacy' => 'public'];
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            . ' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import($post, $files)
         );
         $this->assertEquals(2, $this->bookmarkService->count());
@@ -494,13 +494,13 @@ class BookmarkImportTest extends TestCase
         $this->assertFalse($this->bookmarkService->get(1)->isPrivate());
 
         // re-import as private, enable overwriting
-        $post = array(
+        $post = [
             'privacy' => 'private',
             'overwrite' => 'true'
-        );
+        ];
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 bookmarks imported, 2 bookmarks overwritten, 0 bookmarks skipped.',
+            . ' 2 bookmarks imported, 2 bookmarks overwritten, 0 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import($post, $files)
         );
         $this->assertEquals(2, $this->bookmarkService->count());
@@ -514,21 +514,21 @@ class BookmarkImportTest extends TestCase
      */
     public function testSkipOverwrite()
     {
-        $post = array('privacy' => 'public');
+        $post = ['privacy' => 'public'];
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            . ' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import($post, $files)
         );
         $this->assertEquals(2, $this->bookmarkService->count());
         $this->assertEquals(0, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));
 
         // re-import as private, DO NOT enable overwriting
-        $post = array('privacy' => 'private');
+        $post = ['privacy' => 'private'];
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 0 bookmarks imported, 0 bookmarks overwritten, 2 bookmarks skipped.',
+            . ' 0 bookmarks imported, 0 bookmarks overwritten, 2 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import($post, $files)
         );
         $this->assertEquals(2, $this->bookmarkService->count());
@@ -540,14 +540,14 @@ class BookmarkImportTest extends TestCase
      */
     public function testSetDefaultTags()
     {
-        $post = array(
+        $post = [
             'privacy' => 'public',
             'default_tags' => 'tag1 tag2 tag3'
-        );
+        ];
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            . ' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import($post, $files)
         );
         $this->assertEquals(2, $this->bookmarkService->count());
@@ -561,14 +561,14 @@ class BookmarkImportTest extends TestCase
      */
     public function testSanitizeDefaultTags()
     {
-        $post = array(
+        $post = [
             'privacy' => 'public',
             'default_tags' => 'tag1& tag2 "tag3"'
-        );
+        ];
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            . ' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import($post, $files)
         );
         $this->assertEquals(2, $this->bookmarkService->count());
@@ -597,7 +597,7 @@ class BookmarkImportTest extends TestCase
         $files = file2array('netscape_basic.htm');
         $this->assertStringMatchesFormat(
             'File netscape_basic.htm (482 bytes) was successfully processed in %d seconds:'
-            .' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            . ' 2 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
             $this->netscapeBookmarkUtils->import($post, $files)
         );
         $this->assertEquals(2, $this->bookmarkService->count());
@@ -630,8 +630,8 @@ class BookmarkImportTest extends TestCase
         $files = file2array('same_date.htm');
         $this->assertStringMatchesFormat(
             'File same_date.htm (453 bytes) was successfully processed in %d seconds:'
-            .' 3 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
-            $this->netscapeBookmarkUtils->import(array(), $files)
+            . ' 3 bookmarks imported, 0 bookmarks overwritten, 0 bookmarks skipped.',
+            $this->netscapeBookmarkUtils->import([], $files)
         );
         $this->assertEquals(3, $this->bookmarkService->count());
         $this->assertEquals(0, $this->bookmarkService->count(BookmarkFilter::$PRIVATE));

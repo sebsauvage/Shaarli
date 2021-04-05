@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HttpUtils' tests
  */
@@ -22,24 +23,24 @@ class IndexUrlTest extends TestCase
         $this->assertEquals(
             'http://host.tld/',
             index_url(
-                array(
+                [
                     'HTTPS' => 'Off',
                     'SERVER_NAME' => 'host.tld',
                     'SERVER_PORT' => '80',
                     'SCRIPT_NAME' => '/index.php'
-                )
+                ]
             )
         );
 
         $this->assertEquals(
             'http://host.tld/admin/',
             index_url(
-                array(
+                [
                     'HTTPS' => 'Off',
                     'SERVER_NAME' => 'host.tld',
                     'SERVER_PORT' => '80',
                     'SCRIPT_NAME' => '/admin/index.php'
-                )
+                ]
             )
         );
     }
@@ -52,24 +53,24 @@ class IndexUrlTest extends TestCase
         $this->assertEquals(
             'http://host.tld/page.php',
             page_url(
-                array(
+                [
                     'HTTPS' => 'Off',
                     'SERVER_NAME' => 'host.tld',
                     'SERVER_PORT' => '80',
                     'SCRIPT_NAME' => '/page.php'
-                )
+                ]
             )
         );
 
         $this->assertEquals(
             'http://host.tld/admin/page.php',
             page_url(
-                array(
+                [
                     'HTTPS' => 'Off',
                     'SERVER_NAME' => 'host.tld',
                     'SERVER_PORT' => '80',
                     'SCRIPT_NAME' => '/admin/page.php'
-                )
+                ]
             )
         );
     }
@@ -82,26 +83,26 @@ class IndexUrlTest extends TestCase
         $this->assertEquals(
             'http://host.tld/picture-wall',
             page_url(
-                array(
+                [
                     'HTTPS' => 'Off',
                     'SERVER_NAME' => 'host.tld',
                     'SERVER_PORT' => '80',
                     'SCRIPT_NAME' => '/index.php',
                     'REQUEST_URI' => '/picture-wall',
-                )
+                ]
             )
         );
 
         $this->assertEquals(
             'http://host.tld/admin/picture-wall',
             page_url(
-                array(
+                [
                     'HTTPS' => 'Off',
                     'SERVER_NAME' => 'host.tld',
                     'SERVER_PORT' => '80',
                     'SCRIPT_NAME' => '/admin/index.php',
                     'REQUEST_URI' => '/admin/picture-wall',
-                )
+                ]
             )
         );
     }
@@ -114,26 +115,26 @@ class IndexUrlTest extends TestCase
         $this->assertEquals(
             'http://host.tld/subfolder/picture-wall',
             page_url(
-                array(
+                [
                     'HTTPS' => 'Off',
                     'SERVER_NAME' => 'host.tld',
                     'SERVER_PORT' => '80',
                     'SCRIPT_NAME' => '/subfolder/index.php',
                     'REQUEST_URI' => '/subfolder/picture-wall',
-                )
+                ]
             )
         );
 
         $this->assertEquals(
             'http://host.tld/subfolder/admin/picture-wall',
             page_url(
-                array(
+                [
                     'HTTPS' => 'Off',
                     'SERVER_NAME' => 'host.tld',
                     'SERVER_PORT' => '80',
                     'SCRIPT_NAME' => '/subfolder/admin/index.php',
                     'REQUEST_URI' => '/subfolder/admin/picture-wall',
-                )
+                ]
             )
         );
     }

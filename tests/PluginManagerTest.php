@@ -39,7 +39,7 @@ class PluginManagerTest extends \Shaarli\TestCase
     public function testPlugin(): void
     {
         PluginManager::$PLUGINS_PATH = self::$pluginPath;
-        $this->pluginManager->load(array(self::$pluginName));
+        $this->pluginManager->load([self::$pluginName]);
 
         $this->assertTrue(function_exists('hook_test_random'));
 
@@ -50,19 +50,19 @@ class PluginManagerTest extends \Shaarli\TestCase
         static::assertSame('woot', $data[1]);
 
         $data = [0 => 'woot'];
-        $this->pluginManager->executeHooks('random', $data, array('target' => 'test'));
+        $this->pluginManager->executeHooks('random', $data, ['target' => 'test']);
 
         static::assertCount(2, $data);
         static::assertSame('page test', $data[1]);
 
         $data = [0 => 'woot'];
-        $this->pluginManager->executeHooks('random', $data, array('loggedin' => true));
+        $this->pluginManager->executeHooks('random', $data, ['loggedin' => true]);
 
         static::assertCount(2, $data);
         static::assertEquals('loggedin', $data[1]);
 
         $data = [0 => 'woot'];
-        $this->pluginManager->executeHooks('random', $data, array('loggedin' => null));
+        $this->pluginManager->executeHooks('random', $data, ['loggedin' => null]);
 
         static::assertCount(3, $data);
         static::assertEquals('loggedin', $data[1]);
@@ -76,7 +76,7 @@ class PluginManagerTest extends \Shaarli\TestCase
     public function testPluginWithPhpError(): void
     {
         PluginManager::$PLUGINS_PATH = self::$pluginPath;
-        $this->pluginManager->load(array(self::$pluginName));
+        $this->pluginManager->load([self::$pluginName]);
 
         $this->assertTrue(function_exists('hook_test_error'));
 

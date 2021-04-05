@@ -147,7 +147,8 @@ class DailyPageHelperTest extends TestCase
     /**
      * @dataProvider getRssLengthsByType
      */
-    public function testGeRssLengthsByType(string $type): void {
+    public function testGeRssLengthsByType(string $type): void
+    {
         $length = DailyPageHelper::getRssLengthByType($type);
 
         static::assertIsInt($length);

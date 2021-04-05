@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HttpUtils' tests
  */

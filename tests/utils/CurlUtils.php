@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Old-style mock for cURL, as PHPUnit doesn't allow to mock global functions
  */

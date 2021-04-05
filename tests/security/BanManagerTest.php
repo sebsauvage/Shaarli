@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Shaarli\Security;
 
 use Psr\Log\LoggerInterface;

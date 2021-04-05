@@ -74,7 +74,10 @@ class ImportControllerTest extends TestCase
                 function (
                     array $post,
                     UploadedFileInterface $file
-                ) use ($parameters, $requestFile): string {
+                ) use (
+                    $parameters,
+                    $requestFile
+                ): string {
                     static::assertSame($parameters, $post);
                     static::assertSame($requestFile, $file);
 

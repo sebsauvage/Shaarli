@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Api\Controllers;
 
 use malkusch\lock\mutex\NoMutex;
@@ -106,7 +107,7 @@ class InfoTest extends TestCase
         $title = 'My bookmarks';
         $headerLink = 'http://shaarli.tld';
         $timezone = 'Europe/Paris';
-        $enabledPlugins = array('foo', 'bar');
+        $enabledPlugins = ['foo', 'bar'];
         $defaultPrivateLinks = true;
         $this->conf->set('general.title', $title);
         $this->conf->set('general.header_link', $headerLink);

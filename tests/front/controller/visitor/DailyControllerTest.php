@@ -102,7 +102,7 @@ class DailyControllerTest extends TestCase
         static::assertSame(200, $result->getStatusCode());
         static::assertSame('daily', (string) $result->getBody());
         static::assertSame(
-            'Daily - '. format_date($currentDay, false, true) .' - Shaarli',
+            'Daily - ' . format_date($currentDay, false, true) . ' - Shaarli',
             $assignedVariables['pagetitle']
         );
         static::assertEquals($currentDay, $assignedVariables['dayDate']);
@@ -225,7 +225,7 @@ class DailyControllerTest extends TestCase
         static::assertSame(200, $result->getStatusCode());
         static::assertSame('daily', (string) $result->getBody());
         static::assertSame(
-            'Daily - '. format_date($currentDay, false, true) .' - Shaarli',
+            'Daily - ' . format_date($currentDay, false, true) . ' - Shaarli',
             $assignedVariables['pagetitle']
         );
         static::assertCount(1, $assignedVariables['linksToDisplay']);
@@ -285,7 +285,9 @@ class DailyControllerTest extends TestCase
         static::assertCount(7, $assignedVariables['linksToDisplay']);
 
         $columnIds = function (array $column): array {
-            return array_map(function (array $item): int { return $item['id']; }, $column);
+            return array_map(function (array $item): int {
+                return $item['id'];
+            }, $column);
         };
 
         static::assertSame([1, 4, 6], $columnIds($assignedVariables['cols'][0]));
@@ -366,8 +368,7 @@ class DailyControllerTest extends TestCase
                 $cachedPage->expects(static::once())->method('cache')->with('dailyrss');
 
                 return $cachedPage;
-            }
-        );
+            });
 
         // Save RainTPL assigned variables
         $assignedVariables = [];
@@ -390,7 +391,7 @@ class DailyControllerTest extends TestCase
         static::assertEquals($date, $day['date']);
         static::assertSame($date->format(\DateTime::RSS), $day['date_rss']);
         static::assertSame(format_date($date, false), $day['date_human']);
-        static::assertSame('http://shaarli/subfolder/daily?day='. $dates[0]->format('Ymd'), $day['absolute_url']);
+        static::assertSame('http://shaarli/subfolder/daily?day=' . $dates[0]->format('Ymd'), $day['absolute_url']);
         static::assertCount(1, $day['links']);
         static::assertSame(1, $day['links'][0]['id']);
         static::assertSame('http://domain.tld/1', $day['links'][0]['url']);
@@ -402,7 +403,7 @@ class DailyControllerTest extends TestCase
         static::assertEquals($date, $day['date']);
         static::assertSame($date->format(\DateTime::RSS), $day['date_rss']);
         static::assertSame(format_date($date, false), $day['date_human']);
-        static::assertSame('http://shaarli/subfolder/daily?day='. $dates[1]->format('Ymd'), $day['absolute_url']);
+        static::assertSame('http://shaarli/subfolder/daily?day=' . $dates[1]->format('Ymd'), $day['absolute_url']);
         static::assertCount(2, $day['links']);
 
         static::assertSame(2, $day['links'][0]['id']);
@@ -418,7 +419,7 @@ class DailyControllerTest extends TestCase
         static::assertEquals($date, $day['date']);
         static::assertSame($date->format(\DateTime::RSS), $day['date_rss']);
         static::assertSame(format_date($date, false), $day['date_human']);
-        static::assertSame('http://shaarli/subfolder/daily?day='. $dates[2]->format('Ymd'), $day['absolute_url']);
+        static::assertSame('http://shaarli/subfolder/daily?day=' . $dates[2]->format('Ymd'), $day['absolute_url']);
         static::assertCount(1, $day['links']);
         static::assertSame(4, $day['links'][0]['id']);
         static::assertSame('http://domain.tld/4', $day['links'][0]['url']);
@@ -647,7 +648,7 @@ class DailyControllerTest extends TestCase
         static::assertEquals($date, $day['date']);
         static::assertSame($date->format(\DateTime::RSS), $day['date_rss']);
         static::assertSame('Week 21 (May 18, 2020)', $day['date_human']);
-        static::assertSame('http://shaarli/subfolder/daily?week='. $dates[0]->format('YW'), $day['absolute_url']);
+        static::assertSame('http://shaarli/subfolder/daily?week=' . $dates[0]->format('YW'), $day['absolute_url']);
         static::assertCount(1, $day['links']);
 
         $day = $assignedVariables['days'][$dates[1]->format('YW')];
@@ -656,7 +657,7 @@ class DailyControllerTest extends TestCase
         static::assertEquals($date, $day['date']);
         static::assertSame($date->format(\DateTime::RSS), $day['date_rss']);
         static::assertSame('Week 20 (May 11, 2020)', $day['date_human']);
-        static::assertSame('http://shaarli/subfolder/daily?week='. $dates[1]->format('YW'), $day['absolute_url']);
+        static::assertSame('http://shaarli/subfolder/daily?week=' . $dates[1]->format('YW'), $day['absolute_url']);
         static::assertCount(2, $day['links']);
     }
 
@@ -710,7 +711,7 @@ class DailyControllerTest extends TestCase
         static::assertEquals($date, $day['date']);
         static::assertSame($date->format(\DateTime::RSS), $day['date_rss']);
         static::assertSame('May, 2020', $day['date_human']);
-        static::assertSame('http://shaarli/subfolder/daily?month='. $dates[0]->format('Ym'), $day['absolute_url']);
+        static::assertSame('http://shaarli/subfolder/daily?month=' . $dates[0]->format('Ym'), $day['absolute_url']);
         static::assertCount(1, $day['links']);
 
         $day = $assignedVariables['days'][$dates[1]->format('Ym')];
@@ -719,7 +720,7 @@ class DailyControllerTest extends TestCase
         static::assertEquals($date, $day['date']);
         static::assertSame($date->format(\DateTime::RSS), $day['date_rss']);
         static::assertSame('April, 2020', $day['date_human']);
-        static::assertSame('http://shaarli/subfolder/daily?month='. $dates[1]->format('Ym'), $day['absolute_url']);
+        static::assertSame('http://shaarli/subfolder/daily?month=' . $dates[1]->format('Ym'), $day['absolute_url']);
         static::assertCount(2, $day['links']);
     }
 }

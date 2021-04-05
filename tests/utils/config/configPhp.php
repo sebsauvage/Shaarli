@@ -1,4 +1,5 @@
 <?php
+
 $GLOBALS['login'] = 'root';
 $GLOBALS['hash'] = 'hash';
 $GLOBALS['salt'] = 'salt';

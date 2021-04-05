@@ -54,8 +54,7 @@ class BookmarkListControllerTest extends TestCase
                 (new Bookmark())->setId(1)->setUrl('http://url1.tld')->setTitle('Title 1'),
                 (new Bookmark())->setId(2)->setUrl('http://url2.tld')->setTitle('Title 2'),
                 (new Bookmark())->setId(3)->setUrl('http://url3.tld')->setTitle('Title 3'),
-            ], 0, 2)
-        );
+            ], 0, 2));
 
         $this->container->sessionManager
             ->method('getSessionParameter')
