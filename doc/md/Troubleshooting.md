@@ -96,6 +96,14 @@ If you hosting provider only provides apache 2.2 and no support for `mod_version
 
 Follow the instructions in the error message. Make sure you are accessing shaarli via a direct IP address or a proper hostname. If you have **no dots** in the hostname (e.g. `localhost` or `http://my-webserver/shaarli/`), some browsers will not store cookies at all (this respects the [HTTP cookie specification](http://curl.haxx.se/rfc/cookie_spec.html)).
 
+
+### Error 206 "Not acceptable"
+
+If attempting to save a link results in a `Not acceptable` error (HTTP status code of `206`), it is likely due to strict settings for `mod_security` (a module used with Apache). This cannot be mitigated by reconfiguring Shaarli itself, and must be dealt with at the level of the underlying web server instead.
+
+On some shared hosting services (such as **Bluehost**), `mod_security` is enabled by default, so the recommended course of action is to get in touch with the helpdesk and ask them to disable `mod_security` for your domain, sub-domain, or the subdirectory where Shaarli is installed. Ideally, you want to narrow it down to a very specific location, so as to continue reaping the benefits of `mod_security` elsewhere on your domain. If asked for specific, you can refer support staff to this [issue](https://github.com/shaarli/Shaarli/issues/1736), where more technical details are available.
+
+
 ----------------------------------------------------------
 
 ## Upgrades
