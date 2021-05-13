@@ -1,9 +1,6 @@
 <?php
-namespace Shaarli\Plugin\ReadItLater;
 
-/**
- * PluginQrcodeTest.php
- */
+namespace Shaarli\Plugin\ReadItLater;
 
 use Shaarli\Bookmark\Bookmark;
 use Shaarli\Config\ConfigManager;
