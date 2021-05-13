@@ -12,7 +12,7 @@ site_dir: doc/html
 # - https://github.com/rtfd/readthedocs.org/issues/4314
 # strict: true
 
-pages:
+nav:
 - Home: index.md
 - Setup:
     - Server configuration: Server-configuration.md
