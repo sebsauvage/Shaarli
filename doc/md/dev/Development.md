@@ -143,17 +143,17 @@ A [`Makefile`](https://github.com/shaarli/Shaarli/blob/master/Makefile) is avail
 
 ### Continuous Integration
 
-[Travis CI](http://docs.travis-ci.com/) is a Continuous Integration build server, that runs a build:
+[Drone CI](https://cloud.drone.io/shaarli/Shaarli) is a Continuous Integration build server, that runs a build:
 
-- each time a commit is merged to the mainline (`master` branch)
+- each time a commit is pushed to any branch
 - each time a Pull Request is submitted or updated
 
-After all jobs have finished, Travis returns the results to GitHub:
+After all jobs have finished, Drone returns the results to GitHub:
 
-- a status icon represents the result for the `master` branch: [![](https://api.travis-ci.org/shaarli/Shaarli.svg)](https://travis-ci.org/shaarli/Shaarli)
-- Pull Requests are updated with the Travis build result.
+- a status icon represents the result for the `master` branch: [![Build Status](https://cloud.drone.io/api/badges/shaarli/Shaarli/status.svg?ref=refs/heads/master)](https://cloud.drone.io/shaarli/Shaarli)
+- Pull Requests are updated with the Drone build result.
 
-See [`.travis.yml`](https://github.com/shaarli/Shaarli/blob/master/.travis.yml).
+See [`.drone.yml`](https://github.com/shaarli/Shaarli/blob/master/.drone.yml).
 
 
 ### Documentation

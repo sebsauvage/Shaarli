@@ -1,0 +1,115 @@
+---
+
+kind: pipeline
+type: docker
+name: php-8.0
+
+steps:
+  - name: test-php-8.0
+    image: shaarli/drone-ci-base:8.0
+    commands:
+      - composer config --unset platform && composer config platform.php 8.0
+      - composer update --ignore-platform-req=php
+      - composer remove --dev --ignore-platform-req=php phpunit/phpunit
+      - composer require --dev --ignore-platform-req=php phpunit/php-text-template ^2.0
+      - composer require --dev --ignore-platform-req=php phpunit/phpunit ^9.0
+      - make clean
+      - make check_permissions
+      - make code_sniffer
+      - make all_tests
+
+---
+
+kind: pipeline
+type: docker
+name: php-7.4
+
+steps:
+  - name: test-php-7.4
+    image: shaarli/drone-ci-base:7.4
+    commands:
+      - composer config --unset platform && composer config platform.php 7.4
+      - composer update
+      - make clean
+      - make check_permissions
+      - make code_sniffer
+      - make all_tests
+
+---
+
+kind: pipeline
+type: docker
+name: php-7.3
+
+steps:
+  - name: test-php-7.3
+    image: shaarli/drone-ci-base:7.3
+    commands:
+      - composer config --unset platform && composer config platform.php 7.3
+      - composer update
+      - make clean
+      - make check_permissions
+      - make code_sniffer
+      - make all_tests
+
+---
+
+kind: pipeline
+type: docker
+name: php-7.2
+
+steps:
+  - name: test-php-7.2
+    image: shaarli/drone-ci-base:7.2
+    commands:
+      - composer config --unset platform && composer config platform.php 7.2
+      - composer update
+      - make clean
+      - make check_permissions
+      - make code_sniffer
+      - make all_tests
+
+---
+
+kind: pipeline
+type: docker
+name: php-7.1
+
+steps:
+  - name: test-php-7.1
+    image: shaarli/drone-ci-base:7.1
+    commands:
+      - composer config --unset platform && composer config platform.php 7.1
+      - composer update
+      - make clean
+      - make check_permissions
+      - make code_sniffer
+      - make all_tests
+
+---
+
+kind: pipeline
+type: docker
+name: node-10
+
+steps:
+  - name: test-node-10
+    image: node:10
+    commands:
+      - yarn install
+      - yarn run build # verify successful frontend builds
+      - make eslint # javascript static analysis
+      - make sasslint # linter for SASS syntax
+
+---
+
+kind: pipeline
+type: docker
+name: python-3.6
+
+steps:
+  - name: test-python-3.6
+    image: python:3.6-slim
+    commands:
+      - pip install mkdocs
+      - mkdocs build --clean
