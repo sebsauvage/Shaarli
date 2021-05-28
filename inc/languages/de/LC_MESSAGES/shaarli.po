@@ -624,7 +624,7 @@ msgstr "Bildwand ist nicht verfügbar (Miniaturansichten sind deaktiviert)."
 
 #: application/front/exceptions/WrongTokenException.php:16
 msgid "Wrong token."
-msgstr "Falsches Zeichen."
+msgstr "Falsches Token."
 
 #: application/helper/ApplicationUtils.php:165
 #, php-format
