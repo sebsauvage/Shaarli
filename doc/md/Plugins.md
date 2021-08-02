@@ -49,7 +49,6 @@ Usage of each plugin is documented in it's README file:
  * `archiveorg`: For each Shaare, add a link to the archived page on Archive.org
  * `default_colors`: Override default theme colors.
  * `isso`: Let visitor comment your shaares on permalinks with Isso.
- * [`markdown`](https://github.com/shaarli/Shaarli/blob/master/plugins/markdown/README.md): Render shaare description with Markdown syntax.
  * `piwik`: A plugin that adds Piwik tracking code to Shaarli pages.
  * [`playvideos`](https://github.com/shaarli/Shaarli/blob/master/plugins/playvideos/README.md): Add a button in the toolbar allowing to watch all videos.
  * `pubsubhubbub`: Enable PubSubHubbub feed publishing
