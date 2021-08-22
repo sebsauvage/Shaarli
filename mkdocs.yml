@@ -37,3 +37,7 @@ nav:
     - Theming: dev/Theming.md
     - Unit tests: dev/Unit-tests.md
 - Troubleshooting: Troubleshooting.md
+
+markdown_extensions:
+    - toc:
+        permalink: "#"
