@@ -131,7 +131,7 @@ class InstallController extends ShaarliVisitorController
         } else {
             $this->container->conf->set(
                 'general.title',
-                'Shared bookmarks on ' . escape(index_url($this->container->environment))
+                t('My links')
             );
         }
 
