@@ -40,7 +40,7 @@ zend_extension=xdebug.so
 
 ## Run unit tests
 
-Ensure tests pass successuflly:
+Ensure tests pass successfully:
 
 ```bash
 make test
@@ -110,7 +110,7 @@ Each image provides:
 - Shaarli PHP dependencies (OS packages)
 - test PHP dependencies (OS packages)
 - Composer
-- Tests that run inside the conatiner using a standard Linux user account (running tests as `root` would bypass permission checks and may hide issues)
+- Tests that run inside the container using a standard Linux user account (running tests as `root` would bypass permission checks and may hide issues)
 
 Build a test image:
 

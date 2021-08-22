@@ -256,7 +256,7 @@ class SessionManager
     }
 
     /**
-     * Store a variable in user session.
+     * Delete a variable in user session.
      *
      * @param string $key   Session key
      *

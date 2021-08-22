@@ -160,7 +160,7 @@ See [`.github/workflows/`](https://github.com/shaarli/Shaarli/tree/master/.githu
 
 ### Documentation
 
-[mkdocs](https://www.mkdocs.org/) is used to convert markdown documentation to HTML pages. The [public documentation](https://shaarli.readthedocs.io/en/master/) website is rendered and hosted by [readthedocs.org](https://readthedocs.org/). A copy of the documentation is also included in prebuilt [release archives](https://github.com/shaarli/Shaarli/releases) (`doc/html/` path in your Shaarli installation). To generate the HTML documentation locally, install a recent version of Python `setuptools` and run    `make doc`.
+[mkdocs](https://www.mkdocs.org/) is used to convert markdown documentation to HTML pages. The [public documentation](https://shaarli.readthedocs.io/en/master/) website is rendered and hosted by [readthedocs.org](https://readthedocs.org/). A copy of the documentation is also included in prebuilt [release archives](https://github.com/shaarli/Shaarli/releases) (`doc/html/` path in your Shaarli installation). To generate the HTML documentation locally, install a recent version of Python `setuptools` and run the `make doc`.
 
 
 ## Static analysis
@@ -169,7 +169,7 @@ Patches should try to stick to the [PHP Standard Recommendations](http://www.php
 
 - [PSR-1](http://www.php-fig.org/psr/psr-1/) - Basic Coding Standard
 - [PSR-2](http://www.php-fig.org/psr/psr-2/) - Coding Style Guide
-- [PSR-12](http://www.php-fig.org/psr/psr-12/) - Extended Coding Style  Guide
+- [PSR-12](http://www.php-fig.org/psr/psr-12/) - Extended Coding Style Guide
 
 These are enforced on pull requests using our Continuous Integration tools with [PHP Code Sniffer](https://github.com/squizlabs/PHP_CodeSniffer).
 

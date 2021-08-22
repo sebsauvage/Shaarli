@@ -59,7 +59,7 @@ abstract class ShaarliAdminController extends ShaarliVisitorController
     /**
      * Use the sessionManager to save the provided message using the proper type.
      *
-     * @param string $type successed/warnings/errors
+     * @param string $type successes/warnings/errors
      */
     protected function saveMessage(string $type, string $message): void
     {
