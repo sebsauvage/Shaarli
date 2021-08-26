@@ -32,7 +32,7 @@ class ShaarliVisitorControllerTest extends TestCase
     {
         $this->createContainer();
 
-        $this->controller = new class($this->container) extends ShaarliVisitorController
+        $this->controller = new class ($this->container) extends ShaarliVisitorController
         {
             public function assignView(string $key, $value): ShaarliVisitorController
             {

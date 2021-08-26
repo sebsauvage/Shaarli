@@ -71,5 +71,11 @@
             "Shaarli\\Updater\\": "application/updater",
             "Shaarli\\Updater\\Exception\\": "application/updater/exception"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+          "Shaarli\\Tests\\": "tests",
+          "Shaarli\\Tests\\Utils\\": "tests/utils"
+        }
     }
 }

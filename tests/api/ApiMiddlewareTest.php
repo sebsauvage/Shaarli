@@ -1,9 +1,11 @@
 <?php
+
 namespace Shaarli\Api;
 
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 use Shaarli\Plugin\PluginManager;
+use Shaarli\Tests\Utils\ReferenceLinkDB;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -32,7 +34,7 @@ class ApiMiddlewareTest extends \Shaarli\TestCase
     protected $conf;
 
     /**
-     * @var \ReferenceLinkDB instance.
+     * @var ReferenceLinkDB instance.
      */
     protected $refDB = null;
 
@@ -49,7 +51,7 @@ class ApiMiddlewareTest extends \Shaarli\TestCase
         $this->conf = new ConfigManager('tests/utils/config/configJson');
         $this->conf->set('api.secret', 'NapoleonWasALizard');
 
-        $this->refDB = new \ReferenceLinkDB();
+        $this->refDB = new ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
 
         $history = new History('sandbox/history.php');
@@ -80,7 +82,7 @@ class ApiMiddlewareTest extends \Shaarli\TestCase
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
             'REQUEST_URI' => '/echo',
-            'HTTP_AUTHORIZATION'=> 'Bearer ' . ApiUtilsTest::generateValidJwtToken('NapoleonWasALizard'),
+            'HTTP_AUTHORIZATION' => 'Bearer ' . ApiUtilsTest::generateValidJwtToken('NapoleonWasALizard'),
         ]);
         $request = Request::createFromEnvironment($env);
         $response = new Response();
@@ -196,7 +198,7 @@ class ApiMiddlewareTest extends \Shaarli\TestCase
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
             'REQUEST_URI' => '/echo',
-            'HTTP_AUTHORIZATION'=> 'Bearer jwt',
+            'HTTP_AUTHORIZATION' => 'Bearer jwt',
         ]);
         $request = Request::createFromEnvironment($env);
         $response = new Response();
@@ -219,7 +221,7 @@ class ApiMiddlewareTest extends \Shaarli\TestCase
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
             'REQUEST_URI' => '/echo',
-            'HTTP_AUTHORIZATION'=> 'PolarBearer jwt',
+            'HTTP_AUTHORIZATION' => 'PolarBearer jwt',
         ]);
         $request = Request::createFromEnvironment($env);
         $response = new Response();
@@ -245,7 +247,7 @@ class ApiMiddlewareTest extends \Shaarli\TestCase
         $env = Environment::mock([
             'REQUEST_METHOD' => 'GET',
             'REQUEST_URI' => '/echo',
-            'HTTP_AUTHORIZATION'=> 'Bearer jwt',
+            'HTTP_AUTHORIZATION' => 'Bearer jwt',
         ]);
         $request = Request::createFromEnvironment($env);
         $response = new Response();

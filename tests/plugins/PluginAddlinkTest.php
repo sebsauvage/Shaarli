@@ -1,4 +1,5 @@
 <?php
+
 namespace Shaarli\Plugin\Addlink;
 
 use Shaarli\Plugin\PluginManager;
@@ -25,7 +26,7 @@ class PluginAddlinkTest extends \Shaarli\TestCase
     public function testAddlinkHeaderLoggedIn()
     {
         $str = 'stuff';
-        $data = array($str => $str);
+        $data = [$str => $str];
         $data['_PAGE_'] = TemplatePage::LINKLIST;
         $data['_LOGGEDIN_'] = true;
         $data['_BASE_PATH_'] = '/subfolder';
@@ -34,7 +35,7 @@ class PluginAddlinkTest extends \Shaarli\TestCase
         $this->assertEquals($str, $data[$str]);
         $this->assertEquals(1, count($data['fields_toolbar']));
 
-        $data = array($str => $str);
+        $data = [$str => $str];
         $data['_PAGE_'] = $str;
         $data['_LOGGEDIN_'] = true;
         $data['_BASE_PATH_'] = '/subfolder';
@@ -50,7 +51,7 @@ class PluginAddlinkTest extends \Shaarli\TestCase
     public function testAddlinkHeaderLoggedOut()
     {
         $str = 'stuff';
-        $data = array($str => $str);
+        $data = [$str => $str];
         $data['_PAGE_'] = TemplatePage::LINKLIST;
         $data['_LOGGEDIN_'] = false;
         $data['_BASE_PATH_'] = '/subfolder';

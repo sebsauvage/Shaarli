@@ -4,14 +4,14 @@ namespace Shaarli\Api\Controllers;
 
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
+use Shaarli\TestCase;
+use Shaarli\Tests\Utils\ReferenceHistory;
 use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-require_once 'tests/utils/ReferenceHistory.php';
-
-class HistoryTest extends \Shaarli\TestCase
+class HistoryTest extends TestCase
 {
     /**
      * @var string datastore to test write operations
@@ -24,7 +24,7 @@ class HistoryTest extends \Shaarli\TestCase
     protected $conf;
 
     /**
-     * @var \ReferenceHistory instance.
+     * @var ReferenceHistory instance.
      */
     protected $refHistory = null;
 
@@ -44,7 +44,7 @@ class HistoryTest extends \Shaarli\TestCase
     protected function setUp(): void
     {
         $this->conf = new ConfigManager('tests/utils/config/configJson');
-        $this->refHistory = new \ReferenceHistory();
+        $this->refHistory = new ReferenceHistory();
         $this->refHistory->write(self::$testHistory);
         $this->container = new Container();
         $this->container['conf'] = $this->conf;

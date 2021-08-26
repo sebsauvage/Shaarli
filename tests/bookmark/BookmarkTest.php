@@ -167,7 +167,7 @@ class BookmarkTest extends TestCase
             $exception = $e;
         }
         $this->assertNotNull($exception);
-        $this->assertContainsPolyfill('- ID: '. PHP_EOL, $exception->getMessage());
+        $this->assertContainsPolyfill('- ID: ' . PHP_EOL, $exception->getMessage());
     }
 
     /**
@@ -186,7 +186,7 @@ class BookmarkTest extends TestCase
             $exception = $e;
         }
         $this->assertNotNull($exception);
-        $this->assertContainsPolyfill('- ShortUrl: '. PHP_EOL, $exception->getMessage());
+        $this->assertContainsPolyfill('- ShortUrl: ' . PHP_EOL, $exception->getMessage());
     }
 
     /**
@@ -205,7 +205,7 @@ class BookmarkTest extends TestCase
             $exception = $e;
         }
         $this->assertNotNull($exception);
-        $this->assertContainsPolyfill('- Created: '. PHP_EOL, $exception->getMessage());
+        $this->assertContainsPolyfill('- Created: ' . PHP_EOL, $exception->getMessage());
     }
 
     /**

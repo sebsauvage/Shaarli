@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Link datastore tests
  */
@@ -7,7 +8,6 @@ namespace Shaarli\Bookmark;
 
 use DateTime;
 use malkusch\lock\mutex\NoMutex;
-use ReferenceLinkDB;
 use ReflectionClass;
 use Shaarli;
 use Shaarli\Bookmark\Exception\BookmarkNotFoundException;
@@ -16,6 +16,8 @@ use Shaarli\Formatter\BookmarkMarkdownFormatter;
 use Shaarli\History;
 use Shaarli\Plugin\PluginManager;
 use Shaarli\TestCase;
+use Shaarli\Tests\Utils\FakeBookmarkService;
+use Shaarli\Tests\Utils\ReferenceLinkDB;
 
 /**
  * Unitary tests for LegacyLinkDBTest
@@ -82,19 +84,19 @@ class BookmarkFileServiceTest extends TestCase
             unlink(self::$testDatastore);
         }
 
-        if (file_exists(self::$testConf .'.json.php')) {
-            unlink(self::$testConf .'.json.php');
+        if (file_exists(self::$testConf . '.json.php')) {
+            unlink(self::$testConf . '.json.php');
         }
 
         if (file_exists(self::$testUpdates)) {
             unlink(self::$testUpdates);
         }
 
-        copy('tests/utils/config/configJson.json.php', self::$testConf .'.json.php');
+        copy('tests/utils/config/configJson.json.php', self::$testConf . '.json.php');
         $this->conf = new ConfigManager(self::$testConf);
         $this->conf->set('resource.datastore', self::$testDatastore);
         $this->conf->set('resource.updates', self::$testUpdates);
-        $this->refDB = new \ReferenceLinkDB();
+        $this->refDB = new ReferenceLinkDB();
         $this->refDB->write(self::$testDatastore);
         $this->history = new History('sandbox/history.php');
         $this->pluginManager = new PluginManager($this->conf);
@@ -123,12 +125,12 @@ class BookmarkFileServiceTest extends TestCase
             define('SHAARLI_VERSION', 'dev');
         }
 
-        $this->refDB = new \ReferenceLinkDB(true);
+        $this->refDB = new ReferenceLinkDB(true);
         $this->refDB->write(self::$testDatastore);
         $db = self::getMethod('migrate');
         $db->invokeArgs($this->privateLinkDB, []);
 
-        $db = new \FakeBookmarkService(
+        $db = new FakeBookmarkService(
             $this->conf,
             $this->pluginManager,
             $this->history,
@@ -203,7 +205,7 @@ class BookmarkFileServiceTest extends TestCase
         $this->assertEquals($updated, $bookmark->getUpdated());
 
         // reload from file
-        $this->privateLinkDB = new \FakeBookmarkService(
+        $this->privateLinkDB = new FakeBookmarkService(
             $this->conf,
             $this->pluginManager,
             $this->history,
@@ -714,7 +716,7 @@ class BookmarkFileServiceTest extends TestCase
     {
         unlink(self::$testDatastore);
         $this->assertFileNotExists(self::$testDatastore);
-        $db = new \FakeBookmarkService($this->conf, $this->pluginManager, $this->history, $this->mutex, false);
+        $db = new FakeBookmarkService($this->conf, $this->pluginManager, $this->history, $this->mutex, false);
         $this->assertFileNotExists(self::$testDatastore);
         $this->assertInstanceOf(BookmarkArray::class, $db->getBookmarks());
         $this->assertCount(0, $db->getBookmarks());

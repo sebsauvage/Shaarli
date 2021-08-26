@@ -2,7 +2,7 @@
 
 {#
 The entry point for the ReadTheDocs Theme.
- 
+
 Any theme customisations should override this file to redefine blocks defined in
 the various templates. The custom theme should only need to define a main.html
 which `{% extends "base.html" %}` and defines various blocks which will replace
@@ -14,7 +14,7 @@ the blocks defined in base.html and its included child templates.
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{%- if 'media.readthedocs.org' not in config.extra_css[0] %}
+{%- if config.extra_css|length and 'media.readthedocs.org' not in config.extra_css[0] %}
 <meta name="robots" content="noindex, nofollow">
 {%- endif %}
 

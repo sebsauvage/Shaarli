@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Link datastore tests
  */
@@ -6,14 +7,10 @@
 namespace Shaarli\Legacy;
 
 use DateTime;
-use ReferenceLinkDB;
 use ReflectionClass;
 use Shaarli;
 use Shaarli\Bookmark\Bookmark;
-
-require_once 'application/Utils.php';
-require_once 'tests/utils/ReferenceLinkDB.php';
-
+use Shaarli\Tests\Utils\ReferenceLinkDB;
 
 /**
  * Unitary tests for LegacyLinkDBTest
@@ -118,7 +115,7 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
         $this->assertFileNotExists(self::$testDatastore);
 
         $checkDB = self::getMethod('check');
-        $checkDB->invokeArgs($linkDB, array());
+        $checkDB->invokeArgs($linkDB, []);
         $this->assertFileExists(self::$testDatastore);
 
         // ensure the correct data has been written
@@ -135,7 +132,7 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
         $this->assertGreaterThan(0, $datastoreSize);
 
         $checkDB = self::getMethod('check');
-        $checkDB->invokeArgs($linkDB, array());
+        $checkDB->invokeArgs($linkDB, []);
 
         // ensure the datastore is left unmodified
         $this->assertEquals(
@@ -185,7 +182,7 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
         $testDB = new LegacyLinkDB(self::$testDatastore, true, false);
         $dbSize = sizeof($testDB);
 
-        $link = array(
+        $link = [
             'id' => 43,
             'title' => 'an additional link',
             'url' => 'http://dum.my',
@@ -193,7 +190,7 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
             'private' => 0,
             'created' => DateTime::createFromFormat(Bookmark::LINK_DATE_FORMAT, '20150518_190000'),
             'tags' => 'unit test'
-        );
+        ];
         $testDB[$link['id']] = $link;
         $testDB->save('tests');
 
@@ -239,12 +236,12 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
     public function testDays()
     {
         $this->assertEquals(
-            array('20100309', '20100310', '20121206', '20121207', '20130614', '20150310'),
+            ['20100309', '20100310', '20121206', '20121207', '20130614', '20150310'],
             self::$publicLinkDB->days()
         );
 
         $this->assertEquals(
-            array('20100309', '20100310', '20121206', '20121207', '20130614', '20141125', '20150310'),
+            ['20100309', '20100310', '20121206', '20121207', '20130614', '20141125', '20150310'],
             self::$privateLinkDB->days()
         );
     }
@@ -280,7 +277,7 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
     public function testAllTags()
     {
         $this->assertEquals(
-            array(
+            [
                 'web' => 3,
                 'cartoon' => 2,
                 'gnu' => 2,
@@ -300,12 +297,12 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
                 'coding-style' => 1,
                 'quality' => 1,
                 'standards' => 1,
-            ),
+            ],
             self::$publicLinkDB->linksCountPerTag()
         );
 
         $this->assertEquals(
-            array(
+            [
                 'web' => 4,
                 'cartoon' => 3,
                 'gnu' => 2,
@@ -332,11 +329,11 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
                 'coding-style' => 1,
                 'quality' => 1,
                 'standards' => 1,
-            ),
+            ],
             self::$privateLinkDB->linksCountPerTag()
         );
         $this->assertEquals(
-            array(
+            [
                 'web' => 4,
                 'cartoon' => 2,
                 'gnu' => 1,
@@ -349,17 +346,17 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
                 'Mercurial' => 1,
                 '.hidden' => 1,
                 'hashtag' => 1,
-            ),
+            ],
             self::$privateLinkDB->linksCountPerTag(['web'])
         );
         $this->assertEquals(
-            array(
+            [
                 'web' => 1,
                 'html' => 1,
                 'w3c' => 1,
                 'css' => 1,
                 'Mercurial' => 1,
-            ),
+            ],
             self::$privateLinkDB->linksCountPerTag(['web'], 'private')
         );
     }
@@ -370,7 +367,7 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
     public function testFilterString()
     {
         $tags = 'dev cartoon';
-        $request = array('searchtags' => $tags);
+        $request = ['searchtags' => $tags];
         $this->assertEquals(
             2,
             count(self::$privateLinkDB->filterSearch($request, true, false))
@@ -382,8 +379,8 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
      */
     public function testFilterArray()
     {
-        $tags = array('dev', 'cartoon');
-        $request = array('searchtags' => $tags);
+        $tags = ['dev', 'cartoon'];
+        $request = ['searchtags' => $tags];
         $this->assertEquals(
             2,
             count(self::$privateLinkDB->filterSearch($request, true, false))
@@ -397,7 +394,7 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
     public function testHiddenTags()
     {
         $tags = '.hidden';
-        $request = array('searchtags' => $tags);
+        $request = ['searchtags' => $tags];
         $this->assertEquals(
             1,
             count(self::$privateLinkDB->filterSearch($request, true, false))
@@ -639,7 +636,7 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
         for ($i = 0; $i < 4; ++$i) {
             $linkDB[$nextId + $i] = [
                 'id' => $nextId + $i,
-                'url' => 'http://'. $i,
+                'url' => 'http://' . $i,
                 'created' => $creation,
                 'title' => true,
                 'description' => true,
@@ -657,7 +654,7 @@ class LegacyLinkDBTest extends \Shaarli\TestCase
                     continue;
                 }
                 $this->assertEquals($nextId + $count, $link['id']);
-                $this->assertEquals('http://'. $count, $link['url']);
+                $this->assertEquals('http://' . $count, $link['url']);
                 if (--$count < 0) {
                     break;
                 }

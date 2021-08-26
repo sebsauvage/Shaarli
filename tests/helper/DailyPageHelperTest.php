@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shaarli\Helper;
 
+use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Shaarli\Bookmark\Bookmark;
@@ -147,7 +148,8 @@ class DailyPageHelperTest extends TestCase
     /**
      * @dataProvider getRssLengthsByType
      */
-    public function testGeRssLengthsByType(string $type): void {
+    public function testGeRssLengthsByType(string $type): void
+    {
         $length = DailyPageHelper::getRssLengthByType($type);
 
         static::assertIsInt($length);
@@ -208,31 +210,31 @@ class DailyPageHelperTest extends TestCase
     public function getRequestedDateTimes(): array
     {
         return [
-            [DailyPageHelper::DAY, '20201013', null, new \DateTime('2020-10-13')],
+            [DailyPageHelper::DAY, '20201013', null, new DateTime('2020-10-13')],
             [
                 DailyPageHelper::DAY,
                 '',
-                (new Bookmark())->setCreated($date = new \DateTime('2020-10-13 12:05:31')),
+                (new Bookmark())->setCreated($date = new DateTime('2020-10-13 12:05:31')),
                 $date,
             ],
-            [DailyPageHelper::DAY, '', null, new \DateTime()],
-            [DailyPageHelper::WEEK, '202030', null, new \DateTime('2020-07-20')],
+            [DailyPageHelper::DAY, '', null, new DateTime()],
+            [DailyPageHelper::WEEK, '202030', null, new DateTime('2020-07-20')],
             [
                 DailyPageHelper::WEEK,
                 '',
-                (new Bookmark())->setCreated($date = new \DateTime('2020-10-13 12:05:31')),
-                new \DateTime('2020-10-13'),
+                (new Bookmark())->setCreated($date = new DateTime('2020-10-13 12:05:31')),
+                new DateTime('2020-10-13'),
             ],
-            [DailyPageHelper::WEEK, '', null, new \DateTime(), 'Ym'],
-            [DailyPageHelper::MONTH, '202008', null, new \DateTime('2020-08-01'), 'Ym'],
+            [DailyPageHelper::WEEK, '', null, new DateTime(), 'Ym'],
+            [DailyPageHelper::MONTH, '202008', null, new DateTime('2020-08-01'), 'Ym'],
             [
                 DailyPageHelper::MONTH,
                 '',
-                (new Bookmark())->setCreated($date = new \DateTime('2020-10-13 12:05:31')),
-                new \DateTime('2020-10-13'),
+                (new Bookmark())->setCreated($date = new DateTime('2020-10-13 12:05:31')),
+                new DateTime('2020-10-13'),
                 'Ym'
             ],
-            [DailyPageHelper::MONTH, '', null, new \DateTime(), 'Ym'],
+            [DailyPageHelper::MONTH, '', null, new DateTime(), 'Ym'],
         ];
     }
 
@@ -254,9 +256,9 @@ class DailyPageHelperTest extends TestCase
     public function getStartDatesByType(): array
     {
         return [
-            [DailyPageHelper::DAY, new DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-09 00:00:00')],
-            [DailyPageHelper::WEEK, new DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-05 00:00:00')],
-            [DailyPageHelper::MONTH, new DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-01 00:00:00')],
+            [DailyPageHelper::DAY, new DateTimeImmutable('2020-10-09 04:05:06'), new DateTime('2020-10-09 00:00:00')],
+            [DailyPageHelper::WEEK, new DateTimeImmutable('2020-10-09 04:05:06'), new DateTime('2020-10-05 00:00:00')],
+            [DailyPageHelper::MONTH, new DateTimeImmutable('2020-10-09 04:05:06'), new DateTime('2020-10-01 00:00:00')],
         ];
     }
 
@@ -266,9 +268,9 @@ class DailyPageHelperTest extends TestCase
     public function getEndDatesByType(): array
     {
         return [
-            [DailyPageHelper::DAY, new DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-09 23:59:59')],
-            [DailyPageHelper::WEEK, new DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-11 23:59:59')],
-            [DailyPageHelper::MONTH, new DateTimeImmutable('2020-10-09 04:05:06'), new \DateTime('2020-10-31 23:59:59')],
+            [DailyPageHelper::DAY, new DateTimeImmutable('2020-10-09 04:05:06'), new DateTime('2020-10-09 23:59:59')],
+            [DailyPageHelper::WEEK, new DateTimeImmutable('2020-10-09 04:05:06'), new DateTime('2020-10-11 23:59:59')],
+            [DailyPageHelper::MONTH, new DateTimeImmutable('2020-10-09 04:05:06'), new DateTime('2020-10-31 23:59:59')],
         ];
     }
 
@@ -321,20 +323,20 @@ class DailyPageHelperTest extends TestCase
             [
                 DailyPageHelper::DAY,
                 new DateTimeImmutable('2020-10-09 04:05:06'),
-                new \DateTime('2020-10-09 00:00:00'),
-                new \DateTime('2020-10-09 23:59:59'),
+                new DateTime('2020-10-09 00:00:00'),
+                new DateTime('2020-10-09 23:59:59'),
             ],
             [
                 DailyPageHelper::WEEK,
                 new DateTimeImmutable('2020-10-09 04:05:06'),
-                new \DateTime('2020-10-05 00:00:00'),
-                new \DateTime('2020-10-11 23:59:59'),
+                new DateTime('2020-10-05 00:00:00'),
+                new DateTime('2020-10-11 23:59:59'),
             ],
             [
                 DailyPageHelper::MONTH,
                 new DateTimeImmutable('2020-10-09 04:05:06'),
-                new \DateTime('2020-10-01 00:00:00'),
-                new \DateTime('2020-10-31 23:59:59'),
+                new DateTime('2020-10-01 00:00:00'),
+                new DateTime('2020-10-31 23:59:59'),
             ],
         ];
     }

@@ -130,12 +130,12 @@ class TagCloudControllerTest extends TestCase
             ->method('executeHooks')
             ->withConsecutive(['render_tagcloud'])
             ->willReturnCallback(function (string $hook, array $data, array $param): array {
-               if ('render_tagcloud' === $hook) {
-                   static::assertSame('ghi@def@', $data['search_tags']);
-                   static::assertCount(1, $data['tags']);
+                if ('render_tagcloud' === $hook) {
+                    static::assertSame('ghi@def@', $data['search_tags']);
+                    static::assertCount(1, $data['tags']);
 
-                   static::assertArrayHasKey('loggedin', $param);
-               }
+                    static::assertArrayHasKey('loggedin', $param);
+                }
 
                 return $data;
             })

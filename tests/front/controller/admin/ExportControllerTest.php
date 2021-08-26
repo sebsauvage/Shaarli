@@ -80,7 +80,10 @@ class ExportControllerTest extends TestCase
                     string $selection,
                     bool $prependNoteUrl,
                     string $indexUrl
-                ) use ($parameters, $bookmarks): array {
+                ) use (
+                    $parameters,
+                    $bookmarks
+                ): array {
                     static::assertInstanceOf(BookmarkRawFormatter::class, $formatter);
                     static::assertSame($parameters['selection'], $selection);
                     static::assertTrue($prependNoteUrl);

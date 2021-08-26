@@ -3,11 +3,12 @@
 namespace Shaarli\Bookmark;
 
 use malkusch\lock\mutex\NoMutex;
-use ReferenceLinkDB;
 use Shaarli\Config\ConfigManager;
 use Shaarli\History;
 use Shaarli\Plugin\PluginManager;
 use Shaarli\TestCase;
+use Shaarli\Tests\Utils\FakeBookmarkService;
+use Shaarli\Tests\Utils\ReferenceLinkDB;
 
 /**
  * Class BookmarkFilterTest.
@@ -46,10 +47,10 @@ class BookmarkFilterTest extends TestCase
         $conf = new ConfigManager('tests/utils/config/configJson');
         $conf->set('resource.datastore', self::$testDatastore);
         static::$pluginManager = new PluginManager($conf);
-        self::$refDB = new \ReferenceLinkDB();
+        self::$refDB = new ReferenceLinkDB();
         self::$refDB->write(self::$testDatastore);
         $history = new History('sandbox/history.php');
-        self::$bookmarkService = new \FakeBookmarkService($conf, static::$pluginManager, $history, $mutex, true);
+        self::$bookmarkService = new FakeBookmarkService($conf, static::$pluginManager, $history, $mutex, true);
         self::$linkFilter = new BookmarkFilter(self::$bookmarkService->getBookmarks(), $conf, static::$pluginManager);
     }
 
@@ -417,28 +418,28 @@ class BookmarkFilterTest extends TestCase
             1,
             count(self::$linkFilter->filter(
                 BookmarkFilter::$FILTER_TAG | BookmarkFilter::$FILTER_TEXT,
-                array($tags, $terms)
+                [$tags, $terms]
             ))
         );
         $this->assertEquals(
             2,
             count(self::$linkFilter->filter(
                 BookmarkFilter::$FILTER_TAG | BookmarkFilter::$FILTER_TEXT,
-                array('', $terms)
+                ['', $terms]
             ))
         );
         $this->assertEquals(
             1,
             count(self::$linkFilter->filter(
                 BookmarkFilter::$FILTER_TAG | BookmarkFilter::$FILTER_TEXT,
-                array(false, 'PSR-2')
+                [false, 'PSR-2']
             ))
         );
         $this->assertEquals(
             1,
             count(self::$linkFilter->filter(
                 BookmarkFilter::$FILTER_TAG | BookmarkFilter::$FILTER_TEXT,
-                array($tags, '')
+                [$tags, '']
             ))
         );
         $this->assertEquals(

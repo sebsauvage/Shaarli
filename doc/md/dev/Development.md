@@ -143,17 +143,19 @@ A [`Makefile`](https://github.com/shaarli/Shaarli/blob/master/Makefile) is avail
 
 ### Continuous Integration
 
-[Travis CI](http://docs.travis-ci.com/) is a Continuous Integration build server, that runs a build:
+[Github Actions](https://github.com/shaarli/Shaarli/actions) is a Continuous Integration build server, that runs a build:
 
-- each time a commit is merged to the mainline (`master` branch)
+- each time a commit is pushed to any branch
 - each time a Pull Request is submitted or updated
 
-After all jobs have finished, Travis returns the results to GitHub:
+After all jobs have finished, Github Actions returns the results to GitHub:
 
-- a status icon represents the result for the `master` branch: [![](https://api.travis-ci.org/shaarli/Shaarli.svg)](https://travis-ci.org/shaarli/Shaarli)
-- Pull Requests are updated with the Travis build result.
+- a status icon represents the result for the `master` branch: [![Build Status](https://github.com/shaarli/Shaarli/actions/workflows/ci.yml/badge.svg)](https://github.com/shaarli/Shaarli/actions)
+- Pull Requests are updated with the Github Actions build result.
 
-See [`.travis.yml`](https://github.com/shaarli/Shaarli/blob/master/.travis.yml).
+Github Actions is also used to build and push [Docker](../Docker.md) images to <https://hub.docker.com/r/shaarli/shaarli> for the `master` branch and on every git `tag`/[release](https://github.com/shaarli/Shaarli/releases).
+
+See [`.github/workflows/`](https://github.com/shaarli/Shaarli/tree/master/.github/workflows).
 
 
 ### Documentation
@@ -169,13 +171,11 @@ Patches should try to stick to the [PHP Standard Recommendations](http://www.php
 - [PSR-2](http://www.php-fig.org/psr/psr-2/) - Coding Style Guide
 - [PSR-12](http://www.php-fig.org/psr/psr-12/) - Extended Coding Style  Guide
 
-These are enforced on pull requests using our Continuous Integration tools.
+These are enforced on pull requests using our Continuous Integration tools with [PHP Code Sniffer](https://github.com/squizlabs/PHP_CodeSniffer).
 
-**Work in progress:** Static analysis is currently being discussed here: in [#95 - Fix coding style (static analysis)](https://github.com/shaarli/Shaarli/issues/95), [#130 - Continuous Integration tools & features](https://github.com/shaarli/Shaarli/issues/130)
-
-Static analysis tools can be installed with Composer, and used through Shaarli's [Makefile](https://github.com/shaarli/Shaarli/blob/master/Makefile).
+Static analysis tools are installed with Composer dependencies, and used through Shaarli's [Makefile](https://github.com/shaarli/Shaarli/blob/master/Makefile) with `make code_sniffer`.
 
 For an overview of the available features, see:
 
 - [Code quality: Makefile to run static code checkers](https://github.com/shaarli/Shaarli/pull/124) (#124)
-- [Run PHPCS against different coding standards](https://github.com/shaarli/Shaarli/pull/276) (#276)
+- [Apply PHP Code Sniffer to Shaarli code base](https://github.com/shaarli/Shaarli/pull/1635) (#1635)

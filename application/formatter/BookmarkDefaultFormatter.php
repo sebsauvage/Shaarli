@@ -12,8 +12,8 @@ namespace Shaarli\Formatter;
  */
 class BookmarkDefaultFormatter extends BookmarkFormatter
 {
-    public const SEARCH_HIGHLIGHT_OPEN = '||O_HIGHLIGHT';
-    public const SEARCH_HIGHLIGHT_CLOSE = '||C_HIGHLIGHT';
+    public const SEARCH_HIGHLIGHT_OPEN = 'SHAARLI_O_HIGHLIGHT';
+    public const SEARCH_HIGHLIGHT_CLOSE = 'SHAARLI_C_HIGHLIGHT';
 
     /**
      * @inheritdoc

@@ -16,7 +16,7 @@ class ThemeUtilsTest extends \Shaarli\TestCase
     {
         $themes = ['theme1', 'default', 'Bl1p_- bL0p'];
         foreach ($themes as $theme) {
-            mkdir('sandbox/tpl/'. $theme, 0755, true);
+            mkdir('sandbox/tpl/' . $theme, 0755, true);
         }
 
         // include a file which should be ignored
@@ -29,7 +29,7 @@ class ThemeUtilsTest extends \Shaarli\TestCase
         $this->assertFalse(in_array('supertheme', $res));
 
         foreach ($themes as $theme) {
-            rmdir('sandbox/tpl/'. $theme);
+            rmdir('sandbox/tpl/' . $theme);
         }
         unlink('sandbox/tpl/supertheme');
         rmdir('sandbox/tpl');

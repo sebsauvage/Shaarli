@@ -59,10 +59,15 @@ Extension | Required? | Usage
 [`php-json`](http://php.net/manual/en/book.json.php) | required | configuration parsing
 [`php-simplexml`](https://www.php.net/manual/en/book.simplexml.php) | required | REST API (Slim framework)
 [`php-mbstring`](http://php.net/manual/en/book.mbstring.php) | CentOS, Fedora, RHEL, Windows, some hosting providers | multibyte (Unicode) string support
+[`php-ctype`](https://www.php.net/manual/en/book.ctype.php) | required (bundled with most PHP installation) | Type checking
+[`php-iconv`](https://www.php.net/manual/en/book.iconv.php) | required (bundled with most PHP installation) | Character encoding used in translations
+[`php-session`](https://www.php.net/manual/en/book.session.php) | required (bundled with most PHP installation) | User session
+[`php-zlib`](https://www.php.net/manual/en/book.zlib.php) | required (bundled with most PHP installation) | Datastore I/O compression
 [`php-gd`](http://php.net/manual/en/book.image.php) | optional | required to use thumbnails
 [`php-intl`](http://php.net/manual/en/book.intl.php) | optional | localized text sorting (e.g. `e->è->f`)
 [`php-curl`](http://php.net/manual/en/book.curl.php) | optional | using cURL for fetching webpages and thumbnails in a more robust way
 [`php-gettext`](http://php.net/manual/en/book.gettext.php) | optional | Use the translation system in gettext mode (faster)
+[`php-ldap`](https://www.php.net/manual/en/book.ldap.php) | optional | LDAP login support
 
 Some [plugins](Plugins.md) may require additional configuration.
 
@@ -300,6 +305,7 @@ server {
     client_max_body_size 100m;
 
     # relative path to shaarli from the root of the webserver
+    # if shaarli is installed in a subdirectory of the main domain, edit the location accordingly
     location / {
         # default index file when no file URI is requested
         index index.php;

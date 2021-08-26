@@ -25,26 +25,26 @@ class IndexUrlTestWithConstant extends TestCase
         $this->assertEquals(
             'http://other-host.tld/subfolder/',
             index_url(
-                array(
+                [
                     'HTTPS' => 'Off',
                     'SERVER_NAME' => 'host.tld',
                     'SERVER_PORT' => '80',
                     'SCRIPT_NAME' => '/index.php',
                     'REQUEST_URI' => '/picture-wall',
-                )
+                ]
             )
         );
 
         $this->assertEquals(
             'http://other-host.tld/subfolder/',
             index_url(
-                array(
+                [
                     'HTTPS' => 'Off',
                     'SERVER_NAME' => 'host.tld',
                     'SERVER_PORT' => '80',
                     'SCRIPT_NAME' => '/admin/index.php',
                     'REQUEST_URI' => '/admin/picture-wall',
-                )
+                ]
             )
         );
     }

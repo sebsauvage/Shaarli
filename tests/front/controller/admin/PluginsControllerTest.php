@@ -16,7 +16,7 @@ class PluginsControllerTest extends TestCase
 {
     use FrontAdminControllerMockHelper;
 
-    const PLUGIN_NAMES = ['plugin1', 'plugin2', 'plugin3', 'plugin4'];
+    protected const PLUGIN_NAMES = ['plugin1', 'plugin2', 'plugin3', 'plugin4'];
 
     /** @var PluginsController */
     protected $controller;
@@ -29,13 +29,17 @@ class PluginsControllerTest extends TestCase
 
         mkdir($path = __DIR__ . '/folder');
         PluginManager::$PLUGINS_PATH = $path;
-        array_map(function (string $plugin) use ($path) { touch($path . '/' . $plugin); }, static::PLUGIN_NAMES);
+        array_map(function (string $plugin) use ($path) {
+            touch($path . '/' . $plugin);
+        }, static::PLUGIN_NAMES);
     }
 
     public function tearDown(): void
     {
         $path = __DIR__ . '/folder';
-        array_map(function (string $plugin) use ($path) { unlink($path . '/' . $plugin); }, static::PLUGIN_NAMES);
+        array_map(function (string $plugin) use ($path) {
+            unlink($path . '/' . $plugin);
+        }, static::PLUGIN_NAMES);
         rmdir($path);
     }
 

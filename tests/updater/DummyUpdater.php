@@ -1,5 +1,6 @@
 <?php
-namespace Shaarli\Updater;
+
+namespace Shaarli\Tests\updater;
 
 use Exception;
 use ReflectionClass;
@@ -7,6 +8,7 @@ use ReflectionMethod;
 use Shaarli\Bookmark\BookmarkFileService;
 use Shaarli\Bookmark\LinkDB;
 use Shaarli\Config\ConfigManager;
+use Shaarli\Updater\Updater;
 
 /**
  * Class DummyUpdater.

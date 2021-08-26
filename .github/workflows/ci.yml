@@ -1,0 +1,99 @@
+name: Shaarli CI
+on: [push, pull_request]
+jobs:
+  php:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        php-versions: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1']
+    name: PHP ${{ matrix.php-versions }}
+    steps:
+      - name: Set locales
+        run: |
+          sudo locale-gen de_DE.utf8 && \
+          sudo locale-gen en_US.utf8 && \
+          sudo locale-gen fr_FR.utf8 && \
+          sudo dpkg-reconfigure --frontend=noninteractive locales
+
+      - name: Install Gettext
+        run: sudo apt-get install gettext
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: gd, xml, curl, mbstring, intl, gettext
+          tools: composer:v2
+
+      - name: Check PHP version
+        run: php -v
+
+      - name: Setup Composer from PHP version + update
+        run: composer config --unset platform && composer config platform.php ${{ matrix.php-versions }}
+
+      - name: Update dependencies for PHP 8.x
+        if: ${{ matrix.php-versions == '8.0' || matrix.php-versions == '8.1' }}
+        run: |
+          composer update --ignore-platform-req=php && \
+          composer remove --dev --ignore-platform-req=php phpunit/phpunit && \
+          composer require --dev --ignore-platform-req=php phpunit/php-text-template ^2.0 && \
+          composer require --dev --ignore-platform-req=php phpunit/phpunit ^9.0
+
+      - name: Update dependencies for PHP 7.x
+        if: ${{ matrix.php-versions != '8.0' && matrix.php-versions != '8.1' }}
+        run: composer update
+
+      - name: Clean up
+        run: make clean
+
+      - name: Check permissions
+        run: make check_permissions
+
+      - name: Run PHPCS
+        run: make code_sniffer
+
+      - name: Run tests
+        run: make all_tests
+
+  node:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - name: Yarn install
+        run: yarn install
+
+      - name: Verify successful frontend builds
+        run: yarn run build
+
+      - name: JS static analysis
+        run: make eslint
+
+      - name: Linter for SASS syntax
+        run: make sasslint
+
+  python:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          node-version: 3.8
+
+      - name: Install dependencies
+        run: pip install mkdocs
+
+      - name: Build documentation
+        run: mkdocs build --clean

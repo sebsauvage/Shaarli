@@ -74,7 +74,7 @@ class BookmarkFileService implements BookmarkServiceInterface
         $this->isLoggedIn = $isLoggedIn;
 
         if (!$this->isLoggedIn && $this->conf->get('privacy.hide_public_links', false)) {
-            $this->bookmarks = [];
+            $this->bookmarks = new BookmarkArray();
         } else {
             try {
                 $this->bookmarks = $this->bookmarksIO->read();
