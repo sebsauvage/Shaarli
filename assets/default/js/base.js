@@ -47,14 +47,14 @@ function createAwesompleteInstance(element, separator, tags = []) {
 
   // Tags are separated by separator. Ignore leading search flags
   awesome.filter = (text, input) => {
-    let filter_func = Awesomplete.FILTER_CONTAINS;
-    let input_flagged = input.replace( /^[\-\~\+]/, '' );
-    if (input !== input_flagged) {
-       input = input_flagged;
-       filter_func = Awesomplete.FILTER_STARTSWITH;
+    let filterFunc = Awesomplete.FILTER_CONTAINS;
+    const inputFlagged = input.replace(/^[-~+]/, '');
+    if (input !== inputFlagged) {
+      input = inputFlagged;
+      filterFunc = Awesomplete.FILTER_STARTSWITH;
     }
 
-    return filter_func(text, input.match(new RegExp(`[^${separator}]*$`))[0]);
+    return filterFunc(text, input.match(new RegExp(`[^${separator}]*$`))[0]);
   };
 
   // Insert new selected tag in the input
