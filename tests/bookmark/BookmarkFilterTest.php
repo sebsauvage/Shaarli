@@ -126,6 +126,11 @@ class BookmarkFilterTest extends TestCase
 
         $this->assertEquals(
             4,
+            count(self::$linkFilter->filter(BookmarkFilter::$FILTER_TAG, '+web', false))
+        );
+
+        $this->assertEquals(
+            4,
             count(self::$linkFilter->filter(BookmarkFilter::$FILTER_TAG, 'web', false, 'all'))
         );
 
@@ -448,6 +453,37 @@ class BookmarkFilterTest extends TestCase
                 BookmarkFilter::$FILTER_TAG | BookmarkFilter::$FILTER_TEXT,
                 ''
             ))
+        );
+    }
+
+    /**
+     * Tag search with OR optional tags.
+     */
+    public function testTagFilterOr()
+    {
+        $this->assertEquals(
+            5,
+            count(self::$linkFilter->filter(BookmarkFilter::$FILTER_TAG, '~cartoon ~web'))
+        );
+
+        $this->assertEquals(
+            6,
+            count(self::$linkFilter->filter(BookmarkFilter::$FILTER_TAG, '~c*t*n ~st*'))
+        );
+
+        $this->assertEquals(
+            2,
+            count(self::$linkFilter->filter(BookmarkFilter::$FILTER_TAG, '~cartoon ~web dev'))
+        );
+
+        $this->assertEquals(
+            2,
+            count(self::$linkFilter->filter(BookmarkFilter::$FILTER_TAG, '~cartoon ~web +dev'))
+        );
+
+        $this->assertEquals(
+            4,
+            count(self::$linkFilter->filter(BookmarkFilter::$FILTER_TAG, '~cartoon ~web -samba'))
         );
     }
 

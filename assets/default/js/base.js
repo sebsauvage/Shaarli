@@ -45,8 +45,18 @@ function refreshToken(basePath, callback) {
 function createAwesompleteInstance(element, separator, tags = []) {
   const awesome = new Awesomplete(Awesomplete.$(element));
 
-  // Tags are separated by separator
-  awesome.filter = (text, input) => Awesomplete.FILTER_CONTAINS(text, input.match(new RegExp(`[^${separator}]*$`))[0]);
+  // Tags are separated by separator. Ignore leading search flags
+  awesome.filter = (text, input) => {
+    let filter_func = Awesomplete.FILTER_CONTAINS;
+    let input_flagged = input.replace( /^[\-\~\+]/, '' );
+    if (input !== input_flagged) {
+       input = input_flagged;
+       filter_func = Awesomplete.FILTER_STARTSWITH;
+    }
+
+    return filter_func(text, input.match(new RegExp(`[^${separator}]*$`))[0]);
+  };
+
   // Insert new selected tag in the input
   awesome.replace = (text) => {
     const before = awesome.input.value.match(new RegExp(`^.+${separator}+|`))[0];

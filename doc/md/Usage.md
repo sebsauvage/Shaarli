@@ -49,19 +49,21 @@ Shaarli can be used as a minimal blog, notepad, pastebin...: While adding or edi
 ### Search
 
 - **Plain text search:** Use `Search text` to search in all fields of all Shaares (Title, URL, Description...). Use double-quotes (example `"exact search"`) to search for the exact expression.
-- **Tags search:** `Filter by tags` allow only displaying Shaares tagged with one or multiple tags (use space to separate tags).
+- **Tags search:** `Filter by tags` allow only displaying Shaares tagged with one or multiple tags (use space to separate tags). A plus sign `+` is optional and will restrict suggested tags to only those starting with the string (example: `pr` will hint `apron` and `printer` but `+pr` will only hint printer).
 - **Hidden tags:** tags starting with a dot `.` (example `.secret`) are private. They can only be seen and searched when logged in.
 - **Exclude text/tags:** Use the `-` operator before a word or tag to exclude Shaares matching this word from search results (`NOT` operator).
+- **Optional tags:** Use the `~` operator before multiple tags to search for any one of them (`OR` operator).
+- **Wildcard tag search:** An asterisk (`*`) can be used as a wildcard and will match any number of characters. Wildcards can appear in the middle of a search term or at the end (example: pro\*in\* will match programming and protein).
 - **Untagged links:** Shaares without tags can be searched by clicking the `untagged` toggle button top left of the Shaares list (only when logged in).
 
-Both exclude patterns and exact searches can be combined with normal searches (example `"exact search" term otherterm -notthis "very exact" stuff -notagain`). Only AND (and NOT) search is currrently supported.
+Both exclude patterns and exact searches can be combined with normal searches (example `"exact search" term otherterm -notthis "very exact" stuff -notagain`). Only AND (and NOT) text search is currently supported.
 
-Active search terms are displayed on top of the link list. To remove terms/tags from the curent search, click the `x` next to any of them, or simply clear text/tag search fields.
+Active search terms are displayed on top of the link list. To remove terms/tags from the current search, click the `x` next to any of them, or simply clear text/tag search fields.
 
 
 ### Tag cloud
 
-The `Tag cloud` page diplays a "cloud" or list view of all tags in your Shaarli (most frequently used tags are displayed with a bigger font size)
+The `Tag cloud` page displays a "cloud" or list view of all tags in your Shaarli (most frequently used tags are displayed with a bigger font size)
 
 
 - **Tags list:** click on `Most used` or `Alphabetical` to display tags as a list. You can also edit/delete tags for this page.
@@ -76,7 +78,7 @@ RSS/ATOM feeds feeds are available (in ATOM with `/feed/atom` and RSS with `/fee
 
 - **Filtering RSS feeds:** RSS feeds and picture wall can also be restricted to only return items matching a text/tag search. For example, search for `photography` (text or tags) in Shaarli, then click the `RSS Feed` button. A feed with only matching results is displayed.
 - Add the `&nb` parameter in feed URLs to specify the number of Shaares you want in a feed (default if not specified: `50`). The keyword `all` is available if you want everything.
-- Add the `&permalinks` parameter in feed URLs to point permalinks to the corresponding shaarly entry/link instead of the direct, Shaare URL attribute
+- Add the `&permalinks` parameter in feed URLs to point permalinks to the corresponding Shaarli entry/link instead of the direct, Shaare URL attribute
 
 ![](images/rss-filter-1.png) ![](images/rss-filter-2.png)
 
