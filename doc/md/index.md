@@ -1,6 +1,6 @@
-# <img src="images/icon.png" width="20px" height="20px"> Shaarli
+# Shaarli
 
-The personal, minimalist, super-fast, database free, bookmarking service.
+<img src="images/icon.png" width="16px" height="16px"> The personal, minimalist, super-fast, database free, bookmarking service.
 
 Do you want to share the links you discover? Shaarli is a minimalist bookmark manager and link sharing service that you can install on your own server. It is designed to be personal (single-user), fast and handy.
 
