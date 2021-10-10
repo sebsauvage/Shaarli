@@ -85,6 +85,7 @@ Some settings can be configured directly from a web browser by accesing the `Too
         "hide_timestamps": false,
         "open_shaarli": false,
     },
+    "formatter": "markdown",
     "updates": {
         "check_updates": true,
         "check_updates_branch": "stable",
