@@ -85,16 +85,6 @@ Some settings can be configured directly from a web browser by accesing the `Too
         "hide_timestamps": false,
         "open_shaarli": false,
     },
-    "general": {
-        "header_link": "?",
-        "links_per_page": 20,
-        "enabled_plugins": [
-            "markdown",
-            "wallabag"
-        ],
-        "timezone": "Europe\/Paris",
-        "title": "My Shaarli"
-    },
     "updates": {
         "check_updates": true,
         "check_updates_branch": "stable",
