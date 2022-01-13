@@ -6,5 +6,4 @@ namespace Shaarli\Bookmark\Exception;
 
 class DatastoreNotInitializedException extends \Exception
 {
-
 }

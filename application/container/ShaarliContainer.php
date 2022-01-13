@@ -51,5 +51,4 @@ use Slim\Container;
  */
 class ShaarliContainer extends Container
 {
-
 }

@@ -11,5 +11,4 @@ namespace Shaarli\Front\Exception;
  */
 class UnauthorizedException extends \Exception
 {
-
 }

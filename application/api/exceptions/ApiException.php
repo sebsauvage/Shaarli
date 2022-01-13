@@ -12,7 +12,6 @@ use Slim\Http\Response;
  */
 abstract class ApiException extends \Exception
 {
-
     /**
      * @var Response instance from Slim.
      */

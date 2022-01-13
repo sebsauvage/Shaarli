@@ -6,5 +6,4 @@ namespace Shaarli\Front\Exception;
 
 class CantLoginException extends \Exception
 {
-
 }
