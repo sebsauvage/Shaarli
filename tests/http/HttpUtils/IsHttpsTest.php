@@ -9,7 +9,6 @@ namespace Shaarli\Http;
  */
 class IsHttpsTest extends \Shaarli\TestCase
 {
-
     /**
      * Test is_https with HTTPS values.
      */

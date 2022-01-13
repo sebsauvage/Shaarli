@@ -7,7 +7,6 @@ namespace Shaarli\Http;
  */
 class GetIpAdressFromProxyTest extends \Shaarli\TestCase
 {
-
     /**
      * Test without proxy
      */

@@ -38,5 +38,4 @@ use Shaarli\Thumbnailer;
  */
 class ShaarliTestContainer extends ShaarliContainer
 {
-
 }
