@@ -258,7 +258,7 @@ class DailyPageHelperTest extends TestCase
         return [
             [DailyPageHelper::DAY, new DateTimeImmutable('2020-10-09 04:05:06'), new DateTime('2020-10-09 00:00:00')],
             [DailyPageHelper::WEEK, new DateTimeImmutable('2020-10-09 04:05:06'), new DateTime('2020-10-05 00:00:00')],
-            [DailyPageHelper::MONTH, new DateTimeImmutable('2020-10-09 04:05:06'), new DateTime('2020-10-01 00:00:00')],
+			[DailyPageHelper::MONTH, new DateTimeImmutable('2022-03-30 04:05:06'), new DateTime('2022-03-01 00:00:00')],
         ];
     }
 
@@ -270,7 +270,8 @@ class DailyPageHelperTest extends TestCase
         return [
             [DailyPageHelper::DAY, new DateTimeImmutable('2020-10-09 04:05:06'), new DateTime('2020-10-09 23:59:59')],
             [DailyPageHelper::WEEK, new DateTimeImmutable('2020-10-09 04:05:06'), new DateTime('2020-10-11 23:59:59')],
-            [DailyPageHelper::MONTH, new DateTimeImmutable('2020-10-09 04:05:06'), new DateTime('2020-10-31 23:59:59')],
+            [DailyPageHelper::MONTH, new DateTimeImmutable('2022-02-28 04:05:06'), new DateTime('2022-02-28 23:59:59')],
+            [DailyPageHelper::MONTH, new DateTimeImmutable('2022-03-30 04:05:06'), new DateTime('2022-03-31 23:59:59')],
         ];
     }
 

@@ -7,12 +7,24 @@ use DateTime;
 class UtilsDeTest extends UtilsTest
 {
     /**
+     * Test for international date formatter class. Other tests
+     * will fail without it!
+     */
+    public function testIntlDateFormatter()
+    {
+        $this->assertTrue( class_exists('IntlDateFormatter') );
+    }
+
+    /**
      * Test date_format().
      */
     public function testDateFormat()
     {
-        $date = DateTime::createFromFormat('Ymd_His', '20170101_101112');
-        $this->assertRegExp('/1\. Januar 2017 (um )?10:11:12 GMT\+0?3(:00)?/', format_date($date, true, true));
+        $current = setlocale(LC_ALL, 0);
+        autoLocale('de-de');
+        $date = DateTime::createFromFormat('Ymd_His', '20170102_201112');
+        $this->assertRegExp('/2\. Januar 2017 (um )?20:11:12 GMT\+0?3(:00)?/', format_date($date, true, true));
+        setlocale(LC_ALL, $current);
     }
 
     /**
@@ -20,26 +32,29 @@ class UtilsDeTest extends UtilsTest
      */
     public function testDateFormatNoTime()
     {
-        $date = DateTime::createFromFormat('Ymd_His', '20170101_101112');
-        $this->assertRegExp('/1\. Januar 2017/', format_date($date, false, true));
+        $current = setlocale(LC_ALL, 0);
+        autoLocale('de-de');
+        $date = DateTime::createFromFormat('Ymd_His', '20170102_201112');
+        $this->assertRegExp('/2\. Januar 2017/', format_date($date, false, true));
+        setlocale(LC_ALL, $current);
     }
 
     /**
-     * Test date_format() using builtin PHP function strftime.
+     * Test date_format() using DateTime
      */
     public function testDateFormatDefault()
     {
-        $date = DateTime::createFromFormat('Ymd_His', '20170101_101112');
-        $this->assertEquals('So 01 Jan 2017 10:11:12 EAT', format_date($date, true, false));
+        $date = DateTime::createFromFormat('Ymd_His', '20170102_101112');
+        $this->assertEquals('January 2, 2017 10:11:12 AM GMT+03:00', format_date($date, true, false));
     }
 
     /**
-     * Test date_format() using builtin PHP function strftime without time.
+     * Test date_format() using DateTime
      */
     public function testDateFormatDefaultNoTime()
     {
         $date = DateTime::createFromFormat('Ymd_His', '20170201_101112');
-        $this->assertEquals('01.02.2017', format_date($date, false, false));
+        $this->assertEquals('February 1, 2017', format_date($date, false, false));
     }
 
     /**
@@ -61,7 +76,7 @@ class UtilsDeTest extends UtilsTest
     public function testAutoLocaleValidAlternative()
     {
         $current = setlocale(LC_ALL, 0);
-        $header = 'en_us.UTF8';
+        $header = 'en_US.UTF-8';
         autoLocale($header);
         $this->assertEquals('en_US.utf8', setlocale(LC_ALL, 0));
 
@@ -87,7 +102,7 @@ class UtilsDeTest extends UtilsTest
     public function testAutoLocaleMultipleSecondAvailable()
     {
         $current = setlocale(LC_ALL, 0);
-        $header = 'mag_IN,fr-fr';
+        $header = 'mgg_IN,fr-fr';
         autoLocale($header);
         $this->assertEquals('fr_FR.utf8', setlocale(LC_ALL, 0));
 
@@ -101,7 +116,7 @@ class UtilsDeTest extends UtilsTest
     {
         $current = setlocale(LC_ALL, 0);
         autoLocale('');
-        $this->assertEquals('en_US.utf8', setlocale(LC_ALL, 0));
+        $this->assertEquals('en_US.UTF-8', setlocale(LC_ALL, 0));
 
         setlocale(LC_ALL, $current);
     }
@@ -112,8 +127,8 @@ class UtilsDeTest extends UtilsTest
     public function testAutoLocaleUnavailable()
     {
         $current = setlocale(LC_ALL, 0);
-        autoLocale('mag_IN');
-        $this->assertEquals('en_US.utf8', setlocale(LC_ALL, 0));
+        autoLocale('mgg_IN');
+        $this->assertEquals('en_US.UTF-8', setlocale(LC_ALL, 0));
 
         setlocale(LC_ALL, $current);
     }

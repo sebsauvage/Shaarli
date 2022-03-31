@@ -30,9 +30,13 @@ require_once 'tests/TestCase.php';
 require_once 'tests/container/ShaarliTestContainer.php';
 require_once 'tests/front/controller/visitor/FrontControllerMockHelper.php';
 require_once 'tests/front/controller/admin/FrontAdminControllerMockHelper.php';
+require_once 'tests/updater/DummyUpdater.php';
+require_once 'tests/utils/FakeApplicationUtils.php';
+require_once 'tests/utils/FakeBookmarkService.php';
 require_once 'tests/utils/FakeConfigManager.php';
 require_once 'tests/utils/ReferenceHistory.php';
 require_once 'tests/utils/ReferenceLinkDB.php';
+require_once 'tests/utils/ReferenceSessionIdHashes.php';
 
 ReferenceSessionIdHashes::genAllHashes();
 

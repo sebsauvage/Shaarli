@@ -667,11 +667,11 @@ class DailyControllerTest extends TestCase
     public function testSimpleRssMonthly(): void
     {
         $dates = [
-            new \DateTimeImmutable('2020-05-19'),
+            new \DateTimeImmutable('2022-02-19'),
             new \DateTimeImmutable('2020-04-13'),
         ];
         $expectedDates = [
-            new \DateTimeImmutable('2020-05-31 23:59:59'),
+            new \DateTimeImmutable('2022-02-28 23:59:59'),
             new \DateTimeImmutable('2020-04-30 23:59:59'),
         ];
 
@@ -710,7 +710,7 @@ class DailyControllerTest extends TestCase
 
         static::assertEquals($date, $day['date']);
         static::assertSame($date->format(\DateTime::RSS), $day['date_rss']);
-        static::assertSame('May, 2020', $day['date_human']);
+        static::assertSame('February, 2022', $day['date_human']);
         static::assertSame('http://shaarli/subfolder/daily?month=' . $dates[0]->format('Ym'), $day['absolute_url']);
         static::assertCount(1, $day['links']);
 

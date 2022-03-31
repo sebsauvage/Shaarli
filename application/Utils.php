@@ -197,7 +197,7 @@ function generateLocation($referer, $host, $loopTerms = [])
 function autoLocale($headerLocale)
 {
     // Default if browser does not send HTTP_ACCEPT_LANGUAGE
-    $locales = ['en_US', 'en_US.utf8', 'en_US.UTF-8'];
+    $locales = ['en_US.UTF-8', 'en_US.utf8', 'en_US'];
     if (! empty($headerLocale)) {
         if (preg_match_all('/([a-z]{2,3})[-_]?([a-z]{2})?,?/i', $headerLocale, $matches, PREG_SET_ORDER)) {
             $attempts = [];
@@ -314,10 +314,12 @@ function format_date($date, $time = true, $intl = true)
     }
 
     if (! $intl || ! class_exists('IntlDateFormatter')) {
-        $format = $time ? '%c' : '%x';
-        return strftime($format, $date->getTimestamp());
+        $format = 'F j, Y';
+        if ($time) {
+            $format .= ' h:i:s A \G\M\TP';
+        }
+        return $date->format( $format );
     }
-
     $formatter = new IntlDateFormatter(
         setlocale(LC_TIME, 0),
         IntlDateFormatter::LONG,
