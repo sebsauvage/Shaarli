@@ -318,7 +318,7 @@ function format_date($date, $time = true, $intl = true)
         if ($time) {
             $format .= ' h:i:s A \G\M\TP';
         }
-        return $date->format( $format );
+        return $date->format($format);
     }
     $formatter = new IntlDateFormatter(
         setlocale(LC_TIME, 0),

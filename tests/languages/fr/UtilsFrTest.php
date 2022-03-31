@@ -12,7 +12,7 @@ class UtilsFrTest extends UtilsTest
      */
     public function testIntlDateFormatter()
     {
-        $this->assertTrue( class_exists('IntlDateFormatter') );
+        $this->assertTrue(class_exists('IntlDateFormatter'));
     }
 
     /**

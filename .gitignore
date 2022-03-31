@@ -25,6 +25,7 @@ coverage
 sandbox
 phpmd.html
 phpdoc.xml
+.phpunit.result.cache
 
 # User plugin configuration
 plugins/*
