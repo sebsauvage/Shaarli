@@ -20,6 +20,11 @@ These components are required to build Shaarli:
 - [yarn](https://yarnpkg.com/lang/en/docs/install/) to build frontend dependencies.
 - [python3-virtualenv](https://pypi.python.org/pypi/virtualenv) to build local HTML documentation.
 
+```bash
+# example from a Debian-based build machine
+sudo apt install composer yarnpkg python3-virtualenv
+```
+
 Clone the repository, either pointing to:
 
 - any [tagged release](https://github.com/shaarli/Shaarli/releases)

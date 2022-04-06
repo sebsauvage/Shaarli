@@ -1,6 +1,6 @@
 # Unit tests
 
-Shaarli uses the [PHPUnit](https://phpunit.de/) test framework; it can be installed with [Composer](https://getcomposer.org/), which is a dependency management tool.
+Shaarli uses the [PHPUnit](https://phpunit.de/) test framework; it can be installed with [Composer](../Installation.md#from-sources), which is a dependency management tool.
 
 ## Install composer
 
