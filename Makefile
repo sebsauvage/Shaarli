@@ -106,11 +106,11 @@ composer_dependencies: clean
 
 ### download 3rd-party frontend libraries
 frontend_dependencies:
-	yarn install
+	yarnpkg install
 
 ### Build frontend dependencies
 build_frontend: frontend_dependencies
-	yarn run build
+	yarnpkg run build
 
 ### generate a release tarball and include 3rd-party dependencies and translations
 release_tar: composer_dependencies htmldoc translate build_frontend
@@ -169,10 +169,10 @@ translate:
 
 ### Run ESLint check against Shaarli's JS files
 eslint:
-	@yarn run eslint -c .dev/.eslintrc.js assets/vintage/js/
-	@yarn run eslint -c .dev/.eslintrc.js assets/default/js/
-	@yarn run eslint -c .dev/.eslintrc.js assets/common/js/
+	@yarnpkg run eslint -c .dev/.eslintrc.js assets/vintage/js/
+	@yarnpkg run eslint -c .dev/.eslintrc.js assets/default/js/
+	@yarnpkg run eslint -c .dev/.eslintrc.js assets/common/js/
 
 ### Run CSSLint check against Shaarli's SCSS files
 sasslint:
-	@yarn run stylelint --config .dev/.stylelintrc.js 'assets/default/scss/*.scss'
+	@yarnpkg run stylelint --config .dev/.stylelintrc.js 'assets/default/scss/*.scss'

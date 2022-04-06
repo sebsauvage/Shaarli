@@ -22,8 +22,8 @@ FROM arm32v6/alpine:3.10 as node
 COPY --from=composer /app/shaarli /shaarli
 RUN apk --update --no-cache add yarn nodejs-current python2 build-base \
     && cd /shaarli \
-    && yarn install \
-    && yarn run build \
+    && yarnpkg install \
+    && yarnpkg run build \
     && rm -rf node_modules
 
 # Stage 4:
