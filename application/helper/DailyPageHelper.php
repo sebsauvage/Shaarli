@@ -60,6 +60,11 @@ class DailyPageHelper
             ;
         }
 
+        // Don't use today's day of month (github issue #1844)
+        if ($type === static::MONTH) {
+            $format = '!' . $format;
+        }
+
         // W is not supported by createFromFormat...
         if ($type === static::WEEK) {
             return (new DateTimeImmutable())
