@@ -20,8 +20,8 @@ RUN cd shaarli \
 FROM node:12-alpine as node
 COPY --from=composer /app/shaarli shaarli
 RUN cd shaarli \
-    && yarn install \
-    && yarn run build \
+    && yarnpkg install \
+    && yarnpkg run build \
     && rm -rf node_modules
 
 # Stage 4:
