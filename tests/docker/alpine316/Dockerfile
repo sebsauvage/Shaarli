@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.16
 MAINTAINER Shaarli Community
 
 RUN apk --update --no-cache add \
