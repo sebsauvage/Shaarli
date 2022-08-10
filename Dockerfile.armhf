@@ -1,7 +1,7 @@
 # Stage 1:
 # - Copy Shaarli sources
 # - Build documentation
-FROM arm32v6/alpine:3.10 as docs
+FROM arm32v6/alpine:3.16 as docs
 ADD . /usr/src/app/shaarli
 RUN apk --update --no-cache add py2-pip \
     && cd /usr/src/app/shaarli \
@@ -10,7 +10,7 @@ RUN apk --update --no-cache add py2-pip \
 
 # Stage 2:
 # - Resolve PHP dependencies with Composer
-FROM arm32v6/alpine:3.10 as composer
+FROM arm32v6/alpine:3.16 as composer
 COPY --from=docs /usr/src/app/shaarli /app/shaarli
 RUN apk --update --no-cache add php7-curl php7-mbstring php7-simplexml composer \
     && cd /app/shaarli \
@@ -18,7 +18,7 @@ RUN apk --update --no-cache add php7-curl php7-mbstring php7-simplexml composer 
 
 # Stage 3:
 # - Frontend dependencies
-FROM arm32v6/alpine:3.10 as node
+FROM arm32v6/alpine:3.16 as node
 COPY --from=composer /app/shaarli /shaarli
 RUN apk --update --no-cache add yarn nodejs-current python2 build-base \
     && cd /shaarli \
@@ -28,7 +28,7 @@ RUN apk --update --no-cache add yarn nodejs-current python2 build-base \
 
 # Stage 4:
 # - Shaarli image
-FROM arm32v6/alpine:3.10
+FROM arm32v6/alpine:3.16
 LABEL maintainer="Shaarli Community"
 
 RUN apk --update --no-cache add \
