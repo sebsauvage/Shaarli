@@ -3,7 +3,7 @@
 # - Build documentation
 FROM arm32v6/alpine:3.16 as docs
 ADD . /usr/src/app/shaarli
-RUN apk --update --no-cache add py2-pip \
+RUN apk --update --no-cache add py3-pip \
     && cd /usr/src/app/shaarli \
     && pip install --no-cache-dir mkdocs \
     && mkdocs build --clean
@@ -20,7 +20,7 @@ RUN apk --update --no-cache add php8-curl php8-mbstring php8-simplexml composer 
 # - Frontend dependencies
 FROM arm32v6/alpine:3.16 as node
 COPY --from=composer /app/shaarli /shaarli
-RUN apk --update --no-cache add yarn nodejs-current python2 build-base \
+RUN apk --update --no-cache add yarn nodejs-current python3 build-base \
     && cd /shaarli \
     && yarnpkg install \
     && yarnpkg run build \
