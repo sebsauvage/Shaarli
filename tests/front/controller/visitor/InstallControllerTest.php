@@ -266,7 +266,7 @@ class InstallControllerTest extends TestCase
         static::assertSame('/subfolder/login', $result->getHeader('location')[0]);
 
         static::assertSame('UTC', $confSettings['general.timezone']);
-        static::assertSame('My links', $confSettings['general.title']);
+        static::assertSame('Shared Bookmarks', $confSettings['general.title']);
     }
 
     /**
@@ -299,6 +299,6 @@ class InstallControllerTest extends TestCase
         static::assertSame('/login', $result->getHeader('location')[0]);
 
         static::assertSame('UTC', $confSettings['general.timezone']);
-        static::assertSame('My links', $confSettings['general.title']);
+        static::assertSame('Shared Bookmarks', $confSettings['general.title']);
     }
 }
