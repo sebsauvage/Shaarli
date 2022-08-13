@@ -69,7 +69,7 @@ function hook_wallabag_render_linklist($data, $conf)
 function wallabag_dummy_translation()
 {
     // meta
-    t('For each link, add a QRCode icon.');
+    t("For each link, add a Wallabag icon to save it in your instance.");
     t('Wallabag API URL');
     t('Wallabag API version (1 or 2)');
 }
