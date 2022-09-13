@@ -37,6 +37,7 @@ RUN apk --update --no-cache add \
         php8-curl \
         php8-fpm \
         php8-gd \
+        php8-gettext \
         php8-iconv \
         php8-intl \
         php8-json \
