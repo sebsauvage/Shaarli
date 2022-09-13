@@ -20,6 +20,7 @@ RUN apk --update --no-cache add \
         php8-simplexml \
         php8-tokenizer \
         php8-xdebug \
+        php8-xmlwriter \
         php8-xml \
         php8-zlib \
         rsync
