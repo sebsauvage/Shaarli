@@ -154,7 +154,7 @@ After all jobs have finished, Github Actions returns the results to GitHub:
 - a status icon represents the result for the `master` branch: [![Build Status](https://github.com/shaarli/Shaarli/actions/workflows/ci.yml/badge.svg)](https://github.com/shaarli/Shaarli/actions)
 - Pull Requests are updated with the Github Actions build result.
 
-Github Actions is also used to build and push [Docker](../Docker.md) images to <https://hub.docker.com/r/shaarli/shaarli> for the `master` branch and on every git `tag`/[release](https://github.com/shaarli/Shaarli/releases).
+Github Actions is also used to build and push [Docker](../Docker.md) images to <https://github.com/shaarli/Shaarli/pkgs/container/shaarli> for the `master` branch and on every git `tag`/[release](https://github.com/shaarli/Shaarli/releases).
 
 See [`.github/workflows/`](https://github.com/shaarli/Shaarli/tree/master/.github/workflows).
 
