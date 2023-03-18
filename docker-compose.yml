@@ -8,7 +8,7 @@
 # - SHAARLI_VIRTUAL_HOST      Fully Qualified Domain Name for the Shaarli instance
 # - SHAARLI_LETSENCRYPT_EMAIL Contact email for certificate renewal
 # - SHAARLI_DOCKER_TAG        Shaarli docker tag to use
-#                             See: https://hub.docker.com/r/shaarli/shaarli/tags
+#                             See: https://github.com/shaarli/Shaarli/pkgs/container/shaarli/versions?filters%5Bversion_type%5D=tagged
 version: '3'
 
 networks:
@@ -21,7 +21,7 @@ volumes:
 
 services:
   shaarli:
-    image: shaarli/shaarli:${SHAARLI_DOCKER_TAG}
+    image: ghcr.io/shaarli/shaarli:${SHAARLI_DOCKER_TAG}
     build: ./
     networks:
       - http-proxy

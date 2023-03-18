@@ -39,14 +39,14 @@ docker run hello-world
 
 ## Get and run a Shaarli image
 
-Shaarli images are available on [DockerHub](https://hub.docker.com/r/shaarli/shaarli/) `shaarli/shaarli`:
+Shaarli images are available on [GitHub Container Registry](https://github.com/shaarli/Shaarli/pkgs/container/shaarli) `ghcr.io/shaarli/shaarli`:
 
 - `latest`: master (development) branch
 - `vX.Y.Z`: shaarli [releases](https://github.com/shaarli/Shaarli/releases)
 - `release`: always points to the last release
 - `stable` and `master`: **deprecated**. These tags are no longer maintained and may be removed without notice
 
-These images are built automatically on DockerHub and rely on:
+These images are built automatically on Github Actions and rely on:
 
 - [Alpine Linux](https://www.alpinelinux.org/)
 - [PHP7-FPM](http://php-fpm.org/)
@@ -57,8 +57,8 @@ Additional Dockerfiles are provided for the `arm32v7` platform, relying on [Linu
 Here is an example of how to run Shaarli latest image using Docker:
 
 ```bash
-# download the 'latest' image from dockerhub
-docker pull shaarli/shaarli
+# download the 'latest' image from GitHub Container Registry
+docker pull ghcr.io/shaarli/shaarli
 
 # create persistent data volumes/directories on the host
 docker volume create shaarli-data
@@ -76,7 +76,7 @@ docker run --detach \
            --rm \
            --volume shaarli-data:/var/www/shaarli/data \
            --volume shaarli-cache:/var/www/shaarli/cache \
-           shaarli/shaarli:latest
+           ghcr.io/shaarli/shaarli:latest
 
 # verify that the container is running
 docker ps | grep myshaarli
@@ -118,7 +118,7 @@ $ curl -L https://raw.githubusercontent.com/shaarli/Shaarli/latest/docker-compos
 # (replace <shaarli.mydomain.org>, <admin@mydomain.org> and <latest> with your actual information)
 $ echo 'SHAARLI_VIRTUAL_HOST=shaarli.mydomain.org' > .env
 $ echo 'SHAARLI_LETSENCRYPT_EMAIL=admin@mydomain.org' >> .env
-# Available Docker tags can be found at https://hub.docker.com/r/shaarli/shaarli/tags
+# Available Docker tags can be found at https://github.com/shaarli/Shaarli/pkgs/container/shaarli/versions?filters%5Bversion_type%5D=tagged
 $ echo 'SHAARLI_DOCKER_TAG=latest' >> .env
 # Pull the Docker images
 $ docker-compose pull
@@ -154,7 +154,7 @@ ExecStart=/usr/bin/docker run \
   --hostname shaarli.${domainname} \
   -v /srv/docker-volumes-local/shaarli-data:/var/www/shaarli/data:rw \
   -v /etc/localtime:/etc/localtime:ro \
-  shaarli/shaarli:latest
+  ghcr.io/shaarli/shaarli:latest
 
 ExecStop=/usr/bin/docker rm -f ${hostname}-shaarli
 
@@ -179,9 +179,9 @@ journalctl -f
 
 ```bash
 # pull/update an image
-$ docker pull shaarli/shaarli:release
+$ docker pull ghcr.io/shaarli/shaarli:release
 # run a container from an image
-$ docker run shaarli/shaarli:latest
+$ docker run ghcr.io/shaarli/shaarli:latest
 # list available images
 $ docker images ls
 # list running containers
@@ -206,16 +206,15 @@ $ docker system prune
 - [Docker: using volumes](https://docs.docker.com/storage/volumes/)
 - [Dockerfile best practices](https://docs.docker.com/articles/dockerfile_best-practices/)
 - [Dockerfile reference](https://docs.docker.com/reference/builder/)
-- [DockerHub: GitHub automated build](https://docs.docker.com/docker-hub/github/)
-- [DockerHub: Repositories](https://docs.docker.com/userguide/dockerrepos/)
-- [DockerHub: Teams and organizations](https://docs.docker.com/docker-hub/orgs/)
+- [GitHub Container Registry](https://github.com/features/packages)
+- [GithHub Packages documentation](https://docs.github.com/en/packages)
+- [DockerHub: Teams and organizations](https://docs.docker.com/docker-hub/orgs/), [End of Docker free teams](https://www.docker.com/blog/we-apologize-we-did-a-terrible-job-announcing-the-end-of-docker-free-teams/)
 - [Get Docker CE for Debian](https://docs.docker.com/install/linux/docker-ce/debian/)
 - [Install Docker Compose](https://docs.docker.com/compose/install/)
 - [Interactive Docker training portal](https://www.katacoda.com/courses/docker/) on [Katakoda](https://www.katacoda.com/)
 - [Service management: Nginx in the foreground](http://nginx.org/en/docs/ngx_core_module.html#daemon)
 - [Service management: Using supervisord](https://docs.docker.com/articles/using_supervisord/)
 - [Volumes](https://docs.docker.com/storage/volumes/)
-- [Volumes](https://docs.docker.com/userguide/dockervolumes/)
 - [Where are Docker images stored?](http://blog.thoward37.me/articles/where-are-docker-images-stored/)
 - [docker create](https://docs.docker.com/engine/reference/commandline/create/)
 - [Docker Documentation](https://docs.docker.com/)
