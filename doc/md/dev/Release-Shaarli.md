@@ -139,16 +139,16 @@ make release_archive
 This will create `shaarli-v0.x.y-full.tar`, `shaarli-v0.x.y-full.zip`. These archives need to be manually uploaded on the previously created GitHub [release](https://github.com/shaarli/Shaarli/releases).
 
 
-### Update the `latest` branch
+### Update the `release` branch
 
 ```bash
-# checkout the 'latest' branch
-git checkout latest
+# checkout the 'release' branch
+git checkout release
 # merge changes from your newly published release branch
 git merge v0.x.y
 # fix eventual conflicts with git mergetool...
 # run tests
 make test
 # push the latest branch
-git push upstream latest
+git push upstream release
 ```
