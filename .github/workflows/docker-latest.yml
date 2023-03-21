@@ -35,8 +35,9 @@ jobs:
         with:
           context: .
           push: true
+          platforms: linux/amd64,linux/arm/v7
           tags: |
-            shaarli/shaarli:latest
-            ghcr.io/shaarli/shaarli:latest
+            ${{ secrets.DOCKER_IMAGE }}:latest
+            ghcr.io/${{ secrets.DOCKER_IMAGE }}:latest
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
