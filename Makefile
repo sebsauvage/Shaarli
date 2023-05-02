@@ -82,6 +82,15 @@ locale_test_%:
 		--bootstrap tests/languages/bootstrap.php \
 		--testsuite language-$(firstword $(subst _, ,$*))
 
+# trivy version (https://github.com/aquasecurity/trivy/releases)
+TRIVY_VERSION=0.39.0
+# default docker image to scan with trivy
+TRIVY_TARGET_DOCKER_IMAGE=ghcr.io/shaarli/shaarli:latest
+test_trivy:
+	wget --quiet --continue -O trivy_$(TRIVY_VERSION)_Linux-64bit.tar.gz https://github.com/aquasecurity/trivy/releases/download/v$(TRIVY_VERSION)/trivy_$(TRIVY_VERSION)_Linux-64bit.tar.gz
+	tar -zxf trivy_$(TRIVY_VERSION)_Linux-64bit.tar.gz
+	./trivy image $(TRIVY_TARGET_DOCKER_IMAGE)
+
 all_tests: test locale_test_de_DE locale_test_en_US locale_test_fr_FR
 	@# --The current version is not compatible with PHP 7.2
 	@#$(BIN)/phpcov merge --html coverage coverage
