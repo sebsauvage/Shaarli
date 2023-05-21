@@ -13,6 +13,7 @@ See [REST API](REST-API) for a list of official and community clients.
 ### Third party plugins
 
 - [autosave](https://github.com/kalvn/shaarli-plugin-autosave) by [@kalvn](https://github.com/kalvn): Automatically saves data when editing a Shaare to avoid any loss in case of crash or unexpected shutdown.
+- [clickat](https://forge.tourmentine.com/n/shaarli-plugin-clickat) by [@n](https://forge.tourmentine.com/n): Makes Twitter and Fediverse addresses clickable.
 - [code-coloration](https://github.com/ArthurHoaro/code-coloration) by [@ArthurHoaro](https://github.com/ArthurHoaro): client side code syntax highlighter.
 - [custom-css](https://github.com/immanuelfodor/shaarli-custom-css) by [@immanuelfodor](https://github.com/immanuelfodor) - Customize the look and feel of the UI with custom CSS rules
 - [disqus](https://github.com/kalvn/shaarli-plugin-disqus) by [@kalvn](https://github.com/kalvn): Adds Disqus comment system to your Shaarli.
@@ -22,6 +23,7 @@ See [REST API](REST-API) for a list of official and community clients.
 - [launch](https://github.com/ArthurHoaro/launch-plugin) - Launch Plugin is a plugin designed to enhance and customize Launch Theme for Shaarli.
 - [markdown-toolbar](https://github.com/immanuelfodor/shaarli-markdown-toolbar) by [@immanuelfodor](https://github.com/immanuelfodor) - Easily insert markdown syntax into the Description field when editing a Shaare.
 - [related](https://github.com/ilesinge/shaarli-related) by [@ilesinge](https://github.com/ilesinge) - Show related Shaares based on the number of identical tags.
+- [shaargem](https://forge.tourmentine.com/n/shaarli-plugin-shaargem) by [@n](https://forge.tourmentine.com/n): Allow to shaare gemini capsules.
 - [shaarli-descriptor](https://github.com/immanuelfodor/shaarli-descriptor) by [@immanuelfodor](https://github.com/immanuelfodor) - Customize the default height/number of rows of the Description field when editing a Shaare.
 - [shaarli2mastodon](https://github.com/kalvn/shaarli2mastodon) by [@kalvn](https://github.com/kalvn) - This Shaarli plugin allows you to automatically publish links you post on your Mastodon timeline.
 - [shaarli2twitter](https://github.com/ArthurHoaro/shaarli2twitter) by [@ArthurHoaro](https://github.com/ArthurHoaro) - Automatically tweet your Shaares from Shaarli
