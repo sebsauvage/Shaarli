@@ -42,4 +42,4 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
       - name: Run trivy image scanner
-        run: make test_trivy TRIVY_TARGET_DOCKER_IMAGE=ghcr.io/${{ secrets.DOCKER_IMAGE }}:trivy
+        run: make test_trivy TRIVY_TARGET_DOCKER_IMAGE=ghcr.io/${{ secrets.DOCKER_IMAGE }}:latest
