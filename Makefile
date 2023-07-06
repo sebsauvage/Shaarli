@@ -1,4 +1,4 @@
-# The personal, minimalist, super-fast, database free, bookmarking service.
+# The personal, minimalist, super fast, database-free, bookmarking service.
 # Makefile for PHP code analysis & testing, documentation and release generation
 
 BIN = vendor/bin
