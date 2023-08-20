@@ -134,7 +134,7 @@ The following examples assume a Debian-based operating system is installed. On o
 sudo mkdir -p /var/www/shaarli.mydomain.org/
 ```
 
-You can install Shaarli at the root of your virtualhost, or in a subdirectory as well. See [Directory structure](Directory-structure)
+You can install Shaarli at the root of your virtualhost, or in a subdirectory as well. See [Directory structure](dev/Development.md#directory-structure)
 
 
 ### Apache

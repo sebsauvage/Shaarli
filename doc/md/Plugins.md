@@ -37,7 +37,7 @@ This is important in case plugins depend on each other. Read plugins READMEs for
 
 ## Configuration file
 
-Enabled plugins are stored in your [Configuration file](Shaarli-configuration).
+Enabled plugins are stored in your [Configuration file](Shaarli-configuration.md).
 
 ## Usage
 

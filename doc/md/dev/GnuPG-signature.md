@@ -67,4 +67,4 @@ gpg: sending key A9D53A3E to hkp server pgp.mit.edu
 
 ## Create and push a GPG-signed tag
 
-See [Release Shaarli](Release Shaarli).
+See [Release Shaarli](Release-Shaarli.md).
