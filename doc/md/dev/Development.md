@@ -6,10 +6,10 @@ Please read [Contributing to Shaarli](https://github.com/shaarli/Shaarli/tree/ma
 ## Guidelines
 
 
-- [Unit tests](Unit-tests)
+- [Unit tests](Unit-tests.md)
 - Javascript linting - Shaarli uses [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
 Run `make eslint` to check JS style.
-- [GnuPG signature](GnuPG-signature) for tags/releases
+- [GnuPG signature](GnuPG-signature.md) for tags/releases
 
 
 ## Third-party libraries

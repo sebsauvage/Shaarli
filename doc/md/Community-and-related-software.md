@@ -7,7 +7,7 @@ please get in touch with us to help us find a way to adapt your work to our fork
 ## Related software
 
 ### REST API clients
-See [REST API](REST-API) for a list of official and community clients.
+See [REST API](REST-API.md) for a list of official and community clients.
 
 
 ### Third party plugins
@@ -34,7 +34,7 @@ See [REST API](REST-API) for a list of official and community clients.
 
 ### Third-party themes
 
-See [Theming](Theming) for a list of community-contributed themes, and an installation guide.
+See [Theming](dev/Theming.md) for a list of community-contributed themes, and an installation guide.
 
 
 ### Integration with other platforms

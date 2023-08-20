@@ -67,7 +67,7 @@ Save when you're done, then you can submit a pull request containing the new `sh
 
 ### Theme translations
 
-[Theme](Theming) translation extensions are loaded automatically if they're present.
+[Theme](Theming.md) translation extensions are loaded automatically if they're present.
 
 As a theme developer, all you have to do is to add the `.po` and `.mo` compiled file like this:
 

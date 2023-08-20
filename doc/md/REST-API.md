@@ -4,7 +4,7 @@
 
 See the **[REST API documentation](http://shaarli.github.io/api-documentation/)** for a list of available endpoints and parameters.
 
-Please ensure that your server meets the requirements and is properly [configured](Server-configuration):
+Please ensure that your server meets the requirements and is properly [configured](Server-configuration.md):
 
 - URL rewriting is enabled (see specific Apache and Nginx sections)
 - the server's timezone is properly defined

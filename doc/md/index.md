@@ -51,8 +51,8 @@ Shaarli can be used:
 - [Search](Usage.md#search) in all fields
 - Unique [permalinks](Usage.md#permalinks) for easy reference
 - Paginated Shaares list view (with image and video thumbnails)
-- [Tag cloud/list](Usage#tag-cloud) views
-- [Picture wall](Usage#picture-wall)/thumbnails view (with lazy loading)
+- [Tag cloud/list](Usage.md#tag-cloud) views
+- [Picture wall](Usage.md#picture-wall)/thumbnails view (with lazy loading)
 - [ATOM and RSS feeds](Usage.md#rss-feeds) (can also be filtered using tags or text search)
 - [Daily](Usage.md#daily): newspaper-like daily digest (and daily RSS feed)
 - URL cleanup: automatic removal of `?utm_source=...`, `fb=...` tracking parameters
@@ -80,7 +80,7 @@ Shaarli can be used:
 ### Self-hosted
 
 - Shaarli is an alternative to commercial services such as StumbleUpon, Delicio.us, Diigo...
-- The data is yours, [import and export](Usage#import-export) it to HTML bookmarksformat compatible with most web browser, and from a variety of formats
+- The data is yours, [import and export](Usage.md#import-export) it to HTML bookmarksformat compatible with most web browser, and from a variety of formats
 - Shaarli does not send any telemetry/metrics/private information to developers
 - Shaarli is Free and Open-Source software, inspect and change how the program works in the [source code](https://github.com/shaarli/Shaarli)
 - Built-in [Security](dev/Development.md#security) features to help you protect your Shaarli instance
