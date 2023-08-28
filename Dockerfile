@@ -4,9 +4,8 @@
 FROM python:3-alpine as docs
 ADD . /usr/src/app/shaarli
 RUN cd /usr/src/app/shaarli \
-    && apk add --no-cache gcc musl-dev \
-    && pip install --no-cache-dir mkdocs \
-    && mkdocs build --clean
+    && apk add --no-cache gcc musl-dev make bash \
+    && make htmldoc
 
 # Stage 2:
 # - Resolve PHP dependencies with Composer

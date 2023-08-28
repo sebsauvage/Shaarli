@@ -40,6 +40,7 @@ Dockerfile*       export-ignore
 Doxyfile          export-ignore
 Makefile          export-ignore
 node_modules/     export-ignore
-mkdocs.yml        export-ignore
+doc/conf.py       export-ignore
+doc/requirements.txt export-ignore
 phpunit.xml       export-ignore
 tests/            export-ignore
