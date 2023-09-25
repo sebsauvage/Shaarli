@@ -1413,7 +1413,7 @@ This allows users of the original release to upgrade to the fixed version, witho
 
 ## `release` branch
 
-This branch point the latest release. It recommended to use it to get the latest tested changes.
+This branch points to the latest release. It recommended to use it to get the latest tested changes.
 
 
 ### Releases
