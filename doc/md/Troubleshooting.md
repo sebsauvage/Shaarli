@@ -40,7 +40,7 @@ Shaarli redirections will not work properly. To solve this, assign a local domai
 
 - On hosts (such as **free.fr**) which only support PHP 5.6, Shaarli [v0.10.4](https://github.com/shaarli/Shaarli/releases/tag/v0.10.4) is the maximum supported version. At the root of your webspace create a `sessions` directory and a `.htaccess` file containing:
 
-```xml
+```apacheconf
 <IfDefine Free>
 php56 1
 </IfDefine>

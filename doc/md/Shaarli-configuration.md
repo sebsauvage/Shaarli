@@ -22,7 +22,7 @@ Some settings can be configured directly from a web browser by accesing the `Too
 
 ## Configuration file example
 
-```json
+```
 <?php /*
 {
     "credentials": {
