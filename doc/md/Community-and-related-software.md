@@ -49,11 +49,6 @@ See [REST API](REST-API.md) for a list of official and community clients.
 - [ManufacturaInd/shaarli-2004licious-theme](https://github.com/ManufacturaInd/shaarli-2004licious-theme) - A template/theme as a humble homage to the early looks of the del.icio.us site
 - [xfnw/shaarli-default-dark](https://github.com/xfnw/shaarli-default-dark) - The default theme but nice and dark for your eyeballs
 
-### Shaarli forks
-
-- [misterair/Limonade](https://github.com/misterair/limonade) - A fork of (legacy) Shaarli with a new template
-- [vivienhaese/shaarlitheme](https://github.com/vivienhaese/shaarlitheme) - A Shaarli fork meant to be run in an openshift instance
-
 
 ### Integration with other platforms
 
