@@ -29,6 +29,7 @@ Community-and-related-software.md
 Plugins.md
 REST-API.md
 Troubleshooting.md
+dev/Development.md
 ```
 
 ## Demo
@@ -111,16 +112,11 @@ The original Shaarli instance is still available [here](https://sebsauvage.net/l
 
 ### Contributing and getting help
 
-Feedback is very appreciated! Feel free to propose solutions to existing problems, help us improve the documentation and translations, and submit pull requests :-)
+Feedback is very appreciated! Feel free to propose solutions to existing problems, help us improve the documentation and [translations](dev/Development.md#translations), and submit pull requests :-)
 
 See [Support](Troubleshooting.md#support) to get in touch with the Shaarli community.
 
 
 ### License
 
-Shaarli is [Free Software](http://en.wikipedia.org/wiki/Free_software). See
-[COPYING](https://github.com/shaarli/Shaarli/blob/master/COPYING) for a detail
-of the contributors and licenses for each individual component. A list of
-contributors is available
-[here](https://github.com/shaarli/Shaarli/blob/master/AUTHORS).
-
+Shaarli is [Free Software](http://en.wikipedia.org/wiki/Free_software). See [COPYING](https://github.com/shaarli/Shaarli/blob/master/COPYING) for a detail of the contributors and licenses for each individual component. A list of contributors is available [here](https://github.com/shaarli/Shaarli/blob/master/AUTHORS).

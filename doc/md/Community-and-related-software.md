@@ -32,9 +32,27 @@ See [REST API](REST-API.md) for a list of official and community clients.
 - [webhooks](https://gitlab.com/flow.gunso/shaarli-webhooks) by [@flow.gunso](https://gitlab.com/flow.gunso) - Shaarli plugin that enables user-defined callback URL, i.e. webhooks, for specific Shaarli events (link saving, deletion...)
 
 
-### Third-party themes
+### Custom CSS
 
-See [Theming](dev/Theming.md) for a list of community-contributed themes, and an installation guide.
+- [mrjovanovic/serious-theme-shaarli](https://github.com/mrjovanovic/serious-theme-shaarli) - A serious theme for Shaarli
+- [shaarli/shaarli-themes](https://github.com/shaarli/shaarli-themes)
+
+
+### Themes
+
+- [AkibaTech/Shaarli Superhero Theme](https://github.com/AkibaTech/Shaarli---SuperHero-Theme) - A template/theme for Shaarli
+- [alexisju/albinomouse-template](https://github.com/alexisju/albinomouse-template) - A full template for Shaarli
+- [ArthurHoaro/shaarli-launch](https://github.com/ArthurHoaro/shaarli-launch) - Customizable Shaarli theme
+- [dhoko/ShaarliTemplate](https://github.com/dhoko/ShaarliTemplate) - A template/theme for Shaarli
+- [kalvn/shaarli-blocks](https://github.com/kalvn/shaarli-blocks) - A template/theme for Shaarli
+- [kalvn/Shaarli-Material](https://github.com/kalvn/Shaarli-Material) - A theme (template) based on Google's Material Design for Shaarli, the superfast delicious clone
+- [ManufacturaInd/shaarli-2004licious-theme](https://github.com/ManufacturaInd/shaarli-2004licious-theme) - A template/theme as a humble homage to the early looks of the del.icio.us site
+- [xfnw/shaarli-default-dark](https://github.com/xfnw/shaarli-default-dark) - The default theme but nice and dark for your eyeballs
+
+### Shaarli forks
+
+- [misterair/Limonade](https://github.com/misterair/limonade) - A fork of (legacy) Shaarli with a new template
+- [vivienhaese/shaarlitheme](https://github.com/vivienhaese/shaarlitheme) - A Shaarli fork meant to be run in an openshift instance
 
 
 ### Integration with other platforms
