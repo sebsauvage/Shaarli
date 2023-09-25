@@ -188,7 +188,7 @@ Additional settings applied to formatters.
 
 ### Translation
 
-- **language**: translation language (also see [Translations](dev/Translations.md))
+- **language**: translation language (also see [Translations](dev/Development.md#translations))
     - **auto** (default): The translation language is chosen from the browser locale.
     It means that the language can be different for 2 different visitors depending on their locale.
     - **en**: Use the English translation.
