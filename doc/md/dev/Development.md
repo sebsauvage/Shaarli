@@ -745,28 +745,12 @@ If it's still not working, please [open an issue](https://github.com/shaarli/Sha
 
 Triggered on every page - allows plugins to add content in page headers.
 
-
-##### Data
-
-`$data` is an array containing:
-
-  - [Special data](#special-data)
-
-
-##### Template placeholders
-
-Items can be displayed in templates by adding an entry in `$data['<placeholder>']` array.
-
-List of placeholders:
-
-- `buttons_toolbar`: after the list of buttons in the header.
+- **`$data`** is an array containing [Special data](#special-data)
+- Template placeholders: items can be displayed in templates by adding an entry in `$data['<placeholder>']` array. List of placeholders:
+  - `buttons_toolbar`: after the list of buttons in the header.
+  - `fields_toolbar`: after search fields in the header. Note: This will only be called in linklist.
 
 ![buttons_toolbar_example](http://i.imgur.com/ssJUOrt.png)
-
-- `fields_toolbar`: after search fields in the header.
-
-> Note: This will only be called in linklist.
-
 ![fields_toolbar_example](http://i.imgur.com/3GMifI2.png)
 
 
@@ -774,199 +758,95 @@ List of placeholders:
 
 Triggered on every page - allows plugins to include their own CSS files.
 
-
-##### data
-
-`$data` is an array containing:
-
-  - [Special data](#special-data)
-
-
-##### Template placeholders
-
-Items can be displayed in templates by adding an entry in `$data['<placeholder>']` array.
-
-List of placeholders:
-
-- `css_files`: called after loading default CSS.
-
-> Note: only add the path of the CSS file. E.g: `plugins/demo_plugin/custom_demo.css`.
+- **`$data`** is an array containing [Special data](#special-data)
+- Template placeholders: items can be displayed in templates by adding an entry in `$data['<placeholder>']` array. List of placeholders:
+  - `css_files`: called after loading default CSS. Note: only add the path of the CSS file. E.g: `plugins/demo_plugin/custom_demo.css`.
 
 
 #### render_footer
 
-Triggered on every page.
+Triggered on every page - allows plugins to add content in page footer and include their own JS files.
 
-Allow plugin to add content in page footer and include their own JS files.
-
-
-##### data
-
-`$data` is an array containing:
-
-  - [Special data](#special-data)
-
-
-##### Template placeholders
-
-Items can be displayed in templates by adding an entry in `$data['<placeholder>']` array.
-
-List of placeholders:
-
-- `text`: called after the end of the footer text.
-- `endofpage`: called at the end of the page.
+- **`$data`** is an array containing [Special data](#special-data)
+- Template placeholders: items can be displayed in templates by adding an entry in `$data['<placeholder>']` array. List of placeholders:
+  - `text`: called after the end of the footer text.
+  - `endofpage`: called at the end of the page.
+  - `js_files`: called at the end of the page, to include custom JS scripts. Note: only add the path of the JS file. E.g: `plugins/demo_plugin/custom_demo.js`.
 
 ![text_example](http://i.imgur.com/L5S2YEH.png)
-
-- `js_files`: called at the end of the page, to include custom JS scripts.
-
-> Note: only add the path of the JS file. E.g: `plugins/demo_plugin/custom_demo.js`.
 
 
 #### render_linklist
 
-Triggered when `linklist` is displayed (list of links, permalink, search, tag filtered, etc.).
+Triggered when `linklist` is displayed (list of links, permalink, search, tag filtered, etc.) - allows to add content at the begining and end of the page, after every link displayed and to alter link data.
 
-It allows to add content at the begining and end of the page, after every link displayed and to alter link data.
-
-
-##### data
-
-`$data` is an array containing:
-
+- **`$data`** is an array containing:
   - All templates data, including links.
   - [Special data](#special-data)
-
-
-##### Template placeholders
-
-Items can be displayed in templates by adding an entry in `$data['<placeholder>']` array.
-
-List of placeholders:
-
-- `action_plugin`: next to the button "private only" at the top and bottom of the page.
+- Template placeholders: items can be displayed in templates by adding an entry in `$data['<placeholder>']` array. List of placeholders:
+  - `action_plugin`: next to the button "private only" at the top and bottom of the page.
+  - `link_plugin`: for every link, between permalink and link URL.
+  - `plugin_start_zone`: before displaying the template content.
+  - `plugin_end_zone`: after displaying the template content.
 
 ![action_plugin_example](http://i.imgur.com/Q12PWg0.png)
-
-- `link_plugin`: for every link, between permalink and link URL.
-
 ![link_plugin_example](http://i.imgur.com/3oDPhWx.png)
-
-- `plugin_start_zone`: before displaying the template content.
-
 ![plugin_start_zone_example](http://i.imgur.com/OVBkGy3.png)
-
-- `plugin_end_zone`: after displaying the template content.
-
 ![plugin_end_zone_example](http://i.imgur.com/6IoRuop.png)
 
 
 #### render_editlink
 
-Triggered when the link edition form is displayed.
+Triggered when the link edition form is displayed - allows to add fields in the form, or display elements.
 
-Allow to add fields in the form, or display elements.
-
-
-##### data
-
-`$data` is an array containing:
-
+- **`$data`** is an array containing:
   - All templates data.
   - [Special data](#special-data)
-
-
-##### Template placeholders
-
-Items can be displayed in templates by adding an entry in `$data['<placeholder>']` array.
-
-List of placeholders:
-
-- `edit_link_plugin`: after tags field.
+- Template placeholders: items can be displayed in templates by adding an entry in `$data['<placeholder>']` array. List of placeholders:
+  - `edit_link_plugin`: after tags field.
 
 ![edit_link_plugin_example](http://i.imgur.com/5u17Ens.png)
 
 
 #### render_tools
 
-Triggered when the "tools" page is displayed.
+Triggered when the "tools" page is displayed - allows to add content at the end of the page.
 
-Allow to add content at the end of the page.
-
-
-##### data
-
-`$data` is an array containing:
-
+- **`$data`** is an array containing:
   - All templates data.
   - [Special data](#special-data)
-
-
-##### Template placeholders
-
-Items can be displayed in templates by adding an entry in `$data['<placeholder>']` array.
-
-List of placeholders:
-
-- `tools_plugin`: at the end of the page.
+- Template placeholders: items can be displayed in templates by adding an entry in `$data['<placeholder>']` array. List of placeholders:
+  - `tools_plugin`: at the end of the page.
 
 ![tools_plugin_example](http://i.imgur.com/Bqhu9oQ.png)
 
 
 #### render_picwall
 
-Triggered when picwall is displayed.
+Triggered when picwall is displayed - allows to add content at the top and bottom of the page.
 
-Allow to add content at the top and bottom of the page.
-
-
-##### data
-
-`$data` is an array containing:
-
+- **`$data`** is an array containing:
   - All templates data.
   - [Special data](#special-data)
-
-
-##### Template placeholders
-
-Items can be displayed in templates by adding an entry in `$data['<placeholder>']` array.
-
-List of placeholders:
-
-- `plugin_start_zone`: before displaying the template content.
-- `plugin_end_zone`: after displaying the template content.
+- Template placeholders: items can be displayed in templates by adding an entry in `$data['<placeholder>']` array. List of placeholders:
+  - `plugin_start_zone`: before displaying the template content.
+  - `plugin_end_zone`: after displaying the template content.
 
 ![plugin_start_end_zone_example](http://i.imgur.com/tVTQFER.png)
 
 
 #### render_tagcloud
 
-Triggered when tagcloud is displayed.
+Triggered when tagcloud is displayed - allows to add content at the top and bottom of the page.
 
-Allow to add content at the top and bottom of the page.
-
-
-##### data
-
-`$data` is an array containing:
-
+- **`$data`** is an array containing:
   - All templates data.
   - [Special data](#special-data)
-
-
-##### Template placeholders
-
-Items can be displayed in templates by adding an entry in `$data['<placeholder>']` array.
-
-List of placeholders:
-
-- `plugin_start_zone`: before displaying the template content.
-- `plugin_end_zone`: after displaying the template content.
-
-For each tag, the following placeholder can be used:
-
-- `tag_plugin`: after each tag
+- Template placeholders: items can be displayed in templates by adding an entry in `$data['<placeholder>']` array. List of placeholders:
+  - `plugin_start_zone`: before displaying the template content.
+  - `plugin_end_zone`: after displaying the template content.
+- For each tag, the following placeholder can be used:
+  - `tag_plugin`: after each tag
 
 ![plugin_start_end_zone_example](http://i.imgur.com/vHmyT3a.png)
 
@@ -975,169 +855,83 @@ For each tag, the following placeholder can be used:
 
 Triggered when taglist is displayed - allows to add content at the top and bottom of the page.
 
-
-##### data
-
-`$data` is an array containing:
-
+- **`$data`** is an array containing:
   - All templates data.
   - [Special data](#special-data)
-
-
-##### Template placeholders
-
-Items can be displayed in templates by adding an entry in `$data['<placeholder>']` array.
-
-List of placeholders:
-
-- `plugin_start_zone`: before displaying the template content.
-- `plugin_end_zone`: after displaying the template content.
-
-For each tag, the following placeholder can be used:
-
-- `tag_plugin`: after each tag
+- Template placeholders: items can be displayed in templates by adding an entry in `$data['<placeholder>']` array. List of placeholders:
+  - `plugin_start_zone`: before displaying the template content.
+  - `plugin_end_zone`: after displaying the template content.
+- For each tag, the following placeholder can be used:
+  - `tag_plugin`: after each tag
 
 
 #### render_daily
 
-Triggered when tagcloud is displayed.
+Triggered when tagcloud is displayed - allows to add content at the top and bottom of the page, the bottom of each link and to alter data.
 
-Allow to add content at the top and bottom of the page, the bottom of each link and to alter data.
-
-
-##### data
-
-`$data` is an array containing:
-
+- **`$data`** is an array containing:
   - All templates data, including links.
   - [Special data](#special-data)
-
-
-##### Template placeholders
-
-Items can be displayed in templates by adding an entry in `$data['<placeholder>']` array.
-
-List of placeholders:
-
-- `link_plugin`: used at bottom of each link.
+- Template placeholders: Items can be displayed in templates by adding an entry in `$data['<placeholder>']` array. List of placeholders:
+  - `link_plugin`: used at bottom of each link.
+  - `plugin_start_zone`: before displaying the template content.
+  - `plugin_end_zone`: after displaying the template content.
 
 ![link_plugin_example](http://i.imgur.com/hzhMfSZ.png)
-
-- `plugin_start_zone`: before displaying the template content.
-- `plugin_end_zone`: after displaying the template content.
 
 
 #### render_feed
 
-Triggered when the ATOM or RSS feed is displayed.
+Triggered when the ATOM or RSS feed is displayed - allows to add tags in the feed, either in the header or for each items. Items (links) can also be altered before being rendered.
 
-Allow to add tags in the feed, either in the header or for each items. Items (links) can also be altered before being rendered.
-
-
-##### data
-
-`$data` is an array containing:
-
+- **`$data`** is an array containing:
   - All templates data, including links.
   - [Special data](#special-data)
-
-
-##### Template placeholders
-
-Tags can be added in feeds by adding an entry in `$data['<placeholder>']` array.
-
-List of placeholders:
-
-- `feed_plugins_header`: used as a header tag in the feed.
-
-For each links:
-
-- `feed_plugins`: additional tag for every link entry.
+- Template placeholders: tags can be added in feeds by adding an entry in `$data['<placeholder>']` array. List of placeholders:
+  - `feed_plugins_header`: used as a header tag in the feed.
+- For each link, the following placeholder can be used:
+  - `feed_plugins`: additional tag for every link entry.
 
 
 #### save_link
 
-Triggered when a link is save (new link or edit).
+Triggered when a link is save (new link or edit) - allows to alter the link being saved in the datastore.
 
-Allow to alter the link being saved in the datastore.
-
-
-##### data
-
-`$data` is an array containing the link being saved:
-
-- id
-- title
-- url
-- shorturl
-- description
-- private
-- tags
-- created
-- updated
-
-Also [special data](#special-data).
+- **`$data`** is an array containing:
+  -  the link being saved (id, title, url, shorturl, description, private, tags, created, updated)
+  - [Special data](#special-data).
 
 
 #### delete_link
 
-Triggered when a link is deleted.
+Triggered when a link is deleted - allows to execute any action before the link is actually removed from the datastore
 
-Allow to execute any action before the link is actually removed from the datastore
-
-
-##### data
-
-`$data` is an array containing the link being deleted:
-
-- id
-- title
-- url
-- shorturl
-- description
-- private
-- tags
-- created
-- updated
-
-Also [special data](#special-data).
+- **`$data`** is an array containing:
+  - the link being deleted (id, title, url, shorturl, description, private, tags, created, updated)
+  - [Special data](#special-data).
 
 
 #### save_plugin_parameters
 
-Triggered when the plugin parameters are saved from the plugin administration page.
+Triggered when the plugin parameters are saved from the plugin administration page. Plugins can perform an action every times their settings are updated. For example it is used to update the CSS file of the `default_colors` plugins.
 
-Plugins can perform an action every times their settings are updated.
-For example it is used to update the CSS file of the `default_colors` plugins.
-
-
-##### data
-
-`$data` input contains the `$_POST` array.
-
-So if the plugin has a parameter called `MYPLUGIN_PARAMETER`,
-the array will contain an entry with `MYPLUGIN_PARAMETER` as a key.
-
-Also [special data](#special-data).
+- **`$data`** input contains:
+  - the `$_POST` array, so if the plugin has a parameter called `MYPLUGIN_PARAMETER`, the array will contain an entry with `MYPLUGIN_PARAMETER` as a key.
+  - [Special data](#special-data).
 
 
 #### filter_search_entry
 
-Triggered for *every* bookmark when Shaarli's BookmarkService method `search()` is used.
-Any custom filter can be added to filter out bookmarks from search results.
+Triggered for *every* bookmark when Shaarli's BookmarkService method `search()` is used. Any custom filter can be added to filter out bookmarks from search results.
 
-The hook **must** return either:
+- Parameters:
+  - `Shaarli\Bookmark\Bookmark` object: entry to evaluate
+  - `$context` array: additional information provided depending on what search is currently used, the user request, etc.
+- The hook **must** return either:
   - `true` to keep bookmark entry in search result set
   - `false` to discard bookmark entry in result set
 
 > Note: custom filters are called *before* default filters are applied.
-
-
-##### Parameters
-
-- `Shaarli\Bookmark\Bookmark` object: entry to evaluate
-- $context `array`: additional information provided depending on what search is currently used,
-the user request, etc.
 
 
 ## Guide for template designers
