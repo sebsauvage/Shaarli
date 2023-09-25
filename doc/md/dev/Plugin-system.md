@@ -194,21 +194,21 @@ If it's still not working, please [open an issue](https://github.com/shaarli/Sha
 
 | Hooks         | Description   |
 | ------------- |:-------------:|
-| [render_header](#render_header) | Allow plugin to add content in page headers. |
-| [render_includes](#render_includes) | Allow plugin to include their own CSS files. |
+| [render_header](#render-header) | Allow plugin to add content in page headers. |
+| [render_includes](#render-includes) | Allow plugin to include their own CSS files. |
 | [render_footer](#render_footer) | Allow plugin to add content in page footer and include their own JS files. |
-| [render_linklist](#render_linklist) | It allows to add content at the begining and end of the page, after every link displayed and to alter link data. |
-| [render_editlink](#render_editlink) |  Allow to add fields in the form, or display elements. |
-| [render_tools](#render_tools) |  Allow to add content at the end of the page. |
-| [render_picwall](#render_picwall) |  Allow to add content at the top and bottom of the page. |
-| [render_tagcloud](#render_tagcloud) |  Allow to add content at the top and bottom of the page, and after all tags. |
-| [render_taglist](#render_taglist) |  Allow to add content at the top and bottom of the page, and after all tags. |
-| [render_daily](#render_daily) |  Allow to add content at the top and bottom of the page, the bottom of each link and to alter data. |
-| [render_feed](#render_feed) | Allow to do add tags in RSS and ATOM feeds. |
-| [save_link](#save_link) | Allow to alter the link being saved in the datastore. |
-| [delete_link](#delete_link) | Allow to do an action before a link is deleted from the datastore. |
-| [save_plugin_parameters](#save_plugin_parameters) | Allow to manipulate plugin parameters before they're saved. |
-| [filter_search_entry](#filter_search_entry) | Add custom filters to Shaarli search engine |
+| [render_linklist](#render-linklist) | It allows to add content at the begining and end of the page, after every link displayed and to alter link data. |
+| [render_editlink](#render-editlink) |  Allow to add fields in the form, or display elements. |
+| [render_tools](#render-tools) |  Allow to add content at the end of the page. |
+| [render_picwall](#render-picwall) |  Allow to add content at the top and bottom of the page. |
+| [render_tagcloud](#render-tagcloud) |  Allow to add content at the top and bottom of the page, and after all tags. |
+| [render_taglist](#render-taglist) |  Allow to add content at the top and bottom of the page, and after all tags. |
+| [render_daily](#render-daily) |  Allow to add content at the top and bottom of the page, the bottom of each link and to alter data. |
+| [render_feed](#render-feed) | Allow to do add tags in RSS and ATOM feeds. |
+| [save_link](#save-link) | Allow to alter the link being saved in the datastore. |
+| [delete_link](#delete-link) | Allow to do an action before a link is deleted from the datastore. |
+| [save_plugin_parameters](#save-plugin-parameters) | Allow to manipulate plugin parameters before they're saved. |
+| [filter_search_entry](#filter-search-entry) | Add custom filters to Shaarli search engine |
 
 
 #### render_header
