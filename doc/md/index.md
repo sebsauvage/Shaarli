@@ -105,7 +105,7 @@ Shaarli can be used:
 
 ## About
 
-This [community fork](https://github.com/shaarli/Shaarli) of the original [Shaarli](https://github.com/sebsauvage/Shaarli/) project by [Sébastien Sauvage](http://sebsauvage.net/) (now [unmaintained](https://github.com/sebsauvage/Shaarli/issues/191)) has carried on the work to provide [many patches](https://github.com/shaarli/Shaarli/compare/sebsauvage:master...master) for [bug fixes and enhancements](https://github.com/shaarli/Shaarli/issues?q=is%3Aclosed+) in this repository, and will keep maintaining the project for the foreseeable future, while keeping Shaarli simple and efficient.
+This [community fork](https://github.com/shaarli/Shaarli) of the original [Shaarli](https://github.com/sebsauvage/Shaarli/) project by [Sébastien Sauvage](https://sebsauvage.net/) (now [unmaintained](https://github.com/sebsauvage/Shaarli/issues/191)) has carried on the work to provide [many patches](https://github.com/sebsauvage/Shaarli/compare/master...shaarli:Shaarli:master) for [bug fixes and enhancements](https://github.com/shaarli/Shaarli/issues?q=is%3Aclosed+) in this repository, and will keep maintaining the project for the foreseeable future, while keeping Shaarli simple and efficient.
 
 The original Shaarli instance is still available [here](https://sebsauvage.net/links/) (+25000 shaares!)
 
@@ -119,4 +119,4 @@ See [Support](Troubleshooting.md#support) to get in touch with the Shaarli commu
 
 ### License
 
-Shaarli is [Free Software](http://en.wikipedia.org/wiki/Free_software). See [COPYING](https://github.com/shaarli/Shaarli/blob/master/COPYING) for a detail of the contributors and licenses for each individual component. A list of contributors is available [here](https://github.com/shaarli/Shaarli/blob/master/AUTHORS).
+Shaarli is [Free Software](https://en.wikipedia.org/wiki/Free_software). See [COPYING](https://github.com/shaarli/Shaarli/blob/master/COPYING) for a detail of the contributors and licenses for each individual component. A list of contributors is available [here](https://github.com/shaarli/Shaarli/blob/master/AUTHORS).
