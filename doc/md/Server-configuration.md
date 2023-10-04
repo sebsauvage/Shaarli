@@ -345,28 +345,22 @@ sudo systemctl reload nginx
 - [Server-side TLS (Nginx) - Mozilla](https://wiki.mozilla.org/Security/Server_Side_TLS#Nginx)
 
 
-
 ## Reverse proxies
 
 If Shaarli is hosted on a server behind a [reverse proxy](https://en.wikipedia.org/wiki/Reverse_proxy) (i.e. there is a proxy server between clients and the web server hosting Shaarli), configure it accordingly. See [Reverse proxy](Reverse-proxy.md) configuration.
 
+
 ## Using Shaarli without URL rewriting
 
-By default, Shaarli uses Slim framework's URL, which requires
-URL rewriting.
+By default, Shaarli uses Slim framework's URL, which requires URL rewriting.
 
-If you can't use URL rewriting for any reason (not supported by
-your web server, shared hosting, etc.), you *can* use Shaarli
-without URL rewriting.
+If you can't use URL rewriting for any reason (not supported by your web server, shared hosting, etc.), you *can* use Shaarli without URL rewriting.
 
-You just need to prefix your URL by `/index.php/`.
-Example: instead of accessing `https://shaarli.mydomain.org/`,
-use `https://shaarli.mydomain.org/index.php/`.
+You just need to prefix your URL by `/index.php/`. Example: instead of accessing `https://shaarli.mydomain.org/`, use `https://shaarli.mydomain.org/index.php/`.
 
 **Recommended:**
-  * after installation, in the configuration page, set your header link to `/index.php/`.
-  * in your configuration file `config.json.php` set `general.root_url` to
-    `https://shaarli.mydomain.org/index.php/`.
+* after installation, in the configuration page, set your header link to `/index.php/`.
+* in your configuration file `config.json.php` set `general.root_url` to `https://shaarli.mydomain.org/index.php/`.
 
 
 ## Allow import of large browser bookmarks export
