@@ -121,7 +121,7 @@ If you don't want to rely on a certificate authority, or the server can only be 
 
 ## Examples
 
-The following examples assume a Debian-based operating system is installed. On other distributions you may have to adapt details such as package installation procedures, configuration file locations, and webserver username/group (`www-data` or `httpd` are common values). In these examples we assume the document root for your web server/virtualhost is at `/var/www/shaarli.mydomain.org/`:
+The following examples assume a Debian-based operating system is installed. On other distributions you may have to adapt details such as package installation procedures, configuration file locations, and webserver username/group (`www-data` or `httpd` are common values). In these examples we assume that the web server and the `php-fpm` PHP interpreter are running as the same user, and the document root for your web server/virtualhost is at `/var/www/shaarli.mydomain.org/`,:
 
 ```bash
 # create the document root (replace with your own domain name)
@@ -134,9 +134,14 @@ You can install Shaarli at the root of your virtualhost, or in a subdirectory as
 ### Apache
 
 ```bash
-# Install apache + mod_php and PHP modules
+# Install apache + php-fpm
 sudo apt update
-sudo apt install apache2 libapache2-mod-php php-json php-mbstring php-gd php-intl php-curl php-gettext
+sudo apt install apache2 libapache2-mod-md libapache2-mod-fcgid php8.2-fpm php8.2-mbstring php8.2-gd php8.2-intl php8.2-curl php8.2-gettext php8.2-ldap
+
+# Enable required modules
+sudo a2enmod ssl # SSL/TLS certificates https://httpd.apache.org/docs/current/mod/mod_ssl.html
+sudo a2enmod rewrite # REST API support https://httpd.apache.org/docs/current/mod/mod_rewrite.html
+sudo a2enmod headers # custom HTTP headers
 
 # Edit the virtualhost configuration file with your favorite editor (replace the example domain name)
 sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
@@ -147,7 +152,7 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
     ServerName shaarli.mydomain.org
     DocumentRoot /var/www/shaarli.mydomain.org/
 
-    # For SSL/TLS certificates acquired with certbot or self-signed certificates
+    # If using certbot or self-signed certificates:
     # Redirect HTTP requests to HTTPS, except Let's Encrypt ACME challenge requests
     RewriteEngine on
     RewriteRule ^.well-known/acme-challenge/ - [L]
@@ -155,37 +160,35 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
     RewriteRule  ^ https://shaarli.mydomain.org%{REQUEST_URI} [END,NE,R=permanent]
 </VirtualHost>
 
-# SSL/TLS configuration for Let's Encrypt certificates managed with mod_md
-#MDomain shaarli.mydomain.org
-#MDCertificateAgreement accepted
-#MDContactEmail admin@shaarli.mydomain.org
-#MDPrivateKeys RSA 4096
+# If using mod_md:
+MDomain shaarli.mydomain.org
+MDCertificateAgreement accepted
+MDContactEmail admin@shaarli.mydomain.org
+MDPrivateKeys RSA 4096
 
 <VirtualHost *:443>
     ServerName   shaarli.mydomain.org
     DocumentRoot /var/www/shaarli.mydomain.org/
-
-    # SSL/TLS configuration for Let's Encrypt certificates acquired with certbot standalone
     SSLEngine             on
+
+    # If using certbot:
     SSLCertificateFile    /etc/letsencrypt/live/shaarli.mydomain.org/fullchain.pem
     SSLCertificateKeyFile /etc/letsencrypt/live/shaarli.mydomain.org/privkey.pem
-    # Let's Encrypt settings from https://github.com/certbot/certbot/blob/master/certbot-apache/certbot_apache/_internal/tls_configs/current-options-ssl-apache.conf
-    SSLProtocol             all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
-    SSLCipherSuite          ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384
-    SSLHonorCipherOrder     off
-    SSLSessionTickets       off
-    SSLOptions +StrictRequire
 
-    # SSL/TLS configuration for self-signed certificates
-    #SSLEngine             on
-    #SSLCertificateFile    /etc/ssl/certs/ssl-cert-snakeoil.pem
-    #SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+    # If using self-signed certificates:
+    SSLEngine             on
+    SSLCertificateFile    /etc/ssl/certs/ssl-cert-snakeoil.pem
+    SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
 
     # Optional, log PHP errors, useful for debugging
     #php_flag  log_errors on
     #php_flag  display_errors on
     #php_value error_reporting 2147483647
     #php_value error_log /var/log/apache2/shaarli-php-error.log
+
+    <FilesMatch \.php$>
+        SetHandler "proxy:unix:/run/php/php8.2-fpm.sock|fcgi://localhost"
+    </FilesMatch>
 
     <Directory /var/www/shaarli.mydomain.org/>
         # Required for .htaccess support
@@ -200,8 +203,6 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
         </FilesMatch>
     </Directory>
     
-    # BE CAREFUL: directives order matter!
-
     <FilesMatch ".*\.(?!(ico|css|js|gif|jpe?g|png|ttf|oet|woff2?)$)[^\.]*$">
         Require all denied
     </FilesMatch>
@@ -230,22 +231,7 @@ sudo nano /etc/apache2/sites-available/shaarli.mydomain.org.conf
 # Enable the virtualhost
 sudo a2ensite shaarli.mydomain.org
 
-# mod_ssl must be enabled to use TLS/SSL certificates
-# https://httpd.apache.org/docs/current/mod/mod_ssl.html
-sudo a2enmod ssl
-
-# mod_rewrite must be enabled to use the REST API
-# https://httpd.apache.org/docs/current/mod/mod_rewrite.html
-sudo a2enmod rewrite
-
-# mod_headers must be enabled to set custom headers from the server config
-sudo a2enmod headers
-
-# mod_version must only be enabled if you use Apache 2.2 or lower
-# https://httpd.apache.org/docs/current/mod/mod_version.html
-# sudo a2enmod version
-
-# restart the apache service
+# Restart the apache service
 sudo systemctl restart apache2
 ```
 
@@ -260,12 +246,8 @@ sudo systemctl restart apache2
 
 ### Nginx
 
-This examples uses nginx and the [PHP-FPM](https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mariadb-php-lemp-stack-on-debian-10#step-3-%E2%80%94-installing-php-for-processing) PHP interpreter. Nginx and PHP-FPM must be running using the same user and group, here we assume the user/group to be `www-data:www-data`.
-
-
 ```bash
-# install nginx and php-fpm
-sudo apt update
+# Install nginx and php-fpm
 sudo apt install nginx php-fpm
 
 # Edit the virtualhost configuration file with your favorite editor
@@ -385,6 +367,7 @@ use `https://shaarli.mydomain.org/index.php/`.
   * after installation, in the configuration page, set your header link to `/index.php/`.
   * in your configuration file `config.json.php` set `general.root_url` to
     `https://shaarli.mydomain.org/index.php/`.
+
 
 ## Allow import of large browser bookmarks export
 
