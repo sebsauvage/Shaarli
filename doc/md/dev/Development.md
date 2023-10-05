@@ -451,8 +451,8 @@ $ git merge master
 $ make test
 
 # Bump shaarli_version.php from dev to 0.x.0, **without the v**
-$ vim shaarli_version.php
-$ git add shaarli_version
+$ vim shaarli_version.php doc/conf.py README.md
+$ git add shaarli_version doc/conf.py README.md
 $ git commit -s -m "Bump Shaarli version to v0.x.0"
 $ git push upstream v0.x
 ```
