@@ -40,7 +40,7 @@ Shaarli redirections will not work properly. To solve this, assign a local domai
 
 - On hosts (such as **free.fr**) which only support PHP 5.6, Shaarli [v0.10.4](https://github.com/shaarli/Shaarli/releases/tag/v0.10.4) is the maximum supported version. At the root of your webspace create a `sessions` directory and a `.htaccess` file containing:
 
-```xml
+```apacheconf
 <IfDefine Free>
 php56 1
 </IfDefine>
@@ -94,7 +94,7 @@ If you hosting provider only provides apache 2.2 and no support for `mod_version
 
 ### Sessions do not seem to work correctly on your server
 
-Follow the instructions in the error message. Make sure you are accessing shaarli via a direct IP address or a proper hostname. If you have **no dots** in the hostname (e.g. `localhost` or `http://my-webserver/shaarli/`), some browsers will not store cookies at all (this respects the [HTTP cookie specification](http://curl.haxx.se/rfc/cookie_spec.html)).
+Follow the instructions in the error message. Make sure you are accessing shaarli via a direct IP address or a proper hostname. If you have **no dots** in the hostname (e.g. `localhost` or `http://my-webserver/shaarli/`), some browsers will not store cookies at all (this respects the [HTTP cookie specification](https://curl.se/rfc/cookie_spec.html)).
 
 
 ### Error 406 "Not acceptable"
@@ -144,8 +144,7 @@ Try to delete it and refresh your page while being logged in.
 
 You may be interested in these Firefox addons to manage bookmarks imported from Shaarli
 
-- [Bookmark Deduplicator](https://addons.mozilla.org/en-US/firefox/addon/bookmark-deduplicator/) - provides an easy way to deduplicate your bookmarks
-- [TagSieve](https://addons.mozilla.org/en-US/firefox/addon/tagsieve/) - browse your bookmarks by their tags
+- [Bookmark Dupes](https://addons.mozilla.org/en-US/firefox/addon/bookmark-dupes/) - provides an easy way to deduplicate your bookmarks
 
 ### Diigo
 
@@ -157,7 +156,7 @@ See [this issue](https://github.com/sebsauvage/Shaarli/issues/146) for import tw
 
 ### SemanticScuttle
 
-To correctly import the tags from a [SemanticScuttle](http://semanticscuttle.sourceforge.net/) HTML export, edit the HTML file before importing and replace all occurences of `tags=` (lowercase) to `TAGS=` (uppercase).
+To correctly import the tags from a [SemanticScuttle](https://semanticscuttle.sourceforge.net/) HTML export, edit the HTML file before importing and replace all occurences of `tags=` (lowercase) to `TAGS=` (uppercase).
 
 ### Scuttle
 
@@ -177,7 +176,7 @@ You can use the third-party tool [Derefind](https://github.com/ShawnPConroy/Dere
 
 ### The bookmarklet doesn't work
 
-Some websites may disallow usage of bookmarklets through [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP). Unfortunately, there is nothing Shaarli can do about it ([1](https://github.com/shaarli/Shaarli/issues/196), [2](https://bugzilla.mozilla.org/show_bug.cgi?id=866522), [3](https://code.google.com/p/chromium/issues/detail?id=233903).
+Some websites may disallow usage of bookmarklets through [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP). Unfortunately, there is nothing Shaarli can do about it ([1](https://github.com/shaarli/Shaarli/issues/196), [2](https://bugzilla.mozilla.org/show_bug.cgi?id=866522), [3](https://bugs.chromium.org/p/chromium/issues/detail?id=233903).
 
 Under Opera, you can't drag'n drop the button: You have to right-click on it and add a bookmark to your personal toolbar.
 
@@ -206,7 +205,7 @@ sudo systemctl restart apache2
 
 If the solutions above did not help, please:
 
-- Come and ask question on the [Gitter chat](https://gitter.im/shaarli/Shaarli) (also reachable via [IRC](https://irc.gitter.im/))
+- Come and ask question on the [Gitter chat](https://app.gitter.im/#/room/#shaarli_Shaarli:gitter.im)
 - Search for [issues](https://github.com/shaarli/Shaarli/issues) and [Pull Requests](https://github.com/shaarli/Shaarli/pulls)
     - if you find one that is related to the issue, feel free to comment and provide additional details (host/Shaarli setup...)
     - check issues labeled [`feature`](https://github.com/shaarli/Shaarli/labels/feature), [`enhancement`](https://github.com/shaarli/Shaarli/labels/enhancement), and [`plugin`](https://github.com/shaarli/Shaarli/labels/plugin) if you would like a feature added to Shaarli.

@@ -1,3 +1,5 @@
+# Usage
+
 ## Features
 
 For any item posted to Shaarli (called a _Shaare_), you can customize the following aspects:

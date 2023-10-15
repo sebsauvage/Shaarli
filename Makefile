@@ -159,13 +159,13 @@ generate_authors:
 phpdoc: clean
 	@docker run --rm -v $(PWD):/data -u `id -u`:`id -g` phpdoc/phpdoc
 
-### generate HTML documentation from Markdown pages with MkDocs
+### generate HTML documentation from Markdown pages with Sphinx
 htmldoc:
 	python3 -m venv venv/
 	bash -c 'source venv/bin/activate; \
 	pip install wheel; \
-	pip install mkdocs; \
-	mkdocs build --clean'
+	pip install sphinx==7.1.0 furo==2023.7.26 myst-parser sphinx-design; \
+	sphinx-build -b html -c doc/ doc/md/ doc/html/'
 	find doc/html/ -type f -exec chmod a-x '{}' \;
 	rm -r venv
 

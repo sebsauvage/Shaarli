@@ -22,7 +22,7 @@ Some settings can be configured directly from a web browser by accesing the `Too
 
 ## Configuration file example
 
-```json
+```
 <?php /*
 {
     "credentials": {
@@ -106,7 +106,7 @@ Some settings can be configured directly from a web browser by accesing the `Too
         "mode": "common"
     },
     "plugins": {
-        "WALLABAG_URL": "http://demo.wallabag.org",
+        "WALLABAG_URL": "https://demo.wallabag.org",
         "WALLABAG_VERSION": "1"
     },
     "translation": {
@@ -138,7 +138,7 @@ _These settings should not be edited_
 - **title**: Shaarli's instance title.
 - **header_link**: Link to the homepage.
 - **links_per_page**: Number of Shaares displayed per page.
-- **timezone**: See [the list of supported timezones](http://php.net/manual/en/timezones.php).
+- **timezone**: See [the list of supported timezones](https://www.php.net/manual/en/timezones.php).
 - **enabled_plugins**: List of enabled plugins.
 - **default_note_title**: Default title of a new note.
 - **enable_async_metadata** (boolean): Retrieve external bookmark metadata asynchronously to prevent bookmark creation slowdown.
@@ -188,7 +188,7 @@ Additional settings applied to formatters.
 
 ### Translation
 
-- **language**: translation language (also see [Translations](dev/Translations.md))
+- **language**: translation language (also see [Translations](dev/Development.md#translations))
     - **auto** (default): The translation language is chosen from the browser locale.
     It means that the language can be different for 2 different visitors depending on their locale.
     - **en**: Use the English translation.

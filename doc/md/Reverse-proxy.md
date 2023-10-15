@@ -68,7 +68,7 @@ See also [proxy-related](https://github.com/shaarli/Shaarli/issues?utf8=%E2%9C%9
 ## HAProxy
 
 
-```conf
+```
 global
     [...]
 
