@@ -41,6 +41,7 @@ See [REST API](REST-API.md) for a list of official and community clients.
 - [kalvn/shaarli-blocks](https://github.com/kalvn/shaarli-blocks) - A template/theme for Shaarli
 - [kalvn/Shaarli-Material](https://github.com/kalvn/Shaarli-Material) - A theme (template) based on Google's Material Design for Shaarli, the superfast delicious clone
 - [ManufacturaInd/shaarli-2004licious-theme](https://github.com/ManufacturaInd/shaarli-2004licious-theme) - A template/theme as a humble homage to the early looks of the del.icio.us site
+- [RolandTi/shaarli-stack](https://github.com/RolandTi/shaarli-stack) - A miminalist template/theme for Shaarli
 - [xfnw/shaarli-default-dark](https://github.com/xfnw/shaarli-default-dark) - The default theme but nice and dark for your eyeballs
 - [mrjovanovic/serious-theme-shaarli](https://github.com/mrjovanovic/serious-theme-shaarli) - A serious theme for Shaarli (custom CSS)
 
