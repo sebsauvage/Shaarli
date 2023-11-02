@@ -34,7 +34,6 @@ See [REST API](REST-API.md) for a list of official and community clients.
 
 ### Themes
 
-- [AkibaTech/Shaarli Superhero Theme](https://github.com/MarceauKa/Shaarli---SuperHero-Theme) - A template/theme for Shaarli
 - [alexisju/albinomouse-template](https://github.com/alexisju/albinomouse-template) - A full template for Shaarli
 - [ArthurHoaro/shaarli-launch](https://github.com/ArthurHoaro/shaarli-launch) - Customizable Shaarli theme
 - [dhoko/ShaarliTemplate](https://github.com/dhoko/ShaarliTemplate) - A template/theme for Shaarli
