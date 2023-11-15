@@ -109,6 +109,11 @@ On some shared hosting services (such as **Bluehost**), `mod_security` is enable
 You may need to adjust timeouts to larger values in your [reverse proxy configuration](Reverse-proxy.md) if you're getting `504 Gateway Timeout` errors during long-lasting operations (like importing many bookmarks from HTML, or batch deleting tags) on slow hardware. The PHP setting `max_execution_time` may also need to be adjusted for your specific setup. See issues [#1854](https://github.com/shaarli/Shaarli/issues/1854) and [#1910](https://github.com/shaarli/Shaarli/issues/1910).
 
 
+### Automatic title retrieval fails
+
+When bookmarking a page using the `+ Shaare > Add Link` dialog, Shaarli cannot retrieve the page `<title>` HTML attribute if it is set by javascript at page load (e.g. Youtube videos). You can work around this limitation by using a [Browser extension](Community-and-related-software.md) or the [Bookmarklet](#Usage).
+
+
 ----------------------------------------------------------
 
 ## Upgrades
