@@ -64,6 +64,8 @@ Some settings can be configured directly from a web browser by accesing the `Too
         "default_private_links": true,
         "check_updates_branch": "stable",
         "check_updates_interval": 86400,
+        "download_max_size": 4194304,
+        "download_timeout": 30,
         "enabled_plugins": [
             "markdown",
             "wallabag",
@@ -141,6 +143,8 @@ _These settings should not be edited_
 - **timezone**: See [the list of supported timezones](https://www.php.net/manual/en/timezones.php).
 - **enabled_plugins**: List of enabled plugins.
 - **default_note_title**: Default title of a new note.
+- **download_max_size:**: Maximum number of bytes to download when retrieveing page content/metadata.
+- **download_timeout:**: Network timeout (in seconds) when retrieveing page content/metadata.
 - **enable_async_metadata** (boolean): Retrieve external bookmark metadata asynchronously to prevent bookmark creation slowdown.
 - **retrieve_description** (boolean): If set to true, for every new Shaare Shaarli will try to retrieve the description and keywords from the HTML meta tags.
 - **root_url**: Overrides automatic discovery of Shaarli instance's URL (e.g.) `https://sub.domain.tld/shaarli-folder/`.
