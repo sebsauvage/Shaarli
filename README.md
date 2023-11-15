@@ -11,7 +11,6 @@ _It is designed to be personal (single-user), fast and handy._
 [![](https://img.shields.io/badge/master-v0.12.x-blue.svg)](https://github.com/shaarli/Shaarli)
 [![](https://github.com/shaarli/Shaarli/actions/workflows/ci.yml/badge.svg)](https://github.com/shaarli/Shaarli/actions)
 [![Join the chat at https://gitter.im/shaarli/Shaarli](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/shaarli/Shaarli)
-[![Bountysource](https://www.bountysource.com/badge/team?team_id=19583&style=bounties_received)](https://www.bountysource.com/teams/shaarli/issues)
 [![Docker repository](https://img.shields.io/docker/pulls/shaarli/shaarli.svg)](https://github.com/shaarli/Shaarli/pkgs/container/shaarli)
 
 ## Quickstart
