@@ -9,6 +9,7 @@ _It is designed to be personal (single-user), fast and handy._
 [![](https://img.shields.io/badge/release-v0.13.0-blue.svg)](https://github.com/shaarli/Shaarli/releases/tag/v0.13.0)
 [![](https://img.shields.io/badge/master-v0.13.x-blue.svg)](https://github.com/shaarli/Shaarli)
 [![](https://github.com/shaarli/Shaarli/actions/workflows/ci.yml/badge.svg)](https://github.com/shaarli/Shaarli/actions)
+[![](https://github.com/shaarli/Shaarli/actions/workflows/trivy-release.yml/badge.svg)](https://github.com/shaarli/Shaarli/actions)
 [![Join the chat at https://gitter.im/shaarli/Shaarli](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/shaarli/Shaarli)
 [![Docker repository](https://img.shields.io/docker/pulls/shaarli/shaarli.svg)](https://github.com/shaarli/Shaarli/pkgs/container/shaarli)
 
