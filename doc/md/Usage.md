@@ -23,6 +23,7 @@ While logged in to your Shaarli, you can add, edit or delete Shaares:
 
 The `Shaare a new link` dialog also allows you to create multiple bookmarks at once (unfold the `bulk creation` section and add one URL per line).
 
+
 ### Tags
 
 Tags can be be used to organize and categorize your Shaares:
@@ -37,6 +38,13 @@ Tags can be be used to organize and categorize your Shaares:
 Additional filter buttons can be found at the top left of the Shaare list **only when logged in**:
 
 - **Only show private Shaares:** Private shares can be searched by clicking the `only show private links` toggle button top left of the Shaares list (only when logged in)
+
+
+### Sticky Shaares
+
+Enabling the _Sticky_ mode on a Shaare will make it "stick" to the top of the Shaares list (first item of the first page), bypassing the normal sort order (most recent first). DIsabling the _Sticky_ mode will move back the Shaare to its initial position on the link list.
+
+Sticky-ing a Shaare does not bypass active filters/search terms.
 
 
 ### Permalinks
