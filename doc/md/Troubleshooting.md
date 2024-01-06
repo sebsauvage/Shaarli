@@ -109,11 +109,6 @@ On some shared hosting services (such as **Bluehost**), `mod_security` is enable
 You may need to adjust timeouts to larger values in your [reverse proxy configuration](Reverse-proxy.md) if you're getting `504 Gateway Timeout` errors during long-lasting operations (like importing many bookmarks from HTML, or batch deleting tags) on slow hardware. The PHP setting `max_execution_time` may also need to be adjusted for your specific setup. See issues [#1854](https://github.com/shaarli/Shaarli/issues/1854) and [#1910](https://github.com/shaarli/Shaarli/issues/1910).
 
 
-### Automatic title retrieval fails
-
-When bookmarking a page using the `+ Shaare > Add Link` dialog, Shaarli cannot retrieve the page `<title>` HTML attribute if it is set by javascript at page load (e.g. Youtube videos). You can work around this limitation by using a [Browser extension](Community-and-related-software.md) or the [Bookmarklet](#Usage).
-
-
 ----------------------------------------------------------
 
 ## Upgrades
@@ -178,6 +173,16 @@ You can use the third-party tool [Derefind](https://github.com/ShawnPConroy/Dere
 -------------------------------------------------------
 
 ## Other
+
+### Page title and description are not retrieved automatically
+
+When using the `+Shaare` button (`Shaare a new link` dialog) to add a bookmark, Shaarli attempts to extract the HTML title and description from the target page, and uses this to populate the `Title` and `Description` fields of the `New Shaare` dialog. In consequence, Shaarli can **not** extract the title/description in the following cases:
+- the target page relies on javascript to build the HTML `<title>` and `<description>` attributes (e.g. YouTube videos)
+- the target page is behind a DDoS protection/bot blocking mechanism (e.g. Cloudflare challenge)
+- the target page is unreachable by the server running Shaarli (e.g. firewall or security mechanism blocking outgoing HTTP/HTTPS requests)
+
+You can usually workaround this limitation by adding bookmarks from a [browser extension](Community-and-related-software.md#browser-extensions) or the [bookmarklet](Usage.md#adding-editing-shaares) instead.
+
 
 ### The bookmarklet doesn't work
 
