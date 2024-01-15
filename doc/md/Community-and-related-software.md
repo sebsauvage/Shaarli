@@ -22,7 +22,7 @@ See [REST API](REST-API.md) for a list of official and community clients.
 - [google analytics](https://github.com/ericjuden/Shaarli-Google-Analytics-Plugin) by [@ericjuden](https://github.com/ericjuden): Adds Google Analytics tracking support
 - [launch](https://github.com/ArthurHoaro/launch-plugin) - Launch Plugin is a plugin designed to enhance and customize Launch Theme for Shaarli.
 - [markdown-toolbar](https://github.com/immanuelfodor/shaarli-markdown-toolbar) by [@immanuelfodor](https://github.com/immanuelfodor) - Easily insert markdown syntax into the Description field when editing a Shaare.
-- [offen](https://github.com/waschinski/shaarli-offen/) by [@waschinski](https://github.com/waschinski) - Shaarli plugin that adds Offen tracking code to Shaarli pages.
+- [offen](https://github.com/waschinski/shaarli-offen/) by [@waschinski](https://github.com/waschinski) - Shaarli plugin that adds Offen analytics tracking code to Shaarli pages.
 - [related](https://github.com/ilesinge/shaarli-related) by [@ilesinge](https://github.com/ilesinge) - Show related Shaares based on the number of identical tags.
 - [shaargem](https://forge.tourmentine.com/n/shaarli-plugin-shaargem) by [@n](https://forge.tourmentine.com/n): Allow to shaare gemini capsules.
 - [shaarli-descriptor](https://github.com/immanuelfodor/shaarli-descriptor) by [@immanuelfodor](https://github.com/immanuelfodor) - Customize the default height/number of rows of the Description field when editing a Shaare.
