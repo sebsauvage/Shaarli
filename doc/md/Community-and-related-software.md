@@ -14,6 +14,7 @@ See [REST API](REST-API.md) for a list of official and community clients.
 
 - [autosave](https://github.com/kalvn/shaarli-plugin-autosave) by [@kalvn](https://github.com/kalvn): Automatically saves data when editing a Shaare to avoid any loss in case of crash or unexpected shutdown.
 - [clickat](https://forge.tourmentine.com/n/shaarli-plugin-clickat) by [@n](https://forge.tourmentine.com/n): Makes Twitter and Fediverse addresses clickable.
+- [clickcounter](https://github.com/waschinski/shaarli-clickcounter) by [@waschinski](https://github.com/waschinski): Shaarli plugin that counts how often links have been clicked
 - [code-coloration](https://github.com/ArthurHoaro/code-coloration) by [@ArthurHoaro](https://github.com/ArthurHoaro): client side code syntax highlighter.
 - [custom-css](https://github.com/immanuelfodor/shaarli-custom-css) by [@immanuelfodor](https://github.com/immanuelfodor) - Customize the look and feel of the UI with custom CSS rules
 - [disqus](https://github.com/kalvn/shaarli-plugin-disqus) by [@kalvn](https://github.com/kalvn): Adds Disqus comment system to your Shaarli.
@@ -28,6 +29,7 @@ See [REST API](REST-API.md) for a list of official and community clients.
 - [shaarli2mastodon](https://github.com/kalvn/shaarli2mastodon) by [@kalvn](https://github.com/kalvn) - This Shaarli plugin allows you to automatically publish links you post on your Mastodon timeline.
 - [shaarli2twitter](https://github.com/ArthurHoaro/shaarli2twitter) by [@ArthurHoaro](https://github.com/ArthurHoaro) - Automatically tweet your Shaares from Shaarli
 - [social](https://github.com/alexisju/social) by [@alexisju](https://github.com/alexisju): share links to social networks.
+- [targetblank](https://github.com/waschinski/shaarli-targetblank) by [@waschinski](https://github.com/waschinski): Shaarli plugin to open all external links in new tabs/windows
 - [urlextern](https://github.com/trailjeep/shaarli-urlextern) by [@trailjeep](https://github.com/trailjeep) - Shaarli plugin to open external links in a new tab/window.
 - [webhooks](https://gitlab.com/flow.gunso/shaarli-webhooks) by [@flow.gunso](https://gitlab.com/flow.gunso) - Shaarli plugin that enables user-defined callback URL, i.e. webhooks, for specific Shaarli events (link saving, deletion...)
 
