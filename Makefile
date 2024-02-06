@@ -194,7 +194,7 @@ sasslint:
 ##
 
 # trivy version (https://github.com/aquasecurity/trivy/releases)
-TRIVY_VERSION=0.49.0
+TRIVY_VERSION=0.49.1
 # default trivy exit code when vulnerabilities are found
 TRIVY_EXIT_CODE=1
 # default docker image to scan with trivy
