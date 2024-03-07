@@ -52,8 +52,8 @@ function get_http_response(
     }
 
     $userAgent =
-        'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:45.0)'
-        . ' Gecko/20100101 Firefox/45.0';
+        'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:115.0)'
+        . ' Gecko/20100101 Firefox/115.0';
     $acceptLanguage =
         substr(get_locale(LC_COLLATE), 0, 2) . ',en-US;q=0.7,en;q=0.3';
     $maxRedirs = 3;
